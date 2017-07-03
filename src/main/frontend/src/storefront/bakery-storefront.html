@@ -1,0 +1,99 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/iron-list/iron-list.html">
+
+<link rel="import" href="../app/bakery-search.html">
+<link rel="import" href="storefront-group.html">
+
+<dom-module id="bakery-storefront">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: flex;
+        flex-direction: column-reverse;
+        max-width: calc(964px + var(--valo-space-m)) !important; /* Allow selected order to be 16px wider */
+      }
+
+      iron-list {
+        flex: 1;
+      }
+
+      @media (min-width: 600px) {
+        :host {
+          flex-direction: column;
+          padding: 0 var(--valo-space-s) !important;
+        }
+
+        iron-list {
+          padding: var(--valo-space-s) 0;
+        }
+      }
+    </style>
+
+    <iron-ajax auto url="../../dummy/storefront.json" handle-as="json" last-response="{{orderGroups}}"></iron-ajax>
+
+    <bakery-search
+        field-placeholder="Search"
+        field-value="{{_filterValue}}"
+        button-text="New order"
+        show-checkbox
+        checkbox-text="Show past orders"
+        checkbox-checked="{{_showPrevious}}"
+        on-button-click="_openNewOrderDialog">
+    </bakery-search>
+    <iron-list id="list" items="[[_filterOrders(orderGroups, _filterValue, _showPrevious)]]">
+      <template>
+        <storefront-group group="[[item]]" on-notify-resize="_resizeList" desktop-view="[[desktopView]]"></storefront-group>
+      </template>
+    </iron-list>
+  </template>
+
+  <script>
+    class BakeryStorefront extends Polymer.Element {
+      static get is() {
+        return 'bakery-storefront';
+      }
+
+      static get properties() {
+        return {
+          desktopView: Boolean,
+          orderGroups: {
+            type: Array
+          },
+          _filterValue: {
+            type: String
+          },
+          _showPrevious: {
+            type: Boolean
+          }
+        };
+      }
+
+      _filterOrders(groups, filter, showPrevious) {
+        if (groups && filter) {
+          const filteredGroups = groups.map((group) => {
+            const orders = group.orders.filter((order) => {
+              return order.customer.name.toLowerCase().includes(filter.toLowerCase());
+            });
+            return Object.assign({}, group, {orders});
+          });
+
+          return filteredGroups.filter((group) => {
+            return group.orders.length >= 1;
+          });
+        }
+        return groups;
+      }
+
+      _openNewOrderDialog() {
+        console.log('open new order dialog');
+      }
+
+      _resizeList() {
+        this.$.list.notifyResize();
+      }
+    }
+
+    window.customElements.define(BakeryStorefront.is, BakeryStorefront);
+  </script>
+</dom-module>

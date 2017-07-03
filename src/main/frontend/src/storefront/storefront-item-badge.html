@@ -1,0 +1,75 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+
+<dom-module id="storefront-item-badge">
+  <template>
+    <style>
+      #wrapper {
+        display: inline-block;
+        border-radius: var(--valo-border-radius);
+        background: var(--valo-black-10pct);
+        color: var(--valo-secondary-text-color);
+        padding: 2px 10px;
+        text-transform: capitalize;
+      }
+
+      :host([status="ready"]) #wrapper {
+        color: var(--valo-success-color);
+        background: var(--valo-success-color-10pct);
+      }
+
+      :host([status="new"]) #wrapper {
+        color: var(--valo-primary-color);
+        background: var(--valo-primary-color-10pct);
+      }
+
+      :host([status="problem"]) #wrapper {
+        color: var(--valo-error-color);
+        background: var(--valo-error-color-10pct);
+      }
+
+      :host([status="delivered"]) #wrapper {
+        padding: 2px 3px;
+      }
+
+      :host([small]) #wrapper {
+        padding: 0 5px;
+        font-size: var(--valo-font-size-xs);
+      }
+
+      :host([small]) iron-icon {
+        --iron-icon-height: var(--valo-font-size-xs);
+        --iron-icon-width: var(--valo-font-size-xs);
+      }
+    </style>
+
+    <div id="wrapper" inner-h-t-m-l="{{_getContent(status)}}"></div>
+  </template>
+
+  <script>
+    class StorefrontItemBadge extends Polymer.Element {
+      static get is() {
+        return 'storefront-item-badge';
+      }
+
+      static get properties() {
+        return {
+          status: {
+            type: String,
+            reflectToAttribute: true
+          },
+        };
+      }
+
+      _getContent(status) {
+        if (status === 'delivered') {
+          return '<iron-icon icon="valo:checkmark"></iron-icon>';
+        }
+
+        return status;
+      }
+    }
+
+    window.customElements.define(StorefrontItemBadge.is, StorefrontItemBadge);
+  </script>
+</dom-module>

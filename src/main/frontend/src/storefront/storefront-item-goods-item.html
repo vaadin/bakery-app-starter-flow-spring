@@ -1,0 +1,48 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="storefront-item-goods-item">
+  <template>
+    <style>
+      :host {
+        display: flex;
+        align-items: baseline;
+      }
+
+      #count {
+        background: var(--valo-black-10pct);
+        border-radius: var(--valo-border-radius);
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        font-size: var(--valo-font-size-xs);
+        vertical-align: middle;
+        text-align: center;
+        margin-right: 6px;
+      }
+    </style>
+
+    <span id="count">[[count]]</span>
+    <span>[[name]]</span>
+  </template>
+
+  <script>
+    class StorefrontItemGoodsItem extends Polymer.Element {
+      static get is() {
+        return 'storefront-item-goods-item';
+      }
+
+      static get properties() {
+        return {
+          count: {
+            type: Number
+          },
+          name: {
+            type: String
+          }
+        };
+      }
+    }
+
+    window.customElements.define(StorefrontItemGoodsItem.is, StorefrontItemGoodsItem);
+  </script>
+</dom-module>

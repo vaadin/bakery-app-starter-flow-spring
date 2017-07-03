@@ -1,0 +1,29 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+
+<dom-module id="bakery-products">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <div class="card">
+      <div class="circle">4</div>
+      <h1>View Four</h1>
+      <p>Modus commodo minimum eum te, vero utinam assueverit per eu.</p>
+      <p>Ea duis bonorum nec, falli paulo aliquid ei eum.Has at minim mucius aliquam, est id tempor laoreet.Pro saepe pertinax ei, ad pri animal labores suscipiantur.</p>
+    </div>
+  </template>
+
+  <script>
+    class BakeryProducts extends Polymer.Element {
+      static get is() {
+        return 'bakery-products';
+      }
+    }
+
+    window.customElements.define(BakeryProducts.is, BakeryProducts);
+  </script>
+</dom-module>

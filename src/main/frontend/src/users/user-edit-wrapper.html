@@ -1,0 +1,60 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="user-edit.html">
+<link rel="import" href="../elements/item-detail-dialog.html">
+<link rel="import" href="../elements/item-detail-mobile.html">
+
+<dom-module id="user-edit-wrapper">
+  <template>
+    <div id="wrapper">
+      <template is="dom-if" if="[[_showDesktop(opened, desktopView)]]" restamp>
+        <item-detail-dialog>
+          <user-edit user="[[user]]"></user-edit>
+        </item-detail-dialog>
+      </template>
+      <template is="dom-if" if="[[_showMobile(opened, desktopView)]]" restamp>
+        <item-detail-mobile>
+          <user-edit user="[[user]]"></user-edit>
+        </item-detail-mobile>
+      </template>
+    </div>
+  </template>
+
+  <script>
+    class UserEditWrapper extends Polymer.Element {
+      static get is() {
+        return 'user-edit-wrapper';
+      }
+
+      static get properties() {
+        return {
+          user: {
+            type: Object,
+            observer: '_onUserChanged'
+          },
+          opened: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true
+          },
+          desktopView: {
+            type: Boolean
+          }
+        };
+      }
+
+      _onUserChanged(user) {
+        this.opened = !!user;
+      }
+
+      _showDesktop(opened, desktopView) {
+        return opened && desktopView;
+      }
+
+      _showMobile(opened, desktopView) {
+        return opened && !desktopView;
+      }
+    }
+
+    window.customElements.define(UserEditWrapper.is, UserEditWrapper);
+  </script>
+</dom-module>

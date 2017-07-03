@@ -1,0 +1,66 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="item-detail-dialog">
+  <template>
+    <style>
+
+      :host,
+      #back {
+        display: block;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        right: 0px;
+        bottom: 0px;
+      }
+
+      #fore {
+        position: absolute;
+        top: 10px;
+        right: 5px;
+        bottom: 10px;
+        min-width: 500px;
+        max-width: 680px;
+        background: white;
+        border-radius: 5px;
+        overflow: hidden;
+      }
+
+      #back {
+        background: grey;
+        opacity: 0.3;
+      }
+    </style>
+
+    <div id="back" on-click="_close"></div>
+    <div id="fore">
+      <slot></slot>
+    </div>
+  </template>
+
+  <script>
+    class ItemDetailDialog extends Polymer.Element {
+      static get is() {
+        return 'item-detail-dialog';
+      }
+
+      ready() {
+        super.ready();
+        Polymer.RenderStatus.afterNextRender(this, () => {
+          this._parentElement = this.parentElement;
+          this.addEventListener('close', this._close.bind(this));
+          document.body.appendChild(this);
+        });
+      }
+
+      _close() {
+        if (this.parentElement == document.body) {
+          this._parentElement.appendChild(this);
+          this._parentElement.dispatchEvent(new CustomEvent('close', { bubbles: true, composed: true }));
+        }
+      }
+    }
+
+    window.customElements.define(ItemDetailDialog.is, ItemDetailDialog);
+  </script>
+</dom-module>

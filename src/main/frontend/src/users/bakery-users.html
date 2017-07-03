@@ -1,0 +1,175 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-sorter.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href="../app/bakery-search.html">
+<link rel="import" href="user-edit-wrapper.html">
+
+<dom-module id="bakery-users">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: flex;
+        flex-direction: column-reverse;
+        box-sizing: border-box;
+      }
+
+      .users-grid {
+        flex: 1;
+        height: 100%;
+        --divider-color: transparent;
+        overflow: hidden;
+        color: var(--valo-secondary-text-color);
+
+        --vaadin-grid-header-cell: {
+          height: 64px;
+          color: var(--valo-secondary-text-color);
+          font-size: var(--valo-font-size-s);
+          border-bottom: 1px solid var(--valo-black-5pct);
+        };
+
+        --vaadin-grid-body-cell: {
+          border-bottom: 1px solid var(--valo-black-5pct);
+        };
+
+        --vaadin-grid-body-row-hover-cell: {
+          --edit-icon-visibility: visible; /* TODO Not best practice */
+        };
+      }
+
+      .picture-cell {
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .picture {
+        width: var(--valo-size-xs);
+        height: var(--valo-size-xs);
+        border-radius: 50%;
+      }
+
+      .edit-cell {
+        display: flex;
+        justify-content: center;
+      }
+
+      .edit-icon {
+        --iron-icon-height: var(--valo-size-xs);
+        --iron-icon-width: var(--valo-size-xs);
+        color: var(--valo-black-50pct);
+        visibility: var(--edit-icon-visibility, hidden); /* TODO Not best practice */
+      }
+
+      vaadin-grid-sorter {
+        width: 70px;
+      }
+
+      @media (min-width: 600px) {
+        :host {
+          flex-direction: column;
+          padding: 0 var(--valo-space-s) !important;
+        }
+
+        .users-grid {
+          padding: var(--valo-space-s) 0;
+        }
+      }
+    </style>
+
+    <iron-ajax auto url="../../dummy/users.json" handle-as="json" last-response="{{users}}"></iron-ajax>
+
+    <bakery-search
+        field-placeholder="Search"
+        field-value="{{_filterValue}}"
+        button-text="New user"
+        on-button-click="_openNewUserDialog">
+    </bakery-search>
+
+    <vaadin-grid id="grid" class="users-grid" items="[[_filterUsers(users, _filterValue)]]" active-item="{{_selectedUser}}">
+      <vaadin-grid-column width="80px" flex-grow="0">
+        <template>
+          <div class="picture-cell">
+            <img src="[[item.picture]]" alt="[[item.name]]" class="picture">
+          </div>
+        </template>
+      </vaadin-grid-column>
+      <vaadin-grid-column width="270px" flex-grow="0">
+        <template class="header">
+          <vaadin-grid-sorter path="email">Email</vaadin-grid-sorter>
+        </template>
+        <template>
+          <div>
+            [[item.email]]
+          </div>
+        </template>
+      </vaadin-grid-column>
+      <vaadin-grid-column width="200px" flex-grow="0">
+        <template class="header">
+          <vaadin-grid-sorter path="name">Name</vaadin-grid-sorter>
+        </template>
+        <template>[[item.name]] [[item.last]]</template>
+      </vaadin-grid-column>
+      <vaadin-grid-column>
+        <template class="header">
+          <vaadin-grid-sorter path="role">Role</vaadin-grid-sorter>
+        </template>
+        <template>[[item.role]]</template>
+      </vaadin-grid-column>
+      <vaadin-grid-column width="80px" flex-grow="0" hidden="[[!desktopView]]">
+        <template>
+          <div class="edit-cell">
+            <iron-icon icon="valo:edit" class="edit-icon"></iron-icon>
+          </div>
+        </template>
+      </vaadin-grid-column>
+    </vaadin-grid>
+
+    <user-edit-wrapper user="[[_editableUser]]" on-close="_onClose" desktop-view="[[desktopView]]"></user-edit-wrapper>
+  </template>
+
+  <script>
+    class BakeryUsers extends Polymer.Element {
+      static get is() {
+        return 'bakery-users';
+      }
+
+      static get properties() {
+        return {
+          desktopView: Boolean,
+          _filterValue: String,
+          _selectedUser: {
+            type: Object,
+            observer: '_editUser'
+          },
+          _editableUser: Object
+        }
+      }
+
+      _openNewUserDialog() {
+        this._editUser({});
+      }
+
+      _editUser(user) {
+        this._editableUser = user;
+      }
+
+      _onClose() {
+        this.$.grid.selectedItems = [];
+        this._editableUser = null;
+      }
+
+      _filterUsers(users, filter) {
+        if (users && filter) {
+          return users.filter(function (user) {
+            return user.name.toLowerCase().includes(filter.toLowerCase());
+          });
+        }
+        return users;
+      }
+    }
+
+    window.customElements.define(BakeryUsers.is, BakeryUsers);
+  </script>
+</dom-module>

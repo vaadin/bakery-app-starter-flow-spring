@@ -1,0 +1,92 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="storefront-item-badge.html">
+<link rel="import" href="storefront-item-goods.html">
+
+
+<dom-module id="storefront-item">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: flex;
+        padding: var(--valo-space-l) var(--valo-space-s);
+        cursor: pointer;
+      }
+
+      .flex {
+        display: flex;
+      }
+
+      #info-wrapper {
+        flex-direction: column-reverse;
+        justify-content: flex-end;
+      }
+
+      #status {
+        width: 120px;
+      }
+
+      #time-place {
+        width: 100px;
+      }
+
+      #name-items {
+        flex: 1;
+      }
+
+      #place, #goods {
+        color: var(--valo-secondary-text-color);
+      }
+
+      h3 {
+        margin: 0;
+      }
+
+      @media (min-width: 600px) {
+        :host {
+          padding: var(--valo-space-l);
+        }
+
+        #info-wrapper {
+          flex-direction: row;
+        }
+      }
+    </style>
+
+    <div id="info-wrapper" class="flex">
+      <storefront-item-badge id="status" status="[[item.status]]"></storefront-item-badge>
+
+      <div id="time-place">
+        <h3 id="time">[[_getTime(item.date)]]</h3>
+        <div id="place">[[item.place]]</div>
+      </div>
+    </div>
+
+    <div id="name-items">
+      <h3 id="name">[[item.customer.name]]</h3>
+      <storefront-item-goods items="[[item.goods]]" id="goods"></storefront-item-goods>
+    </div>
+  </template>
+
+  <script>
+    class StorefrontItem extends Polymer.Element {
+      static get is() {
+        return 'storefront-item';
+      }
+
+      static get properties() {
+        return {
+          item: {
+            type: Object
+          }
+        };
+      }
+
+      _getTime(date) {
+        const day = new Date(date);
+        return `${day.getHours()}:${day.getMinutes()}`;
+      }
+    }
+
+    window.customElements.define(StorefrontItem.is, StorefrontItem);
+  </script>
+</dom-module>

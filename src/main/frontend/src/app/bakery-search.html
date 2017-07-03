@@ -1,0 +1,238 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
+<link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
+<link rel="import" href="../../bower_components/vaadin-checkbox/vaadin-checkbox.html">
+<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../../bower_components/vaadin-themes/valo/icons.html">
+<link rel="import" href="../../bower_components/vaadin-themes/valo/vaadin-text-field.html">
+<link rel="import" href="../../bower_components/vaadin-themes/valo/vaadin-button.html">
+<link rel="import" href="../../bower_components/vaadin-themes/valo/vaadin-checkbox.html">
+
+<link rel="import" href="bakery-icons.html">
+
+<dom-module id="bakery-search">
+  <template>
+    <style>
+      :host {
+        display: flex;
+        flex-direction: column;
+        padding: 0 var(--valo-space-s);
+        background-color: #d1d9e4;
+        min-height: 56px;
+        overflow: hidden;
+      }
+
+      :host([show-extra-filters]) {
+        position: fixed;
+        bottom: 0;
+        z-index: 2;
+        width: 100%;
+        min-height: 65px; /* Cover navigation */
+      }
+
+      .row {
+        display: flex;
+        align-items: center;
+        flex: 1;
+      }
+
+      .checkbox, .extra-filter, :host([show-extra-filters]) .extra-action {
+        display: none;
+      }
+
+      :host([show-checkbox]) .checkbox {
+        display: inline-block;
+        margin: 0 0 calc(-1 * var(--valo-space-l));
+        transition: all .5s;
+      }
+
+      :host([show-checkbox][show-extra-filters]) .checkbox {
+        margin: 0;
+      }
+
+      :host([show-extra-filters]) .extra-filter {
+        display: block;
+      }
+
+      .wrapper {
+        display: flex;
+        align-items: center;
+        width: 100%;
+      }
+
+      .field, .button {
+        height: 36px;
+      }
+
+      .field {
+        flex: 6;
+        min-width: 200px;
+        padding-right: var(--valo-space-s);
+      }
+
+      .button {
+        flex: 1;
+        min-width: 145px;
+      }
+
+      .checkbox[hidden] {
+        display: none !important;
+      }
+
+      @media (min-width: 600px) {
+        :host {
+          margin: 0 calc(50% - 50vw) var(--valo-space-s);
+          padding: 0 calc(50vw - 50%);
+        }
+
+        :host([show-extra-filters]) {
+          position: inherit;
+          bottom: inherit;
+          min-height: 56px;
+          z-index: 1;
+        }
+
+        .field {
+          padding-right: var(--valo-space-m);
+        }
+
+        :host([show-checkbox]) .checkbox {
+          display: none;
+          margin: 0;
+        }
+
+        :host([show-checkbox][show-extra-filters]) .checkbox {
+          display: inline-block;
+        }
+
+        :host::after {
+          content: '';
+          width: 100%;
+          border-radius: 50%;
+          box-shadow: 0 0 16px 2px var(--valo-black-20pct);
+          background: transparent;
+        }
+      }
+    </style>
+
+    <iron-media-query query="(min-width: 600px)" query-matches="{{_desktopView}}"></iron-media-query>
+
+    <div class="row">
+      <vaadin-text-field class="field" placeholder="[[fieldPlaceholder]]" value="{{fieldValue}}" focused="{{_fieldFocused}}">
+        <iron-icon icon="[[fieldIcon]]" slot="prefix"></iron-icon>
+      </vaadin-text-field>
+      <vaadin-checkbox class="checkbox" checked="{{checkboxChecked}}" focused="{{_checkboxFocused}}" hidden$="[[!_desktopView]]">[[checkboxText]]</vaadin-checkbox>
+      <vaadin-button class="button extra-filter" on-click="clearSearch" theme="tertiary">
+        [[clearText]]
+      </vaadin-button>
+      <vaadin-button class="button primary extra-action" on-click="_handleButtonClick" theme="primary icon">
+        <iron-icon icon="[[buttonIcon]]"></iron-icon>
+        <span>[[buttonText]]</span>
+      </vaadin-button>
+    </div>
+
+    <vaadin-checkbox class="checkbox" checked="{{checkboxChecked}}" focused="{{_checkboxFocused}}" hidden$="[[_desktopView]]">[[checkboxText]]</vaadin-checkbox>
+
+  </template>
+
+  <script>
+    class BakerySearch extends Polymer.Element {
+      static get is() {
+        return 'bakery-search';
+      }
+      static get properties() {
+        return {
+          fieldPlaceholder: {
+            type: String
+          },
+          fieldValue: {
+            type: String,
+            notify: true
+          },
+          fieldIcon: {
+            type: String,
+            value: 'valo:magnifier'
+          },
+          buttonIcon: {
+            type: String,
+            value: 'valo:plus'
+          },
+          buttonText: {
+            type: String
+          },
+          showCheckbox: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true
+          },
+          checkboxText: {
+            type: String
+          },
+          checkboxChecked: {
+            type: Boolean,
+            notify: true
+          },
+          clearText: {
+            type: String,
+            value: 'Clear search'
+          },
+          showExtraFilters: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true
+          },
+          _fieldFocused: {
+            type: Boolean
+          },
+          _checkboxFocused: {
+            type: Boolean
+          },
+          _isSafari: {
+            type: Boolean,
+            value: function() {
+              return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+            }
+          }
+        }
+      }
+
+      static get observers() {
+        return [
+          '_setShowExtraFilters(fieldValue, checkboxChecked, _fieldFocused, _checkboxFocused)'
+        ]
+      }
+
+      _handleButtonClick () {
+        this.dispatchEvent(new CustomEvent('button-click'));
+      }
+
+      _setShowExtraFilters(fieldValue, checkboxChecked, focused, checkboxFocused) {
+        this._debouncer = Polymer.Debouncer.debounce(
+          this._debouncer,
+          // Set 1 millisecond wait to be able move from text field to checkbox with tab.
+          Polymer.Async.timeOut.after(1), () => {
+            this.showExtraFilters = fieldValue || checkboxChecked || focused || checkboxFocused;
+
+            // Safari has an issue with repainting shadow root element styles when a host attribute changes.
+            // Need this workaround (toggle any inline css property on and off) until the issue gets fixed.
+            // Issue is fixed in Safari 11 Tech Preview version.
+            if (this._isSafari && this.root) {
+              Array.from(this.root.querySelectorAll('*')).forEach(function(el) {
+                el.style['-webkit-backface-visibility'] = 'visible';
+                el.style['-webkit-backface-visibility'] = '';
+              });
+            }
+          }
+        );
+      }
+
+      clearSearch() {
+        this.fieldValue = '';
+        this.checkboxChecked = false;
+      }
+    }
+
+    window.customElements.define(BakerySearch.is, BakerySearch);
+  </script>
+</dom-module>

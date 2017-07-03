@@ -1,0 +1,216 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
+<link rel="import" href="../../bower_components/paper-badge/paper-badge.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
+<link rel="import" href="../../bower_components/vaadin-themes/valo/vaadin-button.html">
+<link rel="import" href="../../bower_components/vaadin-themes/valo/icons.html">
+
+<dom-module id="bakery-navigation">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      .toolbar {
+        display: flex;
+        justify-content: space-between;
+        background-color: var(--valo-base-color);
+        height: 64px;
+        align-items: center;
+      }
+
+      .branding {
+        font-size: var(--valo-font-size-m);
+        line-height: normal;
+        display: none;
+      }
+
+      .navigation-tabs {
+        --paper-tabs-selection-bar-color: var(--valo-primary-color);
+        --paper-tabs-selection-bar: {
+          box-shadow: 0 0 20px 6px rgba(22, 118, 244, 0.2);
+        };
+        height: 100%;
+        width: 100%;
+      }
+
+      paper-tab {
+        --paper-tab-ink: var(--valo-secondary-text-color);
+        padding: 0 var(--valo-space-s);
+        height: 100%;
+      }
+
+      paper-tab a {
+        /* These mixins (from iron-flex-layout) center the link text. */
+        @apply --layout-vertical;
+        @apply --layout-center-center;
+        color: var(--valo-secondary-text-color);
+        text-decoration: none;
+      }
+
+      paper-tab iron-icon {
+        --iron-icon-height: var(--valo-size-xs);
+        --iron-icon-width: var(--valo-size-xs);
+        margin-bottom: var(--valo-space-xs);
+      }
+
+      paper-tab.iron-selected a iron-icon {
+        color: var(--valo-primary-color);
+      }
+
+      paper-tab.iron-selected a span {
+        color: var(--valo-body-text-color);
+      }
+
+      .user-image {
+        width: 32px;
+        height: 32px;
+        vertical-align: middle;
+        border-radius: 50%;
+        z-index: 1;
+      }
+
+      .user-image.mobile-user-image, .alarms.mobile-alarms {
+        position: fixed;
+        top: var(--valo-space-m);
+        right: var(--valo-space-m);
+      }
+
+      .user-button {
+        color: var(--valo-secondary-text-color);
+      }
+
+      paper-badge.alarms {
+        --paper-badge-width: 10px;
+        --paper-badge-height: 10px;
+        --paper-badge-margin-bottom: -10px;
+        --paper-badge-margin-left: -10px;
+        z-index: 2;
+      }
+
+      vaadin-button[hidden], .alarms[hidden], img[hidden] {
+        display: none;
+      }
+
+      @media (min-width:600px) {
+        .toolbar {
+          padding: 0 var(--valo-space-m);
+        }
+
+        paper-tab a {
+          padding: 0 var(--valo-space-xs);
+        }
+
+        .branding {
+          display: block;
+        }
+
+        .navigation-tabs {
+          width: initial;
+        }
+      }
+
+      @media (min-width:740px) {
+        paper-tab a {
+          padding: 0 var(--valo-space-m);
+        }
+      }
+
+      @media (min-width:920px) {
+        paper-tab a {
+          padding: 0 var(--valo-space-l);
+        }
+      }
+    </style>
+
+    <iron-media-query query="(min-width: 600px)" query-matches="{{_desktopView}}"></iron-media-query>
+
+    <div class="toolbar">
+      <div class="branding">
+        Café
+        <br>
+        Sunshine
+      </div>
+      <paper-tabs selected="[[page]]" attr-for-selected="name" class="navigation-tabs" align-bottom="[[_desktopView]]">
+        <paper-tab link name="storefront">
+          <a href="storefront">
+            <iron-icon icon="valo:edit"></iron-icon>
+            <span>Storefront</span>
+          </a>
+        </paper-tab>
+        <paper-tab link name="dashboard">
+          <a href="dashboard">
+            <iron-icon icon="valo:clock"></iron-icon>
+            <span>Dashboard</span>
+          </a>
+        </paper-tab>
+        <paper-tab link name="users">
+          <a href="users">
+            <iron-icon icon="valo:user"></iron-icon>
+            <span>Users</span>
+          </a>
+        </paper-tab>
+        <paper-tab link name="products">
+          <a href="products">
+            <iron-icon icon="valo:calendar"></iron-icon>
+            <span>Products</span>
+          </a>
+        </paper-tab>
+        <paper-tab link name="admin">
+          <a href="admin">
+            <iron-icon icon="valo:cog"></iron-icon>
+            <span>Admin</span>
+          </a>
+        </paper-tab>
+      </paper-tabs>
+      <vaadin-button class="user-button" hidden$="[[!_desktopView]]" theme="tertiary">
+        <img src="[[user.image]]" alt="[[user.name]]" class="user-image" id="desktop-user-image">
+        <paper-badge for="desktop-user-image" class="alarms" hidden$="[[!_showAlarms(user.alarms, _desktopView, 'desktop')]]">
+        </paper-badge>
+        [[user.name]]
+        <iron-icon icon="valo:chevron-down"></iron-icon>
+      </vaadin-button>
+    </div>
+
+    <img src="[[user.image]]" alt="[[user.name]]" class="user-image mobile-user-image" hidden$="[[_desktopView]]">
+    <paper-badge class="alarms mobile-alarms" hidden$="[[!_showAlarms(user.alarms, _desktopView, 'mobile')]]">
+    </paper-badge>
+  </template>
+
+  <script>
+    class BakeryNavigation extends Polymer.Element {
+
+      static get is() {
+        return 'bakery-navigation';
+      }
+
+      static get properties() {
+        return {
+          page: {
+            type: String
+          },
+          user: {
+            type: Object,
+            value: function() {
+              return {
+                name: 'Kate',
+                image: 'https://randomuser.me/api/portraits/women/10.jpg',
+                alarms: true
+              }
+            }
+          }
+        };
+      }
+
+      _showAlarms(alarms, desktopView, element) {
+        return element === 'mobile' ? alarms && !desktopView : alarms && desktopView;
+      }
+    }
+
+    window.customElements.define(BakeryNavigation.is, BakeryNavigation);
+  </script>
+</dom-module>

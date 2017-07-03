@@ -1,0 +1,99 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="storefront-item.html">
+<link rel="import" href="storefront-item-detail.html">
+<link rel="import" href="../elements/item-detail-inline.html">
+<link rel="import" href="../elements/item-detail-mobile.html">
+
+<dom-module id="storefront-item-wrapper">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      :host([selected]) {
+        padding: 0;
+      }
+
+      #wrapper {
+        background: white;
+        box-shadow: 0 3px 5px var(--valo-black-10pct);
+        border-bottom: 1px solid var(--valo-black-10pct);
+        margin: calc(-1 * var(--valo-space-s)) 0 var(--valo-space-s); /* Last item has shadow visible */
+      }
+
+      @media (min-width: 600px) {
+        #wrapper {
+          margin: 0 0 var(--valo-space-s);
+          border-radius: var(--valo-border-radius);
+          border-bottom: none;
+        }
+
+        :host {
+          padding: 0 var(--valo-space-s);
+        }
+      }
+    </style>
+
+    <div id="wrapper">
+      <template is="dom-if" if="[[!_showDetailsDesktop(selected, desktopView)]]">
+        <storefront-item item="[[order]]" on-click="_open"></storefront-item>
+      </template>
+
+      <template is="dom-if" if="[[_showDetailsDesktop(selected, desktopView)]]" restamp>
+        <item-detail-inline>
+          <storefront-item-detail item="[[order]]"></storefront-item-detail>
+        </item-detail-inline>
+      </template>
+
+      <template is="dom-if" if="[[_showDetailsMobile(selected, desktopView)]]" restamp>
+        <item-detail-mobile on-close="_close">
+          <storefront-item-detail item="[[order]]"></storefront-item-detail>
+        </item-detail-mobile>
+      </template>
+    </div>
+
+  </template>
+
+  <script>
+    class StorefrontItemWrapper extends Polymer.Element {
+      static get is() {
+        return 'storefront-item-wrapper';
+      }
+
+      static get properties() {
+        return {
+          order: {
+            type: Object
+          },
+          selected: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true
+          },
+          desktopView: {
+            type: Boolean
+          }
+        };
+      }
+
+      _open(e) {
+        this.dispatchEvent(new CustomEvent('open', {bubbles: true, composed: true}));
+      }
+
+      _close(e) {
+        this.dispatchEvent(new CustomEvent('close', {bubbles: true, composed: true}));
+      }
+
+      _showDetailsDesktop(selected, desktopView) {
+        return selected && desktopView;
+      }
+
+      _showDetailsMobile(selected, desktopView) {
+        return selected && !desktopView;
+      }
+    }
+
+    window.customElements.define(StorefrontItemWrapper.is, StorefrontItemWrapper);
+  </script>
+</dom-module>
