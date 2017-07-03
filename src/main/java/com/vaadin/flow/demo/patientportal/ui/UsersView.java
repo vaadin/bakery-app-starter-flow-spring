@@ -29,13 +29,14 @@ import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
+import com.vaadin.ui.UI;
 
 /**
  * @author Vaadin Ltd
  *
  */
 @Tag("users-view")
-@HtmlImport("/components/users-view.html")
+@HtmlImport("components/users-view.html")
 @Route(value = "users")
 @ParentView(MainView.class)
 public class UsersView extends PolymerTemplate<UsersView.UsersModel>
@@ -53,9 +54,18 @@ public class UsersView extends PolymerTemplate<UsersView.UsersModel>
             getElement().appendChild(div.getElement());
         }
 
+        getElement().addEventListener("click", e -> {
+            logout();
+        });
     }
     public static interface UsersModel extends TemplateModel {
         void setNUsers(int NUsers);
 
+    }
+
+    public void logout() {
+        UI ui = getUI().get();
+        ui.navigateTo("logout");
+        ui.getSession().getSession().invalidate();
     }
 }
