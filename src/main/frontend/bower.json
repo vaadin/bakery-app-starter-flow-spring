@@ -1,0 +1,47 @@
+{
+  "name": "patient-portal-flow",
+  "authors": [],
+  "description": "",
+  "main": "",
+  "license": "Apache2",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "2.0.0",
+    "webcomponentsjs": "1.0.0",
+
+    "app-route": "PolymerElements/app-route#^2.0.0",
+    "app-layout": "^2.0.0",
+
+    "iron-flex-layout": "^2.0.0",
+    "iron-localstorage": "^2.0.0",
+    "iron-pages": "^2.0.0",
+    "iron-selector": "^2.0.0",
+    "iron-icon": "^2.0.0",
+    "iron-iconset-svg": "^2.0.0",
+    "iron-a11y-keys": "^2.0.0",
+    "iron-media-query": "^2.0.0",
+
+    "paper-icon-button": "PolymerElements/paper-icon-button#^2.0.0",
+
+    "vaadin-grid": "3.0.0-alpha2",
+    "vaadin-date-picker": "2.0.0-alpha2",
+    "vaadin-combo-box": "2.0.0-alpha4",
+    "vaadin-charts": "5.0.0-alpha1",
+
+    "moment": "^2.17.1",
+    "fetch": "^2.0.1"
+  },
+  "resolutions": {
+    "polymer": "2.0.0",
+    "webcomponentsjs": "1.0.0",
+    "iron-localstorage": "^2.0.0",
+    "iron-ajax": "^2.0.2"
+  }
+}

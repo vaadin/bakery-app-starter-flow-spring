@@ -1,0 +1,127 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../my-icons.html">
+<dom-module id="main-view">
+  <template>
+    <style include="shared-styles">
+       :host {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+      }
+
+      nav.menu {
+        background: #B5B9BC;
+        height: 60px;
+        display: flex;
+      }
+
+      nav.menu a {
+        font-size: 16px;
+        line-height: 60px;
+        text-transform: uppercase;
+        width: 200px;
+        text-align: center;
+        color: #fff;
+        height: 100%;
+      }
+
+      nav.menu a:hover {
+        color: #ddd;
+        background: #747C81;
+      }
+
+      nav.menu a.active {
+        background: #fff;
+        color: #9DD22D;
+      }
+
+      nav.menu a.right {
+        margin-left: auto;
+      }
+
+      .content {
+        flex: 1;
+        display: flex;
+        padding: 16px;
+        height: 100%;
+      }
+
+      .content>* {
+        flex: 1;
+      }
+    </style>
+    <app-location route="{{route}}"></app-location>
+    <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
+
+    <nav class="menu">
+      <a href="/patients" class$="[[_isActive('patients', routeData.page)]]">Patients</a>
+      <a href="/analytics" class$="[[_isActive('analytics', routeData.page)]]">Analytics</a>
+
+      <a class="right" on-tap="_logout">
+        <iron-icon icon="sign-out"></iron-icon>
+        Logout</a>
+
+    </nav>
+    <iron-pages class="content" selected="[[page]]" attr-for-selected="name" fallback-selection="not-found-view" role="main"
+      selected-attribute="active">
+      <patients-view name="patients" route="{{subroute}}"></patients-view>
+      <analytics-view name="analytics" route="{{subroute}}"></analytics-view>
+    </iron-pages>
+  </template>
+  <script>
+    Polymer({
+      is: 'main-view',
+      properties: {
+        page: {
+          type: String,
+          reflectToAttribute: true,
+          observer: '_pageChanged'
+        }
+      },
+
+      created: function () {
+        this.routing = new Map([
+          ['patients', 'patients/patients-view.html'],
+          ['analytics', 'analytics/analytics-view.html'],
+          ['not-found', 'not-found.html']
+        ]);
+      },
+
+      observers: [
+        '_routePageChanged(routeData.page)'
+      ],
+
+      _routePageChanged: function (page) {
+        if (!page) {
+          this.set('route.path', '/patients');
+        } else {
+          this.page = page;
+        }
+      },
+
+      _pageChanged: function (page) {
+        const resolvedPageUrl = this.resolveUrl(this.routing.get(page));
+        this.importHref(resolvedPageUrl, null, this._showPage404, true);
+      },
+
+      _showPage404: function () {
+        this.page = 'not-found-view';
+      },
+
+      _logout: function () {
+        this.fire('log-out');
+      },
+
+      _isActive: function (link, page) {
+        return link === page ? 'active' : '';
+      }
+    });
+  </script>
+</dom-module>

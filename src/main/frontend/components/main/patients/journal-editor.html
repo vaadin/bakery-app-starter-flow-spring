@@ -1,0 +1,187 @@
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../shared/navigation-helpers.html">
+<link rel="import" href="../../../bower_components/vaadin-date-picker/vaadin-date-picker.html">
+<link rel="import" href="../../../bower_components/vaadin-combo-box/vaadin-combo-box.html">
+
+<dom-module id="journal-editor">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+      }
+
+      header {
+        width: 100%;
+        display: flex;
+        align-items: center;
+      }
+
+      header h1 {
+        color: #9DD22D;
+        text-transform: uppercase;
+        display: inline-block;
+        margin: 1rem auto;
+        border-bottom: 2px solid #9DD22D;
+        padding-bottom: 0.25rem;
+        font-size: 1.2rem;
+      }
+
+      .edit-form {
+        width: 90%;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .edit-form .details {
+        width: 80%;
+        margin: 0 auto;
+      }
+
+      .field.notes {
+        width: 100%;
+      }
+
+      .buttons {
+        margin: 3rem auto;
+      }
+
+      .buttons button {
+        margin-right: 1rem;
+      }
+
+      .buttons button:last-child {
+        margin-right: 0;
+      }
+
+      @media (max-width: 600px) {
+        .edit-form {
+          width: 90%;
+        }
+
+        .edit-form .details {
+          width: 100%;
+        }
+      }
+
+    </style>
+    <header>
+      <h1>New Journal Entry</h1>
+      <paper-icon-button icon="close" on-tap="close" class="close-button"></paper-icon-button>
+    </header>
+
+    <div class="edit-form">
+
+      <div class="details">
+        <div class="field">
+          <label>Patient</label>
+          <span>[[patient.lastName]], [[patient.firstName]]</span>
+        </div>
+
+        <div class="field">
+          <label for="date">Date</label>
+          <vaadin-date-picker id="date" required value="{{model.date}}"></vaadin-date-picker>
+        </div>
+
+        <div class="field">
+          <label for="appointment">Appointment</label>
+          <vaadin-combo-box id="appointment" required value="{{model.appointmentType}}" items="[[appointmentTypes]]">
+          </vaadin-combo-box>
+        </div>
+
+        <div class="field">
+          <label for="doctor">Doctor</label>
+          <vaadin-combo-box id="doctor" items="[[doctors]]" item-label-path="fullName" item-value-path="id"
+                            selected-item="{{model.doctor}}" class="input" required></vaadin-combo-box>
+        </div>
+      </div>
+
+      <div class="spacer"></div>
+
+      <div class="field stacked centered notes">
+        <label for="entry">Notes</label>
+        <textarea id="entry" rows="15" name="entry" value="{{model.entry::input}}">
+    </textarea>
+      </div>
+
+      <div class="buttons">
+        <button class="primary" disabled="[[!valid]]" on-tap="save">Save</button>
+        <a class="button" on-tap="close">Cancel</a>
+      </div>
+
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'journal-editor',
+      properties: {
+        patient: {
+          type: Object,
+          notify: true,
+          observer: '_resetModel'
+        },
+        model: {
+          type: Object
+        },
+        route: Object,
+        doctors: Array,
+        appointmentTypes: {
+          type: Array,
+          value: function () {
+            return [
+              {
+                label: 'New patient',
+                value: 'NEW_PATIENT'
+              }, {
+                label: 'X-ray',
+                value: 'X_RAY'
+              }, {
+                label: 'Surgery',
+                value: 'SURGERY'
+              }, {
+                label: 'Follow up',
+                value: 'FOLLOW_UP'
+              }
+            ]
+          }
+        }
+      },
+
+      ready: function () {
+        this._getDoctors();
+      },
+
+      _resetModel: function () {
+        this.model = {
+          date: moment().format('YYYY-MM-DD'),
+          entry: ''
+        };
+      },
+
+      _getDoctors: function () {
+        PatientPortal.http.get('/doctors')
+        // add fullName property for combobox
+          .then(doctors => {
+            this.doctors = doctors.map(doc => {
+              doc.fullName = `${doc.lastName}, ${doc.firstName}`;
+              return doc;
+            });
+          });
+      },
+
+      save: function () {
+        PatientPortal.http.put(`${this.route.prefix}/journalentries`, this.model)
+          .then(() => {
+            this.fire('new-entry');
+            this.set('route.path', '/journal');
+            this._resetModel();
+          })
+          .catch(err => console.log(err));
+      },
+
+      close: function () {
+        this.set('route.path', '/journal');
+      }
+    });
+  </script>
+</dom-module>

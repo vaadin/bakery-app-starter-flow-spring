@@ -1,0 +1,23 @@
+language: java
+jdk: oraclejdk8
+before_install: ./.travis.before_install.sh
+script: ./.travis.script.sh
+
+# Run on a dedicated Trusty VM to avoid random problems like "User limit of inotify watches reached"
+sudo: required
+dist: trusty
+
+# Cache requires a master build
+branches:
+  only:
+    - master
+    
+install: true
+
+cache:
+  directories:
+  - $HOME/.m2
+before_cache:
+  # remove all build artifacts
+  - rm -rf $TRAVIS_BUILD_DIR/localrepo/com/vaadin/flow
+  - rm -rf $TRAVIS_BUILD_DIR/localrepo/com/vaadin/flow-*

@@ -1,0 +1,170 @@
+
+<link rel="import" href="../../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../shared/navigation-helpers.html">
+<link rel="import" href="patient-profile.html">
+<link rel="import" href="patient-editor.html">
+<link rel="import" href="patient-journal.html">
+<link rel="import" href="journal-editor.html">
+
+<dom-module id="patient-details">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        position: relative;
+      }
+
+      nav[hidden].details-nav {
+        display: none;
+      }
+
+      nav.details-nav {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        text-transform: uppercase;
+        margin-bottom: 50px;
+      }
+
+      nav.details-nav a {
+        padding-bottom: 4px;
+      }
+
+      nav.details-nav .sub-pages a {
+        color: #B5B9BC;
+        margin-right: 16px;
+      }
+
+      nav.details-nav .sub-pages a.active {
+        color: #9DD22D;
+        border-bottom: 2px solid #9DD22D;
+      }
+
+      nav.details-nav .sub-pages a:last-child {
+        margin-right: 0;
+      }
+
+      .content {
+        flex: 1;
+        flex-direction: column;
+        display: flex;
+        overflow-y: scroll;
+      }
+
+      .content > * {
+        flex: 1;
+      }
+
+      @media (max-width: 600px) {
+        nav.details-nav .linktext {
+          display: none;
+        }
+      }
+    </style>
+    <app-route route="{{route}}" active="{{active}}" pattern="/:page" data="{{routeData}}"
+               tail="{{subroute}}"></app-route>
+
+    <nav class="details-nav" hidden="[[pageActive(page, 'edit', 'new-entry')]]">
+      <a on-tap="goBack">
+        <iron-icon icon="arrow-long-left"></iron-icon>
+        <span class="linktext">All patients</span></a>
+      <div class="sub-pages">
+        <a href$="[[route.prefix]]/profile"
+           class$="[[_getItemClasses('profile', page)]]">Profile</a>
+        <a href$="[[route.prefix]]/journal"
+           class$="[[_getItemClasses('journal', page)]]">Journal</a>
+      </div>
+      <a href$="[[route.prefix]]/edit">Edit patient</a>
+    </nav>
+    <iron-pages class="content" selected="[[page]]" fallback-selection="profile" attr-for-selected="name" role="main">
+      <patient-profile name="profile" patient="[[patient]]" route="{{route}}"></patient-profile>
+      <patient-journal name="journal" patient="[[patient]]" route="{{route}}" entries="[[journalEntries]]"></patient-journal>
+      <patient-editor name="edit" patient="[[patient]]" route="{{route}}"></patient-editor>
+      <journal-editor name="new-entry" patient="[[patient]]" route="{{route}}"></journal-editor>
+    </iron-pages>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'patient-details',
+      behaviors: [PatientPortal.NavHelpers],
+      properties: {
+        patient: {
+          type: Object,
+          notify: true,
+          observer: '_updateJournalEntries'
+        },
+        journalEntries: Array,
+        route: {
+          type: Object,
+          notify: true,
+          observer: 'routeChanged',
+          value: function () {
+            return {}
+          }
+        },
+        page: {
+          type: String
+        }
+      },
+
+      created: function () {
+        this.routing = new Map([
+          ['profile', 'patient-profile.html'],
+          ['journal', 'patient-journal.html'],
+          ['new', 'patient-editor.html'],
+          ['edit', 'patient-editor.html'],
+          ['new-entry', 'journal-editor.html'],
+        ]);
+      },
+
+      observers: [
+        '_routePageChanged(routeData.page)'
+      ],
+
+      listeners: {
+        'new-entry': '_updateJournalEntries'
+      },
+
+      routeChanged: function () {
+        if (this.route.path === '' && !this.page) {
+          this.set('route.path', '/profile');
+        }
+      },
+
+      goBack: function () {
+        this.patient = null;
+      },
+
+      _updateEntries: function () {
+        if(this.patient){
+          PatientPortal.http.get(`/patients/${this.patient.id}/journalentries`)
+            .then(entries => this.entries = entries);
+        }
+      },
+
+      _routePageChanged: function (page) {
+        if (page) {
+          this.page = page;
+        }
+      },
+
+      _updateJournalEntries: function () {
+        if(this.patient){
+          PatientPortal.http.get(`/patients/${this.patient.id}/journalentries`)
+            .then(entries => this.journalEntries = entries);
+        }
+      },
+
+      _getItemClasses: function (link, page) {
+        return 'item ' + (link === page ? 'active' : '');
+      },
+
+      _editing: function () {
+        return this.page.indexOf('edit') >= 0 || this.page.indexOf('new') >= 0;
+      }
+    });
+  </script>
+</dom-module>

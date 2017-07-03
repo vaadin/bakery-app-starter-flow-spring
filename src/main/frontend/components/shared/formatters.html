@@ -1,0 +1,24 @@
+<link rel="import" href="moment.html">
+
+<script>
+  PatientPortal = PatientPortal || {};
+
+  /**
+   * @polymerBehavior
+   */
+  PatientPortal.Formatters = {
+    formatDate: function(dateString){
+      return moment(dateString).format('L');
+    }, 
+
+    capitalize: function(value){
+      if (value) {
+        return value.replace(/_/, ' ').toString().split(' ').map(word => {
+          return word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase()
+       }).join(' ');
+      } else {
+        return '';
+      }
+    }
+  }
+</script>

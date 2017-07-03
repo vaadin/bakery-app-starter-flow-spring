@@ -1,0 +1,114 @@
+<!--
+  ~ Copyright 2000-2017 Vaadin Ltd.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  ~ use this file except in compliance with the License. You may obtain a copy of
+  ~ the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  ~ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  ~ License for the specific language governing permissions and limitations under
+  ~ the License.
+  -->
+
+<link rel="import" href="../../../bower_components/vaadin-charts/vaadin-column-chart.html">
+
+<dom-module id="analytics-view">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .nav {
+        justify-content: center;
+        text-transform: uppercase;
+        margin: 2em auto;
+      }
+
+      .nav a {
+        color: #B5B9BC;
+        padding-bottom: 4px;
+        margin-right: 16px;
+      }
+
+      .nav a:last-child {
+        margin-right: 0;
+      }
+
+      .nav a.active {
+        color: #9DD22D;
+        border-bottom: 2px solid #9DD22D;
+      }
+
+      highcharts-chart {
+        flex: 1;
+      }
+    </style>
+    
+    <div class="nav">
+        <a href="/analytics/age" class$="[[_isActive('age', route)]]" router-link>Age</a>
+        <a href="/analytics/doctor" class$="[[_isActive('doctor', route)]]" router-link>Doctor</a>
+        <a href="/analytics/gender" class$="[[_isActive('gender', route)]]" router-link>Gender</a>
+    </div>
+
+    <vaadin-column-chart id="chart">
+      <exporting enabled="false"></exporting>
+      <chart-title text="null"></chart-title>
+      <x-axis>
+        <chart-title text="null"></chart-title>
+      </x-axis>
+      <y-axis>
+        <chart-title>Patients</chart-title>
+      </y-axis>
+      <data-series data="[[data]]">
+        <color>#9DD22D</color>
+      </data-series>
+      <legend enabled="false"></legend>
+    </vaadin-column-chart>
+
+  </template>
+  <script>
+    class Analytics extends Polymer.Element {
+        static get is() { return 'analytics-view' }
+
+        static get properties() {
+            return {
+              categories: {
+                type: Array,
+                value: [],
+                observer: '_categoriesSet'
+              },
+              route :{
+            	  type: String,
+            	  value: ""
+              }
+            }
+          }
+
+        _categoriesSet(){
+            setTimeout(()=> this._doCategoriesSet(), 0);
+        }
+
+        _doCategoriesSet(){
+        	if ( this.$.chart.chart.xAxis ){
+        		this.$.chart.chart.xAxis[0].setCategories(this.categories);
+                this.$.chart.chart.reflow();
+        	}
+        	else {
+        		this._categoriesSet();
+        	}
+        }
+
+        _isActive(link, route) {
+            return link === route ? 'active' : '';
+          }
+      }
+
+    customElements.define(Analytics.is, Analytics);
+  </script>
+</dom-module>

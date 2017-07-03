@@ -1,0 +1,36 @@
+<script>
+  PatientPortal = PatientPortal || {};
+
+  /**
+   * @polymerBehavior
+   */
+  PatientPortal.NavHelpers = {
+
+    /**
+     * Navigates to given path.
+     */
+    navigateTo: function (path) {
+      this.set('route.path', path);
+    },
+
+    /**
+     * Returns the CSS class 'active' if the given link is active.
+     * @param link - target link
+     * @param page - current `app-router` page
+     * @param additionalClasses
+     * @returns {string}
+     */
+    activeClass: function (link, page, ...additionalClasses) {
+      return (this.pageActive(link, page) ? 'active' : '') + additionalClasses.join(' ');
+    },
+
+    /**
+     * Returns true if any of the given patterns match the link.
+     * @param link
+     * @param patterns
+     */
+    pageActive: function (link, ...patterns) {
+      return !!patterns.find(pattern => link === pattern);
+    }
+  }
+</script>

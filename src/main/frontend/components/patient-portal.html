@@ -1,0 +1,81 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="helpers.html">
+<link rel="import" href="shared-styles.html">
+<dom-module id="patient-portal">
+  <template>
+    <style include="shared-styles">
+      :host {
+        --app-primary-color: #9DD22D;
+        --app-secondary-color: black;
+        display: block;
+        height: 100vh;
+        width: 100vw;
+      }
+    </style>
+
+    <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="not-found" role="main">
+      <login-view name="login" logged-in="{{loggedIn}}"></login-view>
+      <main-view name="main"></main-view>
+      <not-found-view name="not-found"></not-found-view>
+    </iron-pages>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'patient-portal',
+
+      properties: {
+        loggedIn: {
+          type: Boolean,
+          observer: '_loginStateChanged'
+        }, 
+        page: {
+          type: String,
+          reflectToAttribute: true,
+          observer: '_pageChanged'
+        }
+      },
+
+      ready: function() {
+        this.routing = new Map([
+          ['login', 'login-view.html'],
+          ['main', 'main/main-view.html']
+        ]);
+        this.loggedIn = !!localStorage.getItem('authToken');
+        document.addEventListener('log-out', this._logOut.bind(this));
+      },
+
+      _loginStateChanged: function() {
+        this.page = this.loggedIn ? 'main' : 'login';
+      },
+
+      _pageChanged: function(page) {
+        // Load page import on demand. Show 404 page if fails
+        var resolvedPageUrl = this.resolveUrl(this.routing.get(page));
+        this.importHref(resolvedPageUrl, null, this._showPage404, true);
+      },
+
+      _showPage404: function() {
+        this.page = 'not-found';
+      }, 
+
+      _logOut: function() {
+        PatientPortal.http.logout();
+        this.loggedIn = false;
+      }
+    });
+  </script>
+</dom-module>

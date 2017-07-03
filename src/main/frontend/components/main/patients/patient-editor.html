@@ -1,0 +1,231 @@
+<link rel="import" href="../../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../../bower_components/vaadin-combo-box/vaadin-combo-box.html">
+<link rel="import" href="../../../bower_components/vaadin-date-picker/vaadin-date-picker.html">
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../shared/navigation-helpers.html">
+<link rel="import" href="../../my-icons.html">
+
+<dom-module id="patient-editor">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+      }
+
+      header {
+        width: 100%;
+        display: flex;
+        align-items: center;
+      }
+
+      header h1 {
+        color: #9DD22D;
+        text-transform: uppercase;
+        display: inline-block;
+        margin: 1rem auto;
+        border-bottom: 2px solid #9DD22D;
+        padding-bottom: 0.25rem;
+        font-size: 1.2rem;
+      }
+
+      .form-wrapper {
+        width: 80%;
+        margin: 0 auto;
+      }
+
+      footer {
+        margin: 3rem auto;
+      }
+
+      footer button {
+        margin-right: 0.5rem;
+      }
+
+      footer button:last-child {
+        margin-right: 0;
+      }
+
+      @media (max-width: 700px) {
+        .form-wrapper {
+          width: 90%
+        }
+
+        .field label {
+          width: 100%;
+        }
+      }
+    </style>
+    <header>
+      <h1>Editing profile</h1>
+      <paper-icon-button icon="close" on-tap="close" class="close-button"></paper-icon-button>
+    </header>
+    <div class="form-wrapper">
+
+      <template is="dom-if" if="[[patient.id]]">
+        <div class="field">
+          <label>Patient Id</label>
+          <span>{{patient.id}}</span>
+        </div>
+      </template>
+
+      <div class="spacer"></div>
+
+      <div class="field">
+        <label for="title">Title</label>
+        <vaadin-combo-box id="title" items="[[titles]]" value="{{model.title}}" required
+                          class="input"></vaadin-combo-box>
+      </div>
+
+      <div class="field">
+        <label for="firstName">First name</label>
+        <paper-input id="firstName" value="{{model.firstName}}" required class="input"></paper-input>
+      </div>
+
+      <div class="field">
+        <label for="middleName">Middle name</label>
+        <paper-input id="middleName" value="{{model.middleName}}" required class="input"></paper-input>
+      </div>
+
+      <div class="field">
+        <label for="lastName">Middle name</label>
+        <paper-input id="lastName" value="{{model.lastName}}" required class="input"></paper-input>
+      </div>
+
+      <div class="spacer"></div>
+
+      <div class="field">
+        <label for="gender">Gender</label>
+        <vaadin-combo-box id="gender" items="[[genders]]" required value="{{model.gender}}"
+                          class="input"></vaadin-combo-box>
+      </div>
+
+      <div class="field">
+        <label for="birthDate">Date of birth</label>
+        <vaadin-date-picker id="birthDate" value="{{model.birthDate}}" class="input" required></vaadin-date-picker>
+      </div>
+
+      <div class="field">
+        <label for="ssn">SSN</label>
+        <paper-input id="ssn" pattern="\d{3}-\d{2}-\d{4}" value="{{model.ssn}}" class="input" required></paper-input>
+      </div>
+
+      <div class="spacer"></div>
+
+      <div class="field">
+        <label for="doctor">Doctor</label>
+        <vaadin-combo-box id="doctor" items="[[doctors]]" item-label-path="fullName" item-value-path="id"
+                          selected-item="{{model.doctor}}" class="input" required></vaadin-combo-box>
+      </div>
+
+      <footer>
+        <button class="primary" disabled="[[!valid]]" on-tap="save">Save</button>
+        <a class="button" on-tap="close">Cancel</a>
+        <button type="button" hidden="[[!patient.id]]" class="danger" on-tap="_deletePatient">Delete</button>
+      </footer>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'patient-editor',
+      behaviors: [PatientPortal.NavHelpers],
+      properties: {
+        route: Object,
+        patient: {
+          type: Object,
+          notify: true,
+          observer: '_patientChanged'
+        },
+        model: Object,
+        titles: {
+          type: Array,
+          value: function () {
+            return ['Miss', 'Ms', 'Mrs', 'Mr'];
+          }
+        },
+        genders: {
+          type: Array,
+          value: function () {
+            return [{
+              label: 'Male',
+              value: 'MALE'
+            }, {
+              label: 'Female',
+              value: 'FEMALE'
+            }, {
+              label: 'Other',
+              value: 'OTHER'
+            }]
+          }
+        },
+        doctors: Array,
+        valid: Boolean
+      },
+
+      observers: [
+        '_checkFormValidity(model.*)'
+      ],
+
+      ready: function () {
+        this._getDoctors();
+        Polymer.dom(this.root).querySelectorAll('.input').forEach(field => field.autoValidate = true);
+      },
+
+      _getDoctors: function () {
+        PatientPortal.http.get('/doctors')
+        // add fullName property for combobox
+          .then(doctors => {
+            this.doctors = doctors.map(this._addFullNameToDoctor);
+            this.setDoctor();
+          });
+      },
+
+      _patientChanged: function () {
+        if (this.patient) {
+          this.model = Object.assign({}, this.patient);
+          this.set('model.birthDate', moment(this.patient.birthDate).format('YYYY-MM-DD'));
+          this.setDoctor();
+        }
+      },
+
+      setDoctor: function () {
+        if (this.patient) {
+          this.set('model.doctor', this._addFullNameToDoctor(this.patient.doctor));
+        }
+      },
+
+      _addFullNameToDoctor: function (doc) {
+        doc.fullName = `${doc.lastName}, ${doc.firstName}`;
+        return doc;
+      },
+
+
+      _checkFormValidity: function () {
+        this.valid = !Polymer.dom(this.root).querySelectorAll('.input').find(input => input.invalid);
+      },
+
+      save: function () {
+        if (this.model.id) {
+          PatientPortal.http.post('/patients/' + this.model.id, this.model)
+            .then(() => {
+              this.fire('patients-updated');
+              this.close();
+            })
+            .catch(err => console.log(err));
+        } else {
+          PatientPortal.http.put('/patients', this.model)
+            .then(() => {
+              this.fire('patients-updated');
+              this.close();
+            })
+            .catch(err => console.log(err));
+        }
+      },
+
+      close: function () {
+        this.set('route.path', '/profile');
+      }
+    });
+  </script>
+</dom-module>
