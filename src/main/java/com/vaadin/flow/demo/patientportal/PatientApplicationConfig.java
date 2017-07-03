@@ -20,7 +20,6 @@ import java.util.Collections;
 
 import javax.annotation.PostConstruct;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
@@ -30,12 +29,13 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.vaadin.flow.demo.patientportal.service.DBInitService;
-import com.vaadin.flow.router.RouterConfigurator;
+import com.vaadin.flow.demo.patientportal.backend.data.entity.User;
+import com.vaadin.flow.demo.patientportal.repositories.UserRepository;
 import com.vaadin.hummingbird.ext.spring.SpringAwareConfigurator;
 import com.vaadin.hummingbird.ext.spring.VaadinUIScope;
 import com.vaadin.hummingbird.ext.spring.annotations.UIScope;
@@ -56,42 +56,24 @@ import com.vaadin.hummingbird.ext.spring.annotations.UIScope;
  *
  */
 @Configuration
-@EnableWebSecurity
-@ComponentScan({ "com.vaadin.flow.demo.patientportal", "com.vaadin.flow.demo.patientportal.service" })
-@EnableJpaRepositories("com.vaadin.flow.demo.patientportal.repositories")
-@EntityScan("com.vaadin.flow.demo.patientportal.entity")
+@ComponentScan({
+    "com.vaadin.flow.demo.patientportal",
+    "com.vaadin.flow.demo.patientportal.backend.service",
+    "com.vaadin.flow.demo.patientportal.app",
+    "com.vaadin.flow.demo.patientportal.app.security" })
+@EnableJpaRepositories(basePackageClasses = { UserRepository.class})
+@EntityScan(basePackageClasses={User.class})
 public class PatientApplicationConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private DBInitService initService;
+    public static final String APP_URL = "/";
+    public static final String LOGIN_URL = "/login.html";
+    public static final String LOGOUT_URL = "/login.html?logout";
+    public static final String LOGIN_FAILURE_URL = "/login.html?error";
+    public static final String LOGIN_PROCESSING_URL = "/login";
 
-    /**
-     * This is temporary decision to figure out how enable some existing
-     * decision voter in the project.
-     * <p>
-     * AccessDecisionVoter` is required by the {@link SpringAwareConfigurator}
-     * class so we need to provide it somehow via configuration. There should be
-     * another good way to do it or we should use just a custom
-     * {@link RouterConfigurator} for this project.
-     */
-    private static class FakeVoter implements AccessDecisionVoter<Object> {
-
-        @Override
-        public boolean supports(ConfigAttribute attribute) {
-            return false;
-        }
-
-        @Override
-        public boolean supports(Class<?> clazz) {
-            return false;
-        }
-
-        @Override
-        public int vote(Authentication authentication, Object object,
-                Collection<ConfigAttribute> attributes) {
-            return 0;
-        }
-
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     /**
@@ -108,27 +90,45 @@ public class PatientApplicationConfig extends WebSecurityConfigurerAdapter {
         return result;
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/*").permitAll();
-    }
-
-    /**
-     * Provides a fake decision voter.
-     * <p>
-     * This is temporary solution. Should be remove in the future. See comments
-     * for {@link FakeVoter} above.
-     *
-     * @return a fake decision voter
-     */
-    @Bean
-    public static FakeVoter voter() {
-        return new FakeVoter();
-    }
-
     @PostConstruct
     private void init() {
-        initService.initDatabase();
+//        initService.initDatabase();
     }
 
+        private static class FakeVoter implements AccessDecisionVoter<Object> {
+
+            @Override
+            public boolean supports(ConfigAttribute attribute) {
+                return false;
+            }
+
+            @Override
+            public boolean supports(Class<?> clazz) {
+                return false;
+            }
+
+            @Override
+            public int vote(Authentication authentication, Object object, Collection<ConfigAttribute> attributes) {
+                return 0;
+            }
+
+        }
+
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+                http.authorizeRequests().antMatchers("/*").permitAll();
+            }
+
+            /**
+          * Provides a fake decision voter.
+          * <p>
+          * This is temporary solution. Should be remove in the future. See comments
+          * for {@link FakeVoter} above.
+          *
+          * @return a fake decision voter
+          */
+            @Bean
+        public static FakeVoter voter() {
+                return new FakeVoter();
+            }
 }
