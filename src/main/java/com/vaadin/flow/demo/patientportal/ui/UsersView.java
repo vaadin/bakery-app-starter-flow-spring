@@ -34,7 +34,7 @@ import com.vaadin.hummingbird.ext.spring.annotations.Route;
  *
  */
 @Tag("users-view")
-@HtmlImport("components/users-view.html")
+@HtmlImport("/components/users-view.html")
 @Route(value = "users")
 public class UsersView extends PolymerTemplate<UsersView.UsersModel>
         implements View {
