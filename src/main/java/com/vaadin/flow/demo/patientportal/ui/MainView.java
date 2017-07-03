@@ -16,6 +16,8 @@
 
 package com.vaadin.flow.demo.patientportal.ui;
 
+import com.vaadin.flow.router.LocationChangeEvent;
+import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.demo.patientportal.backend.service.UserService;
@@ -23,8 +25,8 @@ import com.vaadin.flow.html.Div;
 import com.vaadin.flow.router.HasChildView;
 import com.vaadin.flow.router.View;
 import com.vaadin.hummingbird.ext.spring.annotations.UIScope;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.Composite;
+
+import javax.annotation.Resource;
 
 /**
  * @author Vaadin Ltd
@@ -39,13 +41,23 @@ public class MainView extends Composite<Div> implements HasChildView {
     @Autowired
     private UserService service;
 
-    @Override
-    public void setChildView(View childView) {
-        getContent().removeAll();
-        getContent().add((Component) childView);
+    @Resource
+    private BakeryNavigation navigation;
+    private Div childContainer = new Div();
 
-        // TODO: to remove , just verifies that services and backend is working
-        service.getRepository().count();
+    @Override
+    protected void onAttach(AttachEvent attachEvent) {
+        getContent().add(navigation, childContainer);
     }
 
+    @Override
+    public void onLocationChange(LocationChangeEvent event) {
+        navigation.onLocationChange(event);
+    }
+
+    @Override
+    public void setChildView(View childView) {
+        childContainer.removeAll();
+        childContainer.add((Component) childView);
+    }
 }
