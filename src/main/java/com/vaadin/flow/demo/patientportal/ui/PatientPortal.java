@@ -29,7 +29,6 @@ import com.vaadin.hummingbird.ext.spring.annotations.Route;
  */
 @Tag("patient-portal")
 @HtmlImport("/components/patient-portal.html")
-@Route(value = "")
 @Route(value = "patients")
 @ParentView(MainView.class)
 public class PatientPortal extends
