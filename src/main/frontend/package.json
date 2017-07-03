@@ -1,15 +1,18 @@
 {
-  "name": "patient-portal-flow",
+  "name": "bakery-app-starter-flow-spring",
+  "description": "Frontend dependencies for the Bakery App Starter for Flow and Spring",
   "version": "1.0.0",
-  "description": "This file exists only to define the Bower version",
-  "main": "",
+  "license": "CVALv3",
+  "author": "Vaadin Ltd",
+  "repository": "vaadin/bakery-app-starter-flow-spring",
+  "bugs": {
+    "url": "https://github.com/vaadin/bakery-app-starter-flow-spring/issues"
+  },
   "devDependencies": {
-    "polymer-cli": "^1.3.0",
-    "bower": "^1.8.0"
+    "polymer-cli": "1.3.0",
+    "bower": "1.8.0"
   },
   "scripts": {
     "install": "bower install"
-  },
-  "author": "",
-  "license": "Apache-2.0"
+  }
 }
