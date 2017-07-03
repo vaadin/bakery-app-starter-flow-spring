@@ -1,5 +1,5 @@
 
-package com.vaadin.flow.demo.patientportal.service;
+package com.vaadin.flow.demo.patientportal.backend.service;
 
 /**
  * @author mstahv
