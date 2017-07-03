@@ -16,13 +16,10 @@
     "iron-localstorage": "^2.0.0",
     "iron-selector": "^2.0.0",
     "iron-a11y-keys": "^2.0.0",
-
     "vaadin-date-picker": "2.0.0-alpha2",
     "vaadin-charts": "5.0.0-alpha1",
-
     "moment": "^2.17.1",
     "fetch": "^2.0.1",
-
     "app-layout": "PolymerElements/app-layout#^2.0.0",
     "app-route": "PolymerElements/app-route#^2.0.0",
     "iron-ajax": "PolymerElements/iron-ajax#^2.0.0",
@@ -50,6 +47,7 @@
   },
   "resolutions": {
     "iron-localstorage": "^2.0.0",
-    "vaadin-text-field": "master"
+    "vaadin-text-field": "master",
+    "iron-ajax": "^2.0.0"
   }
 }
