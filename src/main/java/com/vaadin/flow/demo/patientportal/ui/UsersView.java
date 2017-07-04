@@ -17,6 +17,7 @@ package com.vaadin.flow.demo.patientportal.ui;
 
 import java.util.List;
 
+import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.annotations.HtmlImport;
@@ -36,6 +37,7 @@ import com.vaadin.hummingbird.ext.spring.annotations.Route;
 @Tag("users-view")
 @HtmlImport("/components/users-view.html")
 @Route(value = "users")
+@ParentView(MainView.class)
 public class UsersView extends PolymerTemplate<UsersView.UsersModel>
         implements View {
 
