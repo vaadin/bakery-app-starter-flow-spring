@@ -1,4 +1,12 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/vaadin-board/vaadin-board.html">
+<link rel="import" href="../../bower_components/vaadin-board/vaadin-board-row.html">
+
+<link rel="import" href="dashboard-orders-counter.html">
+<link rel="import" href="dashboard-column-chart.html">
+<link rel="import" href="dashboard-line-chart.html">
+<link rel="import" href="dashboard-pie-chart.html">
+<link rel="import" href="dashboard-orders-list.html">
 
 
 <dom-module id="bakery-dashboard">
@@ -9,12 +17,25 @@
       }
     </style>
 
-    <div class="card">
-      <div class="circle">2</div>
-      <h1>View Two</h1>
-      <p>Ea duis bonorum nec, falli paulo aliquid ei eum.</p>
-      <p>Id nam odio natum malorum, tibique copiosae expetenda mel ea.Detracto suavitate repudiandae no eum. Id adhuc minim soluta nam.Id nam odio natum malorum, tibique copiosae expetenda mel ea.</p>
-    </div>
+    <vaadin-board>
+      <vaadin-board-row>
+        <dashboard-orders-counter></dashboard-orders-counter>
+        <dashboard-orders-counter></dashboard-orders-counter>
+        <dashboard-orders-counter></dashboard-orders-counter>
+        <dashboard-orders-counter></dashboard-orders-counter>
+      </vaadin-board-row>
+      <vaadin-board-row>
+        <dashboard-column-chart></dashboard-column-chart>
+        <dashboard-column-chart></dashboard-column-chart>
+      </vaadin-board-row>
+      <vaadin-board-row>
+        <dashboard-line-chart></dashboard-line-chart>
+      </vaadin-board-row>
+      <vaadin-board-row>
+        <dashboard-pie-chart></dashboard-pie-chart>
+        <dashboard-orders-list></dashboard-orders-list>
+      </vaadin-board-row>
+    </vaadin-board>
   </template>
 
   <script>
