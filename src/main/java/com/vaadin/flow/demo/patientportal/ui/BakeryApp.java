@@ -23,12 +23,19 @@ import com.vaadin.hummingbird.ext.spring.annotations.Route;
 @Route(value = "*")
 @ParentView(MainView.class)
 public class BakeryApp extends PolymerTemplate<BakeryApp.Model> implements View {
+
+    private static final String DEFAULT_VIEW = "storefront";
+
     public interface Model extends TemplateModel {
         void setPage(String page);
     }
 
     @Override
     public void onLocationChange(LocationChangeEvent event) {
-        getModel().setPage(event.getLocation().getPath());
+        String page = event.getLocation().getPath();
+        if ("".equals(page)) {
+            page = DEFAULT_VIEW;
+        }
+        getModel().setPage(page);
     }
 }
