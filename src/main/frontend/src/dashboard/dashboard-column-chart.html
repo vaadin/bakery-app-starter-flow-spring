@@ -1,0 +1,19 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="dashboard-column-chart">
+  <template>
+    <div>
+      <h2>column-chart</h2>
+    </div>
+  </template>
+
+  <script>
+      class DashboardColumnChart extends Polymer.Element {
+          static get is () {
+              return 'dashboard-column-chart';
+          }
+      }
+
+      window.customElements.define(DashboardColumnChart.is, DashboardColumnChart);
+  </script>
+</dom-module>
