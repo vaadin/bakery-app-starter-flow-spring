@@ -1,0 +1,19 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="dashboard-line-chart">
+  <template>
+    <div>
+      <h2>line-chart</h2>
+    </div>
+  </template>
+
+  <script>
+      class DashboardLineChart extends Polymer.Element {
+          static get is () {
+              return 'dashboard-line-chart';
+          }
+      }
+
+      window.customElements.define(DashboardLineChart.is, DashboardLineChart);
+  </script>
+</dom-module>

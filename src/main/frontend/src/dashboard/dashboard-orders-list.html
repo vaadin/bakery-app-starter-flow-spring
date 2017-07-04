@@ -1,0 +1,19 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="dashboard-orders-list">
+  <template>
+    <div>
+      <h2>orders-list</h2>
+    </div>
+  </template>
+
+  <script>
+      class DashboardOrdersList extends Polymer.Element {
+          static get is () {
+              return 'dashboard-orders-list';
+          }
+      }
+
+      window.customElements.define(DashboardOrdersList.is, DashboardOrdersList);
+  </script>
+</dom-module>
