@@ -1,17 +1,12 @@
 {
-  "name": "patient-portal-flow",
-  "authors": [],
-  "description": "",
-  "main": "",
-  "license": "Apache2",
-  "private": true,
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
+  "name": "bakery-app-starter-flow-spring",
+  "description": "Client-side dependencies for the Bakery App Starter for Flow and Spring",
+  "version": "1.0.0",
+  "license": "CVALv3",
+  "authors": [
+    "Vaadin Ltd"
   ],
+  "private": true,
   "dependencies": {
     "iron-localstorage": "^2.0.0",
     "iron-selector": "^2.0.0",

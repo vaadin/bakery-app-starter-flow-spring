@@ -2,11 +2,11 @@ package com.vaadin.flow.demo.patientportal.ui;
 
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Tag;
-import com.vaadin.flow.demo.patientportal.backend.data.entity.User;
 import com.vaadin.flow.router.LocationChangeEvent;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.spring.annotations.UIScope;
+import com.vaadin.ui.AttachEvent;
 
 /**
  * Created by viktor on 03/07/2017.
@@ -19,18 +19,6 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> {
         private String name;
         private String image;
         private boolean alarms;
-
-        public UserModel() {
-            this.name = "Kate";
-            this.image = "https://randomuser.me/api/portraits/women/10.jpg";
-            this.alarms = true;
-        }
-
-        public UserModel(User user) {
-            this.name = user.getName();
-            this.image = "https://randomuser.me/api/portraits/women/10.jpg";
-            this.alarms = true;
-        }
 
         public String getName() {
             return name;
@@ -60,6 +48,15 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> {
     public interface Model extends TemplateModel {
         void setPage(String page);
         void setUser(UserModel user);
+    }
+
+    @Override
+    protected void onAttach(AttachEvent attachEvent) {
+        UserModel user = new UserModel();
+        user.setName("Kate");
+        user.setImage("https://randomuser.me/api/portraits/women/10.jpg");
+        user.setAlarms(true);
+        getModel().setUser(user);
     }
 
     public void onLocationChange(LocationChangeEvent event) {

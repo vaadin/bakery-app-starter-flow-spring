@@ -8,7 +8,6 @@ import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
-import com.vaadin.ui.Component;
 
 /**
  * Created by viktor on 03/07/2017.
@@ -21,19 +20,22 @@ import com.vaadin.ui.Component;
 @HtmlImport("/bower_components/vaadin-themes/valo/style.html")
 @HtmlImport("/bower_components/vaadin-themes/valo/icons.html")
 @HtmlImport("/src/app/bakery-app.html")
-@Route(value = "")
-@Route(value = "storefront")
-@Route(value = "dashboard")
-@Route(value = "products")
-@Route(value = "admin")
+@Route(value = "*")
 @ParentView(MainView.class)
 public class BakeryApp extends PolymerTemplate<BakeryApp.Model> implements View {
+
+    private static final String DEFAULT_VIEW = "storefront";
+
     public interface Model extends TemplateModel {
         void setPage(String page);
     }
 
     @Override
     public void onLocationChange(LocationChangeEvent event) {
-        getModel().setPage(event.getLocation().getPath());
+        String page = event.getLocation().getPath();
+        if ("".equals(page)) {
+            page = DEFAULT_VIEW;
+        }
+        getModel().setPage(page);
     }
 }
