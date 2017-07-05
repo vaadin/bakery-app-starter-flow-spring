@@ -219,7 +219,7 @@
                         <webInfIncludeJarPattern>.*/flow-.*.jar$|.*/test-resources-.*.jar$</webInfIncludeJarPattern>
                         <containerIncludeJarPattern>^$</containerIncludeJarPattern>
                         <resourceBases>
-                            <resourceBase>src/main/webapp</resourceBase>
+                            <resourceBase>src/main/frontend/resources</resourceBase>
                             <resourceBase>${bower.working.directory}</resourceBase>
                         </resourceBases>
                     </webAppConfig>

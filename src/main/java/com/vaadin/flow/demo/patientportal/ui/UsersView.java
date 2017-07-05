@@ -30,6 +30,7 @@ import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
+import com.vaadin.ui.History;
 import com.vaadin.ui.UI;
 
 /**
@@ -63,12 +64,10 @@ public class UsersView extends PolymerTemplate<UsersView.UsersModel>
     @EventHandler
     private void onLogout(){
         UI ui = getUI().get();
-        //TODO Fix this
-        //Remove CustomLogoutSuccessHandler
-        //This should navigate to login.html?logout
-        //But this is not supported by flow
-        //https://github.com/vaadin/flow/issues/1961
-        ui.navigateTo("logout");
+        History history = ui.getPage().getHistory();
         ui.getSession().getSession().invalidate();
+        //Reload the page after invalidating the session will redirect
+        // to login page
+        history.go(0);
     }
 }
