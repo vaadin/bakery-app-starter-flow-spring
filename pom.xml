@@ -347,6 +347,9 @@
                                     <directory>${frontend.working.directory}</directory>
                                     <excludes>
                                         <exclude>build/**</exclude>
+                                        <exclude>node/**</exclude>
+                                        <exclude>node_modules/**</exclude>
+                                        <exclude>etc/**</exclude>
                                     </excludes>
                                 </resource>
                             </webResources>
