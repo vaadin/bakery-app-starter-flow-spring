@@ -161,11 +161,51 @@
 
 
     <build>
+        <!-- The `pluginManagement` section allows listing plugin versions and other global
+             configuration in one place.
+
+             Note: listing a plugin in this section does not include it into the build process
+             per se, it needs to be included somewhere outside of this section as well. This
+             section is only to set versions etc. -->
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>${maven.clean.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>${maven.resources.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>${maven.war.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>com.github.eirslett</groupId>
+                    <artifactId>frontend-maven-plugin</artifactId>
+                    <version>${frontend.maven.plugin.version}</version>
+                    <configuration>
+                        <nodeVersion>${node.version}</nodeVersion>
+                        <npmVersion>${npm.version}</npmVersion>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-maven-plugin</artifactId>
+                    <version>${jetty.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
         <plugins>
             <!-- (1): Configures the cleanup process for JS dependencies and build -->
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
-                <version>${maven.clean.plugin.version}</version>
                 <configuration>
                     <filesets>
                         <fileset>
@@ -187,58 +227,10 @@
                 </configuration>
             </plugin>
 
-            <!-- (3): Configures the Jetty plugin to use the right resource path when running in
-                      either production or debug modes -->
-            <plugin>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <version>${jetty.version}</version>
-                <configuration>
-                    <scanIntervalSeconds>-1</scanIntervalSeconds>
-                    <stopPort>8081</stopPort>
-                    <stopWait>5</stopWait>
-                    <stopKey>foo</stopKey>
-                    <!-- Prevent Jetty from scanning the classpath. -->
-                    <!-- Speeds up startup time significantly -->
-                    <webAppConfig>
-                        <webInfIncludeJarPattern>.*/flow-.*.jar$|.*/test-resources-.*.jar$</webInfIncludeJarPattern>
-                        <containerIncludeJarPattern>^$</containerIncludeJarPattern>
-                        <resourceBases>
-                            <resourceBase>${frontend.working.directory}</resourceBase>
-                            <resourceBase>${frontend.working.directory}/resources</resourceBase>
-                            <resourceBase>${jetty.extra.resource.base}</resourceBase>
-                        </resourceBases>
-                    </webAppConfig>
-                </configuration>
-                <executions>
-                    <!-- start and stop jetty (running our app) when running 
-                        integration tests -->
-                    <execution>
-                        <id>start-jetty</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>start</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>stop-jetty</id>
-                        <phase>post-integration-test</phase>
-                        <goals>
-                            <goal>stop</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
             <!-- (2): Configures the frontend plugin to compile the web components source -->
             <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
-                <version>${frontend.maven.plugin.version}</version>
-                <configuration>
-                    <nodeVersion>${node.version}</nodeVersion>
-                    <npmVersion>${npm.version}</npmVersion>
-                </configuration>
                 <executions>
                     <execution>
                         <id>install-node-and-npm</id>
@@ -259,6 +251,48 @@
                             <workingDirectory>${frontend.working.directory}</workingDirectory>
                             <arguments>${npm.build.goal}</arguments>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- (3): Configures the Jetty plugin to use the right resource path when running in
+                      either production or debug modes -->
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <configuration>
+                    <scanIntervalSeconds>-1</scanIntervalSeconds>
+                    <stopPort>8081</stopPort>
+                    <stopWait>5</stopWait>
+                    <stopKey>foo</stopKey>
+                    <!-- Prevent Jetty from scanning the classpath. -->
+                    <!-- Speeds up startup time significantly -->
+                    <webAppConfig>
+                        <webInfIncludeJarPattern>.*/flow-.*.jar$|.*/test-resources-.*.jar$</webInfIncludeJarPattern>
+                        <containerIncludeJarPattern>^$</containerIncludeJarPattern>
+                        <resourceBases>
+                            <resourceBase>${frontend.working.directory}</resourceBase>
+                            <resourceBase>${frontend.working.directory}/resources</resourceBase>
+                            <resourceBase>${jetty.extra.resource.base}</resourceBase>
+                        </resourceBases>
+                    </webAppConfig>
+                </configuration>
+                <executions>
+                    <!-- start and stop jetty (running our app) when running
+                        integration tests -->
+                    <execution>
+                        <id>start-jetty</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>start</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>stop-jetty</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
@@ -296,7 +330,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
-                        <version>${maven.war.plugin.version}</version>
                         <configuration>
                             <webResources>
                                 <resource>
@@ -310,8 +343,8 @@
                     <!-- (6): Copies the files compiled by polymer-build to a directory which jetty:run can use
                               as resource folder -->
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-resources-plugin</artifactId>
-                        <version>3.0.2</version>
                         <executions>
                             <execution>
                                 <id>copy-resources</id>
@@ -354,7 +387,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
-                        <version>${maven.war.plugin.version}</version>
                         <configuration>
                             <webResources>
                                 <resource>
