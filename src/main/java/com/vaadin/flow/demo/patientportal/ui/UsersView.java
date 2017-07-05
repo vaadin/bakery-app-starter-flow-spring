@@ -17,9 +17,9 @@ package com.vaadin.flow.demo.patientportal.ui;
 
 import java.util.List;
 
-import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.vaadin.annotations.EventHandler;
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Tag;
 import com.vaadin.flow.demo.patientportal.backend.data.entity.User;
@@ -28,6 +28,7 @@ import com.vaadin.flow.html.Div;
 import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
+import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
 import com.vaadin.ui.UI;
 
@@ -53,18 +54,20 @@ public class UsersView extends PolymerTemplate<UsersView.UsersModel>
             div.setText(user.getName()+" "+user.getEmail());
             getElement().appendChild(div.getElement());
         }
-
-        getElement().addEventListener("click", e -> {
-            logout();
-        });
     }
     public static interface UsersModel extends TemplateModel {
         void setNUsers(int NUsers);
 
     }
 
-    public void logout() {
+    @EventHandler
+    private void onLogout(){
         UI ui = getUI().get();
+        //TODO Fix this
+        //Remove CustomLogoutSuccessHandler
+        //This should navigate to login.html?logout
+        //But this is not supported by flow
+        //https://github.com/vaadin/flow/issues/1961
         ui.navigateTo("logout");
         ui.getSession().getSession().invalidate();
     }
