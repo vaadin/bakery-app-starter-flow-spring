@@ -52,7 +52,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.authorizeRequests();
 
 		// Allow access to static resources ("/VAADIN/**")
-		reg = reg.antMatchers("/VAADIN/**").permitAll();
+		reg = reg.antMatchers("/icons/**").permitAll();
+		reg = reg.antMatchers("/fonts/**").permitAll();
 		reg = reg.antMatchers("/api/**").permitAll();
 		// Require authentication for all URLS ("/**")
 		reg = reg.antMatchers("/**").hasAnyAuthority(Role.getAllRoles());
@@ -62,11 +63,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		FormLoginConfigurer<HttpSecurity> login = sec.formLogin().permitAll();
 		login = login.loginPage(PatientApplicationConfig.LOGIN_URL).loginProcessingUrl(PatientApplicationConfig.LOGIN_PROCESSING_URL)
 			.failureUrl(PatientApplicationConfig.LOGIN_FAILURE_URL).successHandler(successHandler);
-		login.and().logout().logoutSuccessUrl(PatientApplicationConfig.LOGOUT_URL).logoutSuccessHandler(logoutSuccessHandler());
+		login.and().logout().logoutSuccessUrl(PatientApplicationConfig.LOGOUT_URL);
 	}
 
-	@Bean
-	public LogoutSuccessHandler logoutSuccessHandler() {
-		return new CustomLogoutSuccessHandler();
-	}
+
 }
