@@ -1,5 +1,6 @@
 package com.vaadin.flow.demo.patientportal.ui;
 
+import com.vaadin.annotations.ClientDelegate;
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Tag;
 import com.vaadin.flow.router.LocationChangeEvent;
@@ -7,6 +8,8 @@ import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.spring.annotations.UIScope;
 import com.vaadin.ui.AttachEvent;
+import com.vaadin.ui.History;
+import com.vaadin.ui.UI;
 
 /**
  * Created by viktor on 03/07/2017.
@@ -61,5 +64,15 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> {
 
     public void onLocationChange(LocationChangeEvent event) {
         getModel().setPage(event.getLocation().getPath());
+    }
+
+    @ClientDelegate
+    private void logout(){
+        UI ui = getUI().get();
+        History history = ui.getPage().getHistory();
+        ui.getSession().getSession().invalidate();
+        //Reload the page after invalidating the session will redirect
+        // to login page
+        history.go(0);
     }
 }
