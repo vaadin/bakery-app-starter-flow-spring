@@ -16,7 +16,7 @@ import com.vaadin.ui.UI;
  */
 @UIScope
 @Tag("bakery-navigation")
-@HtmlImport("/src/app/bakery-navigation.html")
+@HtmlImport("frontend://src/app/bakery-navigation.html")
 public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> {
     public static class UserModel {
         private String name;

@@ -35,7 +35,7 @@ import com.vaadin.hummingbird.ext.spring.annotations.Route;
  *
  */
 @Tag("users-view")
-@HtmlImport("components/users-view.html")
+@HtmlImport("frontend://components/users-view.html")
 @Route(value = "users")
 @ParentView(MainView.class)
 //
