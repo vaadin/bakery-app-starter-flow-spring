@@ -17,9 +17,9 @@ package com.vaadin.flow.demo.patientportal.ui;
 
 import java.util.List;
 
-import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.vaadin.annotations.EventHandler;
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Tag;
 import com.vaadin.flow.demo.patientportal.backend.data.entity.User;
@@ -28,16 +28,21 @@ import com.vaadin.flow.html.Div;
 import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
+import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
+import com.vaadin.ui.History;
+import com.vaadin.ui.UI;
 
 /**
  * @author Vaadin Ltd
  *
  */
 @Tag("users-view")
-@HtmlImport("/components/users-view.html")
+@HtmlImport("components/users-view.html")
 @Route(value = "users")
 @ParentView(MainView.class)
+//
+//@Secured(Role.ADMIN) Secured annotation does not work.
 public class UsersView extends PolymerTemplate<UsersView.UsersModel>
         implements View {
 
@@ -52,10 +57,19 @@ public class UsersView extends PolymerTemplate<UsersView.UsersModel>
             div.setText(user.getName()+" "+user.getEmail());
             getElement().appendChild(div.getElement());
         }
-
     }
     public static interface UsersModel extends TemplateModel {
         void setNUsers(int NUsers);
 
+    }
+
+    @EventHandler
+    private void onLogout(){
+        UI ui = getUI().get();
+        History history = ui.getPage().getHistory();
+        ui.getSession().getSession().invalidate();
+        //Reload the page after invalidating the session will redirect
+        // to login page
+        history.go(0);
     }
 }
