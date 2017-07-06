@@ -28,12 +28,16 @@
       #time-place {
         width: 100px;
       }
+      
+      #day-date {
+        width: 80px;
+      }
 
       #name-items {
         flex: 1;
       }
 
-      #place, #goods {
+      #place, #goods, #date {
         color: var(--valo-secondary-text-color);
       }
 
@@ -55,6 +59,13 @@
     <div id="info-wrapper" class="flex">
       <storefront-item-badge id="status" status="[[item.status]]"></storefront-item-badge>
 
+	  <template is="dom-if" if="[[dayColumn]]">
+	  	<div id="day-date">
+		  <h3 id="day">[[_getDay(item.date)]]</h3>
+		  <div id="date">[[_getDate(item.date)]]</div>
+		</div>
+	  </template>
+
       <div id="time-place">
         <h3 id="time">[[_getTime(item.date)]]</h3>
         <div id="place">[[item.place]]</div>
@@ -67,16 +78,33 @@
     </div>
   </template>
 
-  <script>
+  <script> 
     class StorefrontItem extends Polymer.Element {
       static get is() {
         return 'storefront-item';
+      }
+      
+      static get weekday() {
+	    return [ 
+	      "Sun",
+	      "Mon",
+	      "Tue",
+	      "Wed",
+	      "Thu",
+	      "Fri",
+	      "Sat",
+	    ]
       }
 
       static get properties() {
         return {
           item: {
             type: Object
+          },
+          dayColumn: {
+        	type: Boolean,
+        	reflectToAttribute: true,
+        	value: false
           }
         };
       }
@@ -85,6 +113,21 @@
         const day = new Date(date);
         return `${day.getHours()}:${day.getMinutes()}`;
       }
+      
+      _getDay(date) {
+          const day = new Date(date);
+          const curr = new Date();
+          var diffDays = (curr.getTime() - day.getTime()) / (1000 * 60 * 60 * 24); 
+
+          if (diffDays < 1 && diffDays > 0)
+        	  return 'Today';
+          return `${StorefrontItem.weekday[day.getDay()]}`;
+        }
+      
+      _getDate(date) {
+          const day = new Date(date);
+          return `${day.getDate()}/${day.getMonth() + 1}`;
+        }
     }
 
     window.customElements.define(StorefrontItem.is, StorefrontItem);
