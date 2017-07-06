@@ -61,8 +61,8 @@
 
 	  <template is="dom-if" if="[[dayColumn]]">
 	  	<div id="day-date">
-			<h3 id="day">[[_getDay(item.date)]]</h3>
-			<div id="date">[[_getDate(item.date)]]</div>
+		  <h3 id="day">[[_getDay(item.date)]]</h3>
+		  <div id="date">[[_getDate(item.date)]]</div>
 		</div>
 	  </template>
 
@@ -89,9 +89,6 @@
 	weekday[6] = "Sat";
   
     class StorefrontItem extends Polymer.Element {
-
-    	
-    
       static get is() {
         return 'storefront-item';
       }
