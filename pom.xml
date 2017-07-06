@@ -162,11 +162,7 @@
 
     <build>
         <!-- The `pluginManagement` section allows listing plugin versions and other global
-             configuration in one place.
-
-             Note: listing a plugin in this section does not include it into the build process
-             per se, it needs to be included somewhere outside of this section as well. This
-             section is only to set versions etc. -->
+             configuration in one place. -->
         <pluginManagement>
             <plugins>
                 <plugin>
