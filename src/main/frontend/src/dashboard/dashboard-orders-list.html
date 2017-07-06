@@ -1,10 +1,38 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../storefront/storefront-item.html">
 
 <dom-module id="dashboard-orders-list">
+
   <template>
-    <div>
-      <h2>orders-list</h2>
-    </div>
+  
+	 <style>
+      :host {
+        display: block;
+      }
+
+      #item-wrapper {
+        background: white;
+        box-shadow: 0 3px 5px var(--valo-black-10pct);
+        border-bottom: 1px solid var(--valo-black-10pct);
+        margin: calc(-1 * var(--valo-space-s)) 0 var(--valo-space-s); /* Last item has shadow visible */
+      }
+      
+      #wrapper {
+        overflow-y: scroll;
+        max-height: 355px
+      }
+      
+	  </style>
+
+      <div id="wrapper">  
+		  <template is="dom-repeat" items="[[orders]]">
+		     <div id="item-wrapper">
+		      	<storefront-item item="[[item]]" day-column="true"></storefront-item>
+		     </div>
+		  </template>
+	  </div>
+
   </template>
 
   <script>

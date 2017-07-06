@@ -48,6 +48,9 @@ public class MainView extends Composite<Div> implements HasChildView {
     @Override
     protected void onAttach(AttachEvent attachEvent) {
         getContent().add(navigation, childContainer);
+		//TODO: move this UI to frontend
+		getElement().getStyle().set("height", "100%");
+		childContainer.getElement().getStyle().set("height", "100%");
     }
 
     @Override
