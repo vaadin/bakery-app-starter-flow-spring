@@ -16,17 +16,15 @@
 
 package com.vaadin.flow.demo.patientportal.ui;
 
-import com.vaadin.flow.router.LocationChangeEvent;
-import com.vaadin.ui.*;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.vaadin.flow.demo.patientportal.backend.service.UserService;
-import com.vaadin.flow.html.Div;
+import com.vaadin.annotations.HtmlImport;
+import com.vaadin.annotations.Id;
+import com.vaadin.annotations.Tag;
 import com.vaadin.flow.router.HasChildView;
+import com.vaadin.flow.router.LocationChangeEvent;
 import com.vaadin.flow.router.View;
+import com.vaadin.flow.template.PolymerTemplate;
+import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.spring.annotations.UIScope;
-
-import javax.annotation.Resource;
 
 /**
  * @author Vaadin Ltd
@@ -34,24 +32,17 @@ import javax.annotation.Resource;
  */
 @SuppressWarnings("serial")
 @UIScope
-public class MainView extends Composite<Div> implements HasChildView {
+@Tag("main-view")
+@HtmlImport("frontend://src/main-view.html")
+public class MainView extends PolymerTemplate<TemplateModel> implements HasChildView {
 
-    // TODO : to remove, not needed. Just verifies the existing backend is
-    // working
-    @Autowired
-    private UserService service;
+    /*
+     * TODO (2017.07.06, vlukashov): set src/main-view.html as the entry point in polymer.json
+     * after the Flow issue #1969 is fixed (https://github.com/vaadin/flow/issues/1969).
+     */
 
-    @Resource
+    @Id("navigation")
     private BakeryNavigation navigation;
-    private Div childContainer = new Div();
-
-    @Override
-    protected void onAttach(AttachEvent attachEvent) {
-        getContent().add(navigation, childContainer);
-		//TODO: move this UI to frontend
-		getElement().getStyle().set("height", "100%");
-		childContainer.getElement().getStyle().set("height", "100%");
-    }
 
     @Override
     public void onLocationChange(LocationChangeEvent event) {
@@ -60,7 +51,7 @@ public class MainView extends Composite<Div> implements HasChildView {
 
     @Override
     public void setChildView(View childView) {
-        childContainer.removeAll();
-        childContainer.add((Component) childView);
+        getElement().removeAllChildren();
+        getElement().appendChild(childView.getElement());
     }
 }

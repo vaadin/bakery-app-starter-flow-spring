@@ -1,7 +1,8 @@
 {
   "entrypoint": "src/app/bakery-app.html",
-  "shell": "src/app/bakery-app.html",
+  "shell": "src/main-view.html",
   "fragments": [
+    "src/app/bakery-app.html",
     "components/users-view.html"
   ],
   "extraDependencies": [
