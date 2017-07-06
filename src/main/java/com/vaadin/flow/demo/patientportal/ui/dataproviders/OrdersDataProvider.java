@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import com.vaadin.flow.demo.patientportal.app.BeanLocator;
 import com.vaadin.flow.demo.patientportal.backend.service.OrderService;
 import com.vaadin.flow.demo.patientportal.ui.entities.Customer;
+import com.vaadin.flow.demo.patientportal.ui.entities.Good;
 import com.vaadin.flow.demo.patientportal.ui.entities.Order;
 
 public class OrdersDataProvider {
@@ -44,11 +45,27 @@ public class OrdersDataProvider {
 
 	public List<Order> getOrdersList() {
 		List<Order> list = new ArrayList<>();
-		fetchFromBackEnd(null).forEach(entityOrder -> list.add(new Order(entityOrder.getState().getDisplayName(),
-				entityOrder.getDueDate(), entityOrder.getPickupLocation().getName(),
-				new Customer(entityOrder.getCustomer().getFullName()), Collections.emptyList())));
+		fetchFromBackEnd(null).forEach(entityOrder -> list.add(getConvertedOrder(entityOrder)));
 
 		return list;
+
+	}
+
+	private Order getConvertedOrder(com.vaadin.flow.demo.patientportal.backend.data.entity.Order entityOrder) {
+		if (entityOrder == null)
+			return null;
+		Order result = new Order();
+		result.setCustomer(new Customer(entityOrder.getCustomer().getFullName()));
+		result.setDate(entityOrder.getDueDate().toString());
+		List<Good> goods = new ArrayList<>();
+
+		entityOrder.getItems().stream()
+				.forEach(item -> goods.add(new Good(item.getQuantity(), item.getProduct().getName())));
+		result.setGoods(goods);
+		result.setPlace(entityOrder.getPickupLocation().getName());
+		result.setStatus(entityOrder.getState().getDisplayName());
+
+		return result;
 
 	}
 

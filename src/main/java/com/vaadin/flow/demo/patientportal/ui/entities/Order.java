@@ -6,16 +6,13 @@ import java.util.List;
 
 public class Order implements Serializable {
 
+	private static final long serialVersionUID = -9042339584497118164L;
+
 	@Override
 	public String toString() {
 		return "Order [status=" + status + ", date=" + date + ", place=" + place + ", customer=" + customer + ", goods="
 				+ goods + "]";
 	}
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
 	String status;
 	String date;
