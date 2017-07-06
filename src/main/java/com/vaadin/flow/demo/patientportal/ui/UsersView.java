@@ -15,48 +15,111 @@
  */
 package com.vaadin.flow.demo.patientportal.ui;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
+import com.vaadin.annotations.EventHandler;
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Tag;
-import com.vaadin.flow.demo.patientportal.backend.data.entity.User;
 import com.vaadin.flow.demo.patientportal.backend.service.UserService;
-import com.vaadin.flow.html.Div;
 import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
+import com.vaadin.ui.AttachEvent;
+import com.vaadin.ui.History;
+import com.vaadin.ui.UI;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Vaadin Ltd
  *
  */
-@Tag("users-view")
-@HtmlImport("frontend://components/users-view.html")
+@Tag("bakery-users")
+@HtmlImport("frontend://src/users/bakery-users.html")
 @Route(value = "users")
 @ParentView(MainView.class)
 //
 //@Secured(Role.ADMIN) Secured annotation does not work.
-public class UsersView extends PolymerTemplate<UsersView.UsersModel>
+public class UsersView extends PolymerTemplate<UsersView.Model>
         implements View {
 
-    UserService userService;
-    @Autowired
-    public UsersView( UserService userService) {
-        this.userService = userService;
-        List<User> users =userService.getRepository().findAll();
-        getModel().setNUsers(users.size());
-        for(User user: users) {
-            Div div = new Div();
-            div.setText(user.getName()+" "+user.getEmail());
-            getElement().appendChild(div.getElement());
+    public static class UserModel {
+        private String name;
+        private String last;
+        private String email;
+        private String picture;
+        private String role;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getLast() {
+            return last;
+        }
+
+        public void setLast(String last) {
+            this.last = last;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+        public String getPicture() {
+            return picture;
+        }
+
+        public void setPicture(String picture) {
+            this.picture = picture;
+        }
+
+        public String getRole() {
+            return role;
+        }
+
+        public void setRole(String role) {
+            this.role = role;
         }
     }
-    public static interface UsersModel extends TemplateModel {
-        void setNUsers(int NUsers);
 
+    public interface Model extends TemplateModel {
+        void setUsers(List<UserModel> users);
+    }
+
+    private UserService userService;
+
+    @Autowired
+    public UsersView(UserService userService) {
+        this.userService = userService;
+    }
+
+    @Override
+    protected void onAttach(AttachEvent event) {
+        super.onAttach(event);
+
+        List<UserModel> users = userService.getRepository().findAll()
+                .stream()
+                .map(user -> {
+                    UserModel model = new UserModel();
+                    model.setName(user.getName());
+                    model.setLast("McLast");
+                    model.setEmail(user.getEmail());
+                    model.setPicture("https://randomuser.me/api/portraits/women/10.jpg");
+                    model.setRole(user.getRole());
+                    return model;
+                })
+                .collect(Collectors.toList());
+        getModel().setUsers(users);
     }
 }

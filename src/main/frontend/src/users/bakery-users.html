@@ -2,7 +2,7 @@
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-sorter.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
-<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
 
 <link rel="import" href="../app/bakery-search.html">
 <link rel="import" href="user-edit-wrapper.html">
@@ -78,7 +78,7 @@
       }
     </style>
 
-    <iron-ajax auto url="../../dummy/users.json" handle-as="json" last-response="{{users}}"></iron-ajax>
+    <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
 
     <bakery-search
         field-placeholder="Search"
