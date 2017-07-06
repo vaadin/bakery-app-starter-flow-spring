@@ -1,0 +1,41 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/vaadin-themes/valo/icons.html">
+<link rel="import" href="../bower_components/vaadin-themes/valo/typography.html">
+<link rel="import" href="../bower_components/vaadin-themes/valo/color.html">
+<link rel="import" href="../bower_components/vaadin-themes/valo/sizing-and-spacing.html">
+<link rel="import" href="../bower_components/vaadin-themes/valo/style.html">
+
+<link rel="import" href="app/style-modules/shared-styles.html">
+<link rel="import" href="app/bakery-navigation.html">
+
+<dom-module id="main-view">
+  <template>
+    <bakery-navigation id="navigation"></bakery-navigation>
+    <slot></slot>
+
+    <!-- TODO (2017.07.06, vlukashov): Move the <style> tag to the top of the template
+         after the Flow issue #1972 is fixed (https://github.com/vaadin/flow/issues/1972).
+         It's a common convention to keep styles in the beginning of a template, but here
+         it would break Flow's @Id binding feature. -->
+    <style>
+      :host {
+        display: block;
+        height: 100%;
+      }
+
+      bakery-navigation {
+        width: 100%;
+      }
+    </style>
+  </template>
+
+  <script>
+    class MainView extends Polymer.Element {
+      static get is() {
+        return 'main-view';
+      }
+    }
+
+    window.customElements.define(MainView.is, MainView);
+  </script>
+</dom-module>
