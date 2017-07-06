@@ -78,19 +78,22 @@
     </div>
   </template>
 
-  <script>
-	var weekday = new Array(7);
-	weekday[0] =  "Sun";
-	weekday[1] = "Mon";
-	weekday[2] = "Tue";
-	weekday[3] = "Wed";
-	weekday[4] = "Thu";
-	weekday[5] = "Fri";
-	weekday[6] = "Sat";
-  
+  <script> 
     class StorefrontItem extends Polymer.Element {
       static get is() {
         return 'storefront-item';
+      }
+      
+      static get weekday() {
+	    return [ 
+	      "Sun",
+	      "Mon",
+	      "Tue",
+	      "Wed",
+	      "Thu",
+	      "Fri",
+	      "Sat",
+	    ]
       }
 
       static get properties() {
@@ -99,9 +102,9 @@
             type: Object
           },
           dayColumn: {
-        	  type: Boolean,
-        	  reflectToAttribute: true,
-        	  value: false
+        	type: Boolean,
+        	reflectToAttribute: true,
+        	value: false
           }
         };
       }
@@ -118,7 +121,7 @@
 
           if (diffDays < 1 && diffDays > 0)
         	  return 'Today';
-          return `${weekday[day.getDay()]}`;
+          return `${StorefrontItem.weekday[day.getDay()]}`;
         }
       
       _getDate(date) {
