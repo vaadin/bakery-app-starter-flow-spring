@@ -1,0 +1,41 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/vaadin-themes/valo/icons.html">
+<link rel="import" href="../bower_components/vaadin-themes/valo/typography.html">
+<link rel="import" href="../bower_components/vaadin-themes/valo/color.html">
+<link rel="import" href="../bower_components/vaadin-themes/valo/sizing-and-spacing.html">
+<link rel="import" href="../bower_components/vaadin-themes/valo/style.html">
+
+<link rel="import" href="app/style-modules/shared-styles.html">
+<link rel="import" href="app/bakery-navigation.html">
+
+<dom-module id="main-view">
+  <template>
+    <!-- Due to the Flow issue #1972 (https://github.com/vaadin/flow/issues/1972),
+         The ES5 version fails in IE11 if the <style> tag is in the top of the template.
+         And ES6 version fails in Chrome if the <style> tag is in the bottom of the
+         template. -->
+    <style>
+      :host {
+        display: block;
+        height: 100%;
+      }
+
+      bakery-navigation {
+        width: 100%;
+      }
+    </style>
+
+    <bakery-navigation id="navigation"></bakery-navigation>
+    <slot></slot>
+  </template>
+
+  <script>
+    class MainView extends Polymer.Element {
+      static get is() {
+        return 'main-view';
+      }
+    }
+
+    window.customElements.define(MainView.is, MainView);
+  </script>
+</dom-module>
