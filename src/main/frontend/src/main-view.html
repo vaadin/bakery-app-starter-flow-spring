@@ -10,23 +10,51 @@
 
 <dom-module id="main-view">
   <template>
-    <!-- Due to the Flow issue #1972 (https://github.com/vaadin/flow/issues/1972),
-         The ES5 version fails in IE11 if the <style> tag is in the top of the template.
-         And ES6 version fails in Chrome if the <style> tag is in the bottom of the
-         template. -->
+    <!-- Due to the Flow issue #1972 (https://github.com/vaadin/flow/issues/1972):
+         - if the <style> tag is in the top of the template, page load fails in IE11 and Firefox
+         - if the <style> tag is in the bottom of the template, page load fails in Chrome and Safari -->
     <style>
       :host {
-        display: block;
+        --app-primary-color: var(--valo-primary-color);
+        --app-secondary-color: var(--valo-body-text-color);
+
         height: 100%;
+        display: flex;
+        flex-direction: column-reverse;
+        color: var(--valo-body-text-color);
       }
 
       bakery-navigation {
         width: 100%;
       }
-    </style>
 
+      main {
+        display: flex;
+        flex: 1;
+        overflow: auto;
+        width: 100%;
+        justify-content: center;
+      }
+
+      main > ::slotted(*) {
+        max-width: 964px;
+        flex: 1;
+      }
+
+      @media (min-width: 600px) {
+        :host {
+          flex-direction: column;
+        }
+
+        main > ::slotted(*) {
+          padding: var(--valo-space-s);
+        }
+      }
+    </style>
     <bakery-navigation id="navigation"></bakery-navigation>
-    <slot></slot>
+    <main>
+      <slot></slot>
+    </main>
   </template>
 
   <script>

@@ -43,8 +43,8 @@
     "paper-menu-button": "^2.0.0",
     "paper-listbox": "^2.0.0",
     "paper-item": "^2.0.0",
-    "neon-animation":"^2.0.1"
-
+    "neon-animation": "^2.0.1",
+    "web-animations-js": "^2.2.5"
   },
   "resolutions": {
     "iron-localstorage": "^2.0.0",

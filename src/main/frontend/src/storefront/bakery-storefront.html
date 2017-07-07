@@ -1,6 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../../bower_components/polymer/lib/utils/debounce.html">
+<link rel="import" href="../../bower_components/polymer/lib/utils/flush.html">
+<link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
 
 <link rel="import" href="../app/bakery-search.html">
 <link rel="import" href="storefront-group.html">
@@ -30,7 +31,7 @@
       }
     </style>
 
-    <iron-ajax auto url="../../dummy/storefront.json" handle-as="json" last-response="{{orderGroups}}"></iron-ajax>
+    <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
 
     <bakery-search
         field-placeholder="Search"
@@ -41,7 +42,7 @@
         checkbox-checked="{{_showPrevious}}"
         on-button-click="_openNewOrderDialog">
     </bakery-search>
-    <iron-list id="list" items="[[_filterOrders(orderGroups, _filterValue, _showPrevious)]]">
+    <iron-list id="list" items="[[orderGroups]]">
       <template>
         <storefront-group group="[[item]]" on-notify-resize="_resizeList" desktop-view="[[desktopView]]"></storefront-group>
       </template>
@@ -67,6 +68,20 @@
             type: Boolean
           }
         };
+      }
+
+      static get observers() {
+        return [
+          '_onFiltersChanged(_filterValue, _showPrevious)'
+        ];
+      }
+
+      _onFiltersChanged() {
+        this._filtersChangeDebouncer = Polymer.Debouncer.debounce(
+          this._filtersChangeDebouncer,
+          Polymer.Async.timeOut.after(300),
+          () => this.$server.onFiltersChanged(this._filterValue, this._showPrevious));
+        Polymer.enqueueDebouncer(this._filtersChangeDebouncer);
       }
 
       _filterOrders(groups, filter, showPrevious) {
