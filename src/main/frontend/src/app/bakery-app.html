@@ -8,9 +8,6 @@
 <link rel="import" href="../../bower_components/vaadin-themes/valo/sizing-and-spacing.html">
 <link rel="import" href="../../bower_components/vaadin-themes/valo/style.html">
 
-<link rel="lazy-import" href="../storefront/bakery-storefront.html">
-<link rel="lazy-import" href="../dashboard/bakery-dashboard.html">
-<link rel="lazy-import" href="../users/bakery-users.html">
 <link rel="lazy-import" href="../products/bakery-products.html">
 <link rel="lazy-import" href="../admin/bakery-admin.html">
 <link rel="lazy-import" href="../404/bakery-404.html">
@@ -51,15 +48,11 @@
       }
     </style>
 
-    <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
-
     <iron-pages
         selected="[[page]]"
         attr-for-selected="name"
         fallback-selection="view404"
         role="main">
-      <bakery-storefront name="storefront" desktop-view="[[desktopView]]"></bakery-storefront>
-      <bakery-dashboard name="dashboard"></bakery-dashboard>
       <bakery-products name="products"></bakery-products>
       <bakery-admin name="admin"></bakery-admin>
       <bakery-404 name="404"></bakery-404>
@@ -77,7 +70,7 @@
         return {
           page: {
             type: String,
-            value: 'storefront',
+            value: 'admin',
             reflectToAttribute: true,
             observer: '_pageChanged',
           },
@@ -86,7 +79,6 @@
       }
 
       _pageChanged(page) {
-        // Load page import on demand. Show 404 page if fails
         const resolvedPageUrl = this.resolveUrl('../' + page + '/bakery-' + page + '.html');
         Polymer.importHref(
           resolvedPageUrl,

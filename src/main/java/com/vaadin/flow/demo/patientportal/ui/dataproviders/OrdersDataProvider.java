@@ -48,7 +48,7 @@ public class OrdersDataProvider {
 
 	public List<Order> getOrdersList() {
 		List<Order> list = new ArrayList<>();
-		fetchFromBackEnd(null).forEach(entityOrder -> list.add(getConvertedOrder(entityOrder)));
+		fetchFromBackEnd(null).forEach(entityOrder -> list.add(OrdersDataProvider.toUIEntity(entityOrder)));
 
 		return list;
 
@@ -58,7 +58,7 @@ public class OrdersDataProvider {
 		return orderService.getDashboardData(MonthDay.now().getDayOfMonth(), Year.now().getValue());
 	}
 
-	private Order getConvertedOrder(com.vaadin.flow.demo.patientportal.backend.data.entity.Order entityOrder) {
+	public static Order toUIEntity(com.vaadin.flow.demo.patientportal.backend.data.entity.Order entityOrder) {
 		if (entityOrder == null)
 			return null;
 		Order result = new Order();
