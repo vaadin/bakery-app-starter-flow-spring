@@ -1,10 +1,35 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/vaadin-charts/vaadin-column-chart.html">
 
 <dom-module id="dashboard-column-chart">
+  <style>
+    #main {
+      display: block;
+    }
+  </style>
   <template>
-    <div>
-      <h2>column-chart</h2>
-    </div>
+  <div id="main">
+    <vaadin-column-chart>
+	  <chart-title>
+		<chart-style color="rgba(42, 71, 110, 0.6)" font-family=".SFNSText"></chart-style>
+		<text>[[data.title]]</text>
+	  </chart-title>
+	  <x-axis tick-interval="1">
+		<categories>[[data.categories]]</categories>
+      </x-axis>
+	  <y-axis>
+        <chart-title enabled="false"></chart-title>
+  	  </y-axis>
+	  <legend enabled="false"></legend>
+	  <plot-options>
+	    <column color="rgba(34, 70, 117, 0.4)"></column>
+	  </plot-options>
+	  <data-series data="[[data.values]]">
+		<name>[[data.seriesName]]</name>
+		<color-by-point>false</color-by-point>
+	  </data-series>
+    </vaadin-column-chart>
+  </div>
   </template>
 
   <script>

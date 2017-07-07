@@ -12,12 +12,13 @@ import com.vaadin.flow.demo.patientportal.backend.data.DashboardData;
 import com.vaadin.flow.demo.patientportal.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.flow.demo.patientportal.ui.entities.NamedSeries;
 import com.vaadin.flow.demo.patientportal.ui.entities.Order;
+import com.vaadin.flow.demo.patientportal.ui.utils.DashboardUtils;
+import com.vaadin.flow.demo.patientportal.ui.utils.DashboardUtils.ChartData;
 import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
-import org.springframework.context.annotation.Role;
 
 @Tag("bakery-dashboard")
 @HtmlImport("frontend://src/dashboard/bakery-dashboard.html")
@@ -30,6 +31,7 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> implemen
 			populateOrdersList(0, 10);
 			DashboardData data = OrdersDataProvider.get().getDashboardData();
 			populateYearlySalesChart(data);
+			populateDeliveriesCharts(data);
 		});
 	}
 
@@ -37,6 +39,14 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> implemen
 		// TODO: create lazy loading using getOrdersList(start, count)
 		List<Order> ordersList = OrdersDataProvider.get().getOrdersList();
 		getModel().setOrders(ordersList);
+	}
+
+	private void populateDeliveriesCharts(DashboardData data) {
+		ChartData deliveriesThisMonth = DashboardUtils.getDeliveriesThisMonthChartData(data.getDeliveriesThisMonth());
+		getModel().setDeliveriesThisMonth(deliveriesThisMonth);
+
+		ChartData deliveriesThisYear = DashboardUtils.getDeliveriesThisYearChartData(data.getDeliveriesThisYear());
+		getModel().setDeliveriesThisYear(deliveriesThisYear);
 	}
 
 	private void populateYearlySalesChart(DashboardData data) {
@@ -47,9 +57,7 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> implemen
 		for (int i = 0; i < 3; i++) {
 			NamedSeries series = new NamedSeries();
 
-			series.setSeries(Arrays.asList(data.getSalesPerMonth(i))
-					.stream()
-					.filter(number -> number != null)
+			series.setSeries(Arrays.asList(data.getSalesPerMonth(i)).stream().filter(number -> number != null)
 					.map(Number::toString).collect(Collectors.toList()));
 
 			series.setTitle(Integer.toString(year - i));
@@ -61,7 +69,15 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> implemen
 
 	public interface Model extends TemplateModel {
 		void setOrders(List<Order> orders);
+
+		void setDeliveriesThisYear(ChartData deliveriesThisYear);
+
+		void setDeliveriesThisMonth(ChartData deliveriesThisMonth);
+
 		void setSalesGraphSeries(List<NamedSeries> sales);
+
 		void setSalesGraphTitle(String title);
+
 	}
+
 }
