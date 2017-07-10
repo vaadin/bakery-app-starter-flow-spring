@@ -17,7 +17,7 @@ import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
 
 @Tag("bakery-dashboard")
-@HtmlImport("/src/dashboard/bakery-dashboard.html")
+@HtmlImport("frontend://src/dashboard/bakery-dashboard.html")
 public class DashboardView extends PolymerTemplate<DashboardView.Model> implements View {
 
 	public DashboardView() {

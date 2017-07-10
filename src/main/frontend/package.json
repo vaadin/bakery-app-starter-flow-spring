@@ -23,6 +23,8 @@
   },
   "scripts": {
     "install": "bower install",
-    "lint": "gulp lint"
+    "lint": "gulp lint",
+    "build": "polymer build",
+    "skip-build": "echo \"skipping polymer build\""
   }
 }

@@ -7,7 +7,12 @@
 <link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="../../bower_components/vaadin-themes/valo/vaadin-button.html">
 <link rel="import" href="../../bower_components/vaadin-themes/valo/icons.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
 
+<link rel="import" href="../../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../../bower_components/neon-animation/web-animations.html">
 <dom-module id="bakery-navigation">
   <template>
     <style>
@@ -92,7 +97,7 @@
         z-index: 2;
       }
 
-      vaadin-button[hidden], .alarms[hidden], img[hidden] {
+      paper-menu-button[hidden], .alarms[hidden], img[hidden] {
         display: none;
       }
 
@@ -166,19 +171,21 @@
             <span>Admin</span>
           </a>
         </paper-tab>
+        <!-- that should be changed after view from elements team is ready -->
       </paper-tabs>
-      <vaadin-button class="user-button" hidden$="[[!_desktopView]]" theme="tertiary">
-        <img src="[[user.image]]" alt="[[user.name]]" class="user-image" id="desktop-user-image">
-        <paper-badge for="desktop-user-image" class="alarms" hidden$="[[!_showAlarms(user.alarms, _desktopView, 'desktop')]]">
-        </paper-badge>
-        [[user.name]]
-        <iron-icon icon="valo:chevron-down"></iron-icon>
-      </vaadin-button>
+        <paper-menu-button hidden$="[[!_desktopView]]">
+          <div slot="dropdown-trigger" class="user-button" hidden$="[[!_desktopView]]" theme="tertiary">
+            <img src="[[user.image]]" alt="[[user.name]]" class="user-image" id="desktop-user-image">
+            <paper-badge for="desktop-user-image" class="alarms"
+                         hidden$="[[!_showAlarms(user.alarms, _desktopView, 'desktop')]]">
+            </paper-badge>
+            [[user.name]]
+          </div>
+          <paper-listbox slot="dropdown-content" selected="{{selectedMenuIndex}}">
+            <paper-item>Logout</paper-item>
+          </paper-listbox>
+        </paper-menu-button>
     </div>
-
-    <img src="[[user.image]]" alt="[[user.name]]" class="user-image mobile-user-image" hidden$="[[_desktopView]]">
-    <paper-badge class="alarms mobile-alarms" hidden$="[[!_showAlarms(user.alarms, _desktopView, 'mobile')]]">
-    </paper-badge>
   </template>
 
   <script>
@@ -193,19 +200,17 @@
           page: {
             type: String
           },
-          user: {
-            type: Object,
-            value: function() {
-              return {
-                name: 'Kate',
-                image: 'https://randomuser.me/api/portraits/women/10.jpg',
-                alarms: true
-              }
-            }
+          selectedMenuIndex:{
+            type: Number,
+            observer: '_selectedMenuChanged'
           }
         };
       }
-
+      _selectedMenuChanged(index) {
+            if(index == 0 ){
+              this.$server.logout();
+            }
+      }
       _showAlarms(alarms, desktopView, element) {
         return element === 'mobile' ? alarms && !desktopView : alarms && desktopView;
       }

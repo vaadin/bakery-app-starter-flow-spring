@@ -1,12 +1,12 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 
-<link rel="import" href="../../bower_components/app-route/app-location.html">
-<link rel="import" href="../../bower_components/app-route/app-route.html">
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../../bower_components/vaadin-themes/valo/icons.html">
-
-<link rel="import" href="bakery-navigation.html">
+<link rel="import" href="../../bower_components/vaadin-themes/valo/typography.html">
+<link rel="import" href="../../bower_components/vaadin-themes/valo/color.html">
+<link rel="import" href="../../bower_components/vaadin-themes/valo/sizing-and-spacing.html">
+<link rel="import" href="../../bower_components/vaadin-themes/valo/style.html">
 
 <link rel="lazy-import" href="../storefront/bakery-storefront.html">
 <link rel="lazy-import" href="../dashboard/bakery-dashboard.html">
@@ -25,10 +25,6 @@
         display: flex;
         flex-direction: column-reverse;
         color: var(--valo-body-text-color);
-      }
-
-      bakery-navigation {
-        width: 100%;
       }
 
       iron-pages {
@@ -86,27 +82,18 @@
             reflectToAttribute: true,
             observer: '_pageChanged',
           },
-          rootPattern: String,
           desktopView: Boolean
         };
       }
 
-      constructor() {
-        super();
-
-        // Get root pattern for app-route, for more info about `rootPath` see:
-        // https://www.polymer-project.org/2.0/docs/upgrade#urls-in-templates
-        this.rootPattern = (new URL(this.rootPath)).pathname;
-      }
-
       _pageChanged(page) {
         // Load page import on demand. Show 404 page if fails
-        var resolvedPageUrl = this.resolveUrl('../' + page + '/bakery-' + page + '.html');
+        const resolvedPageUrl = this.resolveUrl('../' + page + '/bakery-' + page + '.html');
         Polymer.importHref(
-            resolvedPageUrl,
-            null,
-            this._showPage404.bind(this),
-            true);
+          resolvedPageUrl,
+          null,
+          this._showPage404.bind(this),
+          true);
       }
 
       _showPage404() {
