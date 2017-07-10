@@ -2,7 +2,7 @@ package com.vaadin.flow.demo.patientportal.ui;
 
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Tag;
-import com.vaadin.flow.demo.patientportal.ui.utils.BakeryUrlUtils;
+import com.vaadin.flow.demo.patientportal.ui.utils.BakeryConst;
 import com.vaadin.flow.router.HasChildView;
 import com.vaadin.flow.router.LocationChangeEvent;
 import com.vaadin.flow.router.View;
@@ -26,15 +26,15 @@ public class BakeryApp extends PolymerTemplate<BakeryApp.Model> implements HasCh
 
 	@Override
 	public void onLocationChange(LocationChangeEvent locationChangeEvent) {
+		getModel().setPage(locationChangeEvent.getLocation().getPath());
 		if (!"".equals(locationChangeEvent.getLocation().getPath()))
 			return;
 
-		locationChangeEvent.getUI().navigateTo(BakeryUrlUtils.DEFAULT_PAGE);
+		locationChangeEvent.getUI().navigateTo(BakeryConst.PAGE_DEFAULT);
 	}
 
 	@Override
 	public void setChildView(View childView) {
-		getModel().setPage(BakeryUrlUtils.getUrlByView(childView));
 		if (this.childView != null)
 			getElement().removeChild(this.childView.getElement());
 

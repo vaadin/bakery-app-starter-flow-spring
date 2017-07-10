@@ -10,4 +10,6 @@ public class BakeryConst {
 	public static final String PAGE_ADMIN = "admin";
 	public static final String PAGE_NOTFOUND = "404";
 
+	public static final String PAGE_DEFAULT = PAGE_STOREFRONT;
+
 }
