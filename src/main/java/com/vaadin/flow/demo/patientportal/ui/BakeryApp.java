@@ -18,7 +18,7 @@ import com.vaadin.hummingbird.ext.spring.annotations.UIScope;
 @UIScope
 public class BakeryApp extends PolymerTemplate<BakeryApp.Model> implements HasChildView {
 
-	View childView;
+	private View childView;
 
 	public interface Model extends TemplateModel {
 		void setPage(String page);
@@ -26,18 +26,18 @@ public class BakeryApp extends PolymerTemplate<BakeryApp.Model> implements HasCh
 
 	@Override
 	public void onLocationChange(LocationChangeEvent locationChangeEvent) {
-		getModel().setPage(locationChangeEvent.getLocation().getPath());
-		if (!"".equals(locationChangeEvent.getLocation().getPath()))
-			return;
-
-		locationChangeEvent.getUI().navigateTo(BakeryConst.PAGE_DEFAULT);
+		String path = locationChangeEvent.getLocation().getPath();
+		getModel().setPage(path);
+		if (path.isEmpty()) {
+			locationChangeEvent.getUI().navigateTo(BakeryConst.PAGE_DEFAULT);
+		}
 	}
 
 	@Override
 	public void setChildView(View childView) {
-		if (this.childView != null)
+		if (this.childView != null) {
 			getElement().removeChild(this.childView.getElement());
-
+		}
 		getElement().appendChild(childView.getElement());
 		this.childView = childView;
 	}

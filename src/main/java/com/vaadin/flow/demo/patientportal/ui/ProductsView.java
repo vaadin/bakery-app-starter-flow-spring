@@ -13,10 +13,6 @@ import com.vaadin.hummingbird.ext.spring.annotations.Route;
 @HtmlImport("frontend://src/products/bakery-products.html")
 @Route(BakeryConst.PAGE_PRODUCTS)
 @ParentView(BakeryApp.class)
-public class ProductsView extends PolymerTemplate<ProductsView.Model> implements View {
-
-	public interface Model extends TemplateModel {
-
-	}
+public class ProductsView extends PolymerTemplate<TemplateModel> implements View {
 
 }

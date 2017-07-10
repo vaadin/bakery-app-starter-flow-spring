@@ -13,10 +13,6 @@ import com.vaadin.hummingbird.ext.spring.annotations.Route;
 @HtmlImport("frontend://src/admin/bakery-admin.html")
 @Route(BakeryConst.PAGE_ADMIN)
 @ParentView(BakeryApp.class)
-public class AdminView extends PolymerTemplate<AdminView.Model> implements View {
-
-	public interface Model extends TemplateModel {
-
-	}
+public class AdminView extends PolymerTemplate<TemplateModel> implements View {
 
 }

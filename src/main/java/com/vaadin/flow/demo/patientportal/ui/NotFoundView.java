@@ -13,10 +13,6 @@ import com.vaadin.hummingbird.ext.spring.annotations.Route;
 @HtmlImport("frontend://src/404/bakery-404.html")
 @Route(value = BakeryConst.PAGE_NOTFOUND)
 @ParentView(BakeryApp.class)
-public class NotFoundView extends PolymerTemplate<NotFoundView.Model> implements View {
-
-	public interface Model extends TemplateModel {
-
-	}
+public class NotFoundView extends PolymerTemplate<TemplateModel> implements View {
 
 }
