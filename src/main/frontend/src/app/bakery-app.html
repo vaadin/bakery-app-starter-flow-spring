@@ -7,10 +7,8 @@
 <link rel="import" href="../../bower_components/vaadin-themes/valo/color.html">
 <link rel="import" href="../../bower_components/vaadin-themes/valo/sizing-and-spacing.html">
 <link rel="import" href="../../bower_components/vaadin-themes/valo/style.html">
+<link rel="import" href="bakery-navigation.html">
 
-<link rel="lazy-import" href="../products/bakery-products.html">
-<link rel="lazy-import" href="../admin/bakery-admin.html">
-<link rel="lazy-import" href="../404/bakery-404.html">
 
 <dom-module id="bakery-app">
   <template>
@@ -19,12 +17,17 @@
         --app-primary-color: var(--valo-primary-color);
         --app-secondary-color: var(--valo-body-text-color);
 
+        height: 100%;
         display: flex;
         flex-direction: column-reverse;
         color: var(--valo-body-text-color);
       }
 
-      iron-pages {
+      bakery-navigation {
+        width: 100%;
+      }
+
+      #child-wrapper {
         display: flex;
         flex: 1;
         overflow: auto;
@@ -32,31 +35,25 @@
         justify-content: center;
       }
 
-      iron-pages > * {
+      #child-wrapper > ::slotted(*) {
         max-width: 964px;
         flex: 1;
       }
-
       @media (min-width: 600px) {
         :host {
           flex-direction: column;
         }
-
-        iron-pages > * {
+        
+        #child-wrapper > ::slotted(*) {
           padding: var(--valo-space-s);
         }
       }
     </style>
 
-    <iron-pages
-        selected="[[page]]"
-        attr-for-selected="name"
-        fallback-selection="view404"
-        role="main">
-      <bakery-products name="products"></bakery-products>
-      <bakery-admin name="admin"></bakery-admin>
-      <bakery-404 name="404"></bakery-404>
-    </iron-pages>
+    <bakery-navigation page="[[page]]"></bakery-navigation>
+    <div id="child-wrapper">
+      <slot></slot>
+    </div>  
   </template>
 
   <script>
@@ -66,30 +63,6 @@
         return 'bakery-app';
       }
 
-      static get properties() {
-        return {
-          page: {
-            type: String,
-            value: 'admin',
-            reflectToAttribute: true,
-            observer: '_pageChanged',
-          },
-          desktopView: Boolean
-        };
-      }
-
-      _pageChanged(page) {
-        const resolvedPageUrl = this.resolveUrl('../' + page + '/bakery-' + page + '.html');
-        Polymer.importHref(
-          resolvedPageUrl,
-          null,
-          this._showPage404.bind(this),
-          true);
-      }
-
-      _showPage404() {
-        this.page = '404';
-      }
     }
 
     window.customElements.define(BakeryApp.is, BakeryApp);

@@ -12,17 +12,17 @@ import com.vaadin.flow.demo.patientportal.backend.data.DashboardData;
 import com.vaadin.flow.demo.patientportal.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.flow.demo.patientportal.ui.entities.NamedSeries;
 import com.vaadin.flow.demo.patientportal.ui.entities.Order;
+import com.vaadin.flow.demo.patientportal.ui.utils.BakeryConst;
 import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
-import org.springframework.context.annotation.Role;
 
 @Tag("bakery-dashboard")
 @HtmlImport("frontend://src/dashboard/bakery-dashboard.html")
-@Route("dashboard")
-@ParentView(MainView.class)
+@Route(BakeryConst.PAGE_DASHBOARD)
+@ParentView(BakeryApp.class)
 public class DashboardView extends PolymerTemplate<DashboardView.Model> implements View {
 
 	public DashboardView() {
@@ -47,9 +47,7 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> implemen
 		for (int i = 0; i < 3; i++) {
 			NamedSeries series = new NamedSeries();
 
-			series.setSeries(Arrays.asList(data.getSalesPerMonth(i))
-					.stream()
-					.filter(number -> number != null)
+			series.setSeries(Arrays.asList(data.getSalesPerMonth(i)).stream().filter(number -> number != null)
 					.map(Number::toString).collect(Collectors.toList()));
 
 			series.setTitle(Integer.toString(year - i));
@@ -61,7 +59,9 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> implemen
 
 	public interface Model extends TemplateModel {
 		void setOrders(List<Order> orders);
+
 		void setSalesGraphSeries(List<NamedSeries> sales);
+
 		void setSalesGraphTitle(String title);
 	}
 }

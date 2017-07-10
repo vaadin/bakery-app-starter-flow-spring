@@ -49,7 +49,6 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> {
     }
 
     public interface Model extends TemplateModel {
-        void setPage(String page);
         void setUser(UserModel user);
     }
 
@@ -60,10 +59,6 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> {
         user.setImage("https://randomuser.me/api/portraits/women/10.jpg");
         user.setAlarms(true);
         getModel().setUser(user);
-    }
-
-    public void onLocationChange(LocationChangeEvent event) {
-        getModel().setPage(event.getLocation().getPath());
     }
 
     @ClientDelegate
