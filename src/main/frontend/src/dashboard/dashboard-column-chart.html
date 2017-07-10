@@ -11,7 +11,11 @@
   <div id="main">
     <vaadin-column-chart>
 	  <chart-title>
-		<chart-style color="rgba(42, 71, 110, 0.6)" font-family=".SFNSText"></chart-style>
+        <chart-style>
+          <color>rgba(42, 71, 110, 0.6)</color>
+          <font-size>16px</font-size>
+          <font-weight>bold</font-weight>
+        </chart-style>
 		<text>[[data.title]]</text>
 	  </chart-title>
 	  <x-axis tick-interval="1">
