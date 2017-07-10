@@ -17,10 +17,11 @@ package com.vaadin.flow.demo.patientportal;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
-import com.vaadin.flow.demo.patientportal.backend.util.LocalDateJpaConverter;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
@@ -32,10 +33,12 @@ import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.vaadin.flow.demo.patientportal.backend.data.entity.User;
+import com.vaadin.flow.demo.patientportal.backend.util.LocalDateJpaConverter;
 import com.vaadin.flow.demo.patientportal.repositories.UserRepository;
 import com.vaadin.hummingbird.ext.spring.SpringAwareConfigurator;
 import com.vaadin.hummingbird.ext.spring.VaadinUIScope;
@@ -96,41 +99,42 @@ public class PatientApplicationConfig extends WebSecurityConfigurerAdapter {
 //        initService.initDatabase();
     }
 
-        private static class FakeVoter implements AccessDecisionVoter<Object> {
+    private static class AccessDecisionVoterImpl implements AccessDecisionVoter<Object> {
 
-            @Override
-            public boolean supports(ConfigAttribute attribute) {
-                return false;
-            }
-
-            @Override
-            public boolean supports(Class<?> clazz) {
-                return false;
-            }
-
-            @Override
-            public int vote(Authentication authentication, Object object, Collection<ConfigAttribute> attributes) {
-                return 0;
-            }
-
+        @Override
+        public boolean supports(ConfigAttribute attribute) {
+            return false;
         }
 
         @Override
-        protected void configure(HttpSecurity http) throws Exception {
-                http.csrf().disable();
-                http.authorizeRequests().antMatchers("/*").permitAll();
-            }
+        public boolean supports(Class<?> clazz) {
+            return false;
+        }
 
-            /**
-          * Provides a fake decision voter.
-          * <p>
-          * This is temporary solution. Should be remove in the future. See comments
-          * for {@link FakeVoter} above.
-          *
-          * @return a fake decision voter
-          */
-            @Bean
-        public static FakeVoter voter() {
-                return new FakeVoter();
+        @Override
+        public int vote(Authentication authentication, Object object, Collection<ConfigAttribute> attributes) {
+            List<String> roles = attributes.stream().map(it -> it.getAttribute()).collect(Collectors.toList());
+            for (String role : roles) {
+                if (authentication.getAuthorities().contains(new SimpleGrantedAuthority(role))) {
+                    return 1;
+                }
             }
+            return 0;
+        }
+    }
+
+    @Override
+    protected void configure(HttpSecurity http)
+        throws Exception {
+        http.csrf().disable();
+        http.authorizeRequests().antMatchers("/*").permitAll();
+    }
+
+    /**
+     * Provides a decision voter.
+     */
+    @Bean
+    public static AccessDecisionVoterImpl voter() {
+        return new AccessDecisionVoterImpl();
+    }
 }

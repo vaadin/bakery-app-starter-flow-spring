@@ -17,6 +17,7 @@
 package com.vaadin.flow.demo.patientportal;
 
 import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.flow.demo.patientportal.ui.AccessDeniedView;
 import com.vaadin.flow.demo.patientportal.ui.NotFoundView;
 import com.vaadin.hummingbird.ext.spring.SpringAwareConfigurator;
 import com.vaadin.hummingbird.ext.spring.SpringAwareVaadinService;
@@ -35,14 +36,17 @@ import com.vaadin.server.VaadinServletService;
 @VaadinServletConfiguration(routerConfigurator = SpringAwareConfigurator.class, productionMode = false)
 public class PatientServlet extends VaadinServlet {
 
-	@Override
-	protected VaadinServletService createServletService(DeploymentConfiguration deploymentConfiguration)
-			throws ServiceException {
+    @Override
+    protected VaadinServletService createServletService(
+            DeploymentConfiguration deploymentConfiguration)
+            throws ServiceException {
 
-		SpringAwareConfigurator.setFileNotFoundView(NotFoundView.class);
+	    SpringAwareConfigurator.setFileNotFoundView(NotFoundView.class);
+        SpringAwareConfigurator.setAccessForbiddenView(AccessDeniedView.class);
+        VaadinServletService service = new SpringAwareVaadinService(this,
+                deploymentConfiguration);
+        service.init();
 
-		VaadinServletService service = new SpringAwareVaadinService(this, deploymentConfiguration);
-		service.init();
-		return service;
-	}
+        return service;
+    }
 }
