@@ -4,7 +4,7 @@
 
 <link rel="import" href="dashboard-orders-counter.html">
 <link rel="import" href="dashboard-column-chart.html">
-<link rel="import" href="dashboard-line-chart.html">
+<link rel="import" href="dashboard-yearly-sales.html">
 <link rel="import" href="dashboard-pie-chart.html">
 <link rel="import" href="dashboard-orders-list.html">
 
@@ -29,7 +29,7 @@
         <dashboard-column-chart></dashboard-column-chart>
       </vaadin-board-row>
       <vaadin-board-row>
-        <dashboard-line-chart></dashboard-line-chart>
+        <dashboard-yearly-sales series="[[salesGraphSeries]]" title="[[salesGraphTitle]]"></dashboard-yearly-sales>
       </vaadin-board-row>
       <vaadin-board-row>
         <dashboard-pie-chart></dashboard-pie-chart>
