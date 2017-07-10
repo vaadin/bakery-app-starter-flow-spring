@@ -15,9 +15,14 @@ import com.vaadin.flow.demo.patientportal.ui.entities.Order;
 import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
+import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
+import com.vaadin.hummingbird.ext.spring.annotations.Route;
+import org.springframework.context.annotation.Role;
 
 @Tag("bakery-dashboard")
 @HtmlImport("frontend://src/dashboard/bakery-dashboard.html")
+@Route("dashboard")
+@ParentView(MainView.class)
 public class DashboardView extends PolymerTemplate<DashboardView.Model> implements View {
 
 	public DashboardView() {
