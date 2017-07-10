@@ -8,12 +8,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import com.vaadin.flow.demo.patientportal.backend.data.DashboardData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.vaadin.flow.demo.patientportal.app.BeanLocator;
+import com.vaadin.flow.demo.patientportal.backend.data.DashboardData;
 import com.vaadin.flow.demo.patientportal.backend.service.OrderService;
 import com.vaadin.flow.demo.patientportal.ui.entities.Customer;
 import com.vaadin.flow.demo.patientportal.ui.entities.Good;
@@ -55,7 +55,7 @@ public class OrdersDataProvider {
 	}
 
 	public DashboardData getDashboardData() {
-		return orderService.getDashboardData(MonthDay.now().getDayOfMonth(), Year.now().getValue());
+		return orderService.getDashboardData(MonthDay.now().getMonthValue(), Year.now().getValue());
 	}
 
 	public static Order toUIEntity(com.vaadin.flow.demo.patientportal.backend.data.entity.Order entityOrder) {
