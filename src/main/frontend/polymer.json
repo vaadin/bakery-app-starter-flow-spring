@@ -2,8 +2,7 @@
   "entrypoint": "src/app/bakery-app.html",
   "shell": "src/main-view.html",
   "fragments": [
-    "src/app/bakery-app.html",
-    "components/users-view.html"
+    "src/app/bakery-app.html"
   ],
   "extraDependencies": [
     "bower_components/webcomponentsjs/*.js.map"
