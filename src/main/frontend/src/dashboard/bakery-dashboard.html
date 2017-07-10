@@ -15,6 +15,11 @@
       :host {
         display: block;
       }
+                
+      dashboard-column-chart, dashboard-pie-chart, dashboard-orders-list {
+      	box-shadow: 0 2px 5px 0 rgba(23, 68, 128, 0.1);
+      	padding: 1px;
+      }
     </style>
 
     <vaadin-board>
@@ -25,8 +30,8 @@
         <dashboard-orders-counter></dashboard-orders-counter>
       </vaadin-board-row>
       <vaadin-board-row>
-        <dashboard-column-chart></dashboard-column-chart>
-        <dashboard-column-chart></dashboard-column-chart>
+        <dashboard-column-chart data="[[deliveriesThisMonth]]"></dashboard-column-chart>
+        <dashboard-column-chart data="[[deliveriesThisYear]]"></dashboard-column-chart>
       </vaadin-board-row>
       <vaadin-board-row>
         <dashboard-yearly-sales series="[[salesGraphSeries]]" title="[[salesGraphTitle]]"></dashboard-yearly-sales>

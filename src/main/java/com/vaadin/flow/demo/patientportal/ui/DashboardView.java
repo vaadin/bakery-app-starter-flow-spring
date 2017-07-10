@@ -13,6 +13,8 @@ import com.vaadin.flow.demo.patientportal.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.flow.demo.patientportal.ui.entities.NamedSeries;
 import com.vaadin.flow.demo.patientportal.ui.entities.Order;
 import com.vaadin.flow.demo.patientportal.ui.utils.BakeryConst;
+import com.vaadin.flow.demo.patientportal.ui.utils.DashboardUtils;
+import com.vaadin.flow.demo.patientportal.ui.utils.DashboardUtils.ChartData;
 import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
@@ -30,6 +32,7 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> implemen
 			populateOrdersList(0, 10);
 			DashboardData data = OrdersDataProvider.get().getDashboardData();
 			populateYearlySalesChart(data);
+			populateDeliveriesCharts(data);
 		});
 	}
 
@@ -37,6 +40,14 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> implemen
 		// TODO: create lazy loading using getOrdersList(start, count)
 		List<Order> ordersList = OrdersDataProvider.get().getOrdersList();
 		getModel().setOrders(ordersList);
+	}
+
+	private void populateDeliveriesCharts(DashboardData data) {
+		ChartData deliveriesThisMonth = DashboardUtils.getDeliveriesThisMonthChartData(data.getDeliveriesThisMonth());
+		getModel().setDeliveriesThisMonth(deliveriesThisMonth);
+
+		ChartData deliveriesThisYear = DashboardUtils.getDeliveriesThisYearChartData(data.getDeliveriesThisYear());
+		getModel().setDeliveriesThisYear(deliveriesThisYear);
 	}
 
 	private void populateYearlySalesChart(DashboardData data) {
@@ -60,8 +71,14 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> implemen
 	public interface Model extends TemplateModel {
 		void setOrders(List<Order> orders);
 
+		void setDeliveriesThisYear(ChartData deliveriesThisYear);
+
+		void setDeliveriesThisMonth(ChartData deliveriesThisMonth);
+
 		void setSalesGraphSeries(List<NamedSeries> sales);
 
 		void setSalesGraphTitle(String title);
+
 	}
+
 }
