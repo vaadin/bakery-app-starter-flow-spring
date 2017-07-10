@@ -20,6 +20,7 @@ import java.util.Collections;
 
 import javax.annotation.PostConstruct;
 
+import com.vaadin.flow.demo.patientportal.backend.util.LocalDateJpaConverter;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
@@ -62,7 +63,7 @@ import com.vaadin.hummingbird.ext.spring.annotations.UIScope;
     "com.vaadin.flow.demo.patientportal.app",
     "com.vaadin.flow.demo.patientportal.app.security" })
 @EnableJpaRepositories(basePackageClasses = { UserRepository.class})
-@EntityScan(basePackageClasses={User.class})
+@EntityScan(basePackageClasses={User.class, LocalDateJpaConverter.class})
 public class PatientApplicationConfig extends WebSecurityConfigurerAdapter {
 
     public static final String APP_URL = "/";

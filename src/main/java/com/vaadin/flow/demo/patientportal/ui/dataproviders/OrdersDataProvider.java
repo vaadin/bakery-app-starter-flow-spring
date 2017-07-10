@@ -1,11 +1,14 @@
 package com.vaadin.flow.demo.patientportal.ui.dataproviders;
 
 import java.time.LocalDate;
+import java.time.MonthDay;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import com.vaadin.flow.demo.patientportal.backend.data.DashboardData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -49,6 +52,10 @@ public class OrdersDataProvider {
 
 		return list;
 
+	}
+
+	public DashboardData getDashboardData() {
+		return orderService.getDashboardData(MonthDay.now().getDayOfMonth(), Year.now().getValue());
 	}
 
 	private Order getConvertedOrder(com.vaadin.flow.demo.patientportal.backend.data.entity.Order entityOrder) {
