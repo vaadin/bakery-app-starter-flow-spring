@@ -2,11 +2,11 @@ package com.vaadin.flow.demo.patientportal.ui.entities;
 
 import java.util.List;
 
-public class ListSeries {
+public class NamedSeries {
     private List<String> series;
     private String title;
 
-    public ListSeries() {}
+    public NamedSeries() {}
 
     public List<String> getSeries() {
         return series;

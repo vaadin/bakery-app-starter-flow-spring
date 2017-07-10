@@ -10,7 +10,7 @@ import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Tag;
 import com.vaadin.flow.demo.patientportal.backend.data.DashboardData;
 import com.vaadin.flow.demo.patientportal.ui.dataproviders.OrdersDataProvider;
-import com.vaadin.flow.demo.patientportal.ui.entities.ListSeries;
+import com.vaadin.flow.demo.patientportal.ui.entities.NamedSeries;
 import com.vaadin.flow.demo.patientportal.ui.entities.Order;
 import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
@@ -35,12 +35,12 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> implemen
 	}
 
 	private void populateYearlySalesChart(DashboardData data) {
-		List<ListSeries> yearlySales = new ArrayList<>();
+		List<NamedSeries> yearlySales = new ArrayList<>();
 
 		int year = Year.now().getValue();
 
 		for (int i = 0; i < 3; i++) {
-			ListSeries series = new ListSeries();
+			NamedSeries series = new NamedSeries();
 
 			series.setSeries(Arrays.asList(data.getSalesPerMonth(i))
 					.stream()
@@ -56,7 +56,7 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> implemen
 
 	public interface Model extends TemplateModel {
 		void setOrders(List<Order> orders);
-		void setSalesGraphSeries(List<ListSeries> sales);
+		void setSalesGraphSeries(List<NamedSeries> sales);
 		void setSalesGraphTitle(String title);
 	}
 }
