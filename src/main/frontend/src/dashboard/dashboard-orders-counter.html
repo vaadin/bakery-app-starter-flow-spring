@@ -85,27 +85,27 @@
       class DashboardOrdersCounter extends Polymer.Element {
         static get is() {
           return 'dashboard-orders-counter';
-          }
-          
-          static get properties() {
-            return {
-              countColor: {
-                type: String,
-                reflectToAttribute: true
-              },
-              data:{
-                type: Object,
-                reflectToAttribute: true
-              },
-              displayChart:{
-                type: Boolean,
-                reflectToAttribute: true,
-                value: false
-              }
-            };
         }
+          
+        static get properties() {
+          return {
+            countColor: {
+              type: String,
+              reflectToAttribute: true
+            },
+            data:{
+              type: Object,
+              reflectToAttribute: true
+            },
+            displayChart:{
+              type: Boolean,
+              reflectToAttribute: true,
+              value: false
+            }
+          };
       }
+    }
 
-      window.customElements.define(DashboardOrdersCounter.is, DashboardOrdersCounter);
+    window.customElements.define(DashboardOrdersCounter.is, DashboardOrdersCounter);
   </script>
 </dom-module>
