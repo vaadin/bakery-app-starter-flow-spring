@@ -3,7 +3,7 @@ package com.vaadin.flow.demo.patientportal.ui;
 import com.vaadin.annotations.ClientDelegate;
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Tag;
-import com.vaadin.flow.router.LocationChangeEvent;
+import com.vaadin.flow.demo.patientportal.app.security.SecuredViewAccessControl;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.spring.annotations.UIScope;
@@ -11,9 +11,6 @@ import com.vaadin.ui.AttachEvent;
 import com.vaadin.ui.History;
 import com.vaadin.ui.UI;
 
-/**
- * Created by viktor on 03/07/2017.
- */
 @UIScope
 @Tag("bakery-navigation")
 @HtmlImport("frontend://src/app/bakery-navigation.html")
@@ -59,6 +56,8 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> {
         user.setImage("https://randomuser.me/api/portraits/women/10.jpg");
         user.setAlarms(true);
         getModel().setUser(user);
+        getElement().setProperty("users-hidden", !SecuredViewAccessControl.isAccessGranted(UsersView.class));
+        getElement().setProperty("admin-hidden", !SecuredViewAccessControl.isAccessGranted(AdminView.class));
     }
 
     @ClientDelegate
