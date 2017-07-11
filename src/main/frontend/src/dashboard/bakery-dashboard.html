@@ -24,10 +24,10 @@
 
     <vaadin-board>
       <vaadin-board-row>
-        <dashboard-orders-counter></dashboard-orders-counter>
-        <dashboard-orders-counter></dashboard-orders-counter>
-        <dashboard-orders-counter></dashboard-orders-counter>
-        <dashboard-orders-counter></dashboard-orders-counter>
+        <dashboard-orders-counter data="[[todayOrdersCount]]" count-color="#55BF3B" display-chart="true"></dashboard-orders-counter>
+        <dashboard-orders-counter data="[[notAvailableOrdersCount]]" count-color="#ff473a"></dashboard-orders-counter>
+        <dashboard-orders-counter data="[[newOrdersCount]]" count-color="#1877f3"></dashboard-orders-counter>
+        <dashboard-orders-counter data="[[tomorrowOrdersCount]]" count-color="rgba(45, 71, 105, 0.7)"></dashboard-orders-counter>
       </vaadin-board-row>
       <vaadin-board-row>
         <dashboard-column-chart data="[[deliveriesThisMonth]]"></dashboard-column-chart>
