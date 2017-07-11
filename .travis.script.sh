@@ -5,4 +5,6 @@
 # TRAVIS_SECURE_ENV_VARS == true if encrypted variables, e.g. SONAR_HOST is available
 # TRAVIS_REPO_SLUG == the repository, e.g. vaadin/vaadin
 
-mvn -Dmaven.repo.local=$TRAVIS_BUILD_DIR/localrepo -B -e -V -Dvaadin.testbench.developer.license=$TESTBENCH_LICENSE clean verify
+TESTBENCH=-Dvaadin.testbench.developer.license=$TESTBENCH_LICENSE
+
+mvn -B -e -V -Pit -Dvaadin.productionMode $TESTBENCH clean verify

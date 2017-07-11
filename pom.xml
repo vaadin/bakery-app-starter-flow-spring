@@ -19,7 +19,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
-
         <!-- Dependencies -->
         <flow.version>0.1.12-SNAPSHOT</flow.version>
         <testbench.version>5.0.0</testbench.version>
@@ -157,6 +156,14 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-testbench-core</artifactId>
+            <version>5.1.0.alpha1</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 
@@ -263,6 +270,7 @@
                 <jetty.extra.resource.base>${project.build.directory}/jetty-extra-resources</jetty.extra.resource.base>
             </properties>
 
+
             <!-- (4): Makes the package run in production mode when deployed, without the need of setting extra
                       properties on the server -->
             <dependencies>
@@ -313,6 +321,7 @@
                                 </configuration>
                             </execution>
                         </executions>
+
                     </plugin>
                 </plugins>
             </build>
@@ -405,10 +414,10 @@
              (for integration tests are skipped). Moving jetty start/stop into a separate
              profile speeds up -DskipTests builds. -->
         <profile>
-            <id>integration-tests-jetty</id>
+            <id>it</id>
             <activation>
                 <property>
-                    <name>!skipTests</name>
+                    <name>it</name>
                 </property>
             </activation>
             <build>
@@ -433,6 +442,45 @@
                             </execution>
                         </executions>
                     </plugin>
+                    <plugin>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>2.19.1</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <trimStackTrace>false</trimStackTrace>
+                            <systemPropertyVariables>
+                                <webdriver.chrome.driver>${webdriver.chrome.driver}</webdriver.chrome.driver>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                    <!-- Plugin for automatically download Chrome Driver for tests -->
+                    <plugin>
+                        <groupId>com.lazerycode.selenium</groupId>
+                        <artifactId>driver-binary-downloader-maven-plugin</artifactId>
+                        <version>1.0.12</version>
+                        <configuration>
+                            <!-- root directory that downloaded driver binaries will be stored
+                                in -->
+                            <onlyGetDriversForHostOperatingSystem>true</onlyGetDriversForHostOperatingSystem>
+                            <rootStandaloneServerDirectory>.driver</rootStandaloneServerDirectory>
+                            <customRepositoryMap>webdrivers.xml</customRepositoryMap>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>selenium</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
                 </plugins>
             </build>
         </profile>
