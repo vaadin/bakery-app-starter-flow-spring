@@ -12,6 +12,7 @@ import com.vaadin.flow.demo.patientportal.backend.data.DashboardData;
 import com.vaadin.flow.demo.patientportal.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.flow.demo.patientportal.ui.entities.NamedSeries;
 import com.vaadin.flow.demo.patientportal.ui.entities.Order;
+import com.vaadin.flow.demo.patientportal.ui.utils.BakeryConst;
 import com.vaadin.flow.demo.patientportal.ui.utils.DashboardUtils;
 import com.vaadin.flow.demo.patientportal.ui.utils.DashboardUtils.ChartData;
 import com.vaadin.flow.router.View;
@@ -22,8 +23,8 @@ import com.vaadin.hummingbird.ext.spring.annotations.Route;
 
 @Tag("bakery-dashboard")
 @HtmlImport("frontend://src/dashboard/bakery-dashboard.html")
-@Route("dashboard")
-@ParentView(MainView.class)
+@Route(BakeryConst.PAGE_DASHBOARD)
+@ParentView(BakeryApp.class)
 public class DashboardView extends PolymerTemplate<DashboardView.Model> implements View {
 
 	public DashboardView() {
