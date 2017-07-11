@@ -6,7 +6,8 @@
     "src/dashboard/bakery-dashboard.html",
     "src/users/bakery-users.html",
     "src/products/bakery-products.html",
-    "src/admin/bakery-admin.html"
+    "src/admin/bakery-admin.html",
+    "src/admin/access-denied.html"
   ],
   "extraDependencies": [
     "bower_components/webcomponentsjs/*.js.map"
