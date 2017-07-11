@@ -37,7 +37,7 @@
     "vaadin-grid": "^3.0.0",
     "vaadin-form-layout": "^1.0.0",
     "vaadin-upload": "^2.0.0",
-    "vaadin-combo-box": "#feature/themable-parts",
+    "vaadin-combo-box": "#master",
     "tinycolor": "bgrins/TinyColor#^1.4.1",
     "iron-input": "^2.0.0",
     "paper-menu-button": "^2.0.0",
