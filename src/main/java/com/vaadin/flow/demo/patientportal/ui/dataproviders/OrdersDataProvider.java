@@ -46,6 +46,10 @@ public class OrdersDataProvider {
 		return result.subList(start, start + count);
 	}
 
+	public List<com.vaadin.flow.demo.patientportal.backend.data.entity.Order> getOriginalOrdersList() {
+		return fetchFromBackEnd(null).getContent();
+	}
+
 	public List<Order> getOrdersList() {
 		List<Order> list = new ArrayList<>();
 		fetchFromBackEnd(null).forEach(entityOrder -> list.add(OrdersDataProvider.toUIEntity(entityOrder)));
@@ -96,7 +100,7 @@ public class OrdersDataProvider {
 		}
 	}
 
-	protected OrderService getOrderService() {
+	private OrderService getOrderService() {
 		if (orderService == null) {
 			orderService = BeanLocator.find(OrderService.class);
 		}
