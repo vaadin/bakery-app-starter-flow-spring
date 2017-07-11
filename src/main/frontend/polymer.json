@@ -1,11 +1,12 @@
 {
   "entrypoint": "src/storefront/bakery-storefront.html",
-  "shell": "src/main-view.html",
+  "shell": "src/app/bakery-app.html",
   "fragments": [
     "src/storefront/bakery-storefront.html",
     "src/dashboard/bakery-dashboard.html",
     "src/users/bakery-users.html",
-    "src/app/bakery-app.html"
+    "src/products/bakery-products.html",
+    "src/admin/bakery-admin.html"
   ],
   "extraDependencies": [
     "bower_components/webcomponentsjs/*.js.map"
