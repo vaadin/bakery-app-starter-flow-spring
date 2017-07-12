@@ -6,8 +6,8 @@
     <style>
       :host {
         display: flex;
-        flex-wrap: wrap;
-        margin-top: var(--valo-space-s);
+        flex-direction:column;
+        flex-wrap: nowrap;
       }
 
       :host > * {
@@ -15,11 +15,6 @@
         width: 100%;
       }
 
-      @media (min-width: 600px) {
-        :host > * {
-          width: 50%;
-        }
-      }
     </style>
 
     <template is="dom-repeat" items="[[items]]">
