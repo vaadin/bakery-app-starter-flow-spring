@@ -2,43 +2,58 @@
 <link rel="import" href="../../bower_components/vaadin-charts/vaadin-column-chart.html">
 
 <dom-module id="dashboard-column-chart">
+
 	<template>
-		<vaadin-column-chart>
-			<chart-title>
-				<chart-style>
-					<color>rgba(42, 71, 110, 0.6)</color>
-					<font-size>16px</font-size>
-					<font-weight>bold</font-weight>
-				</chart-style>
-				<text>[[data.title]]</text>
-			</chart-title>
-			<x-axis tick-interval="1">
-				<categories>[[data.categories]]</categories>
-			</x-axis>
-			<y-axis>
-				<chart-title enabled="false"></chart-title>
-			</y-axis>
-			<legend enabled="false"></legend>
-			<plot-options>
-				<column color="rgba(34, 70, 117, 0.4)"></column>
-			</plot-options>
-			<data-series data="[[data.values]]">
-				<name>[[data.seriesName]]</name>
-				<color-by-point>false</color-by-point>
-			</data-series>
-			<exporting>
-				<enabled>false</enabled>
-			</exporting>
-		</vaadin-column-chart>
+		<style>
+
+			.wrapper {
+				box-shadow: 0 2px 5px 0 rgba(23, 68, 128, 0.1);
+				border-radius: 4px;
+				border: 1px solid #d5d5d5;
+
+				@apply --column-chart-margin;
+				@apply --column-chart-height;
+			}
+
+		</style>
+		<div class="wrapper">
+			<vaadin-column-chart>
+				<chart-title>
+					<chart-style>
+						<color>rgba(42, 71, 110, 0.6)</color>
+						<font-size>16px</font-size>
+						<font-weight>bold</font-weight>
+					</chart-style>
+					<text>[[data.title]]</text>
+				</chart-title>
+				<x-axis tick-interval="1">
+					<categories>[[data.categories]]</categories>
+				</x-axis>
+				<y-axis>
+					<chart-title enabled="false"></chart-title>
+				</y-axis>
+				<legend enabled="false"></legend>
+				<plot-options>
+					<column color="rgba(34, 70, 117, 0.4)"></column>
+				</plot-options>
+				<data-series data="[[data.values]]">
+					<name>[[data.seriesName]]</name>
+					<color-by-point>false</color-by-point>
+				</data-series>
+				<exporting>
+					<enabled>false</enabled>
+				</exporting>
+			</vaadin-column-chart>
+		</div>
 	</template>
 
-  <script>
-      class DashboardColumnChart extends Polymer.Element {
-          static get is () {
-              return 'dashboard-column-chart';
-          }
+	<script>
+    class DashboardColumnChart extends Polymer.Element {
+      static get is() {
+        return 'dashboard-column-chart';
       }
+    }
 
-      window.customElements.define(DashboardColumnChart.is, DashboardColumnChart);
-  </script>
+    window.customElements.define(DashboardColumnChart.is, DashboardColumnChart);
+	</script>
 </dom-module>
