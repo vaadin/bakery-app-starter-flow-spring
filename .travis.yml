@@ -18,7 +18,7 @@ addons:
      - google-chrome-stable
 
 
-install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -U -B -V -Dvaadin.charts.developer.license=$CHARTS_LICENSE -Dvaadin.board.developer.license=$BOARD_LICENSE
+install: true
 script: ./.travis.script.sh
 
 # Cache requires a master build
@@ -28,6 +28,8 @@ branches:
 cache:
   directories:
   - $HOME/.m2
+  - .driver
+  - selenium_standalone_zips
 
 before_cache:
   # remove all build artifacts

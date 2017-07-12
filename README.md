@@ -9,7 +9,13 @@ build: `mvn clean install -Dvaadin.productionMode`
 
 run: `mvn jetty:run -Dvaadin.productionMode`
 
+## Running integration tests
 
+Integration tests are implemented using TestBench. The tests take tens of minutes to run and are therefore included in a separate profile. To run the tests, execute
+
+`mvn verify -Pit`
+
+and make sure you have a valid TestBench license installed.
 
 ## Build and Run (in development)
 

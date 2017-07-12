@@ -410,9 +410,8 @@
             </build>
         </profile>
 
-        <!-- When running mvn with `-DskipTests`, there is no need to start and stop jetty
-             (for integration tests are skipped). Moving jetty start/stop into a separate
-             profile speeds up -DskipTests builds. -->
+        <!-- Moving jetty start/stop into a separate profile speeds up regular builds.
+             Execute mvn verify -Pit to run integration tests -->
         <profile>
             <id>it</id>
             <activation>
