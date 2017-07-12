@@ -5,24 +5,27 @@
     <style>
       :host {
         display: flex;
-        align-items: baseline;
+        flex:1;
       }
-
-      #count {
+      span {
         background: var(--valo-black-10pct);
+        font-size: var(--valo-font-size-s);
+      }
+      #count {
+
         border-radius: var(--valo-border-radius);
         display: inline-block;
-        width: 20px;
-        height: 20px;
-        font-size: var(--valo-font-size-xs);
         vertical-align: middle;
         text-align: center;
         margin-right: 6px;
       }
+      #content {
+        white-space: nowrap;
+      }
     </style>
 
     <span id="count">[[count]]</span>
-    <span>[[name]]</span>
+    <span id="content" style="text-overflow: ellipsis;">[[name]]</span>
   </template>
 
   <script>
