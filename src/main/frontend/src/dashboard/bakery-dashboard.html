@@ -14,12 +14,57 @@
     <style include="shared-styles">
       :host {
         display: block;
+        width: 100%;
+        margin: 24px;
       }
-                
-      dashboard-column-chart, dashboard-pie-chart, dashboard-orders-list {
+
+      @media screen and (min-width: 600px) {
+        :host {
+          margin:6px;
+        }
+      }
+      dashboard-pie-chart, dashboard-orders-list {
       	box-shadow: 0 2px 5px 0 rgba(23, 68, 128, 0.1);
+        border-radius: 4px;
       	padding: 1px;
       }
+
+      vaadin-board vaadin-board-row:nth-child(2) > * {
+        --column-chart-height: {
+          height: calc(20vh - 64px) !important;
+          min-height: 150px;
+        }
+      }
+
+      vaadin-board-row.large dashboard-column-chart:first-child {
+        --column-chart-margin: {
+          margin: 12px 12px 12px 0px;
+        };
+      }
+
+      vaadin-board-row.large dashboard-column-chart:last-child {
+        --column-chart-margin: {
+          margin: 12px 0px 12px 12px;
+        };
+      }
+      vaadin-board-row.medium dashboard-column-chart:first-child {
+        --column-chart-margin: {
+          margin: 12px 12px 12px 0px;
+        };
+      }
+
+      vaadin-board-row.medium dashboard-column-chart:last-child {
+        --column-chart-margin: {
+          margin: 12px 0px 12px 12px;
+        };
+      }
+
+      vaadin-board-row.small > * {
+        --column-chart-margin: {
+          margin: 6px 0px;
+        };
+      }
+
     </style>
 
     <vaadin-board>
@@ -37,8 +82,8 @@
         <dashboard-yearly-sales series="[[salesGraphSeries]]" title="[[salesGraphTitle]]"></dashboard-yearly-sales>
       </vaadin-board-row>
       <vaadin-board-row>
-        <dashboard-pie-chart></dashboard-pie-chart>
-        <dashboard-orders-list id="orders-list" orders="[[orders]]"></dashboard-orders-list>
+        <dashboard-pie-chart style="height: calc(43vh - 64px) !important;"></dashboard-pie-chart>
+        <dashboard-orders-list style="height: calc(43vh - 64px) !important;" id="orders-list" orders="[[orders]]"></dashboard-orders-list>
       </vaadin-board-row>
     </vaadin-board>
   </template>
