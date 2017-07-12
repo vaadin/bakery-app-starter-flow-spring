@@ -65,11 +65,10 @@ public class SecurityUtils {
 	 * Checks if access is granted for the current user for the given secured
 	 * view within the given ui.
 	 *
-	 * @param ui
 	 * @param viewSecured
 	 * @return true if access is granted, false otherwise.
 	 */
-	public static boolean isAccessGranted(UI ui, Secured viewSecured) {
+	public static boolean isAccessGranted(Secured viewSecured) {
 		if (viewSecured == null) {
 			return true;
 		}
