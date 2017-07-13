@@ -88,7 +88,7 @@
         on-button-click="_openNewUserDialog">
     </bakery-search>
 
-    <vaadin-grid id="grid" class="users-grid" items="[[_filterUsers(users, _filterValue)]]" active-item="{{_selectedUser}}">
+    <vaadin-grid id="grid" class="users-grid" items="[[_filterUsers(users.*, _filterValue)]]" active-item="{{_selectedUser}}">
       <vaadin-grid-column width="80px" flex-grow="0">
         <template>
           <div class="picture-cell">
@@ -127,7 +127,8 @@
       </vaadin-grid-column>
     </vaadin-grid>
 
-    <user-edit-wrapper user="[[_editableUser]]" on-close="_onClose" desktop-view="[[desktopView]]"></user-edit-wrapper>
+    <user-edit-wrapper user="[[_editableUser]]" desktop-view="[[desktopView]]"
+                       on-close="_onClose" on-save="_onSave" on-delete="_onDelete"></user-edit-wrapper>
   </template>
 
   <script>
@@ -138,6 +139,11 @@
 
       static get properties() {
         return {
+          errorMessage: {
+            type: String,
+            value: '',
+            observer: '_onErrorMessageChanged'
+          },
           desktopView: Boolean,
           _filterValue: String,
           _selectedUser: {
@@ -158,16 +164,60 @@
 
       _onClose() {
         this.$.grid.selectedItems = [];
+        this.$.grid.activeItem = null;
         this._editableUser = null;
       }
 
-      _filterUsers(users, filter) {
-        if (users && filter) {
+      _onSave(event) {
+        let idx;
+        if (!event.detail.user.id) {
+          idx = this.users.length;
+          this.push('users', event.detail.user);
+        } else {
+          idx = this._findUserIndexById(event.detail.user.id);
+          this.set(`users.${idx}`, event.detail.user);
+        }
+
+        this.$server.saveUser(event.detail.user);
+      }
+
+      _onDelete() {
+        if (!event.detail.userId) {
+          return;
+        }
+
+        const idx = this._findUserIndexById(event.detail.userId);
+        this.splice('users', idx);
+        this.$server.deleteUser(event.detail.userId);
+      }
+
+      _findUserIndexById(id) {
+        let idx = -1;
+        for (let i = 0; i < this.users.length; i += 1) {
+          if (this.users[i].id === id) {
+            idx = i;
+            break;
+          }
+        }
+        return idx;
+      }
+
+      _filterUsers(usersChange, filter) {
+        const users = usersChange.base;
+        if (users) {
+          filter = (filter || '').toLowerCase();
           return users.filter(function(user) {
-            return user.name.toLowerCase().includes(filter.toLowerCase());
+            return user.name.toLowerCase().includes(filter);
           });
         }
-        return users;
+        return [];
+      }
+
+      _onErrorMessageChanged() {
+        if (this.errorMessage) {
+          // TODO(vlukashov) 2017-07-13: find a better way to show error messages
+          window.alert(this.errorMessage);
+        }
       }
     }
 
