@@ -1,16 +1,108 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/vaadin-charts/vaadin-solidgauge-chart.html">
 
 <dom-module id="dashboard-orders-counter">
   <template>
-    <div>
-      <h2>content</h2>
+    <style>    
+      :host{
+        position: relative;
+        text-align: center;
+        height: 220px;
+        padding: 10px;
+      }
+            
+      .count-wrapper{
+		position: absolute;
+		display: block;
+		top: 0;
+		heigth: 100%;
+		width: 100%;
+		left: 0;
+		text-align: center;
+		padding-top: 32px;
+      }
+           
+      .subtitle {
+        color: var(--valo-secondary-text-color);
+        font-size: 14px;
+      }
+      
+      h4 {
+        margin: 0;
+      }    
+      
+      .chart-wrapper{
+        height: 120px;
+        display:block;    
+      }
+      
+    </style>
+
+    <div class="chart-wrapper" >
+ 	  <template is="dom-if" if="[[displayChart]]">
+        <vaadin-solidgauge-chart id="solid-gauge">
+		  <chart background-color="transparent"></chart>
+		  <title text=""></title>
+		  <pane start-angle="0" end-angle="360">
+		    <background background-color="rgba(23, 68, 128, 0.1)" inner-radius="100%" outer-radius="110%"
+		      shape="arc" border-width="0"></background>
+		  </pane>
+		  <tooltip enabled="false"></tooltip>
+		  <y-axis line-width="0" minor-tick-width="0" tick-width="0">
+		    <min>0</min>
+		    <max>[[data.overall]]</max>
+		    <labels enabled="false"></labels>
+		  </y-axis>
+		  <exporting enabled="false"></exporting>
+		  <plot-options>
+			<solidgauge>
+			  <data-labels y="0" border-width="0" usehtml="true" format="<div></div>"></data-labels>
+			</solidgauge>
+		  </plot-options>
+		  <data-series name="Orders">
+		    <data>
+		      <point >
+		        <y>[[data.count]]</y>
+		        <color>[[countColor]]</color>
+		        <radius>110%</radius>
+		        <inner-radius>100%</inner-radius>
+	          </point>
+		    </data>
+		  </data-series>
+		</vaadin-solidgauge-chart>
+	  </template>	      
     </div>
+        
+    <div class="count-wrapper">      
+      <span class="count-digit" style="color:[[countColor]];font-size:44px;font-family: .SFNSDisplay;">[[data.count]]</span>
+    </div> 
+
+    <h4>[[data.title]]</h4>
+    <div class="subtitle">[[data.subtitle]]</div>        
   </template>
 
   <script>
       class DashboardOrdersCounter extends Polymer.Element {
         static get is() {
           return 'dashboard-orders-counter';
+          }
+          
+          static get properties() {
+            return {
+              countColor: {
+                type: String,
+                reflectToAttribute: true
+              },
+              data:{
+                type: Object,
+                reflectToAttribute: true
+              },
+              displayChart:{
+                type: Boolean,
+                reflectToAttribute: true,
+                value: false
+              }
+            };
         }
       }
 
