@@ -258,7 +258,7 @@
 
     <profiles>
         <profile>
-            <id>eslint</id>
+            <id>lint</id>
             <activation>
                 <property>
                     <name>!skipTests</name>
