@@ -37,7 +37,9 @@
         flex: 1;
       }
 
-      .checkbox, .extra-filter, :host([show-extra-filters]) .extra-action {
+      .checkbox,
+      .extra-filter,
+      :host([show-extra-filters]) .extra-action {
         display: none;
       }
 
@@ -61,7 +63,8 @@
         width: 100%;
       }
 
-      .field, .button {
+      .field,
+      .button {
         height: 36px;
       }
 
@@ -194,16 +197,16 @@
               return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
             }
           }
-        }
+        };
       }
 
       static get observers() {
         return [
           '_setShowExtraFilters(fieldValue, checkboxChecked, _fieldFocused, _checkboxFocused)'
-        ]
+        ];
       }
 
-      _handleButtonClick () {
+      _handleButtonClick() {
         this.dispatchEvent(new CustomEvent('button-click'));
       }
 

@@ -20,10 +20,12 @@
 
       @media screen and (min-width: 600px) {
         :host {
-          margin:6px;
+          margin: 6px;
         }
       }
-      dashboard-pie-chart, dashboard-orders-list {
+
+      dashboard-pie-chart,
+      dashboard-orders-list {
       	box-shadow: 0 2px 5px 0 rgba(23, 68, 128, 0.1);
         border-radius: 4px;
       	padding: 1px;
@@ -38,19 +40,19 @@
 
       vaadin-board-row:not(.small) dashboard-column-chart:first-child {
         --column-chart-margin: {
-          margin: 12px 12px 12px 0px;
+          margin: 12px 12px 12px 0;
         };
       }
 
       vaadin-board-row:not(.small) dashboard-column-chart:last-child {
         --column-chart-margin: {
-          margin: 12px 0px 12px 12px;
+          margin: 12px 0 12px 12px;
         };
       }
 
       vaadin-board-row.small > * {
         --column-chart-margin: {
-          margin: 6px 0px;
+          margin: 6px 0;
         };
       }
 

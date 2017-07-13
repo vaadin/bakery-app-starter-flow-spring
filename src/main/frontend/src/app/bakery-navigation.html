@@ -83,7 +83,8 @@
         z-index: 1;
       }
 
-      .user-image.mobile-user-image, .alarms.mobile-alarms {
+      .user-image.mobile-user-image,
+      .alarms.mobile-alarms {
         position: fixed;
         top: var(--valo-space-m);
         right: var(--valo-space-m);
@@ -101,11 +102,13 @@
         z-index: 2;
       }
 
-      paper-menu-button[hidden], .alarms[hidden], img[hidden] {
+      paper-menu-button[hidden],
+      .alarms[hidden],
+      img[hidden] {
         display: none;
       }
 
-      @media (min-width:600px) {
+      @media (min-width: 600px) {
         .toolbar {
           padding: 0 var(--valo-space-m);
         }
@@ -123,13 +126,13 @@
         }
       }
 
-      @media (min-width:740px) {
+      @media (min-width: 740px) {
         paper-tab a {
           padding: 0 var(--valo-space-m);
         }
       }
 
-      @media (min-width:920px) {
+      @media (min-width: 920px) {
         paper-tab a {
           padding: 0 var(--valo-space-l);
         }
@@ -204,16 +207,16 @@
           page: {
             type: String
           },
-          selectedMenuIndex:{
+          selectedMenuIndex: {
             type: Number,
             observer: '_selectedMenuChanged'
           }
         };
       }
       _selectedMenuChanged(index) {
-            if(index == 0 ){
-              this.$server.logout();
-            }
+        if (index == 0) {
+          this.$server.logout();
+        }
       }
       _showAlarms(alarms, desktopView, element) {
         return element === 'mobile' ? alarms && !desktopView : alarms && desktopView;
