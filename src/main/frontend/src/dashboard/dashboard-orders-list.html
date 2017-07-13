@@ -17,12 +17,11 @@
         border-bottom: 1px solid var(--valo-black-10pct);
         margin: calc(-1 * var(--valo-space-s)) 0 var(--valo-space-s); /* Last item has shadow visible */
       }
-      
+
       #wrapper {
         overflow-y: scroll;
-        max-height: 355px
+        max-height: 355px;
       }
-      
 	  </style>
 
       <div id="wrapper">  
@@ -37,9 +36,9 @@
 
   <script>
       class DashboardOrdersList extends Polymer.Element {
-          static get is () {
-              return 'dashboard-orders-list';
-          }
+        static get is() {
+          return 'dashboard-orders-list';
+        }
       }
 
       window.customElements.define(DashboardOrdersList.is, DashboardOrdersList);
