@@ -8,10 +8,10 @@
       #back {
         display: block;
         position: absolute;
-        top: 0px;
-        left: 0px;
-        right: 0px;
-        bottom: 0px;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
       }
 
       #fore {
@@ -56,7 +56,7 @@
       _close() {
         if (this.parentElement == document.body) {
           this._parentElement.appendChild(this);
-          this._parentElement.dispatchEvent(new CustomEvent('close', { bubbles: true, composed: true }));
+          this._parentElement.dispatchEvent(new CustomEvent('close', {bubbles: true, composed: true}));
         }
       }
     }

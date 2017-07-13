@@ -17,6 +17,7 @@
         display: block;
         padding: 20px;
       }
+
       img {
         width: 56px;
         height: 56px;
@@ -24,16 +25,18 @@
         margin-right: 20px;
         margin-top: 8px;
       }
+
       label {
         font-size: var(--valo-font-size-s);
         color: var(--valo-contrast-60pct);
         font-weight: 500;
       }
+
       .buttons {
         position: absolute;
-        left: 0px;
-        bottom: 0px;
-        right: 0px;
+        left: 0;
+        bottom: 0;
+        right: 0;
         border-top: 1px solid var(--valo-contrast-60pct);
         padding: 10px;
       }
@@ -97,7 +100,7 @@
 
       _delete() {
         // TODO: use a better web component for this or an Undo feature
-        if (window.confirm("Are you sure to remove the user?")) {
+        if (window.confirm('Are you sure to remove the user?')) {
           this._cancel();
         }
       }

@@ -10,16 +10,16 @@
   },
   "devDependencies": {
     "bower": "1.8.0",
-    "eslint": "4.1.1",
-    "eslint-config-vaadin": "0.2.3",
-    "eslint-plugin-html": "3.0.0",
-    "gulp": "3.9.1",
-    "gulp-eslint": "4.0.0",
-    "gulp-html-extract": "0.3.0",
-    "gulp-stylelint": "3.9.0",
+    "eslint": "^4.0.0",
+    "eslint-config-vaadin": "latest",
+    "eslint-plugin-html": "^2.0.0",
+    "gulp": "latest",
+    "gulp-eslint": "^3.0.1",
+    "gulp-html-extract": "^0.3.0",
+    "gulp-stylelint": "^3.7.0",
     "polymer-cli": "1.3.0",
-    "stylelint": "7.12.0",
-    "stylelint-config-vaadin": "0.1.1"
+    "stylelint": "7.10.1",
+    "stylelint-config-vaadin": "latest"
   },
   "scripts": {
     "install": "bower install",

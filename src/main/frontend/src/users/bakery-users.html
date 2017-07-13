@@ -145,7 +145,7 @@
             observer: '_editUser'
           },
           _editableUser: Object
-        }
+        };
       }
 
       _openNewUserDialog() {
@@ -163,7 +163,7 @@
 
       _filterUsers(users, filter) {
         if (users && filter) {
-          return users.filter(function (user) {
+          return users.filter(function(user) {
             return user.name.toLowerCase().includes(filter.toLowerCase());
           });
         }
