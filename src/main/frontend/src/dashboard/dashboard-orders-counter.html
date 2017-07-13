@@ -12,14 +12,14 @@
       }
 
       .count-wrapper {
-		position: absolute;
-		display: block;
-		top: 0;
-		height: 100%;
-		width: 100%;
-		left: 0;
-		text-align: center;
-		padding-top: 32px;
+        position: absolute;
+        display: block;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        left: 0;
+        text-align: center;
+        padding-top: 32px;
       }
 
       .subtitle {
@@ -39,40 +39,40 @@
     </style>
 
     <div class="chart-wrapper" >
- 	  <template is="dom-if" if="[[displayChart]]">
+       <template is="dom-if" if="[[displayChart]]">
         <vaadin-solidgauge-chart id="solid-gauge">
-		  <chart background-color="transparent"></chart>
-		  <title text=""></title>
-		  <pane start-angle="0" end-angle="360">
-		    <background background-color="rgba(23, 68, 128, 0.1)" inner-radius="100%" outer-radius="110%"
-		      shape="arc" border-width="0"></background>
-		  </pane>
-		  <tooltip enabled="false"></tooltip>
-		  <y-axis line-width="0" minor-tick-width="0" tick-width="0">
-		    <min>0</min>
-		    <max>[[data.overall]]</max>
-		    <labels enabled="false"></labels>
-		  </y-axis>
-		  <exporting enabled="false"></exporting>
-		  <plot-options>
-			<solidgauge>
-			  <data-labels y="0" border-width="0" usehtml="true" format="<div></div>"></data-labels>
-			</solidgauge>
-		  </plot-options>
-		  <data-series name="Orders">
-		    <data>
-		      <point >
-		        <y>[[data.count]]</y>
-		        <color>[[countColor]]</color>
-		        <radius>110%</radius>
-		        <inner-radius>100%</inner-radius>
-	          </point>
-		    </data>
-		  </data-series>
-		</vaadin-solidgauge-chart>
-	  </template>	      
+          <chart background-color="transparent"></chart>
+          <title text=""></title>
+          <pane start-angle="0" end-angle="360">
+            <background background-color="rgba(23, 68, 128, 0.1)" inner-radius="100%" outer-radius="110%"
+              shape="arc" border-width="0"></background>
+          </pane>
+          <tooltip enabled="false"></tooltip>
+          <y-axis line-width="0" minor-tick-width="0" tick-width="0">
+            <min>0</min>
+            <max>[[data.overall]]</max>
+            <labels enabled="false"></labels>
+          </y-axis>
+          <exporting enabled="false"></exporting>
+          <plot-options>
+            <solidgauge>
+              <data-labels y="0" border-width="0" usehtml="true" format="<div></div>"></data-labels>
+            </solidgauge>
+          </plot-options>
+          <data-series name="Orders">
+            <data>
+              <point >
+                <y>[[data.count]]</y>
+                <color>[[countColor]]</color>
+                <radius>110%</radius>
+                <inner-radius>100%</inner-radius>
+              </point>
+            </data>
+          </data-series>
+        </vaadin-solidgauge-chart>
+      </template>
     </div>
-        
+
     <div class="count-wrapper">      
       <span class="count-digit" style="color:[[countColor]];font-size:44px;font-family: .SFNSDisplay;">[[data.count]]</span>
     </div> 
@@ -86,7 +86,7 @@
           static get is() {
             return 'dashboard-orders-counter';
           }
-          
+
           static get properties() {
             return {
               countColor: {
