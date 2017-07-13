@@ -1,5 +1,6 @@
 package com.vaadin.flow.demo.patientportal.ui;
 
+import java.time.LocalDate;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,12 +10,15 @@ import java.util.stream.Collectors;
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Tag;
 import com.vaadin.flow.demo.patientportal.backend.data.DashboardData;
+import com.vaadin.flow.demo.patientportal.backend.data.DeliveryStats;
 import com.vaadin.flow.demo.patientportal.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.flow.demo.patientportal.ui.entities.NamedSeries;
 import com.vaadin.flow.demo.patientportal.ui.entities.Order;
 import com.vaadin.flow.demo.patientportal.ui.utils.BakeryConst;
 import com.vaadin.flow.demo.patientportal.ui.utils.DashboardUtils;
 import com.vaadin.flow.demo.patientportal.ui.utils.DashboardUtils.ChartData;
+import com.vaadin.flow.demo.patientportal.ui.utils.DashboardUtils.OrdersCountData;
+import com.vaadin.flow.demo.patientportal.ui.utils.DashboardUtils.OrdersCountDataWithChart;
 import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
@@ -33,7 +37,19 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> implemen
 			DashboardData data = OrdersDataProvider.get().getDashboardData();
 			populateYearlySalesChart(data);
 			populateDeliveriesCharts(data);
+			populateOrdersCounts(data.getDeliveryStats());
 		});
+	}
+
+	private void populateOrdersCounts(DeliveryStats deliveryStats) {
+		List<com.vaadin.flow.demo.patientportal.backend.data.entity.Order> orders = OrdersDataProvider.get()
+				.getOriginalOrdersList();
+
+		getModel().setTodayOrdersCount(DashboardUtils.getTodaysOrdersCountData(deliveryStats, orders.iterator()));
+		getModel().setNotAvailableOrdersCount(DashboardUtils.getNotAvailableOrdersCountData(deliveryStats));
+		getModel()
+				.setNewOrdersCount(DashboardUtils.getNewOrdersCountData(deliveryStats, orders.get(orders.size() - 1)));
+		getModel().setTomorrowOrdersCount(DashboardUtils.getTomorrowOrdersCountData(deliveryStats, orders.iterator()));
 	}
 
 	private void populateOrdersList(int start, int count) {
@@ -70,6 +86,14 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> implemen
 
 	public interface Model extends TemplateModel {
 		void setOrders(List<Order> orders);
+
+		void setTomorrowOrdersCount(OrdersCountData ordersTomorrow);
+
+		void setNewOrdersCount(OrdersCountData ordersNew);
+
+		void setNotAvailableOrdersCount(OrdersCountData ordersNotAvailable);
+
+		void setTodayOrdersCount(OrdersCountDataWithChart ordersToday);
 
 		void setDeliveriesThisYear(ChartData deliveriesThisYear);
 
