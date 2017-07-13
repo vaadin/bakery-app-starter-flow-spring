@@ -10,6 +10,11 @@ target/
 .idea
 *.iml
 
+# Testing
+.driver
+error-screenshots
+selenium_standalone_zips
+
 # macOs
 .DS_Store
 
