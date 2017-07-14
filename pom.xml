@@ -20,7 +20,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Dependencies -->
-        <flow.version>0.1.12-SNAPSHOT</flow.version>
+        <flow.version>0.1.14-SNAPSHOT</flow.version>
         <testbench.version>5.0.0</testbench.version>
 
         <!-- Plugins -->
