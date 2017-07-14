@@ -1,22 +1,24 @@
 package com.vaadin.flow.demo.patientportal.ui;
 
-import java.time.LocalDate;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Tag;
 import com.vaadin.flow.demo.patientportal.backend.data.DashboardData;
 import com.vaadin.flow.demo.patientportal.backend.data.DeliveryStats;
+import com.vaadin.flow.demo.patientportal.backend.data.entity.Product;
 import com.vaadin.flow.demo.patientportal.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.flow.demo.patientportal.ui.entities.NamedSeries;
 import com.vaadin.flow.demo.patientportal.ui.entities.Order;
+import com.vaadin.flow.demo.patientportal.ui.entities.chart.ColumnChartData;
+import com.vaadin.flow.demo.patientportal.ui.entities.chart.ProductDeliveriesChartData;
 import com.vaadin.flow.demo.patientportal.ui.utils.BakeryConst;
 import com.vaadin.flow.demo.patientportal.ui.utils.DashboardUtils;
-import com.vaadin.flow.demo.patientportal.ui.utils.DashboardUtils.ChartData;
 import com.vaadin.flow.demo.patientportal.ui.utils.DashboardUtils.OrdersCountData;
 import com.vaadin.flow.demo.patientportal.ui.utils.DashboardUtils.OrdersCountDataWithChart;
 import com.vaadin.flow.router.View;
@@ -24,6 +26,7 @@ import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
+import com.vaadin.ui.AttachEvent;
 
 @Tag("bakery-dashboard")
 @HtmlImport("frontend://src/dashboard/bakery-dashboard.html")
@@ -32,13 +35,16 @@ import com.vaadin.hummingbird.ext.spring.annotations.Route;
 public class DashboardView extends PolymerTemplate<DashboardView.Model> implements View {
 
 	public DashboardView() {
-		getElement().addAttachListener(e -> {
-			populateOrdersList(0, 10);
-			DashboardData data = OrdersDataProvider.get().getDashboardData();
-			populateYearlySalesChart(data);
-			populateDeliveriesCharts(data);
-			populateOrdersCounts(data.getDeliveryStats());
-		});
+	}
+
+	@Override
+	protected void onAttach(AttachEvent attachEvent) {
+		populateOrdersList(0, 10);
+		DashboardData data = OrdersDataProvider.get().getDashboardData();
+		populateYearlySalesChart(data);
+		populateDeliveriesCharts(data);
+		populateOrdersCounts(data.getDeliveryStats());
+		populateDeliveriesPerProductChart(data.getProductDeliveries());
 	}
 
 	private void populateOrdersCounts(DeliveryStats deliveryStats) {
@@ -52,6 +58,10 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> implemen
 		getModel().setTomorrowOrdersCount(DashboardUtils.getTomorrowOrdersCountData(deliveryStats, orders.iterator()));
 	}
 
+	private void populateDeliveriesPerProductChart(Map<Product, Integer> productDeliveries) {
+		getModel().setProductDeliveriesThisMonth(DashboardUtils.getDeliveriesPerProductPieChartData(productDeliveries));
+	}
+
 	private void populateOrdersList(int start, int count) {
 		// TODO: create lazy loading using getOrdersList(start, count)
 		List<Order> ordersList = OrdersDataProvider.get().getOrdersList();
@@ -59,10 +69,12 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> implemen
 	}
 
 	private void populateDeliveriesCharts(DashboardData data) {
-		ChartData deliveriesThisMonth = DashboardUtils.getDeliveriesThisMonthChartData(data.getDeliveriesThisMonth());
+		ColumnChartData deliveriesThisMonth = DashboardUtils
+				.getDeliveriesThisMonthChartData(data.getDeliveriesThisMonth());
 		getModel().setDeliveriesThisMonth(deliveriesThisMonth);
 
-		ChartData deliveriesThisYear = DashboardUtils.getDeliveriesThisYearChartData(data.getDeliveriesThisYear());
+		ColumnChartData deliveriesThisYear = DashboardUtils
+				.getDeliveriesThisYearChartData(data.getDeliveriesThisYear());
 		getModel().setDeliveriesThisYear(deliveriesThisYear);
 	}
 
@@ -95,13 +107,15 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> implemen
 
 		void setTodayOrdersCount(OrdersCountDataWithChart ordersToday);
 
-		void setDeliveriesThisYear(ChartData deliveriesThisYear);
+		void setDeliveriesThisYear(ColumnChartData deliveriesThisYear);
 
-		void setDeliveriesThisMonth(ChartData deliveriesThisMonth);
+		void setDeliveriesThisMonth(ColumnChartData deliveriesThisMonth);
 
 		void setSalesGraphSeries(List<NamedSeries> sales);
 
 		void setSalesGraphTitle(String title);
+
+		void setProductDeliveriesThisMonth(ProductDeliveriesChartData productDeliveriesThisMonth);
 
 	}
 

@@ -8,7 +8,6 @@
 <link rel="import" href="dashboard-pie-chart.html">
 <link rel="import" href="dashboard-orders-list.html">
 
-
 <dom-module id="bakery-dashboard">
   <template>
     <style include="shared-styles">
@@ -26,9 +25,12 @@
 
       dashboard-pie-chart,
       dashboard-orders-list {
-      	box-shadow: 0 2px 5px 0 rgba(23, 68, 128, 0.1);
-        border-radius: 4px;
-      	padding: 1px;
+        --fourth-row-style: {
+          border-radius: 4px;
+          box-shadow: 0 2px 5px 0 rgba(23, 68, 128, 0.1);
+          height: calc(40vh - 64px) !important;
+          min-height: 355px;
+        }
       }
 
       vaadin-board vaadin-board-row:nth-child(2) > * {
@@ -38,20 +40,14 @@
         }
       }
 
-      vaadin-board-row:not(.small) dashboard-column-chart:first-child {
-        --column-chart-margin: {
-          margin: 12px 12px 12px 0;
-        };
-      }
-
-      vaadin-board-row:not(.small) dashboard-column-chart:last-child {
-        --column-chart-margin: {
-          margin: 12px 0 12px 12px;
+      vaadin-board-row:not(.small) {
+        --margin-style: {
+          margin: 12px 6px;
         };
       }
 
       vaadin-board-row.small > * {
-        --column-chart-margin: {
+        --margin-style: {
           margin: 6px 0;
         };
       }
@@ -73,8 +69,8 @@
         <dashboard-yearly-sales series="[[salesGraphSeries]]" title="[[salesGraphTitle]]"></dashboard-yearly-sales>
       </vaadin-board-row>
       <vaadin-board-row>
-        <dashboard-pie-chart style="height: calc(43vh - 64px) !important;"></dashboard-pie-chart>
-        <dashboard-orders-list style="height: calc(43vh - 64px) !important;" id="orders-list" orders="[[orders]]"></dashboard-orders-list>
+        <dashboard-pie-chart data="[[productDeliveriesThisMonth]]"></dashboard-pie-chart>
+        <dashboard-orders-list id="orders-list" orders="[[orders]]"></dashboard-orders-list>
       </vaadin-board-row>
     </vaadin-board>
   </template>

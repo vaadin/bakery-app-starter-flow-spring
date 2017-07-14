@@ -9,12 +9,17 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import com.vaadin.flow.demo.patientportal.backend.data.DeliveryStats;
 import com.vaadin.flow.demo.patientportal.backend.data.OrderState;
 import com.vaadin.flow.demo.patientportal.backend.data.entity.Order;
+import com.vaadin.flow.demo.patientportal.backend.data.entity.Product;
+import com.vaadin.flow.demo.patientportal.ui.entities.chart.ColumnChartData;
+import com.vaadin.flow.demo.patientportal.ui.entities.chart.ProductDeliveriesChartData;
 
 public class DashboardUtils {
 
@@ -31,52 +36,12 @@ public class DashboardUtils {
 		return list.stream().map(o -> "" + dayNumber.incrementAndGet()).collect(Collectors.toList());
 	}
 
+	private static String getCurrentMonthName() {
+		return Calendar.getInstance().getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH);
+	}
+
 	private static String getDeliveriesThisMonthTitle() {
-		String thisMonth;
-		switch (Calendar.getInstance().get(Calendar.MONTH)) {
-		case Calendar.JANUARY:
-			thisMonth = "January";
-			break;
-		case Calendar.FEBRUARY:
-			thisMonth = "February";
-			break;
-		case Calendar.MARCH:
-			thisMonth = "March";
-			break;
-		case Calendar.APRIL:
-			thisMonth = "April";
-			break;
-		case Calendar.MAY:
-			thisMonth = "May";
-			break;
-		case Calendar.JUNE:
-			thisMonth = "June";
-			break;
-		case Calendar.JULY:
-			thisMonth = "July";
-			break;
-		case Calendar.AUGUST:
-			thisMonth = "August";
-			break;
-
-		case Calendar.SEPTEMBER:
-			thisMonth = "September";
-			break;
-		case Calendar.OCTOBER:
-			thisMonth = "October";
-			break;
-		case Calendar.NOVEMBER:
-			thisMonth = "November";
-			break;
-		case Calendar.DECEMBER:
-			thisMonth = "December";
-			break;
-		default:
-			thisMonth = "this month";
-			break;
-		}
-
-		return "Deliveries in " + thisMonth;
+		return "Deliveries in " + getCurrentMonthName();
 	}
 
 	private static List<Integer> convertNumbersToIntegers(List<Number> numbersList) {
@@ -155,71 +120,20 @@ public class DashboardUtils {
 
 	}
 
-	public static class ChartData {
-
-		private String title;
-		private String seriesName;
-		private List<String> categories;
-		private List<Integer> values;
-
-		public String getTitle() {
-			return title;
-		}
-
-		public void setTitle(String title) {
-			this.title = title;
-		}
-
-		public List<Integer> getValues() {
-			return values;
-		}
-
-		public void setValues(List<Integer> values) {
-			this.values = values;
-		}
-
-		public ChartData() {
-
-		}
-
-		public ChartData(String title, String seriesName, List<Integer> values, List<String> categories) {
-			this.title = title;
-			this.seriesName = seriesName;
-			this.values = values;
-			this.categories = categories;
-		}
-
-		@Override
-		public String toString() {
-			return "ChartData [title=" + title + ", values=" + values + "]";
-		}
-
-		public List<String> getCategories() {
-			return categories;
-		}
-
-		public void setCategories(List<String> categories) {
-			this.categories = categories;
-		}
-
-		public String getSeriesName() {
-			return seriesName;
-		}
-
-		public void setSeriesName(String seriesName) {
-			this.seriesName = seriesName;
-		}
-
+	public static ColumnChartData getDeliveriesThisYearChartData(List<Number> deliveriesThisYear) {
+		return new ColumnChartData(getDeliveriesThisYearTitle(), "per Month",
+				convertNumbersToIntegers(deliveriesThisYear), getDeliveriesThisYearCategories());
 	}
 
-	public static ChartData getDeliveriesThisYearChartData(List<Number> deliveriesThisYear) {
-		return new ChartData(getDeliveriesThisYearTitle(), "per Month", convertNumbersToIntegers(deliveriesThisYear),
-				getDeliveriesThisYearCategories());
+	public static ColumnChartData getDeliveriesThisMonthChartData(List<Number> deliveriesThisMonth) {
+		return new ColumnChartData(getDeliveriesThisMonthTitle(), "per Day",
+				convertNumbersToIntegers(deliveriesThisMonth), getDeliveriesThisMonthCategories(deliveriesThisMonth));
 	}
 
-	public static ChartData getDeliveriesThisMonthChartData(List<Number> deliveriesThisMonth) {
-		return new ChartData(getDeliveriesThisMonthTitle(), "per Day", convertNumbersToIntegers(deliveriesThisMonth),
-				getDeliveriesThisMonthCategories(deliveriesThisMonth));
+	public static ProductDeliveriesChartData getDeliveriesPerProductPieChartData(
+			Map<Product, Integer> productDeliveries) {
+		return new ProductDeliveriesChartData("Products delivered in " + getCurrentMonthName(), "count",
+				productDeliveries);
 	}
 
 	private static final String NEXT_DELIVERY_PATTERN = "Next Delivery %s";
