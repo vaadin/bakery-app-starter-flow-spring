@@ -181,7 +181,7 @@
         this.$server.saveUser(event.detail.user);
       }
 
-      _onDelete() {
+      _onDelete(event) {
         if (!event.detail.userId) {
           return;
         }
@@ -214,9 +214,10 @@
       }
 
       _onErrorMessageChanged() {
-        if (this.errorMessage) {
+        if (this.errorMessage && this.errorMessage !== '') {
           // TODO(vlukashov) 2017-07-13: find a better way to show error messages
           window.alert(this.errorMessage);
+          this.$server.clearErrorMessage();
         }
       }
     }

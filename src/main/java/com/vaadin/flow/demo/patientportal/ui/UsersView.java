@@ -17,22 +17,18 @@ package com.vaadin.flow.demo.patientportal.ui;
 
 import java.util.List;
 
-import com.vaadin.annotations.ClientDelegate;
-import com.vaadin.annotations.EventData;
-import com.vaadin.flow.demo.patientportal.app.HasLogger;
-import elemental.json.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.security.access.annotation.Secured;
 
-import com.vaadin.annotations.EventHandler;
+import com.vaadin.annotations.ClientDelegate;
 import com.vaadin.annotations.HtmlImport;
-import com.vaadin.annotations.ModelItem;
 import com.vaadin.annotations.Tag;
+import com.vaadin.flow.demo.patientportal.app.HasLogger;
+import com.vaadin.flow.demo.patientportal.backend.data.Role;
 import com.vaadin.flow.demo.patientportal.ui.dataproviders.UserDataProvider;
 import com.vaadin.flow.demo.patientportal.ui.entities.User;
-import com.vaadin.flow.demo.patientportal.backend.data.Role;
 import com.vaadin.flow.demo.patientportal.ui.utils.BakeryConst;
 import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
@@ -41,7 +37,7 @@ import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
 import com.vaadin.ui.AttachEvent;
 
-import javax.validation.ValidationException;
+import elemental.json.JsonObject;
 
 /**
  * @author Vaadin Ltd
@@ -55,6 +51,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 
 	public interface Model extends TemplateModel {
 		void setUsers(List<User> users);
+
 		void setErrorMessage(String message);
 	}
 
@@ -73,26 +70,25 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 
 	@ClientDelegate
 	private void saveUser(JsonObject user) {
-		com.vaadin.flow.demo.patientportal.backend.data.entity.User dataEntity = userDataProvider.toDataEntity(user);
-
 		boolean saved = false;
 		try {
-			userDataProvider.getService().save(dataEntity);
+			userDataProvider.save(user);
 			saved = true;
 		} catch (DataIntegrityViolationException e) {
 			// Commit failed because of validation errors
 			getModel().setErrorMessage(e.getMessage());
 			getLogger().debug("Data integrity violation error while updating entity of type "
-					+ dataEntity.getClass().getName(), e);
+					+ com.vaadin.flow.demo.patientportal.backend.data.entity.User.class.getName(), e);
 		} catch (OptimisticLockingFailureException e) {
 			// Somebody else probably edited the data at the same time
 			getModel().setErrorMessage("Somebody else might have updated the data. Please refresh and try again.");
 			getLogger().debug("Optimistic locking error while saving entity of type "
-					+ dataEntity.getClass().getName(), e);
+					+ com.vaadin.flow.demo.patientportal.backend.data.entity.User.class.getName(), e);
 		} catch (Exception e) {
 			// Something went wrong, no idea what
 			getModel().setErrorMessage("A problem occurred while saving the data. Please check the fields.");
-			getLogger().error("Unable to save entity of type " + dataEntity.getClass().getName(), e);
+			getLogger().error("Unable to save entity of type "
+					+ com.vaadin.flow.demo.patientportal.backend.data.entity.User.class.getName(), e);
 		} finally {
 			if (!saved) {
 				// re-sync the UI state from the DB if the DB operation fails
@@ -109,7 +105,8 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 			deleted = true;
 		} catch (DataIntegrityViolationException e) {
 			// Commit failed because of validation errors
-			getModel().setErrorMessage("The given entity cannot be deleted as there are references to it in the database");
+			getModel().setErrorMessage(
+					"The given entity cannot be deleted as there are references to it in the database");
 			getLogger().error("Data integrity violation error while deleting entity of type "
 					+ com.vaadin.flow.demo.patientportal.backend.data.entity.User.class.getName(), e);
 		} catch (OptimisticLockingFailureException e) {
@@ -128,5 +125,10 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 				getModel().setUsers(userDataProvider.findAll());
 			}
 		}
+	}
+
+	@ClientDelegate
+	private void clearErrorMessage() {
+		getModel().setErrorMessage("");
 	}
 }

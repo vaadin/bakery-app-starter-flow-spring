@@ -1,14 +1,16 @@
 package com.vaadin.flow.demo.patientportal.ui.dataproviders;
 
-import com.google.gson.Gson;
-import com.vaadin.flow.demo.patientportal.backend.service.UserService;
-import com.vaadin.flow.demo.patientportal.ui.entities.User;
-import elemental.json.JsonObject;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import com.google.gson.Gson;
+import com.vaadin.flow.demo.patientportal.backend.service.UserService;
+import com.vaadin.flow.demo.patientportal.ui.entities.User;
+
+import elemental.json.JsonObject;
 
 @Service
 public class UserDataProvider {
@@ -24,21 +26,14 @@ public class UserDataProvider {
 	}
 
 	public List<User> findAll() {
-		return userService.getRepository().findAll()
-				.stream()
-				.map(this::toUIEntity)
-				.collect(Collectors.toList());
-	}
-
-	public void save(User user) {
-		this.userService.save(toDataEntity(user));
+		return userService.getRepository().findAll().stream().map(this::toUIEntity).collect(Collectors.toList());
 	}
 
 	public void save(JsonObject user) {
 		this.userService.save(toDataEntity(user));
 	}
 
-	public User toUIEntity(com.vaadin.flow.demo.patientportal.backend.data.entity.User dataEntity) {
+	private User toUIEntity(com.vaadin.flow.demo.patientportal.backend.data.entity.User dataEntity) {
 		User uiEntity = new User();
 		uiEntity.setId(dataEntity.getId().toString());
 		uiEntity.setName(dataEntity.getName());
@@ -48,21 +43,21 @@ public class UserDataProvider {
 		uiEntity.setPicture("https://randomuser.me/api/portraits/women/10.jpg");
 
 		switch (dataEntity.getRole().toLowerCase()) {
-			case "barista":
-				uiEntity.setRole(ROLE_BARISTA);
-				break;
-			case "admin":
-				uiEntity.setRole(ROLE_ADMIN);
-				break;
-			case "baker":
-				uiEntity.setRole(ROLE_BAKER);
-				break;
+		case "barista":
+			uiEntity.setRole(ROLE_BARISTA);
+			break;
+		case "admin":
+			uiEntity.setRole(ROLE_ADMIN);
+			break;
+		case "baker":
+			uiEntity.setRole(ROLE_BAKER);
+			break;
 		}
 
 		return uiEntity;
 	}
 
-	public com.vaadin.flow.demo.patientportal.backend.data.entity.User toDataEntity(User uiEntity) {
+	private com.vaadin.flow.demo.patientportal.backend.data.entity.User toDataEntity(User uiEntity) {
 		com.vaadin.flow.demo.patientportal.backend.data.entity.User dataEntity = null;
 		try {
 			long id = Long.parseLong(uiEntity.getId());
@@ -96,7 +91,7 @@ public class UserDataProvider {
 		return dataEntity;
 	}
 
-	public com.vaadin.flow.demo.patientportal.backend.data.entity.User toDataEntity(JsonObject user) {
+	private com.vaadin.flow.demo.patientportal.backend.data.entity.User toDataEntity(JsonObject user) {
 		Gson gson = new Gson();
 		User uiEntity = gson.fromJson(user.toJson(), User.class);
 		return toDataEntity(uiEntity);
@@ -104,9 +99,5 @@ public class UserDataProvider {
 
 	public void delete(String userId) {
 		this.userService.delete(Long.parseLong(userId));
-	}
-
-	public UserService getService() {
-		return userService;
 	}
 }
