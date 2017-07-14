@@ -26,6 +26,7 @@ import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
+import com.vaadin.ui.AttachEvent;
 
 @Tag("bakery-dashboard")
 @HtmlImport("frontend://src/dashboard/bakery-dashboard.html")
@@ -34,14 +35,16 @@ import com.vaadin.hummingbird.ext.spring.annotations.Route;
 public class DashboardView extends PolymerTemplate<DashboardView.Model> implements View {
 
 	public DashboardView() {
-		getElement().addAttachListener(e -> {
-			populateOrdersList(0, 10);
-			DashboardData data = OrdersDataProvider.get().getDashboardData();
-			populateYearlySalesChart(data);
-			populateDeliveriesCharts(data);
-			populateOrdersCounts(data.getDeliveryStats());
-			populateDeliveriesPerProductChart(data.getProductDeliveries());
-		});
+	}
+
+	@Override
+	protected void onAttach(AttachEvent attachEvent) {
+		populateOrdersList(0, 10);
+		DashboardData data = OrdersDataProvider.get().getDashboardData();
+		populateYearlySalesChart(data);
+		populateDeliveriesCharts(data);
+		populateOrdersCounts(data.getDeliveryStats());
+		populateDeliveriesPerProductChart(data.getProductDeliveries());
 	}
 
 	private void populateOrdersCounts(DeliveryStats deliveryStats) {

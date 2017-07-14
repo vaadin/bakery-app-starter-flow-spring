@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -36,34 +37,7 @@ public class DashboardUtils {
 	}
 
 	private static String getCurrentMonthName() {
-		switch (Calendar.getInstance().get(Calendar.MONTH)) {
-		case Calendar.JANUARY:
-			return "January";
-		case Calendar.FEBRUARY:
-			return "February";
-		case Calendar.MARCH:
-			return "March";
-		case Calendar.APRIL:
-			return "April";
-		case Calendar.MAY:
-			return "May";
-		case Calendar.JUNE:
-			return "June";
-		case Calendar.JULY:
-			return "July";
-		case Calendar.AUGUST:
-			return "August";
-		case Calendar.SEPTEMBER:
-			return "September";
-		case Calendar.OCTOBER:
-			return "October";
-		case Calendar.NOVEMBER:
-			return "November";
-		case Calendar.DECEMBER:
-			return "December";
-		default:
-			return "this month";
-		}
+		return Calendar.getInstance().getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH);
 	}
 
 	private static String getDeliveriesThisMonthTitle() {
@@ -158,7 +132,7 @@ public class DashboardUtils {
 
 	public static ProductDeliveriesChartData getDeliveriesPerProductPieChartData(
 			Map<Product, Integer> productDeliveries) {
-		return new ProductDeliveriesChartData("Product delivered in " + getCurrentMonthName(), "count",
+		return new ProductDeliveriesChartData("Products delivered in " + getCurrentMonthName(), "count",
 				productDeliveries);
 	}
 
