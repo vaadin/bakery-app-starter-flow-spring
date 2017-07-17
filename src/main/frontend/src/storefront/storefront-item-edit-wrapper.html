@@ -1,0 +1,57 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="storefront-item-edit.html">
+<link rel="import" href="storefront-item-detail.html">
+<link rel="import" href="../elements/item-detail-dialog.html">
+
+<dom-module id="storefront-item-edit-wrapper">
+  <template>
+    <div id="wrapper">
+      <item-detail-dialog desktop-view$=[[desktopView]] opened="[[opened]]">
+        <storefront-item-edit desktop-view="[[desktopView]]" hidden$="[[review]]" item="{{order}}" on-next="_review"></storefront-item-edit>
+        <storefront-item-detail hidden$="[[!review]]" review item="{{order}}" on-back="_edit"></storefront-item-detail>
+      </item-detail-dialog>
+    </div>
+  </template>
+
+  <script>
+    class StoreFromItemEditEditWrapper extends Polymer.Element {
+      static get is() {
+        return 'storefront-item-edit-wrapper';
+      }
+
+      static get properties() {
+        return {
+          order: {
+            type: Object,
+            observer: '_onOrderChanged'
+          },
+          opened: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true
+          },
+          desktopView: {
+            type: Boolean
+          },
+          review: Boolean
+        };
+      }
+
+      _onOrderChanged(user) {
+        this.opened = !!user;
+        this.review = false;
+      }
+
+      _review() {
+        console.log('REV');
+        this.review = true;
+      }
+
+      _edit() {
+        this.review = false;
+      }
+    }
+
+    window.customElements.define(StoreFromItemEditEditWrapper.is, StoreFromItemEditEditWrapper);
+  </script>
+</dom-module>

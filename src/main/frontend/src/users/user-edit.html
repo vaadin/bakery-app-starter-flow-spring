@@ -6,8 +6,8 @@
 <link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
 <link rel="import" href="../../bower_components/vaadin-combo-box/vaadin-combo-box.html">
 <link rel="import" href="../../bower_components/vaadin-upload/vaadin-upload.html">
-<link rel="import" href="../../bower_components/vaadin-themes/valo/vaadin-button.html">
-<link rel="import" href="../../bower_components/vaadin-themes/valo/vaadin-text-field.html">
+<link rel="import" href="../elements/cofirm-dialog-content-wrapper.html">
+<link rel="import" href="../elements/item-detail-dialog.html">
 
 
 <dom-module id="user-edit">
@@ -64,12 +64,16 @@
       <vaadin-combo-box label="Role" value="{{_editableUser.role}}" items='["Barista", "Admin", "Baker"]' required></vaadin-combo-box>
     </vaadin-form-layout>
     <div class="flex buttons">
-      <vaadin-button on-click="save" theme="primary" disabled="[[!dirty]]">Save</vaadin-button>
-      <vaadin-button on-click="cancel">Cancel</vaadin-button>
+      <vaadin-button on-click="_save" theme="primary" disabled="[[!dirty]]">Save</vaadin-button>
+      <vaadin-button on-click="_cancel">Cancel</vaadin-button>
       <div class="flex1"></div>
-      <vaadin-button on-click="delete" theme="danger tertiary" class="right">Delete</vaadin-button>
+      <vaadin-button on-click="_delete" theme="danger tertiary" class="right">Delete</vaadin-button>
     </div>
-
+    <div>
+      <item-detail-dialog confirm-delete-dialog opened="{{_deleteDialogOpened}}">
+        <confirm-dialog user="[[user]]"></confirm-dialog>
+      </item-detail-dialog>
+    </div>
   </template>
 
   <script>
@@ -81,6 +85,10 @@
       static get properties() {
         return {
           user: {
+            type: Object
+          },
+
+          _deleteDialogOpened: {
             type: Object,
             observer: 'reset'
           },
@@ -94,6 +102,14 @@
             value: false
           }
         };
+      }
+
+      ready() {
+        super.ready();
+
+        this.addEventListener('delete', e => {
+          this._doCancel();
+        });
       }
 
       static get observers() {
@@ -138,13 +154,13 @@
           user && {password: user.password || '[the password is write-only]'});
       }
 
-      cancel() {
+      _cancel() {
         if (!this.dirty || window.confirm('Are you sure you want to cancel edits?')) {
           this._doCancel();
         }
       }
 
-      save() {
+      _save() {
         // If the password did not change set it to null.
         // That way the server side can know if the password should be updated or not.
         if (!this._passwordUpdated) {
@@ -162,21 +178,8 @@
         this._doCancel();
       }
 
-      delete() {
-        // TODO: use a better web component for this or an Undo feature
-        if (!window.confirm('Are you sure you want to remove the user?')) {
-          return;
-        }
-
-        this.dispatchEvent(new CustomEvent('delete', {
-          detail: {
-            userId: this._editableUser.id
-          },
-          bubbles: true,
-          composed: true
-        }));
-
-        this._doCancel();
+      _delete() {
+        this._deleteDialogOpened = true;
       }
 
       _doCancel() {

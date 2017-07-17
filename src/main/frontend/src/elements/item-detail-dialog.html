@@ -1,34 +1,61 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="dialog-mixins.html">
 
 <dom-module id="item-detail-dialog">
   <template>
     <style>
-
       :host,
-      #back {
+      #back,
+      #fore {
         display: block;
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
+        z-index: 200;
       }
 
       #fore {
-        position: absolute;
-        top: 10px;
-        right: 5px;
-        bottom: 10px;
+        background: white;
+      }
+
+      :host([confirm-delete-dialog]) #fore {
+        overflow: hidden;
+        max-height: 200px;
+        max-width: 500px;
+        border-radius: 5px;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+      }
+
+      :host([desktop-view]) #fore {
+        overflow: hidden;
         min-width: 500px;
         max-width: 680px;
-        background: white;
         border-radius: 5px;
-        overflow: hidden;
+      }
+
+      :host([desktop-view]:not([align])) #fore {
+        min-width: 500px;
+        max-width: 994px;
+        min-height: 400px;
+        max-height: 648px;
+        margin: auto auto;
+      }
+
+      :host([desktop-view][align="right"]) #fore {
+        top: 10px;
+        bottom: 10px;
+        right: 5px;
+        left: auto;
       }
 
       #back {
-        background: grey;
-        opacity: 0.3;
+        background: var(--valo-shade-20pct);
       }
     </style>
 
@@ -39,40 +66,15 @@
   </template>
 
   <script>
-    class ItemDetailDialog extends Polymer.Element {
+    class ItemDetailDialog extends window.DetachableDialogMixin(Polymer.Element) {
       static get is() {
         return 'item-detail-dialog';
       }
 
       ready() {
         super.ready();
-        Polymer.RenderStatus.afterNextRender(this, () => {
-          this._parentElement = this.parentElement;
-          ['close', 'save', 'delete'].forEach(event => this.addEventListener(event, this._forwardEvent.bind(this)));
-          this.addEventListener('close', this._onContentClose.bind(this));
-          document.body.appendChild(this);
-        });
-      }
 
-      close() {
-        this.dispatchEvent(new CustomEvent('will-close', {cancellable: true}));
-      }
-
-      _forwardEvent(event) {
-        if (this.parentElement === document.body) {
-          this._parentElement.dispatchEvent(
-            new CustomEvent(event.type, {
-              detail: event.detail,
-              bubbles: event.bubbles,
-              composed: event.composed
-            }));
-        }
-      }
-
-      _onContentClose() {
-        if (this.parentElement === document.body) {
-          this._parentElement.appendChild(this);
-        }
+        this.addEventListener('click', e => e.stopPropagation());
       }
     }
 

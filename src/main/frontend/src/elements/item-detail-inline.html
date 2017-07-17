@@ -1,4 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="dialog-mixins.html">
 
 <dom-module id="item-detail-inline">
   <template>
@@ -13,27 +14,9 @@
   </template>
 
   <script>
-    class ItemDetailInline extends Polymer.Element {
+    class ItemDetailInline extends window.CloseableDialogMixin(Polymer.Element) {
       static get is() {
         return 'item-detail-inline';
-      }
-
-      ready() {
-        super.ready();
-        Polymer.RenderStatus.afterNextRender(this, () => {
-          this._documentClickListener = document.addEventListener('click', this._onDocumentClick.bind(this));
-        });
-      }
-
-      _onDocumentClick(e) {
-        if (e.composedPath().indexOf(this) < 0) {
-          document.removeEventListener('click', this._documentClickListener);
-          this.close();
-        }
-      }
-
-      close() {
-        this.dispatchEvent(new CustomEvent('close', {bubbles: true, composed: true}));
       }
     }
 

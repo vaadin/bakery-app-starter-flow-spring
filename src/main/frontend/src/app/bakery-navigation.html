@@ -5,9 +5,6 @@
 <link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
-<link rel="import" href="../../bower_components/vaadin-themes/valo/vaadin-button.html">
-<link rel="import" href="../../bower_components/vaadin-themes/valo/icons.html">
-<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 
@@ -18,6 +15,8 @@
     <style>
       :host {
         display: block;
+        box-shadow: 0 0 16px 2px var(--valo-shade-20pct);
+        z-index: 1;
       }
 
       .toolbar {
@@ -178,21 +177,25 @@
             <span>Admin</span>
           </a>
         </paper-tab>
-        <!-- that should be changed after view from elements team is ready -->
       </paper-tabs>
-        <paper-menu-button hidden$="[[!_desktopView]]">
-          <div slot="dropdown-trigger" class="user-button" hidden$="[[!_desktopView]]" theme="tertiary">
-            <img src="[[user.image]]" alt="[[user.name]]" class="user-image" id="desktop-user-image">
-            <paper-badge for="desktop-user-image" class="alarms"
-                         hidden$="[[!_showAlarms(user.alarms, _desktopView, 'desktop')]]">
-            </paper-badge>
-            [[user.name]]
-          </div>
-          <paper-listbox slot="dropdown-content" selected="{{selectedMenuIndex}}">
+      <paper-menu-button class="user-button" hidden$="[[!_desktopView]]" theme="tertiary">
+       <div slot="dropdown-trigger" class="user-button" hidden$="[[!_desktopView]]" theme="tertiary">
+        <img src="[[user.image]]" alt="[[user.name]]" class="user-image" id="desktop-user-image">
+        <paper-badge for="desktop-user-image" class="alarms"
+                      hidden$="[[!_showAlarms(user.alarms, _desktopView, 'desktop')]]">
+        </paper-badge>
+        [[user.name]]
+        <iron-icon icon="valo:chevron-down"></iron-icon>
+        </div>
+                  <paper-listbox slot="dropdown-content" selected="{{selectedMenuIndex}}">
             <paper-item>Logout</paper-item>
           </paper-listbox>
-        </paper-menu-button>
+      </paper-menu-button>
     </div>
+
+    <img src="[[user.image]]" alt="[[user.name]]" class="user-image mobile-user-image" hidden$="[[_desktopView]]">
+    <paper-badge class="alarms mobile-alarms" hidden$="[[!_showAlarms(user.alarms, _desktopView, 'mobile')]]">
+    </paper-badge>
   </template>
 
   <script>
