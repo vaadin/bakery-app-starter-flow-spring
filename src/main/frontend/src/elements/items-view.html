@@ -7,20 +7,20 @@
 <link rel="import" href="../app/bakery-search.html">
 <link rel="import" href="item-detail-dialog.html">
 <link rel="import" href="../users/user-edit.html">
+<link rel="import" href="../products/product-edit.html">
 
 <dom-module id="items-view">
   <template>
     <style include="shared-styles">
       :host {
         display: flex;
+        flex: 1;
         flex-direction: column-reverse;
         box-sizing: border-box;
-        height: 100%;
       }
 
       .grid-wrapper {
         flex: 1;
-        height: 100%;
         position: relative;
       }
 
@@ -71,11 +71,11 @@
     <bakery-search
         field-placeholder="Search"
         field-value="{{filterValue}}"
-        button-text="New user"
+        button-text="[[buttonText]]"
         on-button-click="_newItem">
     </bakery-search>
 
-    <div class="flex1 overflow-auto">
+    <div class="flex flex1 overflow-auto">
       <div class="grid-wrapper">
         <slot name="grid"></slot>
       </div>
@@ -100,6 +100,9 @@
           filterValue: {
             type: String,
             notify: true
+          },
+          buttonText: {
+            type: String
           },
           item: {
             type: Object,

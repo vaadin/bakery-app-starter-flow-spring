@@ -4,12 +4,11 @@
 <link rel="import" href="../../bower_components/paper-badge/paper-badge.html">
 <link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
-<link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
-
 <link rel="import" href="../../bower_components/paper-menu-button/paper-menu-button.html">
 <link rel="import" href="../../bower_components/neon-animation/web-animations.html">
+
 <dom-module id="bakery-navigation">
   <template>
     <style>
@@ -46,10 +45,6 @@
         --paper-tab-ink: var(--valo-secondary-text-color);
         padding: 0 var(--valo-space-s);
         height: 100%;
-      }
-
-      paper-tab[hidden] {
-        display: none;
       }
 
       paper-tab a {
@@ -102,6 +97,7 @@
       }
 
       paper-menu-button[hidden],
+      paper-tab[hidden],
       .alarms[hidden],
       img[hidden] {
         display: none;
@@ -147,31 +143,31 @@
         Sunshine
       </div>
       <paper-tabs selected="[[page]]" attr-for-selected="name" class="navigation-tabs" align-bottom="[[_desktopView]]">
-        <paper-tab link name="storefront">
+        <paper-tab name="storefront">
           <a router-link href="storefront">
             <iron-icon icon="valo:edit"></iron-icon>
             <span>Storefront</span>
           </a>
         </paper-tab>
-        <paper-tab link name="dashboard">
+        <paper-tab name="dashboard">
           <a router-link href="dashboard">
             <iron-icon icon="valo:clock"></iron-icon>
             <span>Dashboard</span>
           </a>
         </paper-tab>
-        <paper-tab link name="users" hidden$="[[usersHidden]]">
+        <paper-tab name="users">
           <a router-link href="users">
             <iron-icon icon="valo:user"></iron-icon>
             <span>Users</span>
           </a>
         </paper-tab>
-        <paper-tab link name="products" hidden$="[[productsHidden]]">
+        <paper-tab name="products">
           <a router-link href="products">
             <iron-icon icon="valo:calendar"></iron-icon>
             <span>Products</span>
           </a>
         </paper-tab>
-        <paper-tab link name="admin" hidden$="[[adminHidden]]">
+        <paper-tab name="admin">
           <a router-link href="admin">
             <iron-icon icon="valo:cog"></iron-icon>
             <span>Admin</span>
@@ -179,17 +175,17 @@
         </paper-tab>
       </paper-tabs>
       <paper-menu-button class="user-button" hidden$="[[!_desktopView]]" theme="tertiary">
-       <div slot="dropdown-trigger" class="user-button" hidden$="[[!_desktopView]]" theme="tertiary">
-        <img src="[[user.image]]" alt="[[user.name]]" class="user-image" id="desktop-user-image">
-        <paper-badge for="desktop-user-image" class="alarms"
-                      hidden$="[[!_showAlarms(user.alarms, _desktopView, 'desktop')]]">
-        </paper-badge>
-        [[user.name]]
-        <iron-icon icon="valo:chevron-down"></iron-icon>
+        <div slot="dropdown-trigger" class="user-button" hidden$="[[!_desktopView]]" theme="tertiary">
+          <img src="[[user.image]]" alt="[[user.name]]" class="user-image" id="desktop-user-image">
+          <paper-badge for="desktop-user-image" class="alarms"
+                       hidden$="[[!_showAlarms(user.alarms, _desktopView, 'desktop')]]">
+          </paper-badge>
+          [[user.name]]
+          <iron-icon icon="valo:chevron-down"></iron-icon>
         </div>
-                  <paper-listbox slot="dropdown-content" selected="{{selectedMenuIndex}}">
-            <paper-item>Logout</paper-item>
-          </paper-listbox>
+        <paper-listbox slot="dropdown-content" selected="{{selectedMenuIndex}}">
+          <paper-item>Logout</paper-item>
+        </paper-listbox>
       </paper-menu-button>
     </div>
 
@@ -216,11 +212,13 @@
           }
         };
       }
+
       _selectedMenuChanged(index) {
         if (index == 0) {
           this.$server.logout();
         }
       }
+
       _showAlarms(alarms, desktopView, element) {
         return element === 'mobile' ? alarms && !desktopView : alarms && desktopView;
       }

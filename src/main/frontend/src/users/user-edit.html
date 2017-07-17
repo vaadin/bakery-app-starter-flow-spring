@@ -65,9 +65,9 @@
     </vaadin-form-layout>
     <div class="flex buttons">
       <vaadin-button on-click="_save" theme="primary" disabled="[[!dirty]]">Save</vaadin-button>
-      <vaadin-button on-click="_cancel">Cancel</vaadin-button>
+      <vaadin-button on-click="_confirmAndCancel">Cancel</vaadin-button>
       <div class="flex1"></div>
-      <vaadin-button on-click="_delete" theme="danger tertiary" class="right">Delete</vaadin-button>
+      <vaadin-button on-click="_confirmAndDelete" theme="danger tertiary" class="right">Delete</vaadin-button>
     </div>
     <div>
       <item-detail-dialog confirm-delete-dialog opened="{{_deleteDialogOpened}}">
@@ -85,31 +85,18 @@
       static get properties() {
         return {
           user: {
-            type: Object
-          },
-
-          _deleteDialogOpened: {
             type: Object,
             observer: 'reset'
           },
-          _editableUser: Object,
           dirty: {
             type: Boolean,
             value: false
           },
-          _passwordUpdated: {
-            type: Boolean,
-            value: false
-          }
+
+          _deleteDialogOpened: Boolean,
+          _editableUser: Object,
+          _passwordDirty: Boolean
         };
-      }
-
-      ready() {
-        super.ready();
-
-        this.addEventListener('delete', e => {
-          this._doCancel();
-        });
       }
 
       static get observers() {
@@ -118,52 +105,47 @@
         ];
       }
 
+      ready() {
+        super.ready();
+
+        this.addEventListener('delete', e => {
+          this._cancel();
+        });
+      }
+
+      _onPropertyChanged(change) {
+        if (this.user === null || this._passwordDirty) {
+          return;
+        }
+
+        const prop = change.path.substr(change.path.indexOf('.') + 1);
+        if (prop === 'password') {
+          this._passwordDirty = true;
+          this.dirty = true;
+          return;
+        }
+
+        this.dirty = (this._editableUser[prop] !== this.user[prop]);
+      }
+
       _onImgError(e) {
         e.target.src = 'images/default-picture.png';
       }
 
-      _onPropertyChanged(change) {
-        let dirty = false;
-        if (this.user !== null) {
-          dirty = this._passwordUpdated;
-
-          if (!dirty) {
-            if (change.path === '_editableUser.password') {
-              this._passwordUpdated = true;
-              dirty = true;
-            }
-          }
-
-          if (!dirty) {
-            for (const prop of Object.keys(this._editableUser)) {
-              if ((prop !== 'password') && (this._editableUser[prop] !== this.user[prop])) {
-                dirty = true;
-                break;
-              }
-            }
-          }
+      _confirmAndCancel() {
+        if (!this.dirty || window.confirm('Are you sure you want to cancel edits?')) {
+          this._cancel();
         }
-
-        this.dirty = dirty;
-      }
-
-      reset(user) {
-        this.dirty = false;
-        this._passwordUpdated = false;
-        this._editableUser = Object.assign({}, user,
-          user && {password: user.password || '[the password is write-only]'});
       }
 
       _cancel() {
-        if (!this.dirty || window.confirm('Are you sure you want to cancel edits?')) {
-          this._doCancel();
-        }
+        this.dispatchEvent(new CustomEvent('close', {bubbles: true, composed: true}));
       }
 
       _save() {
         // If the password did not change set it to null.
         // That way the server side can know if the password should be updated or not.
-        if (!this._passwordUpdated) {
+        if (!this._passwordDirty) {
           this._editableUser.password = null;
         }
 
@@ -178,13 +160,8 @@
         this._doCancel();
       }
 
-      _delete() {
+      _confirmAndDelete() {
         this._deleteDialogOpened = true;
-      }
-
-      _doCancel() {
-        this.reset({});
-        this.dispatchEvent(new CustomEvent('close', {bubbles: true, composed: true}));
       }
     }
 

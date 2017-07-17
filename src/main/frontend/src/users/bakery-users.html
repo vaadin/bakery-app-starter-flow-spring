@@ -60,7 +60,7 @@
     <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
 
     <items-view desktop-view=[[desktopView]] filter-value="{{_filterValue}}"
-        on-new-item="_openNewUserDialog" item="[[_editableUser]]" on-closed="_onClose">
+        on-new-item="_openNewUserDialog" item="[[_editableUser]]" on-closed="_onClose" button-text="New user">
 
       <vaadin-grid slot="grid" id="grid" class="users-grid" items="[[_filterUsers(users.*, _filterValue)]]" active-item="{{_selectedUser}}">
         <vaadin-grid-column width="80px" flex-grow="0">
@@ -101,8 +101,8 @@
         </vaadin-grid-column>
       </vaadin-grid>
 
-    <user-edit user="[[_editableUser]]" desktop-view="[[desktopView]]"
-                       on-close="_onClose" on-save="_onSave" on-delete="_onDelete"></user-edit>
+      <user-edit slot="editor" user="[[_editableUser]]" on-save="_onSave" on-delete="_onDelete"></user-edit>
+    </items-view>
   </template>
 
   <script>

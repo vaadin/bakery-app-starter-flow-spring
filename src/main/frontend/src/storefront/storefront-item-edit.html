@@ -212,7 +212,7 @@
       }
 
       _computeTotal() {
-        const tot = (this.item && this.item.goods || [])
+        const tot = (this.item && this.item.goods || [])
            .reduce((prev, item) => prev + (item.unitPrice ? item.unitPrice * (item.count || 1) : 0), 0);
         this.set('item.totalPrice', tot);
         return tot ? 'Total $' + tot : '';

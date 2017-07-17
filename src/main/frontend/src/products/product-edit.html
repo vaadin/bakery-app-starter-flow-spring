@@ -1,0 +1,79 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
+<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
+
+
+<dom-module id="product-edit">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        padding: 20px;
+      }
+
+      label {
+        font-size: var(--valo-font-size-s);
+        color: var(--valo-contrast-60pct);
+        font-weight: 500;
+      }
+
+      .buttons {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        border-top: 1px solid var(--valo-contrast-60pct);
+        padding: 10px;
+      }
+    </style>
+
+    <h3>Edit Product</h3>
+    <vaadin-form-layout>
+      <vaadin-text-field label="Product name" value="{{product.productName}}" colspan="2"></vaadin-text-field>
+      <br>
+      <vaadin-text-field label="Unit price" value="{{product.unitPrice}}" colspan="2"></vaadin-text-field>
+    </vaadin-form-layout>
+    <div class="flex buttons">
+      <vaadin-button on-click="_save" theme="primary">Save</vaadin-button>
+      <vaadin-button on-click="_cancel">Cancel</vaadin-button>
+      <div class="flex1"></div>
+      <vaadin-button on-click="_delete" theme="danger tertiary" class="right">Delete</vaadin-button>
+    </div>
+
+  </template>
+
+  <script>
+    class ProductEdit extends Polymer.Element {
+      static get is() {
+        return 'product-edit';
+      }
+
+      static get properties() {
+        return {
+          product: {
+            type: Object
+          }
+        };
+      }
+
+      _cancel() {
+        this.dispatchEvent(new CustomEvent('close', {bubbles: true, composed: true}));
+      }
+
+      _save() {
+        this.dispatchEvent(new CustomEvent('save', {bubbles: true, composed: true, detail: this.product}));
+      }
+
+      _delete() {
+        // TODO: use a better web component for this or an Undo feature
+        if (window.confirm('Are you sure to remove the product?')) {
+          this.dispatchEvent(new CustomEvent('delete', {bubbles: true, composed: true, detail: this.product}));
+        }
+      }
+    }
+
+    window.customElements.define(ProductEdit.is, ProductEdit);
+  </script>
+</dom-module>
