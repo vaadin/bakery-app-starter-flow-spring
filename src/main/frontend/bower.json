@@ -30,13 +30,20 @@
     "vaadin-upload": "^2.0.0",
     "vaadin-combo-box": "#fixes-for-bas",
     "vaadin-date-picker": "#master",
-    "moment": "^2.18.1"
+    "moment": "^2.18.1",
+    "paper-listbox": "^2.0.0",
+    "paper-item": "^2.0.0",
+    "paper-menu-button": "^2.0.0",
+    "web-animations-js": "^2.2.5",
+    "vaadin-charts": "5.0.0-alpha1",
+    "vaadin-board": "1.1.0-alpha1"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0"
   },
   "private": true,
   "resolutions": {
-    "vaadin-text-field": "master"
+    "vaadin-text-field": "master",
+    "iron-ajax": "^2.0.0"
   }
 }
