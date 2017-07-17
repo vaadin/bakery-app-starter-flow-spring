@@ -1,1 +1,1 @@
-com.vaadin.flow.demo.patientportal.CustomVaadinServiceInitListener
+com.vaadin.starter.bakery.CustomVaadinServiceInitListener
