@@ -32,7 +32,7 @@
       }
     </style>
 
-    <div id="back" on-click="_close"></div>
+    <div id="back" on-click="close"></div>
     <div id="fore">
       <slot></slot>
     </div>
@@ -48,15 +48,30 @@
         super.ready();
         Polymer.RenderStatus.afterNextRender(this, () => {
           this._parentElement = this.parentElement;
-          this.addEventListener('close', this._close.bind(this));
+          ['close', 'save', 'delete'].forEach(event => this.addEventListener(event, this._forwardEvent.bind(this)));
+          this.addEventListener('close', this._onContentClose.bind(this));
           document.body.appendChild(this);
         });
       }
 
-      _close() {
-        if (this.parentElement == document.body) {
+      close() {
+        this.dispatchEvent(new CustomEvent('will-close', {cancellable: true}));
+      }
+
+      _forwardEvent(event) {
+        if (this.parentElement === document.body) {
+          this._parentElement.dispatchEvent(
+            new CustomEvent(event.type, {
+              detail: event.detail,
+              bubbles: event.bubbles,
+              composed: event.composed
+            }));
+        }
+      }
+
+      _onContentClose() {
+        if (this.parentElement === document.body) {
           this._parentElement.appendChild(this);
-          this._parentElement.dispatchEvent(new CustomEvent('close', {bubbles: true, composed: true}));
         }
       }
     }

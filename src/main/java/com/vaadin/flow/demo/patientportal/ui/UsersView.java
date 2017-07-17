@@ -16,15 +16,19 @@
 package com.vaadin.flow.demo.patientportal.ui;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.security.access.annotation.Secured;
 
+import com.vaadin.annotations.ClientDelegate;
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Tag;
+import com.vaadin.flow.demo.patientportal.app.HasLogger;
 import com.vaadin.flow.demo.patientportal.backend.data.Role;
-import com.vaadin.flow.demo.patientportal.backend.service.UserService;
+import com.vaadin.flow.demo.patientportal.ui.dataproviders.UserDataProvider;
+import com.vaadin.flow.demo.patientportal.ui.entities.User;
 import com.vaadin.flow.demo.patientportal.ui.utils.BakeryConst;
 import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
@@ -32,6 +36,8 @@ import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
 import com.vaadin.ui.AttachEvent;
+
+import elemental.json.JsonObject;
 
 /**
  * @author Vaadin Ltd
@@ -41,80 +47,83 @@ import com.vaadin.ui.AttachEvent;
 @Route(BakeryConst.PAGE_USERS)
 @ParentView(BakeryApp.class)
 @Secured(Role.ADMIN)
-public class UsersView extends PolymerTemplate<UsersView.Model> implements View {
+public class UsersView extends PolymerTemplate<UsersView.Model> implements View, HasLogger {
 
-    public static class UserModel {
-        private String name;
-        private String last;
-        private String email;
-        private String picture;
-        private String role;
+	public interface Model extends TemplateModel {
+		void setUsers(List<User> users);
 
-        public String getName() {
-            return name;
-        }
+		void setErrorMessage(String message);
+	}
 
-        public void setName(String name) {
-            this.name = name;
-        }
+	private final UserDataProvider userDataProvider;
 
-        public String getLast() {
-            return last;
-        }
+	@Autowired
+	public UsersView(UserDataProvider userDataProvider) {
+		this.userDataProvider = userDataProvider;
+	}
 
-        public void setLast(String last) {
-            this.last = last;
-        }
+	@Override
+	protected void onAttach(AttachEvent event) {
+		super.onAttach(event);
+		getModel().setUsers(userDataProvider.findAll());
+	}
 
-        public String getEmail() {
-            return email;
-        }
+	@ClientDelegate
+	private void saveUser(JsonObject user) {
+		boolean isInSync = false;
+		try {
+			userDataProvider.save(user);
+			isInSync = true;
+		} catch (DataIntegrityViolationException e) {
+			// Commit failed because of validation errors
+			getModel().setErrorMessage(e.getMessage());
+			getLogger().debug("Data integrity violation error while updating entity of type "
+					+ com.vaadin.flow.demo.patientportal.backend.data.entity.User.class.getName(), e);
+		} catch (OptimisticLockingFailureException e) {
+			// Somebody else probably edited the data at the same time
+			getModel().setErrorMessage("Somebody else might have updated the data. Please refresh and try again.");
+			getLogger().debug("Optimistic locking error while saving entity of type "
+					+ com.vaadin.flow.demo.patientportal.backend.data.entity.User.class.getName(), e);
+		} catch (Exception e) {
+			// Something went wrong, no idea what
+			getModel().setErrorMessage("A problem occurred while saving the data. Please check the fields.");
+			getLogger().error("Unable to save entity of type "
+					+ com.vaadin.flow.demo.patientportal.backend.data.entity.User.class.getName(), e);
+		} finally {
+			if (!isInSync) {
+				// re-sync the UI state from the DB if the DB operation fails
+				getModel().setUsers(userDataProvider.findAll());
+			}
+		}
+	}
 
-        public void setEmail(String email) {
-            this.email = email;
-        }
-
-        public String getPicture() {
-            return picture;
-        }
-
-        public void setPicture(String picture) {
-            this.picture = picture;
-        }
-
-        public String getRole() {
-            return role;
-        }
-
-        public void setRole(String role) {
-            this.role = role;
-        }
-    }
-
-    public interface Model extends TemplateModel {
-        void setUsers(List<UserModel> users);
-    }
-
-    private UserService userService;
-
-    @Autowired
-    public UsersView(UserService userService) {
-        this.userService = userService;
-    }
-
-    @Override
-    protected void onAttach(AttachEvent event) {
-        super.onAttach(event);
-
-        List<UserModel> users = userService.getRepository().findAll().stream().map(user -> {
-            UserModel model = new UserModel();
-            model.setName(user.getName());
-            model.setLast("McLast");
-            model.setEmail(user.getEmail());
-            model.setPicture("https://randomuser.me/api/portraits/women/10.jpg");
-            model.setRole(user.getRole());
-            return model;
-        }).collect(Collectors.toList());
-        getModel().setUsers(users);
-    }
+	@ClientDelegate
+	private void deleteUser(String userId) {
+		boolean isInSync = false;
+		try {
+			userDataProvider.delete(userId);
+			isInSync = true;
+		} catch (DataIntegrityViolationException e) {
+			// Commit failed because of validation errors
+			getModel().setErrorMessage(
+					"The given entity cannot be deleted as there are references to it in the database");
+			getLogger().error("Data integrity violation error while deleting entity of type "
+					+ com.vaadin.flow.demo.patientportal.backend.data.entity.User.class.getName(), e);
+		} catch (OptimisticLockingFailureException e) {
+			// Somebody else probably edited the data at the same time
+			getModel().setErrorMessage("Somebody else might have updated the data. Please refresh and try again.");
+			getLogger().debug("Optimistic locking error while deleting entity of type "
+					+ com.vaadin.flow.demo.patientportal.backend.data.entity.User.class.getName(), e);
+		} catch (Exception e) {
+			// Something went wrong, no idea what
+			getModel().setErrorMessage("A problem occurred while deleting the data. Please refresh and try again.");
+			getLogger().error("Unable to delete entity of type "
+					+ com.vaadin.flow.demo.patientportal.backend.data.entity.User.class.getName(), e);
+		} finally {
+			if (!isInSync) {
+				// re-sync the UI state from the DB if the DB operation fails
+				getModel().setUsers(userDataProvider.findAll());
+			}
+		}
+	}
 }

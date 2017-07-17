@@ -7,12 +7,12 @@
   <template>
     <div id="wrapper">
       <template is="dom-if" if="[[_showDesktop(opened, desktopView)]]" restamp>
-        <item-detail-dialog>
+        <item-detail-dialog on-will-close="_onDialogWillClose">
           <user-edit user="[[user]]"></user-edit>
         </item-detail-dialog>
       </template>
       <template is="dom-if" if="[[_showMobile(opened, desktopView)]]" restamp>
-        <item-detail-mobile>
+        <item-detail-mobile on-will-close="_onDialogWillClose">
           <user-edit user="[[user]]"></user-edit>
         </item-detail-mobile>
       </template>
@@ -44,6 +44,11 @@
 
       _onUserChanged(user) {
         this.opened = !!user;
+      }
+
+      _onDialogWillClose(event) {
+        const userEdit = event.target.children[0];
+        userEdit.cancel();
       }
 
       _showDesktop(opened, desktopView) {
