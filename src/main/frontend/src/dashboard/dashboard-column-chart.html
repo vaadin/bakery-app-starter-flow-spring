@@ -32,12 +32,22 @@
 					<chart-title enabled="false"></chart-title>
 				</y-axis>
 				<legend enabled="false"></legend>
-				<plot-options>
-					<column color="rgba(34, 70, 117, 0.4)"></column>
-				</plot-options>
-				<data-series data="[[data.values]]">
+				<data-series>
 					<name>[[data.seriesName]]</name>
 					<color-by-point>false</color-by-point>
+					<data>
+						<template is="dom-repeat" items="[[data.values]]">
+							<point>
+								<template is="dom-if" if="[[_shouldBeHighlighted(index)]]">
+									<color>rgba(24, 119, 242, 0.5)</color>
+								</template>
+								<template is="dom-if" if="[[!_shouldBeHighlighted(index)]]">
+									<color>rgba(34, 70, 117, 0.5)</color>
+								</template>
+								<y>[[item]]</y>
+							</point>
+						</template>
+					</data>
 				</data-series>
 				<exporting>
 					<enabled>false</enabled>
@@ -50,6 +60,10 @@
     class DashboardColumnChart extends Polymer.Element {
       static get is() {
         return 'dashboard-column-chart';
+      }
+
+      _shouldBeHighlighted(index) {
+        return index === this.data.columnHighlighted;
       }
     }
 
