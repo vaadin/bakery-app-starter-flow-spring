@@ -126,9 +126,4 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 			}
 		}
 	}
-
-	@ClientDelegate
-	private void clearErrorMessage() {
-		getModel().setErrorMessage("");
-	}
 }

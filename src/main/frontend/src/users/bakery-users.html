@@ -1,4 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymer/lib/utils/async.html">
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-sorter.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
@@ -215,9 +216,12 @@
 
       _onErrorMessageChanged() {
         if (this.errorMessage && this.errorMessage !== '') {
-          // TODO(vlukashov) 2017-07-13: find a better way to show error messages
-          window.alert(this.errorMessage);
-          this.$server.clearErrorMessage();
+          // TODO(vlukashov) 2017-07-17: refactor this code after the Flow issue #2035 is fixed
+          Polymer.Async.animationFrame.run(() => {
+            // TODO(vlukashov) 2017-07-13: find a better way to show error messages
+            window.alert(this.errorMessage);
+            this.errorMessage = '';
+          });
         }
       }
     }
