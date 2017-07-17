@@ -3,6 +3,7 @@ package com.vaadin.starter.bakery.ui.utils;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.MonthDay;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -13,6 +14,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import com.vaadin.starter.bakery.backend.data.DeliveryStats;
 import com.vaadin.starter.bakery.backend.data.OrderState;
@@ -122,12 +124,12 @@ public class DashboardUtils {
 
 	public static ColumnChartData getDeliveriesThisYearChartData(List<Number> deliveriesThisYear) {
 		return new ColumnChartData(getDeliveriesThisYearTitle(), "per Month",
-				convertNumbersToIntegers(deliveriesThisYear), getDeliveriesThisYearCategories());
+				convertNumbersToIntegers(deliveriesThisYear), getDeliveriesThisYearCategories(), MonthDay.now().getMonthValue() - 1);
 	}
 
 	public static ColumnChartData getDeliveriesThisMonthChartData(List<Number> deliveriesThisMonth) {
 		return new ColumnChartData(getDeliveriesThisMonthTitle(), "per Day",
-				convertNumbersToIntegers(deliveriesThisMonth), getDeliveriesThisMonthCategories(deliveriesThisMonth));
+				convertNumbersToIntegers(deliveriesThisMonth), getDeliveriesThisMonthCategories(deliveriesThisMonth), MonthDay.now().getDayOfMonth() - 1);
 	}
 
 	public static ProductDeliveriesChartData getDeliveriesPerProductPieChartData(
