@@ -67,7 +67,7 @@
         this.dispatchEvent(new CustomEvent('close', {bubbles: true, composed: true}));
         this.dispatchEvent(new CustomEvent('delete', {
           detail: {
-            userId: this.user.id
+            id: this.user.id
           },
           bubbles: true,
           composed: true

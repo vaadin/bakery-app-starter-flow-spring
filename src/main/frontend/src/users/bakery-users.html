@@ -133,7 +133,7 @@
       }
 
       _editUser(user) {
-        this._editableUser = user;
+        this._editableUser = user === null ? null : Object.assign({}, user);
       }
 
       _onClose() {
@@ -144,25 +144,26 @@
 
       _onSave(event) {
         let idx;
-        if (!event.detail.user.id) {
+        if (!event.detail.id) {
           idx = this.users.length;
-          this.push('users', event.detail.user);
+          this.push('users', event.detail);
         } else {
-          idx = this._findUserIndexById(event.detail.user.id);
-          this.set(`users.${idx}`, event.detail.user);
+          idx = this._findUserIndexById(event.detail.id);
+          this.set(`users.${idx}`, event.detail);
         }
 
-        this.$server.saveUser(event.detail.user);
+        this.$server.saveUser(event.detail);
       }
 
       _onDelete(event) {
-        if (!event.detail.userId) {
+        if (!event.detail.id) {
           return;
         }
 
-        const idx = this._findUserIndexById(event.detail.userId);
+        const idx = this._findUserIndexById(event.detail.id);
         this.splice('users', idx, 1);
-        this.$server.deleteUser(event.detail.userId);
+
+        this.$server.deleteUser(event.detail.id);
       }
 
       _findUserIndexById(id) {
