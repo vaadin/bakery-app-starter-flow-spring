@@ -188,7 +188,7 @@
         }
 
         const idx = this._findUserIndexById(event.detail.userId);
-        this.splice('users', idx);
+        this.splice('users', idx, 1);
         this.$server.deleteUser(event.detail.userId);
       }
 

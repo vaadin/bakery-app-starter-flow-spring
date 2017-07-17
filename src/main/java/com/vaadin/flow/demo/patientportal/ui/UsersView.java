@@ -70,10 +70,10 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 
 	@ClientDelegate
 	private void saveUser(JsonObject user) {
-		boolean saved = false;
+		boolean isInSync = false;
 		try {
 			userDataProvider.save(user);
-			saved = true;
+			isInSync = true;
 		} catch (DataIntegrityViolationException e) {
 			// Commit failed because of validation errors
 			getModel().setErrorMessage(e.getMessage());
@@ -90,7 +90,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 			getLogger().error("Unable to save entity of type "
 					+ com.vaadin.flow.demo.patientportal.backend.data.entity.User.class.getName(), e);
 		} finally {
-			if (!saved) {
+			if (!isInSync) {
 				// re-sync the UI state from the DB if the DB operation fails
 				getModel().setUsers(userDataProvider.findAll());
 			}
@@ -99,10 +99,10 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 
 	@ClientDelegate
 	private void deleteUser(String userId) {
-		boolean deleted = false;
+		boolean isInSync = false;
 		try {
 			userDataProvider.delete(userId);
-			deleted = true;
+			isInSync = true;
 		} catch (DataIntegrityViolationException e) {
 			// Commit failed because of validation errors
 			getModel().setErrorMessage(
@@ -120,7 +120,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 			getLogger().error("Unable to delete entity of type "
 					+ com.vaadin.flow.demo.patientportal.backend.data.entity.User.class.getName(), e);
 		} finally {
-			if (!deleted) {
+			if (!isInSync) {
 				// re-sync the UI state from the DB if the DB operation fails
 				getModel().setUsers(userDataProvider.findAll());
 			}
