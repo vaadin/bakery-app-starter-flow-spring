@@ -33,6 +33,7 @@
         line-height: 24px;
         text-align: center;
       }
+
       .at-icon::before {
         content: '@';
       }
@@ -146,18 +147,18 @@
       }
 
       _cancel() {
-        this.dispatchEvent(new CustomEvent('close', { bubbles: true, composed: true }));
+        this.dispatchEvent(new CustomEvent('close', {bubbles: true, composed: true}));
       }
 
       _delete() {
         // TODO: use a better web component for this or an Undo feature
-        if (window.confirm("Are you sure to remove the user?")) {
+        if (window.confirm('Are you sure to remove the user?')) {
           this._cancel();
         }
       }
 
       _editTitle() {
-        return this.item && this.item.id ? 'Edit Order' : 'New Order'
+        return this.item && this.item.id ? 'Edit Order' : 'New Order';
       }
 
       _onCountChange(e) {
@@ -176,7 +177,7 @@
             this.set('item.goods', []);
           }
           // Add an empty item at the end
-          if (!item.goods[0] ||  item.goods[item.goods.length - 1].name) {
+          if (!item.goods[0] || item.goods[item.goods.length - 1].name) {
             this.push('item.goods', {});
           }
         }
@@ -193,12 +194,11 @@
         }
       }
 
-     _onCustomerChange(e) {
-       const idx = e.target.index;
-       const cust = e.target.selectedItem;
-       this.notifyPath('item.customer.name', cust.name);
-       this.set('item.customer.number', cust.phone);
-     }
+      _onCustomerChange(e) {
+        const cust = e.target.selectedItem;
+        this.notifyPath('item.customer.name', cust.name);
+        this.set('item.customer.number', cust.phone);
+      }
 
       _onProductDelete(e) {
         const idx = e.target.index;
@@ -212,8 +212,8 @@
       }
 
       _computeTotal() {
-        const tot = (this.item && this.item.goods || [])
-          .reduce((prev, item) => prev + (item.unitPrice ? item.unitPrice * (item.count || 1): 0), 0);
+        const tot = (this.item && this.item.goods || [])
+           .reduce((prev, item) => prev + (item.unitPrice ? item.unitPrice * (item.count || 1) : 0), 0);
         this.set('item.totalPrice', tot);
         return tot ? 'Total $' + tot : '';
       }
@@ -221,7 +221,7 @@
       _computeResponsiveSteps(desktopView, desktopColumns, mobileColumns) {
         return [{
           columns: desktopView ? desktopColumns : mobileColumns,
-          labelsPosition: "top"
+          labelsPosition: 'top'
         }];
       }
 

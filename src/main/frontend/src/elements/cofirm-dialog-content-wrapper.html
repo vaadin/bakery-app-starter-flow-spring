@@ -10,11 +10,11 @@
         text-align: center;
         color: rgba(42, 71, 110, 0.6);
         margin-bottom: 0;
-        padding:0 16px;
+        padding: 0 16px;
       }
 
       #message {
-        padding:0 16px;
+        padding: 0 16px;
         font-size: 16px;
         line-height: 1.63;
         color: rgba(53, 71, 97, 0.9);
@@ -66,12 +66,12 @@
       _confirmDelete() {
         this.dispatchEvent(new CustomEvent('close', {bubbles: true, composed: true}));
         this.dispatchEvent(new CustomEvent('delete', {
-            detail: {
-              userId: this.user.id
-            },
-            bubbles: true,
-            composed: true
-          }));
+          detail: {
+            userId: this.user.id
+          },
+          bubbles: true,
+          composed: true
+        }));
       }
     }
 

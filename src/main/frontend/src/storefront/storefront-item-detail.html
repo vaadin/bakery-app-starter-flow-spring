@@ -202,7 +202,7 @@
       }
 
       close() {
-        this.dispatchEvent(new CustomEvent('close', { bubbles: true, composed: true }));
+        this.dispatchEvent(new CustomEvent('close', {bubbles: true, composed: true}));
       }
 
       _edit() {
@@ -216,11 +216,11 @@
       _do(type) {
         this.close();
         Polymer.RenderStatus.afterNextRender(this, () =>
-          this.dispatchEvent(new CustomEvent(type, { bubbles: true, composed: true, detail: this.item })));
+          this.dispatchEvent(new CustomEvent(type, {bubbles: true, composed: true, detail: this.item})));
       }
 
       _cancelText() {
-        return this.review ? 'Back' : 'Close'
+        return this.review ? 'Back' : 'Close';
       }
 
       _cancel() {

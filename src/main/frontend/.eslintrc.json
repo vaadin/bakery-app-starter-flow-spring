@@ -11,6 +11,8 @@
   "globals": {
     "Polymer": false,
     "Vaadin": false,
-    "ItemDetailDialog": false
+    "DateUtilsMixin": false,
+    "ScrollShadowMixin": false,
+    "moment": false
   }
 }

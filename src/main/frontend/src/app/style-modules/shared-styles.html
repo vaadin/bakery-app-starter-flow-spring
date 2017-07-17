@@ -48,7 +48,7 @@
     <style include="vaadin-date-picker-default-theme">
       :host {
         display: inline-flex;
-        margin-top: 0px;
+        margin-top: 0;
       }
 
       [part="text-field"] {
@@ -151,7 +151,8 @@
         display: none !important;
       }
 
-      h2, h3 {
+      h2,
+      h3 {
         margin-top: var(--valo-space-m);
         margin-bottom: var(--valo-space-s);
       }
@@ -177,19 +178,19 @@
       .scrollable {
         padding: var(--valo-space-s) var(--valo-space-l);
         overflow: auto;
-        /*height: calc(100vh - var(--valo-space-s) - 90px);*/
+        /* height: calc(100vh - var(--valo-space-s) - 90px); */
       }
 
       .footer {
-        /*box-shadow:  0px -5px 3px var(--valo-shade-5pct);*/
+        /* box-shadow:  0px -5px 3px var(--valo-shade-5pct); */
         display: flex;
         flex-wrap: wrap;
         transition: box-shadow .2s;
         justify-content: space-between;
         padding: var(--valo-space-s);
         align-items: baseline;
-        /*height: 90px;*/
-        /*box-sizing: border-box;*/
+        /* height: 90px; */
+        /* box-sizing: border-box; */
       }
 
       :host([scroll-shadow]) .footer {

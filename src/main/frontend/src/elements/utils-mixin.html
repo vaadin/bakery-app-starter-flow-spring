@@ -56,7 +56,7 @@
       _getMonth(date) {
         return moment(new Date(date)).format('MMM D');
       }
-    }
+    };
 
     /**
      * Adds the scroll-shadow attribute if there is a `#main` element with scrollsize
@@ -87,6 +87,6 @@
       _contentScroll() {
         this.scrollShadow = this._main.scrollHeight - this._main.scrollTop !== this._main.clientHeight;
       }
-    }
+    };
   </script>
 </dom-module>
