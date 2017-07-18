@@ -1,0 +1,92 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<script src="../../bower_components/moment/moment.js"></script>
+
+  <script>
+    /**
+     * Adds a bunch of utility date manipulation methods.
+     */
+    window.DateUtilsMixin = subclass => class extends subclass {
+      _getDay(date) {
+        return moment(new Date(date)).format('MMM D');
+      }
+
+      _getWeekday(date) {
+        return moment(new Date(date)).format('dddd');
+      }
+
+      _getFullDate(date) {
+        return moment(new Date(date)).format('DD/MM/YYYY HH:mm');
+      }
+
+      _setHour(str, date) {
+        const hour = parseInt(str.split(/:/)[0]);
+        date.setHours(hour, 0, 0);
+      }
+
+      _getDayIso(str) {
+        if (str) {
+          return moment(new Date(Date.parse(str))).format('YYYY-MM-DD');
+        }
+      }
+
+      _isToday(date) {
+        return moment().isSame(new Date(date), 'day');
+      }
+
+      _isThisWeek(date) {
+        return moment().isBefore(moment(new Date(date)), 'day') && moment(new Date(date)).isBefore(moment().endOf('week'));
+      }
+
+      _isUpcoming(date) {
+        return moment(new Date(date)).isAfter(moment().endOf('week'));
+      }
+
+      _getTime(date) {
+        return moment(new Date(date)).format('hh:mm a');
+      }
+
+      _getShortDay(date) {
+        return moment(new Date(date)).format('ddd D');
+      }
+
+      _getFullDay(date) {
+        return moment(new Date(date)).format('dddd');
+      }
+
+      _getMonth(date) {
+        return moment(new Date(date)).format('MMM D');
+      }
+    };
+
+    /**
+     * Adds the scroll-shadow attribute if there is a `#main` element with scrollsize
+     * larger than its height, and there is hidden content at the bottom.
+     */
+    window.ScrollShadowMixin = subclass => class extends subclass {
+      static get properties() {
+        return {
+          scrollShadow: {
+            type: Boolean,
+            reflectToAttribute: true
+          },
+          _main: Element
+        };
+      }
+
+      ready() {
+        super.ready();
+        Polymer.RenderStatus.afterNextRender(this, () => {
+          this._main = this.root.querySelector('#main');
+          if (this._main) {
+            this._main.addEventListener('scroll', this._contentScroll.bind(this));
+            this._contentScroll();
+          }
+        });
+      }
+
+      _contentScroll() {
+        this.scrollShadow = this._main.scrollHeight - this._main.scrollTop !== this._main.clientHeight;
+      }
+    };
+  </script>
+</dom-module>

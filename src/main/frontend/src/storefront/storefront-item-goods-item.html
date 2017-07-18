@@ -5,31 +5,24 @@
     <style>
       :host {
         display: flex;
-        flex: 1;
-      }
-
-      span {
-        background: var(--valo-black-10pct);
-        font-size: var(--valo-font-size-s);
+        align-items: baseline;
       }
 
       #count {
-
+        background: var(--valo-shade-10pct);
         border-radius: var(--valo-border-radius);
         display: inline-block;
+        width: 20px;
+        height: 20px;
+        font-size: var(--valo-font-size-xs);
         vertical-align: middle;
         text-align: center;
         margin-right: 6px;
       }
-
-      #content {
-        white-space: nowrap;
-        text-overflow: ellipsis;
-      }
     </style>
 
     <span id="count">[[count]]</span>
-    <span id="content">[[name]]</span>
+    <span>[[name]]</span>
   </template>
 
   <script>

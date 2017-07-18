@@ -2,16 +2,27 @@
   "entrypoint": "src/storefront/bakery-storefront.html",
   "shell": "src/app/bakery-app.html",
   "fragments": [
-    "src/storefront/bakery-storefront.html",
-    "src/dashboard/bakery-dashboard.html",
-    "src/users/bakery-users.html",
-    "src/products/bakery-products.html",
     "src/admin/bakery-admin.html",
+    "src/dashboard/bakery-dashboard.html",
+    "src/products/bakery-products.html",
+    "src/storefront/bakery-storefront.html",
+    "src/users/bakery-users.html",
+    "src/404/bakery-404.html",
     "src/admin/access-denied.html"
   ],
+  "sources": [
+    "src/**/*",
+    "images/**/*",
+    "bower.json"
+  ],
   "extraDependencies": [
+    "manifest.json",
+    "bower_components/webcomponentsjs/*.js",
     "bower_components/webcomponentsjs/*.js.map"
   ],
+  "lint": {
+    "rules": ["polymer-2"]
+  },
   "builds": [
     {
       "name": "es5",

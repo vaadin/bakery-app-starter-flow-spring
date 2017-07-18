@@ -1,4 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../elements/utils-mixin.html">
 <link rel="import" href="storefront-item-badge.html">
 <link rel="import" href="storefront-item-goods.html">
 
@@ -29,21 +30,14 @@
         width: 100px;
       }
 
-      #time-place > div {
-        font-size: var(--valo-font-size-s);
-      }
-
-      #day-date {
-        width: 80px;
-      }
-
       #name-items {
         flex: 1;
       }
 
       #place,
-      #goods,
-      #date {
+      #secondary-time,
+      #full-day,
+      #goods {
         color: var(--valo-secondary-text-color);
       }
 
@@ -65,16 +59,22 @@
     <div id="info-wrapper" class="flex">
       <storefront-item-badge id="status" status="[[item.status]]"></storefront-item-badge>
 
-      <template is="dom-if" if="[[dayColumn]]">
-        <div id="day-date">
-          <h3 id="day">[[_getDay(item.date)]]</h3>
-          <div id="date">[[_getDate(item.date)]]</div>
-        </div>
-      </template>
-
       <div id="time-place">
-        <h3 id="time">[[_getTime(item.date)]]</h3>
-        <div id="place">[[item.place]]</div>
+        <template is="dom-if" if="[[_isToday(item.date)]]">
+          <h3 id="time">[[_getTime(item.date)]]</h3>
+          <div id="place">[[item.place]]</div>
+        </template>
+
+        <template is="dom-if" if="[[_isThisWeek(item.date)]]">
+          <h3 id="short-day">[[_getShortDay(item.date)]]</h3>
+          <div id="secondary-time">[[_getTime(item.date)]]</div>
+          <div id="place">[[item.place]]</div>
+        </template>
+
+        <template is="dom-if" if="[[_isUpcoming(item.date)]]">
+          <h3 id="month">[[_getMonth(item.date)]]</h3>
+          <div id="full-day">[[_getFullDay(item.date)]]</div>
+        </template>
       </div>
     </div>
 
@@ -85,56 +85,19 @@
   </template>
 
   <script>
-    class StorefrontItem extends Polymer.Element {
+    class StorefrontItem extends window.DateUtilsMixin(Polymer.Element) {
       static get is() {
         return 'storefront-item';
-      }
-
-      static get weekday() {
-        return [
-          'Sun',
-          'Mon',
-          'Tue',
-          'Wed',
-          'Thu',
-          'Fri',
-          'Sat',
-        ];
       }
 
       static get properties() {
         return {
           item: {
             type: Object
-          },
-          dayColumn: {
-            type: Boolean,
-            reflectToAttribute: true,
-            value: false
           }
         };
       }
 
-      _getTime(date) {
-        const day = new Date(date);
-        return `${day.getHours()}:${day.getMinutes()}`;
-      }
-
-      _getDay(date) {
-        const day = new Date(date);
-        const curr = new Date();
-        var diffDays = (curr.getTime() - day.getTime()) / (1000 * 60 * 60 * 24);
-
-        if (diffDays < 1 && diffDays > 0) {
-          return 'Today';
-        }
-        return `${StorefrontItem.weekday[day.getDay()]}`;
-      }
-
-      _getDate(date) {
-        const day = new Date(date);
-        return `${day.getDate()}/${day.getMonth() + 1}`;
-      }
     }
 
     window.customElements.define(StorefrontItem.is, StorefrontItem);

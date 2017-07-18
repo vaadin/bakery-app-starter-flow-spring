@@ -1,0 +1,81 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/vaadin-themes/valo/icons.html">
+
+<dom-module id="amount-field">
+  <template>
+    <style>
+      :host {
+        display: inline-flex;
+      }
+
+      [part="text-field"] {
+        flex: 1;
+      }
+
+      iron-icon {
+        cursor: pointer;
+        text-align: center;
+      }
+
+      iron-icon[disabled] {
+        cursor: default;
+        opacity: 0.1;
+      }
+    </style>
+    <vaadin-text-field value="{{value}}" label="[[label]]" theme="center" pattern="\d*" part="text-field" prevent-invalid-input theme="center">
+      <iron-icon slot="prefix" id="minus" icon="valo:minus" on-click="_minus" disabled$="[[_isEqual(value, min)]]"></iron-icon>
+      <iron-icon slot="suffix" id="plus" icon="valo:plus" on-click="_plus" disabled$="[[_isEqual(value, max)]]"></iron-icon>
+    </vaadin-text-field>
+  </template>
+
+  <script>
+    class AmountField extends Polymer.Element {
+      static get is() {
+        return 'amount-field';
+      }
+
+      static get properties() {
+        return {
+          value: {
+            type: Number,
+            value: 1,
+            notify: true
+          },
+          min: {
+            type: Number,
+            value: 0
+          },
+          max: {
+            type: Number,
+            value: Number.MAX_SAFE_INTEGER || (Math.pow(2, 53) - 1) /* MSIE fallback */
+          },
+          label: String
+        };
+      }
+
+      _plus() {
+        if (this.value < this.max) {
+          this.value++;
+        } else if (isNaN(parseInt(this.value, 10))) {
+          this.value = 1;
+        }
+      }
+
+      _minus() {
+        if (this.value > this.min) {
+          this.value--;
+        } if (isNaN(parseInt(this.value, 10))) {
+          this.value = 1;
+        }
+      }
+
+      _isEqual(value, boundry) {
+        return Math.max(this.min, Math.min(value, this.max)) === boundry;
+      }
+    }
+
+    window.customElements.define(AmountField.is, AmountField);
+  </script>
+</dom-module>

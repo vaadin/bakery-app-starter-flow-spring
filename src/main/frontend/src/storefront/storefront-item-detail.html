@@ -2,16 +2,18 @@
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
-<link rel="import" href="../../bower_components/vaadin-themes/valo/vaadin-button.html">
-<link rel="import" href="../../bower_components/vaadin-themes/valo/vaadin-text-field.html">
+<link rel="import" href="../elements/utils-mixin.html">
 
 <link rel="import" href="storefront-item-badge.html">
 
 <dom-module id="storefront-item-detail">
   <template>
     <style include="shared-styles">
-      :host {
-        display: block;
+       :host {
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        height: 100%;
       }
 
       h3 {
@@ -21,25 +23,6 @@
       .secondary {
         color: var(--valo-secondary-text-color);
         font-size: var(--valo-font-size-xs);
-      }
-
-      .main-row {
-        padding: var(--valo-space-s) var(--valo-space-s);
-        height: calc(100vh - var(--valo-space-s) - 90px);
-        overflow: auto;
-      }
-
-      .bottom-row {
-        height: 90px;
-        box-sizing: border-box;
-        justify-content: space-between;
-        padding: var(--valo-space-s);
-        transition: box-shadow .2s;
-        align-items: center;
-      }
-
-      :host([scroll-shadow]) .bottom-row {
-        box-shadow: 0 -1px 5px var(--valo-black-20pct);
       }
 
       .meta-row {
@@ -69,7 +52,7 @@
       }
 
       .count {
-        background: var(--valo-black-10pct);
+        background: var(--valo-shade-10pct);
         border-radius: var(--valo-border-radius);
         width: 20px;
         height: 20px;
@@ -82,11 +65,6 @@
       }
 
       @media (min-width: 600px) {
-        .total {
-          align-self: center;
-          margin-right: var(--valo-space-m);
-        }
-
         .bottom-row {
           height: auto;
         }
@@ -105,7 +83,7 @@
       }
     </style>
 
-    <div class="main-row" on-scroll="_contentScroll" id="main">
+    <div class="scrollable flex1 main-row" id="main">
       <div class="flex meta-row">
         <storefront-item-badge status="[[item.status]]"></storefront-item-badge>
         <span class="secondary">Order #[[item.orderNumber]]</span>
@@ -143,62 +121,70 @@
             <span class="secondary space-top">Products</span>
             <div class="flex column">
               <template is="dom-repeat" items="[[item.goods]]" as="product">
-                <div class="flex product-row">
-                  <div class="flex column flex9">
-                    <span class="bold">[[product.name]]</span>
-                    <span class="secondary">[[product.description]]</span>
-                  </div>
-                  <div class="flex justify-center align-center flex1">
-                    <div class="count">
-                      [[product.count]]
+                <template is="dom-if" if="[[product.name]]">
+                  <div class="flex product-row align-center">
+                    <div class="flex column flex9">
+                      <span class="bold">[[product.name]]</span>
+                      <span class="secondary">[[product.description]]</span>
+                    </div>
+                    <div class="flex justify-center align-center flex1">
+                      <div class="count">
+                        [[product.count]]
+                      </div>
+                    </div>
+                    <div class="flex justify-center secondary flex1">
+                      x
+                    </div>
+                    <div class="flex1 money">
+                      $[[product.unitPrice]]
                     </div>
                   </div>
-                  <div class="flex justify-center align-center secondary flex1">
-                    x
+                </template>
+              </template>
+            </div>
+            <template is="dom-if" if="[[!review]]">
+              <span class="secondary space-top">History</span>
+              <div class="flex column">
+                <template is="dom-repeat" items="[[item.history]]" as="event">
+                  <div>
+                    <span class="bold">[[event.name]]</span>
+                    <span class="secondary">[[_getFullDate(event.date)]]</span>
+                    <storefront-item-badge status="[[event.status]]" small></storefront-item-badge>
                   </div>
-                  <div class="flex justify-center align-center flex1">
-                    $[[product.unitPrice]]
-                  </div>
-                </div>
-              </template>
-            </div>
-            <span class="secondary space-top">History</span>
-            <div class="flex column">
-              <template is="dom-repeat" items="[[item.history]]" as="event">
-                <div>
-                  <span class="bold">[[event.name]]</span>
-                  <span class="secondary">[[_getFullDate(event.date)]]</span>
-                  <storefront-item-badge status="[[event.status]]" small></storefront-item-badge>
-                </div>
-              </template>
-            </div>
-            <div class="flex column space-top">
-              <template is="dom-repeat" items="[[item.comments]]" as="comment">
-                <span class="comment">[[comment.message]]</span>
-              </template>
-            </div>
-            <vaadin-text-field placeholder="Add comment" class="space-top">
-              <div slot="suffix" class="comment-suffix">Send</div>
-            </vaadin-text-field>
+                </template>
+              </div>
+              <div class="flex column space-top">
+                <template is="dom-repeat" items="[[item.comments]]" as="comment">
+                  <span class="comment">[[comment.message]]</span>
+                </template>
+              </div>
+              <vaadin-text-field placeholder="Add comment" class="space-top">
+                <div slot="suffix" class="comment-suffix">Send</div>
+              </vaadin-text-field>
+            </template>
           </div>
           <div class="flex2">
           </div>
         </div>
       </div>
     </div>
-    <div class="flex bottom-row">
-      <vaadin-button on-click="close">Close</vaadin-button>
-      <div class="flex1"></div>
-        <h3 class="total">Total $[[item.totalPrice]]</h3>
-        <vaadin-button theme="primary icon" class="edit-button">
+    <div class="flex footer">
+      <vaadin-button on-click="_cancel">[[_cancelText()]]</vaadin-button>
+      <div class="total money">Total $[[item.totalPrice]]</div>
+      <template is="dom-if" if="[[review]]">
+        <vaadin-button theme="primary success" class="edit-button" on-click="_save">Place Order ✓</vaadin-button>
+      </template>
+      <template is="dom-if" if="[[!review]]">
+        <vaadin-button theme="primary icon" class="edit-button" on-click="_edit">
           <span>Edit order</span>
           <iron-icon icon="valo:edit"></iron-icon>
         </vaadin-button>
+      </template>
     </div>
   </template>
 
   <script>
-    class StorefrontItemDetail extends Polymer.Element {
+    class StorefrontItemDetail extends window.DateUtilsMixin(window.ScrollShadowMixin(Polymer.Element)) {
       static get is() {
         return 'storefront-item-detail';
       }
@@ -208,44 +194,41 @@
           item: {
             type: Object
           },
-          scrollShadow: {
+          review: {
             type: Boolean,
-            reflectToAttribute: true
+            value: false
           }
         };
       }
 
-      ready() {
-        super.ready();
-        Polymer.RenderStatus.afterNextRender(this, this._contentScroll.bind(this));
-      }
-
-      _getTime(date) {
-        const day = new Date(date);
-        return `${day.getHours()}:${day.getMinutes()}`;
-      }
-
-      _getDay(date) {
-        const day = new Date(date);
-        return `${day.toLocaleString('en-us', {month: 'short'})} ${day.getDate()}`;
-      }
-
-      _getWeekday(date) {
-        const day = new Date(date);
-        return day.toLocaleString('en-us', {weekday: 'long'});
-      }
-
-      _getFullDate(date) {
-        const day = new Date(date);
-        return `${day.toLocaleDateString()} ${day.getHours()}:${day.getMinutes()}`;
-      }
-
-      _contentScroll() {
-        this.scrollShadow = (this.$.main.scrollHeight - this.$.main.scrollTop !== this.$.main.clientHeight);
-      }
-
       close() {
         this.dispatchEvent(new CustomEvent('close', {bubbles: true, composed: true}));
+      }
+
+      _edit() {
+        this._do('edit');
+      }
+
+      _save() {
+        this._do('save');
+      }
+
+      _do(type) {
+        this.close();
+        Polymer.RenderStatus.afterNextRender(this, () =>
+          this.dispatchEvent(new CustomEvent(type, {bubbles: true, composed: true, detail: this.item})));
+      }
+
+      _cancelText() {
+        return this.review ? 'Back' : 'Close';
+      }
+
+      _cancel() {
+        if (this.review) {
+          this.dispatchEvent(new CustomEvent('back'));
+        } else {
+          this.close();
+        }
       }
     }
 

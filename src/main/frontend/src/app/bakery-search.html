@@ -4,10 +4,6 @@
 <link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="../../bower_components/vaadin-checkbox/vaadin-checkbox.html">
 <link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
-<link rel="import" href="../../bower_components/vaadin-themes/valo/icons.html">
-<link rel="import" href="../../bower_components/vaadin-themes/valo/vaadin-text-field.html">
-<link rel="import" href="../../bower_components/vaadin-themes/valo/vaadin-button.html">
-<link rel="import" href="../../bower_components/vaadin-themes/valo/vaadin-checkbox.html">
 
 <link rel="import" href="bakery-icons.html">
 
@@ -15,18 +11,21 @@
   <template>
     <style>
       :host {
+        position: relative;
+        z-index: 2;
         display: flex;
         flex-direction: column;
         padding: 0 var(--valo-space-s);
-        background-color: #d1d9e4;
         min-height: 56px;
         overflow: hidden;
+        background-image: linear-gradient(var(--valo-shade-20pct), var(--valo-shade-20pct));
+        background-color: white;
+        box-shadow: 0 0 16px 2px var(--valo-shade-20pct);
       }
 
       :host([show-extra-filters]) {
         position: fixed;
         bottom: 0;
-        z-index: 2;
         width: 100%;
         min-height: 65px; /* Cover navigation */
       }
@@ -84,16 +83,15 @@
       }
 
       @media (min-width: 600px) {
-        :host {
-          margin: 0 calc(50% - 50vw) var(--valo-space-s);
-          padding: 0 calc(50vw - 50%);
-        }
-
         :host([show-extra-filters]) {
           position: inherit;
           bottom: inherit;
           min-height: 56px;
-          z-index: 1;
+        }
+
+        .row {
+          width: calc(964px + var(--valo-space-m)) !important;
+          margin: 0 auto;
         }
 
         .field {
@@ -113,7 +111,6 @@
           content: '';
           width: 100%;
           border-radius: 50%;
-          box-shadow: 0 0 16px 2px var(--valo-black-20pct);
           background: transparent;
         }
       }

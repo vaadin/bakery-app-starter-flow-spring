@@ -1,0 +1,130 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-sorter.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<link rel="import" href="../app/bakery-search.html">
+<link rel="import" href="item-detail-dialog.html">
+<link rel="import" href="../users/user-edit.html">
+<link rel="import" href="../products/product-edit.html">
+
+<dom-module id="items-view">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: flex;
+        flex: 1;
+        flex-direction: column-reverse;
+        box-sizing: border-box;
+      }
+
+      .grid-wrapper {
+        flex: 1;
+        position: relative;
+      }
+
+      ::slotted([slot="grid"]) {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        --divider-color: transparent;
+        overflow: hidden;
+        color: var(--valo-secondary-text-color);
+
+        --vaadin-grid-header-cell: {
+          height: 64px;
+          color: var(--valo-secondary-text-color);
+          font-size: var(--valo-font-size-s);
+          border-bottom: 1px solid var(--valo-shade-5pct);
+        };
+
+        --vaadin-grid-body-cell: {
+          border-bottom: 1px solid var(--valo-shade-5pct);
+        };
+
+        --vaadin-grid-body-row-hover-cell: {
+          --edit-icon-visibility: visible; /* TODO Not best practice */
+        };
+      }
+
+      vaadin-grid-sorter {
+        width: 70px;
+      }
+
+      @media (min-width: 600px) {
+        :host {
+          flex-direction: column;
+        }
+
+        .grid-wrapper {
+          max-width: calc(964px + var(--valo-space-m)) !important;
+          margin: 0 auto;
+        }
+
+        ::slotted([slot="grid"]) {
+          padding: var(--valo-space-s) 0;
+        }
+      }
+    </style>
+
+    <bakery-search
+        field-placeholder="Search"
+        field-value="{{filterValue}}"
+        button-text="[[buttonText]]"
+        on-button-click="_newItem">
+    </bakery-search>
+
+    <div class="flex flex1 overflow-auto">
+      <div class="grid-wrapper">
+        <slot name="grid"></slot>
+      </div>
+
+      <div class="editor-wrapper">
+        <item-detail-dialog opened="[[editing]]" align="right" desktop-view$=[[desktopView]]>
+          <slot name="editor"></slot>
+        </item-detail-dialog>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    class ItemsView extends Polymer.Element {
+      static get is() {
+        return 'items-view';
+      }
+
+      static get properties() {
+        return {
+          desktopView: Boolean,
+          filterValue: {
+            type: String,
+            notify: true
+          },
+          buttonText: {
+            type: String
+          },
+          item: {
+            type: Object,
+            observer: '_onItemChanged'
+          },
+          editing: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true
+          }
+        };
+      }
+
+      _onItemChanged(item) {
+        this.editing = !!item;
+      }
+
+      _newItem() {
+        this.dispatchEvent(new CustomEvent('new-item', {bubbles: true, composed: true}));
+      }
+    }
+
+    window.customElements.define(ItemsView.is, ItemsView);
+  </script>
+</dom-module>

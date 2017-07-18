@@ -1,0 +1,103 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+  <script>
+    /**
+     * Adds listeners to body for closing the element on click and escape.
+     * It sends a `closed` or `opened` event up when the element changes the status.
+     */
+    window.CloseableDialogMixin = subclass => class extends subclass {
+      static get properties() {
+        return {
+          opened: {
+            type: Boolean,
+            reflectToAttribute: true,
+            observer: '_onOpened',
+            notify: true
+          }
+        };
+      }
+
+      ready() {
+        super.ready();
+        this._clickListener = this._onBodyClick.bind(this);
+        this._keydownListener = this._onBodyKeydown.bind(this);
+        this._closeListener = this.close.bind(this);
+      }
+
+      _onOpened(opened, old) {
+        if (opened === true) {
+          setTimeout(() => {
+            document.body.addEventListener('click', this._clickListener);
+            document.body.addEventListener('keydown', this._keydownListener);
+            this.addEventListener('close', this._closeListener);
+          }, 2);
+        } else {
+          document.body.removeEventListener('click', this._clickListener);
+          document.body.removeEventListener('keydown', this._keydownListener);
+          this.removeEventListener('close', this._closeListener);
+        }
+        this.style.display = opened ? 'block' : 'none';
+        Polymer.RenderStatus.afterNextRender(this, () => {
+          this.dispatchEvent(new CustomEvent(opened ? 'opened' : 'closed', {bubbles: true, composed: true}));
+        });
+      }
+
+      _onBodyClick(e) {
+        if (e.composedPath().indexOf(this) < 0) {
+          this.close();
+        }
+      }
+
+      _onBodyKeydown(e) {
+        if (e.keyCode == 27) {
+          this.close();
+        }
+      }
+
+      close(e) {
+        this.opened = false;
+      }
+    };
+
+    /**
+     * Adds listeners to body for closing the element on click and escape, but
+     * additionally it attaches the element to the body when opened, and moves
+     * the element back when the dialog is closed.
+     */
+    window.DetachableDialogMixin = subclass => class extends window.CloseableDialogMixin(subclass) {
+      ready() {
+        super.ready();
+        Polymer.RenderStatus.afterNextRender(this, () => {
+          // If the component has a slot as childre, when moving to body,
+          // assignedNodes need to be moved. We only support one nested
+          // slot and one assigned node, but should be enough for most cases.
+          const slot = this.querySelector('slot');
+          if (slot) {
+            const nodes = slot.assignedNodes();
+            if (nodes.length) {
+              if (slot.parentElement === this) {
+                this.root.querySelector('slot').replaceWith(nodes[0]);
+              } else {
+                slot.replaceWith(nodes[0]);
+              }
+            }
+          }
+        });
+      }
+
+      _onOpened(opened) {
+        if (opened) {
+          Polymer.RenderStatus.afterNextRender(this, () => {
+            this._parentElement = this.parentElement;
+            document.body.appendChild(this);
+          });
+        } else {
+          if (this.parentElement == document.body) {
+            this._parentElement.appendChild(this);
+          }
+        }
+        super._onOpened(opened);
+      }
+    };
+  </script>
+</dom-module>

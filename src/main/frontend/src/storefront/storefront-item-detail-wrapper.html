@@ -2,12 +2,13 @@
 <link rel="import" href="storefront-item.html">
 <link rel="import" href="storefront-item-detail.html">
 <link rel="import" href="../elements/item-detail-inline.html">
-<link rel="import" href="../elements/item-detail-mobile.html">
+<link rel="import" href="../elements/item-detail-dialog.html">
+<link rel="import" href="../app/style-modules/shared-styles.html">
 
-<dom-module id="storefront-item-wrapper">
+<dom-module id="storefront-item-detail-wrapper">
   <template>
-    <style>
-      :host(:not([hidden])) {
+    <style include="shared-styles">
+      :host {
         display: block;
       }
 
@@ -17,8 +18,8 @@
 
       #wrapper {
         background: white;
-        box-shadow: 0 3px 5px var(--valo-black-10pct);
-        border-bottom: 1px solid var(--valo-black-10pct);
+        box-shadow: 0 3px 5px var(--valo-shade-10pct);
+        border-bottom: 1px solid var(--valo-shade-10pct);
         margin: calc(-1 * var(--valo-space-s)) 0 var(--valo-space-s); /* Last item has shadow visible */
       }
 
@@ -40,25 +41,25 @@
         <storefront-item item="[[order]]" on-click="_open"></storefront-item>
       </template>
 
-      <template is="dom-if" if="[[_showDetailsDesktop(selected, desktopView)]]" restamp>
-        <item-detail-inline>
+      <template is="dom-if" if="[[desktopView]]" restamp>
+        <item-detail-inline opened="[[_showDetailsDesktop(selected, desktopView)]]">
           <storefront-item-detail item="[[order]]"></storefront-item-detail>
         </item-detail-inline>
       </template>
 
-      <template is="dom-if" if="[[_showDetailsMobile(selected, desktopView)]]" restamp>
-        <item-detail-mobile on-close="_close">
+      <template is="dom-if" if="[[!desktopView]]" restamp>
+        <item-detail-dialog opened="[[_showDetailsMobile(selected, desktopView)]]">
           <storefront-item-detail item="[[order]]"></storefront-item-detail>
-        </item-detail-mobile>
+        </item-detail-dialog>
       </template>
     </div>
 
   </template>
 
   <script>
-    class StorefrontItemWrapper extends Polymer.Element {
+    class StorefrontItemDetailWrapper extends Polymer.Element {
       static get is() {
-        return 'storefront-item-wrapper';
+        return 'storefront-item-detail-wrapper';
       }
 
       static get properties() {
@@ -78,11 +79,7 @@
       }
 
       _open(e) {
-        this.dispatchEvent(new CustomEvent('open', {bubbles: true, composed: true}));
-      }
-
-      _close(e) {
-        this.dispatchEvent(new CustomEvent('close', {bubbles: true, composed: true}));
+        this.dispatchEvent(new CustomEvent('opened', {bubbles: true, composed: true}));
       }
 
       _showDetailsDesktop(selected, desktopView) {
@@ -94,6 +91,6 @@
       }
     }
 
-    window.customElements.define(StorefrontItemWrapper.is, StorefrontItemWrapper);
+    window.customElements.define(StorefrontItemDetailWrapper.is, StorefrontItemDetailWrapper);
   </script>
 </dom-module>

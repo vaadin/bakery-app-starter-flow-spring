@@ -6,39 +6,23 @@
 <link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
 
 <link rel="import" href="../app/bakery-search.html">
-<link rel="import" href="user-edit-wrapper.html">
+<link rel="import" href="../elements/items-view.html">
+<link rel="import" href="user-edit.html">
 
 <dom-module id="bakery-users">
   <template>
     <style include="shared-styles">
       :host {
+        max-width: none !important;
+        padding: 0 !important;
         display: flex;
         flex-direction: column-reverse;
-        box-sizing: border-box;
-        max-width: 964px;
       }
 
-      .users-grid {
-        flex: 1;
-        height: 100%;
-        --divider-color: transparent;
-        overflow: hidden;
-        color: var(--valo-secondary-text-color);
-
-        --vaadin-grid-header-cell: {
-          height: 64px;
-          color: var(--valo-secondary-text-color);
-          font-size: var(--valo-font-size-s);
-          border-bottom: 1px solid var(--valo-black-5pct);
-        };
-
-        --vaadin-grid-body-cell: {
-          border-bottom: 1px solid var(--valo-black-5pct);
-        };
-
-        --vaadin-grid-body-row-hover-cell: {
-          --edit-icon-visibility: visible; /* TODO Not best practice */
-        };
+      @media (min-width: 600px) {
+        :host {
+          flex-direction: column;
+        }
       }
 
       .picture-cell {
@@ -57,79 +41,68 @@
         justify-content: center;
       }
 
+      #wrapper {
+        padding-top: var(--valo-space-s);
+      }
+
       .edit-icon {
         --iron-icon-height: var(--valo-size-xs);
         --iron-icon-width: var(--valo-size-xs);
-        color: var(--valo-black-50pct);
+        color: var(--valo-shade-50pct);
         visibility: var(--edit-icon-visibility, hidden); /* TODO Not best practice */
       }
 
       vaadin-grid-sorter {
         width: 70px;
       }
-
-      @media (min-width: 600px) {
-        :host {
-          flex-direction: column;
-          padding: 0 var(--valo-space-s) !important;
-        }
-
-        .users-grid {
-          padding: var(--valo-space-s) 0;
-        }
-      }
     </style>
 
     <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
 
-    <bakery-search
-        field-placeholder="Search"
-        field-value="{{_filterValue}}"
-        button-text="New user"
-        on-button-click="_openNewUserDialog">
-    </bakery-search>
+    <items-view desktop-view=[[desktopView]] filter-value="{{_filterValue}}"
+        on-new-item="_openNewUserDialog" item="[[_editableUser]]" on-closed="_onClose" button-text="New user">
 
-    <vaadin-grid id="grid" class="users-grid" items="[[_filterUsers(users.*, _filterValue)]]" active-item="{{_selectedUser}}">
-      <vaadin-grid-column width="80px" flex-grow="0">
-        <template>
-          <div class="picture-cell">
-            <img src="[[item.picture]]" alt="[[item.name]]" class="picture">
-          </div>
-        </template>
-      </vaadin-grid-column>
-      <vaadin-grid-column width="270px" flex-grow="0">
-        <template class="header">
-          <vaadin-grid-sorter path="email">Email</vaadin-grid-sorter>
-        </template>
-        <template>
-          <div>
-            [[item.email]]
-          </div>
-        </template>
-      </vaadin-grid-column>
-      <vaadin-grid-column width="200px" flex-grow="0">
-        <template class="header">
-          <vaadin-grid-sorter path="name">Name</vaadin-grid-sorter>
-        </template>
-        <template>[[item.name]] [[item.last]]</template>
-      </vaadin-grid-column>
-      <vaadin-grid-column>
-        <template class="header">
-          <vaadin-grid-sorter path="role">Role</vaadin-grid-sorter>
-        </template>
-        <template>[[item.role]]</template>
-      </vaadin-grid-column>
-      <vaadin-grid-column width="80px" flex-grow="0" hidden="[[!desktopView]]">
-        <template>
-          <div class="edit-cell">
-            <iron-icon icon="valo:edit" class="edit-icon"></iron-icon>
-          </div>
-        </template>
-      </vaadin-grid-column>
-    </vaadin-grid>
+      <vaadin-grid slot="grid" id="grid" class="users-grid" items="[[_filterUsers(users.*, _filterValue)]]" active-item="{{_selectedUser}}">
+        <vaadin-grid-column width="80px" flex-grow="0">
+          <template>
+            <div class="picture-cell">
+              <img src="[[item.picture]]" alt="[[item.name]]" class="picture">
+            </div>
+          </template>
+        </vaadin-grid-column>
+        <vaadin-grid-column width="270px" flex-grow="0">
+          <template class="header">
+            <vaadin-grid-sorter path="email">Email</vaadin-grid-sorter>
+          </template>
+          <template>
+            <div>
+              [[item.email]]
+            </div>
+          </template>
+        </vaadin-grid-column>
+        <vaadin-grid-column width="200px" flex-grow="0">
+          <template class="header">
+            <vaadin-grid-sorter path="name">Name</vaadin-grid-sorter>
+          </template>
+          <template>[[item.name]] [[item.last]]</template>
+        </vaadin-grid-column>
+        <vaadin-grid-column>
+          <template class="header">
+            <vaadin-grid-sorter path="role">Role</vaadin-grid-sorter>
+          </template>
+          <template>[[item.role]]</template>
+        </vaadin-grid-column>
+        <vaadin-grid-column width="80px" flex-grow="0" hidden="[[!desktopView]]">
+          <template>
+            <div class="edit-cell">
+              <iron-icon icon="valo:edit" class="edit-icon"></iron-icon>
+            </div>
+          </template>
+        </vaadin-grid-column>
+      </vaadin-grid>
 
-    <user-edit-wrapper user="[[_editableUser]]" desktop-view="[[desktopView]]"
-                       on-close="_onClose" on-save="_onSave" on-delete="_onDelete"></user-edit-wrapper>
+      <user-edit slot="editor" user="[[_editableUser]]" on-save="_onSave" on-delete="_onDelete"></user-edit>
+    </items-view>
   </template>
 
   <script>
@@ -160,7 +133,7 @@
       }
 
       _editUser(user) {
-        this._editableUser = user;
+        this._editableUser = user === null ? null : Object.assign({}, user);
       }
 
       _onClose() {
@@ -171,25 +144,26 @@
 
       _onSave(event) {
         let idx;
-        if (!event.detail.user.id) {
+        if (!event.detail.id) {
           idx = this.users.length;
-          this.push('users', event.detail.user);
+          this.push('users', event.detail);
         } else {
-          idx = this._findUserIndexById(event.detail.user.id);
-          this.set(`users.${idx}`, event.detail.user);
+          idx = this._findUserIndexById(event.detail.id);
+          this.set(`users.${idx}`, event.detail);
         }
 
-        this.$server.saveUser(event.detail.user);
+        this.$server.saveUser(event.detail);
       }
 
       _onDelete(event) {
-        if (!event.detail.userId) {
+        if (!event.detail.id) {
           return;
         }
 
-        const idx = this._findUserIndexById(event.detail.userId);
+        const idx = this._findUserIndexById(event.detail.id);
         this.splice('users', idx, 1);
-        this.$server.deleteUser(event.detail.userId);
+
+        this.$server.deleteUser(event.detail.id);
       }
 
       _findUserIndexById(id) {

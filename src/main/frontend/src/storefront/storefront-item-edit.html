@@ -1,0 +1,239 @@
+<link rel="import" href="../app/style-modules/shared-styles.html">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/vaadin-themes/valo/icons.html">
+<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-password-field.html">
+<link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
+<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
+<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-item.html">
+<link rel="import" href="../../bower_components/vaadin-combo-box/vaadin-combo-box.html">
+<link rel="import" href="../../bower_components/vaadin-combo-box/vaadin-combo-box-light.html">
+<link rel="import" href="../../bower_components/vaadin-date-picker/vaadin-date-picker.html">
+<link rel="import" href="../../bower_components/vaadin-upload/vaadin-upload.html">
+<link rel="import" href="../elements/amount-field.html">
+<link rel="import" href="../elements/utils-mixin.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="storefront-item-edit">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        height: 100%;
+      }
+
+      .at-icon {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        font-size: 18px;
+        line-height: 24px;
+        text-align: center;
+      }
+
+      .at-icon::before {
+        content: '@';
+      }
+
+      .product {
+        margin-bottom: 1em;
+      }
+
+      .delete {
+        min-width: 0;
+      }
+    </style>
+
+    <iron-ajax auto url="../../dummy/products.json" handle-as="json" last-response="{{products}}"></iron-ajax>
+    <iron-ajax auto url="../../dummy/customers.json" handle-as="json" last-response="{{customers}}"></iron-ajax>
+
+    <div class="scrollable flex1" id="main">
+      <h2 class="flex0">[[_editTitle()]]</h2>
+
+      <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 4, 1)]]">
+        <vaadin-form-item>
+          <label slot="label">Due</label>
+          <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 1, 2)]]">
+            <vaadin-date-picker value="[[_getDayIso(item.date)]]">
+              <iron-icon slot="prefix" icon="valo:calendar"></iron-icon>
+            </vaadin-date-picker>
+
+            <vaadin-combo-box value="[[_getTime(item.date)]]" allow-custom-value items='
+              ["8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00"]'>
+              <iron-icon slot="prefix" icon="valo:clock"></iron-icon>
+            </vaadin-combo-box>
+          </vaadin-form-layout>
+
+          <vaadin-combo-box class="full-width" value="{{item.place}}" items='["Bakery", "Store"]'>
+            <div slot="prefix" class="at-icon"></div>
+          </vaadin-combo-box>
+        </vaadin-form-item>
+
+        <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 3, 1)]]" colspan="3">
+
+          <vaadin-combo-box label="Customer" colspan="2" value="{{item.customer.name}}"
+            items="[[customers]]" item-label-path="name" item-value-path="name"
+            on-change="_onCustomerChange" allow-custom-value>
+            <iron-icon slot="prefix" icon="valo:user"></iron-icon>
+          </vaadin-combo-box>
+
+          <vaadin-text-field label="Phone number" value="{{item.customer.number}}">
+            <iron-icon slot="prefix" icon="valo:phone"></iron-icon>
+          </vaadin-text-field>
+
+          <vaadin-text-field label="Aditional Details" value="{{item.details}}" colspan="2"></vaadin-text-field>
+
+          <vaadin-form-item colspan="3">
+            <label slot="label">Products</label>
+
+            <template is="dom-repeat" items="[[item.goods]]" as="product">
+              <vaadin-form-layout class="product" responsive-steps="[[_computeResponsiveSteps(desktopView, 18, 10)]]">
+                <vaadin-combo-box colspan="8"value="{{product.name}}" items="[[products]]"
+                  item-label-path="productName" item-value-path="productName"
+                  on-change="_onProductChange" allow-custom-value index="[[index]]"></vaadin-combo-box>
+
+                <vaadin-button colspan="2" class="delete" index="[[index]]" on-click="_onProductDelete"
+                  style$="order: [[_getConditional(desktopView, 2, 0)]];">✕</vaadin-button>
+
+                <amount-field colspan="4" value="{{product.count}}"
+                  min="1" max="15" on-value-changed="_onCountChange" index="[[index]]"
+                  style="order: 1"></amount-field>
+
+                <div colspan="4" class="money"
+                  style="order: 1">[[_getCurrency(product.unitPrice)]]</div>
+
+                <vaadin-text-field colspan$="[[_getConditional(desktopView, 12, 8)]]" placeholder="Details"
+                  on-value-changed="_onDetailChange" value="{{product.description}}" index="[[index]]"
+                  style="order: 3"></vaadin-text-field>
+              </vaadin-form-layout>
+            </template>
+          </vaadin-form-item>
+
+        </vaadin-form-layout>
+      </vaadin-form-layout>
+    </div>
+
+    <div class="footer">
+      <vaadin-button on-click="_cancel">Cancel</vaadin-button>
+      <div class="total money">[[_computeTotal(item.goods.*)]]</div>
+      <vaadin-button on-click="_review" theme="primary">Review Order →</vaadin-button>
+    </div>
+  </template>
+
+  <script>
+    class StoreFromItemEdit extends window.DateUtilsMixin(window.ScrollShadowMixin(Polymer.Element)) {
+      static get is() {
+        return 'storefront-item-edit';
+      }
+
+      static get properties() {
+        return {
+          item: {
+            type: Object,
+            notify: true,
+            observer: '_onItemChange'
+          },
+          products: Array,
+          total: Number,
+          desktopView: Boolean
+        };
+      }
+
+      _onImgError(e) {
+        e.target.src = 'images/default-picture.png';
+      }
+
+      _cancel() {
+        this.dispatchEvent(new CustomEvent('close', {bubbles: true, composed: true}));
+      }
+
+      _delete() {
+        // TODO: use a better web component for this or an Undo feature
+        if (window.confirm('Are you sure to remove the user?')) {
+          this._cancel();
+        }
+      }
+
+      _editTitle() {
+        return this.item && this.item.id ? 'Edit Order' : 'New Order';
+      }
+
+      _onCountChange(e) {
+        const idx = e.target.index;
+        this.set('item.goods.' + idx + '.count', e.target.value);
+      }
+
+      _onDetailChange(e) {
+        const idx = e.target.index;
+        this.set('item.goods.' + idx + '.description', e.target.value);
+      }
+
+      _onItemChange(item) {
+        if (item) {
+          if (!item.goods) {
+            this.set('item.goods', []);
+          }
+          // Add an empty item at the end
+          if (!item.goods[0] || item.goods[item.goods.length - 1].name) {
+            this.push('item.goods', {});
+          }
+        }
+      }
+
+      _onProductChange(e) {
+        const idx = e.target.index;
+        const prod = e.target.selectedItem;
+        this.notifyPath('item.goods.' + idx + '.name', prod.productName);
+        this.set('item.goods.' + idx + '.unitPrice', prod.unitPrice);
+        this.set('item.goods.' + idx + '.count', 1);
+        if (this.item.goods.length == idx + 1) {
+          this.push('item.goods', {});
+        }
+      }
+
+      _onCustomerChange(e) {
+        const cust = e.target.selectedItem;
+        this.notifyPath('item.customer.name', cust.name);
+        this.set('item.customer.number', cust.phone);
+      }
+
+      _onProductDelete(e) {
+        const idx = e.target.index;
+        if (this.item.goods.length != idx + 1) {
+          this.splice('item.goods', idx, 1);
+        }
+      }
+
+      _getCurrency(n) {
+        return n ? '$' + n : '';
+      }
+
+      _computeTotal() {
+        const tot = (this.item && this.item.goods || [])
+           .reduce((prev, item) => prev + (item.unitPrice ? item.unitPrice * (item.count || 1) : 0), 0);
+        this.set('item.totalPrice', tot);
+        return tot ? 'Total $' + tot : '';
+      }
+
+      _computeResponsiveSteps(desktopView, desktopColumns, mobileColumns) {
+        return [{
+          columns: desktopView ? desktopColumns : mobileColumns,
+          labelsPosition: 'top'
+        }];
+      }
+
+      _getConditional(desktopView, desktopColspan, mobileColspan) {
+        return desktopView ? desktopColspan : mobileColspan;
+      }
+
+      _review() {
+        this.dispatchEvent(new CustomEvent('next'));
+      }
+    }
+
+    window.customElements.define(StoreFromItemEdit.is, StoreFromItemEdit);
+  </script>
+</dom-module>

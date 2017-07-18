@@ -1,26 +1,119 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-sorter.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 
+<link rel="import" href="../app/bakery-search.html">
+<link rel="import" href="../elements/items-view.html">
+<link rel="import" href="product-edit.html">
 
 <dom-module id="bakery-products">
   <template>
     <style include="shared-styles">
       :host {
-        display: block;
+        max-width: none !important;
+        padding: 0 !important;
+        display: flex;
+        flex-direction: column-reverse;
       }
+
+      @media (min-width: 600px) {
+        :host {
+          flex-direction: column;
+        }
+      }
+
+      .edit-cell {
+        display: flex;
+        justify-content: center;
+      }
+
+      .edit-icon {
+        --iron-icon-height: var(--valo-size-xs);
+        --iron-icon-width: var(--valo-size-xs);
+        color: var(--valo-shade-50pct);
+        visibility: var(--edit-icon-visibility, hidden); /* TODO Not best practice */
+      }
+
     </style>
 
-    <div class="card">
-      <div class="circle">4</div>
-      <h1>View Four</h1>
-      <p>Modus commodo minimum eum te, vero utinam assueverit per eu.</p>
-      <p>Ea duis bonorum nec, falli paulo aliquid ei eum.Has at minim mucius aliquam, est id tempor laoreet.Pro saepe pertinax ei, ad pri animal labores suscipiantur.</p>
-    </div>
+    <iron-ajax auto url="../../dummy/products.json" handle-as="json" last-response="{{products}}"></iron-ajax>
+
+    <items-view desktop-view=[[desktopView]] filter-value="{{_filterValue}}"
+        on-new-item="_openNewProductDialog" item="[[_editableProduct]]" on-closed="_onClose" button-text="New product">
+
+      <vaadin-grid slot="grid" id="grid" class="products-grid" items="[[_filterProducts(products, _filterValue)]]" active-item="{{_selectedProduct}}">
+        <vaadin-grid-column>
+          <template class="header">
+            <vaadin-grid-sorter path="productName">Product Name</vaadin-grid-sorter>
+          </template>
+          <template>
+            <div>
+              [[item.productName]]
+            </div>
+          </template>
+        </vaadin-grid-column>
+        <vaadin-grid-column>
+          <template class="header">
+            <vaadin-grid-sorter path="unitPrice">Unit Price</vaadin-grid-sorter>
+          </template>
+          <template>[[item.unitPrice]]</template>
+        </vaadin-grid-column>
+        <vaadin-grid-column width="80px" flex-grow="0" hidden="[[!desktopView]]">
+          <template>
+            <div class="edit-cell">
+              <iron-icon icon="valo:edit" class="edit-icon"></iron-icon>
+            </div>
+          </template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+
+      <product-edit slot="editor" product="[[_editableProduct]]" on-save="_onSave"></product-edit>
+    </items-view>
   </template>
 
   <script>
     class BakeryProducts extends Polymer.Element {
       static get is() {
         return 'bakery-products';
+      }
+
+      static get properties() {
+        return {
+          desktopView: Boolean,
+          _filterValue: String,
+          _selectedProduct: {
+            type: Object,
+            observer: '_editProduct'
+          },
+          _editableProduct: Object
+        };
+      }
+
+      _openNewProductDialog() {
+        this._editProduct({});
+      }
+
+      _editProduct(product) {
+        this._editableProduct = product;
+      }
+
+      _onClose() {
+        this.$.grid.selectedItems = [];
+        this._editableProduct = null;
+      }
+
+      _onSave(e) {
+      }
+
+      _filterProducts(products, filter) {
+        if (products && filter) {
+          return products.filter(function(product) {
+            return product.productName.toLowerCase().includes(filter.toLowerCase());
+          });
+        }
+        return products;
       }
     }
 

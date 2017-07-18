@@ -1,0 +1,80 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="confirm-dialog">
+  <template>
+    <style>
+      #title {
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1.57;
+        text-align: center;
+        color: rgba(42, 71, 110, 0.6);
+        margin-bottom: 0;
+        padding: 0 16px;
+      }
+
+      #message {
+        padding: 0 16px;
+        font-size: 16px;
+        line-height: 1.63;
+        color: rgba(53, 71, 97, 0.9);
+      }
+
+      .flex {
+        display: flex;
+      }
+
+      .flex1 {
+        flex: 1;
+      }
+
+      .buttons {
+        border-top: 1px solid rgba(31, 70, 120, 0.3);
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+      }
+    </style>
+
+    <p id="title">Unsaved changes</p>
+    <p id="message">Are you sure you want to delete the user "[[user.email]]"? This action cannot be undone.</p>
+    <div class="flex buttons">
+      <vaadin-button on-click="_confirmDelete" theme="danger tertiary">Delete user</vaadin-button>
+      <div class="flex1"></div>
+      <vaadin-button on-click="_refuseDelete" theme="tertiary" class="right">Cancel</vaadin-button>
+    </div>
+  </template>
+
+  <script>
+    class ConfirmDialog extends Polymer.Element {
+      static get is() {
+        return 'confirm-dialog';
+      }
+
+      static get properties() {
+        return {
+          user: {
+            type: Object
+          }
+        };
+      }
+
+      _refuseDelete() {
+        this.dispatchEvent(new CustomEvent('close', {bubbles: true, composed: true}));
+      }
+
+      _confirmDelete() {
+        this.dispatchEvent(new CustomEvent('close', {bubbles: true, composed: true}));
+        this.dispatchEvent(new CustomEvent('delete', {
+          detail: {
+            id: this.user.id
+          },
+          bubbles: true,
+          composed: true
+        }));
+      }
+    }
+
+    window.customElements.define(ConfirmDialog.is, ConfirmDialog);
+  </script>
+</dom-module>
