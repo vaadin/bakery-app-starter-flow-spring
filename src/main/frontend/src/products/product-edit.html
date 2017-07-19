@@ -59,7 +59,7 @@
       }
 
       _getPrice(price) {
-        return price / 100;
+        return (price / 100).toLocaleString('en-US', {style: 'decimal', minimumFractionDigits: 2});
       }
 
       _cancel() {
