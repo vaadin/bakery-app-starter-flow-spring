@@ -31,9 +31,9 @@
 
     <h3>Edit Product</h3>
     <vaadin-form-layout>
-      <vaadin-text-field label="Product name" value="{{product.productName}}" colspan="2"></vaadin-text-field>
+      <vaadin-text-field label="Product name" value="{{product.name}}" colspan="2"></vaadin-text-field>
       <br>
-      <vaadin-text-field label="Unit price" value="{{product.unitPrice}}" colspan="2"></vaadin-text-field>
+      <vaadin-text-field label="Unit price" value="{{_getPrice(product.price)}}" colspan="2"></vaadin-text-field>
     </vaadin-form-layout>
     <div class="flex buttons">
       <vaadin-button on-click="_save" theme="primary">Save</vaadin-button>
@@ -56,6 +56,10 @@
             type: Object
           }
         };
+      }
+
+      _getPrice(price) {
+        return price / 100;
       }
 
       _cancel() {

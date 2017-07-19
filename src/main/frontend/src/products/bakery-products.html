@@ -2,7 +2,6 @@
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-sorter.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
-<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 
 <link rel="import" href="../app/bakery-search.html">
 <link rel="import" href="../elements/items-view.html">
@@ -38,27 +37,25 @@
 
     </style>
 
-    <iron-ajax auto url="../../dummy/products.json" handle-as="json" last-response="{{products}}"></iron-ajax>
-
     <items-view desktop-view=[[desktopView]] filter-value="{{_filterValue}}"
         on-new-item="_openNewProductDialog" item="[[_editableProduct]]" on-closed="_onClose" button-text="New product">
 
-      <vaadin-grid slot="grid" id="grid" class="products-grid" items="[[_filterProducts(products, _filterValue)]]" active-item="{{_selectedProduct}}">
+      <vaadin-grid slot="grid" id="grid" class="products-grid" items="[[products]]" active-item="{{_selectedProduct}}">
         <vaadin-grid-column>
           <template class="header">
-            <vaadin-grid-sorter path="productName">Product Name</vaadin-grid-sorter>
+            <vaadin-grid-sorter path="name">Product Name</vaadin-grid-sorter>
           </template>
           <template>
             <div>
-              [[item.productName]]
+              [[item.name]]
             </div>
           </template>
         </vaadin-grid-column>
         <vaadin-grid-column>
           <template class="header">
-            <vaadin-grid-sorter path="unitPrice">Unit Price</vaadin-grid-sorter>
+            <vaadin-grid-sorter path="price">Unit Price</vaadin-grid-sorter>
           </template>
-          <template>[[item.unitPrice]]</template>
+          <template>[[_getPrice(item.price)]]</template>
         </vaadin-grid-column>
         <vaadin-grid-column width="80px" flex-grow="0" hidden="[[!desktopView]]">
           <template>
@@ -91,6 +88,16 @@
         };
       }
 
+      static get observers() {
+        return [
+          '_filterProducts(_filterValue)'
+        ];
+      }
+
+      _getPrice(price) {
+        return price / 100;
+      }
+
       _openNewProductDialog() {
         this._editProduct({});
       }
@@ -107,13 +114,12 @@
       _onSave(e) {
       }
 
-      _filterProducts(products, filter) {
-        if (products && filter) {
-          return products.filter(function(product) {
-            return product.productName.toLowerCase().includes(filter.toLowerCase());
-          });
-        }
-        return products;
+      _filterProducts() {
+        this._filtersChangeDebouncer = Polymer.Debouncer.debounce(
+          this._filtersChangeDebouncer,
+          Polymer.Async.timeOut.after(200),
+          () => this.$server.onFilterProducts(this._filterValue));
+        Polymer.enqueueDebouncer(this._filtersChangeDebouncer);
       }
     }
 
