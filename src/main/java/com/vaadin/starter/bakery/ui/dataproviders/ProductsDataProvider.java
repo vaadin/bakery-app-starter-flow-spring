@@ -19,7 +19,9 @@ public class ProductsDataProvider {
 	}
 
 	public List<Product> findAll() {
-		return productService.getRepository().findAll().stream().map(this::toUiEntity).collect(Collectors.toList());
+		return productService.getRepository().findAll().stream()
+				.map(this::toUiEntity)
+				.collect(Collectors.toList());
 	}
 
 	public List<Product> findByName(String name) {
@@ -27,7 +29,10 @@ public class ProductsDataProvider {
 			return this.findAll();
 		}
 		String lowerName = name.toLowerCase();
-		return productService.getRepository().findAll().stream().filter(product -> product.getName().toLowerCase().contains(lowerName)).map(this::toUiEntity).collect(Collectors.toList());
+		return productService.getRepository().findAll().stream()
+				.filter(product -> product.getName().toLowerCase().contains(lowerName))
+				.map(this::toUiEntity)
+				.collect(Collectors.toList());
 	}
 
 	private Product toUiEntity(com.vaadin.starter.bakery.backend.data.entity.Product product) {

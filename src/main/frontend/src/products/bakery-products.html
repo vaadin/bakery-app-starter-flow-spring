@@ -95,7 +95,8 @@
       }
 
       _getPrice(price) {
-        return price / 100;
+        price = price || 0;
+        return (price / 100).toLocaleString('en-US', {style: 'currency', currency: 'USD'});
       }
 
       _openNewProductDialog() {
