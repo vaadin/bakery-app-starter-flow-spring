@@ -324,6 +324,10 @@
                                     <directory>${frontend.working.directory}/build</directory>
                                     <targetPath>${vaadin.frontend.path}</targetPath>
                                 </resource>
+                                <resource>
+                                    <directory>${frontend.working.directory}/resources</directory>
+                                    <targetPath>/</targetPath>
+                                </resource>
                             </webResources>
                         </configuration>
                     </plugin>
