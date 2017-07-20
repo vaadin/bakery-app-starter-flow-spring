@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.google.gson.Gson;
+import com.vaadin.annotations.EventData;
+import com.vaadin.annotations.EventHandler;
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Tag;
 import com.vaadin.flow.router.View;
@@ -26,7 +29,9 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.utils.DashboardUtils;
 import com.vaadin.starter.bakery.ui.utils.DashboardUtils.OrdersCountData;
 import com.vaadin.starter.bakery.ui.utils.DashboardUtils.OrdersCountDataWithChart;
+import com.vaadin.starter.bakery.ui.utils.DashboardUtils.PageInfo;
 import com.vaadin.ui.AttachEvent;
+import org.springframework.data.domain.PageRequest;
 
 @Tag("bakery-dashboard")
 @HtmlImport("frontend://src/dashboard/bakery-dashboard.html")
@@ -39,7 +44,7 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> implemen
 
 	@Override
 	protected void onAttach(AttachEvent attachEvent) {
-		populateOrdersList(0, 10);
+		populateOrdersCount();
 		DashboardData data = OrdersDataProvider.get().getDashboardData();
 		populateYearlySalesChart(data);
 		populateDeliveriesCharts(data);
@@ -62,11 +67,19 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> implemen
 		getModel().setProductDeliveriesThisMonth(DashboardUtils.getDeliveriesPerProductPieChartData(productDeliveries));
 	}
 
-	private void populateOrdersList(int start, int count) {
-		// TODO: create lazy loading using getOrdersList(start, count)
-		List<Order> ordersList = OrdersDataProvider.get().getOrdersList();
-		getModel().setOrders(ordersList);
+	private void populateOrdersCount() {
+		getModel().setOrdersCount((int) OrdersDataProvider.get().countAnyMatchingAfterDueDate());
 	}
+
+	@EventHandler
+	private void loadOrdersPage(@EventData("event.detail.page") int page,
+								@EventData("event.detail.pageSize") int pageSize) {
+		PageInfo pageInfo = OrdersDataProvider.get().getOrdersList(new PageRequest(page, pageSize));
+		//It should be easier to use a complex object as function argument
+		String json = new Gson().toJson(pageInfo);
+		getElement().callFunction("loadPage", json);
+	}
+
 
 	private void populateDeliveriesCharts(DashboardData data) {
 		ColumnChartData deliveriesThisMonth = DashboardUtils
@@ -98,6 +111,8 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> implemen
 
 	public interface Model extends TemplateModel {
 		void setOrders(List<Order> orders);
+
+		void setOrdersCount(Integer ordersCount);
 
 		void setTomorrowOrdersCount(OrdersCountData ordersTomorrow);
 

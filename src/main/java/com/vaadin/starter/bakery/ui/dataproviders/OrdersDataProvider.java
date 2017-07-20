@@ -18,6 +18,7 @@ import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.ui.entities.Customer;
 import com.vaadin.starter.bakery.ui.entities.Good;
 import com.vaadin.starter.bakery.ui.entities.Order;
+import com.vaadin.starter.bakery.ui.utils.DashboardUtils.PageInfo;
 
 public class OrdersDataProvider {
 
@@ -44,6 +45,16 @@ public class OrdersDataProvider {
 			return result.subList(start, result.size() - 1);
 
 		return result.subList(start, start + count);
+	}
+
+	public PageInfo getOrdersList(Pageable pageable) {
+		List<Order> list = new ArrayList<>();
+		fetchFromBackEnd(pageable).forEach(entityOrder -> list.add(OrdersDataProvider.toUIEntity(entityOrder)));
+		return new PageInfo(list,pageable.getPageNumber());
+	}
+
+	public long countAnyMatchingAfterDueDate() {
+		return getOrderService().countAnyMatchingAfterDueDate(Optional.empty(), getOptionalFilterDate());
 	}
 
 	public List<com.vaadin.starter.bakery.backend.data.entity.Order> getOriginalOrdersList() {
