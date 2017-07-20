@@ -39,7 +39,11 @@ import org.springframework.data.domain.PageRequest;
 @ParentView(BakeryApp.class)
 public class DashboardView extends PolymerTemplate<DashboardView.Model> implements View {
 
-	public DashboardView() {
+	private final OrdersDataProvider ordersProvider;
+
+	@Autowired
+	public DashboardView(OrdersDataProvider ordersProvider) {
+		this.ordersProvider = ordersProvider;
 	}
 
 	@Override
@@ -53,8 +57,7 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> implemen
 	}
 
 	private void populateOrdersCounts(DeliveryStats deliveryStats) {
-		List<com.vaadin.starter.bakery.backend.data.entity.Order> orders = OrdersDataProvider.get()
-				.getOriginalOrdersList();
+		List<com.vaadin.starter.bakery.backend.data.entity.Order> orders = ordersProvider.getOriginalOrdersList();
 
 		getModel().setTodayOrdersCount(DashboardUtils.getTodaysOrdersCountData(deliveryStats, orders.iterator()));
 		getModel().setNotAvailableOrdersCount(DashboardUtils.getNotAvailableOrdersCountData(deliveryStats));

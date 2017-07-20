@@ -18,6 +18,23 @@ public class ProductsDataProvider {
 		this.productService = productService;
 	}
 
+	private ProductService getService() {
+		return productsService;
+	}
+
+	public Product getProduct(String name) {
+		List<Product> products = getService().findAnyMatching(Optional.of(name), null).getContent();
+		if (products == null || products.isEmpty()) {
+			return null;
+		}
+
+		return products.get(0);
+	}
+
+	public List<com.vaadin.starter.bakery.ui.entities.Product> getUiProducts() {
+		return getService().find(null).getContent().stream().map(this::toUiEntity).collect(Collectors.toList());
+	}
+
 	public List<Product> findAll() {
 		return productService.getRepository().findAll().stream()
 				.map(this::toUiEntity)

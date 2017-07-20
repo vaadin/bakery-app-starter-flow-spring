@@ -16,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
-import com.vaadin.starter.bakery.app.BeanLocator;
 import com.vaadin.starter.bakery.backend.data.DashboardData;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
@@ -34,22 +33,19 @@ import elemental.json.JsonObject;
 @Service
 public class OrdersDataProvider {
 
-	@Autowired
-	private OrderService orderService;
+	private final OrderService orderService;
+	private final PickupLocationService locationService;
+	private final ProductsDataProvider productsProvider;
 
 	@Autowired
-	private PickupLocationService locationService;
+	public OrdersDataProvider(ProductsDataProvider productsProvider, OrderService orderService,
+			PickupLocationService locationService) {
+		this.orderService = orderService;
+		this.locationService = locationService;
+		this.productsProvider = productsProvider;
+	}
 
 	private LocalDate filterDate = LocalDate.now().minusDays(1);
-
-	private static OrdersDataProvider provider;
-
-	public static OrdersDataProvider get() {
-		if (provider == null) {
-			provider = new OrdersDataProvider();
-		}
-		return provider;
-	}
 
 	public List<Order> getOrdersList(int start, int count) {
 		List<Order> result = getOrdersList();
@@ -92,7 +88,7 @@ public class OrdersDataProvider {
 		if (entityOrder == null)
 			return null;
 		Order result = new Order();
-		result.setId(entityOrder.getId().intValue());
+		result.setId(entityOrder.getId().toString());
 		result.setCustomer(toUICustomerEntity(entityOrder.getCustomer()));
 
 		result.setDate(entityOrder.getDueDate().toString());
@@ -151,16 +147,10 @@ public class OrdersDataProvider {
 	}
 
 	private OrderService getOrderService() {
-		if (orderService == null) {
-			orderService = BeanLocator.find(OrderService.class);
-		}
 		return orderService;
 	}
 
 	private PickupLocationService getLocationService() {
-		if (locationService == null) {
-			locationService = BeanLocator.find(PickupLocationService.class);
-		}
 		return locationService;
 	}
 
@@ -173,7 +163,7 @@ public class OrdersDataProvider {
 		Gson gson = new Gson();
 		Order uiEntity = gson.fromJson(jsonOrder.toJson(), Order.class);
 		try {
-			dataEntity = getOrderService().findOrder((long) uiEntity.getId());
+			dataEntity = getOrderService().findOrder(Long.valueOf(uiEntity.getId()));
 		} catch (NumberFormatException e) {
 		}
 
@@ -212,7 +202,7 @@ public class OrdersDataProvider {
 			OrderItem item = new OrderItem();
 			item.setComment(good.getDescription());
 
-			item.setProduct(ProductsDataProvider.getProduct(good.getName()));
+			item.setProduct(productsProvider.getProduct(good.getName()));
 			item.setQuantity(good.getCount());
 			items.add(item);
 		}

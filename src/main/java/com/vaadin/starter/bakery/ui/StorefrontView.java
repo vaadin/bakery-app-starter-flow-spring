@@ -102,10 +102,15 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	}
 
 	private OrderService orderService;
+	private ProductsDataProvider productProvider;
+	private OrdersDataProvider ordersProvider;
 
 	@Autowired
-	public StorefrontView(OrderService orderService) {
+	public StorefrontView(OrdersDataProvider ordersProvider, OrderService orderService,
+			ProductsDataProvider productProvider) {
 		this.orderService = orderService;
+		this.productProvider = productProvider;
+		this.ordersProvider = ordersProvider;
 	}
 
 	@Override
@@ -113,13 +118,13 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		super.onAttach(event);
 		getModel().setOrderGroups(new ArrayList<>());
 
-		getModel().setProducts(ProductsDataProvider.getUiProducts());
+		getModel().setProducts(productProvider.getUiProducts());
 	}
 
 	@ClientDelegate
 	private void onSave(JsonObject order) {
 		try {
-			OrdersDataProvider.get().save(order);
+			ordersProvider.save(order);
 		} catch (Exception e) {
 			getElement().callFunction("showErrorMessage", "Order was not saved");
 		} finally {
