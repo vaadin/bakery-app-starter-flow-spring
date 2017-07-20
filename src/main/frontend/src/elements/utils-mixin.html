@@ -57,8 +57,9 @@
         return moment(new Date(date)).format('MMM D');
       }
       
-      _getCurrency(n) {
-        return n ? '$' + (n / 100).toFixed(2) : '';
+      _getCurrency(price) {
+        price = price || 0;
+        return (price / 100).toLocaleString('en-US', {style: 'currency', currency: 'USD'});
       }
     };
 
