@@ -20,6 +20,6 @@
       return name;
       
     },
-    unitPrice: '{{integer(10, 30, )}}'
+    unitPrice: '{{integer(1000, 3000, )}}'
   }
 ]

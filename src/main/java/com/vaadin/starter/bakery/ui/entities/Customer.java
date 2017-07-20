@@ -11,14 +11,34 @@ public class Customer implements Serializable {
 		return "Customer [name=" + name + "]";
 	}
 
-	String name;
+	private String name;
+	private String number;
+	private String details;
 
-	Customer() {
+	public Customer() {
 
 	}
 
-	public Customer(String name) {
+	public Customer(String name, String phoneNumber, String details) {
 		this.name = name;
+		this.number = phoneNumber;
+		this.details = details;
+	}
+
+	public String getNumber() {
+		return number;
+	}
+
+	public void setNumber(String number) {
+		this.number = number;
+	}
+
+	public String getDetails() {
+		return details;
+	}
+
+	public void setDetails(String details) {
+		this.details = details;
 	}
 
 	public String getName() {

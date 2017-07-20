@@ -47,7 +47,6 @@
       }
     </style>
 
-    <iron-ajax auto url="../../dummy/products.json" handle-as="json" last-response="{{products}}"></iron-ajax>
     <iron-ajax auto url="../../dummy/customers.json" handle-as="json" last-response="{{customers}}"></iron-ajax>
 
     <div class="scrollable flex1" id="main">
@@ -57,12 +56,12 @@
         <vaadin-form-item>
           <label slot="label">Due</label>
           <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 1, 2)]]">
-            <vaadin-date-picker value="[[_getDayIso(item.date)]]">
+            <vaadin-date-picker on-value-changed="_onDateChange"  value="[[_getDayIso(item.date)]]">
               <iron-icon slot="prefix" icon="valo:calendar"></iron-icon>
             </vaadin-date-picker>
 
-            <vaadin-combo-box value="[[_getTime(item.date)]]" allow-custom-value items='
-              ["8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00"]'>
+            <vaadin-combo-box on-change="_onTimeChange" value="[[_getTime(item.time)]]" allow-custom-value items='
+              ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00"]'>
               <iron-icon slot="prefix" icon="valo:clock"></iron-icon>
             </vaadin-combo-box>
           </vaadin-form-layout>
@@ -84,7 +83,7 @@
             <iron-icon slot="prefix" icon="valo:phone"></iron-icon>
           </vaadin-text-field>
 
-          <vaadin-text-field label="Aditional Details" value="{{item.details}}" colspan="2"></vaadin-text-field>
+          <vaadin-text-field label="Aditional Details" value="{{item.customer.details}}" colspan="2"></vaadin-text-field>
 
           <vaadin-form-item colspan="3">
             <label slot="label">Products</label>
@@ -170,6 +169,14 @@
         const idx = e.target.index;
         this.set('item.goods.' + idx + '.description', e.target.value);
       }
+      
+      _onTimeChange(e) {
+        this.set('item.time', e.target.value);
+      }
+
+      _onDateChange(e) {
+        this.set('item.date', e.target.value);
+      }
 
       _onItemChange(item) {
         if (item) {
@@ -207,15 +214,11 @@
         }
       }
 
-      _getCurrency(n) {
-        return n ? '$' + n : '';
-      }
-
       _computeTotal() {
         const tot = (this.item && this.item.goods || [])
            .reduce((prev, item) => prev + (item.unitPrice ? item.unitPrice * (item.count || 1) : 0), 0);
         this.set('item.totalPrice', tot);
-        return tot ? 'Total $' + tot : '';
+        return tot ? 'Total ' + this._getCurrency(tot) : '';
       }
 
       _computeResponsiveSteps(desktopView, desktopColumns, mobileColumns) {
