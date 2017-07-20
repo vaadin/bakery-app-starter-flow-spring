@@ -91,7 +91,7 @@
             <template is="dom-repeat" items="[[item.goods]]" as="product">
               <vaadin-form-layout class="product" responsive-steps="[[_computeResponsiveSteps(desktopView, 18, 10)]]">
                 <vaadin-combo-box colspan="8"value="{{product.name}}" items="[[products]]"
-                  item-label-path="productName" item-value-path="productName"
+                  item-label-path="name" item-value-path="name"
                   on-change="_onProductChange" allow-custom-value index="[[index]]"></vaadin-combo-box>
 
                 <vaadin-button colspan="2" class="delete" index="[[index]]" on-click="_onProductDelete"
@@ -193,8 +193,8 @@
       _onProductChange(e) {
         const idx = e.target.index;
         const prod = e.target.selectedItem;
-        this.notifyPath('item.goods.' + idx + '.name', prod.productName);
-        this.set('item.goods.' + idx + '.unitPrice', prod.unitPrice);
+        this.notifyPath('item.goods.' + idx + '.name', prod.name);
+        this.set('item.goods.' + idx + '.unitPrice', prod.price);
         this.set('item.goods.' + idx + '.count', 1);
         if (this.item.goods.length == idx + 1) {
           this.push('item.goods', {});

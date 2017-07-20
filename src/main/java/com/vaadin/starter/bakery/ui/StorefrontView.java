@@ -118,7 +118,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		super.onAttach(event);
 		getModel().setOrderGroups(new ArrayList<>());
 
-		getModel().setProducts(productProvider.getUiProducts());
+		getModel().setProducts(productProvider.findAll());
 	}
 
 	@ClientDelegate
