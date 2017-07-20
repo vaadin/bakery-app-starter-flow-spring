@@ -94,7 +94,7 @@
       _onFiltersChanged() {
         this._filtersChangeDebouncer = Polymer.Debouncer.debounce(
           this._filtersChangeDebouncer,
-          Polymer.Async.timeOut.after(300),
+          Polymer.Async.timeOut.after(200),
           () => this.$server.onFiltersChanged(this._filterValue, this._showPrevious));
         Polymer.enqueueDebouncer(this._filtersChangeDebouncer);
       }
