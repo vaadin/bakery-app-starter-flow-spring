@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.vaadin.starter.bakery.app.BeanLocator;
+import com.vaadin.starter.bakery.app.security.SecurityUtils;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.repositories.UserRepository;
 
@@ -23,7 +24,7 @@ public class UserService implements CrudService<User> {
 	}
 
 	public User getCurrentUser() {
-		return new User("foo","foo","foo","foo");
+		return getRepository().findByEmail(SecurityUtils.getUsername());
 	}
 
 	@Override

@@ -1,7 +1,6 @@
 package com.vaadin.starter.bakery.ui.entities;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.List;
 
 public class Order implements Serializable {
@@ -14,22 +13,17 @@ public class Order implements Serializable {
 				+ goods + "]";
 	}
 
-	String status;
-	String date;
-	String place;
-	Customer customer;
-	List<Good> goods;
+	private int id;
+	private String status;
+	private String date;
+	private String time;
+	private String place;
+	private Customer customer;
+	private List<Good> goods;
+	private List<HistoryItem> history;
+	private int totalPrice;
 
 	public Order() {
-
-	}
-
-	public Order(String status, LocalDate date, String place, Customer customer, List<Good> goods) {
-		setStatus(status);
-		this.date = date.toString();
-		this.place = place;
-		this.customer = customer;
-		this.goods = goods;
 
 	}
 
@@ -72,6 +66,38 @@ public class Order implements Serializable {
 
 	public void setGoods(List<Good> goods) {
 		this.goods = goods;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getTime() {
+		return time;
+	}
+
+	public void setTime(String time) {
+		this.time = time;
+	}
+
+	public List<HistoryItem> getHistory() {
+		return history;
+	}
+
+	public void setHistory(List<HistoryItem> history) {
+		this.history = history;
+	}
+
+	public int getTotalPrice() {
+		return totalPrice;
+	}
+
+	public void setTotalPrice(int totalPrice) {
+		this.totalPrice = totalPrice;
 	}
 
 }

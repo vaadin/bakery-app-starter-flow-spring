@@ -35,9 +35,13 @@ import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
 import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
+import com.vaadin.starter.bakery.ui.dataproviders.ProductsDataProvider;
 import com.vaadin.starter.bakery.ui.entities.Order;
+import com.vaadin.starter.bakery.ui.entities.Product;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.ui.AttachEvent;
+
+import elemental.json.JsonObject;
 
 /**
  * @author Vaadin Ltd
@@ -93,6 +97,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 	public interface Model extends TemplateModel {
 		void setOrderGroups(List<OrderGroupModel> orderGroups);
+
+		void setProducts(List<Product> products);
 	}
 
 	private OrderService orderService;
@@ -106,6 +112,19 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	protected void onAttach(AttachEvent event) {
 		super.onAttach(event);
 		getModel().setOrderGroups(new ArrayList<>());
+
+		getModel().setProducts(ProductsDataProvider.getUiProducts());
+	}
+
+	@ClientDelegate
+	private void onSave(JsonObject order) {
+		try {
+			OrdersDataProvider.get().save(order);
+		} catch (Exception e) {
+			getElement().callFunction("showErrorMessage", "Order was not saved");
+		} finally {
+			getElement().callFunction("_onFiltersChanged");
+		}
 	}
 
 	@ClientDelegate
