@@ -24,7 +24,12 @@ public class User extends AbstractEntity {
 	@NotNull
 	@NotEmpty
 	@Size(max = 255)
-	private String name;
+	private String firstName;
+
+	@NotNull
+	@NotEmpty
+	@Size(max = 255)
+	private String lastName;
 
 	@NotNull
 	@Size(max = 255)
@@ -34,14 +39,16 @@ public class User extends AbstractEntity {
 		// An empty constructor is needed for all beans
 	}
 
-	public User(String email, String name, String password, String role) {
+	public User(String email, String firstName, String lastName, String password, String role) {
 		Objects.requireNonNull(email);
-		Objects.requireNonNull(name);
+		Objects.requireNonNull(firstName);
+		Objects.requireNonNull(lastName);
 		Objects.requireNonNull(password);
 		Objects.requireNonNull(role);
 
 		this.email = email;
-		this.name = name;
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.password = password;
 		this.role = role;
 	}
@@ -54,12 +61,20 @@ public class User extends AbstractEntity {
 		this.password = password;
 	}
 
-	public String getName() {
-		return name;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	public String getRole() {

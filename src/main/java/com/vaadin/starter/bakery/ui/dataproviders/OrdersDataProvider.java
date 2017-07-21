@@ -119,7 +119,7 @@ public class OrdersDataProvider {
 			HistoryItem uiItem = new HistoryItem();
 			uiItem.setDate(dataItem.getTimestamp().toString());
 			uiItem.setMessage(dataItem.getMessage());
-			uiItem.setName(dataItem.getCreatedBy().getName());
+			uiItem.setName(dataItem.getCreatedBy().getFirstName());
 			uiItem.setStatus(dataItem.getNewState().getDisplayName());
 			uiHistory.add(uiItem);
 		}
