@@ -1,12 +1,14 @@
 package com.vaadin.starter.bakery.ui.dataproviders;
 
-import com.vaadin.starter.bakery.backend.service.ProductService;
-import com.vaadin.starter.bakery.ui.entities.Product;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import com.vaadin.starter.bakery.backend.service.ProductService;
+import com.vaadin.starter.bakery.ui.entities.Product;
 
 @Service
 public class ProductsDataProvider {
@@ -18,21 +20,33 @@ public class ProductsDataProvider {
 		this.productService = productService;
 	}
 
+	private ProductService getService() {
+		return productService;
+	}
+
+	public com.vaadin.starter.bakery.backend.data.entity.Product getProduct(String name) {
+		List<com.vaadin.starter.bakery.backend.data.entity.Product> products = findAnyMatchingProducts(name);
+		if (products == null || products.isEmpty()) {
+			return null;
+		}
+
+		return products.get(0);
+	}
+
 	public List<Product> findAll() {
-		return productService.getRepository().findAll().stream()
-				.map(this::toUiEntity)
-				.collect(Collectors.toList());
+		return productService.getRepository().findAll().stream().map(this::toUiEntity).collect(Collectors.toList());
+	}
+
+	private List<com.vaadin.starter.bakery.backend.data.entity.Product> findAnyMatchingProducts(String name) {
+		return getService().findAnyMatching(Optional.of(name), null).getContent();
 	}
 
 	public List<Product> findByName(String name) {
 		if (null == name) {
 			return this.findAll();
 		}
-		String lowerName = name.toLowerCase();
-		return productService.getRepository().findAll().stream()
-				.filter(product -> product.getName().toLowerCase().contains(lowerName))
-				.map(this::toUiEntity)
-				.collect(Collectors.toList());
+
+		return findAnyMatchingProducts(name).stream().map(this::toUiEntity).collect(Collectors.toList());
 	}
 
 	private Product toUiEntity(com.vaadin.starter.bakery.backend.data.entity.Product product) {

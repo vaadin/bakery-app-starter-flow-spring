@@ -41,8 +41,8 @@
         return moment(new Date(date)).isAfter(moment().endOf('week'));
       }
 
-      _getTime(date) {
-        return moment(new Date(date)).format('hh:mm a');
+      _getTime(time) {
+        return moment(time, 'HH:mm').format('hh:mm a');
       }
 
       _getShortDay(date) {
@@ -55,6 +55,11 @@
 
       _getMonth(date) {
         return moment(new Date(date)).format('MMM D');
+      }
+      
+      _getCurrency(price) {
+        price = price || 0;
+        return (price / 100).toLocaleString('en-US', {style: 'currency', currency: 'USD'});
       }
     };
 
