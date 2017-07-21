@@ -182,7 +182,8 @@
         if (users) {
           filter = (filter || '').toLowerCase();
           return users.filter(function(user) {
-            return user.name.toLowerCase().includes(filter) || user.email.toLowerCase().includes(filter);
+            return user.name.toLowerCase().includes(filter) || user.last.toLowerCase().includes(filter)
+              || user.email.toLowerCase().includes(filter);
           });
         }
         return [];

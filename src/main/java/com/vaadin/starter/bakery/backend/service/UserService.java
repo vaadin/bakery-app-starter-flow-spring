@@ -33,7 +33,7 @@ public class UserService implements CrudService<User> {
 			String repositoryFilter = "%" + filter.get() + "%";
 			return getRepository()
 					.findByEmailLikeIgnoreCaseOrFirstNameLikeIgnoreCaseOrLastNameLikeIgnoreCaseOrRoleLikeIgnoreCase(
-							repositoryFilter, repositoryFilter, repositoryFilter, pageable);
+							repositoryFilter, repositoryFilter, repositoryFilter, repositoryFilter, pageable);
 		} else {
 			return find(pageable);
 		}
