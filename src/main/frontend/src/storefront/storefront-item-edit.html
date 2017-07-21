@@ -116,7 +116,7 @@
     </div>
 
     <div class="footer">
-      <vaadin-button on-click="_cancel">Cancel</vaadin-button>
+      <vaadin-button on-click="_confirmAndCancel">Cancel</vaadin-button>
       <div class="total money">[[_computeTotal(item.goods.*)]]</div>
       <vaadin-button on-click="_review" theme="primary">Review Order →</vaadin-button>
     </div>
@@ -135,10 +135,24 @@
             notify: true,
             observer: '_onItemChange'
           },
+          _dirty: {
+            type: Boolean,
+            value: null
+          },
           products: Array,
           total: Number,
           desktopView: Boolean
         };
+      }
+      
+      static get observers() {
+        return [
+          '_onPropertyChanged(item.*)'
+        ];
+      }
+
+      _onPropertyChanged(change) {
+        this._dirty = (this._dirty != null);
       }
 
       _onImgError(e) {
@@ -188,6 +202,7 @@
             this.push('item.goods', {});
           }
         }
+        this._dirty = null;
       }
 
       _onProductChange(e) {
@@ -234,6 +249,12 @@
 
       _review() {
         this.dispatchEvent(new CustomEvent('next'));
+      }
+      
+      _confirmAndCancel() {
+        if (!this._dirty || window.confirm('Discard order changes?')) {
+          this._cancel();
+        }
       }
     }
 
