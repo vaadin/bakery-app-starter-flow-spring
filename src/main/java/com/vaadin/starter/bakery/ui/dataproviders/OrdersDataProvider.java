@@ -1,9 +1,12 @@
 package com.vaadin.starter.bakery.ui.dataproviders;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.MonthDay;
 import java.time.Year;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,12 +29,15 @@ import com.vaadin.starter.bakery.ui.entities.Customer;
 import com.vaadin.starter.bakery.ui.entities.Good;
 import com.vaadin.starter.bakery.ui.entities.HistoryItem;
 import com.vaadin.starter.bakery.ui.entities.Order;
+import com.vaadin.starter.bakery.ui.entities.OrderGroupModel;
 import com.vaadin.starter.bakery.ui.utils.DashboardUtils.PageInfo;
 
 import elemental.json.JsonObject;
 
 @Service
 public class OrdersDataProvider {
+
+	private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("EEE, MMM dd");
 
 	private final OrderService orderService;
 	private final PickupLocationService locationService;
@@ -61,7 +67,7 @@ public class OrdersDataProvider {
 	public PageInfo getOrdersList(Pageable pageable) {
 		List<Order> list = new ArrayList<>();
 		fetchFromBackEnd(pageable).forEach(entityOrder -> list.add(OrdersDataProvider.toUIEntity(entityOrder)));
-		return new PageInfo(list,pageable.getPageNumber());
+		return new PageInfo(list, pageable.getPageNumber());
 	}
 
 	public long countAnyMatchingAfterDueDate() {
@@ -227,6 +233,50 @@ public class OrdersDataProvider {
 		dataEntity.setDetails(uiCustomer.getDetails());
 
 		return dataEntity;
+	}
+
+	public List<OrderGroupModel> getOrderGroups(String filter, boolean showPrevious) {
+		LocalDate startOfToday = LocalDate.now();
+		LocalDate startOfTomorrow = startOfToday.plusDays(1);
+		LocalDate startOfNextWeek = startOfToday.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
+
+		List<Order> previous = new ArrayList<>();
+		List<Order> today = new ArrayList<>();
+		List<Order> thisWeek = new ArrayList<>();
+		List<Order> upcoming = new ArrayList<>();
+
+		getOrderService()
+				.findAnyMatchingAfterDueDate(Optional.of(filter),
+						showPrevious ? Optional.empty() : Optional.of(startOfToday.minusDays(1)), null)
+				.forEach(order -> {
+					LocalDate date = order.getDueDate();
+					List<Order> group = upcoming;
+					if (date.isBefore(startOfToday)) {
+						group = previous;
+					} else if (date.isBefore(startOfTomorrow)) {
+						group = today;
+					} else if (date.isBefore(startOfNextWeek)) {
+						group = thisWeek;
+					}
+					group.add(OrdersDataProvider.toUIEntity(order));
+				});
+
+		List<OrderGroupModel> groups = new ArrayList<>();
+		if (!previous.isEmpty()) {
+			groups.add(new OrderGroupModel("Previous", "Yesterday and earlier", previous));
+		}
+		if (!today.isEmpty()) {
+			groups.add(new OrderGroupModel("Today", DATE_FORMATTER.format(startOfToday), today));
+		}
+		if (!thisWeek.isEmpty()) {
+			groups.add(new OrderGroupModel("This week", DATE_FORMATTER.format(startOfTomorrow) + " – "
+					+ DATE_FORMATTER.format(startOfNextWeek.minusDays(1)), thisWeek));
+		}
+		if (!upcoming.isEmpty()) {
+			groups.add(new OrderGroupModel("Upcoming", "After this week", upcoming));
+		}
+
+		return groups;
 	}
 
 }

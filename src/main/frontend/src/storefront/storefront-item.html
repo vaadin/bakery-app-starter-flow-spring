@@ -60,14 +60,30 @@
       <storefront-item-badge id="status" status="[[item.status]]"></storefront-item-badge>
 
       <div id="time-place">
-        <template is="dom-if" if="[[_isToday(item.date)]]">
-          <h3 id="time">[[_getTime(item.time)]]</h3>
+        <template is="dom-if" if="[[_isRecent(item.date)]]">
+          <h3 id="month">[[_getMonth(item.date)]]</h3>
+          <div id="full-day">[[_getFullDay(item.date)]]</div>
+        </template>
+
+        <template is="dom-if" if="[[_isYesterday(item.date)]]">
+          <h3 id="time">[[_getTime(item.date)]]</h3>
           <div id="place">[[item.place]]</div>
         </template>
 
-        <template is="dom-if" if="[[_isThisWeek(item.date)]]">
+        <template is="dom-if" if="[[_isToday(item.date)]]">
+          <h3 id="time">[[_getTime(item.date)]]</h3>
+          <div id="place">[[item.place]]</div>
+        </template>
+
+        <template is="dom-if" if="[[_isThisWeekBeforeYesterday(item.date)]]">
           <h3 id="short-day">[[_getShortDay(item.date)]]</h3>
-          <div id="secondary-time">[[_getTime(item.time)]]</div>
+          <div id="secondary-time">[[_getTime(item.date)]]</div>
+          <div id="place">[[item.place]]</div>
+        </template>
+
+        <template is="dom-if" if="[[_isThisWeekStartingTomorrow(item.date)]]">
+          <h3 id="short-day">[[_getShortDay(item.date)]]</h3>
+          <div id="secondary-time">[[_getTime(item.date)]]</div>
           <div id="place">[[item.place]]</div>
         </template>
 
