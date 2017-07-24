@@ -132,7 +132,7 @@ public class OrderService {
 
 	private static Set<OrderState> matchingStates(String filter) {
 		return filter.isEmpty() ? noOrderStates : Arrays.stream(OrderState.values())
-				.filter(e -> e.getDisplayName().toLowerCase().startsWith(filter.toLowerCase()))
+				.filter(e -> e.getDisplayName().toLowerCase().contains(filter.toLowerCase()))
 				.collect(toSet());
 	}
 
