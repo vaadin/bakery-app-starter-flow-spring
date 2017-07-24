@@ -13,7 +13,7 @@ The following is a set of guidelines to make cooperation between different indiv
   * [Making Pull Requests](#making-pull-requests)
 
 [Styleguides](#styleguides)
-  * [Java Styleguide](#java-Styleguide)
+  * [Java Styleguide](#java-styleguide)
   * [JavaScript and CSS Styleguide](#javascript-and-css-styleguide)
   
 
