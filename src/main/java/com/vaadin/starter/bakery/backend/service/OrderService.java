@@ -115,8 +115,8 @@ public class OrderService {
 			Optional<LocalDate> optionalFilterDate, Pageable pageable) {
 		if (optionalFilter.isPresent()) {
 			if (optionalFilterDate.isPresent()) {
-				return getOrderRepository().findByCustomerFullNameContainingIgnoreCaseAndDueDateAfterOrStateIn(
-						optionalFilter.get(), optionalFilterDate.get(), matchingStates(optionalFilter.get()), pageable);
+				return getOrderRepository().findByCustomerFullNameContainingIgnoreCaseOrStateInAndDueDateAfter(
+						optionalFilter.get(), matchingStates(optionalFilter.get()), optionalFilterDate.get(), pageable);
 			} else {
 				return getOrderRepository().findByCustomerFullNameContainingIgnoreCaseOrStateIn(optionalFilter.get(),
 						matchingStates(optionalFilter.get()), pageable);
