@@ -7,7 +7,7 @@
   <template>
     <div id="wrapper">
       <item-detail-dialog desktop-view$=[[desktopView]] opened="[[opened]]">
-        <storefront-item-edit desktop-view="[[desktopView]]" hidden$="[[review]]" item="{{order}}" on-next="_review"></storefront-item-edit>
+        <storefront-item-edit desktop-view="[[desktopView]]" hidden$="[[review]]" item="{{order}}" on-next="_review" products="[[products]]"></storefront-item-edit>
         <storefront-item-detail hidden$="[[!review]]" review item="{{order}}" on-back="_edit"></storefront-item-detail>
       </item-detail-dialog>
     </div>

@@ -37,8 +37,8 @@ public class UserDataProvider {
             com.vaadin.starter.bakery.backend.data.entity.User dataEntity) {
 		User uiEntity = new User();
 		uiEntity.setId(dataEntity.getId().toString());
-		uiEntity.setName(dataEntity.getName());
-		uiEntity.setLast("LastName");
+		uiEntity.setName(dataEntity.getFirstName());
+		uiEntity.setLast(dataEntity.getLastName());
 		uiEntity.setEmail(dataEntity.getEmail());
 		uiEntity.setPassword(null); // do not send the password to the UI
 		uiEntity.setPicture("https://randomuser.me/api/portraits/women/10.jpg");
@@ -72,7 +72,8 @@ public class UserDataProvider {
             dataEntity = new com.vaadin.starter.bakery.backend.data.entity.User();
 		}
 
-		dataEntity.setName(uiEntity.getName());
+		dataEntity.setFirstName(uiEntity.getName());
+		dataEntity.setLastName(uiEntity.getLast());
 		dataEntity.setEmail(uiEntity.getEmail());
 		if (uiEntity.getPassword() != null) {
 			dataEntity.setPassword(userService.encodePassword(uiEntity.getPassword()));

@@ -13,14 +13,18 @@ public class Good implements Serializable {
 
 	private int count;
 	private String name;
+	private int unitPrice;
+	private String description;
 
 	public Good() {
 
 	}
 
-	public Good(int count, String name) {
+	public Good(int count, String name, int unitPrice, String comment) {
 		this.count = count;
 		this.name = name;
+		this.unitPrice = unitPrice;
+		this.setDescription(comment);
 	}
 
 	public int getCount() {
@@ -37,6 +41,22 @@ public class Good implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public int getUnitPrice() {
+		return unitPrice;
+	}
+
+	public void setUnitPrice(int unitPrice) {
+		this.unitPrice = unitPrice;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 }

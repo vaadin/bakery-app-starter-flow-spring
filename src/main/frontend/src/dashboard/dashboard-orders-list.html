@@ -1,5 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
 <link rel="import" href="../storefront/storefront-item.html">
 
 <dom-module id="dashboard-orders-list">
@@ -10,28 +10,25 @@
         display: block;
       }
 
-      #item-wrapper {
-        background: white;
-        box-shadow: 0 3px 5px var(--valo-black-10pct);
-        margin: calc(-1 * var(--valo-space-s)) 0 var(--valo-space-s); /* Last item has shadow visible */
-        border-bottom: 1px solid;
-        border-bottom-color: rgba(23, 68, 128, 0.1);
+      .orders-list {
+        height: 100%;
       }
 
       #wrapper {
-        overflow-y: scroll;
         @apply --margin-style;
         @apply --fourth-row-style;
       }
 	  </style>
 
-      <div id="wrapper">  
-		  <template is="dom-repeat" items="[[orders]]">
-		     <div id="item-wrapper">
-		      	<storefront-item item="[[item]]" day-column="true"></storefront-item>
-		     </div>
-		  </template>
-	  </div>
+    <div id="wrapper">
+      <vaadin-grid class="orders-list" data-provider="[[dataProvider]]" size="[[ordersCount]]">
+        <vaadin-grid-column>
+          <template>
+            <storefront-item item="[[item]]" day-column="true"></storefront-item>
+          </template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </div>
 
   </template>
 
@@ -40,6 +37,24 @@
         static get is() {
           return 'dashboard-orders-list';
         }
+
+        ready() {
+          super.ready();
+          this.callbacks = {};
+          this.dataProvider = function(params, callback) {
+            this.dispatchEvent(new CustomEvent('page-request', {detail: {page: params.page, pageSize: params.pageSize}}));
+            this.callbacks[params.page] = callback;
+          }.bind(this);
+        }
+
+        loadPage(pageInfo) {
+          if (pageInfo) {
+            const pageInfoJSON = JSON.parse(pageInfo);
+            this.callbacks[pageInfoJSON.pageNumber](pageInfoJSON.orders);
+            this.callbacks[pageInfoJSON.pageNumber] = null;
+          }
+        }
+
       }
 
       window.customElements.define(DashboardOrdersList.is, DashboardOrdersList);
