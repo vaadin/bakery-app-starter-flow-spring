@@ -66,7 +66,7 @@
         </vaadin-grid-column>
       </vaadin-grid>
 
-      <product-edit slot="editor" product="[[_editableProduct]]" on-save="_onSave"></product-edit>
+      <product-edit slot="editor" product="[[_editableProduct]]" on-save="_onSave" on-close="_onClose"></product-edit>
     </items-view>
   </template>
 
@@ -82,7 +82,7 @@
           _filterValue: String,
           _selectedProduct: {
             type: Object,
-            observer: '_editProduct'
+            observer: 'editProduct'
           },
           _editableProduct: Object
         };
@@ -100,19 +100,38 @@
       }
 
       _openNewProductDialog() {
-        this._editProduct({});
+        this.editProduct({});
       }
 
-      _editProduct(product) {
-        this._editableProduct = product;
+      editProduct(product) {
+        this._editableProduct = product ? Object.assign({}, product) : null;
+      }
+
+      showErrorMessage(error) {
+        window.alert(error || 'Error on saving.');
       }
 
       _onClose() {
         this.$.grid.selectedItems = [];
+        this._selectedProduct = null;
         this._editableProduct = null;
       }
 
       _onSave(e) {
+        this.$server.saveProduct(e.detail);
+      }
+
+      _findProductIndexById(id) {
+        let idx = -1;
+
+        for (let i = 0; i < this.products.length; i += 1) {
+          if (this.products[i].id === id) {
+            idx = i;
+            break;
+          }
+        }
+
+        return idx;
       }
 
       _filterProducts() {
