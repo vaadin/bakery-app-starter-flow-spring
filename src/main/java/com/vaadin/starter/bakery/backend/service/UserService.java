@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.vaadin.starter.bakery.app.BeanLocator;
+import com.vaadin.starter.bakery.app.security.SecurityUtils;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.repositories.UserRepository;
 
@@ -23,15 +24,16 @@ public class UserService implements CrudService<User> {
 	}
 
 	public User getCurrentUser() {
-		return new User("foo","foo","foo","foo");
+		return getRepository().findByEmail(SecurityUtils.getUsername());
 	}
 
 	@Override
 	public Page<User> findAnyMatching(Optional<String> filter, Pageable pageable) {
 		if (filter.isPresent()) {
 			String repositoryFilter = "%" + filter.get() + "%";
-			return getRepository().findByEmailLikeIgnoreCaseOrNameLikeIgnoreCaseOrRoleLikeIgnoreCase(repositoryFilter,
-					repositoryFilter, repositoryFilter, pageable);
+			return getRepository()
+					.findByEmailLikeIgnoreCaseOrFirstNameLikeIgnoreCaseOrLastNameLikeIgnoreCaseOrRoleLikeIgnoreCase(
+							repositoryFilter, repositoryFilter, repositoryFilter, repositoryFilter, pageable);
 		} else {
 			return find(pageable);
 		}
@@ -41,7 +43,8 @@ public class UserService implements CrudService<User> {
 	public long countAnyMatching(Optional<String> filter) {
 		if (filter.isPresent()) {
 			String repositoryFilter = "%" + filter.get() + "%";
-			return getRepository().countByEmailLikeIgnoreCaseOrNameLikeIgnoreCase(repositoryFilter, repositoryFilter);
+			return getRepository().countByEmailLikeIgnoreCaseOrFirstNameLikeIgnoreCaseOrLastNameLikeIgnoreCase(
+					repositoryFilter, repositoryFilter, repositoryFilter);
 		} else {
 			return getRepository().count();
 		}

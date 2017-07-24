@@ -7,6 +7,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+
+import com.google.gson.Gson;
+import com.vaadin.annotations.EventData;
+import com.vaadin.annotations.EventHandler;
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Tag;
 import com.vaadin.flow.router.View;
@@ -26,6 +32,7 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.utils.DashboardUtils;
 import com.vaadin.starter.bakery.ui.utils.DashboardUtils.OrdersCountData;
 import com.vaadin.starter.bakery.ui.utils.DashboardUtils.OrdersCountDataWithChart;
+import com.vaadin.starter.bakery.ui.utils.DashboardUtils.PageInfo;
 import com.vaadin.ui.AttachEvent;
 
 @Tag("bakery-dashboard")
@@ -34,13 +41,17 @@ import com.vaadin.ui.AttachEvent;
 @ParentView(BakeryApp.class)
 public class DashboardView extends PolymerTemplate<DashboardView.Model> implements View {
 
-	public DashboardView() {
+	private final OrdersDataProvider ordersProvider;
+
+	@Autowired
+	public DashboardView(OrdersDataProvider ordersProvider) {
+		this.ordersProvider = ordersProvider;
 	}
 
 	@Override
 	protected void onAttach(AttachEvent attachEvent) {
-		populateOrdersList(0, 10);
-		DashboardData data = OrdersDataProvider.get().getDashboardData();
+		populateOrdersCount();
+		DashboardData data = ordersProvider.getDashboardData();
 		populateYearlySalesChart(data);
 		populateDeliveriesCharts(data);
 		populateOrdersCounts(data.getDeliveryStats());
@@ -48,8 +59,7 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> implemen
 	}
 
 	private void populateOrdersCounts(DeliveryStats deliveryStats) {
-		List<com.vaadin.starter.bakery.backend.data.entity.Order> orders = OrdersDataProvider.get()
-				.getOriginalOrdersList();
+		List<com.vaadin.starter.bakery.backend.data.entity.Order> orders = ordersProvider.getOriginalOrdersList();
 
 		getModel().setTodayOrdersCount(DashboardUtils.getTodaysOrdersCountData(deliveryStats, orders.iterator()));
 		getModel().setNotAvailableOrdersCount(DashboardUtils.getNotAvailableOrdersCountData(deliveryStats));
@@ -62,10 +72,17 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> implemen
 		getModel().setProductDeliveriesThisMonth(DashboardUtils.getDeliveriesPerProductPieChartData(productDeliveries));
 	}
 
-	private void populateOrdersList(int start, int count) {
-		// TODO: create lazy loading using getOrdersList(start, count)
-		List<Order> ordersList = OrdersDataProvider.get().getOrdersList();
-		getModel().setOrders(ordersList);
+	private void populateOrdersCount() {
+		getModel().setOrdersCount((int) ordersProvider.countAnyMatchingAfterDueDate());
+	}
+
+	@EventHandler
+	private void loadOrdersPage(@EventData("event.detail.page") int page,
+			@EventData("event.detail.pageSize") int pageSize) {
+		PageInfo pageInfo = ordersProvider.getOrdersList(new PageRequest(page, pageSize));
+		// It should be easier to use a complex object as function argument
+		String json = new Gson().toJson(pageInfo);
+		getElement().callFunction("loadPage", json);
 	}
 
 	private void populateDeliveriesCharts(DashboardData data) {
@@ -98,6 +115,8 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> implemen
 
 	public interface Model extends TemplateModel {
 		void setOrders(List<Order> orders);
+
+		void setOrdersCount(Integer ordersCount);
 
 		void setTomorrowOrdersCount(OrdersCountData ordersTomorrow);
 

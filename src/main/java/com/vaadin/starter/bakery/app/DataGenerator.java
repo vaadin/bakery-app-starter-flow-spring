@@ -335,10 +335,10 @@ public class DataGenerator implements HasLogger {
 	}
 
 	private void createUsers(UserRepository userRepository) {
-		baker = userRepository.save(new User("baker@vaadin.com", "Heidi", passwordEncoder.encode("baker"), Role.BAKER));
+		baker = userRepository.save(new User("baker@vaadin.com", "Heidi", "Carter", passwordEncoder.encode("baker"), Role.BAKER));
 		barista = userRepository
-				.save(new User("barista@vaadin.com", "Malin", passwordEncoder.encode("barista"), Role.BARISTA));
-		admin = userRepository.save(new User("admin@vaadin.com", "Göran", passwordEncoder.encode("admin"), Role.ADMIN));
+				.save(new User("barista@vaadin.com", "Malin", "Castro", passwordEncoder.encode("barista"), Role.BARISTA));
+		admin = userRepository.save(new User("admin@vaadin.com", "Göran", "Rich", passwordEncoder.encode("admin"), Role.ADMIN));
 		users.add(barista);
 		users.add(admin);
 		users.add(baker);

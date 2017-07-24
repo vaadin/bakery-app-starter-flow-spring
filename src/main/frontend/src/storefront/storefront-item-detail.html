@@ -98,7 +98,7 @@
                 <span class="secondary">[[_getWeekday(item.date)]]</span>
               </div>
               <div class="flex column">
-                <h3>[[_getTime(item.date)]]</h3>
+                <h3>[[_getTime(item.time)]]</h3>
                 <span class="secondary">[[item.place]]</span>
               </div>
             </div>
@@ -117,7 +117,7 @@
           </div>
           <div class="flex column flex5">
             <span class="secondary">Additional details</span>
-            <span>[[item.details]]</span>
+            <span>[[item.customer.details]]</span>
             <span class="secondary space-top">Products</span>
             <div class="flex column">
               <template is="dom-repeat" items="[[item.goods]]" as="product">
@@ -136,7 +136,7 @@
                       x
                     </div>
                     <div class="flex1 money">
-                      $[[product.unitPrice]]
+                      [[_getCurrency(product.unitPrice)]]
                     </div>
                   </div>
                 </template>
@@ -170,7 +170,7 @@
     </div>
     <div class="flex footer">
       <vaadin-button on-click="_cancel">[[_cancelText()]]</vaadin-button>
-      <div class="total money">Total $[[item.totalPrice]]</div>
+      <div class="total money">Total [[_getCurrency(item.totalPrice)]]</div>
       <template is="dom-if" if="[[review]]">
         <vaadin-button theme="primary success" class="edit-button" on-click="_save">Place Order ✓</vaadin-button>
       </template>
@@ -215,8 +215,9 @@
 
       _do(type) {
         this.close();
+        const localItem = this.item;
         Polymer.RenderStatus.afterNextRender(this, () =>
-          this.dispatchEvent(new CustomEvent(type, {bubbles: true, composed: true, detail: this.item})));
+          this.dispatchEvent(new CustomEvent(type, {bubbles: true, composed: true, detail: localItem})));
       }
 
       _cancelText() {

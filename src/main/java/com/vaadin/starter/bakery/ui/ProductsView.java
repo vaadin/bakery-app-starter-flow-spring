@@ -16,8 +16,11 @@ import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
+import org.springframework.transaction.TransactionSystemException;
 
-import javax.xml.bind.ValidationException;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import java.util.Iterator;
 import java.util.List;
 
 @Tag("bakery-products")
@@ -55,12 +58,31 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 			productsDataProvider.save(product);
 			getModel().setProducts(productsDataProvider.findAll());
 			getElement().callFunction("editProduct");
-		} catch (ValidationException e) {
-			getElement().callFunction("showErrorMessage", e.getMessage());
-			getLogger().error("Error on saving product: " + e.getMessage());
+		} catch (ConstraintViolationException e) {
+			String errorMessage = getErrorMessage(e);
+			getElement().callFunction("showErrorMessage", errorMessage);
+			getLogger().error("Error on saving product: " + errorMessage);
+		} catch (TransactionSystemException e) {
+			//TODO Figure out why ConstraintViolationException is being wrapped by TransactionSystemException on update
+			String errorMessage = "Product could not be saved.";
+			if (e.getRootCause() instanceof ConstraintViolationException) {
+				errorMessage = getErrorMessage((ConstraintViolationException)e.getRootCause());
+			}
+			getElement().callFunction("showErrorMessage", errorMessage);
+			getLogger().error("Error on saving product: " + errorMessage);
 		} catch (Exception e) {
 			getElement().callFunction("showErrorMessage", "Product could not be saved.");
 			getLogger().error("Error on saving product: " + e.getMessage());
 		}
+	}
+
+	private String getErrorMessage(ConstraintViolationException e) {
+		String errorMessage = "";
+		Iterator it = e.getConstraintViolations().iterator();
+		while (it.hasNext()) {
+			errorMessage += ((ConstraintViolation) it.next()).getMessage() + " ";
+		}
+		errorMessage = errorMessage.trim();
+		return errorMessage;
 	}
 }

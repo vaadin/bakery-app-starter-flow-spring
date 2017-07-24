@@ -121,19 +121,6 @@
         this.$server.saveProduct(e.detail);
       }
 
-      _findProductIndexById(id) {
-        let idx = -1;
-
-        for (let i = 0; i < this.products.length; i += 1) {
-          if (this.products[i].id === id) {
-            idx = i;
-            break;
-          }
-        }
-
-        return idx;
-      }
-
       _filterProducts() {
         this._filtersChangeDebouncer = Polymer.Debouncer.debounce(
           this._filtersChangeDebouncer,
