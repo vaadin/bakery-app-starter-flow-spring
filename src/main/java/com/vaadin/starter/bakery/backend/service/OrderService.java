@@ -28,6 +28,8 @@ import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.repositories.CustomerRepository;
 import com.vaadin.starter.bakery.repositories.OrderRepository;
 
+import static java.util.stream.Collectors.toSet;
+
 @Service
 public class OrderService {
 
@@ -37,9 +39,11 @@ public class OrderService {
 
 	private UserService userService;
 
+	private static Set<OrderState> noOrderStates;
 	private static Set<OrderState> notAvailableStates;
 
 	static {
+		noOrderStates = new HashSet<>();
 		notAvailableStates = new HashSet<>(Arrays.asList(OrderState.values()));
 		notAvailableStates.remove(OrderState.DELIVERED);
 		notAvailableStates.remove(OrderState.READY);
@@ -111,10 +115,11 @@ public class OrderService {
 			Optional<LocalDate> optionalFilterDate, Pageable pageable) {
 		if (optionalFilter.isPresent()) {
 			if (optionalFilterDate.isPresent()) {
-				return getOrderRepository().findByCustomerFullNameContainingIgnoreCaseAndDueDateAfter(
-						optionalFilter.get(), optionalFilterDate.get(), pageable);
+				return getOrderRepository().findByCustomerFullNameContainingIgnoreCaseAndDueDateAfterOrStateIn(
+						optionalFilter.get(), optionalFilterDate.get(), matchingStates(optionalFilter.get()), pageable);
 			} else {
-				return getOrderRepository().findByCustomerFullNameContainingIgnoreCase(optionalFilter.get(), pageable);
+				return getOrderRepository().findByCustomerFullNameContainingIgnoreCaseOrStateIn(optionalFilter.get(),
+						matchingStates(optionalFilter.get()), pageable);
 			}
 		} else {
 			if (optionalFilterDate.isPresent()) {
@@ -123,6 +128,12 @@ public class OrderService {
 				return getOrderRepository().findAll(pageable);
 			}
 		}
+	}
+
+	private static Set<OrderState> matchingStates(String filter) {
+		return filter.isEmpty() ? noOrderStates : Arrays.stream(OrderState.values())
+				.filter(e -> e.getDisplayName().toLowerCase().startsWith(filter.toLowerCase()))
+				.collect(toSet());
 	}
 
 	public long countAfterDueDateWithState(LocalDate filterDate, List<OrderState> states) {
