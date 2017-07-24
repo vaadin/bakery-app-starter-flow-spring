@@ -22,6 +22,16 @@
         margin: calc(-1 * var(--valo-space-s)) 0 var(--valo-space-s); /* Last item has shadow visible */
       }
 
+      .main {
+        color: var(--valo-body-text-color);
+        margin-right: var(--valo-space-s);
+        font-weight: bold;
+      }
+
+      .secondary {
+        color: var(--valo-secondary-text-color);
+      }
+
       @media (min-width: 600px) {
         #wrapper {
           margin: 0 0 var(--valo-space-s);
@@ -34,6 +44,13 @@
         }
       }
     </style>
+
+    <template is="dom-if" if="[[displayHeader]]">
+      <div class="group-heading">
+        <span class="main" theme$="[[_getMainFontSize(desktopView)]]">[[header.main]]</span>
+        <span class="secondary" theme$="[[_getSecondaryFontSize(desktopView)]]">[[header.secondary]]</span>
+      </div>
+    </template>
 
     <div id="wrapper">
       <template is="dom-if" if="[[!_showDetailsDesktop(selected, desktopView)]]">
@@ -75,6 +92,14 @@
             type: Boolean
           }
         };
+      }
+
+      _getMainFontSize(desktop) {
+        return desktop ? 'l-text' : 'm-text';
+      }
+
+      _getSecondaryFontSize(desktop) {
+        return desktop ? 'm-text' : 's-text';
       }
 
       _open(e) {
