@@ -5,8 +5,10 @@
 <link rel="import" href="../../bower_components/iron-list/iron-list.html">
 
 <link rel="import" href="../app/bakery-search.html">
-<link rel="import" href="storefront-group.html">
+<link rel="import" href="storefront-item-detail-wrapper.html">
 <link rel="import" href="storefront-item-edit-wrapper.html">
+
+<link rel="import" href="../elements/utils-mixin.html">
 
 <dom-module id="bakery-storefront">
   <template>
@@ -51,9 +53,19 @@
 
     <div class="flex1 overflow-auto">
 
-      <iron-list id="list" items="[[orderGroups]]">
+      <iron-list id="list" items="[[orders]]">
         <template>
-          <storefront-group on-edit="_onEdit" on-save="_onSave" group="[[item]]" on-notify-resize="_resizeList" desktop-view="[[desktopView]]"></storefront-group>
+          <storefront-item-detail-wrapper
+              header="[[_getHeader(item.date)]]"
+              display-header="[[_displayHeader(item.id)]]"
+              order="[[item]]"
+              on-opened="_selectItem"
+              on-closed="_unselectItem"
+              desktop-view="[[desktopView]]"
+              on-notify-resize="_resizeList"
+              on-edit="_onEdit"
+              on-save="_onSave">
+          </storefront-item-detail-wrapper>
         </template>
       </iron-list>
 
@@ -64,7 +76,7 @@
   </template>
 
   <script>
-    class BakeryStorefront extends Polymer.Element {
+    class BakeryStorefront extends window.DateUtilsMixin(Polymer.Element) {
       static get is() {
         return 'bakery-storefront';
       }
@@ -72,7 +84,7 @@
       static get properties() {
         return {
           desktopView: Boolean,
-          orderGroups: {
+          orders: {
             type: Array
           },
           _filterValue: {
@@ -81,13 +93,19 @@
           _showPrevious: {
             type: Boolean
           },
-          _editableItem: Object
+          _editableItem: Object,
+          _displayedHeadersList: {
+            type: Array,
+            value: []
+          },
+          _usedGroups: Array
         };
       }
 
       static get observers() {
         return [
-          '_onFiltersChanged(_filterValue, _showPrevious)'
+          '_onFiltersChanged(_filterValue, _showPrevious)',
+          '_updatedisplayedHeadersList(orders.*)'
         ];
       }
 
@@ -97,6 +115,85 @@
           Polymer.Async.timeOut.after(200),
           () => this.$server.onFiltersChanged(this._filterValue, this._showPrevious));
         Polymer.enqueueDebouncer(this._filtersChangeDebouncer);
+      }
+
+      /*
+       * Setting headers for each storefront-item-detail-wrapper based on their date.
+       */
+      _getHeader(date) {
+        var header = {};
+        if (this._isRecent(date)) {
+          header['main'] = 'Recent';
+          header['secondary'] = 'Before this week';
+
+        } else if (this._isYesterday(date)) {
+          header['main'] = 'Yesterday';
+          header['secondary'] = this._getHeaderDay(date);
+
+        } else if (this._isToday(date)) {
+          header['main'] = 'Today';
+          header['secondary'] = this._getHeaderDay(date);
+
+        } else if (this._isThisWeekBeforeYesterday(date)) {
+          header['main'] = 'This Week Before Yesterday';
+          header['secondary'] = this._getWeekRangeBefore(date);
+
+        } else if (this._isThisWeekStartingTomorrow(date)) {
+          // If previous orders are shown two 'this week' groups are displayed, so the name is changed.
+          header['main'] = (!this._showPrevious) ? 'This week' : 'This Week Starting Tomorrow';
+          header['secondary'] = this._getWeekRangeAfter(date);
+
+        } else if (this._isUpcoming(date)) {
+          header['main'] = 'Upcoming';
+          header['secondary'] = 'After this week';
+        }
+
+        return header;
+      }
+
+      /*
+       * Updating _displayedHeadersList associative array (structure: {'orderID':'headerDisplayed'}).
+       */
+      _updatedisplayedHeadersList(change) {
+        const currentList = change.base;
+        if (!currentList) {
+          return;
+        }
+
+        this._displayedHeadersList = {};
+        // _usedGroups is used for checking which header was used and should not be displayed ('Recent', 'Yesterday' etc.)
+        this._usedGroups = [false, false, false, false, false, false];
+
+        currentList.forEach((item) => {
+          if (this._isRecent(item.date) && !this._usedGroups[0]) {
+            this._displayedHeadersList[item.id] = this._usedGroups[0] = true;
+
+          } else if (this._isYesterday(item.date) && !this._usedGroups[1]) {
+            this._displayedHeadersList[item.id] = this._usedGroups[1] = true;
+
+          } else if (this._isToday(item.date) && !this._usedGroups[2]) {
+            this._displayedHeadersList[item.id] = this._usedGroups[2] = true;
+
+          } else if (this._isThisWeekBeforeYesterday(item.date) && !this._usedGroups[3]) {
+            this._displayedHeadersList[item.id] = this._usedGroups[3] = true;
+
+          } else if (this._isThisWeekStartingTomorrow(item.date) && !this._usedGroups[4]) {
+            this._displayedHeadersList[item.id] = this._usedGroups[4] = true;
+
+          } else if (this._isUpcoming(item.date) && !this._usedGroups[5]) {
+            this._displayedHeadersList[item.id] = this._usedGroups[5] = true;
+
+          } else {
+            this._displayedHeadersList[item.id] = false;
+          }
+        });
+      }
+
+      /*
+       * Check from _displayedHeadersList if header should be displayed in this order element.
+       */
+      _displayHeader(orderID) {
+        return this._displayedHeadersList[orderID];
       }
 
       _openNewOrderDialog() {
@@ -127,7 +224,28 @@
       _onSave(e) {
         this.$server.onSave(e.detail);
       }
-      
+
+      _selectItem(e) {
+        e.target.selected = true;
+        this._notifyResize();
+      }
+
+      _unselectItem(e) {
+        e.target.selected = false;
+        this._notifyResize();
+      }
+
+      _notifyResize() {
+        // iron-list needs to be resized both before and after rendering the list.
+        // Without double resize, elements will be rendered on top of each others.
+        this.$.list.notifyResize();
+        this.dispatchEvent(new CustomEvent('notify-resize'));
+        Polymer.RenderStatus.afterNextRender(this, () => {
+          this.$.list.notifyResize();
+          this.dispatchEvent(new CustomEvent('notify-resize'));
+        });
+      }
+
       showErrorMessage(message) {
         Polymer.Async.animationFrame.run(() => {
           window.alert(message);

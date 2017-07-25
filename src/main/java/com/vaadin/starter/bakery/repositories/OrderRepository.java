@@ -20,7 +20,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 	Page<Order> findByCustomerFullNameContainingIgnoreCaseOrStateIn(String searchQuery,
 			Collection<OrderState> orderStates, Pageable pageable);
 
-	@Query("SELECT o FROM OrderInfo o WHERE (LOWER(o.customer.fullName) LIKE CONCAT('%', LOWER(?1), '%') OR o.state IN ?2) AND o.dueDate >= ?3")
+	@Query("SELECT o FROM OrderInfo o WHERE (LOWER(o.customer.fullName) LIKE CONCAT('%', LOWER(?1), '%') OR o.state IN ?2) AND o.dueDate > ?3")
 	Page<Order> findByCustomerFullNameContainingIgnoreCaseOrStateInAndDueDateAfter(String searchQuery,
 			Collection<OrderState> orderStates, LocalDate dueDate, Pageable pageable);
 
