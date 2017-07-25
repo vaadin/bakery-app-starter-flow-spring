@@ -66,24 +66,24 @@
         </template>
 
         <template is="dom-if" if="[[_isYesterday(item.date)]]">
-          <h3 id="time">[[_getTime(item.date)]]</h3>
+          <h3 id="time">[[_getTime(item.time)]]</h3>
           <div id="place">[[item.place]]</div>
         </template>
 
         <template is="dom-if" if="[[_isToday(item.date)]]">
-          <h3 id="time">[[_getTime(item.date)]]</h3>
+          <h3 id="time">[[_getTime(item.time)]]</h3>
           <div id="place">[[item.place]]</div>
         </template>
 
         <template is="dom-if" if="[[_isThisWeekBeforeYesterday(item.date)]]">
           <h3 id="short-day">[[_getShortDay(item.date)]]</h3>
-          <div id="secondary-time">[[_getTime(item.date)]]</div>
+          <div id="secondary-time">[[_getTime(item.time)]]</div>
           <div id="place">[[item.place]]</div>
         </template>
 
         <template is="dom-if" if="[[_isThisWeekStartingTomorrow(item.date)]]">
           <h3 id="short-day">[[_getShortDay(item.date)]]</h3>
-          <div id="secondary-time">[[_getTime(item.date)]]</div>
+          <div id="secondary-time">[[_getTime(item.time)]]</div>
           <div id="place">[[item.place]]</div>
         </template>
 

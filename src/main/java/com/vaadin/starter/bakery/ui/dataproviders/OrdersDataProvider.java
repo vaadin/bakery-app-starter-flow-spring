@@ -44,29 +44,19 @@ public class OrdersDataProvider {
 		this.productsProvider = productsProvider;
 	}
 
-	private LocalDate filterDate = LocalDate.now().minusDays(1);
-
-	public PageInfo getOrdersList(Pageable pageable) {
+	public PageInfo getOrdersList(String filter, boolean showPrevious, Pageable pageable) {
 		List<Order> list = new ArrayList<>();
-		fetchFromBackEnd(pageable).forEach(entityOrder -> list.add(OrdersDataProvider.toUIEntity(entityOrder)));
+		fetchFromBackEnd(filter, showPrevious, pageable)
+				.forEach(entityOrder -> list.add(OrdersDataProvider.toUIEntity(entityOrder)));
 		return new PageInfo(list, pageable.getPageNumber());
 	}
 
-	public List<Order> getOrdersList(String filter, boolean showPrevious) {
-		LocalDate startOfToday = LocalDate.now();
-		return getOrderService()
-				.findAnyMatchingAfterDueDate(Optional.of(filter),
-						showPrevious ? Optional.empty() : Optional.of(startOfToday.minusDays(1)), null)
-				.map(OrdersDataProvider::toUIEntity)
-				.getContent();
-	}
-
 	public long countAnyMatchingAfterDueDate() {
-		return getOrderService().countAnyMatchingAfterDueDate(Optional.empty(), getOptionalFilterDate());
+		return getOrderService().countAnyMatchingAfterDueDate(Optional.empty(), getFilterDate(false));
 	}
 
 	public List<com.vaadin.starter.bakery.backend.data.entity.Order> getOriginalOrdersList() {
-		return fetchFromBackEnd(null).getContent();
+		return fetchFromBackEnd(null, false, null).getContent();
 	}
 
 	public DashboardData getDashboardData() {
@@ -115,24 +105,25 @@ public class OrdersDataProvider {
 		return uiHistory;
 	}
 
-	protected Page<com.vaadin.starter.bakery.backend.data.entity.Order> fetchFromBackEnd(Pageable pageable) {
-		return getOrderService().findAnyMatchingAfterDueDate(Optional.empty(), getOptionalFilterDate(), pageable);
+	protected Page<com.vaadin.starter.bakery.backend.data.entity.Order> fetchFromBackEnd(String filter,
+			boolean showPrevious, Pageable pageable) {
+		return getOrderService().findAnyMatchingAfterDueDate(getFilter(filter), getFilterDate(showPrevious), pageable);
 	}
 
-	private Optional<LocalDate> getOptionalFilterDate() {
-		if (filterDate == null) {
+	private Optional<String> getFilter(String filter) {
+		if (filter == null) {
 			return Optional.empty();
-		} else {
-			return Optional.of(filterDate);
 		}
+
+		return Optional.of(filter);
 	}
 
-	public void setIncludePast(boolean includePast) {
-		if (includePast) {
-			filterDate = null;
-		} else {
-			filterDate = LocalDate.now().minusDays(1);
+	private Optional<LocalDate> getFilterDate(boolean showPrevious) {
+		if (showPrevious) {
+			return Optional.empty();
 		}
+
+		return Optional.of(LocalDate.now().minusDays(1));
 	}
 
 	private OrderService getOrderService() {

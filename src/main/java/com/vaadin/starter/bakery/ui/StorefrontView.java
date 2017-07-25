@@ -18,8 +18,9 @@ package com.vaadin.starter.bakery.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.vaadin.starter.bakery.ui.entities.Order;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 
 import com.vaadin.annotations.ClientDelegate;
 import com.vaadin.annotations.HtmlImport;
@@ -31,6 +32,7 @@ import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.starter.bakery.ui.dataproviders.ProductsDataProvider;
+import com.vaadin.starter.bakery.ui.entities.Order;
 import com.vaadin.starter.bakery.ui.entities.Product;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.ui.AttachEvent;
@@ -84,6 +86,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 	@ClientDelegate
 	private void onFiltersChanged(String filter, boolean showPrevious) {
-		getModel().setOrders(ordersProvider.getOrdersList(filter, showPrevious));
+		PageRequest pr = new PageRequest(0, 200, Direction.ASC, "dueDate", "dueTime");
+		getModel().setOrders(ordersProvider.getOrdersList(filter, showPrevious, pr).getOrders());
 	}
 }

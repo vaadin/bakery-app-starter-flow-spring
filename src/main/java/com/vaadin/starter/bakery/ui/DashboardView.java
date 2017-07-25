@@ -79,7 +79,7 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> implemen
 	@EventHandler
 	private void loadOrdersPage(@EventData("event.detail.page") int page,
 			@EventData("event.detail.pageSize") int pageSize) {
-		PageInfo pageInfo = ordersProvider.getOrdersList(new PageRequest(page, pageSize));
+		PageInfo pageInfo = ordersProvider.getOrdersList(null, false, new PageRequest(page, pageSize));
 		// It should be easier to use a complex object as function argument
 		String json = new Gson().toJson(pageInfo);
 		getElement().callFunction("loadPage", json);
