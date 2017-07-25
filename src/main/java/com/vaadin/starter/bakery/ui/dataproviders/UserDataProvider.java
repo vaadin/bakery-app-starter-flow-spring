@@ -41,7 +41,7 @@ public class UserDataProvider {
 		uiEntity.setLast(dataEntity.getLastName());
 		uiEntity.setEmail(dataEntity.getEmail());
 		uiEntity.setPassword(null); // do not send the password to the UI
-		uiEntity.setPicture("https://randomuser.me/api/portraits/women/10.jpg");
+		uiEntity.setPicture(dataEntity.getPhotoUrl());
 
 		switch (dataEntity.getRole().toLowerCase()) {
 		case "barista":
@@ -74,6 +74,7 @@ public class UserDataProvider {
 
 		dataEntity.setFirstName(uiEntity.getName());
 		dataEntity.setLastName(uiEntity.getLast());
+		dataEntity.setPhotoUrl(uiEntity.getPicture());
 		dataEntity.setEmail(uiEntity.getEmail());
 		if (uiEntity.getPassword() != null) {
 			dataEntity.setPassword(userService.encodePassword(uiEntity.getPassword()));

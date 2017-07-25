@@ -35,6 +35,9 @@ public class User extends AbstractEntity {
 	@Size(max = 255)
 	private String role;
 
+	@Size(max = 2083)
+	private String photoUrl;
+
 	public User() {
 		// An empty constructor is needed for all beans
 	}
@@ -51,6 +54,11 @@ public class User extends AbstractEntity {
 		this.lastName = lastName;
 		this.password = password;
 		this.role = role;
+	}
+
+	public User(String email, String firstName, String lastName, String password, String role, String photoUrl) {
+		this(email, firstName, lastName, password, role);
+		this.photoUrl = photoUrl;
 	}
 
 	public String getPassword() {
@@ -93,4 +101,11 @@ public class User extends AbstractEntity {
 		this.email = email;
 	}
 
+	public String getPhotoUrl() {
+		return photoUrl;
+	}
+
+	public void setPhotoUrl(String photoUrl) {
+		this.photoUrl = photoUrl;
+	}
 }
