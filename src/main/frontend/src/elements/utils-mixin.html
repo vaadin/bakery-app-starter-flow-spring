@@ -10,6 +10,22 @@
         return moment(new Date(date)).format('MMM D');
       }
 
+      _getHeaderDay(date) {
+        return moment(new Date(date)).format('ddd, MMM D');
+      }
+
+      _getWeekRangeBefore() {
+        var dayBeforeYesterday = moment().subtract(2, 'day').startOf('day');
+        return this._getHeaderDay(moment().startOf('isoWeek')) + ' - ' +
+               this._getHeaderDay(dayBeforeYesterday);
+      }
+
+      _getWeekRangeAfter(date) {
+        var tomorrow = moment().add(1, 'day').startOf('day');
+        return this._getHeaderDay(tomorrow) + ' - ' +
+               this._getHeaderDay(moment().endOf('isoWeek'));
+      }
+
       _getWeekday(date) {
         return moment(new Date(date)).format('dddd');
       }
@@ -29,16 +45,32 @@
         }
       }
 
+      _isYesterday(date) {
+        return moment().subtract(1, 'days').startOf('day').isSame(new Date(date), 'day');
+      }
+
       _isToday(date) {
         return moment().isSame(new Date(date), 'day');
       }
 
-      _isThisWeek(date) {
-        return moment().isBefore(moment(new Date(date)), 'day') && moment(new Date(date)).isBefore(moment().endOf('week'));
+      _isThisWeekBeforeYesterday(date) {
+        // Is this week until the day before yesterday (excluded)
+        return (moment(new Date(date)).isAfter(moment().startOf('week')) &&
+                moment(new Date(date)).isBefore(moment().subtract(1, 'days').startOf('day')));
+      }
+
+      _isThisWeekStartingTomorrow(date) {
+        // Is this week starting tomorrow
+        return (moment().isBefore(moment(new Date(date)), 'day') &&
+                moment(new Date(date)).isBefore(moment().endOf('week').add(1, 'day')));
+      }
+
+      _isRecent(date) {
+        return moment(new Date(date)).isBefore(moment().startOf('week').add(1, 'day'));
       }
 
       _isUpcoming(date) {
-        return moment(new Date(date)).isAfter(moment().endOf('week'));
+        return moment(new Date(date)).isAfter(moment().endOf('week').add(1, 'day'));
       }
 
       _getTime(time) {
