@@ -18,6 +18,7 @@ package com.vaadin.starter.bakery.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.vaadin.starter.bakery.ui.entities.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.annotations.ClientDelegate;
@@ -30,7 +31,6 @@ import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.starter.bakery.ui.dataproviders.ProductsDataProvider;
-import com.vaadin.starter.bakery.ui.entities.OrderGroupModel;
 import com.vaadin.starter.bakery.ui.entities.Product;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.ui.AttachEvent;
@@ -49,7 +49,7 @@ import elemental.json.JsonObject;
 public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implements View {
 
 	public interface Model extends TemplateModel {
-		void setOrderGroups(List<OrderGroupModel> orderGroups);
+		void setOrders(List<Order> orders);
 
 		void setProducts(List<Product> products);
 	}
@@ -66,7 +66,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	@Override
 	protected void onAttach(AttachEvent event) {
 		super.onAttach(event);
-		getModel().setOrderGroups(new ArrayList<>());
+		getModel().setOrders(new ArrayList<>());
 
 		getModel().setProducts(productProvider.findAll());
 	}
@@ -84,6 +84,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 	@ClientDelegate
 	private void onFiltersChanged(String filter, boolean showPrevious) {
-		getModel().setOrderGroups(ordersProvider.getOrderGroups(filter, showPrevious));
+		getModel().setOrders(ordersProvider.getOrdersList(filter, showPrevious));
 	}
 }
