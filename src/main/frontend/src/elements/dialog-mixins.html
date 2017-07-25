@@ -55,7 +55,14 @@
       }
 
       close(e) {
-        this.opened = false;
+        if (
+          !this.$.fore ||
+          !this.$.fore.querySelector('user-edit') ||
+          !this.$.fore.querySelector('user-edit')._dirty ||
+          window.confirm('Are you sure you want to cancel edits?')
+        ) {
+          this.opened = false;
+        }
       }
     };
 
