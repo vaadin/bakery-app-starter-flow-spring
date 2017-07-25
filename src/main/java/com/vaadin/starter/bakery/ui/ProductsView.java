@@ -62,14 +62,6 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 			String errorMessage = getErrorMessage(e);
 			getElement().callFunction("showErrorMessage", errorMessage);
 			getLogger().error("Error on saving product: " + errorMessage);
-		} catch (TransactionSystemException e) {
-			//TODO Figure out why ConstraintViolationException is being wrapped by TransactionSystemException on update
-			String errorMessage = "Product could not be saved.";
-			if (e.getRootCause() instanceof ConstraintViolationException) {
-				errorMessage = getErrorMessage((ConstraintViolationException)e.getRootCause());
-			}
-			getElement().callFunction("showErrorMessage", errorMessage);
-			getLogger().error("Error on saving product: " + errorMessage);
 		} catch (Exception e) {
 			getElement().callFunction("showErrorMessage", "Product could not be saved.");
 			getLogger().error("Error on saving product: " + e.getMessage());
@@ -77,12 +69,10 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 	}
 
 	private String getErrorMessage(ConstraintViolationException e) {
-		String errorMessage = "";
-		Iterator it = e.getConstraintViolations().iterator();
-		while (it.hasNext()) {
-			errorMessage += ((ConstraintViolation) it.next()).getMessage() + " ";
-		}
-		errorMessage = errorMessage.trim();
-		return errorMessage;
+		StringBuilder errorMessage = new StringBuilder();
+		e.getConstraintViolations().forEach(msg ->
+			errorMessage.append(msg.getMessage()).append(" ")
+		);
+		return errorMessage.toString().trim();
 	}
 }
