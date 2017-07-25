@@ -39,11 +39,9 @@ public class OrderService {
 
 	private UserService userService;
 
-	private static Set<OrderState> noOrderStates;
 	private static Set<OrderState> notAvailableStates;
 
 	static {
-		noOrderStates = new HashSet<>();
 		notAvailableStates = new HashSet<>(Arrays.asList(OrderState.values()));
 		notAvailableStates.remove(OrderState.DELIVERED);
 		notAvailableStates.remove(OrderState.READY);
@@ -131,7 +129,7 @@ public class OrderService {
 	}
 
 	private static Set<OrderState> matchingStates(String filter) {
-		return filter.isEmpty() ? noOrderStates : Arrays.stream(OrderState.values())
+		return filter.isEmpty() ? Collections.emptySet() : Arrays.stream(OrderState.values())
 				.filter(e -> e.getDisplayName().toLowerCase().contains(filter.toLowerCase()))
 				.collect(toSet());
 	}
