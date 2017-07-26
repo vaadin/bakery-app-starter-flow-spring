@@ -5,7 +5,6 @@ import java.time.LocalTime;
 import java.time.MonthDay;
 import java.time.Year;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -45,39 +44,19 @@ public class OrdersDataProvider {
 		this.productsProvider = productsProvider;
 	}
 
-	private LocalDate filterDate = LocalDate.now().minusDays(1);
-
-	public List<Order> getOrdersList(int start, int count) {
-		List<Order> result = getOrdersList();
-		if (start > result.size())
-			return Collections.emptyList();
-
-		if (start + count > result.size())
-			return result.subList(start, result.size() - 1);
-
-		return result.subList(start, start + count);
-	}
-
-	public PageInfo getOrdersList(Pageable pageable) {
+	public PageInfo getOrdersList(String filter, boolean showPrevious, Pageable pageable) {
 		List<Order> list = new ArrayList<>();
-		fetchFromBackEnd(pageable).forEach(entityOrder -> list.add(OrdersDataProvider.toUIEntity(entityOrder)));
-		return new PageInfo(list,pageable.getPageNumber());
+		fetchFromBackEnd(filter, showPrevious, pageable)
+				.forEach(entityOrder -> list.add(OrdersDataProvider.toUIEntity(entityOrder)));
+		return new PageInfo(list, pageable.getPageNumber());
 	}
 
 	public long countAnyMatchingAfterDueDate() {
-		return getOrderService().countAnyMatchingAfterDueDate(Optional.empty(), getOptionalFilterDate());
+		return getOrderService().countAnyMatchingAfterDueDate(Optional.empty(), getFilterDate(false));
 	}
 
 	public List<com.vaadin.starter.bakery.backend.data.entity.Order> getOriginalOrdersList() {
-		return fetchFromBackEnd(null).getContent();
-	}
-
-	public List<Order> getOrdersList() {
-		List<Order> list = new ArrayList<>();
-		fetchFromBackEnd(null).forEach(entityOrder -> list.add(OrdersDataProvider.toUIEntity(entityOrder)));
-
-		return list;
-
+		return fetchFromBackEnd(null, false, null).getContent();
 	}
 
 	public DashboardData getDashboardData() {
@@ -126,24 +105,25 @@ public class OrdersDataProvider {
 		return uiHistory;
 	}
 
-	protected Page<com.vaadin.starter.bakery.backend.data.entity.Order> fetchFromBackEnd(Pageable pageable) {
-		return getOrderService().findAnyMatchingAfterDueDate(Optional.empty(), getOptionalFilterDate(), pageable);
+	protected Page<com.vaadin.starter.bakery.backend.data.entity.Order> fetchFromBackEnd(String filter,
+			boolean showPrevious, Pageable pageable) {
+		return getOrderService().findAnyMatchingAfterDueDate(getFilter(filter), getFilterDate(showPrevious), pageable);
 	}
 
-	private Optional<LocalDate> getOptionalFilterDate() {
-		if (filterDate == null) {
+	private Optional<String> getFilter(String filter) {
+		if (filter == null) {
 			return Optional.empty();
-		} else {
-			return Optional.of(filterDate);
 		}
+
+		return Optional.of(filter);
 	}
 
-	public void setIncludePast(boolean includePast) {
-		if (includePast) {
-			filterDate = null;
-		} else {
-			filterDate = LocalDate.now().minusDays(1);
+	private Optional<LocalDate> getFilterDate(boolean showPrevious) {
+		if (showPrevious) {
+			return Optional.empty();
 		}
+
+		return Optional.of(LocalDate.now().minusDays(1));
 	}
 
 	private OrderService getOrderService() {
@@ -228,5 +208,4 @@ public class OrdersDataProvider {
 
 		return dataEntity;
 	}
-
 }

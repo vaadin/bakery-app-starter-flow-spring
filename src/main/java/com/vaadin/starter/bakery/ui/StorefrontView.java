@@ -15,15 +15,12 @@
  */
 package com.vaadin.starter.bakery.ui;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 
 import com.vaadin.annotations.ClientDelegate;
 import com.vaadin.annotations.HtmlImport;
@@ -33,7 +30,6 @@ import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
-import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.starter.bakery.ui.dataproviders.ProductsDataProvider;
 import com.vaadin.starter.bakery.ui.entities.Order;
@@ -54,61 +50,17 @@ import elemental.json.JsonObject;
 @ParentView(BakeryApp.class)
 public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implements View {
 
-	private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("EEE, MMM dd");
-
-	public static class OrderGroupModel {
-		private String mainTitle;
-		private String secondaryTitle;
-		private List<Order> orders;
-
-		public OrderGroupModel() {
-		}
-
-		public OrderGroupModel(String mainTitle, String secondaryTitle, List<Order> orders) {
-			this.mainTitle = mainTitle;
-			this.secondaryTitle = secondaryTitle;
-			this.orders = orders;
-		}
-
-		public String getMainTitle() {
-			return mainTitle;
-		}
-
-		public void setMainTitle(String mainTitle) {
-			this.mainTitle = mainTitle;
-		}
-
-		public String getSecondaryTitle() {
-			return secondaryTitle;
-		}
-
-		public void setSecondaryTitle(String secondaryTitle) {
-			this.secondaryTitle = secondaryTitle;
-		}
-
-		public List<Order> getOrders() {
-			return orders;
-		}
-
-		public void setOrders(List<Order> orders) {
-			this.orders = orders;
-		}
-	}
-
 	public interface Model extends TemplateModel {
-		void setOrderGroups(List<OrderGroupModel> orderGroups);
+		void setOrders(List<Order> orders);
 
 		void setProducts(List<Product> products);
 	}
 
-	private OrderService orderService;
 	private ProductsDataProvider productProvider;
 	private OrdersDataProvider ordersProvider;
 
 	@Autowired
-	public StorefrontView(OrdersDataProvider ordersProvider, OrderService orderService,
-			ProductsDataProvider productProvider) {
-		this.orderService = orderService;
+	public StorefrontView(OrdersDataProvider ordersProvider, ProductsDataProvider productProvider) {
 		this.productProvider = productProvider;
 		this.ordersProvider = ordersProvider;
 	}
@@ -116,7 +68,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	@Override
 	protected void onAttach(AttachEvent event) {
 		super.onAttach(event);
-		getModel().setOrderGroups(new ArrayList<>());
+		getModel().setOrders(new ArrayList<>());
 
 		getModel().setProducts(productProvider.findAll());
 	}
@@ -134,45 +86,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 	@ClientDelegate
 	private void onFiltersChanged(String filter, boolean showPrevious) {
-		LocalDate startOfToday = LocalDate.now();
-		LocalDate startOfTomorrow = startOfToday.plusDays(1);
-		LocalDate startOfNextWeek = startOfToday.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
-
-		List<Order> previous = new ArrayList<>();
-		List<Order> today = new ArrayList<>();
-		List<Order> thisWeek = new ArrayList<>();
-		List<Order> upcoming = new ArrayList<>();
-
-		orderService
-				.findAnyMatchingAfterDueDate(Optional.of(filter),
-						showPrevious ? Optional.empty() : Optional.of(startOfToday.minusDays(1)), null)
-				.forEach(order -> {
-					LocalDate date = order.getDueDate();
-					List<Order> group = upcoming;
-					if (date.isBefore(startOfToday)) {
-						group = previous;
-					} else if (date.isBefore(startOfTomorrow)) {
-						group = today;
-					} else if (date.isBefore(startOfNextWeek)) {
-						group = thisWeek;
-					}
-					group.add(OrdersDataProvider.toUIEntity(order));
-				});
-
-		List<OrderGroupModel> groups = new ArrayList<>();
-		if (!previous.isEmpty()) {
-			groups.add(new OrderGroupModel("Previous", "Yesterday and earlier", previous));
-		}
-		if (!today.isEmpty()) {
-			groups.add(new OrderGroupModel("Today", DATE_FORMATTER.format(startOfToday), today));
-		}
-		if (!thisWeek.isEmpty()) {
-			groups.add(new OrderGroupModel("This week", DATE_FORMATTER.format(startOfTomorrow) + " – "
-					+ DATE_FORMATTER.format(startOfNextWeek.minusDays(1)), thisWeek));
-		}
-		if (!upcoming.isEmpty()) {
-			groups.add(new OrderGroupModel("Upcoming", "After this week", upcoming));
-		}
-		getModel().setOrderGroups(groups);
+		// the hardcoded limit of 200 is here until lazy loading is implemented (see BFF-120)
+		PageRequest pr = new PageRequest(0, 200, Direction.ASC, "dueDate", "dueTime");
+		getModel().setOrders(ordersProvider.getOrdersList(filter, showPrevious, pr).getOrders());
 	}
 }
