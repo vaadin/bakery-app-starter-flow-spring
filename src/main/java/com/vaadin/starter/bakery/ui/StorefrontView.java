@@ -17,6 +17,7 @@ package com.vaadin.starter.bakery.ui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -52,6 +53,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 	public interface Model extends TemplateModel {
 		void setOrders(List<Order> orders);
+
+		List<Order> getOrders();
 
 		void setProducts(List<Product> products);
 	}
@@ -89,5 +92,46 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		// the hardcoded limit of 200 is here until lazy loading is implemented (see BFF-120)
 		PageRequest pr = new PageRequest(0, 200, Direction.ASC, "dueDate", "dueTime");
 		getModel().setOrders(ordersProvider.getOrdersList(filter, showPrevious, pr).getOrders());
+	}
+
+	@ClientDelegate
+	private void addComment(String orderId, String message) {
+		try {
+			ordersProvider.addOrderComment(orderId, message);
+		} catch (Exception e) {
+			getElement().callFunction("showErrorMessage", e.getMessage());
+		} finally {
+			updateOrderInModel(orderId);
+		}
+	}
+
+	private void updateOrderInModel(String orderId) {
+		int idx = findOrderIndexInModel(orderId);
+		if (idx == -1) {
+			return;
+		}
+
+		try {
+			getModel().getOrders().set(idx, ordersProvider.getOrder(orderId));
+		} catch (Exception e) {
+			// exclude the order from the model if ordersProvider.getOrder() throws
+			getModel().setOrders(
+					getModel().getOrders().stream()
+							.filter(order -> !order.getId().equals(orderId))
+							.collect(Collectors.toList()));
+		}
+	}
+
+	private int findOrderIndexInModel(String orderId) {
+		int idx = -1;
+		List<Order> orders = getModel().getOrders();
+		for (int i = 0; i < orders.size(); i += 1) {
+			Order modelOrder = orders.get(i);
+			if (modelOrder.getId().equals(orderId)) {
+				idx = i;
+				break;
+			}
+		}
+		return idx;
 	}
 }

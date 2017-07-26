@@ -29,6 +29,8 @@ import com.vaadin.starter.bakery.ui.utils.DashboardUtils.PageInfo;
 
 import elemental.json.JsonObject;
 
+import javax.validation.ValidationException;
+
 @Service
 public class OrdersDataProvider {
 
@@ -99,7 +101,7 @@ public class OrdersDataProvider {
 			uiItem.setDate(dataItem.getTimestamp().toString());
 			uiItem.setMessage(dataItem.getMessage());
 			uiItem.setName(dataItem.getCreatedBy().getFirstName());
-			uiItem.setStatus(dataItem.getNewState().getDisplayName());
+			uiItem.setStatus(dataItem.getNewState() == null ? "" : dataItem.getNewState().getDisplayName());
 			uiHistory.add(uiItem);
 		}
 		return uiHistory;
@@ -207,5 +209,25 @@ public class OrdersDataProvider {
 		dataEntity.setDetails(uiCustomer.getDetails());
 
 		return dataEntity;
+	}
+
+	public void addOrderComment(String orderId, String message) {
+		com.vaadin.starter.bakery.backend.data.entity.Order dataEntity =
+				getOrderService().findOrder(Long.valueOf(orderId));
+		if (dataEntity == null) {
+			throw new ValidationException("Someone has already deleted the order. Please refresh the page.");
+		}
+
+		orderService.addHistoryItem(dataEntity, message);
+	}
+
+	public Order getOrder(String orderId) {
+		com.vaadin.starter.bakery.backend.data.entity.Order dataEntity =
+				getOrderService().findOrder(Long.valueOf(orderId));
+		if (dataEntity == null) {
+			throw new ValidationException("Someone has already deleted the order. Please refresh the page.");
+		}
+
+		return toUIEntity(dataEntity);
 	}
 }
