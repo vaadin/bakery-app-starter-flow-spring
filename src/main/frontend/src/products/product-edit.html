@@ -33,7 +33,7 @@
     <vaadin-form-layout>
       <vaadin-text-field label="Product name" value="{{product.name}}" colspan="2"></vaadin-text-field>
       <br>
-      <vaadin-text-field label="Unit price" value="{{_getPrice(product.price)}}" colspan="2"></vaadin-text-field>
+      <vaadin-text-field label="Unit price" value="{{_getPrice(product.price)}}" id="price" colspan="2"></vaadin-text-field>
     </vaadin-form-layout>
     <div class="flex buttons">
       <vaadin-button on-click="_save" theme="primary">Save</vaadin-button>
@@ -68,6 +68,7 @@
       }
 
       _save() {
+        this.product.price = (Number.parseFloat(this.$.price.value || 0, 2) * 100).toFixed(0);
         this.dispatchEvent(new CustomEvent('save', {bubbles: true, composed: true, detail: this.product}));
       }
 

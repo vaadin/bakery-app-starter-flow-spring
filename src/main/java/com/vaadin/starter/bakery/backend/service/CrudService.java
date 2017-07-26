@@ -4,16 +4,16 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
 
 public interface CrudService<T extends AbstractEntity> {
 
-	CrudRepository<T, Long> getRepository();
+	JpaRepository<T, Long> getRepository();
 
 	default T save(T entity) {
-		return getRepository().save(entity);
+		return getRepository().saveAndFlush(entity);
 	}
 
 	default void delete(long id) {
