@@ -1,6 +1,8 @@
 package com.vaadin.starter.bakery.ui.entities;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
 	private String id;
 	private String name;
 	private String last;
@@ -8,6 +10,10 @@ public class User {
 	private String picture;
 	private String role;
 	private String password;
+
+	public User() {
+
+	}
 
 	public String getId() {
 		return id;

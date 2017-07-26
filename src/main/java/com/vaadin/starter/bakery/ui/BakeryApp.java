@@ -25,10 +25,11 @@ public class BakeryApp extends PolymerTemplate<BakeryApp.Model> implements HasCh
 
 	@Override
 	public void onLocationChange(LocationChangeEvent locationChangeEvent) {
-		String path = locationChangeEvent.getLocation().getPath();
-		getModel().setPage(path);
+		String path = locationChangeEvent.getLocation().getFirstSegment();
 		if (path.isEmpty()) {
 			locationChangeEvent.getUI().navigateTo(BakeryConst.PAGE_DEFAULT);
+		} else {
+			getModel().setPage(path);
 		}
 	}
 

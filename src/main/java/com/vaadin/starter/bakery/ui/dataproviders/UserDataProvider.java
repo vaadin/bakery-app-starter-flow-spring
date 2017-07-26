@@ -26,6 +26,10 @@ public class UserDataProvider {
 		this.userService = userService;
 	}
 
+	public User findById(Long id) {
+		return toUIEntity(userService.getRepository().findOne(id));
+	}
+
 	public List<User> findAll() {
 		return userService.getRepository().findAll().stream().map(this::toUIEntity).collect(Collectors.toList());
 	}
@@ -34,8 +38,7 @@ public class UserDataProvider {
 		userService.save(toDataEntity(user));
 	}
 
-    private User toUIEntity(
-            com.vaadin.starter.bakery.backend.data.entity.User dataEntity) {
+	private User toUIEntity(com.vaadin.starter.bakery.backend.data.entity.User dataEntity) {
 		User uiEntity = new User();
 		uiEntity.setId(dataEntity.getId().toString());
 		uiEntity.setName(dataEntity.getFirstName());
@@ -59,9 +62,8 @@ public class UserDataProvider {
 		return uiEntity;
 	}
 
-    private com.vaadin.starter.bakery.backend.data.entity.User toDataEntity(
-            User uiEntity) {
-        com.vaadin.starter.bakery.backend.data.entity.User dataEntity = null;
+	private com.vaadin.starter.bakery.backend.data.entity.User toDataEntity(User uiEntity) {
+		com.vaadin.starter.bakery.backend.data.entity.User dataEntity = null;
 		try {
 			long id = Long.parseLong(uiEntity.getId());
 			dataEntity = userService.load(id);
@@ -70,7 +72,7 @@ public class UserDataProvider {
 		}
 
 		if (dataEntity == null) {
-            dataEntity = new com.vaadin.starter.bakery.backend.data.entity.User();
+			dataEntity = new com.vaadin.starter.bakery.backend.data.entity.User();
 		}
 
 		dataEntity.setFirstName(uiEntity.getName());
@@ -96,8 +98,7 @@ public class UserDataProvider {
 		return dataEntity;
 	}
 
-    private com.vaadin.starter.bakery.backend.data.entity.User toDataEntity(
-            JsonObject user) {
+	private com.vaadin.starter.bakery.backend.data.entity.User toDataEntity(JsonObject user) {
 		Gson gson = new Gson();
 		User uiEntity = gson.fromJson(user.toJson(), User.class);
 		return toDataEntity(uiEntity);
@@ -105,5 +106,9 @@ public class UserDataProvider {
 
 	public void delete(String userId) {
 		userService.delete(Long.parseLong(userId));
+	}
+
+	public User getCurrentUser() {
+		return toUIEntity(userService.getCurrentUser());
 	}
 }
