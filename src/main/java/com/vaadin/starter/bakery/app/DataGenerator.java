@@ -335,10 +335,17 @@ public class DataGenerator implements HasLogger {
 	}
 
 	private void createUsers(UserRepository userRepository) {
-		baker = userRepository.save(new User("baker@vaadin.com", "Heidi", "Carter", passwordEncoder.encode("baker"), Role.BAKER));
+		final Random random = new Random();
+		baker = userRepository.save(new User("baker@vaadin.com", "Heidi", "Carter",
+				passwordEncoder.encode("baker"), Role.BAKER,
+				"https://randomuser.me/api/portraits/women/" + random.nextInt(50) + ".jpg"));
 		barista = userRepository
-				.save(new User("barista@vaadin.com", "Malin", "Castro", passwordEncoder.encode("barista"), Role.BARISTA));
-		admin = userRepository.save(new User("admin@vaadin.com", "Göran", "Rich", passwordEncoder.encode("admin"), Role.ADMIN));
+				.save(new User("barista@vaadin.com", "Malin", "Castro",
+						passwordEncoder.encode("barista"), Role.BARISTA,
+						"https://randomuser.me/api/portraits/men/" + random.nextInt(50) + ".jpg"));
+		admin = userRepository.save(new User("admin@vaadin.com", "Göran", "Rich",
+				passwordEncoder.encode("admin"), Role.ADMIN,
+				"https://randomuser.me/api/portraits/women/" + random.nextInt(50) + ".jpg"));
 		users.add(barista);
 		users.add(admin);
 		users.add(baker);
