@@ -1,6 +1,7 @@
 package com.vaadin.starter.bakery.ui.dataproviders;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class UserDataProvider {
 		uiEntity.setLast(dataEntity.getLastName());
 		uiEntity.setEmail(dataEntity.getEmail());
 		uiEntity.setPassword(null); // do not send the password to the UI
-		uiEntity.setPicture(dataEntity.getPhotoUrl());
+		uiEntity.setPicture(Optional.ofNullable(dataEntity.getPhotoUrl()).orElse("images/default-picture.png"));
 
 		switch (dataEntity.getRole().toLowerCase()) {
 		case "barista":
