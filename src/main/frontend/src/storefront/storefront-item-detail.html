@@ -51,6 +51,10 @@
         margin-top: var(--valo-space-m);
       }
 
+      .full-width {
+        width: 100%;
+      }
+
       .count {
         background: var(--valo-shade-10pct);
         border-radius: var(--valo-border-radius);
@@ -60,7 +64,8 @@
         text-align: center;
       }
 
-      .comment {
+      .comment,
+      .comment-button {
         font-size: var(--valo-font-size-s);
       }
 
@@ -151,15 +156,14 @@
                     <span class="secondary">[[_getFullDate(event.date)]]</span>
                     <storefront-item-badge status="[[event.status]]" small></storefront-item-badge>
                   </div>
+                  <div class="comment">[[event.message]]</div>
                 </template>
               </div>
-              <div class="flex column space-top">
-                <template is="dom-repeat" items="[[item.comments]]" as="comment">
-                  <span class="comment">[[comment.message]]</span>
-                </template>
-              </div>
-              <vaadin-text-field placeholder="Add comment" class="space-top">
-                <div slot="suffix" class="comment-suffix">Send</div>
+              <vaadin-text-field placeholder="Add comment" class="space-top full-width"
+                                 value="{{_comment}}" on-keydown="_onCommentKeydown">
+                <div slot="suffix" class="comment-suffix">
+                  <vaadin-button theme="tertiary" class="comment-button" on-click="_sendComment">Send</vaadin-button>
+                </div>
               </vaadin-text-field>
             </template>
           </div>
@@ -197,12 +201,44 @@
           review: {
             type: Boolean,
             value: false
+          },
+          _comment: {
+            type: String,
+            value: ''
           }
         };
       }
 
       close() {
         this.dispatchEvent(new CustomEvent('close', {bubbles: true, composed: true}));
+      }
+
+      _sendComment() {
+        if (this._comment.trim() === '') {
+          return;
+        }
+
+        if (!this.item.history) {
+          this.set('item.history', []);
+        }
+        this.push('item.history', {
+          name: 'You',
+          date: Date.now(),
+          message: this._comment
+        });
+
+        const detail = {
+          orderId: this.item.id,
+          message: this._comment
+        };
+        this.dispatchEvent(new CustomEvent('comment-added', {bubbles: true, composed: true, detail: detail}));
+        this._comment = '';
+      }
+
+      _onCommentKeydown(event) {
+        if (event.key === 'Enter') {
+          this._sendComment();
+        }
       }
 
       _edit() {
