@@ -80,7 +80,7 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 				message += " Product is currently in use.";
 			}
 			getElement().callFunction("showErrorMessage", message);
-			getLogger().error("Error on eleting product: " + e.getMessage());
+			getLogger().error("Error on deleting product: " + e.getMessage());
 		}
 	}
 
