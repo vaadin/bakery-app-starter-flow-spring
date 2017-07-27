@@ -7,6 +7,7 @@ import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.vaadin.starter.bakery.backend.data.OrderState;
@@ -17,6 +18,7 @@ public class HistoryItem extends AbstractEntity {
 	private OrderState newState;
 
 	@NotEmpty
+	@NotBlank
 	@Size(max = 255)
 	private String message;
 
