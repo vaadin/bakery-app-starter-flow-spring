@@ -138,9 +138,7 @@
       }
 
       _confirmAndCancel() {
-        if (!this._dirty || window.confirm('Are you sure you want to cancel edits?')) {
-          this._cancel();
-        }
+        this._cancel();
       }
 
       _cancel() {
