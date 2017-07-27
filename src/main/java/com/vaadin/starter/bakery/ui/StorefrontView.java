@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.security.access.annotation.Secured;
 
 import com.vaadin.annotations.ClientDelegate;
 import com.vaadin.annotations.HtmlImport;
@@ -31,6 +32,7 @@ import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
+import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.starter.bakery.ui.dataproviders.ProductsDataProvider;
 import com.vaadin.starter.bakery.ui.entities.Order;
@@ -49,6 +51,7 @@ import elemental.json.JsonObject;
 @Route(BakeryConst.PAGE_STOREFRONT)
 @Route(value = "")
 @ParentView(BakeryApp.class)
+@Secured(Role.BARISTA)
 public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implements View {
 
 	public interface Model extends TemplateModel {
