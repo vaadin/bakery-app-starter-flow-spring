@@ -206,47 +206,40 @@
       }
 
       _edit() {
-        this._do('edit');
+        this._do('edit', this._deepCopy(this.item));
       }
 
       _save() {
-        this._do('save');
+        this._do('save', this.item);
       }
 
-      _do(type) {
+      _do(type, localItem) {
         this.close();
-        const localItem = this._deepCopy(this.item);
         Polymer.RenderStatus.afterNextRender(this, () =>
           this.dispatchEvent(new CustomEvent(type, {bubbles: true, composed: true, detail: localItem})));
       }
 
       _deepCopy(obj) {
-        var copy;
-
-        // Handle the 3 simple types, and null or undefined
         if (null == obj || 'object' != typeof obj) {
           return obj;
         }
 
-        // Handle Date
         if (obj instanceof Date) {
-          copy = new Date();
+          var copy = new Date();
           copy.setTime(obj.getTime());
           return copy;
         }
 
-        // Handle Array
         if (obj instanceof Array) {
-          copy = [];
+          var copy = [];
           for (var i = 0, len = obj.length; i < len; i++) {
             copy[i] = this._deepCopy(obj[i]);
           }
           return copy;
         }
 
-        // Handle Object
         if (obj instanceof Object) {
-          copy = {};
+          var copy = {};
           for (var attr in obj) {
             if (obj.hasOwnProperty(attr)) {
               copy[attr] = this._deepCopy(obj[attr]);
