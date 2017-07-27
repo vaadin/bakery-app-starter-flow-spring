@@ -56,6 +56,10 @@ public class ProductsDataProvider {
 		productService.save(productToSave);
 	}
 
+	public void delete(Long id) {
+		productService.delete(id);
+	}
+
 	private Product toUiEntity(com.vaadin.starter.bakery.backend.data.entity.Product product) {
 		Product uiEntity = new Product();
 
