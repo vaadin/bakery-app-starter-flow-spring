@@ -220,18 +220,20 @@
       }
 
       _deepCopy(obj) {
+        var copy;
+
         if (null == obj || 'object' != typeof obj) {
           return obj;
         }
 
         if (obj instanceof Date) {
-          var copy = new Date();
+          copy = new Date();
           copy.setTime(obj.getTime());
           return copy;
         }
 
         if (obj instanceof Array) {
-          var copy = [];
+          copy = [];
           for (var i = 0, len = obj.length; i < len; i++) {
             copy[i] = this._deepCopy(obj[i]);
           }
@@ -239,7 +241,7 @@
         }
 
         if (obj instanceof Object) {
-          var copy = {};
+          copy = {};
           for (var attr in obj) {
             if (obj.hasOwnProperty(attr)) {
               copy[attr] = this._deepCopy(obj[attr]);
