@@ -7,6 +7,7 @@ import com.vaadin.starter.bakery.ui.entities.Product;
 import com.vaadin.ui.AttachEvent;
 import elemental.json.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.annotation.Secured;
 
 import com.vaadin.flow.router.View;
@@ -65,6 +66,21 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 		} catch (Exception e) {
 			getElement().callFunction("showErrorMessage", "Product could not be saved.");
 			getLogger().error("Error on saving product: " + e.getMessage());
+		}
+	}
+
+	@ClientDelegate
+	public void deleteProduct(String id) {
+		try {
+			productsDataProvider.delete(Long.parseLong(id));
+			getModel().setProducts(productsDataProvider.findAll());
+		} catch (Exception e) {
+			String message = "Product could not be deleted.";
+			if (e instanceof DataIntegrityViolationException) {
+				message += " Product is currently in use.";
+			}
+			getElement().callFunction("showErrorMessage", message);
+			getLogger().error("Error on deleting product: " + e.getMessage());
 		}
 	}
 
