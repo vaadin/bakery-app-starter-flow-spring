@@ -212,22 +212,23 @@ public class OrdersDataProvider {
 	}
 
 	public void addOrderComment(String orderId, String message) {
-		com.vaadin.starter.bakery.backend.data.entity.Order dataEntity =
-				getOrderService().findOrder(Long.valueOf(orderId));
-		if (dataEntity == null) {
-			throw new ValidationException("Someone has already deleted the order. Please refresh the page.");
-		}
+		com.vaadin.starter.bakery.backend.data.entity.Order dataEntity = findOrderById(orderId);
 
 		orderService.addHistoryItem(dataEntity, message);
 	}
 
 	public Order getOrder(String orderId) {
+		com.vaadin.starter.bakery.backend.data.entity.Order dataEntity = findOrderById(orderId);
+
+		return toUIEntity(dataEntity);
+	}
+
+	private com.vaadin.starter.bakery.backend.data.entity.Order findOrderById(String orderId) {
 		com.vaadin.starter.bakery.backend.data.entity.Order dataEntity =
 				getOrderService().findOrder(Long.valueOf(orderId));
 		if (dataEntity == null) {
 			throw new ValidationException("Someone has already deleted the order. Please refresh the page.");
 		}
-
-		return toUIEntity(dataEntity);
+		return dataEntity;
 	}
 }

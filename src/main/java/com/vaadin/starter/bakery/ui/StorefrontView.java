@@ -123,15 +123,13 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	}
 
 	private int findOrderIndexInModel(String orderId) {
-		int idx = -1;
 		List<Order> orders = getModel().getOrders();
 		for (int i = 0; i < orders.size(); i += 1) {
 			Order modelOrder = orders.get(i);
 			if (modelOrder.getId().equals(orderId)) {
-				idx = i;
-				break;
+				return i;
 			}
 		}
-		return idx;
+		return -1;
 	}
 }
