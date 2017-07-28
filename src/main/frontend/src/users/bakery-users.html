@@ -129,16 +129,27 @@
       }
 
       _openNewUserDialog() {
-        this._editUser({});
+        this.setEditableUser('{}');
       }
 
-      _editUser(user) {
-        this._editableUser = user === null ? null : Object.assign({}, user);
+      _editUser(user, old) {
+        if (old === undefined) {
+          return;
+        }
+        if (user != null && user.id) {
+          this.$server.editUser(user.id);
+        } else {
+          this.$server.editUser('');
+        }
+      }
+
+      setEditableUser(user) {
+        this._editableUser = user === null ? null : Object.assign({}, JSON.parse(user));
       }
 
       _onClose() {
         this.$.grid.selectedItems = [];
-        this.$.grid.activeItem = null;
+        this.$.grid.activeItem = {};
         this._editableUser = null;
       }
 
