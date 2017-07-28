@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+
+import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,8 +31,6 @@ import com.vaadin.starter.bakery.ui.entities.Order;
 import com.vaadin.starter.bakery.ui.utils.DashboardUtils.PageInfo;
 
 import elemental.json.JsonObject;
-
-import javax.validation.ValidationException;
 
 @Service
 public class OrdersDataProvider {
@@ -224,11 +225,18 @@ public class OrdersDataProvider {
 	}
 
 	private com.vaadin.starter.bakery.backend.data.entity.Order findOrderById(String orderId) {
-		com.vaadin.starter.bakery.backend.data.entity.Order dataEntity =
-				getOrderService().findOrder(Long.valueOf(orderId));
+		com.vaadin.starter.bakery.backend.data.entity.Order dataEntity = getOrderService()
+				.findOrder(Long.valueOf(orderId));
 		if (dataEntity == null) {
 			throw new ValidationException("Someone has already deleted the order. Please refresh the page.");
 		}
 		return dataEntity;
+	}
+
+	public List<Customer> getCustomersList() {
+		List<Customer> result = getOrderService().findAllCustomers().stream()
+				.map(customer -> toUICustomerEntity(customer)).collect(Collectors.toList());
+		System.out.println("OrdersDataProvider.getCustomersList()  " + result);
+		return result;
 	}
 }
