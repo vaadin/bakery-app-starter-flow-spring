@@ -53,7 +53,7 @@
     <div class="scrollable flex1" id="main">
       <h2 class="flex0">[[_editTitle()]]</h2>
       <iron-form id="itemEditForm">
-        <form  onsubmit="return false">
+        <form on-submit="_submitEditForm">
           <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 4, 1)]]">
             <vaadin-form-item>
               <label slot="label">Due</label>
@@ -245,6 +245,11 @@
           columns: desktopView ? desktopColumns : mobileColumns,
           labelsPosition: 'top'
         }];
+      }
+
+      _submitEditForm(e) {
+        e.preventDefault();
+        return false;
       }
 
       _getConditional(desktopView, desktopColspan, mobileColspan) {
