@@ -17,7 +17,7 @@ package com.vaadin.starter.bakery;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
@@ -33,13 +33,14 @@ import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.vaadin.hummingbird.ext.spring.SpringAwareConfigurator;
 import com.vaadin.hummingbird.ext.spring.VaadinUIScope;
 import com.vaadin.hummingbird.ext.spring.annotations.UIScope;
+import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.util.LocalDateJpaConverter;
 import com.vaadin.starter.bakery.repositories.UserRepository;
@@ -111,16 +112,14 @@ public class BakeryApplicationConfig extends WebSecurityConfigurerAdapter {
             return false;
         }
 
-        @Override
-        public int vote(Authentication authentication, Object object, Collection<ConfigAttribute> attributes) {
-            List<String> roles = attributes.stream().map(it -> it.getAttribute()).collect(Collectors.toList());
-            for (String role : roles) {
-                if (authentication.getAuthorities().contains(new SimpleGrantedAuthority(role))) {
-                    return 1;
-                }
-            }
-            return 0;
-        }
+		@Override
+		public int vote(Authentication authentication, Object object, Collection<ConfigAttribute> attributes) {
+			Set<String> authenticatedUserRoles = authentication.getAuthorities().stream()
+					.map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
+			boolean hasAccess = authenticatedUserRoles.contains(Role.ADMIN) || attributes.stream()
+					.map(ConfigAttribute::getAttribute).anyMatch(authenticatedUserRoles::contains);
+			return hasAccess ? ACCESS_GRANTED : ACCESS_ABSTAIN;
+		}
     }
 
     @Override

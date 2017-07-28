@@ -22,9 +22,11 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.security.access.annotation.Secured;
 
+import com.google.gson.Gson;
 import com.vaadin.annotations.ClientDelegate;
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Tag;
+import com.vaadin.flow.router.LocationChangeEvent;
 import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
@@ -44,7 +46,7 @@ import elemental.json.JsonObject;
  */
 @Tag("bakery-users")
 @HtmlImport("frontend://src/users/bakery-users.html")
-@Route(BakeryConst.PAGE_USERS)
+@Route(BakeryConst.PAGE_USERS + "/{id}")
 @ParentView(BakeryApp.class)
 @Secured(Role.ADMIN)
 public class UsersView extends PolymerTemplate<UsersView.Model> implements View, HasLogger {
@@ -63,17 +65,46 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	}
 
 	@Override
+	public void onLocationChange(LocationChangeEvent locationChangeEvent) {
+		setEditableUser(locationChangeEvent.getPathParameter("id"));
+
+	}
+
+	private void setEditableUser(String userId) {
+		if (userId == null || userId.isEmpty()) {
+			return;
+		}
+
+		Long id = null;
+		String json = null;
+		try {
+			id = Long.parseLong(userId);
+			json = new Gson().toJson(userDataProvider.findById(id));
+		} catch (Exception e) {
+			return;
+		}
+		getElement().callFunction("setEditableUser", json);
+	}
+
+	@Override
 	protected void onAttach(AttachEvent event) {
 		super.onAttach(event);
 		getModel().setUsers(userDataProvider.findAll());
 	}
 
 	@ClientDelegate
+	private void editUser(String userId) {
+		if (userId != null && !userId.isEmpty()) {
+			getUI().get().navigateTo(BakeryConst.PAGE_USERS + "/" + userId);
+		} else {
+			getUI().get().navigateTo(BakeryConst.PAGE_USERS);
+		}
+	}
+
+	@ClientDelegate
 	private void saveUser(JsonObject user) {
-		boolean isInSync = false;
 		try {
 			userDataProvider.save(user);
-			isInSync = true;
 		} catch (DataIntegrityViolationException e) {
 			// Commit failed because of validation errors
 			getModel().setErrorMessage(e.getMessage());
@@ -90,10 +121,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 			getLogger().error("Unable to save entity of type "
 					+ com.vaadin.starter.bakery.backend.data.entity.User.class.getName(), e);
 		} finally {
-			if (!isInSync) {
-				// re-sync the UI state from the DB if the DB operation fails
-				getModel().setUsers(userDataProvider.findAll());
-			}
+			getModel().setUsers(userDataProvider.findAll());
 		}
 	}
 

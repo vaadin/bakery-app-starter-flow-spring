@@ -1,7 +1,6 @@
 package com.vaadin.starter.bakery.app.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -12,7 +11,7 @@ import org.springframework.security.config.annotation.web.configurers.Expression
 import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 
 import com.vaadin.starter.bakery.BakeryApplicationConfig;
 import com.vaadin.starter.bakery.backend.data.Role;
@@ -26,14 +25,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private final PasswordEncoder passwordEncoder;
 
-	private final RedirectAuthenticationSuccessHandler successHandler;
-
 	@Autowired
-	public SecurityConfig(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder,
-			RedirectAuthenticationSuccessHandler successHandler) {
+	public SecurityConfig(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
 		this.userDetailsService = userDetailsService;
 		this.passwordEncoder = passwordEncoder;
-		this.successHandler = successHandler;
 	}
 
 	@Override
@@ -49,23 +44,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf().disable();
 
 		ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry reg = http
-			.authorizeRequests();
+				.authorizeRequests();
 
 		// Allow access to static resources ("/VAADIN/**")
 		reg = reg.antMatchers("/icons/**").permitAll();
 		reg = reg.antMatchers("/fonts/**").permitAll();
 		reg = reg.antMatchers("/api/**").permitAll();
 		reg = reg.antMatchers("/manifest.json").permitAll();
-		// Require authentication for all URLS ("/**")
+		reg = reg.antMatchers("/service-worker.js").permitAll();
 		reg = reg.antMatchers("/**").hasAnyAuthority(Role.getAllRoles());
 		HttpSecurity sec = reg.and();
 
 		// Allow access to login page without login
 		FormLoginConfigurer<HttpSecurity> login = sec.formLogin().permitAll();
-		login = login.loginPage(BakeryApplicationConfig.LOGIN_URL).loginProcessingUrl(BakeryApplicationConfig.LOGIN_PROCESSING_URL)
-			.failureUrl(BakeryApplicationConfig.LOGIN_FAILURE_URL).successHandler(successHandler);
+		login = login.loginPage(BakeryApplicationConfig.LOGIN_URL)
+				.loginProcessingUrl(BakeryApplicationConfig.LOGIN_PROCESSING_URL)
+				.failureUrl(BakeryApplicationConfig.LOGIN_FAILURE_URL)
+				.successHandler(new SavedRequestAwareAuthenticationSuccessHandler());
 		login.and().logout().logoutSuccessUrl(BakeryApplicationConfig.LOGOUT_URL);
 	}
-
 
 }
