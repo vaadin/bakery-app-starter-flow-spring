@@ -37,6 +37,9 @@
           this.removeEventListener('close', this._closeListener);
         }
         this.style.display = opened ? 'block' : 'none';
+        if (old === undefined) {
+          return;
+        }
         Polymer.RenderStatus.afterNextRender(this, () => {
           this.dispatchEvent(new CustomEvent(opened ? 'opened' : 'closed', {bubbles: true, composed: true}));
         });
@@ -92,7 +95,7 @@
         });
       }
 
-      _onOpened(opened) {
+      _onOpened(opened, old) {
         if (opened) {
           Polymer.RenderStatus.afterNextRender(this, () => {
             this._parentElement = this.parentElement;
@@ -103,7 +106,7 @@
             this._parentElement.appendChild(this);
           }
         }
-        super._onOpened(opened);
+        super._onOpened(opened, old);
       }
     };
   </script>
