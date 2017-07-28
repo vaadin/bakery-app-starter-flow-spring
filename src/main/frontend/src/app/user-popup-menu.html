@@ -1,5 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="../elements/dialog-mixins.html">
 
 <dom-module id="user-popup-menu">
@@ -202,7 +203,7 @@
           </div>
           <div class="user-buttons">
             <vaadin-button theme="tertiary">Preferences</vaadin-button>
-            <vaadin-button theme="tertiary">Log out</vaadin-button>
+            <vaadin-button theme="tertiary" on-click="_logout">Log out</vaadin-button>
           </div>
         </div>
       </div>
@@ -251,6 +252,10 @@
 
       _closePopup() {
         this.opened = false;
+      }
+      
+      _logout() {
+        this.dispatchEvent(new CustomEvent('logout', {bubbles: true, composed: true}));
       }
     }
 
