@@ -193,7 +193,7 @@
         [[user.name]]
         <iron-icon icon="valo:chevron-down"></iron-icon>
       </vaadin-button>
-      <user-popup-menu opened="{{popupMenuOpened}}" desktop-view$="[[_desktopView]]" user="[[user]]" notifications="[[notifications]]"></user-popup-menu>
+      <user-popup-menu opened="{{popupMenuOpened}}" desktop-view$="[[_desktopView]]" user="[[user]]" notifications="[[notifications]]" on-logout="_logout"></user-popup-menu>
     </div>
 
     <img src="[[user.image]]" alt="[[user.name]]" class="user-image mobile-user-image" hidden$="[[_desktopView]]">
@@ -244,6 +244,10 @@
 
       _showUserMenuPopup() {
         this.popupMenuOpened = true;
+      }
+      
+      _logout() {
+        this.$server.logout();
       }
     }
 
