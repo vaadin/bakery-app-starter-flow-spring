@@ -13,7 +13,6 @@
 <link rel="import" href="../../bower_components/vaadin-upload/vaadin-upload.html">
 <link rel="import" href="../elements/amount-field.html">
 <link rel="import" href="../elements/utils-mixin.html">
-<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 
 <dom-module id="storefront-item-edit">
   <template>
@@ -46,8 +45,6 @@
         min-width: 0;
       }
     </style>
-
-    <iron-ajax auto url="../../dummy/customers.json" handle-as="json" last-response="{{customers}}"></iron-ajax>
 
     <div class="scrollable flex1" id="main">
       <h2 class="flex0">[[_editTitle()]]</h2>
@@ -219,7 +216,8 @@
       _onCustomerChange(e) {
         const cust = e.target.selectedItem;
         this.notifyPath('item.customer.name', cust.name);
-        this.set('item.customer.number', cust.phone);
+        this.set('item.customer.number', cust.number);
+        this.set('item.customer.details', cust.details);
       }
 
       _onProductDelete(e) {
