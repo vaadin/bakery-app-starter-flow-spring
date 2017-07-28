@@ -58,12 +58,12 @@
       }
 
       close(e) {
-        if (
-          !this.$.fore ||
-          !this.$.fore.querySelector('user-edit') ||
-          !this.$.fore.querySelector('user-edit')._dirty ||
-          window.confirm('Are you sure you want to cancel edits?')
-        ) {
+        // When sending the event, the component might be attached to the body instead of to
+        // its original place, so we don't want to bubble.
+        // It's the user responsability to forward this event up.
+        const customEvent = new CustomEvent('before-close', {composed: true, cancelable: true});
+        this.dispatchEvent(customEvent);
+        if (!customEvent.defaultPrevented) {
           this.opened = false;
         }
       }
@@ -78,7 +78,7 @@
       ready() {
         super.ready();
         Polymer.RenderStatus.afterNextRender(this, () => {
-          // If the component has a slot as childre, when moving to body,
+          // If the component has a slot as child, when moving to body,
           // assignedNodes need to be moved. We only support one nested
           // slot and one assigned node, but should be enough for most cases.
           const slot = this.querySelector('slot');
