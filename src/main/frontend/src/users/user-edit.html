@@ -65,7 +65,7 @@
     </vaadin-form-layout>
     <div class="flex buttons">
       <vaadin-button on-click="_save" theme="primary" disabled="[[!_dirty]]">Save</vaadin-button>
-      <vaadin-button on-click="_confirmAndCancel">Cancel</vaadin-button>
+      <vaadin-button on-click="_cancel">Cancel</vaadin-button>
       <div class="flex1"></div>
       <vaadin-button on-click="_confirmAndDelete" theme="danger tertiary" class="right">Delete</vaadin-button>
     </div>
@@ -135,10 +135,6 @@
       _reset() {
         this._dirty = false;
         this._editableUser = Object.assign({}, this.user);
-      }
-
-      _confirmAndCancel() {
-        this._cancel();
       }
 
       _cancel() {
