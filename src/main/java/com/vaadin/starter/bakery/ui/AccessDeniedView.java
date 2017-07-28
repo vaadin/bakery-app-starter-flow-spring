@@ -25,6 +25,8 @@ import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
+import javax.servlet.http.HttpServletResponse;
+
 @Tag("access-denied")
 @HtmlImport("frontend://src/admin/access-denied.html")
 @ParentView(BakeryApp.class)
@@ -32,6 +34,6 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 public class AccessDeniedView extends PolymerTemplate<TemplateModel> implements View {
 	@Override
 	public void onLocationChange(LocationChangeEvent locationChangeEvent) {
-		locationChangeEvent.setStatusCode(403);
+		locationChangeEvent.setStatusCode(HttpServletResponse.SC_FORBIDDEN);
 	}
 }

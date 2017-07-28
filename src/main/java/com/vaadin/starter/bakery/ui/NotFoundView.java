@@ -10,6 +10,8 @@ import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
+import javax.servlet.http.HttpServletResponse;
+
 @Tag("bakery-404")
 @HtmlImport("frontend://src/404/bakery-404.html")
 @Route(value = BakeryConst.PAGE_NOTFOUND)
@@ -17,6 +19,6 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 public class NotFoundView extends PolymerTemplate<TemplateModel> implements View {
 	@Override
 	public void onLocationChange(LocationChangeEvent locationChangeEvent) {
-		locationChangeEvent.setStatusCode(404);
+		locationChangeEvent.setStatusCode(HttpServletResponse.SC_NOT_FOUND);
 	}
 }
