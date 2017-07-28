@@ -1,6 +1,7 @@
 <link rel="import" href="../app/style-modules/shared-styles.html">
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../../bower_components/vaadin-themes/valo/icons.html">
 <link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="../../bower_components/vaadin-text-field/vaadin-password-field.html">
@@ -51,68 +52,71 @@
 
     <div class="scrollable flex1" id="main">
       <h2 class="flex0">[[_editTitle()]]</h2>
-
-      <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 4, 1)]]">
-        <vaadin-form-item>
-          <label slot="label">Due</label>
-          <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 1, 2)]]">
-            <vaadin-date-picker on-value-changed="_onDateChange"  value="[[_getDayIso(item.date)]]">
-              <iron-icon slot="prefix" icon="valo:calendar"></iron-icon>
-            </vaadin-date-picker>
-
-            <vaadin-combo-box on-change="_onTimeChange" value="[[_getTime(item.time)]]" allow-custom-value items='
-              ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00"]'>
-              <iron-icon slot="prefix" icon="valo:clock"></iron-icon>
-            </vaadin-combo-box>
-          </vaadin-form-layout>
-
-          <vaadin-combo-box class="full-width" value="{{item.place}}" items='["Bakery", "Store"]'>
-            <div slot="prefix" class="at-icon"></div>
-          </vaadin-combo-box>
-        </vaadin-form-item>
-
-        <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 3, 1)]]" colspan="3">
-
-          <vaadin-combo-box label="Customer" colspan="2" value="{{item.customer.name}}"
-            items="[[customers]]" item-label-path="name" item-value-path="name"
-            on-change="_onCustomerChange" allow-custom-value>
-            <iron-icon slot="prefix" icon="valo:user"></iron-icon>
-          </vaadin-combo-box>
-
-          <vaadin-text-field label="Phone number" value="{{item.customer.number}}">
-            <iron-icon slot="prefix" icon="valo:phone"></iron-icon>
-          </vaadin-text-field>
-
-          <vaadin-text-field label="Aditional Details" value="{{item.customer.details}}" colspan="2"></vaadin-text-field>
-
-          <vaadin-form-item colspan="3">
-            <label slot="label">Products</label>
-
-            <template is="dom-repeat" items="[[item.goods]]" as="product">
-              <vaadin-form-layout class="product" responsive-steps="[[_computeResponsiveSteps(desktopView, 18, 10)]]">
-                <vaadin-combo-box colspan="8"value="{{product.name}}" items="[[products]]"
-                  item-label-path="name" item-value-path="name"
-                  on-change="_onProductChange" allow-custom-value index="[[index]]"></vaadin-combo-box>
-
-                <vaadin-button colspan="2" class="delete" index="[[index]]" on-click="_onProductDelete"
-                  style$="order: [[_getConditional(desktopView, 2, 0)]];">✕</vaadin-button>
-
-                <amount-field colspan="4" value="{{product.count}}"
-                  min="1" max="15" on-value-changed="_onCountChange" index="[[index]]"
-                  style="order: 1"></amount-field>
-
-                <div colspan="4" class="money"
-                  style="order: 1">[[_getCurrency(product.unitPrice)]]</div>
-
-                <vaadin-text-field colspan$="[[_getConditional(desktopView, 12, 8)]]" placeholder="Details"
-                  on-value-changed="_onDetailChange" value="{{product.description}}" index="[[index]]"
-                  style="order: 3"></vaadin-text-field>
+      <iron-form id="itemEditForm">
+        <form  onsubmit="return false">
+          <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 4, 1)]]">
+            <vaadin-form-item>
+              <label slot="label">Due</label>
+              <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 1, 2)]]">
+                <vaadin-date-picker on-value-changed="_onDateChange"  value="[[_getDayIso(item.date)]]">
+                  <iron-icon slot="prefix" icon="valo:calendar"></iron-icon>
+                </vaadin-date-picker>
+    
+                <vaadin-combo-box on-change="_onTimeChange" value="[[_getTime(item.time)]]" allow-custom-value items='
+                  ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00"]'>
+                  <iron-icon slot="prefix" icon="valo:clock"></iron-icon>
+                </vaadin-combo-box>
               </vaadin-form-layout>
-            </template>
-          </vaadin-form-item>
-
-        </vaadin-form-layout>
-      </vaadin-form-layout>
+    
+              <vaadin-combo-box class="full-width" value="{{item.place}}" items='["Bakery", "Store"]'>
+                <div slot="prefix" class="at-icon"></div>
+              </vaadin-combo-box>
+            </vaadin-form-item>
+    
+            <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 3, 1)]]" colspan="3">
+    
+              <vaadin-combo-box label="Customer" colspan="2" value="{{item.customer.name}}"
+                items="[[customers]]" item-label-path="name" item-value-path="name"
+                on-change="_onCustomerChange" allow-custom-value required>
+                <iron-icon slot="prefix" icon="valo:user"></iron-icon>
+              </vaadin-combo-box>
+    
+              <vaadin-text-field label="Phone number" value="{{item.customer.number}}" required>
+                <iron-icon slot="prefix" icon="valo:phone"></iron-icon>
+              </vaadin-text-field>
+    
+              <vaadin-text-field label="Aditional Details" value="{{item.customer.details}}" colspan="2"></vaadin-text-field>
+    
+              <vaadin-form-item colspan="3">
+                <label slot="label">Products</label>
+    
+                <template is="dom-repeat" items="[[item.goods]]" as="product">
+                  <vaadin-form-layout class="product" responsive-steps="[[_computeResponsiveSteps(desktopView, 18, 10)]]">
+                    <vaadin-combo-box colspan="8"value="{{product.name}}" items="[[products]]"
+                      item-label-path="name" item-value-path="name"
+                      on-change="_onProductChange" allow-custom-value index="[[index]]"></vaadin-combo-box>
+    
+                    <vaadin-button colspan="2" class="delete" index="[[index]]" on-click="_onProductDelete"
+                      style$="order: [[_getConditional(desktopView, 2, 0)]];">✕</vaadin-button>
+    
+                    <amount-field colspan="4" value="{{product.count}}"
+                      min="1" max="15" on-value-changed="_onCountChange" index="[[index]]"
+                      style="order: 1"></amount-field>
+    
+                    <div colspan="4" class="money"
+                      style="order: 1">[[_getCurrency(product.unitPrice)]]</div>
+    
+                    <vaadin-text-field colspan$="[[_getConditional(desktopView, 12, 8)]]" placeholder="Details"
+                      on-value-changed="_onDetailChange" value="{{product.description}}" index="[[index]]"
+                      style="order: 3"></vaadin-text-field>
+                  </vaadin-form-layout>
+                </template>
+              </vaadin-form-item>
+    
+            </vaadin-form-layout>
+          </vaadin-form-layout>
+        </form>
+      </iron-form>
     </div>
 
     <div class="footer">
@@ -248,7 +252,11 @@
       }
 
       _review() {
-        this.dispatchEvent(new CustomEvent('next'));
+        if (this.$.itemEditForm.validate()) {
+          this.dispatchEvent(new CustomEvent('next'));
+        } else {
+          alert('Please fill out all required fields before proceeding.');
+        }
       }
       
       _confirmAndCancel() {

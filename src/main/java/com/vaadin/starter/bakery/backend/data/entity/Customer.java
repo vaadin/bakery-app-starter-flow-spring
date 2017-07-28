@@ -1,28 +1,23 @@
 package com.vaadin.starter.bakery.backend.data.entity;
 
 import javax.persistence.Entity;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.NotBlank;
 
+@SuppressWarnings("serial")
 @Entity
 public class Customer extends AbstractEntity {
 
-	@NotNull
-	@NotEmpty
+	@NotBlank
 	@Size(max = 255)
 	private String fullName;
-	@NotNull
-	@NotEmpty
+
+	@NotBlank
 	@Size(max = 255)
 	private String phoneNumber;
-	@Size(max = 255)
+	
 	private String details;
-
-	public Customer() {
-		// Empty constructor is needed by Spring Data / JPA
-	}
 
 	public String getFullName() {
 		return fullName;
