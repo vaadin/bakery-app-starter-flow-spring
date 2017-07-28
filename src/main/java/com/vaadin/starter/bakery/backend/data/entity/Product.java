@@ -1,11 +1,10 @@
 package com.vaadin.starter.bakery.backend.data.entity;
 
-import org.hibernate.validator.constraints.NotBlank;
-
 import javax.persistence.Entity;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 public class Product extends AbstractEntity {
