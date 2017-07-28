@@ -60,7 +60,8 @@
     <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
 
     <items-view desktop-view=[[desktopView]] filter-value="{{_filterValue}}"
-        on-new-item="_openNewUserDialog" item="[[_editableUser]]" on-closed="_onClose" button-text="New user">
+        item="[[_editableUser]]" button-text="New user"
+        on-new-item="_openNewUserDialog" on-closed="_onClose" on-before-close="_onBeforeClose">
 
       <vaadin-grid slot="grid" id="grid" class="users-grid" items="[[_filterUsers(users.*, _filterValue)]]" active-item="{{_selectedUser}}">
         <vaadin-grid-column width="80px" flex-grow="0">
@@ -101,7 +102,7 @@
         </vaadin-grid-column>
       </vaadin-grid>
 
-      <user-edit slot="editor" user="[[_editableUser]]" on-save="_onSave" on-delete="_onDelete"></user-edit>
+      <user-edit id="editor" slot="editor" user="[[_editableUser]]" on-save="_onSave" on-delete="_onDelete"></user-edit>
     </items-view>
   </template>
 
@@ -151,6 +152,12 @@
         this.$.grid.selectedItems = [];
         this.$.grid.activeItem = {};
         this._editableUser = null;
+      }
+
+      _onBeforeClose(e) {
+        if (this.$.editor._dirty) {
+          e.preventDefault();
+        }
       }
 
       _onSave(event) {

@@ -37,8 +37,8 @@
 
     </style>
 
-    <items-view desktop-view=[[desktopView]] filter-value="{{_filterValue}}"
-        on-new-item="_openNewProductDialog" item="[[_editableProduct]]" on-closed="_onClose" button-text="New product">
+    <items-view desktop-view=[[desktopView]] filter-value="{{_filterValue}}" item="[[_editableProduct]]" button-text="New product"
+      on-new-item="_openNewProductDialog" on-closed="_onClose" on-before-close="_onBeforeClose">
 
       <vaadin-grid slot="grid" id="grid" class="products-grid" items="[[products]]" active-item="{{_selectedProduct}}">
         <vaadin-grid-column>
@@ -115,6 +115,10 @@
         this.$.grid.selectedItems = [];
         this._selectedProduct = null;
         this._editableProduct = null;
+      }
+
+      _onBeforeClose(e) {
+        // Not implemented yet.
       }
 
       _onSave(e) {
