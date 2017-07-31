@@ -125,5 +125,69 @@
         this.scrollShadow = this._main.scrollHeight - this._main.scrollTop !== this._main.clientHeight;
       }
     };
+
+    /**
+     * Mixin for editors.
+     */
+    window.EditableItemMixin = subclass => class extends subclass {
+      static get properties() {
+        return {
+          item: Object,
+
+          _editableItem: Object,
+
+          dirty: {
+            type: Boolean,
+            value: false
+          }
+        };
+      }
+
+      static get observers() {
+        return [
+          '_onItemChanged(item)',
+          '_onPropertyChanged(_editableItem.*)'
+        ];
+      }
+
+      _onItemChanged() {
+        this.dirty = false;
+        this._editableItem = Object.assign({}, this.item);
+      }
+
+      _onPropertyChanged(change) {
+        if (this.item) {
+          const prop = change.path.substr(change.path.indexOf('.') + 1);
+          this.dirty = this._editableItem[prop] !== this.item[prop];
+        }
+      }
+
+      cancel() {
+        // TODO: use a better web component for this or an Undo feature
+        if (!this.dirty || window.confirm('Are you sure you want to cancel edits?')) {
+          this.close(true);
+        }
+      }
+
+      close(force) {
+        // if forced set dirty to true to avoid preventing close on before-close phase
+        this.dirty = !force && this.dirty;
+        this.dispatchEvent(new CustomEvent('close', {bubbles: true, composed: true}));
+      }
+
+      save() {
+        this.item = Object.assign(this.item, this._editableItem);
+        this.dispatchEvent(new CustomEvent('save', {bubbles: true, composed: true, detail: this.item}));
+        this.close(true);
+      }
+
+      delete() {
+        // TODO: use a better web component for this or an Undo feature
+        if (window.confirm('Are you sure to remove the item?')) {
+          this.dispatchEvent(new CustomEvent('delete', {bubbles: true, composed: true, detail: this.item}));
+          this.close(true);
+        }
+      }
+    };
   </script>
 </dom-module>

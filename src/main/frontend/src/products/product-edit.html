@@ -3,7 +3,7 @@
 <link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
-
+<link rel="import" href="../elements/utils-mixin.html">
 
 <dom-module id="product-edit">
   <template>
@@ -31,31 +31,23 @@
 
     <h3>Edit Product</h3>
     <vaadin-form-layout>
-      <vaadin-text-field label="Product name" value="{{product.name}}" colspan="2"></vaadin-text-field>
+      <vaadin-text-field label="Product name" value="{{_editableItem.name}}" colspan="2"></vaadin-text-field>
       <br>
-      <vaadin-text-field label="Unit price" value="{{_getPrice(product.price)}}" id="price" colspan="2"></vaadin-text-field>
+      <vaadin-text-field label="Unit price" value="{{_getPrice(_editableItem.price)}}" id="price" colspan="2"></vaadin-text-field>
     </vaadin-form-layout>
     <div class="flex buttons">
-      <vaadin-button on-click="_save" theme="primary">Save</vaadin-button>
-      <vaadin-button on-click="_cancel">Cancel</vaadin-button>
+      <vaadin-button on-click="save" theme="primary" disabled="[[!dirty]]">Save</vaadin-button>
+      <vaadin-button on-click="cancel">Cancel</vaadin-button>
       <div class="flex1"></div>
-      <vaadin-button on-click="_delete" theme="danger tertiary" class="right">Delete</vaadin-button>
+      <vaadin-button on-click="delete" theme="danger tertiary" class="right">Delete</vaadin-button>
     </div>
 
   </template>
 
   <script>
-    class ProductEdit extends Polymer.Element {
+    class ProductEdit extends window.EditableItemMixin(Polymer.Element) {
       static get is() {
         return 'product-edit';
-      }
-
-      static get properties() {
-        return {
-          product: {
-            type: Object
-          }
-        };
       }
 
       _getPrice(price) {
@@ -63,20 +55,9 @@
         return (price / 100).toLocaleString('en-US', {style: 'decimal', minimumFractionDigits: 2});
       }
 
-      _cancel() {
-        this.dispatchEvent(new CustomEvent('close', {bubbles: true, composed: true}));
-      }
-
-      _save() {
-        this.product.price = (Number.parseFloat(this.$.price.value || 0, 2) * 100).toFixed(0);
-        this.dispatchEvent(new CustomEvent('save', {bubbles: true, composed: true, detail: this.product}));
-      }
-
-      _delete() {
-        // TODO: use a better web component for this or an Undo feature
-        if (window.confirm('Are you sure to remove the product?')) {
-          this.dispatchEvent(new CustomEvent('delete', {bubbles: true, composed: true, detail: this.product}));
-        }
+      save() {
+        this._editableItem.price = (Number.parseFloat(this.$.price.value || 0, 2) * 100).toFixed(0);
+        super.save();
       }
     }
 

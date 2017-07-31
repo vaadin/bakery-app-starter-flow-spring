@@ -7,120 +7,16 @@
 <link rel="import" href="../../../bower_components/vaadin-themes/valo/icons.html">
 <link rel="import" href="../../../bower_components/vaadin-themes/valo/vaadin-button.html">
 <link rel="import" href="../../../bower_components/vaadin-themes/valo/vaadin-text-field.html">
-<link rel="import" href="../../../bower_components/vaadin-themes/valo/icons.html">
 <link rel="import" href="../../../bower_components/vaadin-themes/valo/vaadin-checkbox.html">
 <link rel="import" href="../../../bower_components/vaadin-themes/valo/vaadin-date-picker.html">
+<link rel="import" href="../../../bower_components/vaadin-themes/valo/vaadin-form-layout.html">
+<link rel="import" href="../../../bower_components/vaadin-themes/valo/vaadin-form-item.html">
+<link rel="import" href="../../../bower_components/vaadin-themes/valo/vaadin-combo-box.html">
 
-<dom-module id="bakery-form-layout-styles" theme-for="vaadin-form-layout">
+<!-- valo theme shows clear icons in date-picker and combo-box, but we want it hidden in bakery app -->
+<dom-module id="bakery-combo-box-styles" theme-for="vaadin-combo-box vaadin-date-picker">
   <template>
     <style>
-      :host {
-        --vaadin-form-layout-column-gap: var(--valo-space-l);
-      }
-    </style>
-  </template>
-</dom-module>
-
-<dom-module id="bakery-form-item-styles" theme-for="vaadin-form-item">
-  <template>
-    <style>
-      :host {
-        --vaadin-form-item-row-gap: 0;
-      }
-
-      [part="label"] {
-        color: var(--valo-contrast-60pct);
-        font-family: var(--valo-font-family);
-        font-size: var(--valo-font-size-s);
-        font-weight: 500;
-        margin-top: var(--valo-space-m);
-        margin-left: calc(var(--valo-text-field-border-radius, var(--valo-border-radius)) / 4);
-        margin-bottom: 0.5em;
-        transition: color 0.4s;
-        line-height: 1.333;
-      }
-    </style>
-  </template>
-</dom-module>
-
-<dom-module id="bakery-date-picker-styles" theme-for="vaadin-date-picker">
-  <template>
-    <style include="vaadin-date-picker-default-theme">
-      :host {
-        display: inline-flex;
-        margin-top: 0;
-      }
-
-      [part="text-field"] {
-        flex: 1;
-      }
-
-      [part="clear-button"]::before {
-        content: "";
-      }
-
-      [part="toggle-button"] {
-        color: black;
-        cursor: pointer;
-        opacity: 0.5;
-      }
-
-      [part="toggle-button"]::before {
-        font-family: 'vaadin-combo-box-icons';
-        content: "\e900";
-      }
-
-      [part="text-field"] ::slotted([slot=prefix]) {
-        opacity: 0.4;
-      }
-    </style>
-  </template>
-</dom-module>
-
-<dom-module id="bakery-text-field-styles" theme-for="vaadin-text-field">
-  <template>
-    <style>
-      [part="input-field"] {
-        margin-top: var(--valo-space-xs);
-        margin-bottom: var(--valo-space-xs);
-      }
-
-      /* Maintains correct baseline while having vertical centering for suffix and prefix. */
-      /* TODO: Fix this in vaadin-themes. */
-      [part="value"] {
-        align-self: baseline;
-      }
-
-      /* Required by <amount-field> */
-      :host([theme~="center"]) [part="value"] {
-        text-align: center;
-      }
-
-      ::slotted([slot=prefix]),
-      ::slotted([slot=suffix]) {
-        opacity: 0.4;
-      }
-
-      [part="error-message"][hidden] {
-        margin: 0;
-      }
-    </style>
-  </template>
-</dom-module>
-
-<dom-module id="bakery-combo-box-styles" theme-for="vaadin-combo-box">
-  <template>
-    <style include="vaadin-combo-box-default-theme">
-      :host {
-        display: inline-flex;
-        margin-top: 0;
-        padding: 0;
-      }
-
-      [part="value"] {
-        flex: 1;
-      }
-
       [part="clear-button"] {
         display: none;
       }

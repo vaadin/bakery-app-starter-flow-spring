@@ -1,0 +1,264 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
+<link rel="import" href="../elements/dialog-mixins.html">
+
+<dom-module id="user-popup-menu">
+  <template>
+    <style>
+      :host,
+      #back {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 200;
+      }
+
+      #fore {
+        animation: 0.3s ease-in-out 0.1s 1 foreground-appear;
+        background: white;
+        box-shadow: 0 1px 4px 0 rgba(31, 70, 120, 0.3);
+        position: absolute;
+        z-index: 200;
+        display: block;
+        opacity: 0;
+        animation-fill-mode: forwards;
+        overflow: hidden;
+      }
+
+      @keyframes foreground-appear {
+        0% {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          top: 16px;
+          bottom: auto;
+          right: 352px;
+          left: auto;
+          opacity: 1;
+        }
+
+        10% {
+          border-radius: 5px;
+        }
+
+        99% {
+          height: 400px;
+        }
+
+        100% {
+          width: 400px;
+          height: auto;
+          border-radius: 5px;
+          top: 0;
+          bottom: auto;
+          right: 0;
+          left: auto;
+          display: block;
+          opacity: 1;
+        }
+      }
+
+      @keyframes top-container-padding {
+        0% {
+          padding: 0;
+        }
+
+        100% {
+          padding: 16px;
+        }
+      }
+
+      .top {
+        display: flex;
+        padding: 0;
+        animation: .3s ease-in-out 0.1s 1 top-container-padding;
+        animation-fill-mode: forwards;
+      }
+
+      .image-container img {
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+      }
+
+      .user-actions-container {
+        flex-basis: 90%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .user-top-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .user-info-container {
+        margin-left: 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .user-name {
+        font-size: 14px;
+        font-weight: bold;
+        color: #354761;
+      }
+
+      .user-email {
+        font-size: 14px;
+        color: rgba(45, 71, 105, 0.7);
+      }
+
+      iron-icon {
+        color: rgba(34, 70, 117, 0.4);
+        cursor: pointer;
+      }
+
+      .user-buttons {
+        margin-right: auto;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .bottom {
+        padding: 16px 24px;
+        background: rgba(20, 69, 133, 0.05);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .notifications-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .notifications-title {
+        font-size: 18px;
+        font-weight: bold;
+        color: rgba(45, 71, 105, 0.7);
+      }
+
+      .notifications-list {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+      }
+
+      .notification {
+        position: relative;
+      }
+
+      .notification::before {
+        content: '•';
+        position: absolute;
+        top: 0;
+        left: -16px;
+        color: #ff473a;
+      }
+
+      .notification + .notification {
+        margin-top: 24px;
+      }
+
+      .notification-from {
+        color: rgba(53, 71, 97, 0.9);
+        font-size: 16px;
+        font-weight: 500;
+      }
+
+      .notification-date {
+        color: rgba(45, 71, 105, 0.7);
+        font-size: 14px;
+      }
+
+      .notification-description {
+        margin-top: 8px;
+        font-size: 14px;
+        color: rgba(53, 71, 97, 0.9);
+      }
+
+    </style>
+
+    <div id="back" on-click="close"></div>
+    <div id="fore">
+      <div class="top">
+        <div class="image-container">
+          <img src="[[user.image]]"/>
+        </div>
+        <div class="user-actions-container">
+          <div class="user-top-container">
+            <div class="user-info-container">
+              <div class="user-name">[[user.name]]</div>
+              <div class="user-email">[[user.email]]</div>
+            </div>
+            <iron-icon icon="valo:cross" on-click="_closePopup"></iron-icon>
+          </div>
+          <div class="user-buttons">
+            <vaadin-button theme="tertiary">Preferences</vaadin-button>
+            <vaadin-button theme="tertiary" on-click="_logout">Log out</vaadin-button>
+          </div>
+        </div>
+      </div>
+      <div class="bottom">
+        <div class="notifications-header">
+          <div class="notifications-title">
+            Notifications
+          </div>
+          <vaadin-button theme="tertiary">View all ></vaadin-button>
+        </div>
+        <div class="notifications-list">
+          <template is="dom-repeat" items="[[notifications]]" as="notification">
+            <div class="notification">
+              <div class="notification-from">[[notification.from]]</div>
+              <div class="notification-date">[[notification.date]]</div>
+              <div class="notification-description">[[notification.description]]</div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    class UserPopupMenu extends window.DetachableDialogMixin(Polymer.Element) {
+      static get is() {
+        return 'user-popup-menu';
+      }
+
+      static get properties() {
+        return {
+          user: {
+            type: Object
+          },
+          notifications: {
+            type: Array
+          }
+        };
+      }
+
+      ready() {
+        super.ready();
+
+        this.addEventListener('click', e => e.stopPropagation());
+      }
+
+      _closePopup() {
+        this.opened = false;
+      }
+      
+      _logout() {
+        this.dispatchEvent(new CustomEvent('logout', {bubbles: true, composed: true}));
+      }
+    }
+
+    window.customElements.define(UserPopupMenu.is, UserPopupMenu);
+  </script>
+</dom-module>
