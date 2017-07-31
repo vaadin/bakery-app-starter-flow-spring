@@ -234,9 +234,7 @@ public class OrdersDataProvider {
 	}
 
 	public List<Customer> getCustomersList() {
-		List<Customer> result = getOrderService().findAllCustomers().stream()
-				.map(customer -> toUICustomerEntity(customer)).collect(Collectors.toList());
-		System.out.println("OrdersDataProvider.getCustomersList()  " + result);
-		return result;
+		return getOrderService().findAllCustomers().stream().map(customer -> toUICustomerEntity(customer))
+				.collect(Collectors.toList());
 	}
 }
