@@ -102,7 +102,7 @@
         </vaadin-grid-column>
       </vaadin-grid>
 
-      <user-edit id="editor" slot="editor" user="[[_editableUser]]" on-save="_onSave" on-delete="_onDelete"></user-edit>
+      <user-edit id="editor" slot="editor" item="[[_editableUser]]" on-save="_onSave" on-delete="_onDelete"></user-edit>
     </items-view>
   </template>
 
@@ -155,7 +155,7 @@
       }
 
       _onBeforeClose(e) {
-        if (this.$.editor._dirty) {
+        if (this.$.editor.dirty) {
           e.preventDefault();
         }
       }

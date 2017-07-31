@@ -66,7 +66,7 @@
         </vaadin-grid-column>
       </vaadin-grid>
 
-      <product-edit slot="editor" product="[[_editableProduct]]" on-save="_onSave" on-close="_onClose" on-delete="_onDelete"></product-edit>
+      <product-edit id="editor" slot="editor" item="[[_editableProduct]]" on-save="_onSave" on-close="_onClose" on-delete="_onDelete"></product-edit>
     </items-view>
   </template>
 
@@ -113,12 +113,14 @@
 
       _onClose() {
         this.$.grid.selectedItems = [];
-        this._selectedProduct = null;
+        this.$.grid.activeItem = null;
         this._editableProduct = null;
       }
 
       _onBeforeClose(e) {
-        // Not implemented yet.
+        if (this.$.editor.dirty) {
+          e.preventDefault();
+        }
       }
 
       _onSave(e) {
