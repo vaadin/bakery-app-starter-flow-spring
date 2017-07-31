@@ -35,6 +35,7 @@ import com.vaadin.hummingbird.ext.spring.annotations.Route;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.starter.bakery.ui.dataproviders.ProductsDataProvider;
+import com.vaadin.starter.bakery.ui.entities.Customer;
 import com.vaadin.starter.bakery.ui.entities.Order;
 import com.vaadin.starter.bakery.ui.entities.Product;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
@@ -60,6 +61,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		List<Order> getOrders();
 
 		void setProducts(List<Product> products);
+
+		void setCustomers(List<Customer> customers);
 	}
 
 	private ProductsDataProvider productProvider;
@@ -77,6 +80,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		getModel().setOrders(new ArrayList<>());
 
 		getModel().setProducts(productProvider.findAll());
+
+		getModel().setCustomers(ordersProvider.getCustomersList());
 	}
 
 	@ClientDelegate
@@ -87,6 +92,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 			getElement().callFunction("showErrorMessage", "Order was not saved");
 		} finally {
 			getElement().callFunction("_onFiltersChanged");
+			getModel().setCustomers(ordersProvider.getCustomersList());
 		}
 	}
 
