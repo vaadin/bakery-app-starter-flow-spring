@@ -8,6 +8,7 @@
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/paper-menu-button/paper-menu-button.html">
 <link rel="import" href="../../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="user-popup-menu.html">
 
 <dom-module id="bakery-navigation">
   <template>
@@ -73,9 +74,17 @@
       .user-image {
         width: 32px;
         height: 32px;
-        vertical-align: middle;
         border-radius: 50%;
         z-index: 1;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: -32px;
+        transition: left .1s ease-in-out;
+      }
+
+      .user-button[popup-menu-opened] .user-image {
+        left: -286px;
       }
 
       .user-image.mobile-user-image,
@@ -87,6 +96,8 @@
 
       .user-button {
         color: var(--valo-secondary-text-color);
+        position: relative;
+        margin-left: 32px;
       }
 
       paper-badge.alarms {
@@ -175,24 +186,20 @@
           </a>
         </paper-tab>
       </paper-tabs>
-      <paper-menu-button class="user-button" hidden$="[[!_desktopView]]" theme="tertiary">
-        <div slot="dropdown-trigger" class="user-button" hidden$="[[!_desktopView]]" theme="tertiary">
-          <img src="[[user.image]]" alt="[[user.name]]" class="user-image" id="desktop-user-image">
-          <paper-badge for="desktop-user-image" class="alarms"
-                       hidden$="[[!_showAlarms(user.alarms, _desktopView, 'desktop')]]">
-          </paper-badge>
-          [[user.name]]
-          <iron-icon icon="valo:chevron-down"></iron-icon>
-        </div>
-        <paper-listbox slot="dropdown-content" selected="{{selectedMenuIndex}}">
-          <paper-item>Logout</paper-item>
-        </paper-listbox>
-      </paper-menu-button>
+      <vaadin-button class="user-button" hidden$="[[!_desktopView]]" theme="tertiary" on-click="_showUserMenuPopup" popup-menu-opened$="[[popupMenuOpened]]">
+        <img src="[[user.image]]" alt="[[user.name]]" class="user-image" id="desktop-user-image">
+        <paper-badge for="desktop-user-image" class="alarms" hidden$="[[!_showAlarms(user.alarms, _desktopView, 'desktop')]]">
+        </paper-badge>
+        [[user.name]]
+        <iron-icon icon="valo:chevron-down"></iron-icon>
+      </vaadin-button>
+      <user-popup-menu opened="{{popupMenuOpened}}" desktop-view$="[[_desktopView]]" user="[[user]]" notifications="[[notifications]]" on-logout="_logout"></user-popup-menu>
     </div>
 
     <img src="[[user.image]]" alt="[[user.name]]" class="user-image mobile-user-image" hidden$="[[_desktopView]]">
     <paper-badge class="alarms mobile-alarms" hidden$="[[!_showAlarms(user.alarms, _desktopView, 'mobile')]]">
     </paper-badge>
+
   </template>
 
   <script>
@@ -207,21 +214,40 @@
           page: {
             type: String
           },
-          selectedMenuIndex: {
-            type: Number,
-            observer: '_selectedMenuChanged'
+          popupMenuOpened: {
+            type: Boolean,
+            value: false
+          },
+          notifications: {
+            type: Array,
+            value: function() {
+              return [
+                {
+                  from: 'Alberta Simmons',
+                  date: 'Jun 6, 7:24 AM',
+                  description: 'We’re out of pink sugarcoating! Don’t accept any new orders with the pink stuff.'
+                },
+                {
+                  from: 'Anna Roberts',
+                  date: 'July 12, 8:10 PM',
+                  description: 'Hello, what are you going to do today?'
+                }
+              ];
+            }
           }
         };
       }
 
-      _selectedMenuChanged(index) {
-        if (index == 0) {
-          this.$server.logout();
-        }
-      }
-
       _showAlarms(alarms, desktopView, element) {
         return element === 'mobile' ? alarms && !desktopView : alarms && desktopView;
+      }
+
+      _showUserMenuPopup() {
+        this.popupMenuOpened = true;
+      }
+      
+      _logout() {
+        this.$server.logout();
       }
     }
 

@@ -6,9 +6,9 @@
 <link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
 <link rel="import" href="../../bower_components/vaadin-combo-box/vaadin-combo-box.html">
 <link rel="import" href="../../bower_components/vaadin-upload/vaadin-upload.html">
-<link rel="import" href="../elements/cofirm-dialog-content-wrapper.html">
+<link rel="import" href="../elements/confirm-dialog.html">
 <link rel="import" href="../elements/item-detail-dialog.html">
-
+<link rel="import" href="../elements/utils-mixin.html">
 
 <dom-module id="user-edit">
   <template>
@@ -45,7 +45,7 @@
     <h3>Edit User</h3>
     <vaadin-form-layout>
       <div class="flex" colspan="2">
-        <img src="[[_editableUser.picture]]" on-error="_onImgError"></img>
+        <img src="[[_editableItem.picture]]" on-error="_onImgError"></img>
         <div class="flex1">
           <label>Photo</label>
           <vaadin-upload id="upload" nodrop max-files="1">
@@ -54,102 +54,47 @@
         </div>
       </div>
       <br>
-      <vaadin-text-field label="Email (login)" value="{{_editableUser.email}}" colspan="2"></vaadin-text-field>
+      <vaadin-text-field label="Email (login)" value="{{_editableItem.email}}" colspan="2"></vaadin-text-field>
       <br>
-      <vaadin-text-field label="First Name" value="{{_editableUser.name}}"></vaadin-text-field>
-      <vaadin-text-field label="Last Name" value="{{_editableUser.last}}"></vaadin-text-field>
+      <vaadin-text-field label="First Name" value="{{_editableItem.name}}"></vaadin-text-field>
+      <vaadin-text-field label="Last Name" value="{{_editableItem.last}}"></vaadin-text-field>
       <br>
-      <vaadin-password-field label="Password" value="{{_editableUser.password}}" colspan="2"></vaadin-password-field>
+      <vaadin-password-field label="Password" value="{{_editableItem.password}}" colspan="2"></vaadin-password-field>
       <br>
-      <vaadin-combo-box label="Role" value="{{_editableUser.role}}" items='["Barista", "Admin", "Baker"]'></vaadin-combo-box>
+      <vaadin-combo-box label="Role" value="{{_editableItem.role}}" items='["Barista", "Admin", "Baker"]'></vaadin-combo-box>
     </vaadin-form-layout>
     <div class="flex buttons">
-      <vaadin-button on-click="_save" theme="primary" disabled="[[!_dirty]]">Save</vaadin-button>
-      <vaadin-button on-click="_cancel">Cancel</vaadin-button>
+      <vaadin-button on-click="save" theme="primary" disabled="[[!_dirty]]">Save</vaadin-button>
+      <vaadin-button on-click="cancel">Cancel</vaadin-button>
       <div class="flex1"></div>
-      <vaadin-button on-click="_confirmAndDelete" theme="danger tertiary" class="right">Delete</vaadin-button>
+      <vaadin-button on-click="delete" theme="danger tertiary" class="right">Delete</vaadin-button>
     </div>
     <div>
       <item-detail-dialog confirm-delete-dialog opened="{{_deleteDialogOpened}}">
-        <confirm-dialog user="[[user]]"></confirm-dialog>
+        <confirm-dialog user="[[item]]"></confirm-dialog>
       </item-detail-dialog>
     </div>
   </template>
 
   <script>
-    class UserEdit extends Polymer.Element {
+    class UserEdit extends window.EditableItemMixin(Polymer.Element) {
       static get is() {
         return 'user-edit';
       }
 
       static get properties() {
         return {
-          user: {
-            type: Object,
-            observer: '_reset'
-          },
-
           _deleteDialogOpened: {
             type: Boolean,
             value: false
-          },
-
-          _dirty: {
-            type: Boolean,
-            value: false
-          },
-
-          _editableUser: {
-            type: Object
-          },
+          }
         };
-      }
-
-      static get observers() {
-        return [
-          '_onPropertyChanged(_editableUser.*)'
-        ];
-      }
-
-      ready() {
-        super.ready();
-
-        this.addEventListener('delete', e => {
-          this._cancel();
-        });
       }
 
       _onImgError(e) {
         e.target.src = 'images/default-picture.png';
       }
 
-      _onPropertyChanged(change) {
-        if (this.user === null) {
-          return;
-        }
-
-        const prop = change.path.substr(change.path.indexOf('.') + 1);
-        this._dirty = (this._editableUser[prop] !== this.user[prop]);
-      }
-
-      _reset() {
-        this._dirty = false;
-        this._editableUser = Object.assign({}, this.user);
-      }
-
-      _cancel() {
-        this.dispatchEvent(new CustomEvent('close', {bubbles: true, composed: true}));
-      }
-
-      _save() {
-        this.user = Object.assign(this.user, this._editableUser);
-        this._dirty = false;
-        this.dispatchEvent(new CustomEvent('save', {bubbles: true, composed: true, detail: this.user}));
-      }
-
-      _confirmAndDelete() {
-        this._deleteDialogOpened = true;
-      }
     }
 
     window.customElements.define(UserEdit.is, UserEdit);

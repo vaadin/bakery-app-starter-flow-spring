@@ -1,5 +1,7 @@
 package com.vaadin.starter.bakery.backend.service;
 
+import static java.util.stream.Collectors.toSet;
+
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.vaadin.starter.bakery.app.BeanLocator;
@@ -27,8 +30,6 @@ import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.repositories.CustomerRepository;
 import com.vaadin.starter.bakery.repositories.OrderRepository;
-
-import static java.util.stream.Collectors.toSet;
 
 @Service
 public class OrderService {
@@ -129,9 +130,9 @@ public class OrderService {
 	}
 
 	private static Set<OrderState> matchingStates(String filter) {
-		return filter.isEmpty() ? Collections.emptySet() : Arrays.stream(OrderState.values())
-				.filter(e -> e.getDisplayName().toLowerCase().contains(filter.toLowerCase()))
-				.collect(toSet());
+		return filter.isEmpty() ? Collections.emptySet()
+				: Arrays.stream(OrderState.values())
+						.filter(e -> e.getDisplayName().toLowerCase().contains(filter.toLowerCase())).collect(toSet());
 	}
 
 	public long countAfterDueDateWithState(LocalDate filterDate, List<OrderState> states) {
@@ -247,5 +248,9 @@ public class OrderService {
 			userService = BeanLocator.find(UserService.class);
 		}
 		return userService;
+	}
+
+	public List<Customer> findAllCustomers() {
+		return getCustomerRepository().findAll(new Sort("fullName", "id"));
 	}
 }

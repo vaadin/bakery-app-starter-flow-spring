@@ -20,9 +20,19 @@
         margin: 0;
       }
 
+      .bold {
+        line-height: var(--valo-size-xs);
+      }
+
+      .time {
+        white-space: nowrap;
+        margin-right: 10px;
+      }
+
       .secondary {
         color: var(--valo-secondary-text-color);
         font-size: var(--valo-font-size-xs);
+        line-height: var(--valo-font-size-xl);
       }
 
       .meta-row {
@@ -67,6 +77,7 @@
       .comment,
       .comment-button {
         font-size: var(--valo-font-size-s);
+        line-height: var(--valo-font-size-xl);
       }
 
       @media (min-width: 600px) {
@@ -102,7 +113,7 @@
                 <h3>[[_getDay(item.date)]]</h3>
                 <span class="secondary">[[_getWeekday(item.date)]]</span>
               </div>
-              <div class="flex column">
+              <div class="flex column time">
                 <h3>[[_getTime(item.time)]]</h3>
                 <span class="secondary">[[item.place]]</span>
               </div>

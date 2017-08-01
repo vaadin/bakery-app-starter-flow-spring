@@ -24,7 +24,7 @@
         position: relative;
       }
 
-      ::slotted([slot="grid"]) {
+      .grid-wrapper ::slotted([slot="grid"]) {
         position: absolute;
         width: 100%;
         height: 100%;
@@ -62,7 +62,7 @@
           margin: 0 auto;
         }
 
-        ::slotted([slot="grid"]) {
+        .grid-wrapper ::slotted([slot="grid"]) {
           padding: var(--valo-space-s) 0;
         }
       }
@@ -81,7 +81,7 @@
       </div>
 
       <div class="editor-wrapper">
-        <item-detail-dialog opened="[[editing]]" align="right" desktop-view$=[[desktopView]]>
+        <item-detail-dialog opened="[[editing]]" align="right" desktop-view$=[[desktopView]] on-before-close="_onBeforeClose">
           <slot name="editor"></slot>
         </item-detail-dialog>
       </div>
@@ -122,6 +122,15 @@
 
       _newItem() {
         this.dispatchEvent(new CustomEvent('new-item', {bubbles: true, composed: true}));
+      }
+
+      _onBeforeClose(e) {
+        // We need to forward the event because the dialog before-close event does not bubble.
+        var customEvent = new CustomEvent('before-close', {bubbles: true, composed: true, cancelable: true, detail: this.item});
+        this.dispatchEvent(customEvent);
+        if (customEvent.defaultPrevented) {
+          e.preventDefault();
+        }
       }
     }
 
