@@ -155,7 +155,7 @@
       }
 
       _onBeforeClose(e) {
-        if (this.$.editor.dirty) {
+        if (this.$.editor.dirty && !window.confirm('Discard unsaved changes?')) {
           e.preventDefault();
         }
       }

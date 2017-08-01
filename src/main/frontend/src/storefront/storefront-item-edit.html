@@ -117,14 +117,16 @@
     </div>
 
     <div class="footer">
-      <vaadin-button on-click="_confirmAndCancel">Cancel</vaadin-button>
+      <vaadin-button on-click="_cancel">Cancel</vaadin-button>
       <div class="total money">[[_computeTotal(item.goods.*)]]</div>
       <vaadin-button on-click="_review" theme="primary">Review Order →</vaadin-button>
     </div>
   </template>
 
   <script>
-    class StoreFromItemEdit extends window.DateUtilsMixin(window.ScrollShadowMixin(Polymer.Element)) {
+    class StoreFromItemEdit extends window.EditableItemMixin(
+                                    window.DateUtilsMixin(
+                                    window.ScrollShadowMixin(Polymer.Element))) {
       static get is() {
         return 'storefront-item-edit';
       }
@@ -145,7 +147,7 @@
           desktopView: Boolean
         };
       }
-      
+
       static get observers() {
         return [
           '_onPropertyChanged(item.*)'
@@ -184,7 +186,7 @@
         const idx = e.target.index;
         this.set('item.goods.' + idx + '.description', e.target.value);
       }
-      
+
       _onTimeChange(e) {
         this.set('item.time', e.target.value);
       }
@@ -259,12 +261,6 @@
           this.dispatchEvent(new CustomEvent('next'));
         } else {
           alert('Please fill out all required fields before proceeding.');
-        }
-      }
-      
-      _confirmAndCancel() {
-        if (!this._dirty || window.confirm('Discard order changes?')) {
-          this._cancel();
         }
       }
     }
