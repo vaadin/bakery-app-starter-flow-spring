@@ -61,8 +61,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		List<Order> getOrders();
 
 		void setProducts(List<Product> products);
-
-		void setCustomers(List<Customer> customers);
 	}
 
 	private ProductsDataProvider productProvider;
@@ -81,7 +79,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 		getModel().setProducts(productProvider.findAll());
 
-		getModel().setCustomers(ordersProvider.getCustomersList());
 	}
 
 	@ClientDelegate
@@ -92,7 +89,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 			getElement().callFunction("showErrorMessage", "Order was not saved");
 		} finally {
 			getElement().callFunction("_onFiltersChanged");
-			getModel().setCustomers(ordersProvider.getCustomersList());
 		}
 	}
 

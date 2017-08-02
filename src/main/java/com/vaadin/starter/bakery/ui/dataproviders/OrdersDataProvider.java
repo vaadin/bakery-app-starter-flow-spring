@@ -232,9 +232,4 @@ public class OrdersDataProvider {
 		}
 		return dataEntity;
 	}
-
-	public List<Customer> getCustomersList() {
-		return getOrderService().findAllCustomers().stream().map(customer -> toUICustomerEntity(customer))
-				.collect(Collectors.toList());
-	}
 }
