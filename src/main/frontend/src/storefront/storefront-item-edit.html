@@ -133,15 +133,6 @@
 
       static get properties() {
         return {
-          item: {
-            type: Object,
-            notify: true,
-            observer: '_onItemChange'
-          },
-          _dirty: {
-            type: Boolean,
-            value: null
-          },
           products: Array,
           total: Number,
           desktopView: Boolean
@@ -152,10 +143,6 @@
         return [
           '_onPropertyChanged(item.*)'
         ];
-      }
-
-      _onPropertyChanged(change) {
-        this._dirty = (this._dirty != null);
       }
 
       _onImgError(e) {
@@ -193,19 +180,6 @@
 
       _onDateChange(e) {
         this.set('item.date', e.target.value);
-      }
-
-      _onItemChange(item) {
-        if (item) {
-          if (!item.goods) {
-            this.set('item.goods', []);
-          }
-          // Add an empty item at the end
-          if (!item.goods[0] || item.goods[item.goods.length - 1].name) {
-            this.push('item.goods', {});
-          }
-        }
-        this._dirty = null;
       }
 
       _onProductChange(e) {

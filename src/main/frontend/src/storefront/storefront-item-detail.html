@@ -216,6 +216,10 @@
           _comment: {
             type: String,
             value: ''
+          },
+          _saving: {
+            type: Boolean,
+            value: false
           }
         };
       }
@@ -261,10 +265,12 @@
       }
 
       _do(type) {
+        this._saving = type === 'save';
         this.close();
         const localItem = this.item;
         Polymer.RenderStatus.afterNextRender(this, () =>
           this.dispatchEvent(new CustomEvent(type, {bubbles: true, composed: true, detail: localItem})));
+        this._saving = false;
       }
 
       _cancelText() {

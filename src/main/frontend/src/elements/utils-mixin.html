@@ -1,5 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <script src="../../bower_components/moment/moment.js"></script>
+<script src="copy-util.js"></script>
 
   <script>
     /**
@@ -88,7 +89,7 @@
       _getMonth(date) {
         return moment(new Date(date)).format('MMM D');
       }
-      
+
       _getCurrency(price) {
         price = price || 0;
         return (price / 100).toLocaleString('en-US', {style: 'currency', currency: 'USD'});
@@ -152,14 +153,17 @@
 
       _onItemChanged() {
         this.dirty = false;
-        this._editableItem = Object.assign({}, this.item);
+        this._editableItem = bakeryDeepCopy(this.item);
       }
 
       _onPropertyChanged(change) {
-        if (this.item) {
-          const prop = change.path.substr(change.path.indexOf('.') + 1);
-          this.dirty = this._editableItem[prop] !== this.item[prop];
+        let localItem = this.item;
+        if (this._editableItem && this._editableItem.nodeId) {
+          localItem = bakeryDeepCopy(this.item);
+          localItem.nodeId = this._editableItem.nodeId;
         }
+        // TODO(sayo-vaadin): Consider a non String-based deep compare.
+        this.dirty = JSON.stringify(localItem) !== JSON.stringify(this._editableItem);
       }
 
       cancel() {
