@@ -1,4 +1,6 @@
-function bakeryDeepCopy(obj) {
+/* exported bakeryDeepCopy */
+
+var bakeryDeepCopy = function(obj) {
   var copy;
 
   if (null == obj || 'object' != typeof obj) {
@@ -30,4 +32,4 @@ function bakeryDeepCopy(obj) {
   }
 
   throw new Error('Unable to copy obj! Its type isn\'t supported.');
-}
+};
