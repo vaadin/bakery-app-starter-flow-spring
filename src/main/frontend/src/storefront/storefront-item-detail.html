@@ -165,7 +165,7 @@
                   <div>
                     <span class="bold">[[event.name]]</span>
                     <span class="secondary">[[_getFullDate(event.date)]]</span>
-                    <storefront-item-badge status="[[_lowerCase(event.status)]]" small></storefront-item-badge>
+                    <storefront-item-badge status="[[event.status]]" small></storefront-item-badge>
                   </div>
                   <div class="comment">[[event.message]]</div>
                 </template>
@@ -277,10 +277,6 @@
         } else {
           this.close();
         }
-      }
-
-      _lowerCase(input) {
-        return input.toLowerCase();
       }
     }
 
