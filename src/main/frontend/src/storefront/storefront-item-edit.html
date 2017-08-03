@@ -181,9 +181,9 @@
       }
 
       _onStatusChange(e) {
-          e.target.$.input.setAttribute('status', e.target.value);
-          this.set('item.status', e.target.value);
-        }
+        e.target.$.input.setAttribute('status', e.target.value);
+        this.set('item.status', e.target.value);
+      }
 
       _onItemChange(item) {
         if (item) {

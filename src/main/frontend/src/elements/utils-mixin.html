@@ -6,7 +6,7 @@
     /**
      * Adds a bunch of utility date manipulation methods.
      */
-     window.LocaleUtilsMixin = subclass => class extends subclass {
+    window.LocaleUtilsMixin = subclass => class extends subclass {
       _getDay(date) {
         return moment(new Date(date)).format('MMM D');
       }
