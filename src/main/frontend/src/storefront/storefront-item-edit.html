@@ -174,6 +174,19 @@
         this.set('item.goods.' + idx + '.description', e.target.value);
       }
 
+      _onItemChanged(item) {
+        if (item) {
+          if (!item.goods) {
+            this.set('item.goods', []);
+          }
+          // Add an empty item at the end
+          if (!item.goods[0] || item.goods[item.goods.length - 1].name) {
+            this.push('item.goods', {});
+          }
+        }
+        super._onItemChanged(item);
+      }
+
       _onTimeChange(e) {
         this.set('item.time', e.target.value);
       }
