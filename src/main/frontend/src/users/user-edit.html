@@ -6,8 +6,6 @@
 <link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
 <link rel="import" href="../../bower_components/vaadin-combo-box/vaadin-combo-box.html">
 <link rel="import" href="../../bower_components/vaadin-upload/vaadin-upload.html">
-<link rel="import" href="../elements/confirm-dialog.html">
-<link rel="import" href="../elements/item-detail-dialog.html">
 <link rel="import" href="../elements/utils-mixin.html">
 
 <dom-module id="user-edit">
@@ -69,26 +67,12 @@
       <div class="flex1"></div>
       <vaadin-button on-click="delete" theme="danger tertiary" class="right">Delete</vaadin-button>
     </div>
-    <div>
-      <item-detail-dialog confirm-delete-dialog opened="{{_deleteDialogOpened}}">
-        <confirm-dialog user="[[item]]"></confirm-dialog>
-      </item-detail-dialog>
-    </div>
   </template>
 
   <script>
     class UserEdit extends window.EditableItemMixin(Polymer.Element) {
       static get is() {
         return 'user-edit';
-      }
-
-      static get properties() {
-        return {
-          _deleteDialogOpened: {
-            type: Boolean,
-            value: false
-          }
-        };
       }
 
       _onImgError(e) {

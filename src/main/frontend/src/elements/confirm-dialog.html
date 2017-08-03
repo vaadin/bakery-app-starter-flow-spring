@@ -1,9 +1,17 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
+<link rel="import" href="dialog-mixins.html">
 
 <dom-module id="confirm-dialog">
   <template>
-    <style>
-      #title {
+    <style include="vaadin-modal-dialog-styles">
+      :host #fore {
+        max-width: 400px;
+        max-height: 200px;
+        margin: auto;
+      }
+
+      #caption {
         font-size: 14px;
         font-weight: 500;
         line-height: 1.57;
@@ -20,6 +28,13 @@
         color: rgba(53, 71, 97, 0.9);
       }
 
+      #buttons {
+        border-top: 1px solid var(--valo-contrast-10pct);
+        position: absolute;
+        bottom: 0px;
+        width: 100%;
+      }
+
       .flex {
         display: flex;
       }
@@ -27,51 +42,58 @@
       .flex1 {
         flex: 1;
       }
-
-      .buttons {
-        border-top: 1px solid rgba(31, 70, 120, 0.3);
-        position: absolute;
-        width: 100%;
-        bottom: 0;
-      }
     </style>
 
-    <p id="title">Unsaved changes</p>
-    <p id="message">Are you sure you want to delete the user "[[user.email]]"? This action cannot be undone.</p>
-    <div class="flex buttons">
-      <vaadin-button on-click="_confirmDelete" theme="danger tertiary">Delete user</vaadin-button>
-      <div class="flex1"></div>
-      <vaadin-button on-click="_refuseDelete" theme="tertiary" class="right">Cancel</vaadin-button>
+    <div id="back" on-click="close"></div>
+    <div id="fore">
+      <p id="caption">[[caption]]</p>
+      <p class="flex1" id="message">[[message]]</p>
+      <div id="buttons" class="flex">
+        <vaadin-button on-click="_ok" theme="tertiary danger">[[okText]]</vaadin-button>
+        <div class="flex1"></div>
+        <vaadin-button on-click="_cancel" theme="tertiary" class="right">[[cancelText]]</vaadin-button>
+      </div>
     </div>
   </template>
 
   <script>
-    class ConfirmDialog extends Polymer.Element {
+    class ConfirmDialog extends window.CloseableDialogMixin(Polymer.Element) {
       static get is() {
         return 'confirm-dialog';
       }
 
       static get properties() {
         return {
-          user: {
-            type: Object
-          }
+          caption: {
+            type: String,
+            value: 'Confirmation needed'
+          },
+          message: {
+            type: String,
+            value: 'Do you want to continue?'
+          },
+          okText: {
+            type: String,
+            value: 'OK'
+          },
+          cancelText: {
+            type: String,
+            value: 'Cancel'
+          },
+          callback: Function
         };
       }
 
-      _refuseDelete() {
-        this.dispatchEvent(new CustomEvent('close', {bubbles: true, composed: true}));
+      _cancel() {
+        this.opened = false;
+        this.callback = undefined;
       }
 
-      _confirmDelete() {
-        this.dispatchEvent(new CustomEvent('close', {bubbles: true, composed: true}));
-        this.dispatchEvent(new CustomEvent('delete', {
-          detail: {
-            id: this.user.id
-          },
-          bubbles: true,
-          composed: true
-        }));
+      _ok() {
+        if (this.callback) {
+          this.callback();
+        }
+        this._cancel();
       }
     }
 

@@ -3,42 +3,11 @@
 
 <dom-module id="item-detail-dialog">
   <template>
-    <style>
-      :host,
-      #back,
-      #fore {
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 200;
-      }
-
-      #fore {
-        background: white;
-      }
-
-      :host([confirm-delete-dialog]) #fore {
-        overflow: hidden;
-        max-height: 200px;
-        max-width: 500px;
-        border-radius: 5px;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        margin: auto;
-      }
-
+    <style include="vaadin-modal-dialog-styles">
       :host([desktop-view]) #fore {
-        overflow: hidden;
         min-width: 500px;
         max-width: 680px;
-        border-radius: 5px;
       }
-
       :host([desktop-view]:not([align])) #fore {
         min-width: 500px;
         max-width: 994px;
@@ -53,10 +22,6 @@
         right: 5px;
         left: auto;
       }
-
-      #back {
-        background: var(--valo-shade-20pct);
-      }
     </style>
 
     <div id="back" on-click="close"></div>
@@ -66,15 +31,9 @@
   </template>
 
   <script>
-    class ItemDetailDialog extends window.DetachableDialogMixin(Polymer.Element) {
+    class ItemDetailDialog extends window.CloseableDialogMixin(Polymer.Element) {
       static get is() {
         return 'item-detail-dialog';
-      }
-
-      ready() {
-        super.ready();
-
-        this.addEventListener('click', e => e.stopPropagation());
       }
     }
 

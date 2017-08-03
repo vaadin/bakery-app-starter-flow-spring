@@ -2,29 +2,33 @@
 <link rel="import" href="storefront-item-edit.html">
 <link rel="import" href="storefront-item-detail.html">
 <link rel="import" href="../elements/item-detail-dialog.html">
+<link rel="import" href="../elements/utils-mixin.html">
 
 <dom-module id="storefront-item-edit-wrapper">
   <template>
     <div id="wrapper">
-      <item-detail-dialog desktop-view$=[[desktopView]] opened="[[opened]]">
-        <storefront-item-edit desktop-view="[[desktopView]]" hidden$="[[review]]" item="{{order}}" on-next="_review" products="[[products]]"></storefront-item-edit>
-        <storefront-item-detail hidden$="[[!review]]" review item="{{order}}" on-back="_edit"></storefront-item-detail>
+      <item-detail-dialog desktop-view$=[[desktopView]] opened="[[opened]]" on-before-close="_onBeforeClose">
+        <storefront-item-edit desktop-view="[[desktopView]]" hidden$="[[review]]"
+          item="{{_editableItem}}"
+          on-next="_review"
+          on-cancel="cancel"
+          on-delete="delete"
+          dirty="[[dirty]]"
+          products="[[products]]"
+          ></storefront-item-edit>
+        <storefront-item-detail hidden$="[[!review]]" review item="{{_editableItem}}" on-back="_edit" on-save="save"></storefront-item-detail>
       </item-detail-dialog>
     </div>
   </template>
 
   <script>
-    class StoreFromItemEditEditWrapper extends Polymer.Element {
+    class StoreFromItemEditEditWrapper extends window.EditableItemMixin(Polymer.Element) {
       static get is() {
         return 'storefront-item-edit-wrapper';
       }
 
       static get properties() {
         return {
-          order: {
-            type: Object,
-            observer: '_onOrderChanged'
-          },
           opened: {
             type: Boolean,
             value: false,
@@ -37,9 +41,21 @@
         };
       }
 
-      _onOrderChanged(user) {
-        this.opened = !!user;
+      ready() {
+        super.ready();
+        this.addEventListener('close', () => this.item = null);
+      }
+
+      _onItemChanged(item) {
+        super._onItemChanged(item);
+        this.opened = !!item;
         this.review = false;
+
+        // Hack: Editor modifies the _editableItem, we need to update the _originalItemString with the changes
+        setTimeout(() => {
+          this._originalItemString = JSON.stringify(this._editableItem);
+          this._checkDirty();
+        }, 10);
       }
 
       _review() {
@@ -48,6 +64,12 @@
 
       _edit() {
         this.review = false;
+      }
+
+      _onBeforeClose(e) {
+        if (this.dirty) {
+          e.preventDefault();
+        }
       }
     }
 

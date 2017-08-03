@@ -7,6 +7,7 @@
 
 <link rel="import" href="../app/bakery-search.html">
 <link rel="import" href="../elements/items-view.html">
+<link rel="import" href="../elements/utils-mixin.html">
 <link rel="import" href="user-edit.html">
 
 <dom-module id="bakery-users">
@@ -36,11 +37,6 @@
         border-radius: 50%;
       }
 
-      .edit-cell {
-        display: flex;
-        justify-content: center;
-      }
-
       #wrapper {
         padding-top: var(--valo-space-s);
       }
@@ -49,7 +45,7 @@
         --iron-icon-height: var(--valo-size-xs);
         --iron-icon-width: var(--valo-size-xs);
         color: var(--valo-shade-50pct);
-        visibility: var(--edit-icon-visibility, hidden); /* TODO Not best practice */
+        cursor: pointer;
       }
 
       vaadin-grid-sorter {
@@ -60,10 +56,10 @@
     <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
 
     <items-view desktop-view=[[desktopView]] filter-value="{{_filterValue}}"
-        item="[[_editableUser]]" button-text="New user"
-        on-new-item="_openNewUserDialog" on-closed="_onClose" on-before-close="_onBeforeClose">
+        item="[[_editableItem]]" button-text="New user"
+        on-new-item="_newItem" on-closed="_onClose" on-before-close="_onBeforeClose">
 
-      <vaadin-grid slot="grid" id="grid" class="users-grid" items="[[_filterUsers(users.*, _filterValue)]]" active-item="{{_selectedUser}}">
+      <vaadin-grid slot="grid" id="grid" items="[[_filterUsers(users.*, _filterValue)]]" active-item="{{_activeItem}}">
         <vaadin-grid-column width="80px" flex-grow="0">
           <template>
             <div class="picture-cell">
@@ -71,7 +67,7 @@
             </div>
           </template>
         </vaadin-grid-column>
-        <vaadin-grid-column width="270px" flex-grow="0">
+        <vaadin-grid-column width="270px" flex-grow="5">
           <template class="header">
             <vaadin-grid-sorter path="email">Email</vaadin-grid-sorter>
           </template>
@@ -81,7 +77,7 @@
             </div>
           </template>
         </vaadin-grid-column>
-        <vaadin-grid-column width="200px" flex-grow="0">
+        <vaadin-grid-column width="200px" flex-grow="5">
           <template class="header">
             <vaadin-grid-sorter path="name">Name</vaadin-grid-sorter>
           </template>
@@ -95,19 +91,17 @@
         </vaadin-grid-column>
         <vaadin-grid-column width="80px" flex-grow="0" hidden="[[!desktopView]]">
           <template>
-            <div class="edit-cell">
-              <iron-icon icon="valo:edit" class="edit-icon"></iron-icon>
-            </div>
+            <iron-icon icon="valo:edit" class="edit-icon" on-click="_editItem"></iron-icon>
           </template>
         </vaadin-grid-column>
       </vaadin-grid>
 
-      <user-edit id="editor" slot="editor" item="[[_editableUser]]" on-save="_onSave" on-delete="_onDelete"></user-edit>
+      <user-edit id="editor" slot="editor" item="[[_editableItem]]" on-save="_onSave" on-delete="_onDelete"></user-edit>
     </items-view>
   </template>
 
   <script>
-    class BakeryUsers extends Polymer.Element {
+    class BakeryUsers extends window.EditableListMixin(Polymer.Element) {
       static get is() {
         return 'bakery-users';
       }
@@ -120,44 +114,26 @@
             observer: '_onErrorMessageChanged'
           },
           desktopView: Boolean,
-          _filterValue: String,
-          _selectedUser: {
-            type: Object,
-            observer: '_editUser'
-          },
-          _editableUser: Object
+          _filterValue: String
         };
       }
-
-      _openNewUserDialog() {
-        this.setEditableUser('{}');
-      }
-
-      _editUser(user, old) {
-        if (old === undefined) {
-          return;
-        }
-        if (user != null && user.id) {
-          this.$server.editUser(user.id);
-        } else {
-          this.$server.editUser('');
-        }
+      
+      _editItem() {        
+        setTimeout(() => {
+          var user = this._activeItem;
+          if (user != null && user.id) {
+            this.$server.editUser(user.id);
+          }
+        });
       }
 
       setEditableUser(user) {
-        this._editableUser = user === null ? null : Object.assign({}, JSON.parse(user));
+        this._editableItem = user === null ? null : Object.assign({}, JSON.parse(user));
       }
 
       _onClose() {
-        this.$.grid.selectedItems = [];
-        this.$.grid.activeItem = {};
-        this._editableUser = null;
-      }
-
-      _onBeforeClose(e) {
-        if (this.$.editor.dirty) {
-          e.preventDefault();
-        }
+        super._onClose();
+        this.$server.editUser('');
       }
 
       _onSave(event) {

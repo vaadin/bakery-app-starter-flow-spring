@@ -1,11 +1,12 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <script src="../../bower_components/moment/moment.js"></script>
+<link rel="import" href="confirm-dialog.html">
 
   <script>
     /**
      * Adds a bunch of utility date manipulation methods.
      */
-    window.DateUtilsMixin = subclass => class extends subclass {
+     window.LocaleUtilsMixin = subclass => class extends subclass {
       _getDay(date) {
         return moment(new Date(date)).format('MMM D');
       }
@@ -93,6 +94,11 @@
         price = price || 0;
         return (price / 100).toLocaleString('en-US', {style: 'currency', currency: 'USD'});
       }
+
+      _getPrice(price) {
+        price = price || 0;
+        return (price / 100).toLocaleString('en-US', {style: 'decimal', minimumFractionDigits: 2});
+      }
     };
 
     /**
@@ -127,6 +133,70 @@
     };
 
     /**
+     * Mixin for grids.
+     */
+    window.EditableListMixin = subclass => class extends subclass {
+      static get properties() {
+        return {
+          _activeItem: {
+            observer: '_onActiveItem'
+          },
+          _editableItem: Object
+        };
+      }
+
+      get dirty() {
+        return this.$.editor.dirty;
+      }
+
+      _onActiveItem() {
+        this._editItem();
+      }
+
+      _newItem() {
+        this._editableItem = {};
+      }
+
+      _editItem() {
+        // activeItem is set after clicking on grid elements
+        setTimeout(() => {
+          this._editableItem = this._activeItem;          
+        });
+      }
+
+      _onClose() {
+        this.$.grid.selectedItems = [];
+        this._editableItem = null;
+      }
+
+      _onBeforeClose(e) {
+        if (this.dirty) {
+          e.preventDefault();
+        }
+      }
+
+      _onSave(e) {
+        window.console.log('SAVE', e.detail);
+      }
+
+      _onDelete(e) {
+        window.console.log('DELETE', e.detail);
+      }
+
+      _filterItems(change, filter) {
+        const items = change.base;
+        if (items && filter) {
+          return items.filter((item) => {
+            return item.keys().reduce((last, current) => {
+              return last || item.current.toString.toLowerCase().includes(filter);
+            }, false);
+          });
+        }
+        return items;
+      }
+    };
+
+    /**
      * Mixin for editors.
      */
     window.EditableItemMixin = subclass => class extends subclass {
@@ -139,6 +209,32 @@
           dirty: {
             type: Boolean,
             value: false
+          },
+
+          _dialog: Element,
+          deleteCaption: {
+            value: 'Confirm Delete Item'
+          },
+          deleteMessage: {
+            value: 'Are you sure you want to delete the selected Item?. This action cannot be undone.'
+          },
+          deleteOkText: {
+            value: 'Delete'
+          },
+          deleteCancelText: {
+            value: 'Cancel'
+          },
+          unsavedCaption: {
+            value: 'Unsaved Changes'
+          },
+          unsavedMessage: {
+            value: 'There are unsave modifications to the Item. Are you sure to cancel the edition.'
+          },
+          unsavedOkText: {
+            value: 'Yes'
+          },
+          unsavedCancelText: {
+            value: 'Back'
           }
         };
       }
@@ -146,26 +242,34 @@
       static get observers() {
         return [
           '_onItemChanged(item)',
-          '_onPropertyChanged(_editableItem.*)'
+          '_checkDirty(_editableItem.*)'
         ];
+      }
+
+      ready() {
+        super.ready();
+        Polymer.RenderStatus.afterNextRender(this, () => {
+          this._dialog = document.createElement('confirm-dialog');
+          document.body.appendChild(this._dialog);
+        });
       }
 
       _onItemChanged() {
         this.dirty = false;
+        this._originalItemString = JSON.stringify(this.item);
         this._editableItem = Object.assign({}, this.item);
       }
 
-      _onPropertyChanged(change) {
-        if (this.item) {
-          const prop = change.path.substr(change.path.indexOf('.') + 1);
-          this.dirty = this._editableItem[prop] !== this.item[prop];
-        }
+      _checkDirty() {
+        this.dirty = JSON.stringify(this._editableItem) != this._originalItemString;
       }
 
       cancel() {
-        // TODO: use a better web component for this or an Undo feature
-        if (!this.dirty || window.confirm('Are you sure you want to cancel edits?')) {
-          this.close(true);
+        if (this.dirty) {
+          this._confirm(() => this.close(true),
+            this.unsavedCaption, this.unsavedMessage, this.unsavedOkText, this.unsavedCancelText);
+        } else {
+          this.close();
         }
       }
 
@@ -182,11 +286,19 @@
       }
 
       delete() {
-        // TODO: use a better web component for this or an Undo feature
-        if (window.confirm('Are you sure to remove the item?')) {
+        this._confirm(() => {
           this.dispatchEvent(new CustomEvent('delete', {bubbles: true, composed: true, detail: this.item}));
           this.close(true);
-        }
+        }, this.deleteCaption, this.deleteMessage, this.deleteOkText, this.deleteCancelText);
+      }
+
+      _confirm(callback, caption, message, okText, cancelText) {
+        this._dialog.callback = callback;
+        this._dialog.caption = caption;
+        this._dialog.message = message;
+        this._dialog.okText = okText;
+        this._dialog.cancelText = cancelText;
+        this._dialog.opened = true;
       }
     };
   </script>
