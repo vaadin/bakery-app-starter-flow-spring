@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 import javax.validation.ValidationException;
 
@@ -231,10 +230,5 @@ public class OrdersDataProvider {
 			throw new ValidationException("Someone has already deleted the order. Please refresh the page.");
 		}
 		return dataEntity;
-	}
-
-	public List<Customer> getCustomersList() {
-		return getOrderService().findAllCustomers().stream().map(customer -> toUICustomerEntity(customer))
-				.collect(Collectors.toList());
 	}
 }
