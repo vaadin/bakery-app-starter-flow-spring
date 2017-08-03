@@ -35,7 +35,6 @@ import com.vaadin.hummingbird.ext.spring.annotations.Route;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.starter.bakery.ui.dataproviders.ProductsDataProvider;
-import com.vaadin.starter.bakery.ui.entities.Customer;
 import com.vaadin.starter.bakery.ui.entities.Order;
 import com.vaadin.starter.bakery.ui.entities.Product;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
