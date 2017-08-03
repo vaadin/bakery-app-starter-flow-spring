@@ -71,12 +71,11 @@
             </vaadin-form-item>
     
             <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 3, 1)]]" colspan="3">
-    
-              <vaadin-combo-box label="Customer" colspan="2" value="{{item.customer.name}}"
-                items="[[customers]]" item-label-path="name" item-value-path="name"
-                on-change="_onCustomerChange" allow-custom-value required>
+
+              <vaadin-text-field label="Customer" colspan="2" value="{{item.customer.name}}"
+                required>
                 <iron-icon slot="prefix" icon="valo:user"></iron-icon>
-              </vaadin-combo-box>
+              </vaadin-text-field>
     
               <vaadin-text-field label="Phone number" value="{{item.customer.number}}" required>
                 <iron-icon slot="prefix" icon="valo:phone"></iron-icon>
@@ -204,13 +203,6 @@
         if (this.item.goods.length == idx + 1) {
           this.push('item.goods', {});
         }
-      }
-
-      _onCustomerChange(e) {
-        const cust = e.target.selectedItem;
-        this.notifyPath('item.customer.name', cust.name);
-        this.set('item.customer.number', cust.number);
-        this.set('item.customer.details', cust.details);
       }
 
       _onProductDelete(e) {
