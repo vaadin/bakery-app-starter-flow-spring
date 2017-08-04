@@ -117,7 +117,12 @@
           _filterValue: String
         };
       }
-      
+
+      ready() {
+        super.ready();
+        this._editableItem = null;
+      }
+
       _editItem() {        
         setTimeout(() => {
           var user = this._activeItem;
