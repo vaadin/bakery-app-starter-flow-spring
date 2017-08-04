@@ -1,8 +1,11 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <script src="../../bower_components/moment/moment.js"></script>
+<script src="copy-util.js"></script>
 <link rel="import" href="confirm-dialog.html">
 
   <script>
+    /* global bakeryDeepCopy:false */
+
     /**
      * Adds a bunch of utility date manipulation methods.
      */
@@ -89,7 +92,7 @@
       _getMonth(date) {
         return moment(new Date(date)).format('MMM D');
       }
-      
+
       _getCurrency(price) {
         price = price || 0;
         return (price / 100).toLocaleString('en-US', {style: 'currency', currency: 'USD'});
@@ -105,6 +108,7 @@
      * Adds the scroll-shadow attribute if there is a `#main` element with scrollsize
      * larger than its height, and there is hidden content at the bottom.
      */
+    /* @polymerMixin */
     window.ScrollShadowMixin = subclass => class extends subclass {
       static get properties() {
         return {
@@ -199,6 +203,7 @@
     /**
      * Mixin for editors.
      */
+    /* @polymerMixin */
     window.EditableItemMixin = subclass => class extends subclass {
       static get properties() {
         return {

@@ -34,7 +34,8 @@
     <iron-form id="productEditForm">
       <form on-submit="_submitEditForm">
         <vaadin-form-layout>
-          <vaadin-text-field id="name" label="Product name" value="{{_editableItem.name}}" colspan="2" required pattern=".*[^ ].*"  error-message="Please enter a valid name"></vaadin-text-field>
+          <vaadin-text-field id="name" label="Product name" value="{{_editableItem.name}}" colspan="2" required pattern=".*[^ ].*"
+                             error-message="Please enter a valid name"></vaadin-text-field>
           <br>
           <vaadin-text-field id="price" label="Unit price" value="{{_getPrice(_editableItem.price)}}" colspan="2"
             pattern="\d+(\.\d?\d?)?$" required prevent-invalid-input>
@@ -57,14 +58,27 @@
         return 'product-edit';
       }
 
-      _submitEditForm(e) {
-        e.preventDefault();
-        return false;
+      static get properties() {
+        return {
+          price: {
+            type: String,
+            observer: '_priceChange'
+          }
+        };
+      }
+
+      _priceChange() {
+        this.set('_editableItem.price', +(Number.parseFloat(this.price || 0, 2) * 100).toFixed(0));
       }
 
       _getPrice(price) {
         price = price || 0;
         return (price / 100).toLocaleString('en-US', {style: 'decimal', minimumFractionDigits: 2});
+      }
+
+      _submitEditForm(e) {
+        e.preventDefault();
+        return false;
       }
 
       save() {
@@ -75,7 +89,6 @@
           alert('Please fill out all required fields before proceeding.');
         }
       }
-
     }
 
     window.customElements.define(ProductEdit.is, ProductEdit);
