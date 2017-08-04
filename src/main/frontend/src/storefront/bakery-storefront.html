@@ -10,8 +10,6 @@
 
 <link rel="import" href="../elements/utils-mixin.html">
 
-<script src="../elements/copy-util.js"></script>
-
 <dom-module id="bakery-storefront">
   <template>
     <style include="shared-styles">
@@ -85,7 +83,6 @@
   </template>
 
   <script>
-    /* global bakeryDeepCopy:false */
     class BakeryStorefront extends window.LocaleUtilsMixin(Polymer.Element) {
       static get is() {
         return 'bakery-storefront';
@@ -229,7 +226,7 @@
       }
 
       _onEdit(e) {
-        this._editableItem = bakeryDeepCopy(e.detail);
+        this._editableItem = Object.assign({}, e.detail);
       }
 
       _onSave(e) {
