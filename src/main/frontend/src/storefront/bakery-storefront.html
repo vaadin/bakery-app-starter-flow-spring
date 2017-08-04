@@ -72,7 +72,13 @@
         </template>
       </iron-list>
 
-      <storefront-item-edit-wrapper order="[[_editableItem]]" on-save="_onSave" on-closed="_onClose" desktop-view="[[desktopView]]" products="[[products]]"></storefront-item-edit-wrapper>
+      <storefront-item-edit-wrapper item="[[_editableItem]]" on-save="_onSave" on-closed="_onEditClosed" desktop-view="[[desktopView]]" products="[[products]]"></storefront-item-edit-wrapper>
+
+      <template is="dom-if" if="[[!desktopView]]" restamp>
+        <item-detail-dialog opened="[[_selectedItem]]">
+          <storefront-item-detail item="[[_selectedItem]]" on-close="_unselectItem" on-edit="_onEdit"></storefront-item-detail>
+        </item-detail-dialog>
+      </template>
 
     </div>
 
@@ -80,7 +86,7 @@
 
   <script>
     /* global bakeryDeepCopy:false */
-    class BakeryStorefront extends window.DateUtilsMixin(Polymer.Element) {
+    class BakeryStorefront extends window.LocaleUtilsMixin(Polymer.Element) {
       static get is() {
         return 'bakery-storefront';
       }
@@ -97,6 +103,7 @@
           _showPrevious: {
             type: Boolean
           },
+          _selectedItem: Object,
           _editableItem: Object,
           _displayedHeadersList: {
             type: Array,
@@ -217,7 +224,7 @@
         this.$.list.notifyResize();
       }
 
-      _onClose() {
+      _onEditClosed() {
         this._editableItem = null;
       }
 
@@ -235,11 +242,13 @@
 
       _selectItem(e) {
         e.target.selected = true;
+        this._selectedItem = e.target.order;
         this._notifyResize();
       }
 
       _unselectItem(e) {
         e.target.selected = false;
+        this._selectedItem = undefined;
         this._notifyResize();
       }
 

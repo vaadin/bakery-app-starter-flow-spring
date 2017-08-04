@@ -121,6 +121,7 @@
       }
 
       .user-buttons {
+        margin-top: 4px;
         margin-right: auto;
         display: flex;
         flex-direction: column;
@@ -202,8 +203,8 @@
             <iron-icon icon="valo:cross" on-click="_closePopup"></iron-icon>
           </div>
           <div class="user-buttons">
-            <vaadin-button theme="tertiary">Preferences</vaadin-button>
-            <vaadin-button theme="tertiary" on-click="_logout">Log out</vaadin-button>
+            <vaadin-button theme="tertiary menu">Preferences</vaadin-button>
+            <vaadin-button theme="tertiary menu" on-click="_logout">Log out</vaadin-button>
           </div>
         </div>
       </div>
@@ -228,7 +229,7 @@
   </template>
 
   <script>
-    class UserPopupMenu extends window.DetachableDialogMixin(Polymer.Element) {
+    class UserPopupMenu extends window.CloseableDialogMixin(Polymer.Element) {
       static get is() {
         return 'user-popup-menu';
       }
