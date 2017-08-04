@@ -10,6 +10,8 @@
 
 <link rel="import" href="../elements/utils-mixin.html">
 
+<script src="../elements/copy-util.js"></script>
+
 <dom-module id="bakery-storefront">
   <template>
     <style include="shared-styles">
@@ -70,13 +72,14 @@
         </template>
       </iron-list>
 
-      <storefront-item-edit-wrapper order="[[_editableItem]]" on-save="_onSave" on-closed="_onClose" desktop-view="[[desktopView]]" products="[[products]]" customers="[[customers]]"></storefront-item-edit-wrapper>
+      <storefront-item-edit-wrapper order="[[_editableItem]]" on-save="_onSave" on-closed="_onClose" desktop-view="[[desktopView]]" products="[[products]]"></storefront-item-edit-wrapper>
 
     </div>
 
   </template>
 
   <script>
+    /* global bakeryDeepCopy:false */
     class BakeryStorefront extends window.DateUtilsMixin(Polymer.Element) {
       static get is() {
         return 'bakery-storefront';
@@ -219,7 +222,7 @@
       }
 
       _onEdit(e) {
-        this._editableItem = this._deepCopy(e.detail);
+        this._editableItem = bakeryDeepCopy(e.detail);
       }
 
       _onSave(e) {
@@ -255,40 +258,6 @@
         Polymer.Async.animationFrame.run(() => {
           window.alert(message);
         });
-      }
-
-      _deepCopy(obj) {
-        var copy;
-
-        if (null == obj || 'object' != typeof obj) {
-          return obj;
-        }
-
-        if (obj instanceof Date) {
-          copy = new Date();
-          copy.setTime(obj.getTime());
-          return copy;
-        }
-
-        if (obj instanceof Array) {
-          copy = [];
-          for (var i = 0, len = obj.length; i < len; i++) {
-            copy[i] = this._deepCopy(obj[i]);
-          }
-          return copy;
-        }
-
-        if (obj instanceof Object) {
-          copy = {};
-          for (var attr in obj) {
-            if (obj.hasOwnProperty(attr)) {
-              copy[attr] = this._deepCopy(obj[attr]);
-            }
-          }
-          return copy;
-        }
-
-        throw new Error('Unable to copy obj! Its type isn\'t supported.');
       }
     }
 

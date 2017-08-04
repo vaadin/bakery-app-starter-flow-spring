@@ -11,7 +11,7 @@ public enum OrderState {
 	//TODO should return
 	//SharedUtil.upperCaseUnderscoreToHumanFriendly(name()
 	public String getDisplayName() {
-		return name();
+		return name().toLowerCase();
 	}
 
 	/**

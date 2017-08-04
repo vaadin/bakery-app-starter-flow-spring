@@ -32,8 +32,7 @@ public class Order implements Serializable {
 	}
 
 	public void setStatus(String status) {
-		if (status != null)
-			this.status = status.toLowerCase();
+		this.status = status;
 	}
 
 	public String getDate() {
