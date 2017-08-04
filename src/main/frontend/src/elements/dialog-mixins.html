@@ -64,11 +64,13 @@
           setTimeout(() => {
             document.body.addEventListener('click', this._clickListener);
             document.body.addEventListener('keydown', this._keydownListener);
+            window.addEventListener('popstate', this._closeListener);
             this.addEventListener('close', this._closeListener);
           }, 2);
         } else {
           document.body.removeEventListener('click', this._clickListener);
           document.body.removeEventListener('keydown', this._keydownListener);
+          window.removeEventListener('popstate', this._closeListener);
           this.removeEventListener('close', this._closeListener);
         }
         this.style.display = opened ? 'block' : 'none';
