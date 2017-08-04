@@ -4,7 +4,7 @@
 <link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
-
+<link rel="import" href="../elements/utils-mixin.html">
 
 <dom-module id="product-edit">
   <template>
@@ -34,15 +34,16 @@
     <iron-form id="productEditForm">
       <form on-submit="_submitEditForm">
         <vaadin-form-layout>
-          <vaadin-text-field id="name" label="Product name" value="{{_editableItem.name}}" colspan="2" required pattern=".*[^ ].*"  error-message="Please enter a valid name"></vaadin-text-field>
+          <vaadin-text-field label="Product name" value="{{_editableItem.name}}" colspan="2" required pattern=".*[^ ].*"
+                             error-message="Please enter a valid name"></vaadin-text-field>
           <br>
-          <vaadin-text-field label="Unit price" value="{{_getPrice(_editableItem.price)}}" id="price" colspan="2"></vaadin-text-field>
+          <vaadin-text-field label="Unit price" value="{{price}}" id="price" colspan="2"></vaadin-text-field>
         </vaadin-form-layout>
         <div class="flex buttons">
           <vaadin-button on-click="_save" theme="primary" disabled="[[!dirty]]">Save</vaadin-button>
-          <vaadin-button on-click="_cancel">Cancel</vaadin-button>
+          <vaadin-button on-click="cancel">Cancel</vaadin-button>
           <div class="flex1"></div>
-          <vaadin-button on-click="_delete" theme="danger tertiary" class="right">Delete</vaadin-button>
+          <vaadin-button on-click="delete" theme="danger tertiary" class="right">Delete</vaadin-button>
         </div>
       </form>
     </iron-form>
@@ -54,14 +55,34 @@
         return 'product-edit';
       }
 
-      _submitEditForm(e) {
-        e.preventDefault();
-        return false;
+      static get properties() {
+        return {
+          price: {
+            type: String,
+            observer: '_priceChange'
+          }
+        };
+      }
+
+      _priceChange() {
+        this.set('_editableItem.price', +(Number.parseFloat(this.price || 0, 2) * 100).toFixed(0));
+      }
+
+      _onItemChanged() {
+        super._onItemChanged();
+        if (this._editableItem) {
+          this.price = this._getPrice(this._editableItem.price);
+        }
       }
 
       _getPrice(price) {
         price = price || 0;
         return (price / 100).toLocaleString('en-US', {style: 'decimal', minimumFractionDigits: 2});
+      }
+
+      _submitEditForm(e) {
+        e.preventDefault();
+        return false;
       }
 
       _save() {
@@ -72,7 +93,6 @@
           alert('Please fill out all required fields before proceeding.');
         }
       }
-
     }
 
     window.customElements.define(ProductEdit.is, ProductEdit);

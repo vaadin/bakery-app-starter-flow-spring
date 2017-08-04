@@ -6,9 +6,9 @@
 <dom-module id="storefront-item-edit-wrapper">
   <template>
     <div id="wrapper">
-      <item-detail-dialog desktop-view$=[[desktopView]] opened="[[opened]]">
-        <storefront-item-edit desktop-view="[[desktopView]]" hidden$="[[review]]" item="{{order}}" on-next="_review" products="[[products]]"></storefront-item-edit>
-        <storefront-item-detail hidden$="[[!review]]" review item="{{order}}" on-back="_edit"></storefront-item-detail>
+      <item-detail-dialog desktop-view$=[[desktopView]] opened="[[opened]]" on-before-close="_onBeforeClose">
+        <storefront-item-edit id="editor" desktop-view="[[desktopView]]" hidden$="[[review]]" item="{{order}}" on-next="_review" products="[[products]]"></storefront-item-edit>
+        <storefront-item-detail id="detail" hidden$="[[!review]]" review item="{{order}}" on-back="_edit"></storefront-item-detail>
       </item-detail-dialog>
     </div>
   </template>
@@ -48,6 +48,12 @@
 
       _edit() {
         this.review = false;
+      }
+
+      _onBeforeClose(e) {
+        if (!this.$.detail._saving && this.$.editor.dirty && !window.confirm('Discard unsaved changes?')) {
+          e.preventDefault();
+        }
       }
     }
 
