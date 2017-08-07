@@ -12,10 +12,13 @@ import com.vaadin.starter.bakery.app.BeanLocator;
 import com.vaadin.starter.bakery.app.security.SecurityUtils;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.repositories.UserRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService implements CrudService<User> {
 
+	private static final String MODIFY_LOCKED_USER_NOT_PERMITTED = "User has been locked and cannot be modified or deleted";
+	private static final String DELETING_SELF_NOT_PERMITTED = "It's not possible to delete your own user account.";
 	private final PasswordEncoder passwordEncoder;
 
 	@Autowired
@@ -62,5 +65,42 @@ public class UserService implements CrudService<User> {
 
 	public String encodePassword(String value) {
 		return passwordEncoder.encode(value);
+	}
+
+	@Override
+	@Transactional
+	public User save(User entity) {
+		throwIfUserLocked(entity.getId());
+		return getRepository().saveAndFlush(entity);
+	}
+
+	@Override
+	@Transactional
+	public void delete(long userId) {
+		throwIfDeletingSelf(userId);
+		throwIfUserLocked(userId);
+		getRepository().delete(userId);
+	}
+
+	private void throwIfDeletingSelf(Long userId) {
+		if (userId == null) {
+			return;
+		}
+
+		User current = getCurrentUser();
+		if (current.getId().equals(userId)) {
+			throw new UserFriendlyDataException(DELETING_SELF_NOT_PERMITTED);
+		}
+	}
+
+	private void throwIfUserLocked(Long userId) {
+		if (userId == null) {
+			return;
+		}
+
+		User dbUser = getRepository().findOne(userId);
+		if (dbUser.isLocked()) {
+			throw new UserFriendlyDataException(MODIFY_LOCKED_USER_NOT_PERMITTED);
+		}
 	}
 }

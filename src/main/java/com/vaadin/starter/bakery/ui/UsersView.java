@@ -17,6 +17,7 @@ package com.vaadin.starter.bakery.ui;
 
 import java.util.List;
 
+import com.vaadin.starter.bakery.backend.service.UserFriendlyDataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;
@@ -131,6 +132,11 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 		try {
 			userDataProvider.delete(userId);
 			isInSync = true;
+		} catch (UserFriendlyDataException e) {
+			// Commit failed because of application-level data constraints
+			getModel().setErrorMessage(e.getMessage());
+			getLogger().debug("User-friendly data exception while deleting entity of type "
+					+ com.vaadin.starter.bakery.backend.data.entity.User.class.getName(), e);
 		} catch (DataIntegrityViolationException e) {
 			// Commit failed because of validation errors
 			getModel().setErrorMessage(
