@@ -3,7 +3,7 @@ package com.vaadin.starter.bakery.backend.service;
 import org.springframework.dao.DataIntegrityViolationException;
 
 /**
- * A data integraty violation exception containing a message intended to be
+ * A data integrity violation exception containing a message intended to be
  * shown to the end user.
  */
 public class UserFriendlyDataException extends DataIntegrityViolationException {
