@@ -69,6 +69,13 @@ public class UserService implements CrudService<User> {
 
 	@Override
 	@Transactional
+	public User save(User entity) {
+		throwIfUserLocked(entity.getId());
+		return getRepository().saveAndFlush(entity);
+	}
+
+	@Override
+	@Transactional
 	public void delete(long userId) {
 		throwIfDeletingSelf(userId);
 		throwIfUserLocked(userId);
