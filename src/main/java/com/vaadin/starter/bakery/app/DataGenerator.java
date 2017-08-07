@@ -336,18 +336,24 @@ public class DataGenerator implements HasLogger {
 
 	private void createUsers(UserRepository userRepository) {
 		final Random random = new Random();
-		baker = userRepository.save(new User("baker@vaadin.com", "Heidi", "Carter",
+		User user = new User("baker@vaadin.com", "Heidi", "Carter",
 				passwordEncoder.encode("baker"), Role.BAKER,
-				"https://randomuser.me/api/portraits/women/" + random.nextInt(50) + ".jpg"));
-		barista = userRepository
-				.save(new User("barista@vaadin.com", "Malin", "Castro",
-						passwordEncoder.encode("barista"), Role.BARISTA,
-						"https://randomuser.me/api/portraits/men/" + random.nextInt(50) + ".jpg"));
-		admin = userRepository.save(new User("admin@vaadin.com", "Göran", "Rich",
-				passwordEncoder.encode("admin"), Role.ADMIN,
-				"https://randomuser.me/api/portraits/women/" + random.nextInt(50) + ".jpg"));
-		users.add(barista);
-		users.add(admin);
+				"https://randomuser.me/api/portraits/women/" + random.nextInt(50) + ".jpg");
+		baker = userRepository.save(user);
 		users.add(baker);
+
+		user = new User("barista@vaadin.com", "Malin", "Castro",
+				passwordEncoder.encode("barista"), Role.BARISTA,
+				"https://randomuser.me/api/portraits/men/" + random.nextInt(50) + ".jpg");
+		user.setLocked(true);
+		barista = userRepository.save(user);
+		users.add(barista);
+
+		user = new User("admin@vaadin.com", "Göran", "Rich",
+				passwordEncoder.encode("admin"), Role.ADMIN,
+				"https://randomuser.me/api/portraits/men/" + random.nextInt(50) + ".jpg");
+		user.setLocked(true);
+		admin = userRepository.save(user);
+		users.add(admin);
 	}
 }
