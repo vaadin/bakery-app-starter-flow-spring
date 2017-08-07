@@ -351,7 +351,7 @@ public class DataGenerator implements HasLogger {
 
 		user = new User("admin@vaadin.com", "Göran", "Rich",
 				passwordEncoder.encode("admin"), Role.ADMIN,
-				"https://randomuser.me/api/portraits/women/" + random.nextInt(50) + ".jpg");
+				"https://randomuser.me/api/portraits/men/" + random.nextInt(50) + ".jpg");
 		user.setLocked(true);
 		admin = userRepository.save(user);
 		users.add(admin);
