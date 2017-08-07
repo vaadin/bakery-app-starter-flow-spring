@@ -2,7 +2,6 @@
   "entrypoint": "src/storefront/bakery-storefront.html",
   "shell": "src/app/bakery-app.html",
   "fragments": [
-    "src/admin/bakery-admin.html",
     "src/dashboard/bakery-dashboard.html",
     "src/products/bakery-products.html",
     "src/storefront/bakery-storefront.html",

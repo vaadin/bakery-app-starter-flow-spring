@@ -28,6 +28,10 @@
         font-weight: bold;
       }
 
+      .group-heading {
+        margin: var(--valo-space-m) 0 var(--valo-space-m) var(--valo-space-s);
+      }
+
       .secondary {
         color: var(--valo-secondary-text-color);
       }
@@ -42,11 +46,19 @@
         :host {
           padding: 0 var(--valo-space-s);
         }
+
+        .group-heading {
+          margin: var(--valo-space-m) 0 var(--valo-space-s);
+        }
+      }
+
+      [opened].group-heading {
+        padding-left: 8px;
       }
     </style>
 
     <template is="dom-if" if="[[displayHeader]]">
-      <div class="group-heading">
+      <div class="group-heading" opened$="[[_showDetailsDesktop(selected, desktopView)]]">
         <span class="main" theme$="[[_getMainFontSize(desktopView)]]">[[header.main]]</span>
         <span class="secondary" theme$="[[_getSecondaryFontSize(desktopView)]]">[[header.secondary]]</span>
       </div>
@@ -61,12 +73,6 @@
         <item-detail-inline opened="[[_showDetailsDesktop(selected, desktopView)]]">
           <storefront-item-detail item="[[order]]"></storefront-item-detail>
         </item-detail-inline>
-      </template>
-
-      <template is="dom-if" if="[[!desktopView]]" restamp>
-        <item-detail-dialog opened="[[_showDetailsMobile(selected, desktopView)]]">
-          <storefront-item-detail item="[[order]]"></storefront-item-detail>
-        </item-detail-dialog>
       </template>
     </div>
 

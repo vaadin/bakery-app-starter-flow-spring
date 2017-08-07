@@ -6,8 +6,6 @@
 <link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
 <link rel="import" href="../../bower_components/vaadin-combo-box/vaadin-combo-box.html">
 <link rel="import" href="../../bower_components/vaadin-upload/vaadin-upload.html">
-<link rel="import" href="../elements/confirm-dialog.html">
-<link rel="import" href="../elements/item-detail-dialog.html">
 <link rel="import" href="../elements/utils-mixin.html">
 
 <dom-module id="user-edit">
@@ -56,23 +54,18 @@
       <br>
       <vaadin-text-field label="Email (login)" value="{{_editableItem.email}}" colspan="2"></vaadin-text-field>
       <br>
-      <vaadin-text-field label="First Name" value="{{_editableItem.name}}"></vaadin-text-field>
-      <vaadin-text-field label="Last Name" value="{{_editableItem.last}}"></vaadin-text-field>
+      <vaadin-text-field label="First Name" value="{{_editableItem.name}}" colspan="2"></vaadin-text-field>
+      <vaadin-text-field label="Last Name" value="{{_editableItem.last}}" colspan="2"></vaadin-text-field>
       <br>
       <vaadin-password-field label="Password" value="{{_editableItem.password}}" colspan="2"></vaadin-password-field>
       <br>
-      <vaadin-combo-box label="Role" value="{{_editableItem.role}}" items='["Barista", "Admin", "Baker"]'></vaadin-combo-box>
+      <vaadin-combo-box label="Role" value="{{_editableItem.role}}" items='["Barista", "Admin", "Baker"]' colspan="2"></vaadin-combo-box>
     </vaadin-form-layout>
     <div class="flex buttons">
-      <vaadin-button on-click="save" theme="primary" disabled="[[!_dirty]]">Save</vaadin-button>
+      <vaadin-button on-click="save" theme="primary" disabled="[[!dirty]]">Save</vaadin-button>
       <vaadin-button on-click="cancel">Cancel</vaadin-button>
       <div class="flex1"></div>
       <vaadin-button on-click="delete" theme="danger tertiary" class="right">Delete</vaadin-button>
-    </div>
-    <div>
-      <item-detail-dialog confirm-delete-dialog opened="{{_deleteDialogOpened}}">
-        <confirm-dialog user="[[item]]"></confirm-dialog>
-      </item-detail-dialog>
     </div>
   </template>
 
@@ -80,15 +73,6 @@
     class UserEdit extends window.EditableItemMixin(Polymer.Element) {
       static get is() {
         return 'user-edit';
-      }
-
-      static get properties() {
-        return {
-          _deleteDialogOpened: {
-            type: Boolean,
-            value: false
-          }
-        };
       }
 
       _onImgError(e) {

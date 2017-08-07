@@ -23,11 +23,11 @@
       }
 
       #status {
-        width: 120px;
+        width: 100px;
       }
 
       #time-place {
-        width: 100px;
+        width: 120px;
       }
 
       #name-items {
@@ -101,7 +101,7 @@
   </template>
 
   <script>
-    class StorefrontItem extends window.DateUtilsMixin(Polymer.Element) {
+    class StorefrontItem extends window.LocaleUtilsMixin(Polymer.Element) {
       static get is() {
         return 'storefront-item';
       }

@@ -185,6 +185,7 @@
     </div>
     <div class="flex footer">
       <vaadin-button on-click="_cancel">[[_cancelText()]]</vaadin-button>
+      <div class="flex1"></div>
       <div class="total money">Total [[_getCurrency(item.totalPrice)]]</div>
       <template is="dom-if" if="[[review]]">
         <vaadin-button theme="primary success" class="edit-button" on-click="_save">Place Order ✓</vaadin-button>
@@ -199,7 +200,7 @@
   </template>
 
   <script>
-    class StorefrontItemDetail extends window.DateUtilsMixin(window.ScrollShadowMixin(Polymer.Element)) {
+    class StorefrontItemDetail extends window.LocaleUtilsMixin(window.ScrollShadowMixin(Polymer.Element)) {
       static get is() {
         return 'storefront-item-detail';
       }
@@ -265,12 +266,10 @@
       }
 
       _do(type) {
-        this._saving = type === 'save';
-        this.close();
         const localItem = this.item;
         Polymer.RenderStatus.afterNextRender(this, () =>
           this.dispatchEvent(new CustomEvent(type, {bubbles: true, composed: true, detail: localItem})));
-        this._saving = false;
+        setTimeout(this.close.bind(this), 2);
       }
 
       _cancelText() {
