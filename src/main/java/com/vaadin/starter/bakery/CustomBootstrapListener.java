@@ -11,7 +11,15 @@ public class CustomBootstrapListener implements BootstrapListener {
 
     private void injectInlineCustomStyles(BootstrapPageResponse response) {
         final Element head = response.getDocument().head();
-        head.append("<meta name=\"viewport\" content=\"width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes\">");
+        
+		head.append("<link rel=\"shortcut icon\" href=\"icons/favicon.ico\">");
+		head.append("<link rel=\"icon\" sizes=\"192x192\" href=\"icons/icon-192.png\">");
+		head.append("<link rel=\"icon\" sizes=\"96x96\" href=\"icons/icon-96.png\">");
+		head.append("<link rel=\"apple-touch-icon\" sizes=\"192x192\" href=\"icons/icon-192.png\">");
+		head.append("<link rel=\"apple-touch-icon\" sizes=\"96x96\" href=\"icons/icon-96.png\">");
+
+		head.append(
+				"<meta name=\"viewport\" content=\"width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes\">");    
         head.append("<!-- Add any global styles for body, document, etc. -->\n" +
                 "    <custom-style>\n" +
                 "      <style is=\"custom-style\" include=\"valo-colors valo-typography\">\n" +
