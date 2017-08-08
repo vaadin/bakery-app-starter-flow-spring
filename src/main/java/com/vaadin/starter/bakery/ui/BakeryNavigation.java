@@ -1,5 +1,8 @@
 package com.vaadin.starter.bakery.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.vaadin.annotations.ClientDelegate;
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Tag;
@@ -10,7 +13,9 @@ import com.vaadin.hummingbird.ext.spring.annotations.UIScope;
 import com.vaadin.starter.bakery.app.BeanLocator;
 import com.vaadin.starter.bakery.app.security.SecuredViewAccessControl;
 import com.vaadin.starter.bakery.ui.dataproviders.UserDataProvider;
+import com.vaadin.starter.bakery.ui.entities.PageInfo;
 import com.vaadin.starter.bakery.ui.entities.User;
+import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.ui.AttachEvent;
 import com.vaadin.ui.History;
 import com.vaadin.ui.UI;
@@ -52,16 +57,12 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> im
 	public interface Model extends TemplateModel {
 		void setUser(UserModel user);
 
-		void setUsersMenuHidden(boolean usersMenuHidden);
-
-		void setAdminMenuHidden(boolean usersMenuHidden);
-
-		void setProductsMenuHidden(boolean productsMenuHidden);
+		void setPages(List<PageInfo> pages);
 	}
 
 	private UserDataProvider usersProvider;
-	
-	private UserDataProvider getUsersProvider(){
+
+	private UserDataProvider getUsersProvider() {
 		if (usersProvider == null) {
 			usersProvider = BeanLocator.find(UserDataProvider.class);
 		}
@@ -70,15 +71,27 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> im
 
 	@Override
 	protected void onAttach(AttachEvent attachEvent) {
+		setupNavigationButtons();
 		User uiUser = getUsersProvider().getCurrentUser();
 		UserModel user = new UserModel();
 		user.setName(uiUser.getName());
 		user.setImage(uiUser.getPicture());
 		user.setAlarms(true);
 		getModel().setUser(user);
-		getModel().setUsersMenuHidden(!SecuredViewAccessControl.isAccessGranted(UsersView.class));
-		getModel().setAdminMenuHidden(!SecuredViewAccessControl.isAccessGranted(AdminView.class));
-		getModel().setProductsMenuHidden(!SecuredViewAccessControl.isAccessGranted(AdminView.class));
+	}
+
+	private void setupNavigationButtons() {
+		List<PageInfo> pages = new ArrayList<>();
+
+		pages.add(new PageInfo(BakeryConst.PAGE_STOREFRONT, BakeryConst.ICON_STOREFRONT, BakeryConst.TITLE_STOREFRONT));
+		pages.add(new PageInfo(BakeryConst.PAGE_DASHBOARD, BakeryConst.ICON_DASHBOARD, BakeryConst.TITLE_DASHBOARD));
+
+		if (SecuredViewAccessControl.isAccessGranted(UsersView.class))
+			pages.add(new PageInfo(BakeryConst.PAGE_USERS, BakeryConst.ICON_USERS, BakeryConst.TITLE_USERS));
+		if (SecuredViewAccessControl.isAccessGranted(ProductsView.class))
+			pages.add(new PageInfo(BakeryConst.PAGE_PRODUCTS, BakeryConst.ICON_PRODUCTS, BakeryConst.TITLE_PRODUCTS));
+
+		getModel().setPages(pages);
 	}
 
 	@ClientDelegate
