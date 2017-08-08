@@ -12,6 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import javax.transaction.Transactional;
 
@@ -23,7 +24,6 @@ import com.vaadin.starter.bakery.app.BeanLocator;
 import com.vaadin.starter.bakery.backend.data.DashboardData;
 import com.vaadin.starter.bakery.backend.data.DeliveryStats;
 import com.vaadin.starter.bakery.backend.data.OrderState;
-import com.vaadin.starter.bakery.backend.data.entity.Customer;
 import com.vaadin.starter.bakery.backend.data.entity.HistoryItem;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
@@ -74,19 +74,19 @@ public class OrderService {
 	}
 
 	@Transactional(rollbackOn = Exception.class)
-	public Order saveOrder(Order order) {
-		Customer customer = getCustomerRepository().save(order.getCustomer());
-		order.setCustomer(customer);
-
-		if (order.getHistory() == null) {
-			String comment = "Order placed";
-			order.setHistory(new ArrayList<>());
-			HistoryItem item = new HistoryItem(getUserService().getCurrentUser(), comment);
-			item.setNewState(OrderState.NEW);
-			order.getHistory().add(item);
+	public Order saveOrder(Long id,OrderFiller orderFiller) {
+		Order order;
+		if(id == null) {
+			order = new Order(getUserService().getCurrentUser());
+		} else {
+			order = findOrder(id);
 		}
-
+		orderFiller.accept(order);
 		return getOrderRepository().save(order);
+	}
+	
+	public interface OrderFiller extends Consumer<Order> {
+		
 	}
 
 	public Order addHistoryItem(Order order, String comment) {

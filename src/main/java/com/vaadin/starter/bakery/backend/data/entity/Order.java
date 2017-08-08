@@ -2,6 +2,7 @@ package com.vaadin.starter.bakery.backend.data.entity;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -25,7 +26,7 @@ public class Order extends AbstractEntity {
 	@OneToOne
 	private PickupLocation pickupLocation;
 	@NotNull
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private Customer customer;
 	@NotNull
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -39,9 +40,27 @@ public class Order extends AbstractEntity {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@OrderColumn(name = "id")
 	private List<HistoryItem> history;
+	
 
-	public Order() {
-		// Empty constructor is needed by Spring Data / JPA
+	public Order(User createdBy) {
+		setState(OrderState.NEW);
+		setCustomer(new Customer());
+		createHistoryItem(createdBy,"Order placed");
+		
+	}
+	
+	Order() {
+		// For JPA
+	}
+	
+	private void createHistoryItem(User createdBy, String comment) {
+		HistoryItem item = new HistoryItem(createdBy, comment);
+		item.setNewState(state);
+		if (history == null) {
+			history = Collections.singletonList(item);
+		} else {
+			history.add(item);
+		}
 	}
 
 	public LocalDate getDueDate() {

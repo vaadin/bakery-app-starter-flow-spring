@@ -213,7 +213,7 @@
         // Empty order
         this._editableItem = {
           status: 'new',
-          date: d.toString(),
+          date: this._getDayIso(d.toString()),
           time: '16:00',
           customer: {'name': '', 'number': ''},
           orderNumber: -1

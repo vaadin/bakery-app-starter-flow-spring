@@ -16,7 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.google.gson.Gson;
 import com.vaadin.starter.bakery.backend.data.DashboardData;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
@@ -136,38 +135,27 @@ public class OrdersDataProvider {
 		return locationService;
 	}
 
-	public void save(JsonObject order) {
-		getOrderService().saveOrder(toDataEntity(order));
+	public void save(JsonObject orderData) {
+		Order order = DataProviderUtil.toUIEntity(orderData, Order.class);
+
+		getOrderService().saveOrder(DataProviderUtil.readId(order.getId()), o -> this.fillOrder(order, o));
 	}
 
-	private com.vaadin.starter.bakery.backend.data.entity.Order toDataEntity(JsonObject jsonOrder) {
-		com.vaadin.starter.bakery.backend.data.entity.Order dataEntity = null;
-		Gson gson = new Gson();
-		Order uiEntity = gson.fromJson(jsonOrder.toJson(), Order.class);
-		try {
-			dataEntity = getOrderService().findOrder(Long.valueOf(uiEntity.getId()));
-		} catch (NumberFormatException e) {
-		}
-
-		if (dataEntity == null) {
-			dataEntity = new com.vaadin.starter.bakery.backend.data.entity.Order();
-			dataEntity.setState(OrderState.NEW);
-		}
-
-		dataEntity.setCustomer(toDataCustomerEntity(uiEntity.getCustomer()));
-		LocalDate date;
-		try {
+	private void fillOrder(Order uiEntity, com.vaadin.starter.bakery.backend.data.entity.Order dataEntity) {
+		fillDataCustomerEntity(uiEntity.getCustomer(), dataEntity.getCustomer());
+		LocalDate date ;
+		if (uiEntity.getDate() != null) {
 			date = LocalDate.parse(uiEntity.getDate());
-		} catch (Exception e) {
+		} else {
 			date = LocalDate.now();
 		}
-
+		OrderState state = uiEntity.getStatus() != null ? OrderState.forDisplayName(uiEntity.getStatus()):null;
+		dataEntity.setState(state);
 		dataEntity.setDueDate(date);
 		dataEntity.setDueTime(LocalTime.parse(uiEntity.getTime()));
 		dataEntity.setItems(toDataOrderItemListEntity(uiEntity.getGoods()));
 		dataEntity.setPickupLocation(toDataPickupLocation(uiEntity.getPlace()));
 
-		return dataEntity;
 	}
 
 	private PickupLocation toDataPickupLocation(String place) {
@@ -201,14 +189,12 @@ public class OrdersDataProvider {
 		return uiEntity;
 	}
 
-	private static com.vaadin.starter.bakery.backend.data.entity.Customer toDataCustomerEntity(Customer uiCustomer) {
-		com.vaadin.starter.bakery.backend.data.entity.Customer dataEntity = new com.vaadin.starter.bakery.backend.data.entity.Customer();
+	private void fillDataCustomerEntity(Customer uiCustomer,com.vaadin.starter.bakery.backend.data.entity.Customer dataEntity) {
 
 		dataEntity.setFullName(uiCustomer.getName());
 		dataEntity.setPhoneNumber(uiCustomer.getNumber());
 		dataEntity.setDetails(uiCustomer.getDetails());
 
-		return dataEntity;
 	}
 
 	public void addOrderComment(String orderId, String message) {

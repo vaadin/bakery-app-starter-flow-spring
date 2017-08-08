@@ -102,7 +102,8 @@ public class DataGenerator implements HasLogger {
 		if (random.nextInt(10) == 0) {
 			customer.setDetails("Very important customer");
 		}
-		return customerRepo.save(customer);
+		return customer;
+		//return customerRepo.save(customer);
 	}
 
 	private String getRandomPhone() {
@@ -130,7 +131,7 @@ public class DataGenerator implements HasLogger {
 	}
 
 	private Order createOrder(LocalDate dueDate) {
-		Order order = new Order();
+		Order order = new Order(barista);
 
 		order.setCustomer(getRandomCustomer());
 		order.setPickupLocation(getRandomPickupLocation());
