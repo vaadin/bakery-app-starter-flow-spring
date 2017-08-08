@@ -15,12 +15,20 @@ class UsersViewElement extends AbstractElement {
 		return findElement(By.shadowSelector("::shadow items-view::shadow item-detail-dialog"));
 	}
 
+	WebElement getFirstTextField() {
+		return findElement(By.shadowSelector("::shadow #editor::shadow vaadin-form-layout > vaadin-text-field"));
+	}
+
 	WebElement getPasswordField() {
 		return findElement(By.shadowSelector("::shadow #editor::shadow vaadin-form-layout > vaadin-password-field"));
 	}
 
 	WebElement getUpdateButton() {
 		return findElement(By.shadowSelector("::shadow #editor::shadow vaadin-button[theme='primary']"));
+	}
+
+	WebElement getDeleteButton() {
+		return findElement(By.shadowSelector("::shadow #editor::shadow vaadin-button[theme~='danger']"));
 	}
 
 	WebElement getGridCell(String text) {

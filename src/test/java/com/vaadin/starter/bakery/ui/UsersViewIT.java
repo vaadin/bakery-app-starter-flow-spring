@@ -44,4 +44,47 @@ public class UsersViewIT extends AbstractIT {
 		bakerCell.click();
 		Assert.assertNull(password.getAttribute("value"));
 	}
+
+	@Test
+	public void tryToUpdateLockedEntity() {
+		UsersViewElement page = openTestPage();
+
+		// click on a locked user to open the editor dialog
+		page.getGridCell("baker@vaadin.com").click();
+
+		WebElement field = page.getFirstTextField();
+		String oldValue = field.getAttribute("value");
+		String newValue = oldValue + "-updated";
+		field.clear();
+		field.sendKeys(newValue);
+		page.getUpdateButton().click();
+
+		ConfirmDialogElement dialog = ((TestBenchElement) findElement(By.tagName("confirm-dialog"))).wrap(ConfirmDialogElement.class);
+		dialog.confirm();
+
+		WebDriverWait wait = new WebDriverWait(getDriver(), 10);
+		Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+
+		Assert.assertNotNull(alert);
+		Assert.assertEquals(MODIFY_LOCKED_USER_NOT_PERMITTED, alert.getText());
+	}
+
+	@Test
+	public void tryToDeleteLockedEntity() {
+		UsersViewElement page = openTestPage();
+
+		// click on a locked user to open the editor dialog
+		page.getGridCell("baker@vaadin.com").click();
+
+		page.getDeleteButton().click();
+
+		ConfirmDialogElement dialog = ((TestBenchElement) findElement(By.tagName("confirm-dialog"))).wrap(ConfirmDialogElement.class);
+		dialog.confirm();
+
+		WebDriverWait wait = new WebDriverWait(getDriver(), 10);
+		Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+
+		Assert.assertNotNull(alert);
+		Assert.assertEquals(MODIFY_LOCKED_USER_NOT_PERMITTED, alert.getText());
+	}
 }
