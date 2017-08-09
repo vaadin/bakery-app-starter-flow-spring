@@ -130,7 +130,9 @@
   </template>
 
   <script>
-    class StoreFromItemEdit extends window.LocaleUtilsMixin(window.ScrollShadowMixin(Polymer.Element)) {
+    class StoreFromItemEdit extends window.NotificationMixin(
+                                    window.LocaleUtilsMixin(
+                                    window.ScrollShadowMixin(Polymer.Element))) {
       static get is() {
         return 'storefront-item-edit';
       }
@@ -252,7 +254,7 @@
         if (this.$.itemEditForm.validate()) {
           this.dispatchEvent(new CustomEvent('next'));
         } else {
-          alert('Please fill out all required fields before proceeding.');
+          this.displayToast('Please fill out all required fields before proceeding');
         }
       }
     }

@@ -63,7 +63,9 @@
   </template>
 
   <script>
-    class BakeryProducts extends window.EditableListMixin(window.LocaleUtilsMixin(Polymer.Element)) {
+    class BakeryProducts extends window.NotificationMixin(
+                                 window.EditableListMixin(
+                                 window.LocaleUtilsMixin(Polymer.Element))) {
       static get is() {
         return 'bakery-products';
       }
@@ -92,7 +94,7 @@
       }
 
       showErrorMessage(error) {
-        window.alert(error || 'Error on saving.');
+        this.displayToast(error || 'Error on saving', true);
       }
 
       _onSave(e) {

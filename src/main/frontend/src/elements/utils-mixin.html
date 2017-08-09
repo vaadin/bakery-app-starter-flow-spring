@@ -1,6 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<script src="../../bower_components/moment/moment.js"></script>
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="confirm-dialog.html">
+<script src="../../bower_components/moment/moment.js"></script>
 
   <script>
     /**
@@ -161,7 +162,7 @@
       _editItem() {
         // activeItem is set after clicking on grid elements
         setTimeout(() => {
-          this._editableItem = this._activeItem;          
+          this._editableItem = this._activeItem;
         });
       }
 
@@ -301,6 +302,41 @@
         this._dialog.okText = okText;
         this._dialog.cancelText = cancelText;
         this._dialog.opened = true;
+      }
+    };
+
+    /**
+     * Mixin for editors.
+     */
+    /* @polymerMixin */
+    window.NotificationMixin = subclass => class extends subclass {
+
+      static get properties() {
+        return {
+          _defaultToast: Object,
+          _persistentToast: Object
+        };
+      }
+
+      ready() {
+        super.ready();
+        Polymer.RenderStatus.afterNextRender(this, () => {
+          this._defaultToast = document.createElement('paper-toast');
+          document.body.appendChild(this._defaultToast);
+
+          this._persistentToast = document.createElement('paper-toast');
+          this._persistentToast.setAttribute('duration', '0');
+          this._persistentToast.innerHTML =
+            '<paper-button onclick="this.parentElement.toggle()" class="yellow-button">Close</paper-button>';
+          document.body.appendChild(this._persistentToast);
+        });
+      }
+
+      displayToast(message, persistent) {
+        const toast = persistent ? this._persistentToast : this._defaultToast;
+        toast.style['z-index'] = 1000;
+        toast.text = message;
+        toast.open();
       }
     };
   </script>
