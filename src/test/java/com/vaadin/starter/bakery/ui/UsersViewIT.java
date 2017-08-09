@@ -49,7 +49,6 @@ public class UsersViewIT extends AbstractIT {
 	public void tryToUpdateLockedEntity() {
 		UsersViewElement page = openTestPage();
 
-		// click on a locked user to open the editor dialog
 		page.getGridCell("barista@vaadin.com").click();
 
 		WebElement field = page.getFirstTextField();
@@ -67,7 +66,6 @@ public class UsersViewIT extends AbstractIT {
 	public void tryToDeleteLockedEntity() {
 		UsersViewElement page = openTestPage();
 
-		// click on a locked user to open the editor dialog
 		page.getGridCell("barista@vaadin.com").click();
 
 		page.getDeleteButton().click();

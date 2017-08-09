@@ -3,12 +3,18 @@ package com.vaadin.starter.bakery;
 import com.vaadin.testbench.HasDriver;
 import com.vaadin.testbench.TestBenchDriverProxy;
 import com.vaadin.testbench.TestBenchElement;
+import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,20 +32,7 @@ public abstract class By extends com.vaadin.testbench.By {
 		private final String selector;
 
 		private static final String QUERY_SELECTOR_IN_SHADOW_ROOT_JS =
-				"function queryShadowSelectorAll(selector, context) {\n" +
-				"  context = context || document;\n" +
-				"  const index = selector.indexOf('::shadow');\n" +
-				"  if (index > -1) {\n" +
-				"    const hostSelector = selector.substring(0, index);\n" +
-				"    const rest = selector.substring(index + '::shadow'.length);\n" +
-				"    const host = hostSelector.trim() === '' ? context : context.querySelector(hostSelector);\n" +
-				"    return queryShadowSelectorAll(rest, host.shadowRoot);\n" +
-				"  } else {\n" +
-				"    return context.querySelectorAll(selector);\n" +
-				"  }\n" +
-				"}\n" +
-				"\n" +
-				"return queryShadowSelectorAll(arguments[0], arguments[1]);";
+				getResource("query-selector-in-shadow-root.js");
 
 		private ByShadowSelector(final String selector) {
 			super(selector);
@@ -140,6 +133,22 @@ public abstract class By extends com.vaadin.testbench.By {
 		private static NoSuchElementException makeNoSuchElementException(String selector, Exception cause) {
 			return new NoSuchElementException(
 					"ByShadowSelector: could not find elements with the selector '" + selector + "'", cause);
+		}
+
+		private static String getResource(String name) {
+			Logger logger = LoggerFactory.getLogger(By.class);
+			InputStream inputStream = By.class.getClassLoader().getResourceAsStream(name);
+			if (inputStream != null) {
+				try {
+					return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+				} catch (IOException e) {
+					logger.error("Could not load the resource " + name, e);
+				}
+			} else {
+				logger.error("Could not find the resource " + name);
+			}
+
+			return null;
 		}
 	}
 }
