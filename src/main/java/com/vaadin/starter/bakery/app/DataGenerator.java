@@ -7,6 +7,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Consumer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -299,12 +300,15 @@ public class DataGenerator implements HasLogger {
 	}
 
 	private void createPickupLocations(PickupLocationRepository pickupRepo) {
-		PickupLocation store = new PickupLocation();
-		store.setName("Store");
-		pickupLocations.add(pickupRepo.save(store));
-		PickupLocation bakery = new PickupLocation();
-		bakery.setName("Bakery");
-		pickupLocations.add(pickupRepo.save(bakery));
+		Consumer<String> createAndAdd = s -> {
+			PickupLocation store = new PickupLocation();
+			store.setName(s);
+			pickupLocations.add(store);
+		};
+		createAndAdd.accept("Store");
+		createAndAdd.accept("Bakery");
+		//pickupLocations.add(pickupRepo.save(store));
+		//pickupLocations.add(pickupRepo.save(bakery));
 	}
 
 	private void createProducts(ProductRepository productsRepo) {

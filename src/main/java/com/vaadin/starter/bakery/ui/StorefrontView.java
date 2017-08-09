@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -54,6 +56,8 @@ import elemental.json.JsonObject;
 @Secured(Role.BARISTA)
 public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implements View {
 
+	private static final Log log = LogFactory.getLog(StorefrontView.class);
+	
 	public interface Model extends TemplateModel {
 		void setOrders(List<Order> orders);
 
@@ -85,6 +89,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		try {
 			ordersProvider.save(order);
 		} catch (Exception e) {
+			log.debug("There was a problem while saving the order",e);
 			getElement().callFunction("showErrorMessage", "Order was not saved");
 		} finally {
 			getElement().callFunction("_onFiltersChanged");

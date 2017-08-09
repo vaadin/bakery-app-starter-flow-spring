@@ -23,7 +23,7 @@ public class Order extends AbstractEntity {
 	@NotNull
 	private LocalTime dueTime;
 	@NotNull
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private PickupLocation pickupLocation;
 	@NotNull
 	@OneToOne(cascade = CascadeType.ALL)
@@ -45,12 +45,12 @@ public class Order extends AbstractEntity {
 	public Order(User createdBy) {
 		setState(OrderState.NEW);
 		setCustomer(new Customer());
+		setPickupLocation(new PickupLocation());
 		createHistoryItem(createdBy,"Order placed");
-		
 	}
 	
 	Order() {
-		// For JPA
+		// Empty constructor is needed by Spring Data / JPA
 	}
 	
 	private void createHistoryItem(User createdBy, String comment) {

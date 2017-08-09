@@ -282,7 +282,7 @@
       }
 
       save() {
-        this.item = Object.assign(this.item || {}, this._editableItem);
+        this.item = Object.assign(this.item, this._editableItem);
         this.dispatchEvent(new CustomEvent('save', {bubbles: false, composed: true, detail: this.item}));
         this.close(true);
       }

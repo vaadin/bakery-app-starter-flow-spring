@@ -19,9 +19,7 @@ import org.springframework.stereotype.Service;
 import com.vaadin.starter.bakery.backend.data.DashboardData;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
-import com.vaadin.starter.bakery.backend.data.entity.PickupLocation;
 import com.vaadin.starter.bakery.backend.service.OrderService;
-import com.vaadin.starter.bakery.backend.service.PickupLocationService;
 import com.vaadin.starter.bakery.ui.entities.Customer;
 import com.vaadin.starter.bakery.ui.entities.Good;
 import com.vaadin.starter.bakery.ui.entities.HistoryItem;
@@ -34,14 +32,11 @@ import elemental.json.JsonObject;
 public class OrdersDataProvider {
 
 	private final OrderService orderService;
-	private final PickupLocationService locationService;
 	private final ProductsDataProvider productsProvider;
 
 	@Autowired
-	public OrdersDataProvider(ProductsDataProvider productsProvider, OrderService orderService,
-			PickupLocationService locationService) {
+	public OrdersDataProvider(ProductsDataProvider productsProvider, OrderService orderService) {
 		this.orderService = orderService;
-		this.locationService = locationService;
 		this.productsProvider = productsProvider;
 	}
 
@@ -108,15 +103,8 @@ public class OrdersDataProvider {
 
 	protected Page<com.vaadin.starter.bakery.backend.data.entity.Order> fetchFromBackEnd(String filter,
 			boolean showPrevious, Pageable pageable) {
-		return getOrderService().findAnyMatchingAfterDueDate(getFilter(filter), getFilterDate(showPrevious), pageable);
-	}
-
-	private Optional<String> getFilter(String filter) {
-		if (filter == null) {
-			return Optional.empty();
-		}
-
-		return Optional.of(filter);
+		return getOrderService().findAnyMatchingAfterDueDate(Optional.ofNullable(filter), getFilterDate(showPrevious),
+				pageable);
 	}
 
 	private Optional<LocalDate> getFilterDate(boolean showPrevious) {
@@ -131,10 +119,6 @@ public class OrdersDataProvider {
 		return orderService;
 	}
 
-	private PickupLocationService getLocationService() {
-		return locationService;
-	}
-
 	public void save(JsonObject orderData) {
 		Order order = DataProviderUtil.toUIEntity(orderData, Order.class);
 
@@ -143,25 +127,18 @@ public class OrdersDataProvider {
 
 	private void fillOrder(Order uiEntity, com.vaadin.starter.bakery.backend.data.entity.Order dataEntity) {
 		fillDataCustomerEntity(uiEntity.getCustomer(), dataEntity.getCustomer());
-		LocalDate date ;
+		LocalDate date;
 		if (uiEntity.getDate() != null) {
 			date = LocalDate.parse(uiEntity.getDate());
 		} else {
 			date = LocalDate.now();
 		}
-		OrderState state = uiEntity.getStatus() != null ? OrderState.forDisplayName(uiEntity.getStatus()):null;
+		OrderState state = uiEntity.getStatus() != null ? OrderState.forDisplayName(uiEntity.getStatus()) : null;
 		dataEntity.setState(state);
 		dataEntity.setDueDate(date);
 		dataEntity.setDueTime(LocalTime.parse(uiEntity.getTime()));
 		dataEntity.setItems(toDataOrderItemListEntity(uiEntity.getGoods()));
-		dataEntity.setPickupLocation(toDataPickupLocation(uiEntity.getPlace()));
-
-	}
-
-	private PickupLocation toDataPickupLocation(String place) {
-		PickupLocation pickupLocation = getLocationService().findAnyMatching(Optional.of(place), null).getContent()
-				.get(0);
-		return pickupLocation;
+		dataEntity.getPickupLocation().setName(uiEntity.getPlace());
 	}
 
 	private List<OrderItem> toDataOrderItemListEntity(List<Good> goods) {
