@@ -154,31 +154,15 @@
         <br>
         Sunshine
       </div>
-      <paper-tabs selected="[[page]]" attr-for-selected="name" class="navigation-tabs" align-bottom="[[_desktopView]]">
-        <paper-tab name="storefront">
-          <a router-link href="storefront">
-            <iron-icon icon="valo:edit"></iron-icon>
-            <span>Storefront</span>
-          </a>
-        </paper-tab>
-        <paper-tab name="dashboard">
-          <a router-link href="dashboard">
-            <iron-icon icon="valo:clock"></iron-icon>
-            <span>Dashboard</span>
-          </a>
-        </paper-tab>
-        <paper-tab name="users">
-          <a router-link href="users">
-            <iron-icon icon="valo:user"></iron-icon>
-            <span>Users</span>
-          </a>
-        </paper-tab>
-        <paper-tab name="products">
-          <a router-link href="products">
-            <iron-icon icon="valo:calendar"></iron-icon>
-            <span>Products</span>
-          </a>
-        </paper-tab>
+      <paper-tabs selected="[[page]]" attr-for-selected="page-id" class="navigation-tabs" align-bottom="[[_desktopView]]">
+        <template is="dom-repeat" items="[[pages]]">
+          <paper-tab page-id="[[item.link]]">
+            <a router-link href="[[item.link]]">
+              <iron-icon icon="valo:[[item.icon]]"></iron-icon>
+              <span>[[item.title]]</span>
+            </a>
+          </paper-tab>
+        </template>
       </paper-tabs>
       <vaadin-button class="user-button" hidden$="[[!_desktopView]]" theme="tertiary" on-click="_showUserMenuPopup" popup-menu-opened$="[[popupMenuOpened]]">
         <img src="[[user.image]]" alt="[[user.name]]" class="user-image" id="desktop-user-image">
