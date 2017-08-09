@@ -50,17 +50,11 @@ public class UsersViewIT extends AbstractIT {
 		UsersViewElement page = openTestPage();
 
 		// click on a locked user to open the editor dialog
-		page.getGridCell("baker@vaadin.com").click();
+		page.getGridCell("barista@vaadin.com").click();
 
 		WebElement field = page.getFirstTextField();
-		String oldValue = field.getAttribute("value");
-		String newValue = oldValue + "-updated";
-		field.clear();
-		field.sendKeys(newValue);
+		field.sendKeys("-updated");
 		page.getUpdateButton().click();
-
-		ConfirmDialogElement dialog = ((TestBenchElement) findElement(By.tagName("confirm-dialog"))).wrap(ConfirmDialogElement.class);
-		dialog.confirm();
 
 		WebDriverWait wait = new WebDriverWait(getDriver(), 10);
 		Alert alert = wait.until(ExpectedConditions.alertIsPresent());
@@ -74,11 +68,14 @@ public class UsersViewIT extends AbstractIT {
 		UsersViewElement page = openTestPage();
 
 		// click on a locked user to open the editor dialog
-		page.getGridCell("baker@vaadin.com").click();
+		page.getGridCell("barista@vaadin.com").click();
 
 		page.getDeleteButton().click();
 
-		ConfirmDialogElement dialog = ((TestBenchElement) findElement(By.tagName("confirm-dialog"))).wrap(ConfirmDialogElement.class);
+		WebElement dialogElement = findElements(By.tagName("confirm-dialog"))
+				.stream().filter(WebElement::isDisplayed).findFirst().get();
+		Assert.assertNotNull(dialogElement);
+		ConfirmDialogElement dialog = ((TestBenchElement) dialogElement).wrap(ConfirmDialogElement.class);
 		dialog.confirm();
 
 		WebDriverWait wait = new WebDriverWait(getDriver(), 10);
