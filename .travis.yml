@@ -21,6 +21,13 @@ addons:
 install: true
 script: ./.travis.script.sh
 
+deploy:
+  - provider: script
+    script: ./.travis.deploy.sh
+    skip_cleanup: true
+    on:
+      branch: master
+
 # Cache requires a master build
 branches:
   only:
@@ -34,3 +41,4 @@ cache:
 before_cache:
   # remove all build artifacts
   - rm -rf $HOME/.m2/repository/com/vaadin/starter/bakery
+  
