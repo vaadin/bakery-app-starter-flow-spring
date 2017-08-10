@@ -130,9 +130,12 @@
   </template>
 
   <script>
-    class StoreFromItemEdit extends window.NotificationMixin(
-                                    window.LocaleUtilsMixin(
-                                    window.ScrollShadowMixin(Polymer.Element))) {
+    class StoreFromItemEdit extends
+      window.NotificationMixin(
+        window.LocaleUtilsMixin(
+          window.ScrollShadowMixin(
+            Polymer.Element))) {
+
       static get is() {
         return 'storefront-item-edit';
       }
