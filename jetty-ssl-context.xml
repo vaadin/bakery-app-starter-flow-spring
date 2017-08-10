@@ -7,6 +7,21 @@
 <Configure id="Server" class="org.eclipse.jetty.server.Server">
 
     <New id="sslContextFactory" class="org.eclipse.jetty.util.ssl.SslContextFactory">
+        <!-- ================= GENERATING THE KEYPAIR ===================================== -->
+        <!-- keytool -genkey -keyalg RSA -keysize 2048 -validity 3650 -alias jetty          -->
+        <!--         -keystore keystore.jks -keypass password -storepass password           -->
+        <!--         -dname "CN=localhost, OU=Pro Tools, O=Vaadin, L=Turku, ST=Turku, C=FI" -->
+        <!--         -ext san=ip:127.0.0.1                                                  -->
+        <!-- ============================================================================== -->
+
+        <!-- ================= EXPORTING THE PUBLIC KEY =================================== -->
+        <!-- keytool -list -rfc -alias jetty -keystore keystore.jks -storepass password     -->
+        <!--         | openssl x509 -inform pem -pubkey -noout                              -->
+        <!--         | openssl rsa -pubin -out publickey.ssl                                -->
+        <!-- ============================================================================== -->
+
+        <!-- === DO NOT commit private keys and passwords into production project repos! == -->
+
         <Set name="KeyStorePath"><Property name="jetty.home" default="." />/src/main/resources/keystore.jks</Set>
         <Set name="KeyStorePassword">password</Set>
         <Set name="KeyManagerPassword">password</Set>
@@ -15,8 +30,8 @@
 
         <Set name="IncludeCipherSuites">
             <Array type="String">
-                <Item>TLS_DHE_RSA.*</Item>
                 <Item>TLS_ECDHE.*</Item>
+                <Item>TLS_DHE_RSA.*</Item>
             </Array>
         </Set>
 
@@ -27,6 +42,7 @@
                 <Item>.*MD5.*</Item>
                 <Item>.*DES.*</Item>
                 <Item>.*DSS.*</Item>
+                <Item>.*CBC.*</Item>
             </Array>
         </Set>
     </New>
