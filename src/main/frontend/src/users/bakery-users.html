@@ -108,11 +108,6 @@
 
       static get properties() {
         return {
-          errorMessage: {
-            type: String,
-            value: '',
-            observer: '_onErrorMessageChanged'
-          },
           desktopView: Boolean,
           _filterValue: String
         };
@@ -186,16 +181,6 @@
           });
         }
         return [];
-      }
-
-      _onErrorMessageChanged() {
-        if (this.errorMessage && this.errorMessage !== '') {
-          // TODO(vlukashov) 2017-07-17: refactor this code after the Flow issue #2035 is fixed
-          Polymer.Async.animationFrame.run(() => {
-            this.displayToast(this.errorMessage, true);
-            this.errorMessage = '';
-          });
-        }
       }
     }
 

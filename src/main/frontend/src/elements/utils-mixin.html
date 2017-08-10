@@ -321,21 +321,29 @@
       ready() {
         super.ready();
         Polymer.RenderStatus.afterNextRender(this, () => {
-          this._defaultToast = document.createElement('paper-toast');
-          document.body.appendChild(this._defaultToast);
+          this._defaultToast = document.getElementById('_defaultToast');
+          if (!this._defaultToast) {
+            this._defaultToast = document.createElement('paper-toast');
+            this._defaultToast.setAttribute('id', '_defaultToast');
+            document.body.appendChild(this._defaultToast);
+          }
 
-          this._persistentToast = document.createElement('paper-toast');
-          this._persistentToast.setAttribute('duration', '0');
-          this._persistentToast.innerHTML =
-            '<paper-button onclick="this.parentElement.toggle()" class="yellow-button">Close</paper-button>';
-          document.body.appendChild(this._persistentToast);
+          this._persistentToast = document.getElementById('_persistentToast');
+          if (!this._persistentToast) {
+            this._persistentToast = document.createElement('paper-toast');
+            this._persistentToast.setAttribute('id', '_persistentToast');
+            this._persistentToast.setAttribute('duration', '0');
+            this._persistentToast.innerHTML =
+              '<paper-button onclick="this.parentElement.toggle()" class="yellow-button">Close</paper-button>';
+            document.body.appendChild(this._persistentToast);
+          }
         });
       }
 
       displayToast(message, persistent) {
         const toast = persistent ? this._persistentToast : this._defaultToast;
         toast.style['z-index'] = 1000;
-        toast.text = message;
+        toast.setAttribute('text', message);
         toast.open();
       }
     };

@@ -262,12 +262,6 @@
           this.dispatchEvent(new CustomEvent('notify-resize'));
         });
       }
-
-      showErrorMessage(message) {
-        Polymer.Async.animationFrame.run(() => {
-          this.displayToast(message, true);
-        });
-      }
     }
 
     window.customElements.define(BakeryStorefront.is, BakeryStorefront);

@@ -93,10 +93,6 @@
         this._editableItem = product ? Object.assign({}, product) : null;
       }
 
-      showErrorMessage(error) {
-        this.displayToast(error || 'Error on saving', true);
-      }
-
       _onSave(e) {
         this.$server.saveProduct(e.detail);
       }
