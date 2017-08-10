@@ -12,6 +12,8 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.vaadin.ui.UI;
+
 /**
  * SecurityUtils takes care of all such static operations that have to do with
  * security and querying rights from different beans of the UI.
@@ -26,8 +28,8 @@ public class SecurityUtils {
 	/**
 	 * Gets the user name of the currently signed in user.
 	 *
-	 * @return the user name of the current user or <code>null</code> if the user
-	 *         has not signed in
+	 * @return the user name of the current user or <code>null</code> if the
+	 *         user has not signed in
 	 */
 	public static String getUsername() {
 		SecurityContext context = SecurityContextHolder.getContext();
@@ -36,7 +38,8 @@ public class SecurityUtils {
 	}
 
 	/**
-	 * Check if currently signed-in user is in the role with the given role name.
+	 * Check if currently signed-in user is in the role with the given role
+	 * name.
 	 *
 	 * @param role
 	 *            the role to check for
@@ -60,8 +63,8 @@ public class SecurityUtils {
 	}
 
 	/**
-	 * Checks if access is granted for the current user for the given secured view
-	 * within the given ui.
+	 * Checks if access is granted for the current user for the given secured
+	 * view within the given ui.
 	 *
 	 * @param viewSecured
 	 * @return true if access is granted, false otherwise.

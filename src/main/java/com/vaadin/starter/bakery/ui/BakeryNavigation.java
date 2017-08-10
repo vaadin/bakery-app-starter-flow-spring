@@ -98,8 +98,6 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> im
 		}
 	}
 
-	
-	
 	private void setupNavigationButtons() {
 		List<PageInfo> pages = new ArrayList<>();
 
