@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -76,4 +77,9 @@ public class SecurityUtils {
 		return Arrays.asList(viewSecured.value()).stream().anyMatch(SecurityUtils::isCurrentUserInRole);
 	}
 
+	public static boolean isUserLoggedIn() {
+		SecurityContext context = SecurityContextHolder.getContext();
+		//TODO Find a better way. Maybe disable anonymous auth?
+		return !(context.getAuthentication()  instanceof AnonymousAuthenticationToken);
+	}
 }
