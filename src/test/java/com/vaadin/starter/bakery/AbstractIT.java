@@ -7,8 +7,11 @@ import com.vaadin.testbench.*;
 import com.vaadin.testbench.commands.TestBenchCommandExecutor;
 import org.junit.Before;
 import org.junit.Rule;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.LoggerFactory;
 
 public class AbstractIT extends TestBenchTestCase {
@@ -71,4 +74,14 @@ public class AbstractIT extends TestBenchTestCase {
         return TestBench.createElement(LoginViewElement.class, body.getWrappedElement(), executor);
     }
 
+    /**
+     * Waits for a browser alert window to appear and returns the alert object.
+     * The default timeout is 10 seconds. If no alert appears in that time, an exception is thrown.
+     *
+     * @return an {@link Alert} object
+     */
+    protected Alert waitForAlert() {
+        WebDriverWait wait = new WebDriverWait(getDriver(), 10);
+        return wait.until(ExpectedConditions.alertIsPresent());
+    }
 }

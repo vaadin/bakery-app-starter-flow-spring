@@ -7,12 +7,10 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
+import static com.vaadin.starter.bakery.backend.service.UserService.MODIFY_LOCKED_USER_NOT_PERMITTED;
 
 public class UsersViewIT extends AbstractIT {
-
-	private static final String MODIFY_LOCKED_USER_NOT_PERMITTED = "User has been locked and cannot be modified or deleted";
 
 	private UsersViewElement openTestPage() {
 		openLoginView().login("admin@vaadin.com", "admin");
@@ -55,10 +53,7 @@ public class UsersViewIT extends AbstractIT {
 		field.sendKeys("-updated");
 		page.getUpdateButton().click();
 
-		WebDriverWait wait = new WebDriverWait(getDriver(), 10);
-		Alert alert = wait.until(ExpectedConditions.alertIsPresent());
-
-		Assert.assertNotNull(alert);
+		Alert alert = waitForAlert();
 		Assert.assertEquals(MODIFY_LOCKED_USER_NOT_PERMITTED, alert.getText());
 	}
 
@@ -76,10 +71,7 @@ public class UsersViewIT extends AbstractIT {
 		ConfirmDialogElement dialog = ((TestBenchElement) dialogElement).wrap(ConfirmDialogElement.class);
 		dialog.confirm();
 
-		WebDriverWait wait = new WebDriverWait(getDriver(), 10);
-		Alert alert = wait.until(ExpectedConditions.alertIsPresent());
-
-		Assert.assertNotNull(alert);
+		Alert alert = waitForAlert();
 		Assert.assertEquals(MODIFY_LOCKED_USER_NOT_PERMITTED, alert.getText());
 	}
 }
