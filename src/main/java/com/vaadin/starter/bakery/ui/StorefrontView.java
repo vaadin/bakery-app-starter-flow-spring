@@ -54,7 +54,7 @@ import elemental.json.JsonObject;
 @Route(value = "")
 @ParentView(BakeryApp.class)
 @Secured(Role.BARISTA)
-public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implements View {
+public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implements View, HasToast {
 
 	private static final Log log = LogFactory.getLog(StorefrontView.class);
 	
@@ -89,8 +89,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		try {
 			ordersProvider.save(order);
 		} catch (Exception e) {
-			log.debug("There was a problem while saving the order",e);
-			getElement().callFunction("showErrorMessage", "Order was not saved");
+			log.debug("There was a problem while saving the order", e);
+			toast("Order was not saved", true);
 		} finally {
 			getElement().callFunction("_onFiltersChanged");
 		}
@@ -108,7 +108,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		try {
 			ordersProvider.addOrderComment(orderId, message);
 		} catch (Exception e) {
-			getElement().callFunction("showErrorMessage", e.getMessage());
+			toast(e.getMessage(), true);
 		} finally {
 			updateOrderInModel(orderId);
 		}
