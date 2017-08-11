@@ -53,8 +53,9 @@ public class UsersViewIT extends AbstractIT {
 		field.sendKeys("-updated");
 		page.getUpdateButton().click();
 
-		Alert alert = waitForAlert();
-		Assert.assertEquals(MODIFY_LOCKED_USER_NOT_PERMITTED, alert.getText());
+		WebElement toast = findElement(By.id("_persistentToast"));
+		Assert.assertEquals(MODIFY_LOCKED_USER_NOT_PERMITTED, toast.getAttribute("text"));
+		Assert.assertEquals("paper-toast-open", toast.getAttribute("class"));
 	}
 
 	@Test
@@ -71,7 +72,8 @@ public class UsersViewIT extends AbstractIT {
 		ConfirmDialogElement dialog = ((TestBenchElement) dialogElement).wrap(ConfirmDialogElement.class);
 		dialog.confirm();
 
-		Alert alert = waitForAlert();
-		Assert.assertEquals(MODIFY_LOCKED_USER_NOT_PERMITTED, alert.getText());
+		WebElement toast = findElement(By.id("_persistentToast"));
+		Assert.assertEquals(MODIFY_LOCKED_USER_NOT_PERMITTED, toast.getAttribute("text"));
+		Assert.assertEquals("paper-toast-open", toast.getAttribute("class"));
 	}
 }
