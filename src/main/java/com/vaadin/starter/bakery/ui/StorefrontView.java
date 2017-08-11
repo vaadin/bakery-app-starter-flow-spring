@@ -19,8 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -34,6 +32,7 @@ import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
+import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.starter.bakery.ui.dataproviders.ProductsDataProvider;
@@ -54,10 +53,8 @@ import elemental.json.JsonObject;
 @Route(value = "")
 @ParentView(BakeryApp.class)
 @Secured(Role.BARISTA)
-public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implements View {
+public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implements View,HasLogger {
 
-	private static final Log log = LogFactory.getLog(StorefrontView.class);
-	
 	public interface Model extends TemplateModel {
 		void setOrders(List<Order> orders);
 
@@ -89,7 +86,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		try {
 			ordersProvider.save(order);
 		} catch (Exception e) {
-			log.debug("There was a problem while saving the order",e);
+			getLogger().debug("There was a problem while saving the order",e);
 			getElement().callFunction("showErrorMessage", "Order was not saved");
 		} finally {
 			getElement().callFunction("_onFiltersChanged");

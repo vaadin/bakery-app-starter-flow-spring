@@ -7,7 +7,7 @@ import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.EnumSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import javax.transaction.Transactional;
+import javax.validation.ValidationException;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +25,6 @@ import com.vaadin.starter.bakery.app.BeanLocator;
 import com.vaadin.starter.bakery.backend.data.DashboardData;
 import com.vaadin.starter.bakery.backend.data.DeliveryStats;
 import com.vaadin.starter.bakery.backend.data.OrderState;
-import com.vaadin.starter.bakery.backend.data.entity.HistoryItem;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.repositories.CustomerRepository;
@@ -39,42 +39,31 @@ public class OrderService {
 
 	private UserService userService;
 
-	private static Set<OrderState> notAvailableStates;
-
-	static {
-		notAvailableStates = new HashSet<>(Arrays.asList(OrderState.values()));
-		notAvailableStates.remove(OrderState.DELIVERED);
-		notAvailableStates.remove(OrderState.READY);
-		notAvailableStates.remove(OrderState.CANCELLED);
-	}
+	private static final Set<OrderState> notAvailableStates = Collections.unmodifiableSet(
+			EnumSet.complementOf(EnumSet.of(OrderState.DELIVERED, OrderState.READY, OrderState.CANCELLED)));
 
 	public Order findOrder(Long id) {
-		return getOrderRepository().findOne(id);
+		Order order = getOrderRepository().findOne(id);
+		if (order == null) {
+			throw new ValidationException("Someone has already deleted the order. Please refresh the page.");
+		}
+		return order;
 	}
 
-	public Order changeState(Order order, OrderState state) {
+	@Transactional(rollbackOn = Exception.class)
+	public Order changeState(Long id, OrderState state) {
+		Order order = findOrder(id);
 		if (order.getState() == state) {
 			throw new IllegalArgumentException("Order state is already " + state);
 		}
 		order.setState(state);
-		addHistoryItem(order, state);
+		order.addHistoryItem(getUserService().getCurrentUser(), "Order " + state.getDisplayName());
 
 		return getOrderRepository().save(order);
 	}
 
-	private void addHistoryItem(Order order, OrderState newState) {
-		String comment = "Order " + newState.getDisplayName();
-
-		HistoryItem item = new HistoryItem(getUserService().getCurrentUser(), comment);
-		item.setNewState(newState);
-		if (order.getHistory() == null) {
-			order.setHistory(new ArrayList<>());
-		}
-		order.getHistory().add(item);
-	}
-
 	@Transactional(rollbackOn = Exception.class)
-	public Order saveOrder(Long id,OrderFiller orderFiller) {
+	public Order saveOrder(Long id,Consumer<Order> orderFiller) {
 		Order order;
 		if(id == null) {
 			order = new Order(getUserService().getCurrentUser());
@@ -84,20 +73,11 @@ public class OrderService {
 		orderFiller.accept(order);
 		return getOrderRepository().save(order);
 	}
-	
-	public interface OrderFiller extends Consumer<Order> {
-		
-	}
 
-	public Order addHistoryItem(Order order, String comment) {
-		HistoryItem item = new HistoryItem(getUserService().getCurrentUser(), comment);
-
-		if (order.getHistory() == null) {
-			order.setHistory(new ArrayList<>());
-		}
-
-		order.getHistory().add(item);
-
+	@Transactional(rollbackOn = Exception.class)
+	public Order addComment(Long id, String comment) {
+		Order order = findOrder(id);
+		order.addHistoryItem(getUserService().getCurrentUser(), comment);
 		return getOrderRepository().save(order);
 	}
 

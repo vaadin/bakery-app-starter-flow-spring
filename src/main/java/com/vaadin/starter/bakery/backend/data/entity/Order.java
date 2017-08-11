@@ -2,15 +2,19 @@ package com.vaadin.starter.bakery.backend.data.entity;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Index;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderColumn;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.vaadin.starter.bakery.backend.data.OrderState;
@@ -28,9 +32,10 @@ public class Order extends AbstractEntity {
 	@NotNull
 	@OneToOne(cascade = CascadeType.ALL)
 	private Customer customer;
-	@NotNull
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@OrderColumn(name = "id")
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	@OrderColumn(name = "ORDERITEM_INDEX")
+	@JoinColumn
 	private List<OrderItem> items;
 	@NotNull
 	private OrderState state;
@@ -40,20 +45,20 @@ public class Order extends AbstractEntity {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@OrderColumn(name = "id")
 	private List<HistoryItem> history;
-	
 
 	public Order(User createdBy) {
 		setState(OrderState.NEW);
 		setCustomer(new Customer());
 		setPickupLocation(new PickupLocation());
-		createHistoryItem(createdBy,"Order placed");
+		addHistoryItem(createdBy, "Order placed");
+		this.items = new ArrayList<>();
 	}
-	
+
 	Order() {
 		// Empty constructor is needed by Spring Data / JPA
 	}
-	
-	private void createHistoryItem(User createdBy, String comment) {
+
+	public void addHistoryItem(User createdBy, String comment) {
 		HistoryItem item = new HistoryItem(createdBy, comment);
 		item.setNewState(state);
 		if (history == null) {
@@ -61,6 +66,18 @@ public class Order extends AbstractEntity {
 		} else {
 			history.add(item);
 		}
+	}
+
+	public void clearItems() {
+		this.items.clear();
+	}
+
+	public void addOrderItem(Product product, int quantity, String comment) {
+		OrderItem item = new OrderItem();
+		item.setProduct(product);
+		item.setQuantity(quantity);
+		item.setComment(comment);
+		this.items.add(item);
 	}
 
 	public LocalDate getDueDate() {
