@@ -53,8 +53,7 @@ public class UsersViewIT extends AbstractIT {
 		field.sendKeys("-updated");
 		page.getUpdateButton().click();
 
-		getDriver().waitForVaadin();
-		WebElement toast = findElement(By.shadowSelector("paper-toast[id='_persistentToast']"));
+		WebElement toast = findElement(By.id("_persistentToast"));
 		Assert.assertEquals(MODIFY_LOCKED_USER_NOT_PERMITTED, toast.getAttribute("text"));
 		Assert.assertEquals("paper-toast-open", toast.getAttribute("class"));
 	}
@@ -73,8 +72,7 @@ public class UsersViewIT extends AbstractIT {
 		ConfirmDialogElement dialog = ((TestBenchElement) dialogElement).wrap(ConfirmDialogElement.class);
 		dialog.confirm();
 
-		getDriver().waitForVaadin();
-		WebElement toast = findElement(By.shadowSelector("paper-toast[id='_persistentToast']"));
+		WebElement toast = findElement(By.id("_persistentToast"));
 		Assert.assertEquals(MODIFY_LOCKED_USER_NOT_PERMITTED, toast.getAttribute("text"));
 		Assert.assertEquals("paper-toast-open", toast.getAttribute("class"));
 	}
