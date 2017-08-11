@@ -61,10 +61,10 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 			getElement().callFunction("editProduct");
 		} catch (ConstraintViolationException e) {
 			String errorMessage = getErrorMessage(e);
-			toast( errorMessage, true);
+			toast(errorMessage, true);
 			getLogger().error("Error on saving product: " + errorMessage);
 		} catch (Exception e) {
-			toast( "Product could not be saved", true);
+			toast("Product could not be saved", true);
 			getLogger().error("Error on saving product: " + e.getMessage());
 		}
 	}
