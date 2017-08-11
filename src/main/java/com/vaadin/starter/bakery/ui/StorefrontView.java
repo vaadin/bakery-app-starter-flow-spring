@@ -132,7 +132,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		for (int i = 0; i < orders.size(); i += 1) {
 			Order modelOrder = orders.get(i);
 			if (modelOrder.getId().equals(orderId)) {
-				return i;
+				return i; 
 			}
 		}
 		return -1;
