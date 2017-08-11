@@ -29,7 +29,7 @@ import java.util.List;
 @Route(BakeryConst.PAGE_PRODUCTS)
 @ParentView(BakeryApp.class)
 @Secured(Role.ADMIN)
-public class ProductsView extends PolymerTemplate<ProductsView.Model> implements View, HasLogger {
+public class ProductsView extends PolymerTemplate<ProductsView.Model> implements View, HasToast, HasLogger {
 
 	public interface Model extends TemplateModel {
 		void setProducts(List<Product> products);
@@ -61,10 +61,10 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 			getElement().callFunction("editProduct");
 		} catch (ConstraintViolationException e) {
 			String errorMessage = getErrorMessage(e);
-			getElement().callFunction("showErrorMessage", errorMessage);
+			toast(errorMessage, true);
 			getLogger().error("Error on saving product: " + errorMessage);
 		} catch (Exception e) {
-			getElement().callFunction("showErrorMessage", "Product could not be saved.");
+			toast("Product could not be saved", true);
 			getLogger().error("Error on saving product: " + e.getMessage());
 		}
 	}
@@ -75,11 +75,11 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 			productsDataProvider.delete(Long.parseLong(id));
 			getModel().setProducts(productsDataProvider.findAll());
 		} catch (Exception e) {
-			String message = "Product could not be deleted.";
+			String message = "Product could not be deleted";
 			if (e instanceof DataIntegrityViolationException) {
-				message += " Product is currently in use.";
+				message += " because it is currently in use";
 			}
-			getElement().callFunction("showErrorMessage", message);
+			toast(message, true);
 			getLogger().error("Error on deleting product: " + e.getMessage());
 		}
 	}
