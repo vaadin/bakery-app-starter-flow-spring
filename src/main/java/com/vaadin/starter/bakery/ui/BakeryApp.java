@@ -1,6 +1,7 @@
 package com.vaadin.starter.bakery.ui;
 
 import com.vaadin.annotations.HtmlImport;
+import com.vaadin.annotations.Id;
 import com.vaadin.annotations.JavaScript;
 import com.vaadin.annotations.Tag;
 import com.vaadin.flow.router.HasChildView;
@@ -19,6 +20,11 @@ import com.vaadin.ui.UI;
 @JavaScript(value = "frontend://resources/service-worker-loader.js", loadMode = LoadMode.LAZY)
 @UIScope
 public class BakeryApp extends PolymerTemplate<BakeryApp.Model> implements HasChildView {
+
+	// TODO(vlukashov, 2017.08.11): Remove this once https://github.com/vaadin/flow/issues/2152 is closed.
+	// when bundling is enabled the Flow's sub-template feature does not work
+	@Id("navigation")
+	private BakeryNavigation navigation;
 
 	private View childView;
 

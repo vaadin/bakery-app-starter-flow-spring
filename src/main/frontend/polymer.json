@@ -7,7 +7,8 @@
     "src/storefront/bakery-storefront.html",
     "src/users/bakery-users.html",
     "src/404/bakery-404.html",
-    "src/admin/access-denied.html"
+    "src/admin/access-denied.html",
+    "src/app/bakery-navigation.html"
   ],
   "sources": [
     "src/**/*",
