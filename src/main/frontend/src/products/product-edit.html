@@ -53,7 +53,7 @@
   </template>
 
   <script>
-    class ProductEdit extends window.EditableItemMixin(Polymer.Element) {
+    class ProductEdit extends window.NotificationMixin(window.EditableItemMixin(Polymer.Element)) {
       static get is() {
         return 'product-edit';
       }
@@ -77,7 +77,7 @@
           this._editableItem.price = (Number.parseFloat(this.$.price.value || 0, 2) * 100).toFixed(0);
           super.save();
         } else {
-          alert('Please fill out all required fields before proceeding.');
+          this.displayToast('Please fill out all required fields before proceeding');
         }
       }
     }

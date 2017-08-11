@@ -17,8 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserService implements CrudService<User> {
 
-	private static final String MODIFY_LOCKED_USER_NOT_PERMITTED = "User has been locked and cannot be modified or deleted";
-	private static final String DELETING_SELF_NOT_PERMITTED = "It's not possible to delete your own user account.";
+	public static final String MODIFY_LOCKED_USER_NOT_PERMITTED =
+			"User has been locked and cannot be modified or deleted";
+	private static final String DELETING_SELF_NOT_PERMITTED = "You cannot delete your own account";
 	private final PasswordEncoder passwordEncoder;
 
 	@Autowired

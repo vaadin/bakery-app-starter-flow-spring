@@ -86,7 +86,7 @@
 
   <script>
     /* global bakeryDeepCopy:false */
-    class BakeryStorefront extends window.LocaleUtilsMixin(Polymer.Element) {
+    class BakeryStorefront extends window.NotificationMixin(window.LocaleUtilsMixin(Polymer.Element)) {
       static get is() {
         return 'bakery-storefront';
       }
@@ -260,12 +260,6 @@
         Polymer.RenderStatus.afterNextRender(this, () => {
           this.$.list.notifyResize();
           this.dispatchEvent(new CustomEvent('notify-resize'));
-        });
-      }
-
-      showErrorMessage(message) {
-        Polymer.Async.animationFrame.run(() => {
-          window.alert(message);
         });
       }
     }
