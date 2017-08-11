@@ -85,7 +85,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		try {
 			ordersProvider.save(order);
 		} catch (Exception e) {
-			toast( "Order was not saved", true);
+			toast("Order was not saved", true);
 		} finally {
 			getElement().callFunction("_onFiltersChanged");
 		}
