@@ -1,18 +1,25 @@
 package com.vaadin.starter.bakery;
 
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
-import com.vaadin.starter.bakery.ui.view.LoginViewElement;
-import com.vaadin.testbench.*;
-import com.vaadin.testbench.commands.TestBenchCommandExecutor;
 import org.junit.Before;
 import org.junit.Rule;
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.LoggerFactory;
+
+import com.vaadin.starter.bakery.ui.view.LoginViewElement;
+import com.vaadin.testbench.HasTestBenchCommandExecutor;
+import com.vaadin.testbench.ScreenshotOnFailureRule;
+import com.vaadin.testbench.TestBench;
+import com.vaadin.testbench.TestBenchDriverProxy;
+import com.vaadin.testbench.TestBenchElement;
+import com.vaadin.testbench.TestBenchTestCase;
+import com.vaadin.testbench.commands.TestBenchCommandExecutor;
+
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
 
 public class AbstractIT extends TestBenchTestCase {
 
@@ -74,14 +81,15 @@ public class AbstractIT extends TestBenchTestCase {
         return TestBench.createElement(LoginViewElement.class, body.getWrappedElement(), executor);
     }
 
-    /**
-     * Waits for a browser alert window to appear and returns the alert object.
-     * The default timeout is 10 seconds. If no alert appears in that time, an exception is thrown.
-     *
-     * @return an {@link Alert} object
-     */
-    protected Alert waitForAlert() {
-        WebDriverWait wait = new WebDriverWait(getDriver(), 10);
-        return wait.until(ExpectedConditions.alertIsPresent());
-    }
+	/**
+	 * Waits for a WebElement matching the selector to be found and returns the
+	 * object. The default timeout is 10 seconds.
+	 *
+	 * @return a {@link WebElement} object if found before timeout
+	 * 
+	 *         * @throws TimeoutException If 10 seconds passed.
+	 */
+	protected WebElement waitUntilElementPresent(By by) {
+		return new WebDriverWait(getDriver(), 10).until(ExpectedConditions.presenceOfElementLocated(by));
+	}
 }

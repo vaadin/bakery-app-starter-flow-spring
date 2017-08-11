@@ -1,14 +1,14 @@
 package com.vaadin.starter.bakery.ui;
 
+import static com.vaadin.starter.bakery.backend.service.UserService.MODIFY_LOCKED_USER_NOT_PERMITTED;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.openqa.selenium.WebElement;
+
 import com.vaadin.starter.bakery.AbstractIT;
 import com.vaadin.starter.bakery.By;
 import com.vaadin.testbench.TestBenchElement;
-import org.junit.Assert;
-import org.junit.Test;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.WebElement;
-
-import static com.vaadin.starter.bakery.backend.service.UserService.MODIFY_LOCKED_USER_NOT_PERMITTED;
 
 public class UsersViewIT extends AbstractIT {
 
