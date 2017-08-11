@@ -16,7 +16,7 @@ public class DataProviderUtil {
 	}
 
 	public static Long readId(String id) {
-		return Long.valueOf(id);
+		return convertIfNotNull(id,Long::valueOf);
 	}
 
 	public static <S, T> T convertIfNotNull(S source, Function<S, T> converter) {
