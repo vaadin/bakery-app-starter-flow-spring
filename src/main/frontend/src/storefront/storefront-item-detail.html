@@ -97,29 +97,37 @@
           margin-bottom: 0;
         }
       }
+
+      [mobile-view].mobile-flex-column {
+        flex-direction: column;
+      }
+
+      [mobile-view].flex5 {
+        flex: 0;
+      }
     </style>
 
     <div class="scrollable flex1 main-row" id="main">
       <div class="flex meta-row">
         <storefront-item-badge status="[[item.status]]"></storefront-item-badge>
-        <span class="secondary">Order #[[item.orderNumber]]</span>
+        <span class="secondary">Order #[[item.id]]</span>
       </div>
       <div class="flex column">
-        <div class="flex">
+        <div class="flex mobile-flex-column" mobile-view$="[[!desktopView]]">
           <div class="flex column flex2 date-wrapper">
             <span class="secondary">Due</span>
-            <div class="flex date-row">
-              <div class="flex date column">
+            <div class="flex date-row full-width">
+              <div class="flex date column full-width">
                 <h3>[[_getDay(item.date)]]</h3>
                 <span class="secondary">[[_getWeekday(item.date)]]</span>
               </div>
-              <div class="flex column time">
+              <div class="flex column time full-width">
                 <h3>[[_getTime(item.time)]]</h3>
                 <span class="secondary">[[item.place]]</span>
               </div>
             </div>
           </div>
-          <div class="name-row flex5">
+          <div class="name-row flex5" mobile-view$="[[!desktopView]]">
             <span class="secondary">Customer</span>
             <h3>[[item.customer.name]]</h3>
           </div>
@@ -129,8 +137,10 @@
           </div>
         </div>
         <div class="flex customer-info-row">
-          <div class="flex2">
-          </div>
+          <template is="dom-if" if="[[desktopView]]">
+            <div class="flex2">
+            </div>
+          </template>
           <div class="flex column flex5">
             <span class="secondary">Additional details</span>
             <span>[[item.customer.details]]</span>
@@ -178,8 +188,10 @@
               </vaadin-text-field>
             </template>
           </div>
-          <div class="flex2">
-          </div>
+          <template is="dom-if" if="[[desktopView]]">
+            <div class="flex2">
+            </div>
+          </template>
         </div>
       </div>
     </div>
