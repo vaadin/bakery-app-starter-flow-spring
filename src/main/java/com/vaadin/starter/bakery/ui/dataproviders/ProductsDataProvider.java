@@ -1,15 +1,17 @@
 package com.vaadin.starter.bakery.ui.dataproviders;
 
-import com.google.gson.Gson;
-import com.vaadin.starter.bakery.backend.service.ProductService;
-import com.vaadin.starter.bakery.ui.entities.Product;
-import elemental.json.JsonObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.google.gson.Gson;
+import com.vaadin.starter.bakery.backend.service.ProductService;
+import com.vaadin.starter.bakery.ui.entities.Product;
+
+import elemental.json.JsonObject;
 
 @Service
 public class ProductsDataProvider {
@@ -70,8 +72,7 @@ public class ProductsDataProvider {
 		return uiEntity;
 	}
 
-	private com.vaadin.starter.bakery.backend.data.entity.Product toDataEntity(
-			JsonObject product) {
+	private com.vaadin.starter.bakery.backend.data.entity.Product toDataEntity(JsonObject product) {
 		Gson gson = new Gson();
 		Product uiEntity = gson.fromJson(product.toJson(), Product.class);
 		return toDataEntity(uiEntity);
@@ -93,5 +94,13 @@ public class ProductsDataProvider {
 		dataEntity.setPrice(product.getPrice());
 
 		return dataEntity;
+	}
+
+	public Product getById(Long id) {
+		com.vaadin.starter.bakery.backend.data.entity.Product dataEntity = productService.getRepository().findOne(id);
+		if (dataEntity == null)
+			return null;
+
+		return toUiEntity(dataEntity);
 	}
 }
