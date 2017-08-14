@@ -102,91 +102,91 @@ public class OrdersDataProvider {
 
 		return dataEntity;
 	}
-}
 
-/**
- * 
- * Responsible for filling the UI Order object with the data from model object.
- * 
- * @author tulio
- *
- */
-class UIOrderFiller {
+	/**
+	 * 
+	 * Responsible for filling the UI Order object with the data from model object.
+	 * 
+	 * @author tulio
+	 *
+	 */
+	static class UIOrderFiller {
 
-	void fill(Order uiEntity, com.vaadin.starter.bakery.backend.data.entity.Order dataEntity) {
-		uiEntity.setId(dataEntity.getId().toString());
-		uiEntity.setDate(dataEntity.getDueDate().toString());
-		uiEntity.setTime(dataEntity.getDueTime().toString());
+		void fill(Order uiEntity, com.vaadin.starter.bakery.backend.data.entity.Order dataEntity) {
+			uiEntity.setId(dataEntity.getId().toString());
+			uiEntity.setDate(dataEntity.getDueDate().toString());
+			uiEntity.setTime(dataEntity.getDueTime().toString());
 
-		uiEntity.setPlace(dataEntity.getPickupLocation().getName());
-		uiEntity.setStatus(dataEntity.getState().getDisplayName());
+			uiEntity.setPlace(dataEntity.getPickupLocation().getName());
+			uiEntity.setStatus(dataEntity.getState().getDisplayName());
 
-		fillUICustomerEntity(uiEntity.getCustomer(), dataEntity.getCustomer());
-		fillUIHistoryItems(uiEntity, dataEntity.getHistory());
-		fillUIGoods(uiEntity, dataEntity.getItems());
+			fillUICustomerEntity(uiEntity.getCustomer(), dataEntity.getCustomer());
+			fillUIHistoryItems(uiEntity, dataEntity.getHistory());
+			fillUIGoods(uiEntity, dataEntity.getItems());
+		}
+
+		private void fillUICustomerEntity(Customer uiCustomer,
+				com.vaadin.starter.bakery.backend.data.entity.Customer dataEntity) {
+			uiCustomer.setDetails(dataEntity.getDetails());
+			uiCustomer.setName(dataEntity.getFullName());
+			uiCustomer.setNumber(dataEntity.getPhoneNumber());
+		}
+
+		private void fillUIHistoryItems(Order uiEntity,
+				List<com.vaadin.starter.bakery.backend.data.entity.HistoryItem> historyItems) {
+			historyItems.forEach(h -> {
+				uiEntity.addHistoryItem(h.getTimestamp().toString(), h.getMessage(), h.getCreatedBy().getFirstName(),
+						DataProviderUtil.convertIfNotNull(h.getNewState(), OrderState::getDisplayName, () -> ""));
+			});
+		}
+
+		private void fillUIGoods(Order uiEntity, List<OrderItem> orderItems) {
+			orderItems.forEach(item -> {
+				uiEntity.addUIGood(item.getQuantity(), item.getProduct().getName(), item.getProduct().getPrice(),
+						item.getComment());
+			});
+		}
 	}
 
-	private void fillUICustomerEntity(Customer uiCustomer,
-			com.vaadin.starter.bakery.backend.data.entity.Customer dataEntity) {
-		uiCustomer.setDetails(dataEntity.getDetails());
-		uiCustomer.setName(dataEntity.getFullName());
-		uiCustomer.setNumber(dataEntity.getPhoneNumber());
+	/**
+	 * 
+	 * Responsible for filling the model object with the user input.
+	 * 
+	 * @author tulio
+	 *
+	 */
+	static class DataOrderFiller {
+
+		private final Function<String, Product> productProvider;
+
+		DataOrderFiller(Function<String, Product> productProvider) {
+			this.productProvider = productProvider;
+		}
+
+		void fill(com.vaadin.starter.bakery.backend.data.entity.Order dataEntity, Order uiEntity) {
+			fillDataCustomerEntity(dataEntity.getCustomer(), uiEntity.getCustomer());
+			LocalDate date = DataProviderUtil.convertIfNotNull(uiEntity.getDate(), LocalDate::parse, LocalDate::now);
+			OrderState state = DataProviderUtil.convertIfNotNull(uiEntity.getStatus(), OrderState::forDisplayName);
+			dataEntity.setState(state);
+			dataEntity.setDueDate(date);
+			dataEntity.setDueTime(LocalTime.parse(uiEntity.getTime()));
+			dataEntity.getPickupLocation().setName(uiEntity.getPlace());
+			fillOrderItems(dataEntity, uiEntity.getGoods());
+		}
+
+		private void fillDataCustomerEntity(com.vaadin.starter.bakery.backend.data.entity.Customer dataEntity,
+				Customer uiCustomer) {
+			dataEntity.setFullName(uiCustomer.getName());
+			dataEntity.setPhoneNumber(uiCustomer.getNumber());
+			dataEntity.setDetails(uiCustomer.getDetails());
+		}
+
+		private void fillOrderItems(com.vaadin.starter.bakery.backend.data.entity.Order dataEntity, List<Good> goods) {
+			dataEntity.clearItems();
+			goods.stream().filter(good -> good.getName() != null).forEach(good -> {
+				dataEntity.addOrderItem(productProvider.apply(good.getName()), good.getCount(), good.getDescription());
+			});
+		}
+
 	}
-
-	private void fillUIHistoryItems(Order uiEntity,
-			List<com.vaadin.starter.bakery.backend.data.entity.HistoryItem> historyItems) {
-		historyItems.forEach(h -> {
-			uiEntity.addHistoryItem(h.getTimestamp().toString(), h.getMessage(), h.getCreatedBy().getFirstName(),
-					DataProviderUtil.convertIfNotNull(h.getNewState(), OrderState::getDisplayName, () -> ""));
-		});
-	}
-
-	private void fillUIGoods(Order uiEntity, List<OrderItem> orderItems) {
-		orderItems.forEach(item -> {
-			uiEntity.addUIGood(item.getQuantity(), item.getProduct().getName(), item.getProduct().getPrice(),
-					item.getComment());
-		});
-	}
-}
-
-/**
- * 
- * Responsible for filling the model object with the user input.
- * 
- * @author tulio
- *
- */
-class DataOrderFiller {
-
-	private final Function<String, Product> productProvider;
-
-	DataOrderFiller(Function<String, Product> productProvider) {
-		this.productProvider = productProvider;
-	}
-
-	void fill(com.vaadin.starter.bakery.backend.data.entity.Order dataEntity, Order uiEntity) {
-		fillDataCustomerEntity(dataEntity.getCustomer(), uiEntity.getCustomer());
-		LocalDate date = DataProviderUtil.convertIfNotNull(uiEntity.getDate(), LocalDate::parse, LocalDate::now);
-		OrderState state = DataProviderUtil.convertIfNotNull(uiEntity.getStatus(), OrderState::forDisplayName);
-		dataEntity.setState(state);
-		dataEntity.setDueDate(date);
-		dataEntity.setDueTime(LocalTime.parse(uiEntity.getTime()));
-		dataEntity.getPickupLocation().setName(uiEntity.getPlace());
-		fillOrderItems(dataEntity, uiEntity.getGoods());
-	}
-
-	private void fillDataCustomerEntity(com.vaadin.starter.bakery.backend.data.entity.Customer dataEntity,
-			Customer uiCustomer) {
-		dataEntity.setFullName(uiCustomer.getName());
-		dataEntity.setPhoneNumber(uiCustomer.getNumber());
-		dataEntity.setDetails(uiCustomer.getDetails());
-	}
-
-	private void fillOrderItems(com.vaadin.starter.bakery.backend.data.entity.Order dataEntity, List<Good> goods) {
-		dataEntity.clearItems();
-		goods.stream().filter(good -> good.getName() != null).forEach(good -> {
-			dataEntity.addOrderItem(productProvider.apply(good.getName()), good.getCount(), good.getDescription());
-		});
-	}
-
 }
