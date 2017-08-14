@@ -9,6 +9,7 @@ import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
+import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
 @Tag("bakery-login")
 @HtmlImport("context://src/login/bakery-login.html")
