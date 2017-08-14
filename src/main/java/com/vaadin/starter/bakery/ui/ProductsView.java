@@ -1,32 +1,35 @@
 package com.vaadin.starter.bakery.ui;
 
-import com.vaadin.annotations.*;
-import com.vaadin.starter.bakery.app.HasLogger;
-import com.vaadin.starter.bakery.ui.dataproviders.ProductsDataProvider;
-import com.vaadin.starter.bakery.ui.entities.Product;
-import com.vaadin.ui.AttachEvent;
-import elemental.json.JsonObject;
+import java.util.List;
+
+import javax.validation.ConstraintViolationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.annotation.Secured;
 
+import com.google.gson.Gson;
+import com.vaadin.annotations.ClientDelegate;
+import com.vaadin.annotations.HtmlImport;
+import com.vaadin.annotations.Tag;
+import com.vaadin.flow.router.LocationChangeEvent;
 import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
+import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.Role;
+import com.vaadin.starter.bakery.ui.dataproviders.ProductsDataProvider;
+import com.vaadin.starter.bakery.ui.entities.Product;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
-import org.springframework.transaction.TransactionSystemException;
+import com.vaadin.ui.AttachEvent;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import java.util.Iterator;
-import java.util.List;
+import elemental.json.JsonObject;
 
 @Tag("bakery-products")
 @HtmlImport("frontend://src/products/bakery-products.html")
-@Route(BakeryConst.PAGE_PRODUCTS)
+@Route(BakeryConst.PAGE_PRODUCTS + "/{id}")
 @ParentView(BakeryApp.class)
 @Secured(Role.ADMIN)
 public class ProductsView extends PolymerTemplate<ProductsView.Model> implements View, HasToast, HasLogger {
@@ -45,7 +48,39 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 	@Override
 	protected void onAttach(AttachEvent attachEvent) {
 		super.onAttach(attachEvent);
-		getModel().setProducts(productsDataProvider.findAll());
+
+		getElement().addEventListener("save", e -> saveProduct(e.getEventData().getObject("event.detail")),
+				"event.detail");
+
+		getElement().addEventListener("delete", e -> deleteProduct(e.getEventData().getString("event.detail.id")),
+				"event.detail.id");
+
+		getElement().addEventListener("closed", e -> editProduct(null));
+	}
+
+	@Override
+	public void onLocationChange(LocationChangeEvent locationChangeEvent) {
+		setEditableProduct(locationChangeEvent.getPathParameter("id"));
+
+	}
+
+	private void setEditableProduct(String id) {
+		Long longId = null;
+		try {
+			longId = Long.parseLong(id);
+			Product product = productsDataProvider.getById(longId);
+			getElement().callFunction("setEditableProduct", new Gson().toJson(product));
+		} catch (Exception e) {
+		}
+	}
+
+	@ClientDelegate
+	private void editProduct(String id) {
+		if (id != null && !id.isEmpty()) {
+			getUI().get().navigateTo(BakeryConst.PAGE_PRODUCTS + "/" + id);
+		} else {
+			getUI().get().navigateTo(BakeryConst.PAGE_PRODUCTS);
+		}
 	}
 
 	@ClientDelegate
@@ -53,12 +88,10 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 		getModel().setProducts(productsDataProvider.findByName(filterValue));
 	}
 
-	@ClientDelegate
-	public void saveProduct(JsonObject product){
+	private void saveProduct(JsonObject product) {
 		try {
 			productsDataProvider.save(product);
 			getModel().setProducts(productsDataProvider.findAll());
-			getElement().callFunction("editProduct");
 		} catch (ConstraintViolationException e) {
 			String errorMessage = getErrorMessage(e);
 			toast(errorMessage, true);
@@ -69,8 +102,7 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 		}
 	}
 
-	@ClientDelegate
-	public void deleteProduct(String id) {
+	private void deleteProduct(String id) {
 		try {
 			productsDataProvider.delete(Long.parseLong(id));
 			getModel().setProducts(productsDataProvider.findAll());
@@ -86,9 +118,7 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 
 	private String getErrorMessage(ConstraintViolationException e) {
 		StringBuilder errorMessage = new StringBuilder();
-		e.getConstraintViolations().forEach(msg ->
-			errorMessage.append(msg.getMessage()).append(" ")
-		);
+		e.getConstraintViolations().forEach(msg -> errorMessage.append(msg.getMessage()).append(" "));
 		return errorMessage.toString().trim();
 	}
 }
