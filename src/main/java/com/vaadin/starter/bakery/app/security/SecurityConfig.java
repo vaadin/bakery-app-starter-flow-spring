@@ -1,5 +1,8 @@
 package com.vaadin.starter.bakery.app.security;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -94,5 +97,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			}
 		}
 
+		private boolean isHeartbeat(HttpServletRequest request) {
+			final String HEARTBEAT_PARAMETER = "v-r";
+			final String HEARTBEAT_PARAMETER_VALUE = "heartbeat";
+			return HEARTBEAT_PARAMETER_VALUE.equals(request.getParameter(HEARTBEAT_PARAMETER));
+		}
 	}
 }

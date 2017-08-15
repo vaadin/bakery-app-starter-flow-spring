@@ -1,9 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<dom-module id="user-login">
-<template> <!-- Enable these to hide browser controls when app is started from homescreen:
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  --> 
+<dom-module id="bakery-login">
+<template> 
 
 <style>
 
@@ -138,7 +135,7 @@ label {
   display: inline-block;
 }
 
-input[type='text'],
+input[type='email'],
 input[type='password'] {
   width: 100%;
   -webkit-appearance: none;
@@ -218,7 +215,7 @@ button {
     <form method="post" action="login" id="theform">
       <h2>Sign in</h2>
       <label id="login-label" for="login">Email</label> <input
-        type="text" id="login" name="username"
+        type="email" id="login" name="username"
         aria-labelledby="login-label" autofocus> <label
         id="password-label" for="password">Password</label> <input
         type="password" id="password" name="password"
@@ -229,9 +226,9 @@ button {
   </div>
 </template>
   <script>
-    class UserLogin extends Polymer.Element {
+    class BakeryLogin extends Polymer.Element {
       static get is() {
-        return 'user-login';
+        return 'bakery-login';
       }
 
       static get properties() {
@@ -245,7 +242,7 @@ button {
       }
     }
 
-    window.customElements.define(UserLogin.is, UserLogin);
+    window.customElements.define(BakeryLogin.is, BakeryLogin);
   </script>
 
 </dom-module>
