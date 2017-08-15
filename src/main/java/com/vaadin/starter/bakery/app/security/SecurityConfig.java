@@ -1,5 +1,8 @@
 package com.vaadin.starter.bakery.app.security;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -12,6 +15,7 @@ import org.springframework.security.config.annotation.web.configurers.FormLoginC
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 
 import com.vaadin.starter.bakery.BakeryApplicationConfig;
 import com.vaadin.starter.bakery.backend.data.Role;
@@ -42,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// Not using Spring CSRF here to be able to use plain HTML for the login
 		// page
 		http.csrf().disable();
-
+		http.requestCache().requestCache(new CustomRequestCache());
 		ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry reg = http
 				.authorizeRequests();
 
@@ -56,7 +60,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		reg = reg.antMatchers("/bower_components/**").permitAll();
 		reg = reg.antMatchers("/VAADIN/**").permitAll();
 		reg = reg.antMatchers("/resources/**").permitAll();
-;		
 		reg = reg.antMatchers("/login").permitAll();
 		reg = reg.antMatchers("/src/login/user-login.html").permitAll();
 		
@@ -73,4 +76,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		login.and().logout().logoutSuccessUrl(BakeryApplicationConfig.LOGOUT_URL);
 	}
 
+	
+	class CustomRequestCache extends HttpSessionRequestCache {
+		@Override
+		public void saveRequest(HttpServletRequest request, HttpServletResponse response) {
+			if (!isHeartbeat(request)) {
+				super.saveRequest(request, response);
+			}
+		}
+
+		private boolean isHeartbeat(HttpServletRequest request) {
+			final String HEARTBEAT_PARAMETER = "v-r";
+			final String HEARTBEAT_PARAMETER_VALUE = "heartbeat";
+			return HEARTBEAT_PARAMETER_VALUE.equals(request.getParameter(HEARTBEAT_PARAMETER));
+		}
+	}
 }

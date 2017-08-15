@@ -4,19 +4,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   --> 
-<script type="text/javascript">
 
-const init = function() {
-  if (window.location.hash) {
-    document.getElementById('theform').action += window.location.hash;
-  }
-  if (window.location.search.indexOf('error') > 0) {
-    document.body.className = 'error';
-  }
-};
-document.addEventListener('DOMContentLoaded', init, false);
-
-</script>
 <style>
 
 @font-face {
@@ -218,7 +206,7 @@ button {
   padding: 8px;
 }
 </style>
-  <div id="body" class$="[[_setError(error)]]">
+  <div id="body" class$="[[_getContainerClassName(error)]]">
   <div id="info">
     <div id="logo"></div>
     <h1>###Bakery###</h1>
@@ -247,12 +235,12 @@ button {
       }
 
       static get properties() {
-          return {
-            error: Boolean
-          };
+        return {
+          error: Boolean
+        };
       }
 
-      _setError(error) {
+      _getContainerClassName(error) {
         return error ? 'error' : '';
       }
     }
