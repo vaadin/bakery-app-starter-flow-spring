@@ -7,12 +7,14 @@
     "src/storefront/bakery-storefront.html",
     "src/users/bakery-users.html",
     "src/404/bakery-404.html",
-    "src/admin/access-denied.html"
+    "src/admin/access-denied.html",
+    "src/app/bakery-navigation.html"
   ],
   "sources": [
     "src/**/*",
     "images/**/*",
-    "bower.json"
+    "bower.json",
+    "resources/service-worker*.js"
   ],
   "extraDependencies": [
     "bower_components/webcomponentsjs/*.js",
@@ -34,7 +36,7 @@
       "js": { "minify": true, "compile": false },
       "css": { "minify": true },
       "html": { "minify": true },
-      "bundle": false
+      "bundle": true
     }
   ]
 }
