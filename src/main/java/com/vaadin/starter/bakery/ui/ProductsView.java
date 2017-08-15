@@ -55,6 +55,9 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 		getElement().addEventListener("delete", e -> deleteProduct(e.getEventData().getString("event.detail.id")),
 				"event.detail.id");
 
+		getElement().addEventListener("edit", e -> editProduct(e.getEventData().getString("event.detail")),
+				"event.detail");
+
 		getElement().addEventListener("closed", e -> editProduct(null));
 	}
 
@@ -74,7 +77,6 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 		}
 	}
 
-	@ClientDelegate
 	private void editProduct(String id) {
 		if (id != null && !id.isEmpty()) {
 			getUI().get().navigateTo(BakeryConst.PAGE_PRODUCTS + "/" + id);
