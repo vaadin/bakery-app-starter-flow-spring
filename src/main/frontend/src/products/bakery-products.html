@@ -91,12 +91,16 @@
           return;
         }
         if (!this.desktopView) {
-          this.$server.editProduct(value ? value.id : '');
+            this._editProduct(value ? value.id : '');
         }
       }
       
       _editItem(e) { 
-        this.$server.editProduct(e.target.productId);
+        this._editProduct(e.target.productId);
+      }
+
+      _editProduct(id) {
+        this.dispatchEvent(new CustomEvent('edit', {bubbles: true, composed: true, detail: id}));
       }
       
       setEditableProduct(product) {
