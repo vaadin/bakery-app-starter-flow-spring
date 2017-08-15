@@ -18,6 +18,7 @@ import com.vaadin.starter.bakery.backend.data.DashboardData;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
+import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.ui.entities.Customer;
 import com.vaadin.starter.bakery.ui.entities.Good;
@@ -78,7 +79,7 @@ public class OrdersDataProvider {
 		Order order = DataProviderUtil.toUIEntity(orderData, Order.class);
 
 		getOrderService().saveOrder(DataProviderUtil.readId(order.getId()),
-				o -> new DataOrderFiller(productsProvider::getProduct).fill(o, order));
+				(u, o) -> new DataOrderFiller(productsProvider::getProduct, u).fill(o, order));
 	}
 
 	public void addOrderComment(String orderId, String message) {
@@ -159,15 +160,18 @@ public class OrdersDataProvider {
 
 		private final Function<String, Product> productProvider;
 
-		DataOrderFiller(Function<String, Product> productProvider) {
+		private final User currentUser;
+
+		DataOrderFiller(Function<String, Product> productProvider, User currentUser) {
 			this.productProvider = productProvider;
+			this.currentUser = currentUser;
 		}
 
 		void fill(com.vaadin.starter.bakery.backend.data.entity.Order dataEntity, Order uiEntity) {
 			fillDataCustomerEntity(dataEntity.getCustomer(), uiEntity.getCustomer());
 			LocalDate date = DataProviderUtil.convertIfNotNull(uiEntity.getDate(), LocalDate::parse, LocalDate::now);
 			OrderState state = DataProviderUtil.convertIfNotNull(uiEntity.getStatus(), OrderState::forDisplayName);
-			dataEntity.setState(state);
+			dataEntity.changeState(currentUser, state);
 			dataEntity.setDueDate(date);
 			dataEntity.setDueTime(LocalTime.parse(uiEntity.getTime()));
 			dataEntity.getPickupLocation().setName(uiEntity.getPlace());

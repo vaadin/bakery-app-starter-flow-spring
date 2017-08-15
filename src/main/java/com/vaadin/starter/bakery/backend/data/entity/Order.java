@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -47,7 +48,7 @@ public class Order extends AbstractEntity {
 	private List<HistoryItem> history;
 
 	public Order(User createdBy) {
-		setState(OrderState.NEW);
+		this.state = OrderState.NEW;
 		setCustomer(new Customer());
 		setPickupLocation(new PickupLocation());
 		addHistoryItem(createdBy, "Order placed");
@@ -62,10 +63,9 @@ public class Order extends AbstractEntity {
 		HistoryItem item = new HistoryItem(createdBy, comment);
 		item.setNewState(state);
 		if (history == null) {
-			history = Collections.singletonList(item);
-		} else {
-			history.add(item);
+			history = new LinkedList<>();
 		}
+		history.add(item);
 	}
 
 	public void clearItems() {
@@ -140,8 +140,12 @@ public class Order extends AbstractEntity {
 		return state;
 	}
 
-	public void setState(OrderState state) {
+	public void changeState(User user, OrderState state) {
+		boolean createHistory = this.state != state && this.state != null && state != null;
 		this.state = state;
+		if (createHistory) {
+			addHistoryItem(user, "Order " + state.getDisplayName());
+		}
 	}
 
 }

@@ -12,6 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import javax.transaction.Transactional;
@@ -27,6 +28,7 @@ import com.vaadin.starter.bakery.backend.data.DeliveryStats;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
+import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.repositories.CustomerRepository;
 import com.vaadin.starter.bakery.repositories.OrderRepository;
 
@@ -51,26 +53,15 @@ public class OrderService {
 	}
 
 	@Transactional(rollbackOn = Exception.class)
-	public Order changeState(Long id, OrderState state) {
-		Order order = findOrder(id);
-		if (order.getState() == state) {
-			throw new IllegalArgumentException("Order state is already " + state);
-		}
-		order.setState(state);
-		order.addHistoryItem(getUserService().getCurrentUser(), "Order " + state.getDisplayName());
-
-		return getOrderRepository().save(order);
-	}
-
-	@Transactional(rollbackOn = Exception.class)
-	public Order saveOrder(Long id,Consumer<Order> orderFiller) {
+	public Order saveOrder(Long id,BiConsumer<User,Order> orderFiller) {
+		User currentUser = getUserService().getCurrentUser();
 		Order order;
 		if(id == null) {
-			order = new Order(getUserService().getCurrentUser());
+			order = new Order(currentUser);
 		} else {
 			order = findOrder(id);
 		}
-		orderFiller.accept(order);
+		orderFiller.accept(currentUser,order);
 		return getOrderRepository().save(order);
 	}
 
