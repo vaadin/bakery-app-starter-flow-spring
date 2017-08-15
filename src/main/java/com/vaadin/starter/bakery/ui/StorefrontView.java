@@ -52,7 +52,7 @@ import elemental.json.JsonObject;
 @Route(value = "")
 @ParentView(BakeryApp.class)
 @Secured(Role.BARISTA)
-public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implements View {
+public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implements View, HasToast {
 
 	public interface Model extends TemplateModel {
 		void setOrders(List<Order> orders);
@@ -85,7 +85,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		try {
 			ordersProvider.save(order);
 		} catch (Exception e) {
-			getElement().callFunction("showErrorMessage", "Order was not saved");
+			toast("Order was not saved", true);
 		} finally {
 			getElement().callFunction("_onFiltersChanged");
 		}
@@ -103,7 +103,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		try {
 			ordersProvider.addOrderComment(orderId, message);
 		} catch (Exception e) {
-			getElement().callFunction("showErrorMessage", e.getMessage());
+			toast(e.getMessage(), true);
 		} finally {
 			updateOrderInModel(orderId);
 		}

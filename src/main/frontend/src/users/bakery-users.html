@@ -101,18 +101,13 @@
   </template>
 
   <script>
-    class BakeryUsers extends window.EditableListMixin(Polymer.Element) {
+    class BakeryUsers extends window.NotificationMixin(window.EditableListMixin(Polymer.Element)) {
       static get is() {
         return 'bakery-users';
       }
 
       static get properties() {
         return {
-          errorMessage: {
-            type: String,
-            value: '',
-            observer: '_onErrorMessageChanged'
-          },
           desktopView: Boolean,
           _filterValue: String
         };
@@ -186,17 +181,6 @@
           });
         }
         return [];
-      }
-
-      _onErrorMessageChanged() {
-        if (this.errorMessage && this.errorMessage !== '') {
-          // TODO(vlukashov) 2017-07-17: refactor this code after the Flow issue #2035 is fixed
-          Polymer.Async.animationFrame.run(() => {
-            // TODO(vlukashov) 2017-07-13: find a better way to show error messages
-            window.alert(this.errorMessage);
-            this.errorMessage = '';
-          });
-        }
       }
     }
 

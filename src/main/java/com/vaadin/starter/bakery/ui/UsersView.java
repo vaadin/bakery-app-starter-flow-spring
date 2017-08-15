@@ -50,12 +50,10 @@ import elemental.json.JsonObject;
 @Route(BakeryConst.PAGE_USERS + "/{id}")
 @ParentView(BakeryApp.class)
 @Secured(Role.ADMIN)
-public class UsersView extends PolymerTemplate<UsersView.Model> implements View, HasLogger {
+public class UsersView extends PolymerTemplate<UsersView.Model> implements View, HasToast, HasLogger {
 
 	public interface Model extends TemplateModel {
 		void setUsers(List<User> users);
-
-		void setErrorMessage(String message);
 	}
 
 	private final UserDataProvider userDataProvider;
@@ -108,17 +106,17 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 			userDataProvider.save(user);
 		} catch (DataIntegrityViolationException e) {
 			// Commit failed because of validation errors
-			getModel().setErrorMessage(e.getMessage());
+			toast(e.getMessage(), true);
 			getLogger().debug("Data integrity violation error while updating entity of type "
 					+ com.vaadin.starter.bakery.backend.data.entity.User.class.getName(), e);
 		} catch (OptimisticLockingFailureException e) {
 			// Somebody else probably edited the data at the same time
-			getModel().setErrorMessage("Somebody else might have updated the data. Please refresh and try again.");
+			toast("Somebody else might have updated the data. Please refresh and try again.", true);
 			getLogger().debug("Optimistic locking error while saving entity of type "
 					+ com.vaadin.starter.bakery.backend.data.entity.User.class.getName(), e);
 		} catch (Exception e) {
 			// Something went wrong, no idea what
-			getModel().setErrorMessage("A problem occurred while saving the data. Please check the fields.");
+			toast("A problem occurred while saving the data. Please check the fields.", true);
 			getLogger().error("Unable to save entity of type "
 					+ com.vaadin.starter.bakery.backend.data.entity.User.class.getName(), e);
 		} finally {
@@ -134,23 +132,22 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 			isInSync = true;
 		} catch (UserFriendlyDataException e) {
 			// Commit failed because of application-level data constraints
-			getModel().setErrorMessage(e.getMessage());
+			toast(e.getMessage(), true);
 			getLogger().debug("User-friendly data exception while deleting entity of type "
 					+ com.vaadin.starter.bakery.backend.data.entity.User.class.getName(), e);
 		} catch (DataIntegrityViolationException e) {
 			// Commit failed because of validation errors
-			getModel().setErrorMessage(
-					"The given entity cannot be deleted as there are references to it in the database");
+			toast("The given entity cannot be deleted as there are references to it in the database", true);
 			getLogger().error("Data integrity violation error while deleting entity of type "
 					+ com.vaadin.starter.bakery.backend.data.entity.User.class.getName(), e);
 		} catch (OptimisticLockingFailureException e) {
 			// Somebody else probably edited the data at the same time
-			getModel().setErrorMessage("Somebody else might have updated the data. Please refresh and try again.");
+			toast("Somebody else might have updated the data. Please refresh and try again.", true);
 			getLogger().debug("Optimistic locking error while deleting entity of type "
 					+ com.vaadin.starter.bakery.backend.data.entity.User.class.getName(), e);
 		} catch (Exception e) {
 			// Something went wrong, no idea what
-			getModel().setErrorMessage("A problem occurred while deleting the data. Please refresh and try again.");
+			toast("A problem occurred while deleting the data. Please refresh and try again.", true);
 			getLogger().error("Unable to delete entity of type "
 					+ com.vaadin.starter.bakery.backend.data.entity.User.class.getName(), e);
 		} finally {

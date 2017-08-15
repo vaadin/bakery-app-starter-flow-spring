@@ -1,14 +1,14 @@
 package com.vaadin.starter.bakery.ui;
 
+import static com.vaadin.starter.bakery.backend.service.UserService.MODIFY_LOCKED_USER_NOT_PERMITTED;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.openqa.selenium.WebElement;
+
 import com.vaadin.starter.bakery.AbstractIT;
 import com.vaadin.starter.bakery.By;
 import com.vaadin.testbench.TestBenchElement;
-import org.junit.Assert;
-import org.junit.Test;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.WebElement;
-
-import static com.vaadin.starter.bakery.backend.service.UserService.MODIFY_LOCKED_USER_NOT_PERMITTED;
 
 public class UsersViewIT extends AbstractIT {
 
@@ -53,8 +53,9 @@ public class UsersViewIT extends AbstractIT {
 		field.sendKeys("-updated");
 		page.getUpdateButton().click();
 
-		Alert alert = waitForAlert();
-		Assert.assertEquals(MODIFY_LOCKED_USER_NOT_PERMITTED, alert.getText());
+		WebElement toast = findElement(By.id("_persistentToast"));
+		Assert.assertEquals(MODIFY_LOCKED_USER_NOT_PERMITTED, toast.getAttribute("text"));
+		Assert.assertEquals("paper-toast-open", toast.getAttribute("class"));
 	}
 
 	@Test
@@ -71,7 +72,8 @@ public class UsersViewIT extends AbstractIT {
 		ConfirmDialogElement dialog = ((TestBenchElement) dialogElement).wrap(ConfirmDialogElement.class);
 		dialog.confirm();
 
-		Alert alert = waitForAlert();
-		Assert.assertEquals(MODIFY_LOCKED_USER_NOT_PERMITTED, alert.getText());
+		WebElement toast = findElement(By.id("_persistentToast"));
+		Assert.assertEquals(MODIFY_LOCKED_USER_NOT_PERMITTED, toast.getAttribute("text"));
+		Assert.assertEquals("paper-toast-open", toast.getAttribute("class"));
 	}
 }
