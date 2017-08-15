@@ -12,7 +12,6 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.vaadin.ui.UI;
 
 /**
  * SecurityUtils takes care of all such static operations that have to do with
@@ -79,7 +78,6 @@ public class SecurityUtils {
 
 	public static boolean isUserLoggedIn() {
 		SecurityContext context = SecurityContextHolder.getContext();
-		//TODO Find a better way. Maybe disable anonymous auth?
-		return !(context.getAuthentication()  instanceof AnonymousAuthenticationToken);
+		return !(context.getAuthentication() instanceof AnonymousAuthenticationToken);
 	}
 }
