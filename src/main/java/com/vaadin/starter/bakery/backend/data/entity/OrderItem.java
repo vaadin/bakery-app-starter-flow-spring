@@ -1,7 +1,7 @@
 package com.vaadin.starter.bakery.backend.data.entity;
 
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -9,17 +9,13 @@ import javax.validation.constraints.Size;
 @Entity
 public class OrderItem extends AbstractEntity {
 
-	@OneToOne
+	@ManyToOne
 	@NotNull
 	private Product product;
 	@Min(1)
 	private int quantity = 1;
 	@Size(max = 255)
 	private String comment;
-
-	public OrderItem() {
-		// Empty constructor is needed by Spring Data / JPA
-	}
 
 	public Product getProduct() {
 		return product;

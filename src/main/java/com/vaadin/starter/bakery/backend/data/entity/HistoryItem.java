@@ -27,7 +27,7 @@ public class HistoryItem extends AbstractEntity {
 	@OneToOne
 	private User createdBy;
 
-	protected HistoryItem() {
+	HistoryItem() {
 		// Empty constructor is needed by Spring Data / JPA
 	}
 

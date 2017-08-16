@@ -1,6 +1,7 @@
 package com.vaadin.starter.bakery.ui.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Order implements Serializable {
@@ -18,13 +19,24 @@ public class Order implements Serializable {
 	private String date;
 	private String time;
 	private String place;
-	private Customer customer;
-	private List<Good> goods;
-	private List<HistoryItem> history;
+	private Customer customer = new Customer();
+	private List<Good> goods = new ArrayList<>();
+	private List<HistoryItem> history = new ArrayList<>();
 	private int totalPrice;
 
-	public Order() {
+	public void addHistoryItem(String date, String message, String createdBy, String status) {
+		HistoryItem historyItem = new HistoryItem();
+		historyItem.setDate(date);
+		historyItem.setMessage(message);
+		historyItem.setName(createdBy);
+		historyItem.setStatus(status);
+		history.add(historyItem);
+	}
 
+	public void addUIGood(int count, String name, int unitPrice, String comment) {
+		Good good = new Good(count, name, unitPrice, comment);
+		goods.add(good);
+		this.totalPrice += count * unitPrice;
 	}
 
 	public String getStatus() {
