@@ -36,6 +36,8 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 		@Include({ "id", "name", "price" })
 		@Convert(value = LongToStringConverter.class, path = "id")
 		void setProducts(List<Product> products);
+
+		String getFilterValue();
 	}
 
 	private final ProductsDataProvider productsDataProvider;
@@ -70,8 +72,9 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 	}
 
 	private void setEditableProduct(String id) {
-		if (id == null || id.isEmpty())
+		if (id == null || id.isEmpty()) {
 			return;
+		}
 
 		Long longId = null;
 		try {
@@ -81,6 +84,9 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 				getLogger().error("Product with id " + id + " was not found.");
 				return;
 			}
+			//Used direct call of client method, cause _editableItem is not accessible by Flow
+			//if using getModel().set_editableItem()
+			//InvalidTemplateModelException: has no property named _editableItem (or it has been excluded)
 			getElement().callFunction("setEditableProduct", new Gson().toJson(product));
 		} catch (NumberFormatException e) {
 			getLogger().error("Failed to parse id: " + id);
@@ -97,13 +103,17 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 
 	@ClientDelegate
 	public void onFilterProducts(String filterValue) {
+		if (filterValue == null) {
+			filterValue = "";
+		}
+
 		getModel().setProducts(service.findAnyMatching(Optional.of(filterValue), null).getContent());
 	}
 
 	private void saveProduct(JsonObject product) {
 		try {
 			productsDataProvider.save(product);
-			getElement().callFunction("_filterProducts");
+			onFilterProducts(getModel().getFilterValue());
 		} catch (ConstraintViolationException e) {
 			String errorMessage = getErrorMessage(e);
 			toast(errorMessage, true);
@@ -117,7 +127,7 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 	private void deleteProduct(String id) {
 		try {
 			service.delete(Long.parseLong(id));
-			getElement().callFunction("_filterProducts");
+			onFilterProducts(getModel().getFilterValue());
 		} catch (Exception e) {
 			String message = "Product could not be deleted";
 			if (e instanceof DataIntegrityViolationException) {
