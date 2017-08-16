@@ -98,23 +98,26 @@
         }
 
         .name-row {
-          flex: 5;
+          flex: 5 !important;
         }
 
         .desktop-flex2 {
           flex: 2;
         }
-      }
 
-      @media (max-width: 600px) {
         .mobile-flex-column {
-          flex-direction: column;
-        }
-
-        .name-row {
-          flex: 0;
+          flex-direction: row !important;
         }
       }
+
+      .mobile-flex-column {
+        flex-direction: column;
+      }
+
+      .name-row {
+        flex: 0;
+      }
+
     </style>
 
     <div class="scrollable flex1 main-row" id="main">
