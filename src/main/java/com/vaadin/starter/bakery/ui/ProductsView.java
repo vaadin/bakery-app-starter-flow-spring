@@ -82,7 +82,9 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 			longId = Long.parseLong(id);
 			Product product = service.getRepository().findOne(longId);
 			if (product == null) {
-				getLogger().error("Product with id " + id + " was not found.");
+				String errorMessage = "Product with id " + id + " was not found.";
+				toast(errorMessage, false);
+				getLogger().error(errorMessage);
 				return;
 			}
 			//Used direct call of client method, cause _editableItem is not accessible by Flow
@@ -90,15 +92,16 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 			//InvalidTemplateModelException: has no property named _editableItem (or it has been excluded)
 			getElement().callFunction("setEditableProduct", new Gson().toJson(product));
 		} catch (NumberFormatException e) {
+			toast("Wrong product id: " + id, false);
 			getLogger().error("Failed to parse id: " + id);
 		}
 	}
 
 	private void editProduct(String id) {
 		if (id != null && !id.isEmpty()) {
-			getUI().get().navigateTo(BakeryConst.PAGE_PRODUCTS + "/" + id);
+			getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_PRODUCTS + "/" + id));
 		} else {
-			getUI().get().navigateTo(BakeryConst.PAGE_PRODUCTS);
+			getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_PRODUCTS));
 		}
 	}
 
