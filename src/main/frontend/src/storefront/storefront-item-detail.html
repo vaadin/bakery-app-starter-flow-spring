@@ -100,6 +100,10 @@
         .name-row {
           flex: 5;
         }
+
+        .desktop-flex2 {
+          flex: 2;
+        }
       }
 
       @media (max-width: 600px) {
@@ -143,10 +147,8 @@
           </div>
         </div>
         <div class="flex customer-info-row">
-          <template is="dom-if" if="[[desktopView]]">
-            <div class="flex2">
-            </div>
-          </template>
+          <div class="desktop-flex2">
+          </div>
           <div class="flex column flex5">
             <span class="secondary">Additional details</span>
             <span>[[item.customer.details]]</span>
@@ -194,10 +196,8 @@
               </vaadin-text-field>
             </template>
           </div>
-          <template is="dom-if" if="[[desktopView]]">
-            <div class="flex2">
-            </div>
-          </template>
+          <div class="desktop-flex2">
+          </div>
         </div>
       </div>
     </div>
