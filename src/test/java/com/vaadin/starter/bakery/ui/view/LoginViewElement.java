@@ -56,4 +56,8 @@ public class LoginViewElement extends AbstractElement {
 		return getLogin().getAttribute("label");
 	}
 
+	WebElement getLoginLabel() {
+		return findElement(By.id("login-label"));
+	}
+
 }
