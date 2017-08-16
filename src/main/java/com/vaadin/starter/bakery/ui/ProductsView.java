@@ -56,7 +56,8 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 		getElement()
 				.addEventListener("save", e -> saveProduct(e.getEventData().getObject("event.detail")), "event.detail");
 
-		getElement().addEventListener("delete", e -> deleteProduct(e.getEventData().getString("event.detail.id")),
+		getElement().addEventListener("delete",
+				e -> deleteProduct(Double.valueOf(e.getEventData().getNumber("event.detail.id")).longValue()),
 				"event.detail.id");
 
 		getElement()
@@ -124,9 +125,9 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 		}
 	}
 
-	private void deleteProduct(String id) {
+	private void deleteProduct(long id) {
 		try {
-			service.delete(Long.parseLong(id));
+			service.delete(id);
 			onFilterProducts(getModel().getFilterValue());
 		} catch (Exception e) {
 			String message = "Product could not be deleted";

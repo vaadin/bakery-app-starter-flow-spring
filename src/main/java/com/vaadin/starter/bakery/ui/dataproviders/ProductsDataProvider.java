@@ -44,14 +44,6 @@ public class ProductsDataProvider {
 		return getService().findAnyMatching(Optional.of(name), null).getContent();
 	}
 
-	public List<Product> findByName(String name) {
-		if (null == name) {
-			return this.findAll();
-		}
-
-		return findAnyMatchingProducts(name).stream().map(this::toUiEntity).collect(Collectors.toList());
-	}
-
 	public void save(JsonObject product) {
 		com.vaadin.starter.bakery.backend.data.entity.Product productToSave = toDataEntity(product);
 
@@ -90,13 +82,5 @@ public class ProductsDataProvider {
 		dataEntity.setPrice(product.getPrice());
 
 		return dataEntity;
-	}
-
-	public Product getById(Long id) {
-		com.vaadin.starter.bakery.backend.data.entity.Product dataEntity = productService.getRepository().findOne(id);
-		if (dataEntity == null)
-			return null;
-
-		return toUiEntity(dataEntity);
 	}
 }
