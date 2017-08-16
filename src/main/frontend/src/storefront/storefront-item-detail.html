@@ -96,14 +96,20 @@
         .contact-row {
           margin-bottom: 0;
         }
+
+        .name-row {
+          flex: 5;
+        }
       }
 
-      [mobile-view].mobile-flex-column {
-        flex-direction: column;
-      }
+      @media (max-width: 600px) {
+        .mobile-flex-column {
+          flex-direction: column;
+        }
 
-      [mobile-view].flex5 {
-        flex: 0;
+        .name-row {
+          flex: 0;
+        }
       }
     </style>
 
@@ -113,7 +119,7 @@
         <span class="secondary">Order #[[item.id]]</span>
       </div>
       <div class="flex column">
-        <div class="flex mobile-flex-column" mobile-view$="[[!desktopView]]">
+        <div class="flex mobile-flex-column">
           <div class="flex column flex2 date-wrapper">
             <span class="secondary">Due</span>
             <div class="flex date-row full-width">
@@ -127,7 +133,7 @@
               </div>
             </div>
           </div>
-          <div class="name-row flex5" mobile-view$="[[!desktopView]]">
+          <div class="name-row">
             <span class="secondary">Customer</span>
             <h3>[[item.customer.name]]</h3>
           </div>
