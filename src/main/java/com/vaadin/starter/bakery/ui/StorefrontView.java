@@ -32,6 +32,7 @@ import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
+import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.starter.bakery.ui.dataproviders.ProductsDataProvider;
@@ -52,7 +53,7 @@ import elemental.json.JsonObject;
 @Route(value = "")
 @ParentView(BakeryApp.class)
 @Secured(Role.BARISTA)
-public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implements View, HasToast {
+public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implements View, HasLogger, HasToast {
 
 	public interface Model extends TemplateModel {
 		void setOrders(List<Order> orders);
@@ -85,6 +86,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		try {
 			ordersProvider.save(order);
 		} catch (Exception e) {
+			getLogger().debug("There was a problem while saving the order", e);
 			toast("Order was not saved", true);
 		} finally {
 			getElement().callFunction("_onFiltersChanged");
@@ -93,7 +95,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 	@ClientDelegate
 	private void onFiltersChanged(String filter, boolean showPrevious) {
-		// the hardcoded limit of 200 is here until lazy loading is implemented (see BFF-120)
+		// the hardcoded limit of 200 is here until lazy loading is implemented (see
+		// BFF-120)
 		PageRequest pr = new PageRequest(0, 200, Direction.ASC, "dueDate", "dueTime", "id");
 		getModel().setOrders(ordersProvider.getOrdersList(filter, showPrevious, pr).getOrders());
 	}
@@ -119,10 +122,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 			getModel().getOrders().set(idx, ordersProvider.getOrder(orderId));
 		} catch (Exception e) {
 			// exclude the order from the model if ordersProvider.getOrder() throws
-			getModel().setOrders(
-					getModel().getOrders().stream()
-							.filter(order -> !order.getId().equals(orderId))
-							.collect(Collectors.toList()));
+			getModel().setOrders(getModel().getOrders().stream().filter(order -> !order.getId().equals(orderId))
+					.collect(Collectors.toList()));
 		}
 	}
 
