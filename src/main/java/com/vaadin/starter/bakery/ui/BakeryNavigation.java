@@ -12,7 +12,6 @@ import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.spring.annotations.UIScope;
 import com.vaadin.starter.bakery.app.BeanLocator;
 import com.vaadin.starter.bakery.app.security.SecuredViewAccessControl;
-import com.vaadin.starter.bakery.app.security.SecurityUtils;
 import com.vaadin.starter.bakery.ui.dataproviders.UserDataProvider;
 import com.vaadin.starter.bakery.ui.entities.PageInfo;
 import com.vaadin.starter.bakery.ui.entities.User;
@@ -72,15 +71,13 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> im
 
 	@Override
 	protected void onAttach(AttachEvent attachEvent) {
-		if (SecurityUtils.isUserLoggedIn()) {
-			setupNavigationButtons();
-			User uiUser = getUsersProvider().getCurrentUser();
-			UserModel user = new UserModel();
-			user.setName(uiUser.getName());
-			user.setImage(uiUser.getPicture());
-			user.setAlarms(true);
-			getModel().setUser(user);
-		}
+		setupNavigationButtons();
+		User uiUser = getUsersProvider().getCurrentUser();
+		UserModel user = new UserModel();
+		user.setName(uiUser.getName());
+		user.setImage(uiUser.getPicture());
+		user.setAlarms(true);
+		getModel().setUser(user);
 	}
 
 	private void setupNavigationButtons() {

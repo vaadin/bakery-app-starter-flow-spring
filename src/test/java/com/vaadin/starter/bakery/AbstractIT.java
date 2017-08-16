@@ -76,11 +76,16 @@ public class AbstractIT extends TestBenchTestCase {
 		return openLoginView(getDriver(), APP_URL);
 	}
 
+	protected WebElement getShadowRoot(TestBenchCommandExecutor executor, String querySelector) {
+		return (WebElement) executor
+				.executeScript(String.format("return document.querySelector('%s').shadowRoot", querySelector));
+	}
+
 	protected LoginViewElement openLoginView(WebDriver driver, String url) {
 		driver.get(url);
-		TestBenchElement body = (TestBenchElement) driver.findElement(By.tagName("body"));
 		TestBenchCommandExecutor executor = ((HasTestBenchCommandExecutor) driver).getCommandExecutor();
-		return TestBench.createElement(LoginViewElement.class, body.getWrappedElement(), executor);
+		WebElement shadowRoot = getShadowRoot(executor, "bakery-login");
+		return TestBench.createElement(LoginViewElement.class, shadowRoot, executor);
 	}
 
 	/**

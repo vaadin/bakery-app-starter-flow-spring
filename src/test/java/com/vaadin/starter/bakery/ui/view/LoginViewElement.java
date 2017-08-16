@@ -43,4 +43,8 @@ public class LoginViewElement extends TestBenchElement {
 		return findElement(By.id("login"));
 	}
 
+	WebElement getLoginLabel() {
+		return findElement(By.id("login-label"));
+	}
+
 }
