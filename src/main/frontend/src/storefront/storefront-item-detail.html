@@ -98,26 +98,17 @@
         }
 
         .name-row {
-          flex: 5 !important;
+          flex: 5;
         }
 
         .desktop-flex2 {
           flex: 2;
         }
 
-        .mobile-flex-column {
-          flex-direction: row !important;
+        .desktop-row {
+          flex-direction: row;
         }
       }
-
-      .mobile-flex-column {
-        flex-direction: column;
-      }
-
-      .name-row {
-        flex: 0;
-      }
-
     </style>
 
     <div class="scrollable flex1 main-row" id="main">
@@ -126,7 +117,7 @@
         <span class="secondary">Order #[[item.id]]</span>
       </div>
       <div class="flex column">
-        <div class="flex mobile-flex-column">
+        <div class="flex column desktop-row">
           <div class="flex column flex2 date-wrapper">
             <span class="secondary">Due</span>
             <div class="flex date-row full-width">
