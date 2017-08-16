@@ -7,6 +7,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Consumer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -50,7 +51,6 @@ public class DataGenerator implements HasLogger {
 
 	private final List<PickupLocation> pickupLocations = new ArrayList<>();
 	private final List<Product> products = new ArrayList<>();
-	private final List<Customer> customers = new ArrayList<>();
 	private final List<User> users = new ArrayList<>();
 	private final List<Order> orders = new ArrayList<>();
 	private User baker;
@@ -76,8 +76,6 @@ public class DataGenerator implements HasLogger {
 			createUsers(users);
 			getLogger().info("... generating products");
 			createProducts(products);
-			getLogger().info("... generating customers");
-			createCustomers(customers);
 			getLogger().info("... generating pickup locations");
 			createPickupLocations(pickupLocations);
 			getLogger().info("... generating orders");
@@ -87,14 +85,7 @@ public class DataGenerator implements HasLogger {
 		};
 	}
 
-	private void createCustomers(CustomerRepository customerRepo) {
-		for (int i = 0; i < 100; i++) {
-			customers.add(createCustomer(customerRepo));
-		}
-	}
-
-	private Customer createCustomer(CustomerRepository customerRepo) {
-		Customer customer = new Customer();
+	private void fillCustomer(Customer customer) {
 		String first = getRandom(FIRST_NAME);
 		String last = getRandom(LAST_NAME);
 		customer.setFullName(first + " " + last);
@@ -102,7 +93,6 @@ public class DataGenerator implements HasLogger {
 		if (random.nextInt(10) == 0) {
 			customer.setDetails("Very important customer");
 		}
-		return customerRepo.save(customer);
 	}
 
 	private String getRandomPhone() {
@@ -130,13 +120,13 @@ public class DataGenerator implements HasLogger {
 	}
 
 	private Order createOrder(LocalDate dueDate) {
-		Order order = new Order();
+		Order order = new Order(barista);
 
-		order.setCustomer(getRandomCustomer());
-		order.setPickupLocation(getRandomPickupLocation());
+		fillCustomer(order.getCustomer());
+		order.getPickupLocation().setName(getRandomPickupLocation().getName());
 		order.setDueDate(dueDate);
 		order.setDueTime(getRandomDueTime());
-		order.setState(getRandomState(order.getDueDate()));
+		order.changeState(barista,getRandomState(order.getDueDate()));
 
 		int itemCount = random.nextInt(3);
 		List<OrderItem> items = new ArrayList<>();
@@ -277,10 +267,6 @@ public class DataGenerator implements HasLogger {
 		return getRandom(pickupLocations);
 	}
 
-	private Customer getRandomCustomer() {
-		return getRandom(customers);
-	}
-
 	private User getBaker() {
 		return baker;
 	}
@@ -298,12 +284,14 @@ public class DataGenerator implements HasLogger {
 	}
 
 	private void createPickupLocations(PickupLocationRepository pickupRepo) {
+		pickupLocations.add(createPickupLocation("Store"));
+		pickupLocations.add(createPickupLocation("Bakery"));
+	}
+
+	private PickupLocation createPickupLocation(String name) {
 		PickupLocation store = new PickupLocation();
-		store.setName("Store");
-		pickupLocations.add(pickupRepo.save(store));
-		PickupLocation bakery = new PickupLocation();
-		bakery.setName("Bakery");
-		pickupLocations.add(pickupRepo.save(bakery));
+		store.setName(name);
+		return store;
 	}
 
 	private void createProducts(ProductRepository productsRepo) {

@@ -2,14 +2,20 @@ package com.vaadin.starter.bakery.backend.data.entity;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Index;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderColumn;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.vaadin.starter.bakery.backend.data.OrderState;
@@ -22,14 +28,15 @@ public class Order extends AbstractEntity {
 	@NotNull
 	private LocalTime dueTime;
 	@NotNull
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private PickupLocation pickupLocation;
 	@NotNull
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private Customer customer;
-	@NotNull
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@OrderColumn(name = "id")
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	@OrderColumn(name = "ORDERITEM_INDEX")
+	@JoinColumn
 	private List<OrderItem> items;
 	@NotNull
 	private OrderState state;
@@ -40,8 +47,37 @@ public class Order extends AbstractEntity {
 	@OrderColumn(name = "id")
 	private List<HistoryItem> history;
 
-	public Order() {
+	public Order(User createdBy) {
+		this.state = OrderState.NEW;
+		setCustomer(new Customer());
+		setPickupLocation(new PickupLocation());
+		addHistoryItem(createdBy, "Order placed");
+		this.items = new ArrayList<>();
+	}
+
+	Order() {
 		// Empty constructor is needed by Spring Data / JPA
+	}
+
+	public void addHistoryItem(User createdBy, String comment) {
+		HistoryItem item = new HistoryItem(createdBy, comment);
+		item.setNewState(state);
+		if (history == null) {
+			history = new LinkedList<>();
+		}
+		history.add(item);
+	}
+
+	public void clearItems() {
+		this.items.clear();
+	}
+
+	public void addOrderItem(Product product, int quantity, String comment) {
+		OrderItem item = new OrderItem();
+		item.setProduct(product);
+		item.setQuantity(quantity);
+		item.setComment(comment);
+		this.items.add(item);
 	}
 
 	public LocalDate getDueDate() {
@@ -104,8 +140,12 @@ public class Order extends AbstractEntity {
 		return state;
 	}
 
-	public void setState(OrderState state) {
+	public void changeState(User user, OrderState state) {
+		boolean createHistory = this.state != state && this.state != null && state != null;
 		this.state = state;
+		if (createHistory) {
+			addHistoryItem(user, "Order " + state.getDisplayName());
+		}
 	}
 
 }

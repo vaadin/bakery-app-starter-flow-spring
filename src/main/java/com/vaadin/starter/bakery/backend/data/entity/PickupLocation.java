@@ -3,10 +3,13 @@ package com.vaadin.starter.bakery.backend.data.entity;
 import javax.persistence.Entity;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 @Entity
 public class PickupLocation extends AbstractEntity {
 
 	@Size(max = 255)
+	@NotBlank
 	private String name;
 
 	public PickupLocation() {
