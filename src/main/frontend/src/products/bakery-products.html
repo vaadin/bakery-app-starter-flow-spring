@@ -30,7 +30,7 @@
     
     <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
 
-    <items-view id="view" desktop-view=[[desktopView]] filter-value="{{_filterValue}}"
+    <items-view id="view" desktop-view=[[desktopView]] filter-value="{{filterValue}}"
       item="[[_editableItem]]" button-text="New product"
       on-new-item="_newItem" on-closed="_onClose" on-before-close="_onBeforeClose">
 
@@ -76,13 +76,13 @@
       static get properties() {
         return {
           desktopView: Boolean,
-          _filterValue: String
+          filterValue: String
         };
       }
 
       static get observers() {
         return [
-          '_filterProducts(_filterValue)'
+          '_filterProducts(filterValue)'
         ];
       }
 
@@ -108,10 +108,14 @@
       }
 
       _filterProducts() {
+        if (this.filterValue === null) {
+          return;
+        }
+        // Wait when flow will support this functionality: https://github.com/vaadin/flow/issues/467
         this._filtersChangeDebouncer = Polymer.Debouncer.debounce(
           this._filtersChangeDebouncer,
           Polymer.Async.timeOut.after(200),
-          () => this.$server.onFilterProducts(this._filterValue));
+          () => this.$server.onFilterProducts(this.filterValue));
         Polymer.enqueueDebouncer(this._filtersChangeDebouncer);
       }
     }
