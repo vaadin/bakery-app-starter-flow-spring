@@ -1,15 +1,17 @@
 package com.vaadin.starter.bakery.ui.dataproviders;
 
-import com.google.gson.Gson;
-import com.vaadin.starter.bakery.backend.service.ProductService;
-import com.vaadin.starter.bakery.ui.entities.Product;
-import elemental.json.JsonObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.google.gson.Gson;
+import com.vaadin.starter.bakery.backend.service.ProductService;
+import com.vaadin.starter.bakery.ui.entities.Product;
+
+import elemental.json.JsonObject;
 
 @Service
 public class ProductsDataProvider {
@@ -42,22 +44,10 @@ public class ProductsDataProvider {
 		return getService().findAnyMatching(Optional.of(name), null).getContent();
 	}
 
-	public List<Product> findByName(String name) {
-		if (null == name) {
-			return this.findAll();
-		}
-
-		return findAnyMatchingProducts(name).stream().map(this::toUiEntity).collect(Collectors.toList());
-	}
-
 	public void save(JsonObject product) {
 		com.vaadin.starter.bakery.backend.data.entity.Product productToSave = toDataEntity(product);
 
 		productService.save(productToSave);
-	}
-
-	public void delete(Long id) {
-		productService.delete(id);
 	}
 
 	private Product toUiEntity(com.vaadin.starter.bakery.backend.data.entity.Product product) {
@@ -70,8 +60,7 @@ public class ProductsDataProvider {
 		return uiEntity;
 	}
 
-	private com.vaadin.starter.bakery.backend.data.entity.Product toDataEntity(
-			JsonObject product) {
+	private com.vaadin.starter.bakery.backend.data.entity.Product toDataEntity(JsonObject product) {
 		Gson gson = new Gson();
 		Product uiEntity = gson.fromJson(product.toJson(), Product.class);
 		return toDataEntity(uiEntity);

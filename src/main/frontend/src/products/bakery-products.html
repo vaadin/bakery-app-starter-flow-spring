@@ -30,7 +30,7 @@
     
     <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
 
-    <items-view desktop-view=[[desktopView]] filter-value="{{_filterValue}}"
+    <items-view id="view" desktop-view=[[desktopView]] filter-value="{{filterValue}}"
       item="[[_editableItem]]" button-text="New product"
       on-new-item="_newItem" on-closed="_onClose" on-before-close="_onBeforeClose">
 
@@ -53,12 +53,12 @@
         </vaadin-grid-column>
         <vaadin-grid-column width="80px" flex-grow="0" hidden="[[!desktopView]]">
           <template>
-            <iron-icon icon="valo:edit" class="edit-icon" on-click="_editItem"></iron-icon>
+            <iron-icon icon="valo:edit" class="edit-icon" on-click="_editItem" product-id="[[item.id]]"></iron-icon>
           </template>
         </vaadin-grid-column>
       </vaadin-grid>
 
-      <product-edit id="editor" slot="editor" item="[[_editableItem]]" on-save="_onSave" on-close="_onClose" on-delete="_onDelete"></product-edit>
+      <product-edit id="editor" slot="editor" item="[[_editableItem]]"></product-edit>
     </items-view>
   </template>
 
@@ -76,40 +76,46 @@
       static get properties() {
         return {
           desktopView: Boolean,
-          _filterValue: String
+          filterValue: String
         };
       }
 
       static get observers() {
         return [
-          '_filterProducts(_filterValue)'
+          '_filterProducts(filterValue)'
         ];
       }
 
-      _onActiveItem() {
+      _onActiveItem(value, old) {
+        if (old === undefined) {
+          return;
+        }
         if (!this.desktopView) {
-          super._onActiveItem();
+          this._editProduct(value ? value.id : '');
         }
       }
       
-      editProduct(product) {
-        this._editableItem = product ? Object.assign({}, product) : null;
+      _editItem(e) { 
+        this._editProduct(e.target.productId);
       }
 
-      _onSave(e) {
-        this.$server.saveProduct(e.detail);
+      _editProduct(id) {
+        this.dispatchEvent(new CustomEvent('edit', {bubbles: true, composed: true, detail: id}));
       }
-
-      _onDelete(e) {
-        this.$server.deleteProduct(e.detail.id);
-        this._onClose();
+      
+      setEditableProduct(product) {
+        this._editableItem = product ? Object.assign({}, JSON.parse(product)) : null;
       }
 
       _filterProducts() {
+        if (this.filterValue === null) {
+          return;
+        }
+        // Wait when flow will support this functionality: https://github.com/vaadin/flow/issues/467
         this._filtersChangeDebouncer = Polymer.Debouncer.debounce(
           this._filtersChangeDebouncer,
           Polymer.Async.timeOut.after(200),
-          () => this.$server.onFilterProducts(this._filterValue));
+          () => this.$server.onFilterProducts(this.filterValue));
         Polymer.enqueueDebouncer(this._filtersChangeDebouncer);
       }
     }
