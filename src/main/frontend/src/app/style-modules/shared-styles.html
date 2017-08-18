@@ -70,6 +70,31 @@
   </template>
 </dom-module>
 
+<!-- Theme for the vaadin-overlays -->
+<dom-module id="bakery-overlay-styles" theme-for="vaadin-overlay">
+  <template>
+    <style include="vaadin-overlay-default-theme">
+      [part="content"] {
+        background: var(--valo-base-color) !important;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<!-- Theme for the vaadin-combo-box-items -->
+<dom-module id="bakery-combo-box-item-styles" theme-for="vaadin-combo-box-item">
+  <template>
+    <style include="vaadin-combo-box-item-default-theme">
+      :host(:not([touch-device]):hover),
+      :host([focused]) {
+        background: var(--valo-base-color);
+        background-image: linear-gradient(var(--valo-tint-5pct), var(--valo-tint-5pct));
+      }
+    </style>
+  </template>
+</dom-module>
+
+
 <!-- style for the main page -->
 <custom-style>
   <style is="custom-style" include="valo-colors valo-typography">
@@ -116,7 +141,8 @@
       }
 
       .card {
-        background: white;
+        background: var(--valo-base-color);
+        background-image: linear-gradient(var(--valo-tint-5pct), var(--valo-tint-5pct));
         border-radius: var(--valo-border-radius);
         box-shadow: 0 3px 5px #ddd;
       }

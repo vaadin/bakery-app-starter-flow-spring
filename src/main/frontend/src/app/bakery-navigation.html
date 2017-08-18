@@ -34,7 +34,7 @@
       .navigation-tabs {
         --paper-tabs-selection-bar-color: var(--valo-primary-color);
         --paper-tabs-selection-bar: {
-          box-shadow: 0 0 20px 6px rgba(22, 118, 244, 0.2);
+          box-shadow: 0 0 20px 6px var(--valo-primary-color-10pct);
         };
         height: 100%;
         width: 100%;
@@ -149,6 +149,7 @@
         <br>
         Sunshine
       </div>
+
       <paper-tabs selected="[[page]]" attr-for-selected="page-id" class="navigation-tabs" align-bottom="[[_desktopView]]">
         <template is="dom-repeat" items="[[pages]]">
           <paper-tab page-id="[[item.link]]">
