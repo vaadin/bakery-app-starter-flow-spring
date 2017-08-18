@@ -96,30 +96,42 @@
         .contact-row {
           margin-bottom: 0;
         }
+
+        .name-row {
+          flex: 5;
+        }
+
+        .desktop-flex2 {
+          flex: 2;
+        }
+
+        .desktop-row {
+          flex-direction: row;
+        }
       }
     </style>
 
     <div class="scrollable flex1 main-row" id="main">
       <div class="flex meta-row">
         <storefront-item-badge status="[[item.status]]"></storefront-item-badge>
-        <span class="secondary">Order #[[item.orderNumber]]</span>
+        <span class="secondary">Order #[[item.id]]</span>
       </div>
       <div class="flex column">
-        <div class="flex">
+        <div class="flex column desktop-row">
           <div class="flex column flex2 date-wrapper">
             <span class="secondary">Due</span>
-            <div class="flex date-row">
-              <div class="flex date column">
+            <div class="flex date-row full-width">
+              <div class="flex date column full-width">
                 <h3>[[_getDay(item.date)]]</h3>
                 <span class="secondary">[[_getWeekday(item.date)]]</span>
               </div>
-              <div class="flex column time">
+              <div class="flex column time full-width">
                 <h3>[[_getTime(item.time)]]</h3>
                 <span class="secondary">[[item.place]]</span>
               </div>
             </div>
           </div>
-          <div class="name-row flex5">
+          <div class="name-row">
             <span class="secondary">Customer</span>
             <h3>[[item.customer.name]]</h3>
           </div>
@@ -129,7 +141,7 @@
           </div>
         </div>
         <div class="flex customer-info-row">
-          <div class="flex2">
+          <div class="desktop-flex2">
           </div>
           <div class="flex column flex5">
             <span class="secondary">Additional details</span>
@@ -178,7 +190,7 @@
               </vaadin-text-field>
             </template>
           </div>
-          <div class="flex2">
+          <div class="desktop-flex2">
           </div>
         </div>
       </div>

@@ -23,6 +23,10 @@
         padding-top: 32px;
       }
 
+      .count-digit {
+        font-size: 44px;
+      }
+
       .subtitle {
         color: var(--valo-secondary-text-color);
         font-size: 14px;
@@ -74,12 +78,12 @@
       </template>
     </div>
 
-    <div class="count-wrapper">      
-      <span class="count-digit" style="color:[[countColor]];font-size:44px;font-family: .SFNSDisplay;">[[data.count]]</span>
-    </div> 
+    <div class="count-wrapper">
+      <span id="count_digit" class="count-digit">[[data.count]]</span>
+    </div>
 
     <h4>[[data.title]]</h4>
-    <div class="subtitle">[[data.subtitle]]</div>        
+    <div class="subtitle">[[data.subtitle]]</div>
   </template>
 
   <script>
@@ -92,7 +96,8 @@
         return {
           countColor: {
             type: String,
-            reflectToAttribute: true
+            reflectToAttribute: true,
+            observer: '_countColorChange'
           },
           data: {
             type: Object,
@@ -104,6 +109,10 @@
             value: false
           }
         };
+      }
+
+      _countColorChange(countColor) {
+        this.$.count_digit.style.color = countColor;
       }
     }
 
