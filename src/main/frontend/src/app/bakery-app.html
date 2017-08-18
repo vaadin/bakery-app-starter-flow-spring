@@ -1,5 +1,8 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="style-modules/shared-styles.html">
+<script src="../../bower_components/tinycolor/dist/tinycolor-min.js"></script>
+<link rel="import" href="../../bower_components/vaadin-themes/valo/valo-config.html">
+
 
 <!--
 Due to the Flow issue https://github.com/vaadin/flow/issues/1754 an import of
@@ -47,7 +50,7 @@ the bakery-navigation.html file is injected dynamically from Java code.
         }
       }
     </style>
-
+    <valo-config></valo-config>
     <bakery-navigation id="navigation" page="[[page]]"></bakery-navigation>
     <div id="child-wrapper">
       <slot></slot>

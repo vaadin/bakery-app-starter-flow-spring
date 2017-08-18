@@ -24,7 +24,7 @@
     "vaadin-button": "^1.0.0",
     "paper-badge": "^2.0.0",
     "paper-tabs": "^2.0.0",
-    "vaadin-themes": "#master",
+    "vaadin-themes": "^0.2.3",
     "vaadin-grid": "^3.0.0",
     "vaadin-form-layout": "^1.0.0",
     "vaadin-upload": "^2.0.0",
@@ -37,7 +37,8 @@
     "paper-toast": "^2.0.0",
     "web-animations-js": "^2.2.5",
     "vaadin-charts": "5.0.0-alpha1",
-    "vaadin-board": "1.1.0-alpha1"
+    "vaadin-board": "1.1.0-alpha1",
+    "tinycolor": "^1.4.1"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0"

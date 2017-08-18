@@ -21,6 +21,10 @@
         max-width: calc(964px + var(--valo-space-m)) !important; /* Allow selected order to be 16px wider */
       }
 
+      :host([touch-scrolling]) {
+        -webkit-overflow-scrolling: touch;
+      }
+
       iron-list {
         flex: 1;
       }
@@ -76,7 +80,7 @@
 
       <template is="dom-if" if="[[!desktopView]]" restamp>
         <item-detail-dialog opened="[[_selectedItem]]">
-          <storefront-item-detail item="[[_selectedItem]]" on-close="_unselectItem" on-edit="_onEdit"></storefront-item-detail>
+          <storefront-item-detail item="[[_selectedItem]]" on-close="_unselectItem" on-edit="_onEdit" desktop-view="[[desktopView]]"></storefront-item-detail>
         </item-detail-dialog>
       </template>
 
@@ -96,6 +100,11 @@
           desktopView: Boolean,
           orders: {
             type: Array
+          },
+          touchScrolling: {
+            type: Boolean,
+            computed: '_enableTouchScrolling(desktopView, _selectedItem, _editableItem)',
+            reflectToAttribute: true
           },
           _filterValue: {
             type: String
@@ -261,6 +270,10 @@
           this.$.list.notifyResize();
           this.dispatchEvent(new CustomEvent('notify-resize'));
         });
+      }
+
+      _enableTouchScrolling(desktopView, _selectedItem, _editableItem) {
+        return desktopView ? !_editableItem : !_selectedItem && !_editableItem;
       }
     }
 

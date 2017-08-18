@@ -1,0 +1,34 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="user-avatar">
+  <template>
+    <style>
+       :host {
+        display: inline-flex;
+        width: 32px;
+        height: 32px;
+      }
+
+      img {
+        border-radius: 50%;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+    <img src$="[[src]]" alt$="[[alt]]" on-error="_onImgError">
+  </template>
+
+  <script>
+    class UserAvatar extends Polymer.Element {
+      static get is() {
+        return 'user-avatar';
+      }
+
+      _onImgError(e) {
+        e.target.src = 'images/default-picture.png';
+      }
+    }
+
+    window.customElements.define(UserAvatar.is, UserAvatar);
+  </script>
+</dom-module>

@@ -37,6 +37,10 @@
         padding: 0;
         --valo-size: var(--valo-size-s);
       }
+
+      :host([theme~="narrow"]) [part="button"] {
+        padding: 0 calc(var(--valo-size, var(--valo-size-m)) / 8 + var(--valo-button-border-radius, var(--valo-border-radius)) / 2);
+      }
     </style>
   </template>
 </dom-module>
@@ -118,25 +122,31 @@
       }
 
       .scrollable {
-        padding: var(--valo-space-s) var(--valo-space-l);
+        padding: var(--valo-space-m);
         overflow: auto;
-        /* height: calc(100vh - var(--valo-space-s) - 90px); */
+        -webkit-overflow-scrolling: touch;
       }
 
       .footer {
-        /* box-shadow:  0px -5px 3px var(--valo-shade-5pct); */
         display: flex;
         flex-wrap: wrap;
         transition: box-shadow .2s;
         justify-content: space-between;
         padding: var(--valo-space-s);
         align-items: baseline;
-        /* height: 90px; */
-        /* box-sizing: border-box; */
       }
 
       :host([scroll-shadow]) .footer {
         box-shadow: 0 -1px 5px var(--valo-shade-20pct);
+      }
+
+      .count {
+        display: inline-block;
+        background: var(--valo-shade-10pct);
+        border-radius: var(--valo-border-radius);
+        font-size: var(--valo-font-size-s);
+        padding: 0 var(--valo-space-s);
+        text-align: center;
       }
 
       .money {

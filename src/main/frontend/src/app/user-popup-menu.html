@@ -2,6 +2,7 @@
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="../elements/dialog-mixins.html">
+<link rel="import" href="../elements/user-avatar.html">
 
 <dom-module id="user-popup-menu">
   <template>
@@ -29,20 +30,27 @@
         overflow: hidden;
       }
 
+      :host(:not([desktop-view])) #fore {
+        animation: none;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        display: block;
+        opacity: 1;
+      }
+
       @keyframes foreground-appear {
         0% {
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
+          width: 0;
+          height: 0;
           top: 16px;
           bottom: auto;
           right: 352px;
           left: auto;
           opacity: 1;
-        }
-
-        10% {
-          border-radius: 5px;
         }
 
         99% {
@@ -79,10 +87,13 @@
         animation-fill-mode: forwards;
       }
 
-      .image-container img {
-        border-radius: 50%;
-        width: 32px;
-        height: 32px;
+      :host(:not([desktop-view])) .top {
+        animation: none;
+        padding: 16px;
+      }
+
+      :host(:not([desktop-view])) .bottom {
+        height: 100%;
       }
 
       .user-actions-container {
@@ -192,7 +203,7 @@
     <div id="fore">
       <div class="top">
         <div class="image-container">
-          <img src="[[user.image]]"/>
+          <user-avatar src="[[user.image]]"></user-avatar>
         </div>
         <div class="user-actions-container">
           <div class="user-top-container">
