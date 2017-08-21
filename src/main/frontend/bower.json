@@ -37,8 +37,7 @@
     "paper-toast": "^2.0.0",
     "web-animations-js": "^2.2.5",
     "vaadin-charts": "5.0.0-alpha1",
-    "vaadin-board": "1.1.0-alpha1",
-    "tinycolor": "^1.4.1"
+    "vaadin-board": "1.1.0-alpha1"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0"
