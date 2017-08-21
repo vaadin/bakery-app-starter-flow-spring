@@ -12,6 +12,7 @@ import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.spring.annotations.UIScope;
 import com.vaadin.starter.bakery.app.BeanLocator;
 import com.vaadin.starter.bakery.app.security.SecuredViewAccessControl;
+import com.vaadin.starter.bakery.app.security.SecurityUtils;
 import com.vaadin.starter.bakery.ui.dataproviders.UserDataProvider;
 import com.vaadin.starter.bakery.ui.entities.PageInfo;
 import com.vaadin.starter.bakery.ui.entities.User;
@@ -26,7 +27,6 @@ import com.vaadin.ui.UI;
 public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> implements View {
 	public static class UserModel {
 		private String name;
-		private String email;
 		private String image;
 		private boolean alarms;
 
@@ -36,14 +36,6 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> im
 
 		public void setName(String name) {
 			this.name = name;
-		}
-
-		public String getEmail() {
-			return email;
-		}
-
-		public void setEmail(String email) {
-			this.email = email;
 		}
 
 		public String getImage() {
@@ -80,14 +72,15 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> im
 
 	@Override
 	protected void onAttach(AttachEvent attachEvent) {
-		setupNavigationButtons();
-		User uiUser = getUsersProvider().getCurrentUser();
-		UserModel user = new UserModel();
-		user.setName(uiUser.getName());
-		user.setEmail(uiUser.getEmail());
-		user.setImage(uiUser.getPicture());
-		user.setAlarms(true);
-		getModel().setUser(user);
+		if (SecurityUtils.isUserLoggedIn()) {
+			setupNavigationButtons();
+			User uiUser = getUsersProvider().getCurrentUser();
+			UserModel user = new UserModel();
+			user.setName(uiUser.getName());
+			user.setImage(uiUser.getPicture());
+			user.setAlarms(true);
+			getModel().setUser(user);
+		}
 	}
 
 	private void setupNavigationButtons() {

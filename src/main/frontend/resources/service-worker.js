@@ -1,7 +1,6 @@
 const CACHE_NAME = 'bakery-cache';
 
 const urlsToCache = [
-  '/login.html',
   '/manifest.json',
   '/icons/icon-96.png',
   '/icons/icon-192.png',

@@ -76,4 +76,8 @@ public class SecurityUtils {
 		return Arrays.asList(viewSecured.value()).stream().anyMatch(SecurityUtils::isCurrentUserInRole);
 	}
 
+	public static boolean isUserLoggedIn() {
+		SecurityContext context = SecurityContextHolder.getContext();
+		return !(context.getAuthentication() instanceof AnonymousAuthenticationToken);
+	}
 }

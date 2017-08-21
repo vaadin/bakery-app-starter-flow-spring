@@ -51,6 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.authorizeRequests();
 
 		// Allow access to static resources ("/VAADIN/**")
+		reg = reg.antMatchers("/resources/**").permitAll();
 		reg = reg.antMatchers("/icons/**").permitAll();
 		reg = reg.antMatchers("/fonts/**").permitAll();
 		reg = reg.antMatchers("/api/**").permitAll();
@@ -59,8 +60,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		reg = reg.antMatchers("/bower_components/**").permitAll();
 		reg = reg.antMatchers("/VAADIN/**").permitAll();
 		reg = reg.antMatchers("/login").permitAll();
+		reg = reg.antMatchers("/favico.ico").permitAll();
 		reg = reg.antMatchers("/src/login/bakery-login.html").permitAll();
-
+		reg = reg.antMatchers("/src/app/bakery-app.html").permitAll();
+		reg = reg.antMatchers("/es5/**").permitAll();
+		reg = reg.antMatchers("/es6/**").permitAll();
 		reg = reg.antMatchers("/**").hasAnyAuthority(Role.getAllRoles());
 		HttpSecurity sec = reg.and();
 
