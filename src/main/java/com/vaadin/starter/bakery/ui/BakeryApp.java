@@ -17,7 +17,7 @@ import com.vaadin.ui.UI;
 
 @Tag("bakery-app")
 @HtmlImport("frontend://src/app/bakery-app.html")
-@JavaScript(value = "frontend://resources/service-worker-loader.js", loadMode = LoadMode.LAZY)
+@JavaScript(value = "frontend://service-worker-loader.js", loadMode = LoadMode.LAZY)
 @UIScope
 public class BakeryApp extends PolymerTemplate<BakeryApp.Model> implements HasChildView {
 

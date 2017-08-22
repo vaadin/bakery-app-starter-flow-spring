@@ -35,7 +35,7 @@
         <!-- Frontend -->
         <node.version>v8.1.2</node.version>
         <npm.version>5.0.4</npm.version>
-        <frontend.working.directory>src/main/frontend</frontend.working.directory>
+        <frontend.working.directory>src/main/webapp</frontend.working.directory>
         <vaadin.frontend.path>VAADIN/static/frontend</vaadin.frontend.path>
     </properties>
 
@@ -245,11 +245,6 @@
                     <webAppConfig>
                         <webInfIncludeJarPattern>.*/flow-.*.jar$|.*/test-resources-.*.jar$</webInfIncludeJarPattern>
                         <containerIncludeJarPattern>^$</containerIncludeJarPattern>
-                        <resourceBases>
-                            <resourceBase>${frontend.working.directory}</resourceBase>
-                            <resourceBase>${frontend.working.directory}/resources</resourceBase>
-                            <resourceBase>${jetty.extra.resource.base}</resourceBase>
-                        </resourceBases>
                     </webAppConfig>
                 </configuration>
             </plugin>
@@ -297,7 +292,6 @@
 
             <properties>
                 <npm.build.goal>run build</npm.build.goal>
-                <jetty.extra.resource.base>${project.build.directory}/jetty-extra-resources</jetty.extra.resource.base>
             </properties>
 
 
@@ -324,38 +318,8 @@
                                     <directory>${frontend.working.directory}/build</directory>
                                     <targetPath>${vaadin.frontend.path}</targetPath>
                                 </resource>
-                                <resource>
-                                    <directory>${frontend.working.directory}/resources</directory>
-                                    <targetPath>/</targetPath>
-                                </resource>
                             </webResources>
                         </configuration>
-                    </plugin>
-
-                    <!-- (6): Copies the files compiled by polymer-build to a directory which jetty:run can use
-                              as resource folder -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-resources-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>copy-resources</id>
-                                <phase>process-resources</phase>
-                                <goals>
-                                    <goal>copy-resources</goal>
-                                </goals>
-                                <configuration>
-                                    <outputDirectory>${jetty.extra.resource.base}/${vaadin.frontend.path}</outputDirectory>
-                                    <overwrite>true</overwrite>
-                                    <resources>
-                                        <resource>
-                                            <directory>${frontend.working.directory}/build</directory>
-                                        </resource>
-                                    </resources>
-                                </configuration>
-                            </execution>
-                        </executions>
-
                     </plugin>
                 </plugins>
             </build>
@@ -371,7 +335,6 @@
 
             <properties>
                 <npm.build.goal>run skip-build</npm.build.goal>
-                <jetty.extra.resource.base>${frontend.working.directory}</jetty.extra.resource.base>
             </properties>
 
             <build>
