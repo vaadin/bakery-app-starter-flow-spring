@@ -169,18 +169,16 @@
                   <span class="secondary">[[_getFullDate(event.date)]]</span>
                   <storefront-item-badge status="[[event.status]]" small></storefront-item-badge>
                 </div>
+                <div class="comment">[[event.message]]</div>
               </template>
             </vaadin-form-item>
 
-            <template is="dom-repeat" items="[[item.comments]]" as="comment">
-              <vaadin-form-item label-position="top">
-                <div class="comment">[[comment.message]]</div>
-              </vaadin-form-item>
-            </template>
-
             <vaadin-form-item>
-              <vaadin-text-field placeholder="Add comment" class="full-width">
-                <div slot="suffix" class="comment-suffix">Send</div>
+              <vaadin-text-field placeholder="Add comment" class="full-width"
+                                 value="{{_comment}}" on-keydown="_onCommentKeydown">
+                <div slot="suffix" class="comment-suffix">
+                  <vaadin-button theme="tertiary" on-click="_sendComment">Send</vaadin-button>
+                </div>
               </vaadin-text-field>
             </vaadin-form-item>
           </template>
