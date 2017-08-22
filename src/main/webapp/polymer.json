@@ -14,7 +14,7 @@
     "src/**/*",
     "images/**/*",
     "bower.json",
-    "resources/service-worker*.js"
+    "service-worker*.js"
   ],
   "extraDependencies": [
     "bower_components/webcomponentsjs/*.js",

@@ -393,6 +393,14 @@
                             </webResources>
                         </configuration>
                     </plugin>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <version>${springboot.version}</version>
+                        <configuration>
+                            <jvmArguments>-Dvaadin.frontend.url.es5=context://build/es5/ -Dvaadin.frontend.url.es6=context://build/es6/</jvmArguments>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
