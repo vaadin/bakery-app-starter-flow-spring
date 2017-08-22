@@ -114,7 +114,8 @@
             type: Boolean,
             reflectToAttribute: true
           },
-          _main: Element
+          _main: Element,
+          _boundContentScroll: Function
         };
       }
 
@@ -127,10 +128,26 @@
             this._contentScroll();
           }
         });
+        this._boundContentScroll = this._contentScroll.bind(this);
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        // If a parent dialog hides scrollable content, the scroll shadow
+        // state cannot be determined. We need to update the scroll shadow
+        // whenever a parent dialog opens.
+        window.addEventListener('opened', this._boundContentScroll);
+      }
+
+      disconnectedCallback() {
+        super.disconnectedCallback();
+        window.removeEventListener('opened', this._boundContentScroll);
       }
 
       _contentScroll() {
-        this.scrollShadow = this._main.scrollHeight - this._main.scrollTop !== this._main.clientHeight;
+        if (this._main) {
+          this.scrollShadow = this._main.scrollHeight - this._main.scrollTop !== this._main.clientHeight;
+        }
       }
     };
 
@@ -190,8 +207,8 @@
         const items = change.base;
         if (items && filter) {
           return items.filter((item) => {
-            return item.keys().reduce((last, current) => {
-              return last || item.current.toString.toLowerCase().includes(filter);
+            return Object.keys(item).reduce((last, current) => {
+              return last || String(item[current]).toLowerCase().includes(filter.toLowerCase());
             }, false);
           });
         }

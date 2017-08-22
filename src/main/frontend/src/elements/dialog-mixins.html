@@ -16,12 +16,14 @@
       }
 
       #fore {
-        background: white;
+        background: var(--valo-base-color);
+        background-image: linear-gradient(var(--valo-tint-5pct), var(--valo-tint-5pct));
         overflow: hidden;
       }
 
       :host([desktop-view]) #fore {
-        border-radius: 5px;
+        border-radius: var(--valo-border-radius);
+        box-shadow: 0 4px 20px var(--valo-shade-20pct);
       }
 
       #back {
@@ -66,6 +68,8 @@
             document.body.addEventListener('keydown', this._keydownListener);
             window.addEventListener('popstate', this._closeListener);
             this.addEventListener('close', this._closeListener);
+            // Trigger size update for resizable contents, e.g. <vaadin-form-layout>
+            window.dispatchEvent(new CustomEvent('resize'));
           }, 2);
         } else {
           document.body.removeEventListener('click', this._clickListener);
