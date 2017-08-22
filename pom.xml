@@ -29,7 +29,6 @@
 
         <!-- Plugins -->
         <frontend.maven.plugin.version>1.3</frontend.maven.plugin.version>
-        <jetty.version>9.3.7.v20160115</jetty.version>
         <driver.binary.downloader.maven.plugin.version>1.0.11</driver.binary.downloader.maven.plugin.version>
         <maven.failsafe.plugin.version>2.19.1</maven.failsafe.plugin.version>
         <maven.war.plugin.version>3.0.0</maven.war.plugin.version>
@@ -264,11 +263,6 @@
                     </configuration>
                 </plugin>
                 <plugin>
-                    <groupId>org.eclipse.jetty</groupId>
-                    <artifactId>jetty-maven-plugin</artifactId>
-                    <version>${jetty.version}</version>
-                </plugin>
-                <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${springboot.version}</version>
@@ -299,25 +293,6 @@
                             <directory>${frontend.working.directory}/node_modules</directory>
                         </fileset>
                     </filesets>
-                </configuration>
-            </plugin>
-
-            <!-- (3): Configures the Jetty plugin to use the right resource path when running in
-                      either production or debug modes -->
-            <plugin>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <configuration>
-                    <scanIntervalSeconds>-1</scanIntervalSeconds>
-                    <stopPort>8081</stopPort>
-                    <stopWait>5</stopWait>
-                    <stopKey>foo</stopKey>
-                    <!-- Prevent Jetty from scanning the classpath. -->
-                    <!-- Speeds up startup time significantly -->
-                    <webAppConfig>
-                        <webInfIncludeJarPattern>.*/flow-.*.jar$|.*/test-resources-.*.jar$</webInfIncludeJarPattern>
-                        <containerIncludeJarPattern>^$</containerIncludeJarPattern>
-                    </webAppConfig>
                 </configuration>
             </plugin>
         </plugins>
@@ -487,7 +462,7 @@
             </build>
         </profile>
 
-        <!-- Moving jetty start/stop into a separate profile speeds up regular builds.
+        <!-- Moving spring-boot start/stop into a separate profile speeds up regular builds.
              Execute mvn verify -Pit to run integration tests -->
         <profile>
             <id>it</id>
