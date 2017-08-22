@@ -39,9 +39,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		// Not using Spring CSRF here to be able to use plain HTML for the login
-		// page
+		// Not using Spring CSRF here to be able to use plain HTML for the login page
 		http.csrf().disable();
+		http.requiresChannel().anyRequest().requiresSecure();
 
 		ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry reg = http
 				.authorizeRequests();
