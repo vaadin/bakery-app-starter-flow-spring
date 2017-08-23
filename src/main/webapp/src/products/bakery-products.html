@@ -37,8 +37,8 @@
     <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
 
     <items-view id="view" desktop-view=[[desktopView]] filter-value="{{filterValue}}"
-      item="[[_editableItem]]" button-text="New product"
-      on-new-item="_newItem" on-closed="_onClose" on-before-close="_onBeforeClose">
+      button-text="New product"
+      on-new-item="onNewProduct" on-before-close="onBeforeClose">
 
       <vaadin-grid slot="grid" id="grid" items="[[products]]" active-item="{{_activeItem}}">
         <vaadin-grid-column flex-grow="10">
@@ -64,8 +64,9 @@
         </vaadin-grid-column>
       </vaadin-grid>
 
-      <product-edit id="editor" slot="editor" item="[[_editableItem]]"></product-edit>
+      <slot name="product-editor" slot="editor"></slot>
     </items-view>
+    <slot></slot>
   </template>
 
   <script>
@@ -101,16 +102,12 @@
         }
       }
       
-      _editItem(e) { 
+      _editItem(e) {
         this._editProduct(e.target.productId);
       }
 
       _editProduct(id) {
         this.dispatchEvent(new CustomEvent('edit', {bubbles: true, composed: true, detail: id}));
-      }
-      
-      setEditableProduct(product) {
-        this._editableItem = product ? Object.assign({}, JSON.parse(product)) : null;
       }
 
       _filterProducts() {
@@ -123,6 +120,10 @@
           Polymer.Async.timeOut.after(200),
           () => this.$server.onFilterProducts(this.filterValue));
         Polymer.enqueueDebouncer(this._filtersChangeDebouncer);
+      }
+
+      onBeforeClose(e) {
+        e.preventDefault();
       }
     }
 

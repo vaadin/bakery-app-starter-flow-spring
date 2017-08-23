@@ -31,25 +31,21 @@
     </style>
 
     <h3>Edit Product</h3>
-    <iron-form id="productEditForm">
-      <form on-submit="_submitEditForm">
-        <vaadin-form-layout>
-          <vaadin-text-field id="name" label="Product name" value="{{_editableItem.name}}" colspan="2" required pattern=".*[^ ].*"
-                             error-message="Please enter a valid name"></vaadin-text-field>
-          <br>
-          <vaadin-text-field id="price" label="Unit price" value="{{_getPrice(_editableItem.price)}}" colspan="2" on-value-changed="_priceChange"
-            pattern="\d+(\.\d?\d?)?$" required prevent-invalid-input>
-            <div slot="prefix">$</div>
-          </vaadin-text-field>
-        </vaadin-form-layout>
-        <div class="flex buttons">
-          <vaadin-button on-click="save" theme="primary" disabled="[[!dirty]]">Save</vaadin-button>
-          <vaadin-button on-click="cancel">Cancel</vaadin-button>
-          <div class="flex1"></div>
-          <vaadin-button on-click="delete" theme="danger tertiary" class="right">Delete</vaadin-button>
-        </div>
-      </form>
-    </iron-form>
+    <vaadin-form-layout>
+      <vaadin-text-field id="name" label="Product name" colspan="2" required pattern=".*[^ ].*"
+                         error-message="Please enter a valid name"></vaadin-text-field>
+      <br>
+      <vaadin-text-field id="price" label="Unit price" colspan="2"
+        pattern="\d+(\.\d?\d?)?$" required prevent-invalid-input>
+        <div slot="prefix">$</div>
+      </vaadin-text-field>
+    </vaadin-form-layout>
+    <div class="flex buttons">
+      <vaadin-button id="save" theme="primary" >Save</vaadin-button>
+      <vaadin-button id="cancel">Cancel</vaadin-button>
+      <div class="flex1"></div>
+      <vaadin-button id="delete" theme="danger tertiary" class="right">Delete</vaadin-button>
+    </div>
   </template>
 
   <script>
@@ -58,27 +54,8 @@
         return 'product-edit';
       }
 
-      _priceChange(e) {
-        this.set('_editableItem.price', +(Number.parseFloat(e.target.value || 0, 2) * 100).toFixed(0));
-      }
-
-      _getPrice(price) {
-        price = price || 0;
-        return (price / 100).toFixed(2);
-      }
-
-      _submitEditForm(e) {
-        e.preventDefault();
-        return false;
-      }
-
-      save() {
-        if (this.$.productEditForm.validate()) {
-          this._editableItem.price = (Number.parseFloat(this.$.price.value || 0, 2) * 100).toFixed(0);
-          super.save();
-        } else {
-          this.displayToast('Please fill out all required fields before proceeding');
-        }
+      _createConfirmDialog() {
+        // Need to be removed after EditableItemMixin.ready() will stop create new dialogs
       }
     }
 
