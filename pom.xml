@@ -37,7 +37,7 @@
 
         <!-- Frontend -->
         <node.version>v8.1.2</node.version>
-        <npm.version>5.0.4</npm.version>
+        <yarn.version>v0.27.5</yarn.version>
         <frontend.working.directory>src/main/webapp</frontend.working.directory>
         <vaadin.frontend.path>VAADIN/static/frontend</vaadin.frontend.path>
     </properties>
@@ -259,7 +259,7 @@
                     <version>${frontend.maven.plugin.version}</version>
                     <configuration>
                         <nodeVersion>${node.version}</nodeVersion>
-                        <npmVersion>${npm.version}</npmVersion>
+                        <yarnVersion>${yarn.version}</yarnVersion>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -313,10 +313,10 @@
                         <artifactId>frontend-maven-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>npm run lint</id>
+                                <id>yarn run lint</id>
                                 <phase>compile</phase>
                                 <goals>
-                                    <goal>npm</goal>
+                                    <goal>yarn</goal>
                                 </goals>
                                 <configuration>
                                     <arguments>run lint</arguments>
@@ -338,7 +338,7 @@
             </activation>
 
             <properties>
-                <npm.build.goal>run build</npm.build.goal>
+                <yarn.build.goal>run build</yarn.build.goal>
             </properties>
 
 
@@ -389,7 +389,7 @@
             </activation>
 
             <properties>
-                <npm.build.goal>run skip-build</npm.build.goal>
+                <yarn.build.goal>run skip-build</yarn.build.goal>
             </properties>
 
             <build>
@@ -417,7 +417,7 @@
         </profile>
 
         <!-- When running mvn with `-DskipFrontendBuild`, all frontend-related build steps are skipped:
-             - npm install
+             - yarn install
              - bower install
              - polymer build
 
@@ -437,10 +437,10 @@
                         <artifactId>frontend-maven-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>install-node-and-npm</id>
+                                <id>install-node-and-yarn</id>
                                 <goals>
-                                    <goal>install-node-and-npm</goal>
-                                    <goal>npm</goal> <!-- runs 'install' by default -->
+                                    <goal>install-node-and-yarn</goal>
+                                    <goal>yarn</goal> <!-- runs 'install' by default -->
                                 </goals>
                                 <configuration>
                                     <workingDirectory>${frontend.working.directory}</workingDirectory>
@@ -449,11 +449,11 @@
                             <execution>
                                 <id>run-polymer-build</id>
                                 <goals>
-                                    <goal>npm</goal>
+                                    <goal>yarn</goal>
                                 </goals>
                                 <configuration>
                                     <workingDirectory>${frontend.working.directory}</workingDirectory>
-                                    <arguments>${npm.build.goal}</arguments>
+                                    <arguments>${yarn.build.goal}</arguments>
                                 </configuration>
                             </execution>
                         </executions>
