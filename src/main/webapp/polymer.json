@@ -13,9 +13,7 @@
   "sources": [
     "src/**/*",
     "images/**/*",
-    "bower.json",
-    "resources/service-worker-loader.js",
-    "service-worker.js"
+    "bower.json"
   ],
   "extraDependencies": [
     "bower_components/webcomponentsjs/*.js",
