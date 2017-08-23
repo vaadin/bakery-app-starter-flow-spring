@@ -2,7 +2,6 @@ package com.vaadin.starter.bakery.ui;
 
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Id;
-import com.vaadin.annotations.JavaScript;
 import com.vaadin.annotations.Tag;
 import com.vaadin.flow.router.HasChildView;
 import com.vaadin.flow.router.LocationChangeEvent;
@@ -10,14 +9,12 @@ import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.spring.annotations.UIScope;
-import com.vaadin.shared.ui.LoadMode;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.ui.AttachEvent;
 import com.vaadin.ui.UI;
 
 @Tag("bakery-app")
 @HtmlImport("frontend://src/app/bakery-app.html")
-@JavaScript(value = "frontend://resources/service-worker-loader.js", loadMode = LoadMode.LAZY)
 @UIScope
 public class BakeryApp extends PolymerTemplate<BakeryApp.Model> implements HasChildView {
 
