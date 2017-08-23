@@ -6,7 +6,7 @@ This is the Bakery full stack starter for Flow, a fully functional and tested fu
 
 build: `mvn clean install -Dvaadin.productionMode`
 
-run: `mvn jetty:run -Dvaadin.productionMode`
+run: `mvn spring-boot:run -Dvaadin.productionMode`
 
 ## Running integration tests
 
@@ -22,7 +22,7 @@ In the development mode the app build / start time is shorter, but the app would
 
 build: `mvn clean install`
 
-run:  `mvn jetty:run`
+run:  `mvn spring-boot:run`
 
 
 ## Development vs. Production mode

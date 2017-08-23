@@ -23,9 +23,12 @@
         <flow.version>0.1-SNAPSHOT</flow.version>
         <testbench.version>5.0.0</testbench.version>
 
+        <spring-boot.version>1.5.4.RELEASE</spring-boot.version>
+        <failOnMissingWebXml>false</failOnMissingWebXml>
+        <selenium.version>3.4.0</selenium.version>
+
         <!-- Plugins -->
         <frontend.maven.plugin.version>1.3</frontend.maven.plugin.version>
-        <jetty.version>9.3.7.v20160115</jetty.version>
         <driver.binary.downloader.maven.plugin.version>1.0.11</driver.binary.downloader.maven.plugin.version>
         <maven.failsafe.plugin.version>2.19.1</maven.failsafe.plugin.version>
         <maven.war.plugin.version>3.0.0</maven.war.plugin.version>
@@ -35,7 +38,7 @@
         <!-- Frontend -->
         <node.version>v8.1.2</node.version>
         <npm.version>5.0.4</npm.version>
-        <frontend.working.directory>src/main/frontend</frontend.working.directory>
+        <frontend.working.directory>src/main/webapp</frontend.working.directory>
         <vaadin.frontend.path>VAADIN/static/frontend</vaadin.frontend.path>
     </properties>
 
@@ -67,6 +70,69 @@
         </repository>
         
     </repositories>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- Required because Spring Boot defines old versions -->
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-api</artifactId>
+                <version>${selenium.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-server</artifactId>
+                <version>${selenium.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-chrome-driver</artifactId>
+                <version>${selenium.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-firefox-driver</artifactId>
+                <version>${selenium.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-ie-driver</artifactId>
+                <version>${selenium.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-java</artifactId>
+                <version>${selenium.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-remote-driver</artifactId>
+                <version>${selenium.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-safari-driver</artifactId>
+                <version>${selenium.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-support</artifactId>
+                <version>${selenium.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>htmlunit-driver</artifactId>
+                <version>2.26</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -197,9 +263,9 @@
                     </configuration>
                 </plugin>
                 <plugin>
-                    <groupId>org.eclipse.jetty</groupId>
-                    <artifactId>jetty-maven-plugin</artifactId>
-                    <version>${jetty.version}</version>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring-boot.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -227,30 +293,6 @@
                             <directory>${frontend.working.directory}/node_modules</directory>
                         </fileset>
                     </filesets>
-                </configuration>
-            </plugin>
-
-            <!-- (3): Configures the Jetty plugin to use the right resource path when running in
-                      either production or debug modes -->
-            <plugin>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <configuration>
-                    <scanIntervalSeconds>-1</scanIntervalSeconds>
-                    <stopPort>8081</stopPort>
-                    <stopWait>5</stopWait>
-                    <stopKey>foo</stopKey>
-                    <!-- Prevent Jetty from scanning the classpath. -->
-                    <!-- Speeds up startup time significantly -->
-                    <webAppConfig>
-                        <webInfIncludeJarPattern>.*/flow-.*.jar$|.*/test-resources-.*.jar$</webInfIncludeJarPattern>
-                        <containerIncludeJarPattern>^$</containerIncludeJarPattern>
-                        <resourceBases>
-                            <resourceBase>${frontend.working.directory}</resourceBase>
-                            <resourceBase>${frontend.working.directory}/resources</resourceBase>
-                            <resourceBase>${jetty.extra.resource.base}</resourceBase>
-                        </resourceBases>
-                    </webAppConfig>
                 </configuration>
             </plugin>
         </plugins>
@@ -297,7 +339,6 @@
 
             <properties>
                 <npm.build.goal>run build</npm.build.goal>
-                <jetty.extra.resource.base>${project.build.directory}/jetty-extra-resources</jetty.extra.resource.base>
             </properties>
 
 
@@ -324,38 +365,16 @@
                                     <directory>${frontend.working.directory}/build</directory>
                                     <targetPath>${vaadin.frontend.path}</targetPath>
                                 </resource>
-                                <resource>
-                                    <directory>${frontend.working.directory}/resources</directory>
-                                    <targetPath>/</targetPath>
-                                </resource>
                             </webResources>
                         </configuration>
                     </plugin>
-
-                    <!-- (6): Copies the files compiled by polymer-build to a directory which jetty:run can use
-                              as resource folder -->
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-resources-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>copy-resources</id>
-                                <phase>process-resources</phase>
-                                <goals>
-                                    <goal>copy-resources</goal>
-                                </goals>
-                                <configuration>
-                                    <outputDirectory>${jetty.extra.resource.base}/${vaadin.frontend.path}</outputDirectory>
-                                    <overwrite>true</overwrite>
-                                    <resources>
-                                        <resource>
-                                            <directory>${frontend.working.directory}/build</directory>
-                                        </resource>
-                                    </resources>
-                                </configuration>
-                            </execution>
-                        </executions>
-
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <version>${spring-boot.version}</version>
+                        <configuration>
+                            <jvmArguments>-Dvaadin.frontend.url.es5=context://build/es5/ -Dvaadin.frontend.url.es6=context://build/es6/</jvmArguments>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
@@ -371,7 +390,6 @@
 
             <properties>
                 <npm.build.goal>run skip-build</npm.build.goal>
-                <jetty.extra.resource.base>${frontend.working.directory}</jetty.extra.resource.base>
             </properties>
 
             <build>
@@ -444,7 +462,7 @@
             </build>
         </profile>
 
-        <!-- Moving jetty start/stop into a separate profile speeds up regular builds.
+        <!-- Moving spring-boot start/stop into a separate profile speeds up regular builds.
              Execute mvn verify -Pit to run integration tests -->
         <profile>
             <id>it</id>
@@ -456,24 +474,25 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.eclipse.jetty</groupId>
-                        <artifactId>jetty-maven-plugin</artifactId>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>start-jetty-for-itest</id>
-                                <phase>pre-integration-test</phase>
+                                <id>pre-integration-test</id>
                                 <goals>
                                     <goal>start</goal>
                                 </goals>
                             </execution>
                             <execution>
-                                <id>stop-jetty-after-itest</id>
-                                <phase>post-integration-test</phase>
+                                <id>post-integration-test</id>
                                 <goals>
                                     <goal>stop</goal>
                                 </goals>
                             </execution>
                         </executions>
+                        <configuration>
+                            <maxAttempts>120</maxAttempts>
+                        </configuration>
                     </plugin>
                     <plugin>
                         <artifactId>maven-failsafe-plugin</artifactId>
