@@ -51,7 +51,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		reg = reg.antMatchers("/fonts/**").permitAll();
 		reg = reg.antMatchers("/api/**").permitAll();
 		reg = reg.antMatchers("/manifest.json").permitAll();
-		reg = reg.antMatchers("/service-worker.js").permitAll();
 		reg = reg.antMatchers("/**").hasAnyAuthority(Role.getAllRoles());
 		HttpSecurity sec = reg.and();
 
