@@ -23,7 +23,7 @@
         <flow.version>0.1-SNAPSHOT</flow.version>
         <testbench.version>5.0.0</testbench.version>
 
-        <springboot.version>1.5.4.RELEASE</springboot.version>
+        <spring-boot.version>1.5.4.RELEASE</spring-boot.version>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <selenium.version>3.4.0</selenium.version>
 
@@ -76,7 +76,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>${springboot.version}</version>
+                <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -265,7 +265,7 @@
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
-                    <version>${springboot.version}</version>
+                    <version>${spring-boot.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -371,7 +371,7 @@
                     <plugin>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
-                        <version>${springboot.version}</version>
+                        <version>${spring-boot.version}</version>
                         <configuration>
                             <jvmArguments>-Dvaadin.frontend.url.es5=context://build/es5/ -Dvaadin.frontend.url.es6=context://build/es6/</jvmArguments>
                         </configuration>
