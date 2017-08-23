@@ -13,8 +13,10 @@
   <template>
     <style include="shared-styles">
       :host {
-        display: block;
-        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        height: 100%;
       }
 
       user-avatar {
@@ -30,38 +32,37 @@
         font-weight: 500;
       }
 
-      .buttons {
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        border-top: 1px solid var(--valo-contrast-60pct);
-        padding: 10px;
+      .header-title {
+        position: relative;
+        padding-left: 15px;
       }
     </style>
 
-    <h3>Edit User</h3>
-    <vaadin-form-layout>
-      <div class="flex" colspan="2">
-        <user-avatar src="[[_editableItem.picture]]"></user-avatar>
-        <div class="flex1">
-          <label>Photo</label>
-          <vaadin-upload id="upload" nodrop max-files="1">
-            <vaadin-button slot="add-button">Upload new...</vaadin-button>
-          </vaadin-upload>
+    <h3 class="header-title">Edit User</h3>
+    <div class="scrollable flex1" id="main">
+      <vaadin-form-layout>
+        <div class="flex" colspan="2">
+          <user-avatar src="[[_editableItem.picture]]"></user-avatar>
+          <div class="flex1">
+            <label>Photo</label>
+            <vaadin-upload id="upload" nodrop max-files="1">
+              <vaadin-button slot="add-button">Upload new...</vaadin-button>
+            </vaadin-upload>
+          </div>
         </div>
-      </div>
-      <br>
-      <vaadin-text-field label="Email (login)" value="{{_editableItem.email}}" colspan="2"></vaadin-text-field>
-      <br>
-      <vaadin-text-field label="First Name" value="{{_editableItem.name}}" colspan="2"></vaadin-text-field>
-      <vaadin-text-field label="Last Name" value="{{_editableItem.last}}" colspan="2"></vaadin-text-field>
-      <br>
-      <vaadin-password-field label="Password" value="{{_editableItem.password}}" colspan="2"></vaadin-password-field>
-      <br>
-      <vaadin-combo-box label="Role" value="{{_editableItem.role}}" items='["Barista", "Admin", "Baker"]' colspan="2"></vaadin-combo-box>
-    </vaadin-form-layout>
-    <div class="flex buttons">
+        <br>
+        <vaadin-text-field label="Email (login)" value="{{_editableItem.email}}" colspan="2"></vaadin-text-field>
+        <br>
+        <vaadin-text-field label="First Name" value="{{_editableItem.name}}" colspan="2"></vaadin-text-field>
+        <vaadin-text-field label="Last Name" value="{{_editableItem.last}}" colspan="2"></vaadin-text-field>
+        <br>
+        <vaadin-password-field label="Password" value="{{_editableItem.password}}" colspan="2"></vaadin-password-field>
+        <br>
+        <vaadin-combo-box label="Role" value="{{_editableItem.role}}" items='["Barista", "Admin", "Baker"]'
+                          colspan="2"></vaadin-combo-box>
+      </vaadin-form-layout>
+    </div>
+    <div class="footer">
       <vaadin-button on-click="save" theme="primary" disabled="[[!dirty]]">Save</vaadin-button>
       <vaadin-button on-click="cancel">Cancel</vaadin-button>
       <div class="flex1"></div>
