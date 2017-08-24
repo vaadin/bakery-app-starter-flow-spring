@@ -256,6 +256,13 @@
           },
           unsavedCancelText: {
             value: 'Back'
+          },
+          _editableItemName: {
+            type: String,
+            value: 'Item'
+          },
+          _title: {
+            type: String
           }
         };
       }
@@ -279,6 +286,7 @@
         this.dirty = false;
         this._originalItemString = JSON.stringify(this.item);
         this._editableItem = Object.assign({}, this.item);
+        this._title = (this.item && this.item.id ? 'Edit ' : 'New ') + this._editableItemName;
       }
 
       _checkDirty() {
