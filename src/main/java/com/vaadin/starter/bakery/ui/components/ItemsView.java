@@ -14,6 +14,10 @@ public class ItemsView extends PolymerTemplate<ItemsView.Model> {
 		void setEditing(Boolean editing);
 	}
 
+	public ItemsView() {
+
+	}
+
 	public void openDialog(boolean open) {
 		getModel().setEditing(open);
 	}

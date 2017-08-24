@@ -36,6 +36,10 @@ public class ConfirmationDialog extends PolymerTemplate<ConfirmationDialog.Model
 	private Registration okRegistration;
 	private Registration cancelRegistration;
 
+	public ConfirmationDialog() {
+
+	}
+
 	private void clearRegistration() {
 		if (okRegistration != null) {
 			okRegistration.remove();
@@ -51,7 +55,7 @@ public class ConfirmationDialog extends PolymerTemplate<ConfirmationDialog.Model
 			ComponentEventListener<HasClickListeners.ClickEvent<Button>> okListener,
 			ComponentEventListener<HasClickListeners.ClickEvent<Button>> cancelListener) {
 		clearRegistration();
-		
+
 		getModel().setCaption(caption);
 		getModel().setMessage(message);
 		getModel().setOkText(okText);
