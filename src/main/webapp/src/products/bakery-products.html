@@ -121,6 +121,8 @@
       }
 
       onBeforeClose(e) {
+        // Cancel closing dialog and send message to server to check dirty and show confirmation.
+        // Can be removed when all the dialog open/close logic will be moved to server.
         e.preventDefault();
       }
     }
