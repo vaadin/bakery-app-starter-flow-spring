@@ -8,7 +8,7 @@ import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.HasClickListeners;
+import com.vaadin.ui.HasClickListeners.ClickEvent;
 
 @Tag("confirm-dialog")
 @HtmlImport("frontend://src/elements/confirm-dialog.html")
@@ -36,24 +36,21 @@ public class ConfirmationDialog extends PolymerTemplate<ConfirmationDialog.Model
 	private Registration okRegistration;
 	private Registration cancelRegistration;
 
-	public ConfirmationDialog() {
-
-	}
-
 	private void clearRegistration() {
 		if (okRegistration != null) {
 			okRegistration.remove();
+			okRegistration = null;
 		}
-		okRegistration = null;
+
 		if (cancelRegistration != null) {
 			cancelRegistration.remove();
+			cancelRegistration = null;
 		}
-		cancelRegistration = null;
 	}
 
 	public void show(String caption, String message, String okText, String cancelText,
-			ComponentEventListener<HasClickListeners.ClickEvent<Button>> okListener,
-			ComponentEventListener<HasClickListeners.ClickEvent<Button>> cancelListener) {
+			ComponentEventListener<ClickEvent<Button>> okListener,
+			ComponentEventListener<ClickEvent<Button>> cancelListener) {
 		clearRegistration();
 
 		getModel().setCaption(caption);
@@ -61,6 +58,7 @@ public class ConfirmationDialog extends PolymerTemplate<ConfirmationDialog.Model
 		getModel().setOkText(okText);
 		getModel().setCancelText(cancelText);
 		getModel().setOpened(true);
+
 		okRegistration = okButton.addClickListener(okListener);
 
 		if (cancelListener != null) {

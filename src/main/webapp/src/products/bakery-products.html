@@ -112,7 +112,8 @@
         if (this.filterValue === null) {
           return;
         }
-        // Wait when flow will support this functionality: https://github.com/vaadin/flow/issues/467
+
+        // TODO(sayo-vaadin): Remove when https://github.com/vaadin/flow/issues/467 is resolved.
         this._filtersChangeDebouncer = Polymer.Debouncer.debounce(
           this._filtersChangeDebouncer,
           Polymer.Async.timeOut.after(200),

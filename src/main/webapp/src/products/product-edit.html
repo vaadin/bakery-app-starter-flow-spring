@@ -33,13 +33,13 @@
       <vaadin-text-field id="name" label="Product name" colspan="2" required pattern=".*[^ ].*"
                          error-message="Please enter a valid name"></vaadin-text-field>
       <br>
-      <vaadin-text-field id="price" label="Unit price" colspan="2"
+      <vaadin-text-field id="price" label="Unit price" colspan="2" on-focus="priceFocusGained" on-blur="priceFocusLost"
         pattern="\d+(\.\d?\d?)?$" required prevent-invalid-input>
         <div slot="prefix">$</div>
       </vaadin-text-field>
     </vaadin-form-layout>
     <div class="flex buttons">
-      <vaadin-button id="save" theme="primary" >Save</vaadin-button>
+      <vaadin-button id="save" theme="primary">Save</vaadin-button>
       <vaadin-button id="cancel">Cancel</vaadin-button>
       <div class="flex1"></div>
       <vaadin-button id="delete" theme="danger tertiary" class="right">Delete</vaadin-button>

@@ -10,12 +10,7 @@ import com.vaadin.flow.template.model.TemplateModel;
 public class ItemsView extends PolymerTemplate<ItemsView.Model> {
 
 	public interface Model extends TemplateModel {
-
 		void setEditing(Boolean editing);
-	}
-
-	public ItemsView() {
-
 	}
 
 	public void openDialog(boolean open) {
