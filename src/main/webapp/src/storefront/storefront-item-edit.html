@@ -191,7 +191,7 @@
       }
 
       _onItemChange(item) {
-        this._title = (item && item.id && item.customer && item.customer.name ? 'Edit ' : 'New ') + 'Order';
+        this._title = (item.id ? 'Edit ' : 'New ') + 'Order';
         if (item) {
           if (!item.goods) {
             this.set('item.goods', []);
