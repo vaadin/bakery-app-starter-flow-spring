@@ -98,17 +98,18 @@ public class ProductEdit extends PolymerTemplate<TemplateModel> implements View 
 
 	@EventHandler
 	public void priceFocusLost() {
-		if ("".equals(priceField.getValue()) || Integer.valueOf(priceField.getValue()) == 0) {
+		if ("".equals(priceField.getValue()) || fromUiPrice() == 0) {
 			priceField.setValue(DECIMAL_ZERO);
 		}
 	}
 
 	public boolean isDirty() {
-		if (product == null || product.getName() == null) {
-			return true;
+		if (product != null && product.getId() != null) {
+			return !product.getName().equals(nameField.getValue()) || product.getPrice() != fromUiPrice();
 		}
 
-		return (!product.getName().equals(nameField.getValue()) || product.getPrice() != fromUiPrice());
+		return !(nameField.isEmpty() || nameField.getValue().trim().isEmpty())
+				|| !("".equals(priceField.getValue()) || fromUiPrice() == 0);
 	}
 
 	public List<String> validate() {
