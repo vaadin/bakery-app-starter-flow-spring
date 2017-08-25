@@ -80,6 +80,12 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> im
 			user.setImage(uiUser.getPicture());
 			user.setAlarms(true);
 			getModel().setUser(user);
+		}else {
+			UserModel user = new UserModel();
+			user.setName("Anonymous");
+			user.setAlarms(true);
+			getModel().setUser(user);
+			
 		}
 	}
 

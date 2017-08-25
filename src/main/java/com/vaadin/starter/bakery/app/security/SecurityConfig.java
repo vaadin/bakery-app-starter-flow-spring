@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
@@ -45,36 +46,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		// Not using Spring CSRF here to be able to use plain HTML for the login
 		// page
-		http.csrf().disable();
-		http.requestCache().requestCache(new CustomRequestCache());
-		ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry reg = http
-				.authorizeRequests();
-
-		// Allow access to static resources ("/VAADIN/**")
-		reg = reg.antMatchers("/resources/**").permitAll();
-		reg = reg.antMatchers("/icons/**").permitAll();
-		reg = reg.antMatchers("/fonts/**").permitAll();
-		reg = reg.antMatchers("/api/**").permitAll();
-		reg = reg.antMatchers("/manifest.json").permitAll();
-		reg = reg.antMatchers("/service-worker.js").permitAll();
-		reg = reg.antMatchers("/bower_components/**").permitAll();
-		reg = reg.antMatchers("/VAADIN/**").permitAll();
-		reg = reg.antMatchers("/login").permitAll();
-		reg = reg.antMatchers("/favico.ico").permitAll();
-		reg = reg.antMatchers("/src/login/bakery-login.html").permitAll();
-		reg = reg.antMatchers("/src/app/bakery-app.html").permitAll();
-		reg = reg.antMatchers("/es5/**").permitAll();
-		reg = reg.antMatchers("/es6/**").permitAll();
-		reg = reg.antMatchers("/**").hasAnyAuthority(Role.getAllRoles());
-		HttpSecurity sec = reg.and();
-
-		// Allow access to login page without login
-		FormLoginConfigurer<HttpSecurity> login = sec.formLogin().permitAll();
-		login = login.loginPage(BakeryApplicationConfig.LOGIN_URL)
+		http.csrf().disable().requestCache().requestCache(new CustomRequestCache()).and().authorizeRequests()
+				.anyRequest().hasAnyAuthority(Role.getAllRoles()).and().formLogin()
+				.loginPage(BakeryApplicationConfig.LOGIN_URL).permitAll()
 				.loginProcessingUrl(BakeryApplicationConfig.LOGIN_PROCESSING_URL)
 				.failureUrl(BakeryApplicationConfig.LOGIN_FAILURE_URL)
-				.successHandler(new SavedRequestAwareAuthenticationSuccessHandler());
-		login.and().logout().logoutSuccessUrl(BakeryApplicationConfig.LOGOUT_URL);
+				.successHandler(new SavedRequestAwareAuthenticationSuccessHandler()).and().logout()
+				.logoutSuccessUrl(BakeryApplicationConfig.LOGOUT_URL);
+	}
+
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+
+		web.ignoring()
+				.antMatchers("/resources/**", "/icons/**", "/fonts/**", "/api/**", "/manifest.json",
+						"/service-worker.js", "/bower_components/**", "/VAADIN/**", "/favico.ico",
+						"/src/login/bakery-login.html", "/src/app/**","/src/elements/**", "/es5/**", "/es6/**")
+				.and().ignoring().requestMatchers(this::isHeartbeat);
+	}
+
+	private boolean isHeartbeat(HttpServletRequest request) {
+		final String HEARTBEAT_PARAMETER = "v-r";
+		final String HEARTBEAT_PARAMETER_VALUE = "heartbeat";
+		return HEARTBEAT_PARAMETER_VALUE.equals(request.getParameter(HEARTBEAT_PARAMETER));
 	}
 
 	class CustomRequestCache extends HttpSessionRequestCache {
@@ -85,10 +79,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			}
 		}
 
-		private boolean isHeartbeat(HttpServletRequest request) {
-			final String HEARTBEAT_PARAMETER = "v-r";
-			final String HEARTBEAT_PARAMETER_VALUE = "heartbeat";
-			return HEARTBEAT_PARAMETER_VALUE.equals(request.getParameter(HEARTBEAT_PARAMETER));
-		}
 	}
 }
