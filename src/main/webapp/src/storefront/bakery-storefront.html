@@ -280,7 +280,7 @@
       }
 
       _notifyResize() {
-        // iron-list needs to be resized both before and after rendering the list.
+        // list needs to be resized both before and after rendering the list.
         // Without double resize, elements will be rendered on top of each others.
         this.$.list.notifyResize();
         this.dispatchEvent(new CustomEvent('notify-resize'));
