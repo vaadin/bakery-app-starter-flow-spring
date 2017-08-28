@@ -5,6 +5,7 @@ import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Id;
 import com.vaadin.annotations.Tag;
 import com.vaadin.flow.event.ComponentEventListener;
+import com.vaadin.flow.html.H3;
 import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
@@ -24,6 +25,9 @@ import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PRODUCT_PRICE_VALID
 @Tag("product-edit")
 @HtmlImport("frontend://src/products/product-edit.html")
 public class ProductEdit extends PolymerTemplate<TemplateModel> implements View {
+
+	@Id("title")
+	private H3 title;
 
 	@Id("name")
 	private TextField nameField;
@@ -48,6 +52,7 @@ public class ProductEdit extends PolymerTemplate<TemplateModel> implements View 
 	public ProductEdit() {
 		nameField.addValueChangeListener(valueChangeEvent -> saveButton.setDisabled(!isDirty()));
 		priceField.addValueChangeListener(valueChangeEvent -> saveButton.setDisabled(!isDirty()));
+		title.setText("New Product");
 	}
 
 	public int getProductId() {
@@ -68,13 +73,11 @@ public class ProductEdit extends PolymerTemplate<TemplateModel> implements View 
 	}
 
 	public void setProduct(Product product) {
-		if (product != null) {
-			deleteButton.setDisabled(product.getId() == null);
-			nameField.setValue(product.getName());
-		}
-
 		this.product = product;
+		nameField.setValue(product.getName());
 		priceField.setValue(toUiPrice());
+		deleteButton.setDisabled(product.getId() == null);
+		title.setText((product.getId() == null ? "New" : "Edit") + " Product");
 	}
 
 	public Registration addSaveListener(ComponentEventListener<ClickEvent<Button>> listener) {
