@@ -30,7 +30,7 @@
       }
     </style>
 
-    <h3>Edit Product</h3>
+    <h3>[[_title]]</h3>
     <iron-form id="productEditForm">
       <form on-submit="_submitEditForm">
         <vaadin-form-layout>
@@ -56,6 +56,11 @@
     class ProductEdit extends window.NotificationMixin(window.EditableItemMixin(Polymer.Element)) {
       static get is() {
         return 'product-edit';
+      }
+
+      constructor() {
+        super();
+        this._editableItemName = 'Product';
       }
 
       _priceChange(e) {
