@@ -6,6 +6,7 @@
     "src/products/bakery-products.html",
     "src/elements/items-view.html",
     "src/products/product-edit.html",
+    "src/elements/dialog-mixins.html",
     "src/elements/confirm-dialog.html",
     "src/storefront/bakery-storefront.html",
     "src/users/bakery-users.html",

@@ -4,6 +4,7 @@ import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Id;
 import com.vaadin.annotations.Tag;
 import com.vaadin.flow.event.ComponentEventListener;
+import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.shared.Registration;
@@ -12,7 +13,7 @@ import com.vaadin.ui.HasClickListeners.ClickEvent;
 
 @Tag("confirm-dialog")
 @HtmlImport("frontend://src/elements/confirm-dialog.html")
-public class ConfirmationDialog extends PolymerTemplate<ConfirmationDialog.Model> {
+public class ConfirmationDialog extends PolymerTemplate<ConfirmationDialog.Model> implements View {
 
 	public interface Model extends TemplateModel {
 

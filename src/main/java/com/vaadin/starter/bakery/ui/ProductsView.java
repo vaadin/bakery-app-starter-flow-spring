@@ -1,7 +1,6 @@
 package com.vaadin.starter.bakery.ui;
 
 import com.vaadin.annotations.*;
-import com.vaadin.flow.event.ComponentEventListener;
 import com.vaadin.flow.router.LocationChangeEvent;
 import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
@@ -31,7 +30,7 @@ import java.util.StringJoiner;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_CANCELBUTTON_CANCEL;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_CANCELBUTTON_DELETE;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_CAPTION_CANCEL;
-import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_CAPTION_DELETE;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_CAPTION_DELETE_PRODUCT;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_MESSAGE_CANCEL;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_MESSAGE_DELETE;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_OKBUTTON_CANCEL;
@@ -62,6 +61,16 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 	private ProductEdit editor;
 	private ConfirmationDialog confirmationDialog;
 
+	@Autowired
+	public ProductsView(ProductService service) {
+		this.service = service;
+		confirmationDialog = new ConfirmationDialog();
+		getElement().appendChild(confirmationDialog.getElement());
+		initEditor();
+		getElement().addEventListener("edit", e -> navigateToProduct(e.getEventData().getString("event.detail")),
+				"event.detail");
+	}
+
 	private void initEditor() {
 		if (editor != null) {
 			getElement().removeChild(editor.getElement());
@@ -87,9 +96,8 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 	}
 
 	private void onBeforeDelete(final ClickEvent<Button> deleteEvent) {
-		confirmationDialog.show(CONFIRM_CAPTION_DELETE, CONFIRM_MESSAGE_DELETE, CONFIRM_OKBUTTON_DELETE,
+		confirmationDialog.show(CONFIRM_CAPTION_DELETE_PRODUCT, CONFIRM_MESSAGE_DELETE, CONFIRM_OKBUTTON_DELETE,
 				CONFIRM_CANCELBUTTON_DELETE, okButtonEvent -> deleteProduct(editor.getProductId()), null);
-
 	}
 
 	@EventHandler
@@ -100,16 +108,6 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 		} else {
 			navigateToProduct(null);
 		}
-	}
-
-	@Autowired
-	public ProductsView(ProductService service) {
-		this.service = service;
-		confirmationDialog = new ConfirmationDialog();
-		getElement().appendChild(confirmationDialog.getElement());
-		initEditor();
-		getElement().addEventListener("edit", e -> navigateToProduct(e.getEventData().getString("event.detail")),
-				"event.detail");
 	}
 
 	@Override

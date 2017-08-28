@@ -25,7 +25,7 @@ public class BakeryConst {
 	public static final String CONFIRM_MESSAGE_CANCEL = "There are unsaved changes to the Product. Are you sure to cancel the editing.";
 	public static final String CONFIRM_OKBUTTON_CANCEL = "Yes";
 	public static final String CONFIRM_CANCELBUTTON_CANCEL = "Back";
-	public static final String CONFIRM_CAPTION_DELETE = "Confirm Delete Product";
+	public static final String CONFIRM_CAPTION_DELETE_PRODUCT = "Confirm Delete Product";
 	public static final String CONFIRM_MESSAGE_DELETE = "Are you sure you want to delete the selected Item? This action cannot be undone.";
 	public static final String CONFIRM_OKBUTTON_DELETE = "Delete";
 	public static final String CONFIRM_CANCELBUTTON_DELETE = "Cancel";

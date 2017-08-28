@@ -108,7 +108,7 @@ public class ProductEdit extends PolymerTemplate<TemplateModel> implements View 
 			return !product.getName().equals(nameField.getValue()) || product.getPrice() != fromUiPrice();
 		}
 
-		return !(nameField.isEmpty() || nameField.getValue().trim().isEmpty()) || fromUiPrice() > 0;
+		return !nameField.getValue().trim().isEmpty() || fromUiPrice() > 0;
 	}
 
 	public List<String> validate() {
