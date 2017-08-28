@@ -76,7 +76,7 @@
             <div class="flex justify-center">
               <storefront-item-detail-wrapper
                   header="[[_getHeader(item.date)]]"
-                  display-header="[[_displayHeader(item.id)]]"
+                  display-header="[[_displayHeader(item.id,_displayedHeadersList)]]"
                   order="[[item]]"
                   on-opened="_selectItem"
                   on-closed="_unselectItem"
@@ -130,8 +130,10 @@
           _selectedItem: Object,
           _editableItem: Object,
           _displayedHeadersList: {
-            type: Array,
-            value: []
+            type: Object,
+            value: function() { 
+              return {};
+            }
           },
           _usedGroups: Array
         };
@@ -195,40 +197,41 @@
           return;
         }
 
-        this._displayedHeadersList = {};
+        const newHeadersList = {};
         // _usedGroups is used for checking which header was used and should not be displayed ('Recent', 'Yesterday' etc.)
         this._usedGroups = [false, false, false, false, false, false];
 
         currentList.forEach((item) => {
           if (this._isRecent(item.date) && !this._usedGroups[0]) {
-            this._displayedHeadersList[item.id] = this._usedGroups[0] = true;
+            newHeadersList[item.id] = this._usedGroups[0] = true;
 
           } else if (this._isYesterday(item.date) && !this._usedGroups[1]) {
-            this._displayedHeadersList[item.id] = this._usedGroups[1] = true;
+            newHeadersList[item.id] = this._usedGroups[1] = true;
 
           } else if (this._isToday(item.date) && !this._usedGroups[2]) {
-            this._displayedHeadersList[item.id] = this._usedGroups[2] = true;
+            newHeadersList[item.id] = this._usedGroups[2] = true;
 
           } else if (this._isThisWeekBeforeYesterday(item.date) && !this._usedGroups[3]) {
-            this._displayedHeadersList[item.id] = this._usedGroups[3] = true;
+            newHeadersList[item.id] = this._usedGroups[3] = true;
 
           } else if (this._isThisWeekStartingTomorrow(item.date) && !this._usedGroups[4]) {
-            this._displayedHeadersList[item.id] = this._usedGroups[4] = true;
+            newHeadersList[item.id] = this._usedGroups[4] = true;
 
           } else if (this._isUpcoming(item.date) && !this._usedGroups[5]) {
-            this._displayedHeadersList[item.id] = this._usedGroups[5] = true;
+            newHeadersList[item.id] = this._usedGroups[5] = true;
 
           } else {
-            this._displayedHeadersList[item.id] = false;
+            newHeadersList[item.id] = false;
           }
         });
+        this._displayedHeadersList = newHeadersList;
       }
 
       /*
        * Check from _displayedHeadersList if header should be displayed in this order element.
        */
       _displayHeader(orderID) {
-        return this._displayedHeadersList[orderID];
+        return orderID && this._displayedHeadersList[orderID];
       }
 
       _openNewOrderDialog() {
