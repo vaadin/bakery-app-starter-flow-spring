@@ -16,11 +16,6 @@ import com.vaadin.ui.HasClickListeners.ClickEvent;
 import com.vaadin.ui.TextField;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PRODUCT_NAME_VALIDATION_MESSAGE;
-import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PRODUCT_PRICE_VALIDATION_MESSAGE;
 
 @Tag("product-edit")
 @HtmlImport("frontend://src/products/product-edit.html")
@@ -55,12 +50,8 @@ public class ProductEdit extends PolymerTemplate<TemplateModel> implements View 
 		title.setText("New Product");
 	}
 
-	public int getProductId() {
-		if (product != null && product.getId() != null) {
-			return product.getId().intValue();
-		}
-
-		return -1;
+	public Long getProductId() {
+		return product == null ? null : product.getId();
 	}
 
 	public Product getProduct() {
@@ -114,27 +105,11 @@ public class ProductEdit extends PolymerTemplate<TemplateModel> implements View 
 		return !nameField.getValue().trim().isEmpty() || fromUiPrice() > 0;
 	}
 
-	public List<String> validate() {
-		final List<String> errors = new ArrayList<>(2);
-		if (nameField.isEmpty() || nameField.getValue().trim().isEmpty()) {
-			errors.add(PRODUCT_NAME_VALIDATION_MESSAGE);
-		}
-		if (fromUiPrice() <= 0) {
-			errors.add(PRODUCT_PRICE_VALIDATION_MESSAGE);
-		}
-
-		return errors;
-	}
-
 	private String toUiPrice() {
 		return product == null ? DECIMAL_ZERO : df.format(product.getPrice() / 100f);
 	}
 
 	private int fromUiPrice() {
-		try {
-			return (int) Math.round(Double.parseDouble(priceField.getValue()) * 100);
-		} catch (NullPointerException | NumberFormatException e) {
-			return -1;
-		}
+		return priceField.getValue().isEmpty() ? 0 : (int) Math.round(Double.parseDouble(priceField.getValue()) * 100);
 	}
 }

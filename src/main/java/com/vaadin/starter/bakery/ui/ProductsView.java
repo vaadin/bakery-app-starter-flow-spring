@@ -25,7 +25,6 @@ import org.springframework.security.access.annotation.Secured;
 import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
-import java.util.StringJoiner;
 
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_CANCELBUTTON_CANCEL;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_CANCELBUTTON_DELETE;
@@ -80,22 +79,12 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 		editor.getElement().setAttribute("slot", "product-editor");
 		getElement().appendChild(editor.getElement());
 
-		editor.addSaveListener(buttonClickEvent -> {
-			final List<String> errors = editor.validate();
-			if (errors.isEmpty()) {
-				saveProduct(editor.getProduct());
-			} else {
-				final StringJoiner joiner = new StringJoiner(". ");
-				errors.forEach(joiner::add);
-				toast(joiner.toString());
-			}
-		});
-
 		editor.addDeleteListener(this::onBeforeDelete);
 		editor.addCancelListener(cancelClickEvent -> onBeforeClose());
+		editor.addSaveListener(saveClickEvent -> saveProduct(editor.getProduct()));
 	}
 
-	private void onBeforeDelete(final ClickEvent<Button> deleteEvent) {
+	private void onBeforeDelete(ClickEvent<Button> deleteEvent) {
 		confirmationDialog.show(CONFIRM_CAPTION_DELETE_PRODUCT, CONFIRM_MESSAGE_DELETE, CONFIRM_OKBUTTON_DELETE,
 				CONFIRM_CANCELBUTTON_DELETE, okButtonEvent -> deleteProduct(editor.getProductId()), null);
 	}
@@ -132,8 +121,8 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 		}
 
 		try {
-			final Long longId = Long.parseLong(id);
-			final Product product = service.getRepository().findOne(longId);
+			Long longId = Long.parseLong(id);
+			Product product = service.getRepository().findOne(longId);
 			if (product == null) {
 				String errorMessage = "Product with id " + id + " was not found.";
 				toast(errorMessage, false);
