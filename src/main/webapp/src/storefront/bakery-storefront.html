@@ -78,6 +78,7 @@
                   header="[[_getHeader(item.date)]]"
                   display-header="[[_displayHeader(item.id,_displayedHeadersList)]]"
                   order="[[item]]"
+                  selected="[[_isSelected(item,_selectedItem)]]"
                   on-opened="_selectItem"
                   on-closed="_unselectItem"
                   desktop-view="[[desktopView]]"
@@ -234,6 +235,10 @@
         return orderID && this._displayedHeadersList[orderID];
       }
 
+      _isSelected(order){
+        return this._selectedItem === order;
+      }
+
       _openNewOrderDialog() {
         // For new orders we stimate to be delivered today at last time
         const d = new Date();
@@ -268,14 +273,14 @@
       }
 
       _selectItem(e) {
-        e.target.selected = true;
         this._selectedItem = e.target.order;
         this._notifyResize();
       }
 
       _unselectItem(e) {
-        e.target.selected = false;
-        this._selectedItem = undefined;
+        if(this._selectedItem === e.target.order) {
+          this._selectedItem = undefined;
+        }
         this._notifyResize();
       }
 
