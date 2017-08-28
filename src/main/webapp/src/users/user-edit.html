@@ -38,19 +38,15 @@
       }
     </style>
 
-    <h3 class="header-title">Edit User</h3>
+    <h3 class="header-title">[[_title]]</h3>
     <div class="scrollable flex1" id="main">
       <vaadin-form-layout>
-        <div class="flex" colspan="2">
-          <user-avatar src="[[_editableItem.picture]]"></user-avatar>
-          <div class="flex1">
-            <label>Photo</label>
-            <vaadin-upload id="upload" nodrop max-files="1">
-              <vaadin-button slot="add-button">Upload new...</vaadin-button>
-            </vaadin-upload>
+        <template is="dom-if" if="[[_editableItem.picture]]">
+          <div class="flex" colspan="2">
+            <user-avatar src="[[_editableItem.picture]]"></user-avatar>
           </div>
-        </div>
-        <br>
+          <br>
+        </template>
         <vaadin-text-field label="Email (login)" value="{{_editableItem.email}}" colspan="2"></vaadin-text-field>
         <br>
         <vaadin-text-field label="First Name" value="{{_editableItem.name}}" colspan="2"></vaadin-text-field>
@@ -74,6 +70,11 @@
     class UserEdit extends window.EditableItemMixin(Polymer.Element) {
       static get is() {
         return 'user-edit';
+      }
+
+      constructor() {
+        super();
+        this._editableItemName = 'User';
       }
     }
 
