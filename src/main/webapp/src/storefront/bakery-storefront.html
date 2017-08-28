@@ -202,22 +202,22 @@
         this._usedGroups = [false, false, false, false, false, false];
 
         currentList.forEach((item) => {
-          if (this._isRecent(item.date) && !this._usedGroups[0]) {
+          if (!this._usedGroups[0] && this._isRecent(item.date)) {
             newHeadersList[item.id] = this._usedGroups[0] = true;
 
-          } else if (this._isYesterday(item.date) && !this._usedGroups[1]) {
+          } else if (!this._usedGroups[1] && this._isYesterday(item.date)) {
             newHeadersList[item.id] = this._usedGroups[1] = true;
 
-          } else if (this._isToday(item.date) && !this._usedGroups[2]) {
+          } else if (!this._usedGroups[2] && this._isToday(item.date)) {
             newHeadersList[item.id] = this._usedGroups[2] = true;
 
-          } else if (this._isThisWeekBeforeYesterday(item.date) && !this._usedGroups[3]) {
+          } else if (!this._usedGroups[3] && this._isThisWeekBeforeYesterday(item.date) ) {
             newHeadersList[item.id] = this._usedGroups[3] = true;
 
-          } else if (this._isThisWeekStartingTomorrow(item.date) && !this._usedGroups[4]) {
+          } else if (!this._usedGroups[4] && this._isThisWeekStartingTomorrow(item.date)) {
             newHeadersList[item.id] = this._usedGroups[4] = true;
 
-          } else if (this._isUpcoming(item.date) && !this._usedGroups[5]) {
+          } else if (!this._usedGroups[5] && this._isUpcoming(item.date)) {
             newHeadersList[item.id] = this._usedGroups[5] = true;
 
           } else {
