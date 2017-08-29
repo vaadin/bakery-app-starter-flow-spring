@@ -115,7 +115,9 @@
 
       _onBeforeClose(e) {
         // We need to forward the event because the dialog before-close event does not bubble.
-        var customEvent = new CustomEvent('before-close', {bubbles: true, composed: true, cancelable: true, detail: this.item});
+        e.stopPropagation();
+        var customEvent = new CustomEvent('before-close',
+          {bubbles: true, composed: true, cancelable: true, detail: this.item});
         this.dispatchEvent(customEvent);
         if (customEvent.defaultPrevented) {
           e.preventDefault();
