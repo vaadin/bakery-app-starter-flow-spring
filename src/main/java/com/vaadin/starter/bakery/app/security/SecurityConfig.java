@@ -97,10 +97,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			}
 		}
 
-		private boolean isHeartbeat(HttpServletRequest request) {
-			final String HEARTBEAT_PARAMETER = "v-r";
-			final String HEARTBEAT_PARAMETER_VALUE = "heartbeat";
-			return HEARTBEAT_PARAMETER_VALUE.equals(request.getParameter(HEARTBEAT_PARAMETER));
-		}
 	}
 }

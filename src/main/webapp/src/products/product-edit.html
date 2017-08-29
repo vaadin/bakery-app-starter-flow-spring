@@ -1,0 +1,62 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
+<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
+<link rel="import" href="../elements/utils-mixin.html">
+
+<dom-module id="product-edit">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        padding: 20px;
+      }
+
+      label {
+        font-size: var(--valo-font-size-s);
+        color: var(--valo-contrast-60pct);
+        font-weight: 500;
+      }
+
+      .buttons {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        border-top: 1px solid var(--valo-contrast-60pct);
+        padding: 10px;
+      }
+    </style>
+
+    <h3 id="title"></h3>
+    <vaadin-form-layout>
+      <vaadin-text-field id="name" label="Product name" colspan="2" required pattern=".*[^ ].*"
+                         error-message="Please enter a valid name"></vaadin-text-field>
+      <br>
+      <vaadin-text-field id="price" label="Unit price" colspan="2" on-focus="priceFocusGained" on-blur="priceFocusLost"
+        pattern="\d+(\.\d?\d?)?$" required prevent-invalid-input>
+        <div slot="prefix">$</div>
+      </vaadin-text-field>
+    </vaadin-form-layout>
+    <div class="flex buttons">
+      <vaadin-button id="save" theme="primary">Save</vaadin-button>
+      <vaadin-button id="cancel">Cancel</vaadin-button>
+      <div class="flex1"></div>
+      <vaadin-button id="delete" theme="danger tertiary" class="right">Delete</vaadin-button>
+    </div>
+  </template>
+
+  <script>
+    class ProductEdit extends window.NotificationMixin(window.EditableItemMixin(Polymer.Element)) {
+      static get is() {
+        return 'product-edit';
+      }
+
+      _createConfirmDialog() {
+        // Need to be removed after EditableItemMixin.ready() will stop create new dialogs
+      }
+    }
+
+    window.customElements.define(ProductEdit.is, ProductEdit);
+  </script>
+</dom-module>
