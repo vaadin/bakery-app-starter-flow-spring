@@ -1,203 +1,248 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/polymer/lib/mixins/gesture-event-listeners.html">
-<link rel="import" href="../../bower_components/iron-form/iron-form.html">
-<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
-<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-password-field.html">
-<link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
-
 <dom-module id="bakery-login">
-  <template>
-    <style include="shared-styles">
-      *,
-      *::before,
-      *::after {
-        box-sizing: border-box;
-      }
+<template> 
 
-      :host {
-        height: 100%;
+<style>
 
-        /* workaround for a WebKit issue */
-        height: 100vh;
-      }
+@font-face {
+  font-family: "Open Sans";
+  src: url(../../resources/fonts/OpenSans-Light-webfont.woff) format("woff");
+  font-weight: 300;
+  font-style: normal;
+}
 
-      .body {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-      }
+@font-face {
+  font-family: "Open Sans";
+  src: url(../../resources/fonts/OpenSans-Semibold-webfont.woff) format("woff");
+  font-weight: 600;
+  font-style: normal;
+}
 
-      .info {
-        background-image: url(../../images/login-banner.jpg);
-        background-size: cover;
-        background-position-x: center;
-        display: table;
-        width: 100%;
-        padding: var(--valo-space-l);
-      }
+:host {
+  background: linear-gradient(145deg, #484962 30%, #d06b41 100%);
+}
 
-      .info__header {
-        font-weight: 300;
-        color: var(--valo-base-color);
-        margin-top: 2em;
-        margin-bottom: 0;
-      }
+@media (min-width: 1000px) {
+  /* load on wide screens */
+  #body {
+    background-color: transparent;
+    background-image: url(../../resources/icons/bg.jpg);
+    background-size: cover;
+  }
+}
 
-      .info__text {
-        font-size: var(--valo-font-size-s);
-        color: var(--valo-tint-70pct);
-        font-weight: 500;
-        margin: 0;
-      }
+button {
+  background-color: #4b4b65;
+}
 
-      .login {
-        padding: var(--valo-space-l);
-        background-color: var(--valo-base-color);
-        flex: 1;
-      }
+#logo {
+  display: inline-block;
+  width: 60px;
+  height: 60px;
+  border-radius: 100%;
+  background-image: url(../../resources/icons/icon-96.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 3px 3px 8px rgba(0, 0, 0, .2);
+}
 
-      .login__header {
-        margin-top: 0;
-        margin-bottom: 0;
-      }
+/* Layout */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
-      .login__layout {
-        display: flex;
-        flex-direction: column;
-      }
+/* html, */
+:host,
+#body {
+  height: 100%;
+  font: 100 16px/1.55 "Open Sans", sans-serif;
+  margin: 0;
+}
 
-      .login__layout > * {
-        width: 100%;
-      }
+#info {
+  color: #fff;
+  text-align: center;
+  padding: 28px;
+}
 
-      .login__button {
-        margin-top: var(--valo-space-m);
-        margin-left: 0;
-        margin-right: 0;
-        position: relative;
-      }
+#form {
+  height: 100%;
+  display: flex;
+  background-color: #fff;
+  justify-content: center;
+}
 
-      .login__button-icon {
-        text-align: right;
-        position: absolute;
-        right: var(--valo-space-s);
-      }
+/* Responsive behaviour */
+@media (max-width: 1000px) {
+  h2 {
+    display: none;
+  }
+}
 
-      .error {
-        display: flex;
-        align-items: flex-start;
-      }
+@media (min-width: 1001px) {
+  #body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-      .error__icon {
-        flex: 0 0 auto;
-        width: 1em;
-        fill: var(--valo-error-color);
-        margin-top: 1.3em;
-        margin-right: var(--valo-space-s);
-      }
+  #logo {
+    width: 96px;
+    height: 96px;
+  }
 
-      .error__text {
-        max-width: 35em;
-      }
+  #info,
+  #form {
+    height: 450px;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, .2);
+  }
 
-      @media (min-width: 1000px) {
-        .body {
-          max-width: 700px;
-          height: auto;
-          margin: 20vh auto 0;
-          box-shadow: 0 2px 5px 0 var(--valo-shade-10pct);
-        }
+  #info {
+    background-color: rgba(255, 255, 255, .2);
+    width: 465px;
+    border-radius: 5px 0 0 5px;
+  }
 
-        .info {
-          border-top-left-radius: 4px;
-          border-top-right-radius: 4px;
-        }
+  #form {
+    width: 320px;
+    padding: 28px;
+    border-radius: 0 5px 5px 0;
+  }
+}
 
-        .login {
-          border-bottom-left-radius: 4px;
-          border-bottom-right-radius: 4px;
-        }
+/* Elements / components theme */
+h1 {
+  font-size: 36px;
+  font-weight: 100;
+}
 
-        .login__layout {
-          flex-direction: row;
-          align-items: flex-end;
-        }
+h2 {
+  font-size: 28px;
+  font-weight: 100;
+  margin-bottom: 14px;
+}
 
-        .login__layout > *:not(:first-child) {
-          margin-left: var(--valo-space-m);
-        }
+form {
+  max-width: 320px;
+}
 
-        .login__button {
-          max-width: 7em;
-        }
+label {
+  font-size: 14px;
+  padding: 16px 0 5px;
+  display: inline-block;
+}
 
-        .login__button-icon {
-          position: static;
-        }
-      }
-    </style>
-    <div class="body">
-      <div class="info">
-        <h1 class="info__header">###Bakery###</h1>
-        <p class="info__text">
-          admin@vaadin.com + admin <br>
-          barista@vaadin.com + barista
-        </p>
-      </div>
-      <iron-form class="login" id="form" allow-redirect>
-        <form method="post" action="login">
-          <h2 class="login__header">Sign in</h2>
-          <div class="login__layout">
-            <vaadin-text-field id="username" name="username" label="Email" autofocus required></vaadin-text-field>
-            <vaadin-password-field id="password" name="password" label="Password" required on-keydown="_onPasswordKeydown"></vaadin-password-field>
-            <vaadin-button id="button-submit" class="login__button" on-tap="login" theme="primary">
-              Sign In <span class="login__button-icon">→</span>
-            </vaadin-button>
-          </div>
-          <template is="dom-if" if="[[error]]">
-            <div class="error">
-              <svg class="error__icon" viewBox="0 0 16 16">
-                <path d="M8 1c3.9 0 7 3.1 7 7s-3.1 7-7 7-7-3.1-7-7 3.1-7 7-7zM8 0c-4.4 0-8 3.6-8 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8v0z"></path>
-                <path d="M7 3h2v7h-2v-7z"></path>
-                <path d="M7 11h2v2h-2v-2z"></path>
-              </svg>
-              <p class="error__text">
-                The username and password you entered do not match our records. Please double-check and try again.
-              </p>
-            </div>
-          </template>
-        </form>
-      </iron-form>
-    </div>
-  </template>
+input[type='email'],
+input[type='password'] {
+  width: 100%;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  -o-appearance: none;
+  appearance: none;
+  font: inherit;
+  font-size: 14px;
+  height: 37px;
+  border-radius: 4px;
+  padding: 4px 9px;
+  border: 1px solid rgba(0, 0, 0, .2);
+}
+
+button {
+  width: 100%;
+  margin-top: 37px;
+  height: 37px;
+  border: 1px solid #666;
+  border-radius: 4px;
+  background-image:
+    linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.2) 2%,
+      rgba(0, 0, 0, 0.1) 98%
+    );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+    0 2px 3px rgba(0, 0, 0, 0.05);
+  outline: none;
+  cursor: pointer;
+  color: #fff;
+  text-align: center;
+  position: relative;
+  font: inherit;
+  font-weight: 600;
+}
+
+#button-submit:focus::after {
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, .5);
+  content: "";
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  bottom: -2px;
+  left: -2px;
+  border-radius: inherit;
+}
+
+.error input {
+  display: block;
+  border-color: red;
+}
+
+.error form::after {
+  content: "The username and password you entered do not match our records. Please double-check and try again.";
+  display: block;
+  border: 1px solid red;
+  border-radius: 4px;
+  width: 100%;
+  margin-top: 16px;
+  font-size: 14px;
+  padding: 8px;
+}
+</style>
+  <div id="body" class$="[[_getContainerClassName(error)]]">
+  <div id="info">
+    <div id="logo"></div>
+    <h1>###Bakery###</h1>
+    <p>
+      admin@vaadin.com + admin <br> barista@vaadin.com + barista
+    </p>
+  </div>
+  <div id="form">
+    <form method="post" action="login" id="theform">
+      <h2>Sign in</h2>
+      <label id="login-label" for="login">Email</label> <input
+        type="email" id="login" name="username"
+        aria-labelledby="login-label" autofocus> <label
+        id="password-label" for="password">Password</label> <input
+        type="password" id="password" name="password"
+        aria-labelledby="password-label">
+      <button id="button-submit" type="submit">Sign in</button>
+    </form>
+  </div>
+  </div>
+</template>
   <script>
-    class BakeryLogin extends Polymer.GestureEventListeners(Polymer.Element) {
+    class BakeryLogin extends Polymer.Element {
       static get is() {
         return 'bakery-login';
       }
 
       static get properties() {
         return {
-          error: {
-            type: Boolean,
-            value: false
-          }
+          error: Boolean
         };
       }
 
-      login() {
-        if (!this.$.username.invalid && !this.$.password.invalid) {
-          this.$.form.submit();
-        }
-      }
-
-      _onPasswordKeydown(event) {
-        if (event.key === 'Enter') {
-          this.login();
-        }
+      _getContainerClassName(error) {
+        return error ? 'error' : '';
       }
     }
 
     window.customElements.define(BakeryLogin.is, BakeryLogin);
   </script>
+
 </dom-module>
