@@ -27,6 +27,7 @@ import com.vaadin.ui.UI;
 public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> implements View {
 	public static class UserModel {
 		private String name;
+		private String email;
 		private String image;
 		private boolean alarms;
 
@@ -36,6 +37,14 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> im
 
 		public void setName(String name) {
 			this.name = name;
+		}
+
+		public String getEmail() {
+			return email;
+		}
+
+		public void setEmail(String email) {
+			this.email = email;
 		}
 
 		public String getImage() {
@@ -77,6 +86,7 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> im
 			User uiUser = getUsersProvider().getCurrentUser();
 			UserModel user = new UserModel();
 			user.setName(uiUser.getName());
+			user.setEmail(uiUser.getEmail());
 			user.setImage(uiUser.getPicture());
 			user.setAlarms(true);
 			getModel().setUser(user);

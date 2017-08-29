@@ -1,5 +1,8 @@
 package com.vaadin.starter.bakery.app.security;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -58,20 +61,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		web.ignoring()
 				.antMatchers("/resources/**", "/icons/**", "/fonts/**", "/api/**", "/manifest.json",
 						"/service-worker.js", "/bower_components/**", "/VAADIN/**", "/favico.ico",
-						"/src/login/bakery-login.html", "/src/app/**","/src/elements/**", "/es5/**", "/es6/**")
-				.and().ignoring().requestMatchers(this::isHeartbeat);
+						"/src/login/bakery-login.html", "/src/app/**", "/src/elements/**", "/es5/**", "/es6/**")
+				.and().ignoring().requestMatchers(this::isFrameworkInternalRequest);
 	}
 
-	private boolean isHeartbeat(HttpServletRequest request) {
-		final String HEARTBEAT_PARAMETER = "v-r";
+	private boolean isFrameworkInternalRequest(HttpServletRequest request) {
+		final String FRAMEWORK_INTERNAL_REQUEST_PARAMETER = "v-r";
 		final String HEARTBEAT_PARAMETER_VALUE = "heartbeat";
-		return HEARTBEAT_PARAMETER_VALUE.equals(request.getParameter(HEARTBEAT_PARAMETER));
+		final String UIDL_PARAMETER_VALUE = "uidl";
+		final String parameterValue = request.getParameter(FRAMEWORK_INTERNAL_REQUEST_PARAMETER);
+		return parameterValue != null
+				&& (parameterValue.equals(HEARTBEAT_PARAMETER_VALUE) || parameterValue.equals(UIDL_PARAMETER_VALUE));
 	}
 
 	class CustomRequestCache extends HttpSessionRequestCache {
 		@Override
 		public void saveRequest(HttpServletRequest request, HttpServletResponse response) {
-			if (!isHeartbeat(request)) {
+			if (!isFrameworkInternalRequest(request)) {
 				super.saveRequest(request, response);
 			}
 		}
