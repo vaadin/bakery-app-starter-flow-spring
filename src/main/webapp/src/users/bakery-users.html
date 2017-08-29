@@ -8,6 +8,7 @@
 <link rel="import" href="../app/bakery-search.html">
 <link rel="import" href="../elements/items-view.html">
 <link rel="import" href="../elements/utils-mixin.html">
+<link rel="import" href="../elements/user-avatar.html">
 <link rel="import" href="user-edit.html">
 
 <dom-module id="bakery-users">
@@ -15,15 +16,7 @@
     <style include="shared-styles">
       :host {
         max-width: none !important;
-        padding: 0 !important;
         display: flex;
-        flex-direction: column-reverse;
-      }
-
-      @media (min-width: 600px) {
-        :host {
-          flex-direction: column;
-        }
       }
 
       .picture-cell {
@@ -34,11 +27,6 @@
       .picture {
         width: var(--valo-size-xs);
         height: var(--valo-size-xs);
-        border-radius: 50%;
-      }
-
-      #wrapper {
-        padding-top: var(--valo-space-s);
       }
 
       .edit-icon {
@@ -50,6 +38,15 @@
 
       vaadin-grid-sorter {
         width: 70px;
+      }
+
+      vaadin-grid {
+        /* Effective for <vaadin-grid> 3 only */
+        --primary-background-color: var(--valo-base-color);
+        --vaadin-grid-cell: {
+          background: var(--valo-base-color);
+          background-image: linear-gradient(var(--valo-tint-5pct), var(--valo-tint-5pct));
+        }
       }
     </style>
 
@@ -63,7 +60,7 @@
         <vaadin-grid-column width="80px" flex-grow="0">
           <template>
             <div class="picture-cell">
-              <img src="[[item.picture]]" alt="[[item.name]]" class="picture">
+              <user-avatar src="[[item.picture]]" alt="[[item.name]]" class="picture"></user-avatar>
             </div>
           </template>
         </vaadin-grid-column>

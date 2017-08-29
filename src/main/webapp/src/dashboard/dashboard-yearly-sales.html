@@ -92,12 +92,6 @@
           }
         };
       }
-
-      connectedCallback() {
-        super.connectedCallback();
-        setTimeout(() => this.$.saleschart.reloadConfiguration(), 500);
-
-      }
     }
 
     window.customElements.define(DashboardYearlySales.is, DashboardYearlySales);

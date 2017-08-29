@@ -49,33 +49,37 @@
 
     <div class="scrollable flex1" id="main">
 
-      <h2 class="flex0">[[_title(item)]]</h2>
+      <h2>[[_title]]</h2>
 
       <iron-form id="itemEditForm">
         <form on-submit="_submitEditForm">
-        
-          <vaadin-combo-box hidden$="[[!_editing(item)]]" id="status" on-value-changed="_onStatusChange" value="[[item.status]]" items='
-            ["new", "confirmed", "ready", "delivered", "problem", "cancelled"]'>
-          </vaadin-combo-box>
-      
+
           <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 4, 1)]]">
-            <vaadin-form-item>
-              <label slot="label">Due</label>
-              <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 1, 2)]]">
-                <vaadin-date-picker on-value-changed="_onDateChange"  value="[[_getDayIso(item.date)]]">
-                  <iron-icon slot="prefix" icon="valo:calendar"></iron-icon>
-                </vaadin-date-picker>
+            <vaadin-form-layout responsive-steps='[{"columns": 1, "labelsPosition": "top"}]'>
+
+              <vaadin-combo-box hidden$="[[!_editing(item)]]" label="Status" id="status" on-value-changed="_onStatusChange" value="[[item.status]]" items='
+                ["new", "confirmed", "ready", "delivered", "problem", "cancelled"]'>
+              </vaadin-combo-box>
+
+              <vaadin-form-item>
+                <label slot="label">Due</label>
+                <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 1, 2)]]">
+                  <vaadin-date-picker on-value-changed="_onDateChange"  value="[[_getDayIso(item.date)]]">
+                    <iron-icon slot="prefix" icon="valo:calendar"></iron-icon>
+                  </vaadin-date-picker>
     
-                <vaadin-combo-box on-change="_onTimeChange" value="[[_getTime(item.time)]]" allow-custom-value items='
-                  ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00"]'>
-                  <iron-icon slot="prefix" icon="valo:clock"></iron-icon>
-                </vaadin-combo-box>
-              </vaadin-form-layout>
-    
+                  <vaadin-combo-box on-change="_onTimeChange" value="[[_getTime(item.time)]]" allow-custom-value items='
+                    ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00"]'>
+                    <iron-icon slot="prefix" icon="valo:clock"></iron-icon>
+                  </vaadin-combo-box>
+                </vaadin-form-layout>
+
+              </vaadin-form-item>
+
               <vaadin-combo-box class="full-width" value="{{item.place}}" items='["Bakery", "Store"]'>
                 <div slot="prefix" class="at-icon"></div>
               </vaadin-combo-box>
-            </vaadin-form-item>
+            </vaadin-form-layout>
     
             <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 3, 1)]]" colspan="3">
 
@@ -100,7 +104,7 @@
                       on-change="_onProductChange" allow-custom-value index="[[index]]"></vaadin-combo-box>
     
                     <vaadin-button colspan="2" class="delete" index="[[index]]" on-click="_onProductDelete"
-                      style$="order: [[_getConditional(desktopView, 2, 0)]];">✕</vaadin-button>
+                      theme="narrow" style$="order: [[_getConditional(desktopView, 2, 0)]];">✕</vaadin-button>
     
                     <amount-field colspan="4" value="{{product.count}}"
                       min="1" max="15" on-value-changed="_onCountChange" index="[[index]]"
@@ -130,7 +134,7 @@
   </template>
 
   <script>
-    class StoreFromItemEdit extends
+    class StorefrontItemEdit extends
       window.NotificationMixin(
         window.LocaleUtilsMixin(
           window.ScrollShadowMixin(
@@ -147,15 +151,12 @@
             notify: true,
             observer: '_onItemChange'
           },
+          _title: String,
           dirty: Boolean,
           products: Array,
           total: Number,
           desktopView: Boolean
         };
-      }
-
-      _onImgError(e) {
-        e.target.src = 'images/default-picture.png';
       }
 
       _cancel() {
@@ -190,6 +191,7 @@
       }
 
       _onItemChange(item) {
+        this._title = (item.id ? 'Edit ' : 'New ') + 'Order';
         if (item) {
           if (!item.goods) {
             this.set('item.goods', []);
@@ -206,10 +208,6 @@
 
       _editing(item) {
         return item && !!item._id;
-      }
-
-      _title(item) {
-        return this._editing(item) ? 'Edit Order' : 'New Order';
       }
 
       _onProductChange(e) {
@@ -262,6 +260,6 @@
       }
     }
 
-    window.customElements.define(StoreFromItemEdit.is, StoreFromItemEdit);
+    window.customElements.define(StorefrontItemEdit.is, StorefrontItemEdit);
   </script>
 </dom-module>

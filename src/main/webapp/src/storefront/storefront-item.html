@@ -1,8 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../elements/utils-mixin.html">
 <link rel="import" href="storefront-item-badge.html">
-<link rel="import" href="storefront-item-goods.html">
-
 
 <dom-module id="storefront-item">
   <template>
@@ -20,6 +18,10 @@
       #info-wrapper {
         flex-direction: column-reverse;
         justify-content: flex-end;
+      }
+
+      storefront-item-badge {
+        margin: var(--valo-space-s) 0;
       }
 
       #status {
@@ -45,6 +47,33 @@
         margin: 0;
       }
 
+      #goods {
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      #goods > div {
+        box-sizing: border-box;
+        width: 18em;
+        flex: auto;
+        padding-right: var(--valo-space-l);
+      }
+
+      .goods-item {
+        display: flex;
+        align-items: baseline;
+        font-size: var(--valo-font-size-s);
+        margin: var(--valo-space-xs) 0;
+      }
+
+      .goods-item > .count {
+        margin-right: var(--valo-space-s);
+      }
+
+      .goods-item > div {
+        flex: auto;
+      }
+
       @media (min-width: 600px) {
         :host {
           padding: var(--valo-space-l);
@@ -52,6 +81,10 @@
 
         #info-wrapper {
           flex-direction: row;
+        }
+
+        storefront-item-badge {
+          margin: 0;
         }
       }
     </style>
@@ -96,7 +129,14 @@
 
     <div id="name-items">
       <h3 id="name">[[item.customer.name]]</h3>
-      <storefront-item-goods items="[[item.goods]]" id="goods"></storefront-item-goods>
+      <div id="goods">
+        <template is="dom-repeat" items="[[item.goods]]">
+          <div class="goods-item">
+            <span class="count">[[item.count]]</span>
+            <div>[[item.name]]</div>
+          </div>
+        </template>
+      </div>
     </div>
   </template>
 

@@ -19,15 +19,8 @@
         min-height: 56px;
         overflow: hidden;
         background-image: linear-gradient(var(--valo-shade-20pct), var(--valo-shade-20pct));
-        background-color: white;
+        background-color: var(--valo-base-color);
         box-shadow: 0 0 16px 2px var(--valo-shade-20pct);
-      }
-
-      :host([show-extra-filters]) {
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-        min-height: 65px; /* Cover navigation */
       }
 
       .row {
@@ -63,8 +56,8 @@
       }
 
       .field {
-        flex: 6;
-        min-width: 200px;
+        flex: 1;
+        width: auto;
         padding-right: var(--valo-space-s);
       }
 
@@ -73,14 +66,9 @@
       }
 
       @media (min-width: 600px) {
-        :host([show-extra-filters]) {
-          position: inherit;
-          bottom: inherit;
-          min-height: 56px;
-        }
-
         .row {
-          width: calc(964px + var(--valo-space-m)) !important;
+          width: 100%;
+          max-width: 964px;
           margin: 0 auto;
         }
 

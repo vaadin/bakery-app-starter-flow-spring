@@ -2,6 +2,7 @@
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="../elements/dialog-mixins.html">
+<link rel="import" href="../elements/user-avatar.html">
 
 <dom-module id="user-popup-menu">
   <template>
@@ -19,7 +20,7 @@
 
       #fore {
         animation: 0.3s ease-in-out 0.1s 1 foreground-appear;
-        background: white;
+        background: var(--valo-base-color);
         box-shadow: 0 1px 4px 0 rgba(31, 70, 120, 0.3);
         position: absolute;
         z-index: 200;
@@ -29,20 +30,27 @@
         overflow: hidden;
       }
 
+      :host(:not([desktop-view])) #fore {
+        animation: none;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        display: block;
+        opacity: 1;
+      }
+
       @keyframes foreground-appear {
         0% {
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
+          width: 0;
+          height: 0;
           top: 16px;
           bottom: auto;
           right: 352px;
           left: auto;
           opacity: 1;
-        }
-
-        10% {
-          border-radius: 5px;
         }
 
         99% {
@@ -79,10 +87,13 @@
         animation-fill-mode: forwards;
       }
 
-      .image-container img {
-        border-radius: 50%;
-        width: 32px;
-        height: 32px;
+      :host(:not([desktop-view])) .top {
+        animation: none;
+        padding: 16px;
+      }
+
+      :host(:not([desktop-view])) .bottom {
+        height: 100%;
       }
 
       .user-actions-container {
@@ -107,16 +118,16 @@
       .user-name {
         font-size: 14px;
         font-weight: bold;
-        color: #354761;
+        color: var(--valo-body-text-color);
       }
 
       .user-email {
         font-size: 14px;
-        color: rgba(45, 71, 105, 0.7);
+        color: var(--valo-secondary-text-color);
       }
 
       iron-icon {
-        color: rgba(34, 70, 117, 0.4);
+        color: var(--valo-contrast-50pct);
         cursor: pointer;
       }
 
@@ -129,7 +140,8 @@
 
       .bottom {
         padding: 16px 24px;
-        background: rgba(20, 69, 133, 0.05);
+        background: var(--valo-base-color);
+        background-image: linear-gradient(var(--valo-contrast-5pct), var(--valo-contrast-5pct));
         display: flex;
         flex-direction: column;
       }
@@ -143,7 +155,7 @@
       .notifications-title {
         font-size: 18px;
         font-weight: bold;
-        color: rgba(45, 71, 105, 0.7);
+        color: var(--valo-body-text-color);
       }
 
       .notifications-list {
@@ -170,20 +182,20 @@
       }
 
       .notification-from {
-        color: rgba(53, 71, 97, 0.9);
+        color: var(--valo-body-text-color);
         font-size: 16px;
         font-weight: 500;
       }
 
       .notification-date {
-        color: rgba(45, 71, 105, 0.7);
+        color: var(--valo-secondary-text-color);
         font-size: 14px;
       }
 
       .notification-description {
         margin-top: 8px;
         font-size: 14px;
-        color: rgba(53, 71, 97, 0.9);
+        color: var(--valo-secondary-text-color);
       }
 
     </style>
@@ -192,7 +204,7 @@
     <div id="fore">
       <div class="top">
         <div class="image-container">
-          <img src="[[user.image]]"/>
+          <user-avatar src="[[user.image]]"></user-avatar>
         </div>
         <div class="user-actions-container">
           <div class="user-top-container">
@@ -254,7 +266,11 @@
       _closePopup() {
         this.opened = false;
       }
-      
+
+      _themeChanged(e) {
+        document.body.setAttribute('theme', e.target.value.toLowerCase());
+      }
+
       _logout() {
         this.dispatchEvent(new CustomEvent('logout', {bubbles: true, composed: true}));
       }

@@ -9,18 +9,20 @@
         max-width: 680px;
       }
 
-      :host([desktop-view]:not([align])) #fore {
+      :host([desktop-view]:not([side])) #fore {
         min-width: 500px;
         max-width: 994px;
         min-height: 400px;
         max-height: 648px;
         margin: auto;
+        left: 16px;
+        right: 16px;
       }
 
-      :host([desktop-view][align="right"]) #fore {
-        top: 10px;
-        bottom: 10px;
-        right: 5px;
+      :host([desktop-view][side="right"]) #fore {
+        top: 16px;
+        bottom: 16px;
+        right: 16px;
         left: auto;
       }
     </style>

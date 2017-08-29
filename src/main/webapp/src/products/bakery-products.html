@@ -5,18 +5,14 @@
 <link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
 
 <link rel="import" href="../app/bakery-search.html">
-<link rel="import" href="../elements/items-view.html">
 <link rel="import" href="../elements/utils-mixin.html">
-<link rel="import" href="product-edit.html">
 
 <dom-module id="bakery-products">
   <template>
     <style include="shared-styles">
       :host {
         max-width: none !important;
-        padding: 0 !important;
         display: flex;
-        flex-direction: column-reverse;
       }
 
       .edit-icon {
@@ -26,13 +22,21 @@
         cursor: pointer;
       }
 
+      vaadin-grid {
+        /* Effective for <vaadin-grid> 3 only */
+        --primary-background-color: var(--valo-base-color);
+        --vaadin-grid-cell: {
+          background: var(--valo-base-color);
+          background-image: linear-gradient(var(--valo-tint-5pct), var(--valo-tint-5pct));
+        }
+      }
     </style>
     
     <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
 
     <items-view id="view" desktop-view=[[desktopView]] filter-value="{{filterValue}}"
-      item="[[_editableItem]]" button-text="New product"
-      on-new-item="_newItem" on-closed="_onClose" on-before-close="_onBeforeClose">
+      button-text="New product"
+      on-new-item="onNewProduct" on-before-close="onBeforeClose">
 
       <vaadin-grid slot="grid" id="grid" items="[[products]]" active-item="{{_activeItem}}">
         <vaadin-grid-column flex-grow="10">
@@ -58,8 +62,9 @@
         </vaadin-grid-column>
       </vaadin-grid>
 
-      <product-edit id="editor" slot="editor" item="[[_editableItem]]"></product-edit>
+      <slot name="product-editor" slot="editor"></slot>
     </items-view>
+    <slot></slot>
   </template>
 
   <script>
@@ -95,28 +100,31 @@
         }
       }
       
-      _editItem(e) { 
+      _editItem(e) {
         this._editProduct(e.target.productId);
       }
 
       _editProduct(id) {
         this.dispatchEvent(new CustomEvent('edit', {bubbles: true, composed: true, detail: id}));
       }
-      
-      setEditableProduct(product) {
-        this._editableItem = product ? Object.assign({}, JSON.parse(product)) : null;
-      }
 
       _filterProducts() {
         if (this.filterValue === null) {
           return;
         }
-        // Wait when flow will support this functionality: https://github.com/vaadin/flow/issues/467
+
+        // TODO(sayo-vaadin): Remove when https://github.com/vaadin/flow/issues/467 is resolved.
         this._filtersChangeDebouncer = Polymer.Debouncer.debounce(
           this._filtersChangeDebouncer,
           Polymer.Async.timeOut.after(200),
           () => this.$server.onFilterProducts(this.filterValue));
         Polymer.enqueueDebouncer(this._filtersChangeDebouncer);
+      }
+
+      onBeforeClose(e) {
+        // Cancel closing dialog and send message to server to check dirty and show confirmation.
+        // Can be removed when all the dialog open/close logic will be moved to server.
+        e.preventDefault();
       }
     }
 

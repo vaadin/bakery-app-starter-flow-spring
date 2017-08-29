@@ -9,6 +9,10 @@
         max-width: 400px;
         max-height: 200px;
         margin: auto;
+        left: 16px;
+        right: 16px;
+        border-radius: var(--valo-border-radius);
+        box-shadow: 0 4px 20px var(--valo-shade-20pct);
       }
 
       #caption {
@@ -17,6 +21,7 @@
         line-height: 1.57;
         text-align: center;
         color: rgba(42, 71, 110, 0.6);
+        color: var(--valo-body-text-color);
         margin-bottom: 0;
         padding: 0 16px;
       }
@@ -25,7 +30,7 @@
         padding: 0 16px;
         font-size: 16px;
         line-height: 1.63;
-        color: rgba(53, 71, 97, 0.9);
+        color: var(--valo-secondary-text-color);
       }
 
       #buttons {
@@ -49,9 +54,9 @@
       <p id="caption">[[caption]]</p>
       <p class="flex1" id="message">[[message]]</p>
       <div id="buttons" class="flex">
-        <vaadin-button on-click="_ok" theme="tertiary danger">[[okText]]</vaadin-button>
+        <vaadin-button id="ok" on-click="_ok" theme="tertiary danger">[[okText]]</vaadin-button>
         <div class="flex1"></div>
-        <vaadin-button on-click="_cancel" theme="tertiary" class="right">[[cancelText]]</vaadin-button>
+        <vaadin-button id="cancel" on-click="_cancel" theme="tertiary" class="right">[[cancelText]]</vaadin-button>
       </div>
     </div>
   </template>
