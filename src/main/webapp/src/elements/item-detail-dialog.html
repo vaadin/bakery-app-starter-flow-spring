@@ -4,6 +4,11 @@
 <dom-module id="item-detail-dialog">
   <template>
     <style include="vaadin-modal-dialog-styles">
+      /* This is a workaround because of this bug on Safari https://bugs.webkit.org/show_bug.cgi?id=170762 */
+      :host([desktop-view]) {
+        line-height: 25px;
+      }
+
       :host([desktop-view]) #fore {
         min-width: 500px;
         max-width: 680px;
@@ -12,11 +17,12 @@
       :host([desktop-view]:not([side])) #fore {
         min-width: 500px;
         max-width: 994px;
-        min-height: 400px;
         max-height: 648px;
         margin: auto;
         left: 16px;
         right: 16px;
+        top: 32px;
+        bottom: 32px;
       }
 
       :host([desktop-view][side="right"]) #fore {
@@ -24,6 +30,7 @@
         bottom: 16px;
         right: 16px;
         left: auto;
+        max-width: calc(100vw - 2 * 16px);
       }
     </style>
 
