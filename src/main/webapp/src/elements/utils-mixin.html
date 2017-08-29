@@ -276,6 +276,10 @@
 
       ready() {
         super.ready();
+        this._createConfirmDialog();
+      }
+
+      _createConfirmDialog() {
         Polymer.RenderStatus.afterNextRender(this, () => {
           this._dialog = document.createElement('confirm-dialog');
           document.body.appendChild(this._dialog);

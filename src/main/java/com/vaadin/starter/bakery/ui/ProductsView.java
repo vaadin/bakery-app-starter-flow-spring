@@ -1,6 +1,5 @@
 package com.vaadin.starter.bakery.ui;
 
-import com.google.gson.Gson;
 import com.vaadin.annotations.*;
 import com.vaadin.flow.router.LocationChangeEvent;
 import com.vaadin.flow.router.View;
@@ -12,11 +11,13 @@ import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.service.ProductService;
+import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
+import com.vaadin.starter.bakery.ui.components.ItemsView;
+import com.vaadin.starter.bakery.ui.components.ProductEdit;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
-import com.vaadin.starter.bakery.ui.dataproviders.ProductsDataProvider;
-import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.ui.AttachEvent;
-import elemental.json.JsonObject;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.HasClickListeners.ClickEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.annotation.Secured;
@@ -25,14 +26,25 @@ import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
 
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_CANCELBUTTON_CANCEL;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_CANCELBUTTON_DELETE;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_CAPTION_CANCEL;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_CAPTION_DELETE_PRODUCT;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_MESSAGE_CANCEL;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_MESSAGE_DELETE;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_OKBUTTON_CANCEL;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_OKBUTTON_DELETE;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_PRODUCTS;
+
 @Tag("bakery-products")
 @HtmlImport("frontend://src/products/bakery-products.html")
-@Route(BakeryConst.PAGE_PRODUCTS + "/{id}")
+@Route(PAGE_PRODUCTS + "/{id}")
 @ParentView(BakeryApp.class)
 @Secured(Role.ADMIN)
 public class ProductsView extends PolymerTemplate<ProductsView.Model> implements View, HasToast, HasLogger {
 
 	public interface Model extends TemplateModel {
+
 		@Include({ "id", "name", "price" })
 		@Convert(value = LongToStringConverter.class, path = "id")
 		void setProducts(List<Product> products);
@@ -40,46 +52,76 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 		String getFilterValue();
 	}
 
-	private final ProductsDataProvider productsDataProvider;
 	private final ProductService service;
 
+	@Id("view")
+	private ItemsView view;
+
+	private ProductEdit editor;
+	private ConfirmationDialog confirmationDialog;
+
 	@Autowired
-	public ProductsView(ProductsDataProvider productsDataProvider, ProductService service) {
-		this.productsDataProvider = productsDataProvider;
+	public ProductsView(ProductService service) {
 		this.service = service;
+		confirmationDialog = new ConfirmationDialog();
+		getElement().appendChild(confirmationDialog.getElement());
+		initEditor();
+		getElement().addEventListener("edit", e -> navigateToProduct(e.getEventData().getString("event.detail")),
+				"event.detail");
+	}
+
+	private void initEditor() {
+		if (editor != null) {
+			getElement().removeChild(editor.getElement());
+		}
+
+		editor = new ProductEdit();
+		editor.getElement().setAttribute("slot", "product-editor");
+		getElement().appendChild(editor.getElement());
+
+		editor.addDeleteListener(this::onBeforeDelete);
+		editor.addCancelListener(cancelClickEvent -> onBeforeClose());
+		editor.addSaveListener(saveClickEvent -> saveProduct(editor.getProduct()));
+	}
+
+	private void onBeforeDelete(ClickEvent<Button> deleteEvent) {
+		confirmationDialog.show(CONFIRM_CAPTION_DELETE_PRODUCT, CONFIRM_MESSAGE_DELETE, CONFIRM_OKBUTTON_DELETE,
+				CONFIRM_CANCELBUTTON_DELETE, okButtonEvent -> deleteProduct(editor.getProductId()), null);
+	}
+
+	@EventHandler
+	private void onBeforeClose() {
+		if (editor.isDirty()) {
+			confirmationDialog.show(CONFIRM_CAPTION_CANCEL, CONFIRM_MESSAGE_CANCEL, CONFIRM_OKBUTTON_CANCEL,
+					CONFIRM_CANCELBUTTON_CANCEL, okButtonEvent -> navigateToProduct(null), null);
+		} else {
+			navigateToProduct(null);
+		}
 	}
 
 	@Override
 	protected void onAttach(AttachEvent attachEvent) {
+		if (!attachEvent.isInitialAttach()) {
+			// TODO(sayo-vaadin): Remove when https://github.com/vaadin/patient-portal-demo-flow/issues/54 is resolved.
+			initEditor();
+		}
+
 		super.onAttach(attachEvent);
-
-		getElement()
-				.addEventListener("save", e -> saveProduct(e.getEventData().getObject("event.detail")), "event.detail");
-
-		getElement().addEventListener("delete",
-				e -> deleteProduct(Double.valueOf(e.getEventData().getNumber("event.detail.id")).longValue()),
-				"event.detail.id");
-
-		getElement()
-				.addEventListener("edit", e -> editProduct(e.getEventData().getString("event.detail")), "event.detail");
-
-		getElement().addEventListener("closed", e -> editProduct(null));
 	}
 
 	@Override
 	public void onLocationChange(LocationChangeEvent locationChangeEvent) {
 		setEditableProduct(locationChangeEvent.getPathParameter("id"));
-
 	}
 
 	private void setEditableProduct(String id) {
 		if (id == null || id.isEmpty()) {
+			view.openDialog(false);
 			return;
 		}
 
-		Long longId = null;
 		try {
-			longId = Long.parseLong(id);
+			Long longId = Long.parseLong(id);
 			Product product = service.getRepository().findOne(longId);
 			if (product == null) {
 				String errorMessage = "Product with id " + id + " was not found.";
@@ -87,22 +129,19 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 				getLogger().error(errorMessage);
 				return;
 			}
-			//Used direct call of client method, cause _editableItem is not accessible by Flow
-			//if using getModel().set_editableItem()
-			//InvalidTemplateModelException: has no property named _editableItem (or it has been excluded)
-			getElement().callFunction("setEditableProduct", new Gson().toJson(product));
+
+			view.openDialog(true);
+			editor.setProduct(product);
 		} catch (NumberFormatException e) {
 			toast("Wrong product id: " + id, false);
 			getLogger().error("Failed to parse id: " + id);
+			view.openDialog(false);
 		}
 	}
 
-	private void editProduct(String id) {
-		if (id != null && !id.isEmpty()) {
-			getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_PRODUCTS + "/" + id));
-		} else {
-			getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_PRODUCTS));
-		}
+	private void navigateToProduct(String id) {
+		final String location = PAGE_PRODUCTS + (id == null || id.isEmpty() ? "" : "/" + id);
+		getUI().ifPresent(ui -> ui.navigateTo(location));
 	}
 
 	@ClientDelegate
@@ -114,9 +153,16 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 		getModel().setProducts(service.findAnyMatching(Optional.of(filterValue), null).getContent());
 	}
 
-	private void saveProduct(JsonObject product) {
+	@EventHandler
+	public void onNewProduct() {
+		view.openDialog(true);
+		editor.setProduct(new Product());
+	}
+
+	private void saveProduct(Product product) {
 		try {
-			productsDataProvider.save(product);
+			service.save(product);
+			navigateToProduct(null);
 			onFilterProducts(getModel().getFilterValue());
 		} catch (ConstraintViolationException e) {
 			String errorMessage = getErrorMessage(e);
@@ -131,6 +177,7 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 	private void deleteProduct(long id) {
 		try {
 			service.delete(id);
+			navigateToProduct(null);
 			onFilterProducts(getModel().getFilterValue());
 		} catch (Exception e) {
 			String message = "Product could not be deleted";
