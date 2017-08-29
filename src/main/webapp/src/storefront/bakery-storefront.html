@@ -235,7 +235,7 @@
         return orderID && this._displayedHeadersList[orderID];
       }
 
-      _isSelected(order){
+      _isSelected(order) {
         return this._selectedItem === order;
       }
 
@@ -278,7 +278,7 @@
       }
 
       _unselectItem(e) {
-        if(this._selectedItem === e.target.order) {
+        if (this._selectedItem === e.target.order) {
           this._selectedItem = undefined;
         }
         this._notifyResize();
