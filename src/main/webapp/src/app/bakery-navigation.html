@@ -9,7 +9,9 @@
 <link rel="import" href="../elements/user-avatar.html">
 
 <dom-module id="bakery-navigation">
-  <template is="dom-if" if="[[visible]]">
+  <template>
+      <template is="dom-if" if="[[user.name]]">
+  
     <style>
       :host {
         display: block;
@@ -173,7 +175,7 @@
     <user-avatar src="[[user.image]]" alt="[[user.name]]" class="user-image mobile-user-image" hidden$="[[_desktopView]]" on-click="_showUserMenuPopup"></user-avatar>
     <paper-badge class="alarms mobile-alarms" hidden$="[[!_showAlarms(user.alarms, _desktopView, 'mobile')]]">
     </paper-badge>
-
+  </template>
   </template>
 
   <script>
@@ -187,9 +189,6 @@
         return {
           page: {
             type: String
-          },
-          visible: {
-            type: Boolean
           },
           popupMenuOpened: {
             type: Boolean,

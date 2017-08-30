@@ -47,9 +47,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// Not using Spring CSRF here to be able to use plain HTML for the login
 		// page
 		http.csrf().disable().requestCache().requestCache(new CustomRequestCache()).and().authorizeRequests()
-				.anyRequest().hasAnyAuthority(Role.getAllRoles()).and().formLogin()
-				.loginPage(BakeryApplicationConfig.LOGIN_URL).permitAll()
-				.loginProcessingUrl(BakeryApplicationConfig.LOGIN_PROCESSING_URL)
+				.requestMatchers(this::isFrameworkInternalRequest).permitAll().anyRequest()
+				.hasAnyAuthority(Role.getAllRoles()).and().formLogin().loginPage(BakeryApplicationConfig.LOGIN_URL)
+				.permitAll().loginProcessingUrl(BakeryApplicationConfig.LOGIN_PROCESSING_URL)
 				.failureUrl(BakeryApplicationConfig.LOGIN_FAILURE_URL)
 				.successHandler(new SavedRequestAwareAuthenticationSuccessHandler()).and().logout()
 				.logoutSuccessUrl(BakeryApplicationConfig.LOGOUT_URL);
@@ -61,8 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		web.ignoring()
 				.antMatchers("/resources/**", "/icons/**", "/fonts/**", "/api/**", "/manifest.json",
 						"/service-worker.js", "/bower_components/**", "/VAADIN/**", "/favico.ico",
-						"/src/login/bakery-login.html", "/src/app/**", "/src/elements/**", "/es5/**", "/es6/**")
-				.and().ignoring().requestMatchers(this::isFrameworkInternalRequest);
+						"/src/login/bakery-login.html", "/src/app/**", "/src/elements/**", "/es5/**", "/es6/**","/build/**");
 	}
 
 	private boolean isFrameworkInternalRequest(HttpServletRequest request) {
