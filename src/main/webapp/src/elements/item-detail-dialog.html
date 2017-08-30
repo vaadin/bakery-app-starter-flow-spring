@@ -5,6 +5,7 @@
   <template>
     <style include="vaadin-modal-dialog-styles">
       /* This is a workaround because of this bug on Safari https://bugs.webkit.org/show_bug.cgi?id=170762 */
+      /* It is fixed for Safari 11 */
       :host([desktop-view]) {
         line-height: 25px;
       }
@@ -30,7 +31,7 @@
         bottom: 16px;
         right: 16px;
         left: auto;
-        max-width: calc(100vw - 2 * 16px);
+        margin-left: 16px;
       }
     </style>
 
