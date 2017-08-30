@@ -2,7 +2,7 @@
 <link rel="import" href="../../bower_components/polymer/lib/utils/debounce.html">
 <link rel="import" href="../../bower_components/polymer/lib/utils/flush.html">
 <link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
-<link rel="import" href="../../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
 
 <link rel="import" href="../app/bakery-search.html">
 <link rel="import" href="storefront-item-detail-wrapper.html">
@@ -25,8 +25,16 @@
         -webkit-overflow-scrolling: touch;
       }
 
-      iron-list {
+      vaadin-grid {
+        background: initial;
+        border: initial;
         flex: 1;
+        height: 100%;
+        --vaadin-grid-cell: {
+            padding: initial;
+            border: initial;
+            background: initial;
+        };
       }
 
       @media (min-width: 600px) {
@@ -36,11 +44,14 @@
           padding: 0 !important;
         }
 
-        iron-list {
+        vaadin-grid {
           overflow-y: visible !important;
           padding: var(--valo-space-s) 0;
-          max-width: calc(964px + var(--valo-space-m)) !important;
           margin: 0 auto;
+        }
+
+        storefront-item-detail-wrapper {
+          max-width: calc(964px + var(--valo-space-m)) !important; /* Allow selected order to be 16px wider */
         }
       }
     </style>
@@ -58,23 +69,28 @@
     </bakery-search>
 
     <div class="flex1 overflow-auto">
-
-      <iron-list id="list" items="[[orders]]">
-        <template>
-          <storefront-item-detail-wrapper
-              header="[[_getHeader(item.date)]]"
-              display-header="[[_displayHeader(item.id)]]"
-              order="[[item]]"
-              on-opened="_selectItem"
-              on-closed="_unselectItem"
-              desktop-view="[[desktopView]]"
-              on-notify-resize="_resizeList"
-              on-edit="_onEdit"
-              on-save="_onSave"
-              on-comment-added="_onCommentAdded">
-          </storefront-item-detail-wrapper>
-        </template>
-      </iron-list>
+      
+      <vaadin-grid id="list" items="[[orders]]">
+        <vaadin-grid-column>
+          <template>
+            <div class="flex justify-center">
+              <storefront-item-detail-wrapper
+                  header="[[_getHeader(item.date)]]"
+                  display-header="[[_displayHeader(item.id,_displayedHeadersList)]]"
+                  order="[[item]]"
+                  selected="[[_isSelected(item,_selectedItem)]]"
+                  on-opened="_selectItem"
+                  on-closed="_unselectItem"
+                  desktop-view="[[desktopView]]"
+                  on-notify-resize="_resizeList"
+                  on-edit="_onEdit"
+                  on-save="_onSave"
+                  on-comment-added="_onCommentAdded">
+              </storefront-item-detail-wrapper>
+            </div>
+          </template>
+        </vaadin-grid-column>
+      </vaadin-grid>     
 
       <storefront-item-edit-wrapper item="[[_editableItem]]" on-save="_onSave" on-closed="_onEditClosed" desktop-view="[[desktopView]]" products="[[products]]"></storefront-item-edit-wrapper>
 
@@ -115,8 +131,10 @@
           _selectedItem: Object,
           _editableItem: Object,
           _displayedHeadersList: {
-            type: Array,
-            value: []
+            type: Object,
+            value: function() { 
+              return {};
+            }
           },
           _usedGroups: Array
         };
@@ -180,40 +198,41 @@
           return;
         }
 
-        this._displayedHeadersList = {};
+        const newHeadersList = {};
         // _usedGroups is used for checking which header was used and should not be displayed ('Recent', 'Yesterday' etc.)
         this._usedGroups = [false, false, false, false, false, false];
 
         currentList.forEach((item) => {
-          if (this._isRecent(item.date) && !this._usedGroups[0]) {
-            this._displayedHeadersList[item.id] = this._usedGroups[0] = true;
+          if (!this._usedGroups[0] && this._isRecent(item.date)) {
+            newHeadersList[item.id] = this._usedGroups[0] = true;
 
-          } else if (this._isYesterday(item.date) && !this._usedGroups[1]) {
-            this._displayedHeadersList[item.id] = this._usedGroups[1] = true;
+          } else if (!this._usedGroups[1] && this._isYesterday(item.date)) {
+            newHeadersList[item.id] = this._usedGroups[1] = true;
 
-          } else if (this._isToday(item.date) && !this._usedGroups[2]) {
-            this._displayedHeadersList[item.id] = this._usedGroups[2] = true;
+          } else if (!this._usedGroups[2] && this._isToday(item.date)) {
+            newHeadersList[item.id] = this._usedGroups[2] = true;
 
-          } else if (this._isThisWeekBeforeYesterday(item.date) && !this._usedGroups[3]) {
-            this._displayedHeadersList[item.id] = this._usedGroups[3] = true;
+          } else if (!this._usedGroups[3] && this._isThisWeekBeforeYesterday(item.date) ) {
+            newHeadersList[item.id] = this._usedGroups[3] = true;
 
-          } else if (this._isThisWeekStartingTomorrow(item.date) && !this._usedGroups[4]) {
-            this._displayedHeadersList[item.id] = this._usedGroups[4] = true;
+          } else if (!this._usedGroups[4] && this._isThisWeekStartingTomorrow(item.date)) {
+            newHeadersList[item.id] = this._usedGroups[4] = true;
 
-          } else if (this._isUpcoming(item.date) && !this._usedGroups[5]) {
-            this._displayedHeadersList[item.id] = this._usedGroups[5] = true;
+          } else if (!this._usedGroups[5] && this._isUpcoming(item.date)) {
+            newHeadersList[item.id] = this._usedGroups[5] = true;
 
           } else {
-            this._displayedHeadersList[item.id] = false;
+            newHeadersList[item.id] = false;
           }
         });
+        this._displayedHeadersList = newHeadersList;
       }
 
       /*
        * Check from _displayedHeadersList if header should be displayed in this order element.
        */
       _displayHeader(orderID) {
-        return this._displayedHeadersList[orderID];
+        return orderID && this._displayedHeadersList[orderID];
       }
 
       _openNewOrderDialog() {
@@ -249,20 +268,26 @@
         this.$server.addComment(e.detail.orderId, e.detail.message);
       }
 
+      _isSelected(order) {
+        return order && order.selected;
+      }
+
       _selectItem(e) {
-        e.target.selected = true;
+        e.target.order.selected = true;
         this._selectedItem = e.target.order;
         this._notifyResize();
       }
 
       _unselectItem(e) {
-        e.target.selected = false;
+        if (e.target.order) {
+          e.target.order.selected = false;
+        }
         this._selectedItem = undefined;
         this._notifyResize();
       }
 
       _notifyResize() {
-        // iron-list needs to be resized both before and after rendering the list.
+        // list needs to be resized both before and after rendering the list.
         // Without double resize, elements will be rendered on top of each others.
         this.$.list.notifyResize();
         this.dispatchEvent(new CustomEvent('notify-resize'));
