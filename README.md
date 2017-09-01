@@ -4,9 +4,7 @@ This is the Bakery full stack starter for Flow, a fully functional and tested fu
 
 ## Build and Run
 
-build: `mvn clean install -Dvaadin.productionMode`
-
-run: `mvn spring-boot:run -Dvaadin.productionMode`
+run: `mvn spring-boot:run`
 
 ## Running integration tests
 
