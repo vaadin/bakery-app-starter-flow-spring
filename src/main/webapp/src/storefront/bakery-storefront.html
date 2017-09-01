@@ -25,11 +25,19 @@
         -webkit-overflow-scrolling: touch;
       }
 
+      .grid-wrapper {
+        flex: 1;
+        height: 100%;
+        position: relative;
+      }
+
       vaadin-grid {
         background: initial;
         border: initial;
         flex: 1;
         height: 100%;
+        width: 100%;
+        position: absolute;
         --vaadin-grid-cell: {
             padding: initial;
             border: initial;
@@ -45,7 +53,6 @@
         }
 
         vaadin-grid {
-          overflow-y: visible !important;
           padding: var(--valo-space-s) 0;
           margin: 0 auto;
         }
@@ -68,8 +75,8 @@
         on-button-click="_openNewOrderDialog">
     </bakery-search>
 
-    <div class="flex1 overflow-auto">
-      
+    <div class="grid-wrapper">
+
       <vaadin-grid id="list" items="[[orders]]">
         <vaadin-grid-column>
           <template>
