@@ -23,6 +23,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.annotation.Secured;
 
 import javax.validation.ConstraintViolationException;
+
+import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
 
@@ -95,7 +97,14 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 
 		editor.addDeleteListener(this::onBeforeDelete);
 		editor.addCancelListener(cancelClickEvent -> onBeforeClose());
-		editor.addSaveListener(saveClickEvent -> saveProduct(editor.getProduct()));
+		editor.addSaveListener(saveClickEvent -> {
+			try {
+				saveProduct(editor.getProduct());
+			} catch (ParseException e) {
+				getLogger().info("Exception while saving a product",e);
+				toast("Invalid number");
+			}
+		});
 	}
 
 	private void onBeforeDelete(ClickEvent<Button> deleteEvent) {
