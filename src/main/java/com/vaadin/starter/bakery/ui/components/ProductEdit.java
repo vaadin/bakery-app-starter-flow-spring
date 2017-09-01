@@ -16,6 +16,7 @@ import com.vaadin.ui.HasClickListeners.ClickEvent;
 import com.vaadin.ui.TextField;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
 
 @Tag("product-edit")
 @HtmlImport("frontend://src/products/product-edit.html")
@@ -54,7 +55,7 @@ public class ProductEdit extends PolymerTemplate<TemplateModel> implements View 
 		return product == null ? null : product.getId();
 	}
 
-	public Product getProduct() {
+	public Product getProduct() throws ParseException {
 		if (product != null) {
 			product.setName(nameField.getValue());
 			product.setPrice(fromUiPrice());
@@ -92,24 +93,28 @@ public class ProductEdit extends PolymerTemplate<TemplateModel> implements View 
 
 	@EventHandler
 	public void priceFocusLost() {
-		if (fromUiPrice() <= 0) {
+		if (priceField.getValue().isEmpty()) {
 			priceField.setValue(DECIMAL_ZERO);
 		}
 	}
 
 	public boolean isDirty() {
-		if (product != null && product.getId() != null) {
-			return !product.getName().equals(nameField.getValue()) || product.getPrice() != fromUiPrice();
+		try {
+			if (product != null && product.getId() != null) {
+				return !product.getName().equals(nameField.getValue()) || product.getPrice() != fromUiPrice();
+			}
+			return !nameField.getValue().trim().isEmpty() || fromUiPrice() > 0;
+		} catch (ParseException e) {
+			return true;
 		}
-
-		return !nameField.getValue().trim().isEmpty() || fromUiPrice() > 0;
 	}
 
 	private String toUiPrice() {
 		return product == null ? DECIMAL_ZERO : df.format(product.getPrice() / 100f);
 	}
 
-	private int fromUiPrice() {
-		return priceField.getValue().isEmpty() ? 0 : (int) Math.round(Double.parseDouble(priceField.getValue()) * 100);
+	private int fromUiPrice() throws ParseException {
+		return priceField.getValue().isEmpty() ? 0
+				: (int) Math.round(df.parse(priceField.getValue()).doubleValue() * 100);
 	}
 }

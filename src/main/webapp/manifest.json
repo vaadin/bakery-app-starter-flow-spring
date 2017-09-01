@@ -1,7 +1,7 @@
 {
   "name": "Café Sunshine",
   "short_name": "Café",
-  "start_url": "/login.html",
+  "start_url": "/login",
   "display": "standalone",
   "theme_color": "#227aef",
   "background_color": "#227aef",
