@@ -10,8 +10,7 @@
 
 <dom-module id="bakery-navigation">
   <template>
-      <template is="dom-if" if="[[user.name]]">
-  
+
     <style>
       :host {
         display: block;
@@ -143,6 +142,7 @@
       }
     </style>
 
+    <template is="dom-if" if="[[user.name]]">
     <iron-media-query query="(min-width: 600px)" query-matches="{{_desktopView}}"></iron-media-query>
 
     <div class="toolbar">
