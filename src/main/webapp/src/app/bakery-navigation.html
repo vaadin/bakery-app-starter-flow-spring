@@ -10,7 +10,6 @@
 
 <dom-module id="bakery-navigation">
   <template>
-
     <style>
       :host {
         display: block;
@@ -143,39 +142,39 @@
     </style>
 
     <template is="dom-if" if="[[user.name]]">
-    <iron-media-query query="(min-width: 600px)" query-matches="{{_desktopView}}"></iron-media-query>
+      <iron-media-query query="(min-width: 600px)" query-matches="{{_desktopView}}"></iron-media-query>
 
-    <div class="toolbar">
-      <div class="branding">
-        Café
-        <br>
-        Sunshine
+      <div class="toolbar">
+        <div class="branding">
+          Café
+          <br>
+          Sunshine
+        </div>
+
+        <paper-tabs selected="[[page]]" attr-for-selected="page-id" class="navigation-tabs" align-bottom="[[_desktopView]]">
+          <template is="dom-repeat" items="[[pages]]">
+            <paper-tab page-id="[[item.link]]">
+              <a router-link href="[[item.link]]">
+                <iron-icon icon="valo:[[item.icon]]"></iron-icon>
+                <span>[[item.title]]</span>
+              </a>
+            </paper-tab>
+          </template>
+        </paper-tabs>
+        <vaadin-button class="user-button" hidden$="[[!_desktopView]]" theme="tertiary" on-click="_showUserMenuPopup" popup-menu-opened$="[[popupMenuOpened]]">
+          <user-avatar src="[[user.image]]" alt="[[user.name]]" class="user-image" id="desktop-user-image"></user-avatar>
+          <paper-badge for="desktop-user-image" class="alarms" hidden$="[[!_showAlarms(user.alarms, _desktopView, 'desktop')]]">
+          </paper-badge>
+          [[user.name]]
+          <iron-icon icon="valo:chevron-down"></iron-icon>
+        </vaadin-button>
+        <user-popup-menu opened="{{popupMenuOpened}}" desktop-view$="[[_desktopView]]" user="[[user]]" notifications="[[notifications]]" on-logout="_logout"></user-popup-menu>
       </div>
 
-      <paper-tabs selected="[[page]]" attr-for-selected="page-id" class="navigation-tabs" align-bottom="[[_desktopView]]">
-        <template is="dom-repeat" items="[[pages]]">
-          <paper-tab page-id="[[item.link]]">
-            <a router-link href="[[item.link]]">
-              <iron-icon icon="valo:[[item.icon]]"></iron-icon>
-              <span>[[item.title]]</span>
-            </a>
-          </paper-tab>
-        </template>
-      </paper-tabs>
-      <vaadin-button class="user-button" hidden$="[[!_desktopView]]" theme="tertiary" on-click="_showUserMenuPopup" popup-menu-opened$="[[popupMenuOpened]]">
-        <user-avatar src="[[user.image]]" alt="[[user.name]]" class="user-image" id="desktop-user-image"></user-avatar>
-        <paper-badge for="desktop-user-image" class="alarms" hidden$="[[!_showAlarms(user.alarms, _desktopView, 'desktop')]]">
-        </paper-badge>
-        [[user.name]]
-        <iron-icon icon="valo:chevron-down"></iron-icon>
-      </vaadin-button>
-      <user-popup-menu opened="{{popupMenuOpened}}" desktop-view$="[[_desktopView]]" user="[[user]]" notifications="[[notifications]]" on-logout="_logout"></user-popup-menu>
-    </div>
-
-    <user-avatar src="[[user.image]]" alt="[[user.name]]" class="user-image mobile-user-image" hidden$="[[_desktopView]]" on-click="_showUserMenuPopup"></user-avatar>
-    <paper-badge class="alarms mobile-alarms" hidden$="[[!_showAlarms(user.alarms, _desktopView, 'mobile')]]">
-    </paper-badge>
-  </template>
+      <user-avatar src="[[user.image]]" alt="[[user.name]]" class="user-image mobile-user-image" hidden$="[[_desktopView]]" on-click="_showUserMenuPopup"></user-avatar>
+      <paper-badge class="alarms mobile-alarms" hidden$="[[!_showAlarms(user.alarms, _desktopView, 'mobile')]]">
+      </paper-badge>
+    </template>
   </template>
 
   <script>
