@@ -64,7 +64,7 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> implements View {
 	private Button cancelButton;
 
 	private User user;
-	private Binder<User> binder;
+	private Binder<User> binder = new Binder<>();
 
 	public UserEdit() {
 		nameField.addValueChangeListener(valueChangeEvent -> saveButton.setDisabled(!isDirty()));
@@ -81,7 +81,6 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> implements View {
 					.forEach(field -> field.addValueChangeListener(
 							event -> saveButton.setDisabled(!isDirty())));
 
-			binder = new Binder<>();
 			binder.bind(nameField, User::getFirstName, User::setFirstName);
 			binder.bind(lastnameField, User::getLastName, User::setLastName);
 			binder.bind(emailField, User::getEmail, User::setEmail);
