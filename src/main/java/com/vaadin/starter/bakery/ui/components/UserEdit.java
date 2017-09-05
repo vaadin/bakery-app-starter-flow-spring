@@ -3,6 +3,8 @@ package com.vaadin.starter.bakery.ui.components;
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Id;
 import com.vaadin.annotations.Tag;
+import com.vaadin.data.Binder;
+import com.vaadin.data.ValidationException;
 import com.vaadin.flow.event.ComponentEventListener;
 import com.vaadin.flow.html.H3;
 import com.vaadin.flow.router.View;
@@ -62,6 +64,7 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> implements View {
 	private Button cancelButton;
 
 	private User user;
+	private Binder<User> binder;
 
 	public UserEdit() {
 		nameField.addValueChangeListener(valueChangeEvent -> saveButton.setDisabled(!isDirty()));
@@ -77,6 +80,19 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> implements View {
 			Stream.of(nameField, lastnameField, emailField, passwordField, roleField)
 					.forEach(field -> field.addValueChangeListener(
 							event -> saveButton.setDisabled(!isDirty())));
+
+			binder = new Binder<>();
+			binder.bind(nameField, User::getFirstName, User::setFirstName);
+			binder.bind(lastnameField, User::getLastName, User::setLastName);
+			binder.bind(emailField, User::getEmail, User::setEmail);
+			binder.bind(passwordField,
+					(user) -> passwordField.getEmptyValue(),
+					(user, password) -> {
+						if (!passwordField.getEmptyValue().equals(password)) {
+							user.setPassword(password);
+						}
+					});
+			binder.bind(roleField, User::getRole, User::setRole);
 		}
 	}
 
@@ -102,26 +118,15 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> implements View {
 		}
 		avatar.setSrc(user.getPhotoUrl());
 		getModel().setShowAvatar(user.getPhotoUrl() != null && !user.getPhotoUrl().isEmpty());
-
-		nameField.setValue(user.getFirstName());
-		lastnameField.setValue(user.getLastName());
-		emailField.setValue(user.getEmail());
-		passwordField.clear();
-		roleField.setValue(user.getRole());
 		deleteButton.setDisabled(user.getId() == null);
 		title.setText((user.getId() == null ? "New" : "Edit") + " User");
+
+		binder.readBean(user);
 	}
 
-	public User getUser() {
+	public User getUser() throws ValidationException {
 		if (user != null) {
-			user.setFirstName(nameField.getValue());
-			user.setLastName(lastnameField.getValue());
-			user.setEmail(emailField.getValue());
-			if (!passwordField.isEmpty()) {
-				user.setPassword(passwordField.getValue());
-			}
-			user.setPassword(passwordField.getValue());
-			user.setRole(roleField.getValue());
+			binder.writeBean(user);
 		}
 
 		return user;
