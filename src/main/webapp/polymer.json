@@ -10,6 +10,7 @@
     "src/elements/confirm-dialog.html",
     "src/storefront/bakery-storefront.html",
     "src/users/bakery-users.html",
+    "src/users/user-edit.html",
     "src/404/bakery-404.html",
     "src/admin/access-denied.html",
     "src/app/bakery-navigation.html",
