@@ -8,6 +8,7 @@
     "src/products/product-edit.html",
     "src/elements/dialog-mixins.html",
     "src/elements/confirm-dialog.html",
+    "src/elements/user-avatar.html",
     "src/storefront/bakery-storefront.html",
     "src/users/bakery-users.html",
     "src/users/user-edit.html",
