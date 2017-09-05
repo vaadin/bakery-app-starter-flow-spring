@@ -145,7 +145,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 		editor = new UserEdit();
 		editor.addDeleteListener(this::onBeforeDelete);
 		editor.addCancelListener(cancelClickEvent -> onBeforeClose());
-		editor.addSaveListener(saveClickEvent -> saveUser(editor.getUser()));
+		editor.addSaveListener(saveClickEvent -> onSaveUser());
 		editor.getElement().setAttribute("slot", "user-editor");
 		getElement().appendChild(editor.getElement());
 
@@ -170,7 +170,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 
 	private void onBeforeDelete(HasClickListeners.ClickEvent<Button> deleteEvent) {
 		confirmationDialog.show(CONFIRM_CAPTION_DELETE_PRODUCT, CONFIRM_MESSAGE_DELETE, CONFIRM_OKBUTTON_DELETE,
-				CONFIRM_CANCELBUTTON_DELETE, okButtonEvent -> deleteUser(editor.getUser().getId()), null);
+				CONFIRM_CANCELBUTTON_DELETE, okButtonEvent -> onDeleteUser(), null);
 	}
 
 	@EventHandler
@@ -192,9 +192,9 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 		getModel().setUsers(userService.findAnyMatching(Optional.of(filterValue), null).getContent());
 	}
 
-	private void saveUser(User user) {
+	private void onSaveUser() {
 		try {
-			userService.save(user);
+			userService.save(editor.getUser());
 			navigateToUser(null);
 		} catch (DataIntegrityViolationException e) {
 			// Commit failed because of validation errors
@@ -216,9 +216,9 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 		}
 	}
 
-	private void deleteUser(Long userId) {
+	private void onDeleteUser() {
 		try {
-			userService.delete(userId);
+			userService.delete(editor.getUser().getId());
 			navigateToUser(null);
 		} catch (UserFriendlyDataException e) {
 			// Commit failed because of application-level data constraints
