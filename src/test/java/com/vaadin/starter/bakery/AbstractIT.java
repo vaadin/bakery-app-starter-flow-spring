@@ -10,13 +10,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.LoggerFactory;
 
 import com.vaadin.starter.bakery.ui.view.LoginViewElement;
-import com.vaadin.testbench.HasTestBenchCommandExecutor;
 import com.vaadin.testbench.ScreenshotOnFailureRule;
 import com.vaadin.testbench.TestBench;
 import com.vaadin.testbench.TestBenchDriverProxy;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.TestBenchTestCase;
-import com.vaadin.testbench.commands.TestBenchCommandExecutor;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
@@ -78,9 +76,7 @@ public class AbstractIT extends TestBenchTestCase {
 
 	protected LoginViewElement openLoginView(WebDriver driver, String url) {
 		driver.get(url);
-		TestBenchElement body = (TestBenchElement) driver.findElement(By.tagName("body"));
-		TestBenchCommandExecutor executor = ((HasTestBenchCommandExecutor) driver).getCommandExecutor();
-		return TestBench.createElement(LoginViewElement.class, body.getWrappedElement(), executor);
+		return ((TestBenchElement) findElement(By.tagName("bakery-login"))).wrap(LoginViewElement.class);
 	}
 
 	/**

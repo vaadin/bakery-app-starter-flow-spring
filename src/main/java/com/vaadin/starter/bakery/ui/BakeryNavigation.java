@@ -6,12 +6,14 @@ import java.util.List;
 import com.vaadin.annotations.ClientDelegate;
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Tag;
+import com.vaadin.flow.router.LocationChangeEvent;
 import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.spring.annotations.UIScope;
 import com.vaadin.starter.bakery.app.BeanLocator;
 import com.vaadin.starter.bakery.app.security.SecuredViewAccessControl;
+import com.vaadin.starter.bakery.app.security.SecurityUtils;
 import com.vaadin.starter.bakery.ui.dataproviders.UserDataProvider;
 import com.vaadin.starter.bakery.ui.entities.PageInfo;
 import com.vaadin.starter.bakery.ui.entities.User;
@@ -24,6 +26,8 @@ import com.vaadin.ui.UI;
 @Tag("bakery-navigation")
 @HtmlImport("frontend://src/app/bakery-navigation.html")
 public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> implements View {
+	private boolean loggedIn;
+	
 	public static class UserModel {
 		private String name;
 		private String email;
@@ -78,18 +82,24 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> im
 		return usersProvider;
 	}
 
-	@Override
-	protected void onAttach(AttachEvent attachEvent) {
-		setupNavigationButtons();
-		User uiUser = getUsersProvider().getCurrentUser();
-		UserModel user = new UserModel();
-		user.setName(uiUser.getName());
-		user.setEmail(uiUser.getEmail());
-		user.setImage(uiUser.getPicture());
-		user.setAlarms(true);
-		getModel().setUser(user);
+	public void updateUser() {
+		if (!loggedIn && SecurityUtils.isUserLoggedIn()) {
+			setupNavigationButtons();
+			User uiUser = getUsersProvider().getCurrentUser();
+			UserModel user = new UserModel();
+			user.setName(uiUser.getName());
+			user.setEmail(uiUser.getEmail());
+			user.setImage(uiUser.getPicture());
+			user.setAlarms(true);
+			getModel().setUser(user);
+			loggedIn = true;
+		}else if(!loggedIn){
+			getModel().setUser(null);
+		}
 	}
 
+	
+	
 	private void setupNavigationButtons() {
 		List<PageInfo> pages = new ArrayList<>();
 
