@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -15,15 +16,22 @@ import com.vaadin.starter.bakery.backend.data.entity.Order;
 public interface OrderRepository extends JpaRepository<Order, Long> {
 	Page<Order> findByDueDateAfterAndStateIn(LocalDate dueDate, Collection<OrderState> states, Pageable page);
 
+    @EntityGraph(value = "Order.summary", type = org.springframework.data.jpa.repository.EntityGraph.EntityGraphType.LOAD)
 	Page<Order> findByDueDateAfter(LocalDate filterDate, Pageable pageable);
 
+    @EntityGraph(value = "Order.summary", type = org.springframework.data.jpa.repository.EntityGraph.EntityGraphType.LOAD)
 	Page<Order> findByCustomerFullNameContainingIgnoreCaseOrStateIn(String searchQuery,
 			Collection<OrderState> orderStates, Pageable pageable);
 
-	@Query("SELECT o FROM OrderInfo o WHERE (LOWER(o.customer.fullName) LIKE CONCAT('%', LOWER(?1), '%') OR o.state IN ?2) AND o.dueDate > ?3")
+	@Query("SELECT o FROM OrderInfo o join o.pickupLocation l join o.customer c WHERE (LOWER(o.customer.fullName) LIKE CONCAT('%', LOWER(?1), '%') OR o.state IN ?2) AND o.dueDate > ?3")
+	@EntityGraph(value = "Order.summary", type = org.springframework.data.jpa.repository.EntityGraph.EntityGraphType.LOAD)
 	Page<Order> findByCustomerFullNameContainingIgnoreCaseOrStateInAndDueDateAfter(String searchQuery,
 			Collection<OrderState> orderStates, LocalDate dueDate, Pageable pageable);
 
+	@EntityGraph(value = "Order.summary", type = org.springframework.data.jpa.repository.EntityGraph.EntityGraphType.LOAD)	
+	@Override
+	List<Order> findAll();
+	
 	long countByDueDateAfterAndStateIn(LocalDate dueDate, Collection<OrderState> states);
 
 	long countByDueDateAfter(LocalDate dueDate);

@@ -99,20 +99,19 @@
         </vaadin-grid-column>
       </vaadin-grid>     
 
-      <storefront-item-edit-wrapper item="[[_editableItem]]" on-save="_onSave" on-closed="_onEditClosed" desktop-view="[[desktopView]]" products="[[products]]"></storefront-item-edit-wrapper>
-
+      <!-- <storefront-item-edit-wrapper item="[[_editableItem]]" on-save="_onSave" on-closed="_onEditClosed" desktop-view="[[desktopView]]" products="[[products]]"></storefront-item-edit-wrapper>
+ -->
       <template is="dom-if" if="[[!desktopView]]" restamp>
         <item-detail-dialog opened="[[_selectedItem]]">
           <storefront-item-detail item="[[_selectedItem]]" on-close="_unselectItem" on-edit="_onEdit" desktop-view="[[desktopView]]"></storefront-item-detail>
         </item-detail-dialog>
       </template>
-
+      <slot name="order-editor" slot="editor"></slot>
     </div>
 
   </template>
 
   <script>
-    /* global bakeryDeepCopy:false */
     class BakeryStorefront extends window.NotificationMixin(window.LocaleUtilsMixin(Polymer.Element)) {
       static get is() {
         return 'bakery-storefront';
@@ -264,7 +263,9 @@
       }
 
       _onEdit(e) {
-        this._editableItem = bakeryDeepCopy(e.detail);
+        //this._editableItem = bakeryDeepCopy(e.detail);
+        e.preventDefault();
+        this.$server.edit(e.detail.id);
       }
 
       _onSave(e) {

@@ -25,15 +25,21 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.access.annotation.Secured;
 
 import com.vaadin.annotations.ClientDelegate;
+import com.vaadin.annotations.Convert;
 import com.vaadin.annotations.HtmlImport;
+import com.vaadin.annotations.Include;
 import com.vaadin.annotations.Tag;
 import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
+import com.vaadin.hummingbird.ext.components.VaadinGrid;
 import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.Role;
+import com.vaadin.starter.bakery.backend.service.OrderService;
+import com.vaadin.starter.bakery.ui.components.storefront.OrderEdit;
+import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.starter.bakery.ui.dataproviders.ProductsDataProvider;
 import com.vaadin.starter.bakery.ui.entities.Order;
@@ -56,28 +62,38 @@ import elemental.json.JsonObject;
 public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implements View, HasLogger, HasToast {
 
 	public interface Model extends TemplateModel {
+
 		void setOrders(List<Order> orders);
 
 		List<Order> getOrders();
 
 		void setProducts(List<Product> products);
+		
+		void setSelectedOrder(Order order);
+
+		void getSelectedOrder(Order order);
 	}
 
 	private ProductsDataProvider productProvider;
 	private OrdersDataProvider ordersProvider;
-
+	private OrderService orderService;
+	private OrderEdit orderEdit;
+	
+	
 	@Autowired
-	public StorefrontView(OrdersDataProvider ordersProvider, ProductsDataProvider productProvider) {
+	public StorefrontView(OrdersDataProvider ordersProvider, ProductsDataProvider productProvider,OrderService orderService) {
 		this.productProvider = productProvider;
 		this.ordersProvider = ordersProvider;
+		this.orderService = orderService;
 	}
 
-	@Override
+	@Override  
 	protected void onAttach(AttachEvent event) {
 		super.onAttach(event);
 		getModel().setOrders(new ArrayList<>());
 
 		getModel().setProducts(productProvider.findAll());
+		getModel().setSelectedOrder(null);
 
 	}
 
@@ -110,6 +126,14 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		} finally {
 			updateOrderInModel(orderId);
 		}
+	}
+
+	@ClientDelegate
+	private void edit(String id) {
+		orderEdit = new OrderEdit();
+		orderEdit.getElement().setAttribute("slot", "order-editor");
+		getElement().appendChild(orderEdit.getElement());
+		orderEdit.setEditableItem(orderService.findOrder(Long.valueOf(id)));
 	}
 
 	private void updateOrderInModel(String orderId) {
