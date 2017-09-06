@@ -62,9 +62,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring()
-				.antMatchers("/resources/**", "/icons/**", "/fonts/**", "/api/**", "/manifest.json",
-						"/service-worker.js", "/bower_components/**", "/VAADIN/**", "/favico.ico",
-						"/src/login/bakery-login.html", "/src/app/**", "/src/elements/**", "/es5/**", "/es6/**","/build/**");
+				.antMatchers(
+						// Vaadin Flow static resources
+						"/VAADIN/**",
+
+						// the standard favicon URI
+						"/favicon.ico",
+
+						// development-mode static resources
+						"/bower_components/**",
+						"/fonts/**",
+						"/icons/**",
+						"/images/**",
+						"/src/**",
+						"/manifest.json",
+
+						// production-mode static resources
+						"/build/**");
 	}
 
 	private boolean isFrameworkInternalRequest(HttpServletRequest request) {
