@@ -44,20 +44,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		// Not using Spring CSRF here to be able to use plain HTML for the login
-		// page
-		http.csrf().disable().requestCache().requestCache(new CustomRequestCache()).and().authorizeRequests()
-				.requestMatchers(this::isFrameworkInternalRequest).permitAll().anyRequest()
-				.hasAnyAuthority(Role.getAllRoles()).and().formLogin().loginPage(BakeryApplicationConfig.LOGIN_URL)
-				.permitAll().loginProcessingUrl(BakeryApplicationConfig.LOGIN_PROCESSING_URL)
-				.failureUrl(BakeryApplicationConfig.LOGIN_FAILURE_URL)
-				.successHandler(new SavedRequestAwareAuthenticationSuccessHandler()).and().logout()
-				.logoutSuccessUrl(BakeryApplicationConfig.LOGOUT_URL);
+		// Not using Spring CSRF here to be able to use plain HTML for the login page
+		http.csrf().disable()
+				.requestCache().requestCache(new CustomRequestCache())
+				.and().authorizeRequests()
+					.requestMatchers(this::isFrameworkInternalRequest).permitAll()
+					.anyRequest().hasAnyAuthority(Role.getAllRoles())
+				.and().formLogin()
+					.loginPage(BakeryApplicationConfig.LOGIN_URL).permitAll()
+					.loginProcessingUrl(BakeryApplicationConfig.LOGIN_PROCESSING_URL)
+					.failureUrl(BakeryApplicationConfig.LOGIN_FAILURE_URL)
+					.successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
+				.and().logout()
+					.logoutSuccessUrl(BakeryApplicationConfig.LOGOUT_URL);
 	}
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-
 		web.ignoring()
 				.antMatchers("/resources/**", "/icons/**", "/fonts/**", "/api/**", "/manifest.json",
 						"/service-worker.js", "/bower_components/**", "/VAADIN/**", "/favico.ico",
