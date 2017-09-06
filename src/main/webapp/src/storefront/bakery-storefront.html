@@ -1,0 +1,315 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymer/lib/utils/debounce.html">
+<link rel="import" href="../../bower_components/polymer/lib/utils/flush.html">
+<link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
+<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
+
+<link rel="import" href="../app/bakery-search.html">
+<link rel="import" href="storefront-item-detail-wrapper.html">
+<link rel="import" href="storefront-item-edit-wrapper.html">
+
+<link rel="import" href="../elements/utils-mixin.html">
+
+<script src="../elements/copy-util.js"></script>
+
+<dom-module id="bakery-storefront">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: flex;
+        flex-direction: column-reverse;
+        max-width: calc(964px + var(--valo-space-m)) !important; /* Allow selected order to be 16px wider */
+      }
+
+      :host([touch-scrolling]) {
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .grid-wrapper {
+        flex: 1;
+        height: 100%;
+        position: relative;
+      }
+
+      vaadin-grid {
+        background: initial;
+        border: initial;
+        flex: 1;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        --vaadin-grid-cell: {
+            padding: initial;
+            border: initial;
+            background: initial;
+        };
+      }
+
+      @media (min-width: 600px) {
+        :host {
+          max-width: none !important;
+          flex-direction: column;
+          padding: 0 !important;
+        }
+
+        vaadin-grid {
+          padding: var(--valo-space-s) 0;
+          margin: 0 auto;
+        }
+
+        storefront-item-detail-wrapper {
+          max-width: calc(964px + var(--valo-space-m)) !important; /* Allow selected order to be 16px wider */
+        }
+      }
+    </style>
+
+    <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
+
+    <bakery-search
+        field-placeholder="Search"
+        field-value="{{_filterValue}}"
+        button-text="New order"
+        show-checkbox
+        checkbox-text="Show past orders"
+        checkbox-checked="{{_showPrevious}}"
+        on-button-click="_openNewOrderDialog">
+    </bakery-search>
+
+    <div class="grid-wrapper">
+
+      <vaadin-grid id="list" items="[[orders]]">
+        <vaadin-grid-column>
+          <template>
+            <div class="flex justify-center">
+              <storefront-item-detail-wrapper
+                  header="[[_getHeader(item.date)]]"
+                  display-header="[[_displayHeader(item.id,_displayedHeadersList)]]"
+                  order="[[item]]"
+                  selected="[[_isSelected(item,_selectedItem)]]"
+                  on-opened="_selectItem"
+                  on-closed="_unselectItem"
+                  desktop-view="[[desktopView]]"
+                  on-notify-resize="_resizeList"
+                  on-edit="_onEdit"
+                  on-save="_onSave"
+                  on-comment-added="_onCommentAdded">
+              </storefront-item-detail-wrapper>
+            </div>
+          </template>
+        </vaadin-grid-column>
+      </vaadin-grid>     
+
+      <!-- <storefront-item-edit-wrapper item="[[_editableItem]]" on-save="_onSave" on-closed="_onEditClosed" desktop-view="[[desktopView]]" products="[[products]]"></storefront-item-edit-wrapper>
+ -->
+      <template is="dom-if" if="[[!desktopView]]" restamp>
+        <item-detail-dialog opened="[[_selectedItem]]">
+          <storefront-item-detail item="[[_selectedItem]]" on-close="_unselectItem" on-edit="_onEdit" desktop-view="[[desktopView]]"></storefront-item-detail>
+        </item-detail-dialog>
+      </template>
+      <slot name="order-editor" slot="editor"></slot>
+    </div>
+
+  </template>
+
+  <script>
+    class BakeryStorefront extends window.NotificationMixin(window.LocaleUtilsMixin(Polymer.Element)) {
+      static get is() {
+        return 'bakery-storefront';
+      }
+
+      static get properties() {
+        return {
+          desktopView: Boolean,
+          orders: {
+            type: Array
+          },
+          touchScrolling: {
+            type: Boolean,
+            computed: '_enableTouchScrolling(desktopView, _selectedItem, _editableItem)',
+            reflectToAttribute: true
+          },
+          _filterValue: {
+            type: String
+          },
+          _showPrevious: {
+            type: Boolean
+          },
+          _selectedItem: Object,
+          _editableItem: Object,
+          _displayedHeadersList: {
+            type: Object,
+            value: function() { 
+              return {};
+            }
+          },
+          _usedGroups: Array
+        };
+      }
+
+      static get observers() {
+        return [
+          '_onFiltersChanged(_filterValue, _showPrevious)',
+          '_updatedisplayedHeadersList(orders.*)'
+        ];
+      }
+
+      _onFiltersChanged() {
+        this._filtersChangeDebouncer = Polymer.Debouncer.debounce(
+          this._filtersChangeDebouncer,
+          Polymer.Async.timeOut.after(200),
+          () => this.$server.onFiltersChanged(this._filterValue, this._showPrevious));
+        Polymer.enqueueDebouncer(this._filtersChangeDebouncer);
+      }
+
+      /*
+       * Setting headers for each storefront-item-detail-wrapper based on their date.
+       */
+      _getHeader(date) {
+        var header = {};
+        if (this._isRecent(date)) {
+          header['main'] = 'Recent';
+          header['secondary'] = 'Before this week';
+
+        } else if (this._isYesterday(date)) {
+          header['main'] = 'Yesterday';
+          header['secondary'] = this._getHeaderDay(date);
+
+        } else if (this._isToday(date)) {
+          header['main'] = 'Today';
+          header['secondary'] = this._getHeaderDay(date);
+
+        } else if (this._isThisWeekBeforeYesterday(date)) {
+          header['main'] = 'This Week Before Yesterday';
+          header['secondary'] = this._getWeekRangeBefore(date);
+
+        } else if (this._isThisWeekStartingTomorrow(date)) {
+          // If previous orders are shown two 'this week' groups are displayed, so the name is changed.
+          header['main'] = (!this._showPrevious) ? 'This week' : 'This Week Starting Tomorrow';
+          header['secondary'] = this._getWeekRangeAfter(date);
+
+        } else if (this._isUpcoming(date)) {
+          header['main'] = 'Upcoming';
+          header['secondary'] = 'After this week';
+        }
+
+        return header;
+      }
+
+      /*
+       * Updating _displayedHeadersList associative array (structure: {'orderID':'headerDisplayed'}).
+       */
+      _updatedisplayedHeadersList(change) {
+        const currentList = change.base;
+        if (!currentList) {
+          return;
+        }
+
+        const newHeadersList = {};
+        // _usedGroups is used for checking which header was used and should not be displayed ('Recent', 'Yesterday' etc.)
+        this._usedGroups = [false, false, false, false, false, false];
+
+        currentList.forEach((item) => {
+          if (!this._usedGroups[0] && this._isRecent(item.date)) {
+            newHeadersList[item.id] = this._usedGroups[0] = true;
+
+          } else if (!this._usedGroups[1] && this._isYesterday(item.date)) {
+            newHeadersList[item.id] = this._usedGroups[1] = true;
+
+          } else if (!this._usedGroups[2] && this._isToday(item.date)) {
+            newHeadersList[item.id] = this._usedGroups[2] = true;
+
+          } else if (!this._usedGroups[3] && this._isThisWeekBeforeYesterday(item.date) ) {
+            newHeadersList[item.id] = this._usedGroups[3] = true;
+
+          } else if (!this._usedGroups[4] && this._isThisWeekStartingTomorrow(item.date)) {
+            newHeadersList[item.id] = this._usedGroups[4] = true;
+
+          } else if (!this._usedGroups[5] && this._isUpcoming(item.date)) {
+            newHeadersList[item.id] = this._usedGroups[5] = true;
+
+          } else {
+            newHeadersList[item.id] = false;
+          }
+        });
+        this._displayedHeadersList = newHeadersList;
+      }
+
+      /*
+       * Check from _displayedHeadersList if header should be displayed in this order element.
+       */
+      _displayHeader(orderID) {
+        return orderID && this._displayedHeadersList[orderID];
+      }
+
+      _openNewOrderDialog() {
+        // For new orders we stimate to be delivered today at last time
+        const d = new Date();
+        // Empty order
+        this._editableItem = {
+          status: 'new',
+          date: this._getDayIso(d.toString()),
+          time: '16:00',
+          customer: {'name': '', 'number': ''},
+          orderNumber: -1
+        };
+      }
+
+      _resizeList() {
+        this.$.list.notifyResize();
+      }
+
+      _onEditClosed() {
+        this._editableItem = null;
+      }
+
+      _onEdit(e) {
+        //this._editableItem = bakeryDeepCopy(e.detail);
+        e.preventDefault();
+        this.$server.edit(e.detail.id);
+      }
+
+      _onSave(e) {
+        this.$server.onSave(e.detail);
+      }
+
+      _onCommentAdded(e) {
+        this.$server.addComment(e.detail.orderId, e.detail.message);
+      }
+
+      _isSelected(order) {
+        return order && order.selected;
+      }
+
+      _selectItem(e) {
+        e.target.order.selected = true;
+        this._selectedItem = e.target.order;
+        this._notifyResize();
+      }
+
+      _unselectItem(e) {
+        if (e.target.order) {
+          e.target.order.selected = false;
+        }
+        this._selectedItem = undefined;
+        this._notifyResize();
+      }
+
+      _notifyResize() {
+        // list needs to be resized both before and after rendering the list.
+        // Without double resize, elements will be rendered on top of each others.
+        this.$.list.notifyResize();
+        this.dispatchEvent(new CustomEvent('notify-resize'));
+        Polymer.RenderStatus.afterNextRender(this, () => {
+          this.$.list.notifyResize();
+          this.dispatchEvent(new CustomEvent('notify-resize'));
+        });
+      }
+
+      _enableTouchScrolling(desktopView, _selectedItem, _editableItem) {
+        return desktopView ? !_editableItem : !_selectedItem && !_editableItem;
+      }
+    }
+
+    window.customElements.define(BakeryStorefront.is, BakeryStorefront);
+  </script>
+</dom-module>
