@@ -20,8 +20,6 @@ import com.vaadin.ui.HasClickListeners.ClickEvent;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 
-import java.util.stream.Stream;
-
 @Tag("user-edit")
 @HtmlImport("frontend://src/users/user-edit.html")
 public class UserEdit extends PolymerTemplate<UserEdit.Model> implements View {
@@ -30,7 +28,7 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> implements View {
 		void setShowAvatar(boolean showAvatar);
 	}
 
-	// TODO(vlukashov): refactor when https://github.com/vaadin/flow/issues/2233 is fixed
+	// A workaround for a Flow issue (see BFF-244 for details).
 	// Instead of adding a slot into the template, and then populating it with a <user-avatar>
 	// element created from the server-side at run time, <user-avatar> would be placed
 	// directly into the template and referenced with @Id from the server-side.
@@ -40,7 +38,7 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> implements View {
 	private H3 title;
 
 	@Id("first")
-	private TextField nameField;
+	private TextField firstnameField;
 
 	@Id("last")
 	private TextField lastnameField;
@@ -63,25 +61,22 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> implements View {
 	@Id("cancel")
 	private Button cancelButton;
 
-	private User user;
 	private Binder<User> binder = new Binder<>();
 
 	public UserEdit() {
-		nameField.addValueChangeListener(valueChangeEvent -> saveButton.setDisabled(!isDirty()));
-		setUser(new User());
 	}
 
 	@Override
 	protected void onAttach(AttachEvent attachEvent) {
 		super.onAttach(attachEvent);
 		if (attachEvent.isInitialAttach()) {
+			avatar = new UserAvatar();
+			avatar.getElement().setAttribute("slot", "avatar");
+			getElement().appendChild(avatar.getElement());
+
 			roleField.setItems(Role.getAllRoles());
 
-			Stream.of(nameField, lastnameField, emailField, passwordField, roleField)
-					.forEach(field -> field.addValueChangeListener(
-							event -> saveButton.setDisabled(!isDirty())));
-
-			binder.bind(nameField, User::getFirstName, User::setFirstName);
+			binder.bind(firstnameField, User::getFirstName, User::setFirstName);
 			binder.bind(lastnameField, User::getLastName, User::setLastName);
 			binder.bind(emailField, User::getEmail, User::setEmail);
 			binder.bind(passwordField,
@@ -92,6 +87,8 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> implements View {
 						}
 					});
 			binder.bind(roleField, User::getRole, User::setRole);
+
+			binder.addValueChangeListener(event -> saveButton.setDisabled(!isDirty()));
 		}
 	}
 
@@ -107,40 +104,23 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> implements View {
 		return cancelButton.addClickListener(listener);
 	}
 
-	public void setUser(User user) {
-		this.user = user;
-
-		if (avatar == null) {
-			avatar = new UserAvatar();
-			avatar.getElement().setAttribute("slot", "avatar");
-			getElement().appendChild(avatar.getElement());
-		}
-		avatar.setSrc(user.getPhotoUrl());
-		getModel().setShowAvatar(user.getPhotoUrl() != null && !user.getPhotoUrl().isEmpty());
-		deleteButton.setDisabled(user.getId() == null);
-		title.setText((user.getId() == null ? "New" : "Edit") + " User");
-
+	public void editUser(User user) {
 		binder.readBean(user);
+
+		title.setText((user.getId() == null ? "New" : "Edit") + " User");
+		avatar.setSrc(user.getPhotoUrl());
+		getModel().setShowAvatar(user.getPhotoUrl() != null);
+		saveButton.setDisabled(true);
+		deleteButton.setDisabled(user.getId() == null);
 	}
 
-	public User getUser() throws ValidationException {
-		if (user != null) {
-			binder.writeBean(user);
-		}
-
+	public User getEditedUser() throws ValidationException {
+		User user = new User();
+		binder.writeBean(user);
 		return user;
 	}
 
 	public boolean isDirty() {
-		if (user != null && user.getId() != null) {
-			return !user.getFirstName().equals(nameField.getValue())
-					|| !user.getLastName().equals(lastnameField.getValue())
-					|| !user.getEmail().equals(emailField.getValue())
-					|| (!passwordField.isEmpty() && !user.getPassword().equals(passwordField.getValue()))
-					|| !user.getRole().equals(roleField.getValue());
-		}
-
-		return Stream.of(nameField, lastnameField, emailField, passwordField, roleField)
-				.anyMatch(field -> field.getValue() != null && !field.getValue().trim().isEmpty());
+		return binder.hasChanges();
 	}
 }

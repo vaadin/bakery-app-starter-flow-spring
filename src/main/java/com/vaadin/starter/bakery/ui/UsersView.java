@@ -84,7 +84,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	@Id("view")
 	private ItemsView view;
 
-	// TODO(vlukashov): refactor after https://github.com/vaadin/patient-portal-demo-flow/issues/54 is fixed
+	// A workaround for a Flow issue (see BFF-243 for details).
 	// Initialize the two fields below with the @Id annotation instead of creating them at run-time on the server-side.
 	// The 'editor' and 'confirmationDialog' elements have to be created on the server (to apply the workaround).
 	// That's the reason why they are not initialized with @Id at the moment.
@@ -107,21 +107,21 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 			return;
 		}
 
+		String errorMessage = "Cannot find a user with the id '" + userId + "'. Please refresh the page and try again.";
 		try {
 			Long longId = Long.parseLong(userId);
 			User user = userService.getRepository().findOne(longId);
 			if (user == null) {
-				String errorMessage = "User with id " + userId + " was not found.";
 				toast(errorMessage, false);
 				getLogger().error(errorMessage);
 				return;
 			}
 
 			view.openDialog(true);
-			editor.setUser(user);
+			editor.editUser(user);
 		} catch (NumberFormatException e) {
-			toast("Wrong user id: " + userId, false);
-			getLogger().error("Failed to parse id: " + userId);
+			toast(errorMessage, false);
+			getLogger().error("Expected to get a numeric user id, but got: " + userId, e);
 			view.openDialog(false);
 		}
 	}
@@ -136,7 +136,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 					"event.detail");
 		}
 
-		// TODO(vlukashov): refactor after https://github.com/vaadin/patient-portal-demo-flow/issues/54 is fixed
+		// A workaround for a Flow issue (see BFF-243 for details).
 		// The 'editor' and 'confirmationDialog' elements are re-created every time the view is attached.
 		// This is inefficient, but it helps to avoid the issue. Without the issue this initialization is needed only once.
 		if (editor != null) {
@@ -162,9 +162,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	}
 
 	private void onNewUser() {
-		User user = new User();
-		user.setPhotoUrl(DEFAULT_AVATAR_URL);
-		editor.setUser(user);
+		editor.editUser(new User());
 		view.openDialog(true);
 	}
 
@@ -194,7 +192,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 
 	private void onSaveUser() {
 		try {
-			userService.save(editor.getUser());
+			userService.save(editor.getEditedUser());
 			navigateToUser(null);
 		} catch (DataIntegrityViolationException e) {
 			// Commit failed because of validation errors
@@ -218,7 +216,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 
 	private void onDeleteUser() {
 		try {
-			userService.delete(editor.getUser().getId());
+			userService.delete(editor.getEditedUser().getId());
 			navigateToUser(null);
 		} catch (UserFriendlyDataException e) {
 			// Commit failed because of application-level data constraints
