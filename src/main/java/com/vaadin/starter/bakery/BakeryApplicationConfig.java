@@ -71,9 +71,9 @@ import com.vaadin.starter.bakery.repositories.UserRepository;
 public class BakeryApplicationConfig extends WebSecurityConfigurerAdapter {
 
     public static final String APP_URL = "/";
-    public static final String LOGIN_URL = "/login.html";
-    public static final String LOGOUT_URL = "/login.html?logout";
-    public static final String LOGIN_FAILURE_URL = "/login.html?error";
+    public static final String LOGIN_URL = "/login";
+    public static final String LOGOUT_URL = "/login?logout";
+    public static final String LOGIN_FAILURE_URL = "/login?error";
     public static final String LOGIN_PROCESSING_URL = "/login";
 
     @Bean
@@ -120,13 +120,6 @@ public class BakeryApplicationConfig extends WebSecurityConfigurerAdapter {
 					.map(ConfigAttribute::getAttribute).anyMatch(authenticatedUserRoles::contains);
 			return hasAccess ? ACCESS_GRANTED : ACCESS_ABSTAIN;
 		}
-    }
-
-    @Override
-    protected void configure(HttpSecurity http)
-        throws Exception {
-        http.csrf().disable();
-        http.authorizeRequests().antMatchers("/*").permitAll();
     }
 
     /**

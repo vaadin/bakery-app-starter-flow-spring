@@ -46,6 +46,7 @@ public class BakeryApp extends PolymerTemplate<BakeryApp.Model> implements HasCh
 		} else {
 			getModel().setPage(path);
 		}
+		navigation.updateUser();
 	}
 
 	@Override

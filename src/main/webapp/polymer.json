@@ -12,11 +12,13 @@
     "src/users/bakery-users.html",
     "src/404/bakery-404.html",
     "src/admin/access-denied.html",
-    "src/app/bakery-navigation.html"
+    "src/app/bakery-navigation.html",
+    "src/login/bakery-login.html"
   ],
   "sources": [
     "src/**/*",
     "images/**/*",
+    "icons/**/*",
     "bower.json"
   ],
   "extraDependencies": [
