@@ -1,14 +1,14 @@
 package com.vaadin.starter.bakery.ui.view;
 
-import org.openqa.selenium.By;
+import com.vaadin.starter.bakery.By;
+import com.vaadin.testbench.elementsbase.AbstractElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.vaadin.testbench.TestBenchElement;
 
-public class LoginViewElement extends TestBenchElement {
+public class LoginViewElement extends AbstractElement {
 
 	public void login(String username, String password) {
 		WebElement loginElement = getLogin();
@@ -20,10 +20,10 @@ public class LoginViewElement extends TestBenchElement {
 
 		getSubmit().click();
 
-		waitUntilElementPresent("Login failed", By.tagName("bakery-app"));
+		waitUntilElementPresent("Login failed", By.tagName("bakery-storefront"));
 	}
 
-	protected void waitUntilElementPresent(String errorMessage, By by) {
+	protected void waitUntilElementPresent(String errorMessage, org.openqa.selenium.By by) {
 		waitUntil(ExpectedConditions.presenceOfElementLocated(by), 30);
 	}
 
@@ -32,19 +32,19 @@ public class LoginViewElement extends TestBenchElement {
 	}
 
 	private WebElement getSubmit() {
-		return findElement(By.id("button-submit"));
+		return findElement(By.shadowSelector("::shadow #button-submit"));
 	}
 
 	private WebElement getPassword() {
-		return findElement(By.id("password"));
+		return findElement(By.shadowSelector("::shadow #password"));
 	}
 
 	private WebElement getLogin() {
-		return findElement(By.id("login"));
+		return findElement(By.shadowSelector("::shadow #login"));
 	}
 
 	WebElement getLoginLabel() {
-		return findElement(By.id("login-label"));
+		return findElement(By.shadowSelector("::shadow #login-label"));
 	}
 
 }
