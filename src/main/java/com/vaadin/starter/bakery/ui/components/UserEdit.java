@@ -65,32 +65,25 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> implements View {
 	private Binder<User> binder = new Binder<>();
 
 	public UserEdit() {
-	}
+		avatar = new UserAvatar();
+		avatar.getElement().setAttribute("slot", "avatar");
+		getElement().appendChild(avatar.getElement());
 
-	@Override
-	protected void onAttach(AttachEvent attachEvent) {
-		super.onAttach(attachEvent);
-		if (attachEvent.isInitialAttach()) {
-			avatar = new UserAvatar();
-			avatar.getElement().setAttribute("slot", "avatar");
-			getElement().appendChild(avatar.getElement());
+		roleField.setItems(Role.getAllRoles());
 
-			roleField.setItems(Role.getAllRoles());
+		binder.bind(firstnameField, User::getFirstName, User::setFirstName);
+		binder.bind(lastnameField, User::getLastName, User::setLastName);
+		binder.bind(emailField, User::getEmail, User::setEmail);
+		binder.bind(passwordField,
+				(user) -> passwordField.getEmptyValue(),
+				(user, password) -> {
+					if (!passwordField.getEmptyValue().equals(password)) {
+						user.setPassword(password);
+					}
+				});
+		binder.bind(roleField, User::getRole, User::setRole);
 
-			binder.bind(firstnameField, User::getFirstName, User::setFirstName);
-			binder.bind(lastnameField, User::getLastName, User::setLastName);
-			binder.bind(emailField, User::getEmail, User::setEmail);
-			binder.bind(passwordField,
-					(user) -> passwordField.getEmptyValue(),
-					(user, password) -> {
-						if (!passwordField.getEmptyValue().equals(password)) {
-							user.setPassword(password);
-						}
-					});
-			binder.bind(roleField, User::getRole, User::setRole);
-
-			binder.addValueChangeListener(event -> saveButton.setDisabled(!isDirty()));
-		}
+		binder.addValueChangeListener(event -> saveButton.setDisabled(!isDirty()));
 	}
 
 	public Registration addSaveListener(ComponentEventListener<ClickEvent<Button>> listener) {
