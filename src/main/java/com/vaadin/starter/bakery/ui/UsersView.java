@@ -102,6 +102,9 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 
 	@Override
 	public void onLocationChange(LocationChangeEvent locationChangeEvent) {
+		if (editor == null) {
+			initChildComponents();
+		}
 		setEditableUser(locationChangeEvent.getPathParameter("id"));
 	}
 
@@ -133,7 +136,13 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	@Override
 	protected void onAttach(AttachEvent event) {
 		super.onAttach(event);
+		if (!event.isInitialAttach()) {
+			// if it's an initial attach initialization would have happened in onLocationChange()
+			initChildComponents();
+		}
+	}
 
+	private void initChildComponents() {
 		// A workaround for a Flow issue (see BFF-243 for details).
 		// The 'editor' and 'confirmationDialog' elements are re-created every time the view is attached.
 		// This is inefficient, but it helps to avoid the issue. Without the issue this initialization is needed only once.
