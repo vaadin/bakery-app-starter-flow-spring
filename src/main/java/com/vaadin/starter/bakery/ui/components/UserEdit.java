@@ -61,6 +61,7 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> implements View {
 	@Id("cancel")
 	private Button cancelButton;
 
+	private User user;
 	private Binder<User> binder = new Binder<>();
 
 	public UserEdit() {
@@ -104,20 +105,23 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> implements View {
 		return cancelButton.addClickListener(listener);
 	}
 
-	public void editUser(User user) {
+	public void setUser(User user) {
+		this.user = user;
 		binder.readBean(user);
 
-		title.setText((user.getId() == null ? "New" : "Edit") + " User");
+		title.setText((user.isNew() ? "New" : "Edit") + " User");
 		avatar.setSrc(user.getPhotoUrl());
 		getModel().setShowAvatar(user.getPhotoUrl() != null);
 		saveButton.setDisabled(true);
-		deleteButton.setDisabled(user.getId() == null);
+		deleteButton.setDisabled(user.isNew());
 	}
 
-	public User getEditedUser() throws ValidationException {
-		User user = new User();
-		binder.writeBean(user);
+	public User getUser() {
 		return user;
+	}
+
+	public void writeEditsToUser() throws ValidationException {
+		binder.writeBean(user);
 	}
 
 	public boolean isDirty() {

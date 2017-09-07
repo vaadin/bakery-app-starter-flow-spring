@@ -118,7 +118,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 			}
 
 			view.openDialog(true);
-			editor.editUser(user);
+			editor.setUser(user);
 		} catch (NumberFormatException e) {
 			toast(errorMessage, false);
 			getLogger().error("Expected to get a numeric user id, but got: " + userId, e);
@@ -162,7 +162,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	}
 
 	private void onNewUser() {
-		editor.editUser(new User());
+		editor.setUser(new User());
 		view.openDialog(true);
 	}
 
@@ -192,7 +192,8 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 
 	private void onSaveUser() {
 		try {
-			userService.save(editor.getEditedUser());
+			editor.writeEditsToUser();
+			userService.save(editor.getUser());
 			navigateToUser(null);
 		} catch (DataIntegrityViolationException e) {
 			// Commit failed because of validation errors
@@ -216,7 +217,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 
 	private void onDeleteUser() {
 		try {
-			userService.delete(editor.getEditedUser().getId());
+			userService.delete(editor.getUser().getId());
 			navigateToUser(null);
 		} catch (UserFriendlyDataException e) {
 			// Commit failed because of application-level data constraints
