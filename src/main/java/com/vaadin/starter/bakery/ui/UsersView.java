@@ -94,6 +94,10 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	@Autowired
 	public UsersView(UserService userService) {
 		this.userService = userService;
+
+		view.addNewListener(e -> onNewUser());
+		getElement().addEventListener("edit", e -> navigateToUser(e.getEventData().getString("event.detail")),
+				"event.detail");
 	}
 
 	@Override
@@ -129,12 +133,6 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	@Override
 	protected void onAttach(AttachEvent event) {
 		super.onAttach(event);
-		if (event.isInitialAttach()) {
-			view.addNewListener(e -> onNewUser());
-
-			getElement().addEventListener("edit", e -> navigateToUser(e.getEventData().getString("event.detail")),
-					"event.detail");
-		}
 
 		// A workaround for a Flow issue (see BFF-243 for details).
 		// The 'editor' and 'confirmationDialog' elements are re-created every time the view is attached.
