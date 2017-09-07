@@ -38,7 +38,8 @@
         <!-- Frontend -->
         <node.version>v8.1.2</node.version>
         <yarn.version>v0.27.5</yarn.version>
-        <frontend.working.directory>src/main/webapp</frontend.working.directory>
+        <buildtools.directory>build-tools</buildtools.directory>
+        <dependencies.directory>src/main/webapp</dependencies.directory>
         <vaadin.frontend.path>VAADIN/static/frontend</vaadin.frontend.path>
     </properties>
 
@@ -217,28 +218,16 @@
                 </plugin>
             </plugins>
         </pluginManagement>
-
         <plugins>
-            <!-- (1): Configures the cleanup process for JS dependencies and build -->
+            <!-- (1): Configures the cleanup process for JS dependencies 
+                and build -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
                 <configuration>
                     <filesets>
                         <fileset>
-                            <directory>${frontend.working.directory}/bower_components</directory>
-                        </fileset>
-                        <fileset>
-                            <directory>${frontend.working.directory}/build</directory>
-                        </fileset>
-                        <fileset>
-                            <directory>${frontend.working.directory}/etc</directory>
-                        </fileset>
-                        <fileset>
-                            <directory>${frontend.working.directory}/node</directory>
-                        </fileset>
-                        <fileset>
-                            <directory>${frontend.working.directory}/node_modules</directory>
+                            <directory>${dependencies.directory}/bower_components</directory>
                         </fileset>
                     </filesets>
                 </configuration>
@@ -268,7 +257,7 @@
                                 </goals>
                                 <configuration>
                                     <arguments>run lint</arguments>
-                                    <workingDirectory>${frontend.working.directory}</workingDirectory>
+                                    <workingDirectory>${buildtools.directory}</workingDirectory>
                                 </configuration>
                             </execution>
                         </executions>
@@ -309,7 +298,7 @@
                         <configuration>
                             <webResources>
                                 <resource>
-                                    <directory>${frontend.working.directory}/build</directory>
+                                    <directory>${dependencies.directory}/build</directory>
                                     <targetPath>${vaadin.frontend.path}</targetPath>
                                 </resource>
                             </webResources>
@@ -334,26 +323,23 @@
                     <name>!vaadin.productionMode</name>
                 </property>
             </activation>
-
+    
             <properties>
                 <yarn.build.goal>run skip-build</yarn.build.goal>
             </properties>
-
             <build>
                 <plugins>
-                    <!-- (7): Adds the files from src/main/frontend directly into the WAR when in development mode -->
+                    <!-- (7): Adds the files from src/main/frontend directly 
+                        into the WAR when in development mode -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
                         <configuration>
                             <webResources>
                                 <resource>
-                                    <directory>${frontend.working.directory}</directory>
+                                    <directory>${dependencies.directory}</directory>
                                     <excludes>
                                         <exclude>build/**</exclude>
-                                        <exclude>node/**</exclude>
-                                        <exclude>node_modules/**</exclude>
-                                        <exclude>etc/**</exclude>
                                     </excludes>
                                 </resource>
                             </webResources>
@@ -390,7 +376,7 @@
                                     <goal>yarn</goal> <!-- runs 'install' by default -->
                                 </goals>
                                 <configuration>
-                                    <workingDirectory>${frontend.working.directory}</workingDirectory>
+                                    <workingDirectory>${buildtools.directory}</workingDirectory>
                                 </configuration>
                             </execution>
                             <execution>
@@ -399,7 +385,7 @@
                                     <goal>yarn</goal>
                                 </goals>
                                 <configuration>
-                                    <workingDirectory>${frontend.working.directory}</workingDirectory>
+                                    <workingDirectory>${buildtools.directory}</workingDirectory>
                                     <arguments>${yarn.build.goal}</arguments>
                                 </configuration>
                             </execution>
