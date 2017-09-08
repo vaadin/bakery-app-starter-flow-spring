@@ -23,6 +23,10 @@ public class ItemsView extends PolymerTemplate<ItemsView.Model> {
 	@Id("item-search")
 	private BakerySearch searchBar;
 
+	public ItemsView() {
+		searchBar.setPlaceHolder("Search");
+	}
+
 	public void addFilterChangeListener(Consumer<String> consumer) {
 		searchBar.addFilterChangeListener((filter, showPrevious) -> consumer.accept(filter));
 	}
