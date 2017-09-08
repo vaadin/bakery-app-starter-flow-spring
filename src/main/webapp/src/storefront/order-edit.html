@@ -1,5 +1,9 @@
-<link rel="import" href="../app/style-modules/shared-styles.html">
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="storefront-item-detail.html">
+<link rel="import" href="order-items-edit.html">
+<link rel="import" href="../elements/item-detail-dialog.html">
+<link rel="import" href="../elements/utils-mixin.html">
+<link rel="import" href="../app/style-modules/shared-styles.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../../bower_components/vaadin-themes/valo/icons.html">
@@ -13,119 +17,155 @@
 <link rel="import" href="../../bower_components/vaadin-date-picker/vaadin-date-picker.html">
 <link rel="import" href="../../bower_components/vaadin-upload/vaadin-upload.html">
 <link rel="import" href="../elements/amount-field.html">
-<link rel="import" href="../elements/utils-mixin.html">
 
 <dom-module id="order-edit">
   <template>
- 
-  </template>
-  <script>
-    class OrderEdit extends
-      window.NotificationMixin(
-        window.LocaleUtilsMixin(
-          window.ScrollShadowMixin(
-            Polymer.Element))) {
+    <div id="wrapper">
+      <item-detail-dialog desktop-view$=[[desktopView]] opened="[[opened]]" on-before-close="_onBeforeClose">
+   <style include="shared-styles">
+      :host {
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        height: 100%;
+      }
 
+      .at-icon {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        font-size: 18px;
+        line-height: 24px;
+        text-align: center;
+      }
+
+      .at-icon::before {
+        content: '@';
+      }
+
+      .product {
+        margin-bottom: 1em;
+      }
+
+      .delete {
+        min-width: 0;
+      }
+    </style>
+    
+    <div class="scrollable flex1" id="main">
+
+      <h2 id="title"></h2>
+
+      <iron-form id="itemEditForm">
+        <form on-submit="_submitEditForm">
+
+          <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 4, 1)]]">
+            <vaadin-form-layout responsive-steps='[{"columns": 1, "labelsPosition": "top"}]'>
+
+              <vaadin-combo-box label="Status" id="status">
+              </vaadin-combo-box>
+
+              <vaadin-form-item>
+                <label slot="label">Due</label>
+                <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 1, 2)]]">
+                  <vaadin-date-picker  id="due-date">
+                    <iron-icon slot="prefix" icon="valo:calendar"></iron-icon>
+                  </vaadin-date-picker>
+    
+                  <vaadin-combo-box id="due-time" allow-custom-value >
+                    <iron-icon slot="prefix" icon="valo:clock"></iron-icon>
+                  </vaadin-combo-box>
+                </vaadin-form-layout>
+
+              </vaadin-form-item>
+
+              <vaadin-combo-box id="pickup-location" class="full-width" >
+                <div slot="prefix" class="at-icon"></div>
+              </vaadin-combo-box>
+            </vaadin-form-layout>
+    
+            <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 3, 1)]]" colspan="3">
+
+              <vaadin-text-field id="customer-name" label="Customer" colspan="2" value="{{item.customer.name}}"
+                required>
+                <iron-icon slot="prefix" icon="valo:user"></iron-icon>
+              </vaadin-text-field>
+    
+              <vaadin-text-field id="customer-number" label="Phone number"  required>
+                <iron-icon slot="prefix" icon="valo:phone"></iron-icon>
+              </vaadin-text-field>
+    
+              <vaadin-text-field  id="customer-details" label="Aditional Details" colspan="2"></vaadin-text-field>
+    
+              <vaadin-form-item colspan="3">
+                <label slot="label">Products</label>
+                <order-items-edit id="items"></order-items-edit>
+              </vaadin-form-item>
+
+            </vaadin-form-layout>
+          </vaadin-form-layout>
+        </form>
+      </iron-form>
+    </div>
+
+    <div id="footer" class="footer" >
+    </div>
+        <storefront-item-detail hidden$="[[!review]]" review item="{{editableItem}}" on-back="_edit" ></storefront-item-detail>
+      </item-detail-dialog>
+    </div>  
+  </template>
+
+  <script>
+    class OrderEdit extends window.EditableItemMixin( window.NotificationMixin(
+            window.LocaleUtilsMixin(
+                    window.ScrollShadowMixin(
+                      Polymer.Element)))) {
       static get is() {
         return 'order-edit';
       }
 
       static get properties() {
         return {
-          item: {
-            type: Object,
-            value : {}
-            // notify: true,
-            // observer: '_onItemChange'
+          opened: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true
           },
-          dirty: Boolean,
-          products: Array,
-          total: Number,
-          desktopView: Boolean
+          desktopView: {
+            type: Boolean
+          },
+          review: Boolean
         };
       }
 
-      _cancel() {
-        this.dispatchEvent(new CustomEvent('cancel', {composed: true}));
+      ready() {
+        super.ready();
+        this.addEventListener('close', () => this.item = null);
       }
 
-      _delete() {
-        this.dispatchEvent(new CustomEvent('delete', {composed: true}));
-      }
+      _onItemChanged(item) {
+        super._onItemChanged(item);
+        this.opened = !!item;
+        this.review = false;
 
-      _onCountChange(e) {
-        const idx = e.target.index;
-        this.set('item.goods.' + idx + '.count', e.target.value);
-      }
-
-      _onDetailChange(e) {
-        const idx = e.target.index;
-        this.set('item.goods.' + idx + '.description', e.target.value);
-      }
-
-      _onTimeChange(e) {
-        this.set('item.time', e.target.value);
-      }
-
-      _onDateChange(e) {
-        this.set('item.date', e.target.value);
-      }
-
-      _onStatusChange(e) {
-        e.target.$.input.setAttribute('status', e.target.value);
-        this.set('item.status', e.target.value);
-      }
-
-      _editing(item) {
-        return item && !!item._id;
-      }
-
-      _onProductChange(e) {
-        const idx = e.target.index;
-        const prod = e.target.selectedItem;
-        this.notifyPath('item.goods.' + idx + '.name', prod.name);
-        this.set('item.goods.' + idx + '.unitPrice', prod.price);
-        this.set('item.goods.' + idx + '.count', 1);
-        if (this.item.goods.length == idx + 1) {
-          this.push('item.goods', {});
-        }
-      }
-
-      _onProductDelete(e) {
-        const idx = e.target.index;
-        if (this.item.goods.length != idx + 1) {
-          this.splice('item.goods', idx, 1);
-        }
-      }
-
-      _computeTotal() {
-        const tot = (this.item && this.item.goods || [])
-          .reduce((prev, item) => prev + (item.unitPrice ? item.unitPrice * (item.count || 1) : 0), 0);
-        this.set('item.totalPrice', tot);
-        return tot ? 'Total ' + this._getCurrency(tot) : '';
-      }
-
-      _computeResponsiveSteps(desktopView, desktopColumns, mobileColumns) {
-        return [{
-          columns: desktopView ? desktopColumns : mobileColumns,
-          labelsPosition: 'top'
-        }];
-      }
-
-      _submitEditForm(e) {
-        e.preventDefault();
-        return false;
-      }
-
-      _getConditional(desktopView, desktopColspan, mobileColspan) {
-        return desktopView ? desktopColspan : mobileColspan;
+        // Hack: Editor modifies the editableItem, we need to update the _originalItemString with the changes
+        setTimeout(() => {
+          this._originalItemString = JSON.stringify(this.editableItem);
+          this._checkDirty();
+        }, 10);
       }
 
       _review() {
-        if (this.$.itemEditForm.validate()) {
-          this.dispatchEvent(new CustomEvent('next'));
-        } else {
-          this.displayToast('Please fill out all required fields before proceeding');
+        this.review = true;
+      }
+
+      _edit() {
+        this.review = false;
+      }
+
+      _onBeforeClose(e) {
+        if (this.dirty) {
+          e.preventDefault();
         }
       }
     }
