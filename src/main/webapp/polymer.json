@@ -13,6 +13,7 @@
     "src/404/bakery-404.html",
     "src/admin/access-denied.html",
     "src/app/bakery-navigation.html",
+    "src/app/bakery-search.html",
     "src/login/bakery-login.html"
   ],
   "sources": [

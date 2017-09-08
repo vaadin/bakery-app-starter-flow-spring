@@ -53,11 +53,10 @@
 
     <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
 
-    <items-view desktop-view=[[desktopView]] filter-value="{{_filterValue}}"
-        item="[[_editableItem]]" button-text="New user"
-        on-new-item="_newItem" on-closed="_onClose" on-before-close="_onBeforeClose">
+    <items-view id="user-items-view" desktop-view=[[desktopView]]  item="[[_editableItem]]"
+                on-closed="_onClose" on-before-close="_onBeforeClose">
 
-      <vaadin-grid slot="grid" id="grid" items="[[_filterUsers(users.*, _filterValue)]]" active-item="{{_activeItem}}">
+      <vaadin-grid slot="grid" id="grid" items="[[users]]" active-item="{{_activeItem}}">
         <vaadin-grid-column width="80px" flex-grow="0">
           <template>
             <div class="picture-cell">
@@ -106,8 +105,7 @@
 
       static get properties() {
         return {
-          desktopView: Boolean,
-          _filterValue: String
+          desktopView: Boolean
         };
       }
 
@@ -167,18 +165,6 @@
           }
         }
         return idx;
-      }
-
-      _filterUsers(usersChange, filter) {
-        const users = usersChange.base;
-        if (users) {
-          filter = (filter || '').toLowerCase();
-          return users.filter(function(user) {
-            return user.name.toLowerCase().includes(filter) || user.last.toLowerCase().includes(filter)
-              || user.email.toLowerCase().includes(filter);
-          });
-        }
-        return [];
       }
     }
 

@@ -57,12 +57,7 @@
       }
     </style>
 
-    <bakery-search
-        field-placeholder="Search"
-        field-value="{{filterValue}}"
-        button-text="[[buttonText]]"
-        on-button-click="_newItem">
-    </bakery-search>
+    <bakery-search id="item-search"></bakery-search>
 
     <div class="flex flex1 overflow-auto">
       <div class="grid-wrapper">
@@ -86,13 +81,6 @@
       static get properties() {
         return {
           desktopView: Boolean,
-          filterValue: {
-            type: String,
-            notify: true
-          },
-          buttonText: {
-            type: String
-          },
           item: {
             type: Object,
             observer: '_onItemChanged'
@@ -107,10 +95,6 @@
 
       _onItemChanged(item) {
         this.editing = !!item;
-      }
-
-      _newItem() {
-        this.dispatchEvent(new CustomEvent('new-item', {bubbles: true, composed: true}));
       }
 
       _onBeforeClose(e) {

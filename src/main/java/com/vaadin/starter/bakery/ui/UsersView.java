@@ -17,7 +17,11 @@ package com.vaadin.starter.bakery.ui;
 
 import java.util.List;
 
+import com.vaadin.annotations.Id;
 import com.vaadin.starter.bakery.backend.service.UserFriendlyDataException;
+import com.vaadin.starter.bakery.ui.components.ItemsView;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.HasClickListeners.ClickEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;
@@ -38,7 +42,6 @@ import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.ui.dataproviders.UserDataProvider;
 import com.vaadin.starter.bakery.ui.entities.User;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
-import com.vaadin.ui.AttachEvent;
 
 import elemental.json.JsonObject;
 
@@ -58,15 +61,23 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 
 	private final UserDataProvider userDataProvider;
 
+	@Id("user-items-view")
+	private ItemsView view;
+
 	@Autowired
 	public UsersView(UserDataProvider userDataProvider) {
 		this.userDataProvider = userDataProvider;
+
+		filterUsers(view.getFilter());
+
+		view.setActionText("New user");
+		view.addFilterChangeListener(this::filterUsers);
+		view.addActionClickListener(this::createNewUser);
 	}
 
 	@Override
 	public void onLocationChange(LocationChangeEvent locationChangeEvent) {
 		setEditableUser(locationChangeEvent.getPathParameter("id"));
-
 	}
 
 	private void setEditableUser(String userId) {
@@ -85,10 +96,12 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 		getElement().callFunction("setEditableUser", json);
 	}
 
-	@Override
-	protected void onAttach(AttachEvent event) {
-		super.onAttach(event);
-		getModel().setUsers(userDataProvider.findAll());
+	private void filterUsers(String filter) {
+		getModel().setUsers(userDataProvider.findAnyMatching(filter));
+	}
+
+	private void createNewUser(ClickEvent<Button> newUserButtonClick) {
+		view.openDialog(true);
 	}
 
 	@ClientDelegate
@@ -96,6 +109,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 		if (userId != null && !userId.isEmpty()) {
 			getUI().get().navigateTo(BakeryConst.PAGE_USERS + "/" + userId);
 		} else {
+			view.openDialog(false);
 			getUI().get().navigateTo(BakeryConst.PAGE_USERS);
 		}
 	}
@@ -156,5 +170,10 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 				getModel().setUsers(userDataProvider.findAll());
 			}
 		}
+	}
+
+	@ClientDelegate
+	private void closeDialog() {
+		view.openDialog(false);
 	}
 }
