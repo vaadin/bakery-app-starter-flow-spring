@@ -55,10 +55,12 @@
  
 
     <div id="wrapper">
-      <item-detail-dialog desktop-view$=[[desktopView]]   opened >
+ 
+      <item-detail-dialog desktop-view$=[[desktopView]]   opened=[[opened]] >
+                     <slot></slot>
       </item-detail-dialog>
     </div>
-            <slot></slot>
+
     
 </template>
 

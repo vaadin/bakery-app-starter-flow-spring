@@ -28,6 +28,7 @@ import org.springframework.security.access.annotation.Secured;
 
 import com.vaadin.annotations.ClientDelegate;
 import com.vaadin.annotations.HtmlImport;
+import com.vaadin.annotations.Id;
 import com.vaadin.annotations.Tag;
 import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
@@ -41,6 +42,7 @@ import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.backend.service.ProductService;
 import com.vaadin.starter.bakery.backend.service.UserService;
 import com.vaadin.starter.bakery.ui.components.storefront.OrderEdit;
+import com.vaadin.starter.bakery.ui.components.storefront.OrderEditWrapper;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.starter.bakery.ui.entities.Order;
 import com.vaadin.starter.bakery.ui.entities.Product;
@@ -80,6 +82,9 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	private OrderEdit orderEdit;
 	private UserService userService;
 
+	@Id("order-edit")
+	private OrderEditWrapper editWrapper;
+	
 	@Autowired
 	public StorefrontView(OrdersDataProvider ordersProvider, ProductService productService, OrderService orderService,
 			UserService userService) {
@@ -154,15 +159,18 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 		orderEdit = new OrderEdit(currentUser, productService.getRepository().findAll(), saveOrder,
 				cancelEdit);
-		orderEdit.getElement().setAttribute("slot", "order-editor");
+		//orderEdit.getElement().setAttribute("slot", "order-editor");
 		orderEdit.setEditableItem(order);
-
-		getElement().appendChild(orderEdit.getElement());
+		//editWrapper = new OrderEditWrapper();
+		//getElement().appendChild(editWrapper.getElement());
+		editWrapper.getElement().setAttribute("opened",true);
+		editWrapper.getElement().appendChild(orderEdit.getElement());
 
 	}
 
 	private void closeEditor() {
-		getElement().removeChild(orderEdit.getElement());
+		editWrapper.getElement().removeChild(orderEdit.getElement());
+		editWrapper.getElement().setAttribute("opened",false);
 		orderEdit = null;
 	}
 
