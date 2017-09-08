@@ -20,8 +20,6 @@
 
 <dom-module id="order-edit">
   <template>
-    <div id="wrapper">
-      <item-detail-dialog desktop-view$=[[desktopView]] opened="[[opened]]" on-before-close="_onBeforeClose">
    <style include="shared-styles">
       :host {
         display: flex;
@@ -50,6 +48,8 @@
       .delete {
         min-width: 0;
       }
+      
+      
     </style>
     
     <div class="scrollable flex1" id="main">
@@ -107,12 +107,8 @@
         </form>
       </iron-form>
     </div>
+      <div id="footer" class="footer" ></div>
 
-    <div id="footer" class="footer" >
-    </div>
-        <storefront-item-detail hidden$="[[!review]]" review item="{{editableItem}}" on-back="_edit" ></storefront-item-detail>
-      </item-detail-dialog>
-    </div>  
   </template>
 
   <script>
@@ -161,6 +157,13 @@
 
       _edit() {
         this.review = false;
+      }
+
+      _computeResponsiveSteps(desktopView, desktopColumns, mobileColumns) {
+        return [{
+          columns: desktopView ? desktopColumns : mobileColumns,
+          labelsPosition: 'top'
+        }];
       }
 
       _onBeforeClose(e) {

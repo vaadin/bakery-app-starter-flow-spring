@@ -133,6 +133,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		} finally {
 			updateOrderInModel(orderId);
 		}
+
 	}
 
 	private void updateOrderInModel(String orderId) {
