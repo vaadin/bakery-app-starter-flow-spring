@@ -13,7 +13,8 @@ public class OrderItem extends AbstractEntity {
 	@NotNull
 	private Product product;
 	@Min(1)
-	private int quantity = 1;
+	@NotNull
+	private Integer quantity = 1;
 	@Size(max = 255)
 	private String comment;
 
@@ -25,11 +26,11 @@ public class OrderItem extends AbstractEntity {
 		this.product = product;
 	}
 
-	public int getQuantity() {
+	public Integer getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(int quantity) {
+	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
 

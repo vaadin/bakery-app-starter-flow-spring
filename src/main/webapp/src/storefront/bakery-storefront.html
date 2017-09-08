@@ -242,16 +242,7 @@
       }
 
       _openNewOrderDialog() {
-        // For new orders we stimate to be delivered today at last time
-        const d = new Date();
-        // Empty order
-        this._editableItem = {
-          status: 'new',
-          date: this._getDayIso(d.toString()),
-          time: '16:00',
-          customer: {'name': '', 'number': ''},
-          orderNumber: -1
-        };
+        this.$server.edit(null);
       }
 
       _resizeList() {

@@ -23,6 +23,10 @@ public class DataProviderUtil {
 		return convertIfNotNull(source, converter, () -> null);
 	}
 
+	public static <T> T convertIfNotEmpty(String source,Function<String, T> converter) {
+		return source != null && !"".equals(source) ? converter.apply(source) : null;
+	}
+
 	public static <S, T> T convertIfNotNull(S source, Function<S, T> converter, Supplier<T> nullValueSupplier) {
 		return source != null ? converter.apply(source) : nullValueSupplier.get();
 	}
