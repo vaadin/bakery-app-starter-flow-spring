@@ -15,6 +15,8 @@
  */
 package com.vaadin.starter.bakery.ui;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,9 +37,13 @@ import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.components.VaadinGrid;
 import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
+import com.vaadin.starter.bakery.app.BeanLocator;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.Role;
+import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.OrderService;
+import com.vaadin.starter.bakery.backend.service.ProductService;
+import com.vaadin.starter.bakery.backend.service.UserService;
 import com.vaadin.starter.bakery.ui.components.storefront.OrderEdit;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
@@ -67,6 +73,9 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 		void setProducts(List<Product> products);
 
+		void setSelectedOrder(Order order);
+
+		void getSelectedOrder(Order order);
 	}
 
 	@Id("search")
@@ -74,12 +83,16 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 	private ProductsDataProvider productProvider;
 	private OrdersDataProvider ordersProvider;
+	private OrderService orderService;
+	private OrderEdit orderEdit;
+	private UserService userService;
 
 	@Autowired
 	public StorefrontView(OrdersDataProvider ordersProvider, ProductsDataProvider productProvider) {
 		this.productProvider = productProvider;
 		this.ordersProvider = ordersProvider;
 		this.orderService = orderService;
+		this.userService = userService;
 	}
 
 		searchBar.setActionText("New order");
