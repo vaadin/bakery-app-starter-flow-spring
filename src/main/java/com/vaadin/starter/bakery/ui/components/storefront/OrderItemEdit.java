@@ -3,17 +3,11 @@
  */
 package com.vaadin.starter.bakery.ui.components.storefront;
 
-import java.util.function.Consumer;
-import java.util.function.IntConsumer;
-
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Id;
 import com.vaadin.annotations.Tag;
 import com.vaadin.components.data.HasValue;
 import com.vaadin.data.BeanValidationBinder;
-import com.vaadin.data.Converter;
-import com.vaadin.data.Result;
-import com.vaadin.data.ValueContext;
 import com.vaadin.flow.html.Div;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;

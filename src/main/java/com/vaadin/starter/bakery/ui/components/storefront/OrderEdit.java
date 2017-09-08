@@ -1,23 +1,15 @@
 package com.vaadin.starter.bakery.ui.components.storefront;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.IntStream;
 
-import com.vaadin.annotations.Convert;
-import com.vaadin.annotations.Exclude;
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Id;
 import com.vaadin.annotations.Tag;
 import com.vaadin.data.BeanValidationBinder;
-import com.vaadin.data.Converter;
-import com.vaadin.data.Result;
-import com.vaadin.data.ValueContext;
 import com.vaadin.flow.html.Div;
 import com.vaadin.flow.html.H2;
-import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.starter.bakery.backend.data.OrderState;
@@ -26,10 +18,7 @@ import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.ui.HasToast;
 import com.vaadin.starter.bakery.ui.converters.EnumConverter;
-import com.vaadin.starter.bakery.ui.converters.LocalDateConverter;
 import com.vaadin.starter.bakery.ui.converters.LocalTimeConverter;
-import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
-import com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
