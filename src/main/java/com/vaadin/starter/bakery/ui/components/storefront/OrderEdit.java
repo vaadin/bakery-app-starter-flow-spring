@@ -25,8 +25,8 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.DatePicker;
 import com.vaadin.ui.TextField;
 
-@Tag("order-edit-wrapper")
-@HtmlImport("frontend://src/storefront/order-edit-wrapper.html")
+@Tag("order-edit")
+@HtmlImport("frontend://src/storefront/order-edit.html")
 public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasToast {
 
 	private BeanValidationBinder<Order> binder = new BeanValidationBinder<>(Order.class);
@@ -104,7 +104,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 			footer.getElement().removeAllChildren();
 			footer.getElement().appendChild(reviewFooter.getElement());
 		} else {
-			toast("Please fill all required fields");
+			toast("Please fill out all required fields before proceeding");
 		}
 	}
 

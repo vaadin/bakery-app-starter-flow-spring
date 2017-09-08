@@ -51,69 +51,16 @@
         min-width: 0;
       }
     </style>
-    
-    <div class="scrollable flex1" id="main">
 
-      <h2 id="title"></h2>
+ 
 
-      <iron-form id="itemEditForm">
-        <form on-submit="_submitEditForm">
-
-          <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 4, 1)]]">
-            <vaadin-form-layout responsive-steps='[{"columns": 1, "labelsPosition": "top"}]'>
-
-              <vaadin-combo-box label="Status" id="status">
-              </vaadin-combo-box>
-
-              <vaadin-form-item>
-                <label slot="label">Due</label>
-                <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 1, 2)]]">
-                  <vaadin-date-picker  id="due-date">
-                    <iron-icon slot="prefix" icon="valo:calendar"></iron-icon>
-                  </vaadin-date-picker>
-    
-                  <vaadin-combo-box id="due-time" allow-custom-value >
-                    <iron-icon slot="prefix" icon="valo:clock"></iron-icon>
-                  </vaadin-combo-box>
-                </vaadin-form-layout>
-
-              </vaadin-form-item>
-
-              <vaadin-combo-box id="pickup-location" class="full-width" >
-                <div slot="prefix" class="at-icon"></div>
-              </vaadin-combo-box>
-            </vaadin-form-layout>
-    
-            <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 3, 1)]]" colspan="3">
-
-              <vaadin-text-field id="customer-name" label="Customer" colspan="2" value="{{item.customer.name}}"
-                required>
-                <iron-icon slot="prefix" icon="valo:user"></iron-icon>
-              </vaadin-text-field>
-    
-              <vaadin-text-field id="customer-number" label="Phone number"  required>
-                <iron-icon slot="prefix" icon="valo:phone"></iron-icon>
-              </vaadin-text-field>
-    
-              <vaadin-text-field  id="customer-details" label="Aditional Details" colspan="2"></vaadin-text-field>
-    
-              <vaadin-form-item colspan="3">
-                <label slot="label">Products</label>
-                <order-items-edit id="items"></order-items-edit>
-              </vaadin-form-item>
-
-            </vaadin-form-layout>
-          </vaadin-form-layout>
-        </form>
-      </iron-form>
-    </div>
-
-    <div id="footer" class="footer" >
-    </div>
-        <storefront-item-detail hidden$="[[!review]]" review item="{{editableItem}}" on-back="_edit" ></storefront-item-detail>
+    <div id="wrapper">
+      <item-detail-dialog desktop-view$=[[desktopView]]   opened >
       </item-detail-dialog>
-    </div>  
-  </template>
+    </div>
+            <slot></slot>
+    
+</template>
 
   <script>
     class OrderEditWrapper extends window.EditableItemMixin( window.NotificationMixin(
@@ -136,37 +83,6 @@
           },
           review: Boolean
         };
-      }
-
-      ready() {
-        super.ready();
-        this.addEventListener('close', () => this.item = null);
-      }
-
-      _onItemChanged(item) {
-        super._onItemChanged(item);
-        this.opened = !!item;
-        this.review = false;
-
-        // Hack: Editor modifies the editableItem, we need to update the _originalItemString with the changes
-        setTimeout(() => {
-          this._originalItemString = JSON.stringify(this.editableItem);
-          this._checkDirty();
-        }, 10);
-      }
-
-      _review() {
-        this.review = true;
-      }
-
-      _edit() {
-        this.review = false;
-      }
-
-      _onBeforeClose(e) {
-        if (this.dirty) {
-          e.preventDefault();
-        }
       }
     }
 
