@@ -37,7 +37,7 @@
 
         <!-- Frontend -->
         <node.version>v8.1.2</node.version>
-        <yarn.version>v0.27.5</yarn.version>
+        <yarn.version>v1.0.0</yarn.version>
         <frontend.working.directory>src/main/webapp</frontend.working.directory>
         <vaadin.frontend.path>VAADIN/static/frontend</vaadin.frontend.path>
     </properties>
