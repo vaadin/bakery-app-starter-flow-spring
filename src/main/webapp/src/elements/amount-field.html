@@ -24,9 +24,9 @@
         opacity: 0.1;
       }
     </style>
-    <vaadin-text-field value="{{value}}" label="[[label]]" theme="center" pattern="\d*" part="text-field" prevent-invalid-input theme="center">
-      <iron-icon slot="prefix" id="minus" icon="valo:minus" on-click="_minus" disabled$="[[_isEqual(value, min)]]"></iron-icon>
-      <iron-icon slot="suffix" id="plus" icon="valo:plus" on-click="_plus" disabled$="[[_isEqual(value, max)]]"></iron-icon>
+    <vaadin-text-field id="amount" label="[[label]]" theme="center" pattern="\d*" part="text-field" prevent-invalid-input theme="center" value="{{value}}">
+      <iron-icon slot="prefix" id="minus" icon="valo:minus" on-click="_minus" disabled$="[[_isDisabled(value, min)]]"></iron-icon>
+      <iron-icon slot="suffix" id="plus" icon="valo:plus" on-click="_plus" disabled$="[[_isDisabled(value, max)]]"></iron-icon>
     </vaadin-text-field>
   </template>
 
@@ -39,13 +39,16 @@
       static get properties() {
         return {
           value: {
-            type: Number,
-            value: 1,
+            type: String,
             notify: true
           },
           min: {
             type: Number,
             value: 0
+          },
+          enabled : { 
+            type: Boolean,
+            value: false
           },
           max: {
             type: Number,
@@ -56,23 +59,30 @@
       }
 
       _plus() {
-        if (this.value < this.max) {
-          this.value++;
-        } else if (isNaN(parseInt(this.value, 10))) {
-          this.value = 1;
-        }
+        this._updateValue(v => v < this.max, v=> v + 1);
       }
 
       _minus() {
-        if (this.value > this.min) {
-          this.value--;
-        } if (isNaN(parseInt(this.value, 10))) {
-          this.value = 1;
-        }
+        this._updateValue(v => v > this.min, v=> v - 1);
       }
 
-      _isEqual(value, boundry) {
-        return Math.max(this.min, Math.min(value, this.max)) === boundry;
+      _updateValue(validator,changer) {
+          if(!this.enabled) return;
+          var value= parseInt(this.value, 10);
+          if (isNaN(value)) {
+            this.value = "1";
+          } else if(validator(value)) {
+            value = changer(value);
+            this.value = value.toString();
+          }
+      }
+      
+      _isDisabled(value, boundary) {
+        return !this.enabled || this._isEqual(value,boundary);
+      }
+      
+      _isEqual(value, boundary) {
+        return Math.max(this.min, Math.min(value, this.max)) === boundary;
       }
     }
 

@@ -18,11 +18,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import com.vaadin.starter.bakery.backend.data.OrderState;
 
@@ -47,6 +49,8 @@ public class Order extends AbstractEntity {
 	@OrderColumn(name = "ORDERITEM_INDEX")
 	@JoinColumn
 	@BatchSize(size=1000)
+	@NotEmpty
+	@Valid
 	private List<OrderItem> items;
 	@NotNull
 	private OrderState state;

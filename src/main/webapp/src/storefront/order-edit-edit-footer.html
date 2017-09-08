@@ -1,0 +1,18 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<dom-module id="order-edit-edit-footer">
+  <template>
+      <vaadin-button id="cancel">Cancel</vaadin-button>
+      <div id="price" class="total money"></div>
+      <vaadin-button id="review" theme="primary">Review Order →</vaadin-button>
+  </template>
+  <script>
+    class OrderEditEditFooter extends Polymer.Element {
+
+      static get is() {
+        return 'order-edit-edit-footer';
+      }
+
+    }
+    window.customElements.define(OrderEditEditFooter.is, OrderEditEditFooter);
+  </script>
+</dom-module>

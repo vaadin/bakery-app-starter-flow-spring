@@ -15,6 +15,8 @@
  */
 package com.vaadin.starter.bakery.ui;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,13 +37,18 @@ import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.components.VaadinGrid;
 import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
+import com.vaadin.starter.bakery.app.BeanLocator;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.Role;
+import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.OrderService;
+import com.vaadin.starter.bakery.backend.service.ProductService;
+import com.vaadin.starter.bakery.backend.service.UserService;
 import com.vaadin.starter.bakery.ui.components.storefront.OrderEdit;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.starter.bakery.ui.dataproviders.ProductsDataProvider;
+import com.vaadin.starter.bakery.ui.dataproviders.UserDataProvider;
 import com.vaadin.starter.bakery.ui.entities.Order;
 import com.vaadin.starter.bakery.ui.entities.Product;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
@@ -68,31 +75,32 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		List<Order> getOrders();
 
 		void setProducts(List<Product> products);
-		
+
 		void setSelectedOrder(Order order);
 
 		void getSelectedOrder(Order order);
 	}
 
-	private ProductsDataProvider productProvider;
+	private ProductService productService;
 	private OrdersDataProvider ordersProvider;
 	private OrderService orderService;
 	private OrderEdit orderEdit;
-	
-	
+	private UserService userService;
+
 	@Autowired
-	public StorefrontView(OrdersDataProvider ordersProvider, ProductsDataProvider productProvider,OrderService orderService) {
-		this.productProvider = productProvider;
+	public StorefrontView(OrdersDataProvider ordersProvider, ProductService productService, OrderService orderService,
+			UserService userService) {
+		this.productService = productService;
 		this.ordersProvider = ordersProvider;
 		this.orderService = orderService;
+		this.userService = userService;
 	}
 
-	@Override  
+	@Override
 	protected void onAttach(AttachEvent event) {
 		super.onAttach(event);
 		getModel().setOrders(new ArrayList<>());
 
-		getModel().setProducts(productProvider.findAll());
 		getModel().setSelectedOrder(null);
 
 	}
@@ -130,10 +138,34 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 	@ClientDelegate
 	private void edit(String id) {
-		orderEdit = new OrderEdit();
+		com.vaadin.starter.bakery.backend.data.entity.Order order;
+		User currentUser = userService.getCurrentUser();
+		if(id == null) {
+			order = new com.vaadin.starter.bakery.backend.data.entity.Order(currentUser);
+			order.setDueTime(LocalTime.of(16, 0));
+			order.setDueDate(LocalDate.now());
+		}else {
+			order = orderService.findOrder(Long.valueOf(id));			
+		}
+
+		Runnable saveOrder = () -> {
+			orderService.saveOrder(order);
+			closeEditor();
+		};
+		Runnable cancelEdit = this::closeEditor;
+
+		orderEdit = new OrderEdit(currentUser, productService.getRepository().findAll(), saveOrder,
+				cancelEdit);
 		orderEdit.getElement().setAttribute("slot", "order-editor");
+		orderEdit.setEditableItem(order);
+
 		getElement().appendChild(orderEdit.getElement());
-		orderEdit.setEditableItem(orderService.findOrder(Long.valueOf(id)));
+
+	}
+
+	private void closeEditor() {
+		getElement().removeChild(orderEdit.getElement());
+		orderEdit = null;
 	}
 
 	private void updateOrderInModel(String orderId) {

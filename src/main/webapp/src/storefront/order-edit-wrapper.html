@@ -1,5 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="storefront-item-detail.html">
+<link rel="import" href="order-items-edit.html">
 <link rel="import" href="../elements/item-detail-dialog.html">
 <link rel="import" href="../elements/utils-mixin.html">
 <link rel="import" href="../app/style-modules/shared-styles.html">
@@ -71,56 +72,34 @@
                     <iron-icon slot="prefix" icon="valo:calendar"></iron-icon>
                   </vaadin-date-picker>
     
-                  <vaadin-combo-box on-change="_onTimeChange" value="[[_getTime(item.time)]]" allow-custom-value items='
-                    ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00"]'>
+                  <vaadin-combo-box id="due-time" allow-custom-value >
                     <iron-icon slot="prefix" icon="valo:clock"></iron-icon>
                   </vaadin-combo-box>
                 </vaadin-form-layout>
 
               </vaadin-form-item>
 
-              <vaadin-combo-box class="full-width" value="{{item.place}}" items='["Bakery", "Store"]'>
+              <vaadin-combo-box id="pickup-location" class="full-width" >
                 <div slot="prefix" class="at-icon"></div>
               </vaadin-combo-box>
             </vaadin-form-layout>
     
             <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 3, 1)]]" colspan="3">
 
-              <vaadin-text-field label="Customer" colspan="2" value="{{item.customer.name}}"
+              <vaadin-text-field id="customer-name" label="Customer" colspan="2" value="{{item.customer.name}}"
                 required>
                 <iron-icon slot="prefix" icon="valo:user"></iron-icon>
               </vaadin-text-field>
     
-              <vaadin-text-field label="Phone number" value="{{item.customer.number}}" required>
+              <vaadin-text-field id="customer-number" label="Phone number"  required>
                 <iron-icon slot="prefix" icon="valo:phone"></iron-icon>
               </vaadin-text-field>
     
-              <vaadin-text-field label="Aditional Details" value="{{item.customer.details}}" colspan="2"></vaadin-text-field>
+              <vaadin-text-field  id="customer-details" label="Aditional Details" colspan="2"></vaadin-text-field>
     
               <vaadin-form-item colspan="3">
                 <label slot="label">Products</label>
-    
-                <template is="dom-repeat" items="[[item.goods]]" as="product">
-                  <vaadin-form-layout class="product" responsive-steps="[[_computeResponsiveSteps(desktopView, 18, 10)]]">
-                    <vaadin-combo-box colspan="8"value="{{product.name}}" items="[[products]]"
-                      item-label-path="name" item-value-path="name"
-                      on-change="_onProductChange" allow-custom-value index="[[index]]"></vaadin-combo-box>
-    
-                    <vaadin-button colspan="2" class="delete" index="[[index]]" on-click="_onProductDelete"
-                      theme="narrow" style$="order: [[_getConditional(desktopView, 2, 0)]];">✕</vaadin-button>
-    
-                    <amount-field colspan="4" value="{{product.count}}"
-                      min="1" max="15" on-value-changed="_onCountChange" index="[[index]]"
-                      style="order: 1"></amount-field>
-    
-                    <div colspan="4" class="money"
-                      style="order: 1">[[_getCurrency(product.unitPrice)]]</div>
-    
-                    <vaadin-text-field colspan$="[[_getConditional(desktopView, 12, 8)]]" placeholder="Details"
-                      on-value-changed="_onDetailChange" value="{{product.description}}" index="[[index]]"
-                      style="order: 3"></vaadin-text-field>
-                  </vaadin-form-layout>
-                </template>
+                <order-items-edit id="items"></order-items-edit>
               </vaadin-form-item>
 
             </vaadin-form-layout>
@@ -129,10 +108,7 @@
       </iron-form>
     </div>
 
-    <div class="footer">
-      <vaadin-button on-click="_cancel">Cancel</vaadin-button>
-      <!-- <div class="total money">[[_computeTotal(item.goods.*)]]</div> -->
-      <vaadin-button on-click="_review" theme="primary" disabled="[[!dirty]]">Review Order →</vaadin-button>
+    <div id="footer" class="footer" >
     </div>
         <storefront-item-detail hidden$="[[!review]]" review item="{{editableItem}}" on-back="_edit" ></storefront-item-detail>
       </item-detail-dialog>
