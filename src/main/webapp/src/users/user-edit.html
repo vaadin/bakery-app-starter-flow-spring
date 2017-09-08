@@ -1,6 +1,11 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-password-field.html">
+<link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
+<link rel="import" href="../../bower_components/vaadin-combo-box/vaadin-combo-box.html">
+<link rel="import" href="../../bower_components/vaadin-upload/vaadin-upload.html">
 <link rel="import" href="../elements/utils-mixin.html">
 <link rel="import" href="../elements/user-avatar.html">
 
@@ -14,7 +19,7 @@
         height: 100%;
       }
 
-      ::slotted(user-avatar[slot="avatar"]) {
+      user-avatar {
         width: 56px;
         height: 56px;
         margin-right: 20px;
@@ -31,36 +36,33 @@
         position: relative;
         padding-left: 15px;
       }
-
-      vaadin-combo-box {
-        margin-top: var(--valo-space-m);
-      }
     </style>
 
-    <h3 id="title" class="header-title"></h3>
+    <h3 class="header-title">[[_title]]</h3>
     <div class="scrollable flex1" id="main">
       <vaadin-form-layout>
-        <template is="dom-if" if="[[showAvatar]]">
+        <template is="dom-if" if="[[_editableItem.picture]]">
           <div class="flex" colspan="2">
-            <slot name="avatar"></slot>
+            <user-avatar src="[[_editableItem.picture]]"></user-avatar>
           </div>
           <br>
         </template>
-        <vaadin-text-field id="email" label="Email (login)" colspan="2"></vaadin-text-field>
+        <vaadin-text-field label="Email (login)" value="{{_editableItem.email}}" colspan="2"></vaadin-text-field>
         <br>
-        <vaadin-text-field id="first" label="First Name" colspan="2"></vaadin-text-field>
-        <vaadin-text-field id="last" label="Last Name" colspan="2"></vaadin-text-field>
+        <vaadin-text-field label="First Name" value="{{_editableItem.name}}" colspan="2"></vaadin-text-field>
+        <vaadin-text-field label="Last Name" value="{{_editableItem.last}}" colspan="2"></vaadin-text-field>
         <br>
-        <vaadin-password-field id="password" label="Password" colspan="2"></vaadin-password-field>
+        <vaadin-password-field label="Password" value="{{_editableItem.password}}" colspan="2"></vaadin-password-field>
         <br>
-        <vaadin-combo-box id="role" label="Role" colspan="2"></vaadin-combo-box>
+        <vaadin-combo-box label="Role" value="{{_editableItem.role}}" items='["Barista", "Admin", "Baker"]'
+                          colspan="2"></vaadin-combo-box>
       </vaadin-form-layout>
     </div>
     <div class="footer">
-      <vaadin-button id="save" theme="primary">Save</vaadin-button>
-      <vaadin-button id="cancel">Cancel</vaadin-button>
+      <vaadin-button on-click="save" theme="primary" disabled="[[!dirty]]">Save</vaadin-button>
+      <vaadin-button on-click="cancel">Cancel</vaadin-button>
       <div class="flex1"></div>
-      <vaadin-button id="delete" theme="danger tertiary" class="right">Delete</vaadin-button>
+      <vaadin-button on-click="delete" theme="danger tertiary" class="right">Delete</vaadin-button>
     </div>
   </template>
 
