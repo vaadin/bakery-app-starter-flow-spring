@@ -56,8 +56,6 @@ import elemental.json.JsonObject;
 public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implements View, HasLogger, HasToast {
 
 	public interface Model extends TemplateModel {
-		void setShowPrevious(boolean showPrevious);
-
 		void setOrders(List<Order> orders);
 
 		List<Order> getOrders();
