@@ -33,14 +33,14 @@ public class UsersViewIT extends AbstractIT {
 		Assert.assertTrue(editor.isDisplayed());
 
 		WebElement password = page.getPasswordField();
-		Assert.assertEquals("", password.getAttribute("value"));
+		Assert.assertNull(password.getAttribute("value"));
 
 		password.sendKeys("foobar");
 		page.getUpdateButton().click();
 		Assert.assertFalse(editor.isDisplayed());
 
 		bakerCell.click();
-		Assert.assertEquals("", password.getAttribute("value"));
+		Assert.assertNull(password.getAttribute("value"));
 	}
 
 	@Test
