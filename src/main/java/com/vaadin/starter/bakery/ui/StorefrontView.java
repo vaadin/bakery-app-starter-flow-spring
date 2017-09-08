@@ -15,10 +15,10 @@
  */
 package com.vaadin.starter.bakery.ui;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.vaadin.annotations.Id;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -63,6 +63,9 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		void setProducts(List<Product> products);
 	}
 
+	@Id("search")
+	private BakerySearch searchBar;
+
 	private ProductsDataProvider productProvider;
 	private OrdersDataProvider ordersProvider;
 
@@ -70,15 +73,14 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	public StorefrontView(OrdersDataProvider ordersProvider, ProductsDataProvider productProvider) {
 		this.productProvider = productProvider;
 		this.ordersProvider = ordersProvider;
-	}
 
-	@Override
-	protected void onAttach(AttachEvent event) {
-		super.onAttach(event);
-		getModel().setOrders(new ArrayList<>());
+		searchBar.setActionText("New order");
+		searchBar.setCheckboxText("Show past orders");
+		searchBar.setPlaceHolder("Search");
+		searchBar.addFilterChangeListener(this::filterItems);
+		searchBar.addActionClickListener(e -> getElement().callFunction("_openNewOrderDialog"));
 
-		getModel().setProducts(productProvider.findAll());
-
+		filterItems(searchBar.getFilter(), searchBar.getShowPrevious());
 	}
 
 	@ClientDelegate
@@ -89,14 +91,12 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 			getLogger().debug("There was a problem while saving the order", e);
 			toast("Order was not saved", true);
 		} finally {
-			getElement().callFunction("_onFiltersChanged");
+			filterItems(searchBar.getFilter(), searchBar.getShowPrevious());
 		}
 	}
 
-	@ClientDelegate
-	private void onFiltersChanged(String filter, boolean showPrevious) {
-		// the hardcoded limit of 200 is here until lazy loading is implemented (see
-		// BFF-120)
+	private void filterItems(String filter, boolean showPrevious) {
+		// TODO(sayo-vaadin): The hardcoded limit of 200 is here until lazy loading is implemented (see BFF-127)
 		PageRequest pr = new PageRequest(0, 200, Direction.ASC, "dueDate", "dueTime", "id");
 		getModel().setOrders(ordersProvider.getOrdersList(filter, showPrevious, pr).getOrders());
 	}

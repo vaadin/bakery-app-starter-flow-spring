@@ -64,15 +64,7 @@
 
     <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
 
-    <bakery-search
-        field-placeholder="Search"
-        field-value="{{_filterValue}}"
-        button-text="New order"
-        show-checkbox
-        checkbox-text="Show past orders"
-        checkbox-checked="{{_showPrevious}}"
-        on-button-click="_openNewOrderDialog">
-    </bakery-search>
+    <bakery-search id="search" show-checkbox></bakery-search>
 
     <div class="grid-wrapper">
 
@@ -128,12 +120,6 @@
             computed: '_enableTouchScrolling(desktopView, _selectedItem, _editableItem)',
             reflectToAttribute: true
           },
-          _filterValue: {
-            type: String
-          },
-          _showPrevious: {
-            type: Boolean
-          },
           _selectedItem: Object,
           _editableItem: Object,
           _displayedHeadersList: {
@@ -148,17 +134,8 @@
 
       static get observers() {
         return [
-          '_onFiltersChanged(_filterValue, _showPrevious)',
           '_updatedisplayedHeadersList(orders.*)'
         ];
-      }
-
-      _onFiltersChanged() {
-        this._filtersChangeDebouncer = Polymer.Debouncer.debounce(
-          this._filtersChangeDebouncer,
-          Polymer.Async.timeOut.after(200),
-          () => this.$server.onFiltersChanged(this._filterValue, this._showPrevious));
-        Polymer.enqueueDebouncer(this._filtersChangeDebouncer);
       }
 
       /*
@@ -184,7 +161,9 @@
 
         } else if (this._isThisWeekStartingTomorrow(date)) {
           // If previous orders are shown two 'this week' groups are displayed, so the name is changed.
-          header['main'] = (!this._showPrevious) ? 'This week' : 'This Week Starting Tomorrow';
+          // TODO(sayo-vaadin): Remove when https://github.com/vaadin/flow/issues/2327 is resolved.
+          // Wait briefly for showPrevious to get synchronized.
+          setTimeout(() => header['main'] = (!this.showPrevious) ? 'This week' : 'This Week Starting Tomorrow', 1);
           header['secondary'] = this._getWeekRangeAfter(date);
 
         } else if (this._isUpcoming(date)) {
@@ -242,7 +221,7 @@
       }
 
       _openNewOrderDialog() {
-        // For new orders we stimate to be delivered today at last time
+        // For new orders we estimate to be delivered today at last time
         const d = new Date();
         // Empty order
         this._editableItem = {

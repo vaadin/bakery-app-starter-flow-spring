@@ -34,6 +34,14 @@ public class UserDataProvider {
 		return userService.getRepository().findAll().stream().map(this::toUIEntity).collect(Collectors.toList());
 	}
 
+	public List<User> findAnyMatching(String filter) {
+		return userService.findAnyMatching(Optional.of(filter), null)
+				.getContent()
+				.stream()
+				.map(this::toUIEntity)
+				.collect(Collectors.toList());
+	}
+
 	public void save(JsonObject user) {
 		userService.save(toDataEntity(user));
 	}
