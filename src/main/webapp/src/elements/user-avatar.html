@@ -24,6 +24,24 @@
         return 'user-avatar';
       }
 
+      static get properties() {
+        return {
+          src: {
+            type: String,
+            observer: '_onSrcChanged'
+          },
+          alt: {
+            type: String
+          }
+        };
+      }
+
+      _onSrcChanged() {
+        if (this.src === undefined || this.src === null) {
+          this.src = 'images/default-picture.png';
+        }
+      }
+
       _onImgError(e) {
         e.target.src = 'images/default-picture.png';
       }
