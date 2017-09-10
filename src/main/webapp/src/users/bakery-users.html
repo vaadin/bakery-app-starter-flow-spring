@@ -53,15 +53,14 @@
 
     <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
 
-    <items-view desktop-view=[[desktopView]] filter-value="{{_filterValue}}"
-        item="[[_editableItem]]" button-text="New user"
-        on-new-item="_newItem" on-closed="_onClose" on-before-close="_onBeforeClose">
+    <items-view id="view" desktop-view=[[desktopView]] filter-value="{{filterValue}}"
+        button-text="New user" on-before-close="onBeforeClose">
 
-      <vaadin-grid slot="grid" id="grid" items="[[_filterUsers(users.*, _filterValue)]]" active-item="{{_activeItem}}">
+      <vaadin-grid slot="grid" id="grid" items="[[users]]" active-item="{{_activeItem}}">
         <vaadin-grid-column width="80px" flex-grow="0">
           <template>
             <div class="picture-cell">
-              <user-avatar src="[[item.picture]]" alt="[[item.name]]" class="picture"></user-avatar>
+              <user-avatar src="[[item.photoUrl]]" alt="[[item.firstName]]" class="picture"></user-avatar>
             </div>
           </template>
         </vaadin-grid-column>
@@ -79,7 +78,7 @@
           <template class="header">
             <vaadin-grid-sorter path="name">Name</vaadin-grid-sorter>
           </template>
-          <template>[[item.name]] [[item.last]]</template>
+          <template>[[item.firstName]] [[item.lastName]]</template>
         </vaadin-grid-column>
         <vaadin-grid-column>
           <template class="header">
@@ -89,13 +88,14 @@
         </vaadin-grid-column>
         <vaadin-grid-column width="80px" flex-grow="0" hidden="[[!desktopView]]">
           <template>
-            <iron-icon icon="valo:edit" class="edit-icon" on-click="_editItem"></iron-icon>
+            <iron-icon icon="valo:edit" class="edit-icon"></iron-icon>
           </template>
         </vaadin-grid-column>
       </vaadin-grid>
 
-      <user-edit id="editor" slot="editor" item="[[_editableItem]]" on-save="_onSave" on-delete="_onDelete"></user-edit>
+      <slot name="user-editor" slot="editor"></slot>
     </items-view>
+    <slot></slot>
   </template>
 
   <script>
@@ -107,78 +107,47 @@
       static get properties() {
         return {
           desktopView: Boolean,
-          _filterValue: String
+          filterValue: String
         };
       }
 
-      ready() {
-        super.ready();
-        this._editableItem = null;
+      static get observers() {
+        return [
+          '_filterUsers(filterValue)'
+        ];
       }
 
-      _editItem() {        
-        setTimeout(() => {
-          var user = this._activeItem;
-          if (user != null && user.id) {
-            this.$server.editUser(user.id);
-          }
-        });
-      }
-
-      setEditableUser(user) {
-        this._editableItem = user === null ? null : Object.assign({}, JSON.parse(user));
-      }
-
-      _onClose() {
-        super._onClose();
-        this.$server.editUser('');
-      }
-
-      _onSave(event) {
-        let idx;
-        if (!event.detail.id) {
-          idx = this.users.length;
-          this.push('users', event.detail);
-        } else {
-          idx = this._findUserIndexById(event.detail.id);
-          this.set(`users.${idx}`, event.detail);
-        }
-
-        this.$server.saveUser(event.detail);
-      }
-
-      _onDelete(event) {
-        if (!event.detail.id) {
+      /* @Override EditableListMixin._onActiveItem() */
+      _onActiveItem(value, old) {
+        if (old === undefined || value === null) {
           return;
         }
 
-        const idx = this._findUserIndexById(event.detail.id);
-        this.splice('users', idx, 1);
+        const id = value ? value.id : '';
+        this.dispatchEvent(new CustomEvent('edit', {bubbles: true, composed: true, detail: id}));
 
-        this.$server.deleteUser(event.detail.id);
+        // It's easier to remove the active item here than from a server-side when the editor dialog is closed.
+        // When there is a server-side wrapper for vaadin-grid, this approach should be revisited.
+        this.$.grid.activeItem = null;
       }
 
-      _findUserIndexById(id) {
-        let idx = -1;
-        for (let i = 0; i < this.users.length; i += 1) {
-          if (this.users[i].id === id) {
-            idx = i;
-            break;
-          }
+      _filterUsers() {
+        if (this.filterValue === null) {
+          return;
         }
-        return idx;
+
+        // TODO(sayo-vaadin): Remove when https://github.com/vaadin/flow/issues/467 is resolved.
+        this._filtersChangeDebouncer = Polymer.Debouncer.debounce(
+          this._filtersChangeDebouncer,
+          Polymer.Async.timeOut.after(200),
+          () => this.$server.onFilterUsers(this.filterValue));
+        Polymer.enqueueDebouncer(this._filtersChangeDebouncer);
       }
 
-      _filterUsers(usersChange, filter) {
-        const users = usersChange.base;
-        if (users) {
-          filter = (filter || '').toLowerCase();
-          return users.filter(function(user) {
-            return user.name.toLowerCase().includes(filter) || user.last.toLowerCase().includes(filter)
-              || user.email.toLowerCase().includes(filter);
-          });
-        }
-        return [];
+      onBeforeClose(e) {
+        // Cancel closing dialog and send message to server to check dirty and show confirmation.
+        // Can be removed when all the dialog open/close logic will be moved to server.
+        e.preventDefault();
       }
     }
 
