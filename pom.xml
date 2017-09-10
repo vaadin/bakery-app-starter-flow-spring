@@ -20,8 +20,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Dependencies -->
-        <flow.version>0.1-SNAPSHOT</flow.version>
-        <testbench.version>5.0.0</testbench.version>
+        <vaadin.version>10.0-SNAPSHOT</vaadin.version>
 
         <spring-boot.version>1.5.4.RELEASE</spring-boot.version>
         <failOnMissingWebXml>false</failOnMissingWebXml>
@@ -74,9 +73,9 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot.version}</version>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-bom</artifactId>
+                <version>${vaadin.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -149,16 +148,11 @@
             <artifactId>commons-logging</artifactId>
             <version>1.1.1</version>
         </dependency>
-        <!-- Vaadin Flow -->
+        <!-- Vaadin -->
         <dependency>
             <groupId>com.vaadin</groupId>
-            <artifactId>flow</artifactId>
-            <version>${flow.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>flow-components</artifactId>
-            <version>${flow.version}</version>
+            <artifactId>vaadin</artifactId>
+            <version>${vaadin.version}</version>
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
@@ -171,7 +165,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- End of Vaadin Flow -->
+        <!-- End of Vaadin -->
         <!-- Spring -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -232,7 +226,6 @@
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-testbench-core</artifactId>
-            <version>5.1.0.alpha1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -353,7 +346,6 @@
                 <dependency>
                     <groupId>com.vaadin</groupId>
                     <artifactId>flow-server-production-mode</artifactId>
-                    <version>${flow.version}</version>
                 </dependency>
             </dependencies>
 
