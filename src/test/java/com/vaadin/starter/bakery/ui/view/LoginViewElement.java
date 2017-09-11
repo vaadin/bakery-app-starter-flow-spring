@@ -1,18 +1,19 @@
 package com.vaadin.starter.bakery.ui.view;
 
-import com.vaadin.starter.bakery.By;
-import com.vaadin.testbench.elementsbase.AbstractElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import com.vaadin.starter.bakery.By;
+import com.vaadin.testbench.elementsbase.AbstractElement;
+
 
 public class LoginViewElement extends AbstractElement {
 
 	public void login(String username, String password) {
-		WebElement loginElement = getLogin();
-		WebElement passwordElement = getPassword();
+		WebElement loginElement = getLoginInput();
+		WebElement passwordElement = getPasswordInput();
 		loginElement.clear();
 		loginElement.sendKeys(username);
 		passwordElement.clear();
@@ -20,10 +21,10 @@ public class LoginViewElement extends AbstractElement {
 
 		getSubmit().click();
 
-		waitUntilElementPresent("Login failed", By.tagName("bakery-storefront"));
+		waitUntilElementPresent(By.tagName("bakery-storefront"));
 	}
 
-	protected void waitUntilElementPresent(String errorMessage, org.openqa.selenium.By by) {
+	protected void waitUntilElementPresent(org.openqa.selenium.By by) {
 		waitUntil(ExpectedConditions.presenceOfElementLocated(by), 30);
 	}
 
@@ -39,12 +40,20 @@ public class LoginViewElement extends AbstractElement {
 		return findElement(By.shadowSelector("::shadow #password"));
 	}
 
-	private WebElement getLogin() {
-		return findElement(By.shadowSelector("::shadow #login"));
+	private WebElement getPasswordInput() {
+		return getPassword().findElement(By.shadowSelector("::shadow #input"));
 	}
 
-	WebElement getLoginLabel() {
-		return findElement(By.shadowSelector("::shadow #login-label"));
+	private WebElement getLogin() {
+		return findElement(By.shadowSelector("::shadow #username"));
+	}
+
+	private WebElement getLoginInput() {
+		return getLogin().findElement(By.shadowSelector("::shadow #input"));
+	}
+
+	String getLoginLabel() {
+		return getLogin().getAttribute("label");
 	}
 
 }
