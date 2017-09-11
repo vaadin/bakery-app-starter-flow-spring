@@ -8,4 +8,5 @@ import com.vaadin.flow.template.model.TemplateModel;
 @HtmlImport("frontend://src/storefront/order-edit-wrapper.html")
 public class OrderEditWrapper extends PolymerTemplate<TemplateModel> {
 
+
 }
