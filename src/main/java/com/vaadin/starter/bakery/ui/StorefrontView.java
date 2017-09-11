@@ -27,6 +27,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.access.annotation.Secured;
 
 import com.vaadin.annotations.ClientDelegate;
+import com.vaadin.annotations.EventHandler;
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Id;
 import com.vaadin.annotations.Tag;
@@ -74,6 +75,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		void setSelectedOrder(Order order);
 
 		void getSelectedOrder(Order order);
+
+		void setEditing(boolean editing);
 	}
 
 	private ProductService productService;
@@ -143,7 +146,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 			order.setDueTime(LocalTime.of(16, 0));
 			order.setDueDate(LocalDate.now());
 		}else {
-			order = orderService.findOrder(Long.valueOf(id));			
+			order = orderService.findOrder(Long.valueOf(id));
 		}
 
 		Runnable saveOrder = () -> {
@@ -159,19 +162,19 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 		orderEdit = new OrderEdit(currentUser, productService.getRepository().findAll(), saveOrder,
 				cancelEdit);
-		orderEdit.getElement().setAttribute("desktop-view", "[[desktopView]]");
 		orderEdit.setEditableItem(order);
 		//editWrapper = new OrderEditWrapper();
 		//getElement().appendChild(editWrapper.getElement());
-		editWrapper.getElement().setAttribute("opened",true);
 		editWrapper.getElement().appendChild(orderEdit.getElement());
+		getModel().setEditing(true);
 
 	}
 
-	private void closeEditor() {
+	@EventHandler
+	public void closeEditor() {
 		editWrapper.getElement().removeChild(orderEdit.getElement());
-		editWrapper.getElement().setAttribute("opened",false);
 		orderEdit = null;
+		getModel().setEditing(false);
 	}
 
 	private void updateOrderInModel(String orderId) {

@@ -110,8 +110,6 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 
 	public interface Model extends TemplateModel {
 
-		void setReview(boolean review);
-
 		void setOpened(boolean opened);
 
 	}

@@ -106,8 +106,7 @@
           <storefront-item-detail item="[[_selectedItem]]" on-close="_unselectItem" on-edit="_onEdit" desktop-view="[[desktopView]]"></storefront-item-detail>
         </item-detail-dialog>
       </template>
-      <order-edit-wrapper id="order-edit" desktop-view$=[[desktopView]]></order-edit-wrapper> 
-      <slot name="order-editor" slot="editor"></slot>
+      <order-edit-wrapper id="order-edit" desktop-view$=[[desktopView]] opened=[[editing]] on-close="closeEditor"></order-edit-wrapper> 
     </div>
 
   </template>
@@ -248,10 +247,6 @@
 
       _resizeList() {
         this.$.list.notifyResize();
-      }
-
-      _onEditClosed() {
-        this._editableItem = null;
       }
 
       _onEdit(e) {

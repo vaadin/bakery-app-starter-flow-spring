@@ -54,7 +54,7 @@
 
     <div id="wrapper">
  
-      <item-detail-dialog desktop-view$=[[desktopView]]   opened=[[opened]] >
+      <item-detail-dialog desktop-view$=[[desktopView]] opened=[[opened]] on-before-close="_onBeforeClose">
                      <slot id="slot" ></slot>
       </item-detail-dialog>
     </div>
@@ -76,13 +76,13 @@
           opened: {
             type: Boolean,
             value: false,
-            reflectToAttribute: true
+            reflectToAttribute: true,
+            observer: '_desktopViewChanged'
           },
           desktopView: {
             type: Boolean,
             observer: '_desktopViewChanged'
           },
-          review: Boolean
         };
       }
       _desktopViewChanged() {
@@ -90,6 +90,9 @@
         if (element) {
           element.updateDesktopView(this.desktopView);
         }
+      }
+      _onBeforeClose(e) {
+        e.preventDefault();
       }
     }
   
