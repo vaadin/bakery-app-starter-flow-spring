@@ -76,6 +76,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		void setSelectedOrder(Order order);
 
 		void getSelectedOrder(Order order);
+
+		void setEditing(boolean editing);
 	}
 
 	@Id("search")
@@ -106,18 +108,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 		getModel().setProducts(productProvider.findAll());
 		filterItems(searchBar.getFilter(), searchBar.getShowPrevious());
-	}
 
-	@ClientDelegate
-	private void onSave(JsonObject order) {
-		try {
-			ordersProvider.save(order);
-		} catch (Exception e) {
-			getLogger().debug("There was a problem while saving the order", e);
-			toast("Order was not saved", true);
-		} finally {
-			filterItems(searchBar.getFilter(), searchBar.getShowPrevious());
-		}
 	}
 
 	private void filterItems(String filter, boolean showPrevious) {
@@ -138,7 +129,44 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		}
 	}
 
+	@ClientDelegate
+	private void edit(String id) {
+		com.vaadin.starter.bakery.backend.data.entity.Order order;
+		User currentUser = userService.getCurrentUser();
+		if(id == null) {
+			order = new com.vaadin.starter.bakery.backend.data.entity.Order(currentUser);
+			order.setDueTime(LocalTime.of(16, 0));
+			order.setDueDate(LocalDate.now());
+		}else {
+			order = orderService.findOrder(Long.valueOf(id));
+		}
 
+		Runnable saveOrder = () -> {
+			orderService.saveOrder(order);
+			closeEditor();
+		};
+		Runnable cancelEdit = () -> {
+			this.closeEditor();
+			if(order.getId() != null) {
+				updateOrderInModel(order.getId().toString());
+			}
+		};
+
+		orderEdit = new OrderEdit(currentUser, productService.getRepository().findAll(), saveOrder,
+				cancelEdit);
+		orderEdit.setEditableItem(order);
+		//editWrapper = new OrderEditWrapper();
+		//getElement().appendChild(editWrapper.getElement());
+		editWrapper.getElement().appendChild(orderEdit.getElement());
+		getModel().setEditing(true);
+
+	}
+
+	@EventHandler
+	public void closeEditor() {
+		editWrapper.getElement().removeChild(orderEdit.getElement());
+		orderEdit = null;
+		getModel().setEditing(false);
 	}
 
 	private void updateOrderInModel(String orderId) {
