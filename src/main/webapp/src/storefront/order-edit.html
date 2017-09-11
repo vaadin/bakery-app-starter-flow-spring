@@ -121,41 +121,10 @@
 
       static get properties() {
         return {
-          opened: {
-            type: Boolean,
-            value: false,
-            reflectToAttribute: true
-          },
           desktopView: {
             type: Boolean
-          },
-          review: Boolean
+          }
         };
-      }
-
-      ready() {
-        super.ready();
-        this.addEventListener('close', () => this.item = null);
-      }
-
-      _onItemChanged(item) {
-        super._onItemChanged(item);
-        this.opened = !!item;
-        this.review = false;
-
-        // Hack: Editor modifies the editableItem, we need to update the _originalItemString with the changes
-        setTimeout(() => {
-          this._originalItemString = JSON.stringify(this.editableItem);
-          this._checkDirty();
-        }, 10);
-      }
-
-      _review() {
-        this.review = true;
-      }
-
-      _edit() {
-        this.review = false;
       }
 
       _computeResponsiveSteps(desktopView, desktopColumns, mobileColumns) {
@@ -165,11 +134,6 @@
         }];
       }
 
-      _onBeforeClose(e) {
-        if (this.dirty) {
-          e.preventDefault();
-        }
-      }
     }
 
     window.customElements.define(OrderEdit.is, OrderEdit);
