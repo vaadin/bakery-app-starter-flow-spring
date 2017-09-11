@@ -4,6 +4,7 @@ import static com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil.conver
 import static com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil.convertIfNotNull;
 
 import com.vaadin.annotations.ClientDelegate;
+import com.vaadin.annotations.EventHandler;
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Id;
 import com.vaadin.annotations.Tag;
@@ -69,12 +70,12 @@ public class AmountField extends PolymerTemplate<AmountField.Model> implements H
 		}
 	}
 
-	@ClientDelegate
+	@EventHandler
 	public void plus() {
 		change(1);
 	}
 
-	@ClientDelegate
+	@EventHandler
 	public void minus() {
 		change(-1);
 	}
