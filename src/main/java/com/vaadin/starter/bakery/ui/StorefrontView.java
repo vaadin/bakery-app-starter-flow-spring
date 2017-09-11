@@ -87,6 +87,9 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	private OrderEdit orderEdit;
 	private UserService userService;
 
+	@Id("order-edit")
+	private OrderEditWrapper editWrapper;
+	
 	@Autowired
 	public StorefrontView(OrdersDataProvider ordersProvider, ProductsDataProvider productProvider) {
 		this.productProvider = productProvider;
@@ -133,6 +136,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		} finally {
 			updateOrderInModel(orderId);
 		}
+	}
+
 
 	}
 

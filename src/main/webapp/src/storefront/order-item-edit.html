@@ -17,21 +17,31 @@
 
 <dom-module id="order-item-edit">
   <template>
+    <style include="shared-styles">
+      .product {
+        margin-bottom: 1em;
+      }
+
+      .delete {
+        min-width: 0;
+      }
+
+    </style>
     <vaadin-form-layout class="product" responsive-steps="[[_computeResponsiveSteps(desktopView, 18, 10)]]">
       <vaadin-combo-box  id="products" colspan="8" index="[[index]]"></vaadin-combo-box>
 
        <vaadin-button id="delete" colspan="2" class="delete" index="[[index]]"
           theme="narrow" style$="order: [[_getConditional(desktopView, 2, 0)]];">✕</vaadin-button>
-    
+
          <amount-field id="amount" colspan="4" 
            min="1" max="15" index="[[index]]"
            style="order: 1"></amount-field>
-    
+
          <div id="product-price" colspan="4" class="money"
            style="order: 1"></div>
 
          <vaadin-text-field id="comment" colspan$="[[_getConditional(desktopView, 12, 8)]]" placeholder="Details"
-           on-value-changed="_onDetailChange" value="{{product.description}}" index="[[index]]"
+           on-value-changed="_onDetailChange" index="[[index]]"
            style="order: 3"></vaadin-text-field>
     </vaadin-form-layout>
   </template>
@@ -40,6 +50,30 @@
 
       static get is() {
         return 'order-item-edit';
+      }
+
+      static get properties() {
+          return {
+            desktopView: {
+              type: Boolean
+            }
+          };
+        }
+
+      _computeResponsiveSteps(desktopView, desktopColumns, mobileColumns) {
+        return [{
+          columns: desktopView ? desktopColumns : mobileColumns,
+          labelsPosition: 'top'
+        }];
+      }
+      
+      _getConditional(desktopView, desktopColspan, mobileColspan) {
+          return desktopView ? desktopColspan : mobileColspan;
+        }
+
+      updateDesktopView(desktopView) {
+        alert("Desktop view: "+desktopView);
+        this.desktopView = desktopView;
       }
 
     }
