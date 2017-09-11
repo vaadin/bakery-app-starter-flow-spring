@@ -107,18 +107,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	}
 
 	@ClientDelegate
-	private void onSave(JsonObject order) {
-		try {
-			ordersProvider.save(order);
-		} catch (Exception e) {
-			getLogger().debug("There was a problem while saving the order", e);
-			toast("Order was not saved", true);
-		} finally {
-			getElement().callFunction("_onFiltersChanged");
-		}
-	}
-
-	@ClientDelegate
 	private void onFiltersChanged(String filter, boolean showPrevious) {
 		// the hardcoded limit of 200 is here until lazy loading is implemented (see
 		// BFF-120)
