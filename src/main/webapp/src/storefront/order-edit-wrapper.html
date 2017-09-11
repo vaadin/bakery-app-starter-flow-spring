@@ -20,8 +20,6 @@
 
 <dom-module id="order-edit-wrapper">
   <template>
-    <div id="wrapper">
-      <item-detail-dialog desktop-view$=[[desktopView]] opened="[[opened]]" on-before-close="_onBeforeClose">
    <style include="shared-styles">
       :host {
         display: flex;
@@ -57,7 +55,7 @@
     <div id="wrapper">
  
       <item-detail-dialog desktop-view$=[[desktopView]]   opened=[[opened]] >
-                     <slot></slot>
+                     <slot id="slot" ></slot>
       </item-detail-dialog>
     </div>
 
@@ -81,13 +79,20 @@
             reflectToAttribute: true
           },
           desktopView: {
-            type: Boolean
+            type: Boolean,
+            observer: '_desktopViewChanged'
           },
           review: Boolean
         };
       }
+      _desktopViewChanged() {
+        var element = this.querySelector("order-edit");
+        if (element) {
+          element.updateDesktopView(this.desktopView);
+        }
+      }
     }
-
+  
     window.customElements.define(OrderEditWrapper.is, OrderEditWrapper);
   </script>
 </dom-module>

@@ -159,7 +159,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 		orderEdit = new OrderEdit(currentUser, productService.getRepository().findAll(), saveOrder,
 				cancelEdit);
-		//orderEdit.getElement().setAttribute("slot", "order-editor");
+		orderEdit.getElement().setAttribute("desktop-view", "[[desktopView]]");
 		orderEdit.setEditableItem(order);
 		//editWrapper = new OrderEditWrapper();
 		//getElement().appendChild(editWrapper.getElement());

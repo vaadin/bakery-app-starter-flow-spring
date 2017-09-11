@@ -47,8 +47,4 @@ public class LoginViewElement extends AbstractElement {
 		return findElement(By.shadowSelector("::shadow #login-label"));
 	}
 
-	WebElement getLoginLabel() {
-		return findElement(By.id("login-label"));
-	}
-
 }

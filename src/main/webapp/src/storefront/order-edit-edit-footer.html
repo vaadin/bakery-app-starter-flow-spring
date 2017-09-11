@@ -1,6 +1,19 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../app/style-modules/shared-styles.html">
+
 <dom-module id="order-edit-edit-footer">
   <template>
+    <style include="shared-styles">
+      :host {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        transition: box-shadow .2s;
+        justify-content: space-between;
+        padding: var(--valo-space-s);
+        align-items: baseline;
+      }
+    </style>
       <vaadin-button id="cancel">Cancel</vaadin-button>
       <div id="price" class="total money"></div>
       <vaadin-button id="review" theme="primary">Review Order →</vaadin-button>

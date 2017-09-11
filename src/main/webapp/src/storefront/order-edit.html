@@ -98,7 +98,7 @@
     
               <vaadin-form-item colspan="3">
                 <label slot="label">Products</label>
-                <order-items-edit id="items"></order-items-edit>
+                <order-items-edit id="items" desktop-view$=[[desktopView]]></order-items-edit>
               </vaadin-form-item>
 
             </vaadin-form-layout>
@@ -133,7 +133,10 @@
           labelsPosition: 'top'
         }];
       }
-
+      
+      updateDesktopView(desktopView) {
+          this.desktopView = desktopView;
+      }
     }
 
     window.customElements.define(OrderEdit.is, OrderEdit);
