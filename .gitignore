@@ -19,10 +19,10 @@ selenium_standalone_zips
 .DS_Store
 
 # Frontend
-/src/main/webapp/bin/
+/build-tools/bin/
 /src/main/webapp/bower_components/
 /src/main/webapp/build/
-/src/main/webapp/etc/
-/src/main/webapp/lib/
-/src/main/webapp/node/
-/src/main/webapp/node_modules/
+/build-tools/etc/
+/build-tools/lib/
+/build-tools/node/
+/build-tools/node_modules/

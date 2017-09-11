@@ -3,11 +3,7 @@
   "description": "Frontend dependencies for the Bakery App Starter for Flow and Spring",
   "version": "1.0.0",
   "author": "Vaadin Ltd",
-  "repository": "vaadin/bakery-app-starter-flow-spring",
-  "license": "CVALv3",
-  "bugs": {
-    "url": "https://github.com/vaadin/bakery-app-starter-flow-spring/issues"
-  },
+  "license": "SEE LICENSE IN http://vaadin.com/license/cvtl-1",
   "devDependencies": {
     "bower": "1.8.0",
     "eslint": "3.19.0",
@@ -22,12 +18,12 @@
     "stylelint-config-vaadin": "0.1.1"
   },
   "scripts": {
-    "start": "polymer serve",
+    "start": "cd ../src/main/webapp && polymer serve",
     "lint": "gulp lint",
-    "test": "polymer test",
-    "test:integration": "polymer build # test that psk builds without error with the CLI",
-    "install": "bower install",
-    "build": "polymer build",
+    "test": "cd ../src/main/webapp && polymer test",
+    "test:integration": "cd ../src/main/webapp && polymer build # test that psk builds without error with the CLI",
+    "install": "cd ../src/main/webapp && bower install",
+    "build": "cd ../src/main/webapp && polymer build",
     "skip-build": "echo \"skipping polymer build\""
   }
 }

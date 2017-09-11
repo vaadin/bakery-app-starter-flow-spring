@@ -20,11 +20,11 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Dependencies -->
-        <flow.version>0.1-SNAPSHOT</flow.version>
-        <testbench.version>5.0.0</testbench.version>
+        <vaadin.version>10.0-SNAPSHOT</vaadin.version>
 
         <spring-boot.version>1.5.4.RELEASE</spring-boot.version>
         <failOnMissingWebXml>false</failOnMissingWebXml>
+        <!-- Overrides the old version specified by the Spring Boot parent -->
         <selenium.version>3.4.0</selenium.version>
 
         <!-- Plugins -->
@@ -38,7 +38,8 @@
         <!-- Frontend -->
         <node.version>v8.1.2</node.version>
         <yarn.version>v0.27.5</yarn.version>
-        <frontend.working.directory>src/main/webapp</frontend.working.directory>
+        <buildtools.directory>build-tools</buildtools.directory>
+        <frontend.directory>src/main/webapp</frontend.directory>
         <vaadin.frontend.path>VAADIN/static/frontend</vaadin.frontend.path>
     </properties>
 
@@ -74,62 +75,11 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot.version}</version>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-bom</artifactId>
+                <version>${vaadin.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-            <!-- Required because Spring Boot defines old versions -->
-            <dependency>
-                <groupId>org.seleniumhq.selenium</groupId>
-                <artifactId>selenium-api</artifactId>
-                <version>${selenium.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.seleniumhq.selenium</groupId>
-                <artifactId>selenium-server</artifactId>
-                <version>${selenium.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.seleniumhq.selenium</groupId>
-                <artifactId>selenium-chrome-driver</artifactId>
-                <version>${selenium.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.seleniumhq.selenium</groupId>
-                <artifactId>selenium-firefox-driver</artifactId>
-                <version>${selenium.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.seleniumhq.selenium</groupId>
-                <artifactId>selenium-ie-driver</artifactId>
-                <version>${selenium.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.seleniumhq.selenium</groupId>
-                <artifactId>selenium-java</artifactId>
-                <version>${selenium.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.seleniumhq.selenium</groupId>
-                <artifactId>selenium-remote-driver</artifactId>
-                <version>${selenium.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.seleniumhq.selenium</groupId>
-                <artifactId>selenium-safari-driver</artifactId>
-                <version>${selenium.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.seleniumhq.selenium</groupId>
-                <artifactId>selenium-support</artifactId>
-                <version>${selenium.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.seleniumhq.selenium</groupId>
-                <artifactId>htmlunit-driver</artifactId>
-                <version>2.26</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -149,16 +99,11 @@
             <artifactId>commons-logging</artifactId>
             <version>1.1.1</version>
         </dependency>
-        <!-- Vaadin Flow -->
+        <!-- Vaadin -->
         <dependency>
             <groupId>com.vaadin</groupId>
-            <artifactId>flow</artifactId>
-            <version>${flow.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>flow-components</artifactId>
-            <version>${flow.version}</version>
+            <artifactId>vaadin</artifactId>
+            <version>${vaadin.version}</version>
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
@@ -171,7 +116,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- End of Vaadin Flow -->
+        <!-- End of Vaadin -->
         <!-- Spring -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -232,7 +177,6 @@
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-testbench-core</artifactId>
-            <version>5.1.0.alpha1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -274,28 +218,16 @@
                 </plugin>
             </plugins>
         </pluginManagement>
-
         <plugins>
-            <!-- (1): Configures the cleanup process for JS dependencies and build -->
+            <!-- (1): Configures the cleanup process for JS dependencies 
+                and build -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
                 <configuration>
                     <filesets>
                         <fileset>
-                            <directory>${frontend.working.directory}/bower_components</directory>
-                        </fileset>
-                        <fileset>
-                            <directory>${frontend.working.directory}/build</directory>
-                        </fileset>
-                        <fileset>
-                            <directory>${frontend.working.directory}/etc</directory>
-                        </fileset>
-                        <fileset>
-                            <directory>${frontend.working.directory}/node</directory>
-                        </fileset>
-                        <fileset>
-                            <directory>${frontend.working.directory}/node_modules</directory>
+                            <directory>${frontend.directory}/bower_components</directory>
                         </fileset>
                     </filesets>
                 </configuration>
@@ -325,7 +257,7 @@
                                 </goals>
                                 <configuration>
                                     <arguments>run lint</arguments>
-                                    <workingDirectory>${frontend.working.directory}</workingDirectory>
+                                    <workingDirectory>${buildtools.directory}</workingDirectory>
                                 </configuration>
                             </execution>
                         </executions>
@@ -353,7 +285,6 @@
                 <dependency>
                     <groupId>com.vaadin</groupId>
                     <artifactId>flow-server-production-mode</artifactId>
-                    <version>${flow.version}</version>
                 </dependency>
             </dependencies>
 
@@ -367,7 +298,7 @@
                         <configuration>
                             <webResources>
                                 <resource>
-                                    <directory>${frontend.working.directory}/build</directory>
+                                    <directory>${frontend.directory}/build</directory>
                                     <targetPath>${vaadin.frontend.path}</targetPath>
                                 </resource>
                             </webResources>
@@ -392,26 +323,23 @@
                     <name>!vaadin.productionMode</name>
                 </property>
             </activation>
-
+    
             <properties>
                 <yarn.build.goal>run skip-build</yarn.build.goal>
             </properties>
-
             <build>
                 <plugins>
-                    <!-- (7): Adds the files from src/main/frontend directly into the WAR when in development mode -->
+                    <!-- (7): Adds the files from src/main/frontend directly 
+                        into the WAR when in development mode -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
                         <configuration>
                             <webResources>
                                 <resource>
-                                    <directory>${frontend.working.directory}</directory>
+                                    <directory>${frontend.directory}</directory>
                                     <excludes>
                                         <exclude>build/**</exclude>
-                                        <exclude>node/**</exclude>
-                                        <exclude>node_modules/**</exclude>
-                                        <exclude>etc/**</exclude>
                                     </excludes>
                                 </resource>
                             </webResources>
@@ -448,7 +376,7 @@
                                     <goal>yarn</goal> <!-- runs 'install' by default -->
                                 </goals>
                                 <configuration>
-                                    <workingDirectory>${frontend.working.directory}</workingDirectory>
+                                    <workingDirectory>${buildtools.directory}</workingDirectory>
                                 </configuration>
                             </execution>
                             <execution>
@@ -457,7 +385,7 @@
                                     <goal>yarn</goal>
                                 </goals>
                                 <configuration>
-                                    <workingDirectory>${frontend.working.directory}</workingDirectory>
+                                    <workingDirectory>${buildtools.directory}</workingDirectory>
                                     <arguments>${yarn.build.goal}</arguments>
                                 </configuration>
                             </execution>

@@ -102,7 +102,7 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 	@Override
 	protected void onAttach(AttachEvent attachEvent) {
 		if (!attachEvent.isInitialAttach()) {
-			// TODO(sayo-vaadin): Remove when https://github.com/vaadin/patient-portal-demo-flow/issues/54 is resolved.
+			// A workaround for a Flow issue (see BFF-243 for details).
 			initEditor();
 		}
 
