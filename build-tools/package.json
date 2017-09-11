@@ -18,12 +18,12 @@
     "stylelint-config-vaadin": "0.1.1"
   },
   "scripts": {
-    "start": "polymer serve",
+    "start": "cd ../src/main/webapp && polymer serve",
     "lint": "gulp lint",
-    "test": "polymer test",
-    "test:integration": "polymer build # test that psk builds without error with the CLI",
-    "install": "bower install",
-    "build": "polymer build",
+    "test": "cd ../src/main/webapp && polymer test",
+    "test:integration": "cd ../src/main/webapp && polymer build # test that psk builds without error with the CLI",
+    "install": "cd ../src/main/webapp && bower install",
+    "build": "cd ../src/main/webapp && polymer build",
     "skip-build": "echo \"skipping polymer build\""
   }
 }
