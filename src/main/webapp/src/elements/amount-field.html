@@ -25,8 +25,8 @@
       }
     </style>
     <vaadin-text-field id="amount" label="[[label]]" theme="center" pattern="\d*" part="text-field" prevent-invalid-input theme="center">
-      <iron-icon slot="prefix" id="minus" icon="valo:minus" on-click="_minus" disabled$="[[_isDisabled(value, min)]]"></iron-icon>
-      <iron-icon slot="suffix" id="plus" icon="valo:plus" on-click="_plus" disabled$="[[_isDisabled(value, max)]]"></iron-icon>
+      <iron-icon slot="prefix" id="minus" icon="valo:minus" on-click="minus" disabled$="[[_isDisabled(value, min)]]"></iron-icon>
+      <iron-icon slot="suffix" id="plus" icon="valo:plus" on-click="plus" disabled$="[[_isDisabled(value, max)]]"></iron-icon>
     </vaadin-text-field>
   </template>
 
@@ -38,12 +38,9 @@
 
       static get properties() {
         return {
-          value: {
-            type: String,
-            notify: true
-          },
           min: {
             type: Number,
+            notify: true,
             value: 0
           },
           enabled : { 
@@ -52,18 +49,11 @@
           },
           max: {
             type: Number,
+            notify: true,
             value: Number.MAX_SAFE_INTEGER || (Math.pow(2, 53) - 1) /* MSIE fallback */
           },
           label: String
         };
-      }
-
-      _plus() {
-        this.$server.plus();
-      }
-
-      _minus() {
-        this.$server.minus();
       }
 
       _isDisabled(value, boundary) {
