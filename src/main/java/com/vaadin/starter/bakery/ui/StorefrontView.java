@@ -39,7 +39,6 @@ import com.vaadin.starter.bakery.ui.dataproviders.ProductsDataProvider;
 import com.vaadin.starter.bakery.ui.entities.Order;
 import com.vaadin.starter.bakery.ui.entities.Product;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
-import com.vaadin.ui.AttachEvent;
 
 import elemental.json.JsonObject;
 
