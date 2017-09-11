@@ -5,6 +5,7 @@
 <link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
 
 <link rel="import" href="../app/bakery-search.html">
+<link rel="import" href="../elements/items-view.html">
 <link rel="import" href="../elements/utils-mixin.html">
 
 <dom-module id="bakery-products">
@@ -35,9 +36,7 @@
     
     <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
 
-    <items-view id="view" desktop-view=[[desktopView]] filter-value="{{filterValue}}"
-      button-text="New product"
-      on-new-item="onNewProduct" on-before-close="onBeforeClose">
+    <items-view id="view" desktop-view=[[desktopView]] on-before-close="onBeforeClose">
 
       <vaadin-grid slot="grid" id="grid" items="[[products]]" active-item="{{_activeItem}}">
         <vaadin-grid-column flex-grow="10">
@@ -81,15 +80,8 @@
 
       static get properties() {
         return {
-          desktopView: Boolean,
-          filterValue: String
+          desktopView: Boolean
         };
-      }
-
-      static get observers() {
-        return [
-          '_filterProducts(filterValue)'
-        ];
       }
 
       _onActiveItem(value, old) {
@@ -107,19 +99,6 @@
 
       _editProduct(id) {
         this.dispatchEvent(new CustomEvent('edit', {bubbles: true, composed: true, detail: id}));
-      }
-
-      _filterProducts() {
-        if (this.filterValue === null) {
-          return;
-        }
-
-        // TODO(sayo-vaadin): Remove when https://github.com/vaadin/flow/issues/467 is resolved.
-        this._filtersChangeDebouncer = Polymer.Debouncer.debounce(
-          this._filtersChangeDebouncer,
-          Polymer.Async.timeOut.after(200),
-          () => this.$server.onFilterProducts(this.filterValue));
-        Polymer.enqueueDebouncer(this._filtersChangeDebouncer);
       }
 
       onBeforeClose(e) {
