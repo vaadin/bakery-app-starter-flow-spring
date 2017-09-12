@@ -11,7 +11,7 @@ public class LoginIT extends AbstractIT {
 	@Test
 	public void logingWorks() {
 		LoginViewElement loginView = openLoginView();
-		assertEquals("Email", loginView.getLoginLabel().getText());
+		assertEquals("Email", loginView.getLoginLabel());
 		loginView.login("barista@vaadin.com", "barista");
 	}
 
