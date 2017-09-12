@@ -57,7 +57,7 @@
         </vaadin-grid-column>
         <vaadin-grid-column width="80px" flex-grow="0" hidden="[[!desktopView]]">
           <template>
-            <iron-icon icon="valo:edit" class="edit-icon" on-click="_editItem" product-id="[[item.id]]"></iron-icon>
+            <iron-icon icon="valo:edit" class="edit-icon" product-id="[[item.id]]"></iron-icon>
           </template>
         </vaadin-grid-column>
       </vaadin-grid>
@@ -85,20 +85,14 @@
       }
 
       _onActiveItem(value, old) {
-        if (old === undefined) {
+        if (old === undefined || value === null) {
           return;
         }
-        if (!this.desktopView) {
-          this._editProduct(value ? value.id : '');
-        }
-      }
-      
-      _editItem(e) {
-        this._editProduct(e.target.productId);
-      }
 
-      _editProduct(id) {
+        const id = value ? value.id : '';
         this.dispatchEvent(new CustomEvent('edit', {bubbles: true, composed: true, detail: id}));
+
+        this.$.grid.activeItem = null;
       }
 
       onBeforeClose(e) {
