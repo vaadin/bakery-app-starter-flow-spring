@@ -227,6 +227,9 @@
                 <configuration>
                     <filesets>
                         <fileset>
+                            <directory>${frontend.directory}/build</directory>
+                        </fileset>
+                        <fileset>
                             <directory>${frontend.directory}/bower_components</directory>
                         </fileset>
                     </filesets>
