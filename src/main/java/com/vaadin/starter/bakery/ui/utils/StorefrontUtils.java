@@ -57,7 +57,6 @@ public class StorefrontUtils {
 		Map<String, StorefrontItemHeader> result = new HashMap<>(HEADER_FUNCTIONS.size());
 		boolean[] usedGroups = new boolean[HEADER_FUNCTIONS.size()];
 		int used = 0;
-		// A rather bold assumption that the orders are ordered by date.
 		ordersLoop: for (Order order : orders) {
 			for (Map.Entry<Integer, BiFunction<String, Boolean, Optional<StorefrontItemHeader>>> functionEntry :
 					HEADER_FUNCTIONS.entrySet()) {
