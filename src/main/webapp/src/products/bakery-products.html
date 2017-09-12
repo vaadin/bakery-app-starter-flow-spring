@@ -96,9 +96,8 @@
         if (old === undefined) {
           return;
         }
-        if (!this.desktopView) {
-          this._editProduct(value ? value.id : '');
-        }
+
+        this._editProduct(value ? value.id : '');
       }
       
       _editItem(e) {
