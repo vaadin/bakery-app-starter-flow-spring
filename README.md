@@ -21,7 +21,7 @@ and make sure you have a valid TestBench license installed.
 
 # Running the Project in Production Mode
 
-`spring-boot:run -Dvaadin.productionMode`
+`mvn spring-boot:run -Dvaadin.productionMode`
 
 The default mode when the application is built or started is 'development'. The 'production' mode is turned on by setting the `vaadin.productionMode` system property when building or starting the app.
 
