@@ -24,9 +24,9 @@
         opacity: 0.1;
       }
     </style>
-    <vaadin-text-field id="amount" label="[[label]]" theme="center" pattern="\d*" part="text-field" prevent-invalid-input theme="center">
-      <iron-icon slot="prefix" id="minus" icon="valo:minus" on-click="minus" disabled$="[[_isDisabled(value, min)]]"></iron-icon>
-      <iron-icon slot="suffix" id="plus" icon="valo:plus" on-click="plus" disabled$="[[_isDisabled(value, max)]]"></iron-icon>
+    <vaadin-text-field id="amount" label="[[label]]" theme="center" pattern="\d*" part="text-field" prevent-invalid-input theme="center" value=[[value]] readonly="true">
+      <iron-icon slot="prefix" id="minus" icon="valo:minus" on-click="minus" disabled$="[[!minusEnabled]]"></iron-icon>
+      <iron-icon slot="suffix" id="plus" icon="valo:plus" on-click="plus" disabled$="[[!plusEnabled]]"></iron-icon>
     </vaadin-text-field>
   </template>
 
@@ -38,31 +38,37 @@
 
       static get properties() {
         return {
+            value: {
+                type: Number,
+                value: 1,
+                notify: true
+              },
           min: {
             type: Number,
-            notify: true,
             value: 0
           },
-          enabled : { 
+          disabled : { 
             type: Boolean,
-            value: false
+            value: false,
+            notify: true,
+            reflectToAttribute: true
+          },
+          readOnly : { 
+              type: Boolean,
+              value: false,
+              notify: true,
+              reflectToAttribute: true
           },
           max: {
             type: Number,
-            notify: true,
             value: Number.MAX_SAFE_INTEGER || (Math.pow(2, 53) - 1) /* MSIE fallback */
           },
+          plusEnabled: { type: Boolean },
+          minusEnabled: { type: Boolean },
           label: String
         };
       }
 
-      _isDisabled(value, boundary) {
-        return !this.enabled || this._isEqual(value,boundary);
-      }
-      
-      _isEqual(value, boundary) {
-        return Math.max(this.min, Math.min(value, this.max)) === boundary;
-      }
     }
 
     window.customElements.define(AmountField.is, AmountField);

@@ -3,7 +3,6 @@ package com.vaadin.starter.bakery.ui.components;
 import static com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil.convertIfNotEmpty;
 import static com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil.convertIfNotNull;
 
-import com.vaadin.annotations.ClientDelegate;
 import com.vaadin.annotations.EventHandler;
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Id;
@@ -23,51 +22,35 @@ import com.vaadin.ui.TextField;
 public class AmountField extends PolymerTemplate<AmountField.Model> implements HasValue<AmountField, Integer> {
 
 	private final int MIN = 1;
-	
-	private final int MAX = 15;
-	
-	@Id("amount")
-	private TextField amount;
 
-	private boolean enabledIfNotReadOnly;
+	private final int MAX = 15;
+
+	private Integer value;
+
+	private boolean disabled = true;
 
 	public AmountField() {
-		amount.setReadOnly(true);
-		getModel().setEnabled(false);
-		amount.addValueChangeListener(e -> {
-			fireEvent(new ValueChangeEvent<AmountField, Integer>(this, this,
-					convertIfNotEmpty(e.getOldValue(), Integer::parseInt), false));
-		});
+		getModel().setDisabled(false);
+		getModel().setReadOnly(false);
+		updateCommands();
 	}
 
 	@Override
-	public AmountField setValue(Integer value) {
-		amount.setReadOnly(false);
-		amount.setValue(convertIfNotNull(value, Object::toString));
-		if (value != null && value.intValue() > 0) {
-			setEnabled(true);
-		}
+	public void setValue(Integer value) {
+		this.value = value;
 		getModel().setValue(value);
-		amount.setReadOnly(true);
-		return this;
+		updateCommands();
 	}
 
 	@Override
 	public Integer getValue() {
-		return convertIfNotEmpty(amount.getValue(), Integer::parseInt);
+		return this.value;
 	}
 
-	public void setEnabled(boolean enabled) {
-		enabledIfNotReadOnly = enabled;
-		changeEnabled();
-	}
-
-	private void changeEnabled() {
-		boolean enabled = enabledIfNotReadOnly && !isReadOnly();
-		getModel().setEnabled(enabled);
-		if (enabled && getValue() == null) {
-			setValue(1);
-		}
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
+		getModel().setDisabled(disabled);
+		updateCommands();
 	}
 
 	@EventHandler
@@ -78,6 +61,10 @@ public class AmountField extends PolymerTemplate<AmountField.Model> implements H
 	@EventHandler
 	public void minus() {
 		change(-1);
+	}
+
+	private boolean isChangeable() {
+		return !isReadOnly() && !disabled;
 	}
 
 	private void change(int valueToSum) {
@@ -92,17 +79,31 @@ public class AmountField extends PolymerTemplate<AmountField.Model> implements H
 		}
 	}
 
+	private void updateCommands() {
+		Integer value = getValue();
+		boolean canAdd = value == null || value < MAX;
+		boolean canSubtract = value != null && value > MIN;
+		getModel().setPlusEnabled(isChangeable() && canAdd);
+		getModel().setMinusEnabled(isChangeable() && canSubtract);
+	}
+
 	@Override
 	public void setReadOnly(boolean readOnly) {
 		HasValue.super.setReadOnly(readOnly);
-		changeEnabled();
-		// amount.setReadOnly(readOnly);
+		getModel().setReadOnly(readOnly);
+		updateCommands();
 	}
 
 	public interface Model extends TemplateModel {
 
-		void setEnabled(boolean enabled);
+		void setDisabled(boolean disabled);
 
 		void setValue(Integer value);
+
+		void setPlusEnabled(boolean enabled);
+
+		void setMinusEnabled(boolean enabled);
+
+		void setReadOnly(boolean readOnly);
 	}
 }

@@ -40,7 +40,7 @@ public class OrderItemsEdit extends PolymerTemplate<TemplateModel> implements Ha
 	}
 
 	@Override
-	public OrderItemsEdit setValue(List<OrderItem> items) {
+	public void setValue(List<OrderItem> items) {
 		this.items = items;
 		getElement().removeChild(empty.getElement());
 		if(items != null) {
@@ -52,7 +52,6 @@ public class OrderItemsEdit extends PolymerTemplate<TemplateModel> implements Ha
 			});
 		}
 		getElement().appendChild(empty.getElement());
-		return this;
 	}
 
 	@Override

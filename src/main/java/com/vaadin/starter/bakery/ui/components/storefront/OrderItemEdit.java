@@ -52,11 +52,13 @@ public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements Has
 	public OrderItemEdit(OrderItemsEdit parent, ProductSource productSource) {
 
 		this.productSource = productSource;
+		this.amount.setDisabled(true);
 	    productSource.setupBeanComboBox(products);
 		products.addChangeListener(e -> {
 			this.setPrice();
 			parent.productChanged(this,productSource.getProductByName(products.getValue()));
-			this.amount.setEnabled(true);
+			this.amount.setDisabled(false);
+			this.amount.setValue(1);
 		});
 
 		binder.forField(products).withConverter(productSource).bind("product");
@@ -92,10 +94,10 @@ public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements Has
 	}
 
 	@Override
-	public OrderItemEdit setValue(OrderItem value) {
+	public void setValue(OrderItem value) {
 		this.orderItem = value;
 		binder.setBean(value);
-		return this;
+		amount.setDisabled(value == null || value.getProduct() == null);
 	}
 
 	@Override

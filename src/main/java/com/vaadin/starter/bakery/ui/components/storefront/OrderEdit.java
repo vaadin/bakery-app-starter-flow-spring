@@ -1,13 +1,20 @@
 package com.vaadin.starter.bakery.ui.components.storefront;
 
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Id;
 import com.vaadin.annotations.Tag;
 import com.vaadin.data.BeanValidationBinder;
+import com.vaadin.data.Converter;
+import com.vaadin.data.Result;
+import com.vaadin.data.ValueContext;
 import com.vaadin.flow.html.Div;
 import com.vaadin.flow.html.H2;
 import com.vaadin.flow.template.PolymerTemplate;
@@ -17,8 +24,8 @@ import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.ui.HasToast;
-import com.vaadin.starter.bakery.ui.converters.EnumConverter;
 import com.vaadin.starter.bakery.ui.converters.LocalTimeConverter;
+import com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
@@ -37,7 +44,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 	private H2 title;
 
 	@Id("status")
-	private ComboBox<OrderState> status;
+	private ComboBox<String> status;
 
 	@Id("due-date")
 	private DatePicker date;
@@ -65,7 +72,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 
 	public OrderEdit(User currentUser, Collection<Product> availableProducts, Runnable onSave, Runnable onCancel) {
 		items.setProducts(availableProducts);
-		status.setItems(OrderState.values());
+		status.setItems(Arrays.stream(OrderState.values()).map(OrderState::getDisplayName));
 		binder.forField(status).withConverter(new OrderStateConverter()).bind(Order::getState,
 				(o, s) -> o.changeState(currentUser, s));
 		binder.forField(date).bind("dueDate");
@@ -115,22 +122,27 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 	}
 
 	public void setEditableItem(Order order) {
-		// getModel().setEditableItem(order);
 		getModel().setOpened(true);
 		binder.setBean(order);
 	}
 
-	public static class OrderStateConverter extends EnumConverter<OrderState> {
+	public static class OrderStateConverter implements Converter<String, OrderState> {
 
+		private Map<String,OrderState> values;
 		public OrderStateConverter() {
-			super(OrderState.class);
+			values = Arrays.stream(OrderState.values()).collect(Collectors.toMap(OrderState::getDisplayName, Function.identity()));
+		}
+		@Override
+		public Result<OrderState> convertToModel(String value, ValueContext context) {
+			return Result.ok(DataProviderUtil.convertIfNotNull(value, values::get));
+		}
+		@Override
+		public String convertToPresentation(OrderState value, ValueContext context) {
+			return DataProviderUtil.convertIfNotNull(value,OrderState::getDisplayName);
 		}
 
 	}
-
-	enum Status {
-		EDIT, REVIEW;
-	}
+	
 }
 
 abstract class Footer extends PolymerTemplate<TemplateModel> {
