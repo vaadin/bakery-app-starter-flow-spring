@@ -45,12 +45,12 @@ public class StorefrontItemHeaderGenerator {
 		MODEL_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		HEADER_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("EEE, MMM d");
 		HEADER_FUNCTIONS = Arrays.asList(
-				StorefrontItemHeaderGenerator::headerIfRecent,
-				StorefrontItemHeaderGenerator::headerIfYesterday,
-				StorefrontItemHeaderGenerator::headerIfToday,
-				StorefrontItemHeaderGenerator::headerIfThisWeekBeforeYesterday,
-				StorefrontItemHeaderGenerator::headerIfThisWeekStartingTomorrow,
-				StorefrontItemHeaderGenerator::headerIfUpcoming);
+				(date, showPrevious) -> headerIfRecent(date),
+				(date, showPrevious) -> headerIfYesterday(date),
+				(date, showPrevious) -> headerIfToday(date),
+				(date, showPrevious) -> headerIfThisWeekBeforeYesterday(date),
+				(date, showPrevious) -> headerIfThisWeekStartingTomorrow(date, showPrevious),
+				(date, showPrevious) -> headerIfUpcoming(date));
 	}
 
 	public static JsonObject computeEntriesWithHeader(List<Order> orders, boolean showPrevious) {
@@ -85,26 +85,26 @@ public class StorefrontItemHeaderGenerator {
 		return result;
 	}
 
-	private static Optional<StorefrontItemHeader> headerIfRecent(String date, boolean showPrevious) {
+	private static Optional<StorefrontItemHeader> headerIfRecent(String date) {
 		LocalDate today = LocalDate.now();
 		LocalDate thisWeekStart = today.minusDays(today.getDayOfWeek().getValue() - 1);
 		return Optional.ofNullable(toDate(date).isBefore(thisWeekStart) ?
 				new StorefrontItemHeader("Recent", "Before this week") : null);
 	}
 
-	private static Optional<StorefrontItemHeader> headerIfYesterday(String date, boolean showPrevious) {
+	private static Optional<StorefrontItemHeader> headerIfYesterday(String date) {
 		LocalDate yesterday = LocalDate.now().minusDays(1);
 		return Optional.ofNullable(toDate(date).equals(yesterday) ?
 				new StorefrontItemHeader("Yesterday", secondaryHeaderFor(yesterday)) : null);
 	}
 
-	private static Optional<StorefrontItemHeader> headerIfToday(String date, boolean showPrevious) {
+	private static Optional<StorefrontItemHeader> headerIfToday(String date) {
 		LocalDate today = LocalDate.now();
 		return Optional.ofNullable(toDate(date).equals(today) ?
 				new StorefrontItemHeader("Today", secondaryHeaderFor(today)) : null);
 	}
 
-	private static Optional<StorefrontItemHeader> headerIfThisWeekBeforeYesterday(String date, boolean showPrevious) {
+	private static Optional<StorefrontItemHeader> headerIfThisWeekBeforeYesterday(String date) {
 		LocalDate today = LocalDate.now();
 		LocalDate yesterday = today.minusDays(1);
 		LocalDate thisWeekStart = today.minusDays(today.getDayOfWeek().getValue() - 1);
@@ -124,7 +124,7 @@ public class StorefrontItemHeaderGenerator {
 						secondaryHeaderFor(tomorrow, nextWeekStart)) : null);
 	}
 
-	private static Optional<StorefrontItemHeader> headerIfUpcoming(String date, boolean showPrevious) {
+	private static Optional<StorefrontItemHeader> headerIfUpcoming(String date) {
 		LocalDate today = LocalDate.now();
 		LocalDate nextWeekStart = today.minusDays(today.getDayOfWeek().getValue() - 1).plusWeeks(1);;
 		final LocalDate currentDate = toDate(date);
