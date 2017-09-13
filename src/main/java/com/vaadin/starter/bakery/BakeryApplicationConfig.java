@@ -56,9 +56,6 @@ import com.vaadin.starter.bakery.repositories.UserRepository;
  * {@link SpringAwareConfigurator} happy</li>
  * </ul>
  *
- *
- * @author Vaadin Ltd
- *
  */
 @Configuration
 @ComponentScan({

@@ -42,10 +42,6 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
 import elemental.json.JsonObject;
 
-/**
- * @author Vaadin Ltd
- *
- */
 @Tag("bakery-storefront")
 @HtmlImport("frontend://src/storefront/bakery-storefront.html")
 @Route(BakeryConst.PAGE_STOREFRONT)

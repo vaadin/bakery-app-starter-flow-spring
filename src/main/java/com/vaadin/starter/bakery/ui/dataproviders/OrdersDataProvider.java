@@ -108,8 +108,6 @@ public class OrdersDataProvider {
 	 * 
 	 * Responsible for filling the UI Order object with the data from model object.
 	 * 
-	 * @author tulio
-	 *
 	 */
 	static class UIOrderFiller {
 
@@ -153,8 +151,6 @@ public class OrdersDataProvider {
 	 * 
 	 * Responsible for filling the model object with the user input.
 	 * 
-	 * @author tulio
-	 *
 	 */
 	static class DataOrderFiller {
 
