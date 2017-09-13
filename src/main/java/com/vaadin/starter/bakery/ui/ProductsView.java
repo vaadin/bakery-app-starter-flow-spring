@@ -48,8 +48,6 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 		@Include({ "id", "name", "price" })
 		@Convert(value = LongToStringConverter.class, path = "id")
 		void setProducts(List<Product> products);
-
-		String getFilterValue();
 	}
 
 	private final ProductService service;
@@ -68,6 +66,22 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 		initEditor();
 		getElement().addEventListener("edit", e -> navigateToProduct(e.getEventData().getString("event.detail")),
 				"event.detail");
+
+		filterProducts(view.getFilter());
+
+		view.setActionText("New product");
+		view.addActionClickListener(this::createNewProduct);
+		view.addFilterChangeListener(this::filterProducts);
+	}
+
+	@Override
+	protected void onAttach(AttachEvent attachEvent) {
+		if (!attachEvent.isInitialAttach()) {
+			// A workaround for a Flow issue (see BFF-243 for details).
+			initEditor();
+		}
+
+		super.onAttach(attachEvent);
 	}
 
 	private void initEditor() {
@@ -97,16 +111,6 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 		} else {
 			navigateToProduct(null);
 		}
-	}
-
-	@Override
-	protected void onAttach(AttachEvent attachEvent) {
-		if (!attachEvent.isInitialAttach()) {
-			// A workaround for a Flow issue (see BFF-243 for details).
-			initEditor();
-		}
-
-		super.onAttach(attachEvent);
 	}
 
 	@Override
@@ -144,17 +148,11 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 		getUI().ifPresent(ui -> ui.navigateTo(location));
 	}
 
-	@ClientDelegate
-	public void onFilterProducts(String filterValue) {
-		if (filterValue == null) {
-			filterValue = "";
-		}
-
-		getModel().setProducts(service.findAnyMatching(Optional.of(filterValue), null).getContent());
+	private void filterProducts(String filter) {
+		getModel().setProducts(service.findAnyMatching(Optional.ofNullable(filter), null).getContent());
 	}
 
-	@EventHandler
-	public void onNewProduct() {
+	public void createNewProduct(ClickEvent<Button> newProductEvent) {
 		view.openDialog(true);
 		editor.setProduct(new Product());
 	}
@@ -163,7 +161,6 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 		try {
 			service.save(product);
 			navigateToProduct(null);
-			onFilterProducts(getModel().getFilterValue());
 		} catch (ConstraintViolationException e) {
 			String errorMessage = getErrorMessage(e);
 			toast(errorMessage, true);
@@ -171,6 +168,8 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 		} catch (Exception e) {
 			toast("Product could not be saved", true);
 			getLogger().error("Error on saving product: " + e.getMessage());
+		} finally {
+			filterProducts(view.getFilter());
 		}
 	}
 
@@ -178,7 +177,6 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 		try {
 			service.delete(id);
 			navigateToProduct(null);
-			onFilterProducts(getModel().getFilterValue());
 		} catch (Exception e) {
 			String message = "Product could not be deleted";
 			if (e instanceof DataIntegrityViolationException) {
@@ -186,6 +184,8 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 			}
 			toast(message, true);
 			getLogger().error("Error on deleting product: " + e.getMessage());
+		} finally {
+			filterProducts(view.getFilter());
 		}
 	}
 

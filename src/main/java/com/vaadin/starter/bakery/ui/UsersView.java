@@ -15,7 +15,6 @@
  */
 package com.vaadin.starter.bakery.ui;
 
-import com.vaadin.annotations.ClientDelegate;
 import com.vaadin.annotations.Convert;
 import com.vaadin.annotations.EventHandler;
 import com.vaadin.annotations.HtmlImport;
@@ -30,16 +29,16 @@ import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.Role;
-import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.UserFriendlyDataException;
 import com.vaadin.starter.bakery.backend.service.UserService;
 import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
 import com.vaadin.starter.bakery.ui.components.ItemsView;
 import com.vaadin.starter.bakery.ui.components.UserEdit;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
+import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.ui.AttachEvent;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.HasClickListeners;
+import com.vaadin.ui.HasClickListeners.ClickEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;
@@ -68,15 +67,11 @@ import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_USERS;
 @Secured(Role.ADMIN)
 public class UsersView extends PolymerTemplate<UsersView.Model> implements View, HasToast, HasLogger {
 
-	private static final String DEFAULT_AVATAR_URL = "images/default-picture.png";
-
 	public interface Model extends TemplateModel {
 
 		@Include({"id", "firstName", "lastName", "email", "photoUrl", "role"})
 		@Convert(value = LongToStringConverter.class, path = "id")
 		void setUsers(List<User> users);
-
-		String getFilterValue();
 	}
 
 	private final UserService userService;
@@ -95,9 +90,23 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	public UsersView(UserService userService) {
 		this.userService = userService;
 
-		view.addNewListener(e -> onNewUser());
 		getElement().addEventListener("edit", e -> navigateToUser(e.getEventData().getString("event.detail")),
 				"event.detail");
+
+		filterUsers(view.getFilter());
+
+		view.setActionText("New user");
+		view.addActionClickListener(this::createNewUser);
+		view.addFilterChangeListener(this::filterUsers);
+	}
+
+	@Override
+	protected void onAttach(AttachEvent event) {
+		super.onAttach(event);
+		if (!event.isInitialAttach()) {
+			// if it's an initial attach initialization would have happened in onLocationChange()
+			initChildComponents();
+		}
 	}
 
 	@Override
@@ -106,6 +115,28 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 			initChildComponents();
 		}
 		setEditableUser(locationChangeEvent.getPathParameter("id"));
+	}
+
+	private void initChildComponents() {
+		// A workaround for a Flow issue (see BFF-243 for details).
+		// The 'editor' and 'confirmationDialog' elements are re-created every time the view is attached.
+		// This is inefficient, but it helps to avoid the issue.
+		// Without the issue this initialization is needed only once.
+		if (editor != null) {
+			getElement().removeChild(editor.getElement());
+		}
+		editor = new UserEdit();
+		editor.addSaveListener(this::saveUser);
+		editor.addDeleteListener(this::onBeforeDelete);
+		editor.addCancelListener(cancelClickEvent -> onBeforeClose());
+		editor.getElement().setAttribute("slot", "user-editor");
+		getElement().appendChild(editor.getElement());
+
+		if (confirmationDialog != null) {
+			getElement().removeChild(confirmationDialog.getElement());
+		}
+		confirmationDialog = new ConfirmationDialog();
+		getElement().appendChild(confirmationDialog.getElement());
 	}
 
 	private void setEditableUser(String userId) {
@@ -133,96 +164,26 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 		}
 	}
 
-	@Override
-	protected void onAttach(AttachEvent event) {
-		super.onAttach(event);
-		if (!event.isInitialAttach()) {
-			// if it's an initial attach initialization would have happened in onLocationChange()
-			initChildComponents();
-		}
-	}
-
-	private void initChildComponents() {
-		// A workaround for a Flow issue (see BFF-243 for details).
-		// The 'editor' and 'confirmationDialog' elements are re-created every time the view is attached.
-		// This is inefficient, but it helps to avoid the issue. Without the issue this initialization is needed only once.
-		if (editor != null) {
-			getElement().removeChild(editor.getElement());
-		}
-		editor = new UserEdit();
-		editor.addDeleteListener(this::onBeforeDelete);
-		editor.addCancelListener(cancelClickEvent -> onBeforeClose());
-		editor.addSaveListener(saveClickEvent -> onSaveUser());
-		editor.getElement().setAttribute("slot", "user-editor");
-		getElement().appendChild(editor.getElement());
-
-		if (confirmationDialog != null) {
-			getElement().removeChild(confirmationDialog.getElement());
-		}
-		confirmationDialog = new ConfirmationDialog();
-		getElement().appendChild(confirmationDialog.getElement());
-	}
-
 	private void navigateToUser(String id) {
 		final String location = PAGE_USERS + (id == null || id.isEmpty() ? "" : "/" + id);
 		getUI().ifPresent(ui -> ui.navigateTo(location));
 	}
 
-	private void onNewUser() {
+	private void filterUsers(String filter) {
+		getModel().setUsers(userService.findAnyMatching(Optional.ofNullable(filter), null).getContent());
+	}
+
+	private void createNewUser(ClickEvent<Button> newUserEvent) {
 		editor.setUser(new User());
 		view.openDialog(true);
 	}
 
-	private void onBeforeDelete(HasClickListeners.ClickEvent<Button> deleteEvent) {
+	private void onBeforeDelete(ClickEvent<Button> deleteEvent) {
 		confirmationDialog.show(CONFIRM_CAPTION_DELETE_PRODUCT, CONFIRM_MESSAGE_DELETE, CONFIRM_OKBUTTON_DELETE,
-				CONFIRM_CANCELBUTTON_DELETE, okButtonEvent -> onDeleteUser(), null);
+				CONFIRM_CANCELBUTTON_DELETE, this::deleteUser, null);
 	}
 
-	@EventHandler
-	private void onBeforeClose() {
-		if (editor.isDirty()) {
-			confirmationDialog.show(CONFIRM_CAPTION_CANCEL, CONFIRM_MESSAGE_CANCEL, CONFIRM_OKBUTTON_CANCEL,
-					CONFIRM_CANCELBUTTON_CANCEL, okButtonEvent -> navigateToUser(null), null);
-		} else {
-			navigateToUser(null);
-		}
-	}
-
-	@ClientDelegate
-	private void onFilterUsers(String filterValue) {
-		if (filterValue == null) {
-			filterValue = "";
-		}
-
-		getModel().setUsers(userService.findAnyMatching(Optional.of(filterValue), null).getContent());
-	}
-
-	private void onSaveUser() {
-		try {
-			editor.writeEditsToUser();
-			userService.save(editor.getUser());
-			navigateToUser(null);
-		} catch (DataIntegrityViolationException e) {
-			// Commit failed because of validation errors
-			toast(e.getMessage(), true);
-			getLogger().debug("Data integrity violation error while updating entity of type "
-					+ com.vaadin.starter.bakery.backend.data.entity.User.class.getName(), e);
-		} catch (OptimisticLockingFailureException e) {
-			// Somebody else probably edited the data at the same time
-			toast("Somebody else might have updated the data. Please refresh and try again.", true);
-			getLogger().debug("Optimistic locking error while saving entity of type "
-					+ com.vaadin.starter.bakery.backend.data.entity.User.class.getName(), e);
-		} catch (Exception e) {
-			// Something went wrong, no idea what
-			toast("A problem occurred while saving the data. Please check the fields.", true);
-			getLogger().error("Unable to save entity of type "
-					+ com.vaadin.starter.bakery.backend.data.entity.User.class.getName(), e);
-		} finally {
-			onFilterUsers(getModel().getFilterValue());
-		}
-	}
-
-	private void onDeleteUser() {
+	private void deleteUser(ClickEvent<Button> confirmOkDeleteEvent) {
 		try {
 			userService.delete(editor.getUser().getId());
 			navigateToUser(null);
@@ -247,7 +208,42 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 			getLogger().error("Unable to delete entity of type "
 					+ com.vaadin.starter.bakery.backend.data.entity.User.class.getName(), e);
 		} finally {
-			onFilterUsers(getModel().getFilterValue());
+			filterUsers(view.getFilter());
+		}
+	}
+
+	private void saveUser(ClickEvent<Button> saveEvent) {
+		try {
+			editor.writeEditsToUser();
+			userService.save(editor.getUser());
+			navigateToUser(null);
+		} catch (DataIntegrityViolationException e) {
+			// Commit failed because of validation errors
+			toast(e.getMessage(), true);
+			getLogger().debug("Data integrity violation error while updating entity of type "
+					+ com.vaadin.starter.bakery.backend.data.entity.User.class.getName(), e);
+		} catch (OptimisticLockingFailureException e) {
+			// Somebody else probably edited the data at the same time
+			toast("Somebody else might have updated the data. Please refresh and try again.", true);
+			getLogger().debug("Optimistic locking error while saving entity of type "
+					+ com.vaadin.starter.bakery.backend.data.entity.User.class.getName(), e);
+		} catch (Exception e) {
+			// Something went wrong, no idea what
+			toast("A problem occurred while saving the data. Please check the fields.", true);
+			getLogger().error("Unable to save entity of type "
+					+ com.vaadin.starter.bakery.backend.data.entity.User.class.getName(), e);
+		} finally {
+			filterUsers(view.getFilter());
+		}
+	}
+
+	@EventHandler
+	private void onBeforeClose() {
+		if (editor.isDirty()) {
+			confirmationDialog.show(CONFIRM_CAPTION_CANCEL, CONFIRM_MESSAGE_CANCEL, CONFIRM_OKBUTTON_CANCEL,
+					CONFIRM_CANCELBUTTON_CANCEL, okButtonEvent -> navigateToUser(null), null);
+		} else {
+			navigateToUser(null);
 		}
 	}
 }
