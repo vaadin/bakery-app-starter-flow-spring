@@ -96,14 +96,14 @@
     <iron-media-query query="(min-width: 600px)" query-matches="{{_desktopView}}"></iron-media-query>
 
     <div class="row">
-      <vaadin-text-field class="field" placeholder="[[fieldPlaceholder]]" value="{{fieldValue}}" focused="{{_fieldFocused}}">
+      <vaadin-text-field id="field" class="field" placeholder="[[fieldPlaceholder]]" value="{{fieldValue}}" focused="{{_fieldFocused}}">
         <iron-icon icon="[[fieldIcon]]" slot="prefix"></iron-icon>
       </vaadin-text-field>
       <vaadin-checkbox class="checkbox" checked="{{checkboxChecked}}" focused="{{_checkboxFocused}}" hidden$="[[!_desktopView]]">[[checkboxText]]</vaadin-checkbox>
-      <vaadin-button class="button extra-filter" on-click="clearSearch" theme="tertiary">
+      <vaadin-button id="clear" class="button extra-filter" theme="tertiary">
         [[clearText]]
       </vaadin-button>
-      <vaadin-button class="button primary extra-action" on-click="_handleButtonClick" theme="primary icon">
+      <vaadin-button id="action" class="button primary extra-action" theme="primary icon">
         <iron-icon icon="[[buttonIcon]]"></iron-icon>
         <span>[[buttonText]]</span>
       </vaadin-button>
@@ -180,10 +180,6 @@
         ];
       }
 
-      _handleButtonClick() {
-        this.dispatchEvent(new CustomEvent('button-click'));
-      }
-
       _setShowExtraFilters(fieldValue, checkboxChecked, focused, checkboxFocused) {
         this._debouncer = Polymer.Debouncer.debounce(
           this._debouncer,
@@ -202,11 +198,6 @@
             }
           }
         );
-      }
-
-      clearSearch() {
-        this.fieldValue = '';
-        this.checkboxChecked = false;
       }
     }
 

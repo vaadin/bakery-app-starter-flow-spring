@@ -281,8 +281,13 @@
 
       _createConfirmDialog() {
         Polymer.RenderStatus.afterNextRender(this, () => {
-          this._dialog = document.createElement('confirm-dialog');
-          document.body.appendChild(this._dialog);
+          const confirmDialogId = 'confirmation-dialog';
+          this._dialog = document.getElementById(confirmDialogId);
+          if (!this._dialog) {
+            this._dialog = document.createElement('confirm-dialog');
+            this._dialog.setAttribute('id', confirmDialogId);
+            document.body.appendChild(this._dialog);
+          }
         });
       }
 
