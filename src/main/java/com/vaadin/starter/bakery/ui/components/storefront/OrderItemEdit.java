@@ -72,17 +72,17 @@ public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements Has
 		binder.forField(comment).bind("comment");
 		
 		delete.addClickListener(e->parent.deleteItem(this));
+		this.setPrice();
 	}
 
 	private void setPrice() {
 		Integer selectedAmount = amount.getValue();
 		Product product = productSource.getProductByName(products.getValue());
-		String formattedPrice = null;
+		int totalPrice = 0;
 		if (selectedAmount != null && product != null) {
-			int totalPrice = selectedAmount * product.getPrice();
-			formattedPrice = FormattingUtils.formatAsCurrency(totalPrice);
+			totalPrice = selectedAmount * product.getPrice();
 		}
-		this.price.setText(formattedPrice);
+		this.price.setText(FormattingUtils.formatAsCurrency(totalPrice));
 	}
 
 	@Override

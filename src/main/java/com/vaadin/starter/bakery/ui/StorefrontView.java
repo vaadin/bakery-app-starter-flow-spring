@@ -86,7 +86,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	private ProductsDataProvider productProvider;
 	private OrdersDataProvider ordersProvider;
 	private OrderService orderService;
-	private OrderEdit orderEdit;
+
 	private UserService userService;
 
 	@Id("order-edit")
@@ -133,11 +133,11 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	private void edit(String id) {
 		com.vaadin.starter.bakery.backend.data.entity.Order order;
 		User currentUser = userService.getCurrentUser();
-		if(id == null) {
+		if (id == null) {
 			order = new com.vaadin.starter.bakery.backend.data.entity.Order(currentUser);
 			order.setDueTime(LocalTime.of(16, 0));
 			order.setDueDate(LocalDate.now());
-		}else {
+		} else {
 			order = orderService.findOrder(Long.valueOf(id));
 		}
 
@@ -147,26 +147,20 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		};
 		Runnable cancelEdit = () -> {
 			this.closeEditor();
-			if(order.getId() != null) {
+			if (order.getId() != null) {
 				updateOrderInModel(order.getId().toString());
 			}
 		};
 
-		orderEdit = new OrderEdit(currentUser, productService.getRepository().findAll(), saveOrder,
-				cancelEdit);
-		orderEdit.setEditableItem(order);
-		//editWrapper = new OrderEditWrapper();
-		//getElement().appendChild(editWrapper.getElement());
-		editWrapper.getElement().appendChild(orderEdit.getElement());
+		editWrapper.openEdit(order, currentUser, productService.getRepository().findAll(), saveOrder, cancelEdit);
 		getModel().setEditing(true);
 
 	}
 
 	@EventHandler
 	public void closeEditor() {
-		editWrapper.getElement().removeChild(orderEdit.getElement());
-		orderEdit = null;
 		getModel().setEditing(false);
+		editWrapper.close();
 	}
 
 	private void updateOrderInModel(String orderId) {

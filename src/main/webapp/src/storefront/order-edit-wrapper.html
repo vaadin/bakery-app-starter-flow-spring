@@ -1,6 +1,8 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="storefront-item-detail.html">
 <link rel="import" href="order-items-edit.html">
+<link rel="import" href="order-edit.html">
+<link rel="import" href="order-detail.html">
 <link rel="import" href="../elements/item-detail-dialog.html">
 <link rel="import" href="../elements/utils-mixin.html">
 <link rel="import" href="../app/style-modules/shared-styles.html">
@@ -22,7 +24,8 @@
   <template>
     <div id="wrapper">
       <item-detail-dialog desktop-view$=[[desktopView]] opened=[[opened]] on-before-close="_onBeforeClose">
-        <slot id="slot" ></slot>
+        <order-edit id="orderEdit" hidden$=[[review]] desktop-view=[[desktopView]]></order-edit>
+        <order-detail id="orderDetail" hidden$=[[!review]] ></order-detail>
       </item-detail-dialog>
     </div>
   </template>
@@ -38,21 +41,14 @@
           opened: {
             type: Boolean,
             value: false,
-            reflectToAttribute: true,
-            observer: '_desktopViewChanged'
+            reflectToAttribute: true
           },
           desktopView: {
-            type: Boolean,
-            observer: '_desktopViewChanged'
-          },
+            type: Boolean
+          }
         };
       }
-      _desktopViewChanged() {
-        var element = this.querySelector('order-edit');
-        if (element) {
-          element.updateDesktopView(this.desktopView);
-        }
-      }
+ 
       _onBeforeClose(e) {
         e.preventDefault();
       }

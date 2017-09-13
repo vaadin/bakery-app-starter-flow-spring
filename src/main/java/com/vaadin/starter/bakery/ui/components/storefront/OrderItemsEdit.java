@@ -34,6 +34,15 @@ public class OrderItemsEdit extends PolymerTemplate<TemplateModel> implements Ha
 
 	private IntConsumer onTotalPriceChanged;
 	
+	
+	public void close() {
+		editors.forEach(i -> getElement().removeChild(i.getElement()));
+		editors.clear();
+		if(items != null)
+			items.clear();
+		getElement().removeAllChildren();
+	}
+	
 	void setProducts(Collection<Product> products) {
 		this.productSource = new ProductSource(products);
 		createEmptyElement();

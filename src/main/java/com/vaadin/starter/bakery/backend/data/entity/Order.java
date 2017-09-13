@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -163,4 +164,11 @@ public class Order extends AbstractEntity {
 		}
 	}
 
+	public int getTotalPrice() {
+		if(items != null) {
+			return items.stream().mapToInt(OrderItem::getTotalPrice).sum();
+		}else {
+			return 0;
+		}
+	}
 }
