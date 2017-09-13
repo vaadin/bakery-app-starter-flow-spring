@@ -20,24 +20,15 @@
 
 <dom-module id="order-edit-wrapper">
   <template>
-
- 
-
     <div id="wrapper">
- 
       <item-detail-dialog desktop-view$=[[desktopView]] opened=[[opened]] on-before-close="_onBeforeClose">
-                     <slot id="slot" ></slot>
+        <slot id="slot" ></slot>
       </item-detail-dialog>
     </div>
-
-    
-</template>
-
+  </template>
   <script>
     class OrderEditWrapper extends window.EditableItemMixin( window.NotificationMixin(
-            window.LocaleUtilsMixin(
-                    window.ScrollShadowMixin(
-                      Polymer.Element)))) {
+      window.LocaleUtilsMixin(window.ScrollShadowMixin(Polymer.Element)))) {
       static get is() {
         return 'order-edit-wrapper';
       }
@@ -57,7 +48,7 @@
         };
       }
       _desktopViewChanged() {
-        var element = this.querySelector("order-edit");
+        var element = this.querySelector('order-edit');
         if (element) {
           element.updateDesktopView(this.desktopView);
         }
@@ -66,7 +57,7 @@
         e.preventDefault();
       }
     }
-  
+
     window.customElements.define(OrderEditWrapper.is, OrderEditWrapper);
   </script>
 </dom-module>

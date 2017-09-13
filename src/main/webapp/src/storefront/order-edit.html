@@ -112,9 +112,7 @@
 
   <script>
     class OrderEdit extends window.EditableItemMixin( window.NotificationMixin(
-            window.LocaleUtilsMixin(
-                    window.ScrollShadowMixin(
-                      Polymer.Element)))) {
+      window.LocaleUtilsMixin(window.ScrollShadowMixin(Polymer.Element)))) {
       static get is() {
         return 'order-edit';
       }
@@ -135,7 +133,7 @@
       }
       
       updateDesktopView(desktopView) {
-          this.desktopView = desktopView;
+        this.desktopView = desktopView;
       }
     }
 

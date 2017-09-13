@@ -27,13 +27,13 @@
       }
       
       static get properties() {
-          return {
-            desktopView: {
-              type: Boolean,
-              observer: '_updateItems'
-            }
-          };
-        }
+        return {
+          desktopView: {
+            type: Boolean,
+            observer: '_updateItems'
+          }
+        };
+      }
 
       _updateItems() {
         this.querySelectorAll('order-item-edit').forEach(item => item.updateDesktopView(this.desktopView));

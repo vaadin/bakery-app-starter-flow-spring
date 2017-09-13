@@ -53,12 +53,12 @@
       }
 
       static get properties() {
-          return {
-            desktopView: {
-              type: Boolean
-            }
-          };
-        }
+        return {
+          desktopView: {
+            type: Boolean
+          }
+        };
+      }
 
       _computeResponsiveSteps(desktopView, desktopColumns, mobileColumns) {
         return [{
@@ -68,8 +68,8 @@
       }
       
       _getConditional(desktopView, desktopColspan, mobileColspan) {
-          return desktopView ? desktopColspan : mobileColspan;
-        }
+        return desktopView ? desktopColspan : mobileColspan;
+      }
 
       updateDesktopView(desktopView) {
         this.desktopView = desktopView;

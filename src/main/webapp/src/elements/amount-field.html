@@ -38,33 +38,33 @@
 
       static get properties() {
         return {
-            value: {
-                type: Number,
-                value: 1,
-                notify: true
-              },
+          value: {
+            type: Number,
+            value: 1,
+            notify: true
+          },
           min: {
             type: Number,
             value: 0
           },
-          disabled : { 
+          disabled: { 
             type: Boolean,
             value: false,
             notify: true,
             reflectToAttribute: true
           },
-          readOnly : { 
-              type: Boolean,
-              value: false,
-              notify: true,
-              reflectToAttribute: true
+          readOnly: { 
+            type: Boolean,
+            value: false,
+            notify: true,
+            reflectToAttribute: true
           },
           max: {
             type: Number,
             value: Number.MAX_SAFE_INTEGER || (Math.pow(2, 53) - 1) /* MSIE fallback */
           },
-          plusEnabled: { type: Boolean },
-          minusEnabled: { type: Boolean },
+          plusEnabled: {type: Boolean},
+          minusEnabled: {type: Boolean},
           label: String
         };
       }
