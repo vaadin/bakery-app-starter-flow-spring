@@ -96,7 +96,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	}
 
 	private void filterItems(String filter, boolean showPrevious) {
-		// TODO(sayo-vaadin): The hardcoded limit of 200 is here until lazy loading is implemented (see BFF-127)
+		// the hardcoded limit of 200 is here until lazy loading is implemented (see
+		// BFF-120)
 		PageRequest pr = new PageRequest(0, 200, Direction.ASC, "dueDate", "dueTime", "id");
 		getModel().setOrders(ordersProvider.getOrdersList(filter, showPrevious, pr).getOrders());
 	}
