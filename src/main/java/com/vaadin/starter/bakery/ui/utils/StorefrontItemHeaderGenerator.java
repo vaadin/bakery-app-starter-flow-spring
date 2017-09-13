@@ -74,7 +74,6 @@ public class StorefrontItemHeaderGenerator {
 		return toJsonObject(result);
 	}
 
-	// TODO(sayo-vaadin): Remove when Flow supports Map property type.
 	private static JsonObject toJsonObject(Map<String, StorefrontItemHeader> map) {
 		JsonObject result = JSON_FACTORY.createObject();
 		map.forEach((k, v) -> {
