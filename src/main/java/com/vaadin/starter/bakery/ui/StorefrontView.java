@@ -143,6 +143,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 	private void setOrders(List<Order> orders, boolean showPrevious) {
 		getModel().setOrders(orders);
-		getElement().setPropertyJson("displayedHeadersList", computeEntriesWithHeader(orders, showPrevious));
+		getElement().setPropertyJson("displayedHeaders", computeEntriesWithHeader(orders, showPrevious));
 	}
 }

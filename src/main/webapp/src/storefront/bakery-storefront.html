@@ -74,7 +74,7 @@
             <div class="flex justify-center">
               <storefront-item-detail-wrapper
                   header="[[_getHeader(item.id)]]"
-                  display-header="[[_displayHeader(item.id,displayedHeadersList)]]"
+                  display-header="[[_displayHeader(item.id,displayedHeaders)]]"
                   order="[[item]]"
                   selected="[[_isSelected(item,_selectedItem)]]"
                   on-opened="_selectItem"
@@ -122,7 +122,7 @@
           },
           _selectedItem: Object,
           _editableItem: Object,
-          displayedHeadersList: {
+          displayedHeaders: {
             type: Object
           }
         };
@@ -132,14 +132,14 @@
        * Setting headers for each storefront-item-detail-wrapper based on their date.
        */
       _getHeader(id) {
-        return this.displayedHeadersList[id];
+        return this.displayedHeaders[id];
       }
 
       /*
-       * Check from displayedHeadersList if header should be displayed in this order element.
+       * Check from displayedHeaders if header should be displayed in this order element.
        */
       _displayHeader(orderID) {
-        return orderID && this.displayedHeadersList[orderID];
+        return orderID && this.displayedHeaders[orderID];
       }
 
       _openNewOrderDialog() {
