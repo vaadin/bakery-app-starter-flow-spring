@@ -43,7 +43,7 @@ import com.vaadin.ui.AttachEvent;
 
 import elemental.json.JsonObject;
 
-import static com.vaadin.starter.bakery.ui.utils.StorefrontUtils.computeEntriesWithHeader;
+import static com.vaadin.starter.bakery.ui.utils.StorefrontItemHeaderGenerator.computeEntriesWithHeader;
 
 /**
  * @author Vaadin Ltd

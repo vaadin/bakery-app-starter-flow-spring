@@ -22,8 +22,8 @@ import elemental.json.impl.JreJsonFactory;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -33,24 +33,24 @@ import java.util.function.BiFunction;
  * @author Vaadin Ltd
  *
  */
-public class StorefrontUtils {
+public class StorefrontItemHeaderGenerator {
 
 	private static final JreJsonFactory JSON_FACTORY;
 	private static final DateTimeFormatter MODEL_DATE_TIME_FORMATTER;
 	private static final DateTimeFormatter HEADER_DATE_TIME_FORMATTER;
-	private static final Map<Integer, BiFunction<String, Boolean, Optional<StorefrontItemHeader>>> HEADER_FUNCTIONS;
+	private static final List<BiFunction<String, Boolean, Optional<StorefrontItemHeader>>> HEADER_FUNCTIONS;
 
 	static {
 		JSON_FACTORY = new JreJsonFactory();
 		MODEL_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		HEADER_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("EEE, MMM d");
-		HEADER_FUNCTIONS = new LinkedHashMap<>();
-		HEADER_FUNCTIONS.put(0, StorefrontUtils::headerIfRecent);
-		HEADER_FUNCTIONS.put(1, StorefrontUtils::headerIfYesterday);
-		HEADER_FUNCTIONS.put(2, StorefrontUtils::headerIfToday);
-		HEADER_FUNCTIONS.put(3, StorefrontUtils::headerIfThisWeekBeforeYesterday);
-		HEADER_FUNCTIONS.put(4, StorefrontUtils::headerIfThisWeekStartingTomorrow);
-		HEADER_FUNCTIONS.put(5, StorefrontUtils::headerIfUpcoming);
+		HEADER_FUNCTIONS = Arrays.asList(
+				StorefrontItemHeaderGenerator::headerIfRecent,
+				StorefrontItemHeaderGenerator::headerIfYesterday,
+				StorefrontItemHeaderGenerator::headerIfToday,
+				StorefrontItemHeaderGenerator::headerIfThisWeekBeforeYesterday,
+				StorefrontItemHeaderGenerator::headerIfThisWeekStartingTomorrow,
+				StorefrontItemHeaderGenerator::headerIfUpcoming);
 	}
 
 	public static JsonObject computeEntriesWithHeader(List<Order> orders, boolean showPrevious) {
@@ -58,11 +58,10 @@ public class StorefrontUtils {
 		boolean[] usedGroups = new boolean[HEADER_FUNCTIONS.size()];
 		int used = 0;
 		ordersLoop: for (Order order : orders) {
-			for (Map.Entry<Integer, BiFunction<String, Boolean, Optional<StorefrontItemHeader>>> functionEntry :
-					HEADER_FUNCTIONS.entrySet()) {
-				Optional<StorefrontItemHeader> header = functionEntry.getValue().apply(order.getDate(), showPrevious);
-				if (!usedGroups[functionEntry.getKey()] && header.isPresent()) {
-					usedGroups[functionEntry.getKey()] = true;
+			for (int i = 0; i < HEADER_FUNCTIONS.size(); i++) {
+				Optional<StorefrontItemHeader> header = HEADER_FUNCTIONS.get(i).apply(order.getDate(), showPrevious);
+				if (!usedGroups[i] && header.isPresent()) {
+					usedGroups[i] = true;
 					result.put(order.getId(), header.get());
 					if (++used == HEADER_FUNCTIONS.size()) {
 						break ordersLoop;
