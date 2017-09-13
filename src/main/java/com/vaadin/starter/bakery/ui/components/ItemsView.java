@@ -8,7 +8,7 @@ import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.flow.event.ComponentEventListener;
 import com.vaadin.starter.bakery.ui.BakerySearch;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.HasClickListeners;
+import com.vaadin.ui.HasClickListeners.ClickEvent;
 
 import java.util.function.Consumer;
 
@@ -31,7 +31,7 @@ public class ItemsView extends PolymerTemplate<ItemsView.Model> {
 		searchBar.addFilterChangeListener((filter, showPrevious) -> consumer.accept(filter));
 	}
 
-	public void addActionClickListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {
+	public void addActionClickListener(ComponentEventListener<ClickEvent<Button>> listener) {
 		searchBar.addActionClickListener(listener);
 	}
 

@@ -79,6 +79,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		searchBar.addFilterChangeListener(this::filterItems);
 		searchBar.addActionClickListener(e -> getElement().callFunction("_openNewOrderDialog"));
 
+		getModel().setProducts(productProvider.findAll());
 		filterItems(searchBar.getFilter(), searchBar.getShowPrevious());
 	}
 
