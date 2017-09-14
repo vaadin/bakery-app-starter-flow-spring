@@ -11,9 +11,6 @@ import org.springframework.web.WebApplicationInitializer;
  * Spring boot web appplication initializer.
  * <p>
  * The initializer registers the {@link BakeryServlet} Vaadin servlet.
- *
- * @author Vaadin Ltd
- *
  */
 @SpringBootApplication
 /*

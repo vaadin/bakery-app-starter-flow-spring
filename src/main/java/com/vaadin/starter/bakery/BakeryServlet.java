@@ -27,10 +27,8 @@ import com.vaadin.starter.bakery.ui.AccessDeniedView;
 import com.vaadin.starter.bakery.ui.NotFoundView;
 
 /**
+ * 
  * The main servlet for the application.
- *
- *
- * @author Vaadin Ltd
  *
  */
 @VaadinServletConfiguration(routerConfigurator = SpringAwareConfigurator.class, productionMode = false)

@@ -57,9 +57,6 @@ import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_OKBUTTON_CA
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_OKBUTTON_DELETE;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_USERS;
 
-/**
- * @author Vaadin Ltd
- */
 @Tag("bakery-users")
 @HtmlImport("frontend://src/users/bakery-users.html")
 @Route(PAGE_USERS + "/{id}")
