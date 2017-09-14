@@ -27,6 +27,8 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
 import elemental.json.JsonObject;
 
+import static com.vaadin.starter.bakery.ui.utils.StorefrontItemHeaderGenerator.computeEntriesWithHeader;
+
 @Tag("bakery-storefront")
 @HtmlImport("frontend://src/storefront/bakery-storefront.html")
 @Route(BakeryConst.PAGE_STOREFRONT)
@@ -80,7 +82,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		// the hardcoded limit of 200 is here until lazy loading is implemented (see
 		// BFF-120)
 		PageRequest pr = new PageRequest(0, 200, Direction.ASC, "dueDate", "dueTime", "id");
-		getModel().setOrders(ordersProvider.getOrdersList(filter, showPrevious, pr).getOrders());
+		setOrders(ordersProvider.getOrdersList(filter, showPrevious, pr).getOrders(), showPrevious);
 	}
 
 	@ClientDelegate
@@ -104,8 +106,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 			getModel().getOrders().set(idx, ordersProvider.getOrder(orderId));
 		} catch (Exception e) {
 			// exclude the order from the model if ordersProvider.getOrder() throws
-			getModel().setOrders(getModel().getOrders().stream().filter(order -> !order.getId().equals(orderId))
-					.collect(Collectors.toList()));
+			setOrders(getModel().getOrders().stream().filter(order -> !order.getId().equals(orderId))
+					.collect(Collectors.toList()), false);
 		}
 	}
 
@@ -118,5 +120,10 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 			}
 		}
 		return -1;
+	}
+
+	private void setOrders(List<Order> orders, boolean showPrevious) {
+		getModel().setOrders(orders);
+		getElement().setPropertyJson("displayedHeaders", computeEntriesWithHeader(orders, showPrevious));
 	}
 }

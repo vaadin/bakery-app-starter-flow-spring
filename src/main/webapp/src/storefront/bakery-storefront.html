@@ -73,8 +73,8 @@
           <template>
             <div class="flex justify-center">
               <storefront-item-detail-wrapper
-                  header="[[_getHeader(item.date)]]"
-                  display-header="[[_displayHeader(item.id,_displayedHeadersList)]]"
+                  header="[[_getHeader(item.id)]]"
+                  display-header="[[_displayHeader(item.id,displayedHeaders)]]"
                   order="[[item]]"
                   selected="[[_isSelected(item,_selectedItem)]]"
                   on-opened="_selectItem"
@@ -122,102 +122,24 @@
           },
           _selectedItem: Object,
           _editableItem: Object,
-          _displayedHeadersList: {
-            type: Object,
-            value: function() { 
-              return {};
-            }
-          },
-          _usedGroups: Array
+          displayedHeaders: {
+            type: Object
+          }
         };
-      }
-
-      static get observers() {
-        return [
-          '_updatedisplayedHeadersList(orders.*)'
-        ];
       }
 
       /*
        * Setting headers for each storefront-item-detail-wrapper based on their date.
        */
-      _getHeader(date) {
-        var header = {};
-        if (this._isRecent(date)) {
-          header['main'] = 'Recent';
-          header['secondary'] = 'Before this week';
-
-        } else if (this._isYesterday(date)) {
-          header['main'] = 'Yesterday';
-          header['secondary'] = this._getHeaderDay(date);
-
-        } else if (this._isToday(date)) {
-          header['main'] = 'Today';
-          header['secondary'] = this._getHeaderDay(date);
-
-        } else if (this._isThisWeekBeforeYesterday(date)) {
-          header['main'] = 'This Week Before Yesterday';
-          header['secondary'] = this._getWeekRangeBefore(date);
-
-        } else if (this._isThisWeekStartingTomorrow(date)) {
-          // If previous orders are shown two 'this week' groups are displayed, so the name is changed.
-          // TODO(sayo-vaadin): Remove when https://github.com/vaadin/flow/issues/2327 is resolved.
-          // Wait briefly for showPrevious to get synchronized.
-          setTimeout(() => header['main'] = (!this.showPrevious) ? 'This week' : 'This Week Starting Tomorrow', 1);
-          header['secondary'] = this._getWeekRangeAfter(date);
-
-        } else if (this._isUpcoming(date)) {
-          header['main'] = 'Upcoming';
-          header['secondary'] = 'After this week';
-        }
-
-        return header;
+      _getHeader(id) {
+        return this.displayedHeaders[id];
       }
 
       /*
-       * Updating _displayedHeadersList associative array (structure: {'orderID':'headerDisplayed'}).
-       */
-      _updatedisplayedHeadersList(change) {
-        const currentList = change.base;
-        if (!currentList) {
-          return;
-        }
-
-        const newHeadersList = {};
-        // _usedGroups is used for checking which header was used and should not be displayed ('Recent', 'Yesterday' etc.)
-        this._usedGroups = [false, false, false, false, false, false];
-
-        currentList.forEach((item) => {
-          if (!this._usedGroups[0] && this._isRecent(item.date)) {
-            newHeadersList[item.id] = this._usedGroups[0] = true;
-
-          } else if (!this._usedGroups[1] && this._isYesterday(item.date)) {
-            newHeadersList[item.id] = this._usedGroups[1] = true;
-
-          } else if (!this._usedGroups[2] && this._isToday(item.date)) {
-            newHeadersList[item.id] = this._usedGroups[2] = true;
-
-          } else if (!this._usedGroups[3] && this._isThisWeekBeforeYesterday(item.date) ) {
-            newHeadersList[item.id] = this._usedGroups[3] = true;
-
-          } else if (!this._usedGroups[4] && this._isThisWeekStartingTomorrow(item.date)) {
-            newHeadersList[item.id] = this._usedGroups[4] = true;
-
-          } else if (!this._usedGroups[5] && this._isUpcoming(item.date)) {
-            newHeadersList[item.id] = this._usedGroups[5] = true;
-
-          } else {
-            newHeadersList[item.id] = false;
-          }
-        });
-        this._displayedHeadersList = newHeadersList;
-      }
-
-      /*
-       * Check from _displayedHeadersList if header should be displayed in this order element.
+       * Check from displayedHeaders if header should be displayed in this order element.
        */
       _displayHeader(orderID) {
-        return orderID && this._displayedHeadersList[orderID];
+        return orderID && this.displayedHeaders[orderID];
       }
 
       _openNewOrderDialog() {
