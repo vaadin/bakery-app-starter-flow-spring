@@ -6,7 +6,7 @@
 
 <link rel="import" href="../app/bakery-search.html">
 <link rel="import" href="storefront-item-detail-wrapper.html">
-<link rel="import" href="storefront-item-edit-wrapper.html">
+
 <link rel="import" href="order-edit-wrapper.html">
 
 <link rel="import" href="../elements/utils-mixin.html">
@@ -107,7 +107,7 @@
           <storefront-item-detail item="[[_selectedItem]]" on-close="_unselectItem" on-edit="_onEdit" desktop-view="[[desktopView]]"></storefront-item-detail>
         </item-detail-dialog>
       </template>
-      <order-edit-wrapper id="order-edit" desktop-view$=[[desktopView]] opened=[[editing]] on-close="closeEditor"></order-edit-wrapper> 
+      <order-edit-wrapper id="order-edit-wrapper" desktop-view$=[[desktopView]] opened=[[editing]] on-close="closeEditor"></order-edit-wrapper> 
     </div>
 
   </template>
@@ -122,7 +122,8 @@
         return {
           desktopView: Boolean,
           orders: {
-            type: Array
+            type: Array,
+            notify: true
           },
           touchScrolling: {
             type: Boolean,

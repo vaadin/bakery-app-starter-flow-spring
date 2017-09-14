@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.vaadin.annotations.Id;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -79,7 +80,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 		void setEditing(boolean editing);
 	}
-
 	@Id("search")
 	private BakerySearch searchBar;
 
@@ -187,10 +187,5 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 			}
 		}
 		return -1;
-	}
-
-	private void setOrders(List<Order> orders, boolean showPrevious) {
-		getModel().setOrders(orders);
-		getElement().setPropertyJson("displayedHeaders", computeEntriesWithHeader(orders, showPrevious));
 	}
 }
