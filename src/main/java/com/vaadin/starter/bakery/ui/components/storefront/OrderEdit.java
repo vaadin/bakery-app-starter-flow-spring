@@ -103,6 +103,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 	public void init(User currentUser, Collection<Product> availableProducts, Runnable onSave, Runnable onCancel) {
 		this.onSave = onSave;
 		this.onCancel = onCancel;
+		this.currentUser = currentUser;
 
 		items.setProducts(availableProducts);
 	}
