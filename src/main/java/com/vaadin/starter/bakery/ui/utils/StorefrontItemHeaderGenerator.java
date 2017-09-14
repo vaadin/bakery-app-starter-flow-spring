@@ -37,14 +37,13 @@ public class StorefrontItemHeaderGenerator {
 	public static JsonObject computeEntriesWithHeader(List<Order> orders, boolean showPrevious) {
 		Map<String, StorefrontItemHeader> result = new HashMap<>(HEADER_FUNCTIONS.size());
 		boolean[] usedGroups = new boolean[HEADER_FUNCTIONS.size()];
-		int used = 0;
 		ordersLoop: for (Order order : orders) {
 			for (int i = 0; i < HEADER_FUNCTIONS.size(); i++) {
 				Optional<StorefrontItemHeader> header = HEADER_FUNCTIONS.get(i).apply(order.getDate(), showPrevious);
 				if (!usedGroups[i] && header.isPresent()) {
 					usedGroups[i] = true;
 					result.put(order.getId(), header.get());
-					if (++used == HEADER_FUNCTIONS.size()) {
+					if (i == usedGroups.length - 1) {
 						break ordersLoop;
 					}
 					break;
