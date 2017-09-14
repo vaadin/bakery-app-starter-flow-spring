@@ -14,6 +14,7 @@ import com.vaadin.flow.html.H2;
 import com.vaadin.flow.html.Span;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
+import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
@@ -93,10 +94,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 		binder.forField(customerNumber).bind("customer.phoneNumber");
 		binder.forField(customerDetails).bind("customer.details");
 		binder.forField(items).bind("items");
-		items.setOnTotalPriceChanged((totalPrice) -> {
-			editFooter.updatePrice(totalPrice);
-		});
-
+		items.addPriceChangeListener(e -> editFooter.updatePrice(e.getTotalPrice()));
 
 	}
 
@@ -109,7 +107,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 	}
 
 	public void close() {
-		items.close();
+		items.reset();
 	}
 	
 	public interface Model extends TemplateModel {

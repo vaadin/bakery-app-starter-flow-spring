@@ -11,10 +11,13 @@ import java.util.function.IntConsumer;
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Tag;
 import com.vaadin.components.data.HasValue;
+import com.vaadin.flow.event.ComponentEventListener;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
+import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
+import com.vaadin.ui.ComponentEvent;
 
 /**
  * @author tulio
@@ -31,11 +34,9 @@ public class OrderItemsEdit extends PolymerTemplate<TemplateModel> implements Ha
 	private List<OrderItemEdit> editors = new ArrayList<>(5);
 	
 	private ProductSource productSource;
-
-	private IntConsumer onTotalPriceChanged;
 	
 	
-	public void close() {
+	public void reset() {
 		editors.forEach(i -> getElement().removeChild(i.getElement()));
 		editors.clear();
 		if(items != null)
@@ -45,13 +46,13 @@ public class OrderItemsEdit extends PolymerTemplate<TemplateModel> implements Ha
 	
 	void setProducts(Collection<Product> products) {
 		this.productSource = new ProductSource(products);
-		createEmptyElement();
 	}
 
 	@Override
 	public void setValue(List<OrderItem> items) {
+		reset();
 		this.items = items;
-		getElement().removeChild(empty.getElement());
+
 		if(items != null) {
 			items.forEach(i -> {
 				OrderItemEdit editor = new OrderItemEdit(this, productSource);
@@ -60,7 +61,7 @@ public class OrderItemsEdit extends PolymerTemplate<TemplateModel> implements Ha
 				getElement().appendChild(editor.getElement());
 			});
 		}
-		getElement().appendChild(empty.getElement());
+		createEmptyElement();
 	}
 
 	@Override
@@ -88,7 +89,7 @@ public class OrderItemsEdit extends PolymerTemplate<TemplateModel> implements Ha
 	void priceChanged() {
 		Integer totalPrice = items.stream().filter(o -> o != null && o.getProduct() != null)
 				.mapToInt(o -> o.getProduct().getPrice() * o.getQuantity()).sum();
-		onTotalPriceChanged.accept(totalPrice);
+		fireEvent(new PriceChangeEvent(totalPrice));
 	}
 
 	void deleteItem(OrderItemEdit item) {
@@ -107,8 +108,20 @@ public class OrderItemsEdit extends PolymerTemplate<TemplateModel> implements Ha
 		getElement().appendChild(empty.getElement());
 	}
 
-	public void setOnTotalPriceChanged(IntConsumer onTotalPriceChanged) {
-		this.onTotalPriceChanged = onTotalPriceChanged;
+	public Registration addPriceChangeListener(ComponentEventListener<PriceChangeEvent> listener)  {
+		return addListener(PriceChangeEvent.class, listener);
 	}
 
+	public class PriceChangeEvent extends ComponentEvent<OrderItemsEdit> {
+
+		private final Integer totalPrice;
+		PriceChangeEvent(Integer totalPrice) {
+			super(OrderItemsEdit.this, false);
+			this.totalPrice = totalPrice;
+		}
+		public Integer getTotalPrice() {
+			return totalPrice;
+		}
+		
+	}
 }
