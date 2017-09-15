@@ -8,14 +8,17 @@ import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Id;
 import com.vaadin.annotations.Include;
 import com.vaadin.annotations.Tag;
-import com.vaadin.flow.html.Div;
+import com.vaadin.flow.event.ComponentEventListener;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
+import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.ui.converters.LocalDateConverter;
 import com.vaadin.starter.bakery.ui.converters.LocalTimeConverter;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
+import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.ComponentEvent;
 
 /**
  * @author tulio
@@ -25,32 +28,27 @@ import com.vaadin.ui.Button;
 @HtmlImport("frontend://src/storefront/order-detail.html")
 public class OrderDetail extends PolymerTemplate<OrderDetail.Model> {
 
-	@Id("footer")
-	private Div footer;
-
 	private Order order;
 
-	private ReviewFooter reviewFooter;
+	@Id("back")
+	private Button back;
 
-	private Runnable onBack;
-	private Runnable onSave;
+	@Id("save")
+	private Button save;
 
 	public OrderDetail() {
-		reviewFooter = new ReviewFooter(()->this.onBack.run(), ()->this.onSave.run());
-		footer.add(reviewFooter);
+		back.addClickListener(e -> fireEvent(new BackEvent()));
+		save.addClickListener(e -> fireEvent(new SaveEvent()));
 	}
 
-	public void display(Order order, Runnable onBack, Runnable onSave) {
+	public void display(Order order) {
 		this.order = order;
-		this.onBack = onBack;
-		this.onSave = onSave;
-
 	}
 
 	void onReview() {
 		getModel().setReview(true);
 		getModel().setItem(order);
-		reviewFooter.updatePrice(order.getTotalPrice());
+		getModel().setTotalPrice(FormattingUtils.formatAsCurrency(order.getTotalPrice()));
 	}
 
 	public interface Model extends TemplateModel {
@@ -64,21 +62,30 @@ public class OrderDetail extends PolymerTemplate<OrderDetail.Model> {
 		void setItem(Order order);
 
 		void setReview(boolean review);
+
+		void setTotalPrice(String totalPrice);
 	}
-}
 
-@Tag("order-edit-review-footer")
-@HtmlImport("frontend://src/storefront/order-edit-review-footer.html")
-class ReviewFooter extends Footer {
-
-	@Id("back")
-	private Button back;
-
-	@Id("save")
-	private Button save;
-
-	public ReviewFooter(Runnable onBack, Runnable onSave) {
-		back.addClickListener(e -> onBack.run());
-		save.addClickListener(e -> onSave.run());
+	public Registration addSaveListener(ComponentEventListener<SaveEvent> listener) {
+		return addListener(SaveEvent.class, listener);
 	}
+
+	public Registration addBackListener(ComponentEventListener<BackEvent> listener) {
+		return addListener(BackEvent.class, listener);
+	}
+
+	public class SaveEvent extends ComponentEvent<OrderDetail> {
+
+		SaveEvent() {
+			super(OrderDetail.this, false);
+		}
+	}
+
+	public class BackEvent extends ComponentEvent<OrderDetail> {
+
+		BackEvent() {
+			super(OrderDetail.this, false);
+		}
+	}
+
 }

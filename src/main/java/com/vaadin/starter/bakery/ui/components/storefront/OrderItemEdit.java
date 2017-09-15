@@ -56,17 +56,19 @@ public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements Has
 		this.amount.setDisabled(true);
 		productSource.setupBeanComboBox(products);
 		products.addChangeListener(e -> {
+			if (this.amount.getValue() == null) {
+				this.amount.setDisabled(false);
+				this.amount.setValue(1);
+			}
 			fireEvent(new ProductChangeEvent(productSource.getProductByName(products.getValue())));
 			this.setPrice();
-			this.amount.setDisabled(false);
-			this.amount.setValue(1);
 		});
+		amount.addValueChangeListener(e -> this.setPrice());
 
 		// Bind with getter/setters to avoid required validation.
 		binder.forField(products).withConverter(productSource).bind(OrderItem::getProduct, OrderItem::setProduct);
 
 		binder.forField(amount).bind("quantity");
-		amount.addValueChangeListener(e -> this.setPrice());
 
 		binder.forField(comment).bind("comment");
 
@@ -75,6 +77,7 @@ public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements Has
 	}
 
 	private void setPrice() {
+
 		Integer selectedAmount = amount.getValue();
 		Product product = productSource.getProductByName(products.getValue());
 		int totalPrice = 0;
@@ -112,6 +115,7 @@ public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements Has
 	public Registration addProductChangeListener(ComponentEventListener<ProductChangeEvent> listener) {
 		return addListener(ProductChangeEvent.class, listener);
 	}
+
 	public Registration addDeleteListener(ComponentEventListener<DeleteEvent> listener) {
 		return addListener(DeleteEvent.class, listener);
 	}

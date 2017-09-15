@@ -42,7 +42,7 @@ public class OrderItem extends AbstractEntity {
 		this.comment = comment;
 	}
 
-	int getTotalPrice() {
+	public int getTotalPrice() {
 		if(quantity != null && product != null) {
 			return quantity * product.getPrice();
 		} else {

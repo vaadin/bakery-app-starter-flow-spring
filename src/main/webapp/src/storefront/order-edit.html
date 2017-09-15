@@ -84,7 +84,7 @@
     
             <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 3, 1)]]" colspan="3">
 
-              <vaadin-text-field id="customer-name" label="Customer" colspan="2" value="{{item.customer.name}}"
+              <vaadin-text-field id="customer-name" label="Customer" colspan="2"
                 required>
                 <iron-icon slot="prefix" icon="valo:user"></iron-icon>
               </vaadin-text-field>
@@ -105,7 +105,11 @@
         </form>
       </iron-form>
     </div>
-    <div id="footer" class="footer" ></div>
+    <div id="footer" class="footer">
+          <vaadin-button id="cancel">Cancel</vaadin-button>
+         <div class="total money">Total [[totalPrice]]</div>
+         <vaadin-button id="review" theme="primary">Review Order →</vaadin-button>
+    </div>
 
   </template>
 

@@ -9,9 +9,8 @@ import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Id;
 import com.vaadin.annotations.Tag;
 import com.vaadin.data.BeanValidationBinder;
-import com.vaadin.flow.html.Div;
+import com.vaadin.flow.event.ComponentEventListener;
 import com.vaadin.flow.html.H2;
-import com.vaadin.flow.html.Span;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.shared.Registration;
@@ -24,6 +23,7 @@ import com.vaadin.starter.bakery.ui.converters.LocalTimeConverter;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.ComponentEvent;
 import com.vaadin.ui.DatePicker;
 import com.vaadin.ui.TextField;
 
@@ -59,24 +59,16 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 	@Id("items")
 	private OrderItemsEdit items;
 
-	@Id("footer")
-	private Div footer;
-
-	private EditFooter editFooter;
-
-	private Runnable onSave;
-	private Runnable onCancel;
+	@Id("cancel")
+	private Button cancel;
+	
+	@Id("review")
+	private Button review;
 
 	public OrderEdit() {
-		Runnable validateAndSave = () -> {
-			if (binder.isValid()) {
-				this.onSave.run();
-			} else {
-				toast("Please fill out all required fields before proceeding");
-			}
-		};
-		editFooter = new EditFooter(() -> this.onCancel.run(), validateAndSave);
-		footer.getElement().appendChild(editFooter.getElement());
+		cancel.addClickListener(e -> fireEvent(new CancelEvent()));
+		review.addClickListener(e -> fireEvent(new ReviewEvent()));
+
 		status.setItems(Arrays.stream(OrderState.values()).map(OrderState::getDisplayName));
 		binder.forField(status).withConverter(new OrderStateConverter()).bind(Order::getState,
 				(o, s) -> o.changeState(currentUser, s));
@@ -94,13 +86,11 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 		binder.forField(customerNumber).bind("customer.phoneNumber");
 		binder.forField(customerDetails).bind("customer.details");
 		binder.forField(items).bind("items");
-		items.addPriceChangeListener(e -> editFooter.updatePrice(e.getTotalPrice()));
-
+		items.addPriceChangeListener(e -> getModel().setTotalPrice(FormattingUtils.formatAsCurrency(e.getTotalPrice())));
+		binder.addStatusChangeListener(e -> getModel().setValid(!e.hasValidationErrors()));
 	}
 
-	public void init(User currentUser, Collection<Product> availableProducts, Runnable onSave, Runnable onCancel) {
-		this.onSave = onSave;
-		this.onCancel = onCancel;
+	public void init(User currentUser, Collection<Product> availableProducts) {
 		this.currentUser = currentUser;
 
 		items.setProducts(availableProducts);
@@ -109,11 +99,14 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 	public void close() {
 		items.reset();
 	}
-	
+
 	public interface Model extends TemplateModel {
 
 		void setOpened(boolean opened);
 
+		void setValid(boolean valid);
+		
+		void setTotalPrice(String totalPrice);
 	}
 
 	public void setEditableItem(Order order) {
@@ -122,31 +115,28 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 		boolean newOrder = order.getId() == null;
 		title.setText(String.format("%s order", newOrder ? "New" : "Edit"));
 	}
-}
 
-abstract class Footer extends PolymerTemplate<Footer.Model> {
-
-	void updatePrice(int newPrice) {
-		getModel().setPrice(FormattingUtils.formatAsCurrency(newPrice));
+	public Registration addReviewListener(ComponentEventListener<ReviewEvent> listener) {
+		return addListener(ReviewEvent.class, listener);
 	}
 
-	public interface Model extends TemplateModel {
-		void setPrice(String price);
+	public Registration addCancelListener(ComponentEventListener<CancelEvent> listener) {
+		return addListener(CancelEvent.class, listener);
 	}
+
+	public class ReviewEvent extends ComponentEvent<OrderEdit> {
+
+		ReviewEvent() {
+			super(OrderEdit.this, false);
+		}
+	}
+
+	public class CancelEvent extends ComponentEvent<OrderEdit> {
+
+		CancelEvent() {
+			super(OrderEdit.this, false);
+		}
+	}
+
 }
 
-@Tag("order-edit-edit-footer")
-@HtmlImport("frontend://src/storefront/order-edit-edit-footer.html")
-class EditFooter extends Footer {
-
-	@Id("cancel")
-	private Button cancel;
-
-	@Id("review")
-	private Button review;
-
-	public EditFooter(Runnable onCancel, Runnable onReview) {
-		cancel.addClickListener(e -> onCancel.run());
-		review.addClickListener(e -> onReview.run());
-	}
-}

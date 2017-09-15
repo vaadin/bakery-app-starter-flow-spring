@@ -108,7 +108,18 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 		getModel().setProducts(productProvider.findAll());
 		filterItems(searchBar.getFilter(), searchBar.getShowPrevious());
+	}
 
+	@ClientDelegate
+	private void onSave(JsonObject order) {
+		try {
+			ordersProvider.save(order);
+		} catch (Exception e) {
+			getLogger().debug("There was a problem while saving the order", e);
+			toast("Order was not saved", true);
+		} finally {
+			getElement().callFunction("_onFiltersChanged");
+		}
 	}
 
 	private void filterItems(String filter, boolean showPrevious) {
