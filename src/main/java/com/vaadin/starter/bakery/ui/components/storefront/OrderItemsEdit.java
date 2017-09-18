@@ -20,12 +20,11 @@ import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
 import com.vaadin.ui.ComponentEvent;
-import com.vaadin.ui.HasValidation;
 
 @Tag("order-items-edit")
 @HtmlImport("frontend://src/storefront/order-items-edit.html")
 public class OrderItemsEdit extends PolymerTemplate<OrderItemsEdit.Model>
-		implements HasValue<OrderItemsEdit, List<OrderItem>>,HasValidation {
+		implements HasValue<OrderItemsEdit, List<OrderItem>>{
 
 	private OrderItemEdit empty;
 
@@ -38,10 +37,6 @@ public class OrderItemsEdit extends PolymerTemplate<OrderItemsEdit.Model>
 	private ProductSource productSource;
 
 	private int totalPrice = 0;
-
-	private String errorMessage;
-	
-	private boolean invalid;
 	
 	public interface Model extends TemplateModel {
 		void setTotalPrice(Integer total);
@@ -170,22 +165,6 @@ public class OrderItemsEdit extends PolymerTemplate<OrderItemsEdit.Model>
 			return totalPrice;
 		}
 
-	}
-
-	public String getErrorMessage() {
-		return errorMessage;
-	}
-
-	public void setErrorMessage(String errorMessage) {
-		this.errorMessage = errorMessage;
-	}
-
-	public boolean isInvalid() {
-		return invalid;
-	}
-
-	public void setInvalid(boolean invalid) {
-		this.invalid = invalid;
 	}
 
 }
