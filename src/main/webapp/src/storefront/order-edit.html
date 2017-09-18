@@ -134,11 +134,11 @@
 
       ready() {
         super.ready();
-        this.$.status.$.input.setAttribute('theme','status');
+        this.$.status.$.input.setAttribute('theme', 'status');
       }
 
       _onStatusChange() {
-        this.$.status.$.input.setAttribute('status',this.status);
+        this.$.status.$.input.setAttribute('status', this.status);
       }
 
       _computeResponsiveSteps(desktopView, desktopColumns, mobileColumns) {

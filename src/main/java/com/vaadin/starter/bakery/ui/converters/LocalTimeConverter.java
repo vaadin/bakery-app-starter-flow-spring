@@ -3,7 +3,14 @@ package com.vaadin.starter.bakery.ui.converters;
 import static com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil.convertIfNotNull;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
+import java.time.format.SignStyle;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Scanner;
 
 import com.vaadin.data.Result;
 import com.vaadin.data.ValueContext;
@@ -12,28 +19,42 @@ import com.vaadin.starter.bakery.ui.converters.binder.BinderConverter;
 
 public class LocalTimeConverter implements ModelConverter<LocalTime, String>, BinderConverter<String, LocalTime> {
 
+	public static final DateTimeFormatter formatter;
+
+	static {
+		Map<Long, String> ampm = new HashMap<>();
+		ampm.put(0L, "a.m.");
+		ampm.put(1L, "p.m.");
+		formatter = new DateTimeFormatterBuilder().parseCaseInsensitive().parseLenient()
+				.appendValue(java.time.temporal.ChronoField.HOUR_OF_DAY, 1, 2, SignStyle.NOT_NEGATIVE)
+				.appendLiteral(':').appendValue(java.time.temporal.ChronoField.MINUTE_OF_HOUR, 2).optionalStart()
+				.appendLiteral(' ').optionalEnd().appendText(java.time.temporal.ChronoField.AMPM_OF_DAY, ampm)
+				.toFormatter();
+	}
+
 	@Override
 	public String toPresentation(LocalTime modelValue) {
-		return convertIfNotNull(modelValue, LocalTime::toString);
+		return convertIfNotNull(modelValue, formatter::format);
 	}
 
 	@Override
 	public LocalTime toModel(String presentationValue) {
-		return convertIfNotNull(presentationValue, LocalTime::parse);
+		return convertIfNotNull(presentationValue, p -> LocalTime.parse(p, formatter));
 	}
 
 	@Override
 	public Result<LocalTime> convertToModelIfNotNull(String arg0, ValueContext arg1) {
 		try {
-			return Result.ok(LocalTime.parse(arg0));
+			return Result.ok(toModel(arg0));
 		} catch (DateTimeParseException e) {
 			return Result.error("Invalid time");
 		}
+
 	}
 
 	@Override
 	public String convertToPresentationIfNotNull(LocalTime arg0, ValueContext arg1) {
-		return arg0.toString();
+		return toPresentation(arg0);
 	}
 
 }

@@ -4,6 +4,7 @@ import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import com.vaadin.annotations.Convert;
 import com.vaadin.annotations.HtmlImport;
@@ -88,8 +89,11 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 				(o, s) -> o.changeState(currentUser, s));
 		binder.forField(date).bind("dueDate");
 
-		time.setItems(IntStream.rangeClosed(8, 16).mapToObj(i -> LocalTime.of(i, 0).toString()));
-		binder.forField(time).withConverter(new LocalTimeConverter()).bind("dueTime");
+		final LocalTimeConverter localTimeConverter = new LocalTimeConverter();
+		final Stream<String> defaultTimes = IntStream.rangeClosed(8, 16)
+				.mapToObj(i -> localTimeConverter.toPresentation(LocalTime.of(i, 0)));
+		time.setItems(defaultTimes);
+		binder.forField(time).withConverter(localTimeConverter).bind("dueTime");
 
 		pickupLocation.setItems("Bakery", "Store");
 		binder.forField(pickupLocation).bind("pickupLocation.name");
