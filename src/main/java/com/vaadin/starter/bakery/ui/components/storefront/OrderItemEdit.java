@@ -50,6 +50,8 @@ public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements Has
 
 	private ProductSource productSource;
 
+	private int totalPrice;
+
 	public OrderItemEdit(OrderItemsEdit parent, ProductSource productSource) {
 
 		this.productSource = productSource;
@@ -72,20 +74,22 @@ public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements Has
 
 		binder.forField(comment).bind("comment");
 
-		delete.addClickListener(e -> fireEvent(new DeleteEvent()));
+		delete.addClickListener(e -> fireEvent(new DeleteEvent(totalPrice)));
 		this.setPrice();
 	}
 
 	private void setPrice() {
-
+		int oldValue = totalPrice;
 		Integer selectedAmount = amount.getValue();
 		Product product = productSource.getProductByName(products.getValue());
-		int totalPrice = 0;
+		totalPrice = 0;
 		if (selectedAmount != null && product != null) {
 			totalPrice = selectedAmount * product.getPrice();
 		}
 		this.price.setText(FormattingUtils.formatAsCurrency(totalPrice));
-		fireEvent(new PriceChangeEvent(totalPrice));
+		if (oldValue != totalPrice) {
+			fireEvent(new PriceChangeEvent(oldValue, totalPrice));
+		}
 	}
 
 	@Override
@@ -122,15 +126,22 @@ public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements Has
 
 	public class PriceChangeEvent extends ComponentEvent<OrderItemEdit> {
 
-		private final Integer totalPrice;
+		private final int oldValue;
 
-		PriceChangeEvent(Integer totalPrice) {
+		private final int newValue;
+
+		public PriceChangeEvent(int oldValue, int newValue) {
 			super(OrderItemEdit.this, false);
-			this.totalPrice = totalPrice;
+			this.oldValue = oldValue;
+			this.newValue = newValue;
 		}
 
-		public Integer getTotalPrice() {
-			return totalPrice;
+		public int getOldValue() {
+			return oldValue;
+		}
+
+		public int getNewValue() {
+			return newValue;
 		}
 
 	}
@@ -151,8 +162,17 @@ public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements Has
 	}
 
 	public class DeleteEvent extends ComponentEvent<OrderItemEdit> {
-		DeleteEvent() {
+
+		private final int totalPrice;
+
+		DeleteEvent(int totalPrice) {
 			super(OrderItemEdit.this, false);
+			this.totalPrice = totalPrice;
 		}
+
+		public int getTotalPrice() {
+			return totalPrice;
+		}
+
 	}
 }

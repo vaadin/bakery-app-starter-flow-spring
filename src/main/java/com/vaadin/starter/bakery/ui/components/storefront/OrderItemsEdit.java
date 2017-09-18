@@ -3,10 +3,9 @@
  */
 package com.vaadin.starter.bakery.ui.components.storefront;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.function.IntConsumer;
 
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Tag;
@@ -28,11 +27,13 @@ public class OrderItemsEdit extends PolymerTemplate<OrderItemsEdit.Model>
 
 	private List<OrderItem> items;
 
-	private List<OrderItemEdit> editors = new ArrayList<>(5);
+	private List<OrderItemEdit> editors = new LinkedList<>();
 
-	private List<Registration> registrations = new ArrayList<>(5);
+	private List<Registration> registrations = new LinkedList<>();
 
 	private ProductSource productSource;
+
+	private int totalPrice = 0;
 
 	public interface Model extends TemplateModel {
 		void setTotalPrice(Integer total);
@@ -48,6 +49,7 @@ public class OrderItemsEdit extends PolymerTemplate<OrderItemsEdit.Model>
 		if (items != null)
 			items.clear();
 		getElement().removeAllChildren();
+		this.totalPrice = 0;
 	}
 
 	void setProducts(Collection<Product> products) {
@@ -69,10 +71,10 @@ public class OrderItemsEdit extends PolymerTemplate<OrderItemsEdit.Model>
 
 	private OrderItemEdit createEditor(OrderItem value) {
 		OrderItemEdit editor = new OrderItemEdit(this, productSource);
-		editor.setValue(value);
 		editors.add(editor);
 		getElement().appendChild(editor.getElement());
-		Registration priceChangeRegistration = addRegistration(editor.addPriceChangeListener(e -> this.priceChanged()));
+		Registration priceChangeRegistration = addRegistration(
+				editor.addPriceChangeListener(e -> this.updateTotalPriceOnItemPriceChange(e.getOldValue(), e.getNewValue())));
 		Registration productChangeRegistration = addRegistration(
 				editor.addProductChangeListener(e -> this.productChanged(e.getSource(), e.getProduct())));
 		editor.addDeleteListener(e -> {
@@ -83,9 +85,10 @@ public class OrderItemsEdit extends PolymerTemplate<OrderItemsEdit.Model>
 				removeRegistration(priceChangeRegistration);
 				removeRegistration(productChangeRegistration);
 				getElement().removeChild(editor.getElement());
-				priceChanged();
+				updateTotalPriceOnItemPriceChange(e.getTotalPrice(), 0);
 			}
 		});
+		editor.setValue(value);
 		return editor;
 	}
 
@@ -98,7 +101,7 @@ public class OrderItemsEdit extends PolymerTemplate<OrderItemsEdit.Model>
 		registrations.add(r);
 		return r;
 	}
-	
+
 	@Override
 	public void setReadOnly(boolean readOnly) {
 		HasValue.super.setReadOnly(readOnly);
@@ -117,13 +120,12 @@ public class OrderItemsEdit extends PolymerTemplate<OrderItemsEdit.Model>
 			orderItem.setProduct(product);
 			items.add(orderItem);
 			item.setValue(orderItem);
-			priceChanged();
 		}
 	}
 
-	private void priceChanged() {
-		Integer totalPrice = items.stream().filter(o -> o != null && o.getProduct() != null)
-				.mapToInt(o -> o.getProduct().getPrice() * o.getQuantity()).sum();
+	private void updateTotalPriceOnItemPriceChange(int oldItemPrice, int newItemPrice) {
+		final int delta = newItemPrice - oldItemPrice;
+		totalPrice += delta;
 		fireEvent(new PriceChangeEvent(totalPrice));
 	}
 

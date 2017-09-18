@@ -65,6 +65,15 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 	@Id("review")
 	private Button review;
 
+	public interface Model extends TemplateModel {
+
+		void setOpened(boolean opened);
+
+		void setValid(boolean valid);
+
+		void setTotalPrice(String totalPrice);
+	}
+
 	public OrderEdit() {
 		cancel.addClickListener(e -> fireEvent(new CancelEvent()));
 		review.addClickListener(e -> fireEvent(new ReviewEvent()));
@@ -86,8 +95,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 		binder.forField(customerNumber).bind("customer.phoneNumber");
 		binder.forField(customerDetails).bind("customer.details");
 		binder.forField(items).bind("items");
-		items.addPriceChangeListener(
-				e -> getModel().setTotalPrice(FormattingUtils.formatAsCurrency(e.getTotalPrice())));
+		items.addPriceChangeListener(e -> setTotalPrice(e.getTotalPrice()));
 		binder.addStatusChangeListener(e -> getModel().setValid(!e.hasValidationErrors()));
 	}
 
@@ -99,15 +107,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 
 	public void close() {
 		items.reset();
-	}
-
-	public interface Model extends TemplateModel {
-
-		void setOpened(boolean opened);
-
-		void setValid(boolean valid);
-
-		void setTotalPrice(String totalPrice);
+		this.setTotalPrice(0);
 	}
 
 	public void setEditableItem(Order order) {
@@ -123,6 +123,10 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 
 	public Registration addCancelListener(ComponentEventListener<CancelEvent> listener) {
 		return addListener(CancelEvent.class, listener);
+	}
+
+	private void setTotalPrice(int totalPrice) {
+		getModel().setTotalPrice(FormattingUtils.formatAsCurrency(totalPrice));
 	}
 
 	public class ReviewEvent extends ComponentEvent<OrderEdit> {

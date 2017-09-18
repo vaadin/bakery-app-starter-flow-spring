@@ -1,16 +1,11 @@
 package com.vaadin.starter.bakery.ui.components;
 
-import static com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil.convertIfNotEmpty;
-import static com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil.convertIfNotNull;
-
 import com.vaadin.annotations.EventHandler;
 import com.vaadin.annotations.HtmlImport;
-import com.vaadin.annotations.Id;
 import com.vaadin.annotations.Tag;
 import com.vaadin.components.data.HasValue;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
-import com.vaadin.ui.TextField;
 
 /**
  * 
