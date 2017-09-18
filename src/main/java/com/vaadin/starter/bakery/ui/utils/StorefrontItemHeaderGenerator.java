@@ -89,7 +89,8 @@ public class StorefrontItemHeaderGenerator {
 		LocalDate yesterday = today.minusDays(1);
 		LocalDate thisWeekStart = today.minusDays(today.getDayOfWeek().getValue() - 1);
 		LocalDate currentDate = toDate(date);
-		return Optional.ofNullable(currentDate.isAfter(thisWeekStart) && currentDate.isBefore(yesterday) ?
+		return Optional.ofNullable((currentDate.equals(thisWeekStart) || currentDate.isAfter(thisWeekStart))
+				&& currentDate.isBefore(yesterday) ?
 				new StorefrontItemHeader("This week before yesterday",
 						secondaryHeaderFor(thisWeekStart, yesterday)) : null);
 	}
@@ -99,7 +100,8 @@ public class StorefrontItemHeaderGenerator {
 		LocalDate tomorrow = today.plusDays(1);
 		LocalDate nextWeekStart = today.minusDays(today.getDayOfWeek().getValue() - 1).plusWeeks(1);
 		LocalDate currentDate = toDate(date);
-		return Optional.ofNullable(currentDate.isAfter(tomorrow) && currentDate.isBefore(nextWeekStart) ?
+		return Optional.ofNullable((currentDate.equals(tomorrow) || currentDate.isAfter(tomorrow))
+				&& currentDate.isBefore(nextWeekStart) ?
 				new StorefrontItemHeader(showPrevious ? "This week starting tomorrow" : "This week",
 						secondaryHeaderFor(tomorrow, nextWeekStart)) : null);
 	}
