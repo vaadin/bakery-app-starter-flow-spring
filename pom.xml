@@ -243,7 +243,7 @@
             <id>lint</id>
             <activation>
                 <property>
-                    <name>!skipTests</name>
+                    <name>runLint</name>
                 </property>
             </activation>
             <build>
