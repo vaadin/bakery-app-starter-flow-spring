@@ -41,11 +41,8 @@ public class OrderDetail extends PolymerTemplate<OrderDetail.Model> {
 		save.addClickListener(e -> fireEvent(new SaveEvent()));
 	}
 
-	public void display(Order order) {
+	public void display(Order order,boolean review) {
 		this.order = order;
-	}
-
-	void onReview() {
 		getModel().setReview(true);
 		getModel().setItem(order);
 		getModel().setTotalPrice(FormattingUtils.formatAsCurrency(order.getTotalPrice()));

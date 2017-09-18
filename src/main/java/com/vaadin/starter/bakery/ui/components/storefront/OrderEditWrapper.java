@@ -43,7 +43,7 @@ public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 		this.order = order;
 		orderEdit.init(currentUser, availableProducts);
 		orderEdit.setEditableItem(order);
-		orderDetail.display(order);
+
 		edit();
 	}
 
@@ -57,8 +57,9 @@ public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 	}
 
 	private void review() {
-		orderDetail.onReview();
-		getModel().setReview(true);
+		final boolean review = true;
+		orderDetail.display(order,review);
+		getModel().setReview(review);
 	}
 
 	public Registration addSaveListener(ComponentEventListener<SaveEvent> listener) {

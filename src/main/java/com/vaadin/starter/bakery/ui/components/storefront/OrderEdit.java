@@ -61,7 +61,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 
 	@Id("cancel")
 	private Button cancel;
-	
+
 	@Id("review")
 	private Button review;
 
@@ -86,7 +86,8 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 		binder.forField(customerNumber).bind("customer.phoneNumber");
 		binder.forField(customerDetails).bind("customer.details");
 		binder.forField(items).bind("items");
-		items.addPriceChangeListener(e -> getModel().setTotalPrice(FormattingUtils.formatAsCurrency(e.getTotalPrice())));
+		items.addPriceChangeListener(
+				e -> getModel().setTotalPrice(FormattingUtils.formatAsCurrency(e.getTotalPrice())));
 		binder.addStatusChangeListener(e -> getModel().setValid(!e.hasValidationErrors()));
 	}
 
@@ -105,7 +106,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 		void setOpened(boolean opened);
 
 		void setValid(boolean valid);
-		
+
 		void setTotalPrice(String totalPrice);
 	}
 
@@ -139,4 +140,3 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 	}
 
 }
-

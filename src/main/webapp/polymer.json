@@ -20,8 +20,6 @@
     "src/storefront/order-edit-wrapper.html",
     "src/storefront/order-edit.html",
     "src/storefront/order-detail.html",
-    "src/storefront/order-edit-edit-footer.html",
-    "src/storefront/order-edit-review-footer.html",
     "src/storefront/order-item-edit.html",
     "src/storefront/order-items-edit.html",
     "src/elements/amount-field.html",
