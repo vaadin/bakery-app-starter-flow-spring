@@ -7,7 +7,9 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.vaadin.annotations.Convert;
 import com.vaadin.annotations.HtmlImport;
+import com.vaadin.annotations.Include;
 import com.vaadin.annotations.Tag;
 import com.vaadin.components.data.HasValue;
 import com.vaadin.flow.event.ComponentEventListener;
@@ -16,12 +18,14 @@ import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
+import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
 import com.vaadin.ui.ComponentEvent;
+import com.vaadin.ui.HasValidation;
 
 @Tag("order-items-edit")
 @HtmlImport("frontend://src/storefront/order-items-edit.html")
 public class OrderItemsEdit extends PolymerTemplate<OrderItemsEdit.Model>
-		implements HasValue<OrderItemsEdit, List<OrderItem>> {
+		implements HasValue<OrderItemsEdit, List<OrderItem>>,HasValidation {
 
 	private OrderItemEdit empty;
 
@@ -35,10 +39,18 @@ public class OrderItemsEdit extends PolymerTemplate<OrderItemsEdit.Model>
 
 	private int totalPrice = 0;
 
+	private String errorMessage;
+	
+	private boolean invalid;
+	
 	public interface Model extends TemplateModel {
 		void setTotalPrice(Integer total);
 
 		Integer getTotalPrice();
+
+		@Include({ "comment", "quantity", "product.id" })
+		@Convert(value=LongToStringConverter.class,path="product.id")
+		void setValue(List<OrderItem> items);
 	}
 
 	public void reset() {
@@ -50,6 +62,7 @@ public class OrderItemsEdit extends PolymerTemplate<OrderItemsEdit.Model>
 			items.clear();
 		getElement().removeAllChildren();
 		this.totalPrice = 0;
+		getModel().setValue(null);
 	}
 
 	void setProducts(Collection<Product> products) {
@@ -66,17 +79,19 @@ public class OrderItemsEdit extends PolymerTemplate<OrderItemsEdit.Model>
 		}
 
 		createEmptyElement();
-
+		getModel().setValue(items);
 	}
 
 	private OrderItemEdit createEditor(OrderItem value) {
 		OrderItemEdit editor = new OrderItemEdit(this, productSource);
 		editors.add(editor);
 		getElement().appendChild(editor.getElement());
-		Registration priceChangeRegistration = addRegistration(
-				editor.addPriceChangeListener(e -> this.updateTotalPriceOnItemPriceChange(e.getOldValue(), e.getNewValue())));
+		Registration priceChangeRegistration = addRegistration(editor
+				.addPriceChangeListener(e -> this.updateTotalPriceOnItemPriceChange(e.getOldValue(), e.getNewValue())));
 		Registration productChangeRegistration = addRegistration(
 				editor.addProductChangeListener(e -> this.productChanged(e.getSource(), e.getProduct())));
+		Registration commentChangeRegistration = addRegistration(
+				editor.addCommentChangeListener(e -> getModel().setValue(items)));
 		editor.addDeleteListener(e -> {
 			if (empty != editor) {
 				OrderItem orderItem = editor.getValue();
@@ -84,8 +99,10 @@ public class OrderItemsEdit extends PolymerTemplate<OrderItemsEdit.Model>
 				editors.remove(editor);
 				removeRegistration(priceChangeRegistration);
 				removeRegistration(productChangeRegistration);
+				removeRegistration(commentChangeRegistration);
 				getElement().removeChild(editor.getElement());
 				updateTotalPriceOnItemPriceChange(e.getTotalPrice(), 0);
+				getModel().setValue(items);
 			}
 		});
 		editor.setValue(value);
@@ -120,12 +137,14 @@ public class OrderItemsEdit extends PolymerTemplate<OrderItemsEdit.Model>
 			orderItem.setProduct(product);
 			items.add(orderItem);
 			item.setValue(orderItem);
+			getModel().setValue(items);
 		}
 	}
 
 	private void updateTotalPriceOnItemPriceChange(int oldItemPrice, int newItemPrice) {
 		final int delta = newItemPrice - oldItemPrice;
 		totalPrice += delta;
+		getModel().setValue(items);
 		fireEvent(new PriceChangeEvent(totalPrice));
 	}
 
@@ -152,4 +171,21 @@ public class OrderItemsEdit extends PolymerTemplate<OrderItemsEdit.Model>
 		}
 
 	}
+
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
+	}
+
+	public boolean isInvalid() {
+		return invalid;
+	}
+
+	public void setInvalid(boolean invalid) {
+		this.invalid = invalid;
+	}
+
 }

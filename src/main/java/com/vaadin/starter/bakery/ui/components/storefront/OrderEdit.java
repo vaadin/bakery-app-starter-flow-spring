@@ -6,11 +6,11 @@ import java.util.Collection;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import com.vaadin.annotations.Convert;
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Id;
 import com.vaadin.annotations.Tag;
 import com.vaadin.data.BeanValidationBinder;
+import com.vaadin.data.ValidationException;
 import com.vaadin.flow.event.ComponentEventListener;
 import com.vaadin.flow.html.H2;
 import com.vaadin.flow.template.PolymerTemplate;
@@ -67,20 +67,28 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 	@Id("review")
 	private Button review;
 
+	private Order order;
+
 	public interface Model extends TemplateModel {
 
 		void setOpened(boolean opened);
 
-		void setValid(boolean valid);
-
 		void setTotalPrice(String totalPrice);
 
 		void setStatus(String status);
+
 	}
 
 	public OrderEdit() {
 		cancel.addClickListener(e -> fireEvent(new CancelEvent()));
-		review.addClickListener(e -> fireEvent(new ReviewEvent()));
+		review.addClickListener(e -> {
+			try {
+				binder.writeBean(this.order);
+				fireEvent(new ReviewEvent());
+			} catch (ValidationException ex) {
+				toast("Please fill out all required fields before proceeding.");
+			}
+		});
 
 		status.setItems(Arrays.stream(OrderState.values()).map(OrderState::getDisplayName));
 		status.addValueChangeListener(e -> getModel().setStatus(e.getValue()));
@@ -103,9 +111,12 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 		customerNumber.setRequired(true);
 		binder.forField(customerNumber).bind("customer.phoneNumber");
 		binder.forField(customerDetails).bind("customer.details");
+
+		items.setRequiredIndicatorVisible(true);
 		binder.forField(items).bind("items");
 		items.addPriceChangeListener(e -> setTotalPrice(e.getTotalPrice()));
-		binder.addStatusChangeListener(e -> getModel().setValid(!e.hasValidationErrors()));
+
+		binder.addValueChangeListener(e -> review.setDisabled(false));
 	}
 
 	public void init(User currentUser, Collection<Product> availableProducts) {
@@ -115,16 +126,19 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 	}
 
 	public void close() {
+		this.order = null;
 		items.reset();
 		this.setTotalPrice(0);
 		getModel().setStatus(null);
 	}
 
 	public void setEditableItem(Order order) {
+		this.order = order;
 		getModel().setOpened(true);
-		binder.setBean(order);
+		binder.readBean(order);
 		boolean newOrder = order.getId() == null;
 		title.setText(String.format("%s Order", newOrder ? "New" : "Edit"));
+		review.setDisabled(true);
 	}
 
 	public Registration addReviewListener(ComponentEventListener<ReviewEvent> listener) {

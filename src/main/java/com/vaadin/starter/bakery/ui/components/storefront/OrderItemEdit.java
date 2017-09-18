@@ -27,7 +27,7 @@ import com.vaadin.ui.TextField;
  */
 @Tag("order-item-edit")
 @HtmlImport("frontend://src/storefront/order-item-edit.html")
-public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements HasValue<OrderItemEdit, OrderItem> {
+public class OrderItemEdit extends PolymerTemplate<OrderItemEdit.Model> implements HasValue<OrderItemEdit, OrderItem> {
 
 	private BeanValidationBinder<OrderItem> binder = new BeanValidationBinder<>(OrderItem.class);
 
@@ -52,6 +52,12 @@ public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements Has
 
 	private int totalPrice;
 
+	public interface Model extends TemplateModel {
+		void setTotalPrice(Integer total);
+
+		Integer getTotalPrice();
+	}
+
 	public OrderItemEdit(OrderItemsEdit parent, ProductSource productSource) {
 
 		this.productSource = productSource;
@@ -62,10 +68,14 @@ public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements Has
 				this.amount.setDisabled(false);
 				this.amount.setValue(1);
 			}
+			if (this.comment.isDisabled()) {
+				this.comment.setDisabled(false);
+			}
 			fireEvent(new ProductChangeEvent(productSource.getProductByName(products.getValue())));
 			this.setPrice();
 		});
 		amount.addValueChangeListener(e -> this.setPrice());
+		comment.addValueChangeListener(e -> fireEvent(new CommentChangeEvent(e.getValue())));
 
 		// Bind with getter/setters to avoid required validation.
 		binder.forField(products).withConverter(productSource).bind(OrderItem::getProduct, OrderItem::setProduct);
@@ -104,7 +114,9 @@ public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements Has
 	public void setValue(OrderItem value) {
 		this.orderItem = value;
 		binder.setBean(value);
-		amount.setDisabled(value == null || value.getProduct() == null);
+		boolean noProductSelected = value == null || value.getProduct() == null;
+		amount.setDisabled(noProductSelected);
+		comment.setDisabled(noProductSelected);
 	}
 
 	@Override
@@ -118,6 +130,10 @@ public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements Has
 
 	public Registration addProductChangeListener(ComponentEventListener<ProductChangeEvent> listener) {
 		return addListener(ProductChangeEvent.class, listener);
+	}
+
+	public Registration addCommentChangeListener(ComponentEventListener<CommentChangeEvent> listener) {
+		return addListener(CommentChangeEvent.class, listener);
 	}
 
 	public Registration addDeleteListener(ComponentEventListener<DeleteEvent> listener) {
@@ -157,6 +173,21 @@ public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements Has
 
 		public Product getProduct() {
 			return product;
+		}
+
+	}
+
+	public class CommentChangeEvent extends ComponentEvent<OrderItemEdit> {
+
+		private final String comment;
+
+		CommentChangeEvent(String comment) {
+			super(OrderItemEdit.this, false);
+			this.comment = comment;
+		}
+
+		public String getComment() {
+			return comment;
 		}
 
 	}
