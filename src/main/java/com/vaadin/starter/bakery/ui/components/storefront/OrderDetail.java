@@ -20,10 +20,6 @@ import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComponentEvent;
 
-/**
- * @author tulio
- *
- */
 @Tag("order-detail")
 @HtmlImport("frontend://src/storefront/order-detail.html")
 public class OrderDetail extends PolymerTemplate<OrderDetail.Model> {

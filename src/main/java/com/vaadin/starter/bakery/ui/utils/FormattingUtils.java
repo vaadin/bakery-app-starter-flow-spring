@@ -7,10 +7,6 @@ import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-/**
- * @author tulio
- *
- */
 public class FormattingUtils {
 
 

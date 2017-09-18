@@ -5,10 +5,6 @@ package com.vaadin.starter.bakery.ui.converters;
 
 import java.io.Serializable;
 
-/**
- * @author tulio
- *
- */
 public class LabelValueBean implements Serializable{
 	private String value;
 	private String label;
