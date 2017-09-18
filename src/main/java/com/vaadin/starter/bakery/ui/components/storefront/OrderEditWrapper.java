@@ -12,8 +12,6 @@ import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.User;
-import com.vaadin.starter.bakery.ui.components.storefront.OrderItemEdit.DeleteEvent;
-import com.vaadin.starter.bakery.ui.components.storefront.OrderItemEdit.ProductChangeEvent;
 import com.vaadin.ui.ComponentEvent;
 
 @Tag("order-edit-wrapper")
@@ -27,7 +25,7 @@ public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 	private OrderDetail orderDetail;
 
 	private Order order;
-	
+
 	public interface Model extends TemplateModel {
 		void setReview(boolean review);
 	}
@@ -58,7 +56,7 @@ public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 
 	private void review() {
 		final boolean review = true;
-		orderDetail.display(order,review);
+		orderDetail.display(order, review);
 		getModel().setReview(review);
 	}
 
@@ -77,11 +75,11 @@ public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 	}
 
 	public class SaveEvent extends ComponentEvent<OrderEditWrapper> {
-		
+
 		SaveEvent() {
 			super(OrderEditWrapper.this, false);
 		}
-		
+
 		public Order getOrder() {
 			return order;
 		}

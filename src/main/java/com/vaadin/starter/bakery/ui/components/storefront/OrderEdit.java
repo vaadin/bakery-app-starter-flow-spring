@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.IntStream;
 
+import com.vaadin.annotations.Convert;
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Id;
 import com.vaadin.annotations.Tag;
@@ -72,6 +73,8 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 		void setValid(boolean valid);
 
 		void setTotalPrice(String totalPrice);
+
+		void setStatus(String status);
 	}
 
 	public OrderEdit() {
@@ -79,6 +82,8 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 		review.addClickListener(e -> fireEvent(new ReviewEvent()));
 
 		status.setItems(Arrays.stream(OrderState.values()).map(OrderState::getDisplayName));
+		status.addValueChangeListener(e -> getModel().setStatus(e.getValue()));
+
 		binder.forField(status).withConverter(new OrderStateConverter()).bind(Order::getState,
 				(o, s) -> o.changeState(currentUser, s));
 		binder.forField(date).bind("dueDate");
@@ -108,13 +113,14 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 	public void close() {
 		items.reset();
 		this.setTotalPrice(0);
+		getModel().setStatus(null);
 	}
 
 	public void setEditableItem(Order order) {
 		getModel().setOpened(true);
 		binder.setBean(order);
 		boolean newOrder = order.getId() == null;
-		title.setText(String.format("%s order", newOrder ? "New" : "Edit"));
+		title.setText(String.format("%s Order", newOrder ? "New" : "Edit"));
 	}
 
 	public Registration addReviewListener(ComponentEventListener<ReviewEvent> listener) {

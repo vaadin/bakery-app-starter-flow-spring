@@ -124,8 +124,21 @@
         return {
           desktopView: {
             type: Boolean
+          },
+          status: {
+            type: String,
+            observer: '_onStatusChange'
           }
         };
+      }
+
+      ready() {
+        super.ready();
+        this.$.status.$.input.setAttribute('theme','status');
+      }
+
+      _onStatusChange() {
+        this.$.status.$.input.setAttribute('status',this.status);
       }
 
       _computeResponsiveSteps(desktopView, desktopColumns, mobileColumns) {
