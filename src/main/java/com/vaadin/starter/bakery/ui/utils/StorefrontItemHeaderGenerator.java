@@ -19,7 +19,7 @@ public class StorefrontItemHeaderGenerator {
 	private static final JreJsonFactory JSON_FACTORY;
 	private static final DateTimeFormatter MODEL_DATE_TIME_FORMATTER;
 	private static final DateTimeFormatter HEADER_DATE_TIME_FORMATTER;
-	private static final List<BiFunction<String, Boolean, Optional<StorefrontItemHeader>>> HEADER_FUNCTIONS;
+	private static final List<BiFunction<LocalDate, Boolean, Optional<StorefrontItemHeader>>> HEADER_FUNCTIONS;
 
 	static {
 		JSON_FACTORY = new JreJsonFactory();
@@ -39,7 +39,8 @@ public class StorefrontItemHeaderGenerator {
 		boolean[] usedGroups = new boolean[HEADER_FUNCTIONS.size()];
 		ordersLoop: for (Order order : orders) {
 			for (int i = 0; i < HEADER_FUNCTIONS.size(); i++) {
-				Optional<StorefrontItemHeader> header = HEADER_FUNCTIONS.get(i).apply(order.getDate(), showPrevious);
+				Optional<StorefrontItemHeader> header
+						= HEADER_FUNCTIONS.get(i).apply(toDate(order.getDate()), showPrevious);
 				if (!usedGroups[i] && header.isPresent()) {
 					usedGroups[i] = true;
 					result.put(order.getId(), header.get());
@@ -65,50 +66,51 @@ public class StorefrontItemHeaderGenerator {
 		return result;
 	}
 
-	private static Optional<StorefrontItemHeader> headerIfRecent(String date) {
+	private static Optional<StorefrontItemHeader> headerIfRecent(LocalDate date) {
 		LocalDate today = LocalDate.now();
 		LocalDate thisWeekStart = today.minusDays(today.getDayOfWeek().getValue() - 1);
-		return Optional.ofNullable(toDate(date).isBefore(thisWeekStart) ?
+		return Optional.ofNullable(date.isBefore(thisWeekStart) ?
 				new StorefrontItemHeader("Recent", "Before this week") : null);
 	}
 
-	private static Optional<StorefrontItemHeader> headerIfYesterday(String date) {
+	private static Optional<StorefrontItemHeader> headerIfYesterday(LocalDate date) {
 		LocalDate yesterday = LocalDate.now().minusDays(1);
-		return Optional.ofNullable(toDate(date).equals(yesterday) ?
+		return Optional.ofNullable(date.equals(yesterday) ?
 				new StorefrontItemHeader("Yesterday", secondaryHeaderFor(yesterday)) : null);
 	}
 
-	private static Optional<StorefrontItemHeader> headerIfToday(String date) {
+	private static Optional<StorefrontItemHeader> headerIfToday(LocalDate date) {
 		LocalDate today = LocalDate.now();
-		return Optional.ofNullable(toDate(date).equals(today) ?
+		return Optional.ofNullable(date.equals(today) ?
 				new StorefrontItemHeader("Today", secondaryHeaderFor(today)) : null);
 	}
 
-	private static Optional<StorefrontItemHeader> headerIfThisWeekBeforeYesterday(String date) {
+	private static Optional<StorefrontItemHeader> headerIfThisWeekBeforeYesterday(LocalDate date) {
 		LocalDate today = LocalDate.now();
 		LocalDate yesterday = today.minusDays(1);
 		LocalDate thisWeekStart = today.minusDays(today.getDayOfWeek().getValue() - 1);
-		LocalDate currentDate = toDate(date);
-		return Optional.ofNullable(currentDate.isAfter(thisWeekStart) && currentDate.isBefore(yesterday) ?
+		return Optional.ofNullable((date.equals(thisWeekStart) || date.isAfter(thisWeekStart))
+				&& date.isBefore(yesterday) ?
 				new StorefrontItemHeader("This week before yesterday",
 						secondaryHeaderFor(thisWeekStart, yesterday)) : null);
 	}
 
-	private static Optional<StorefrontItemHeader> headerIfThisWeekStartingTomorrow(String date, boolean showPrevious) {
+	private static Optional<StorefrontItemHeader> headerIfThisWeekStartingTomorrow(
+			LocalDate date, boolean showPrevious) {
+
 		LocalDate today = LocalDate.now();
 		LocalDate tomorrow = today.plusDays(1);
 		LocalDate nextWeekStart = today.minusDays(today.getDayOfWeek().getValue() - 1).plusWeeks(1);
-		LocalDate currentDate = toDate(date);
-		return Optional.ofNullable(currentDate.isAfter(tomorrow) && currentDate.isBefore(nextWeekStart) ?
+		return Optional.ofNullable((date.equals(tomorrow) || date.isAfter(tomorrow))
+				&& date.isBefore(nextWeekStart) ?
 				new StorefrontItemHeader(showPrevious ? "This week starting tomorrow" : "This week",
 						secondaryHeaderFor(tomorrow, nextWeekStart)) : null);
 	}
 
-	private static Optional<StorefrontItemHeader> headerIfUpcoming(String date) {
+	private static Optional<StorefrontItemHeader> headerIfUpcoming(LocalDate date) {
 		LocalDate today = LocalDate.now();
-		LocalDate nextWeekStart = today.minusDays(today.getDayOfWeek().getValue() - 1).plusWeeks(1);;
-		final LocalDate currentDate = toDate(date);
-		return Optional.ofNullable(currentDate.isEqual(nextWeekStart) || currentDate.isAfter(nextWeekStart) ?
+		LocalDate nextWeekStart = today.minusDays(today.getDayOfWeek().getValue() - 1).plusWeeks(1);
+		return Optional.ofNullable(date.isEqual(nextWeekStart) || date.isAfter(nextWeekStart) ?
 				new StorefrontItemHeader("Upcoming", "After this week") : null);
 	}
 
