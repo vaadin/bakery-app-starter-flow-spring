@@ -20,14 +20,11 @@ public class ItemsView extends PolymerTemplate<ItemsView.Model> {
 		void setEditing(Boolean editing);
 	}
 
+	@Id("item-search")
 	private BakerySearch searchBar;
 
 	public ItemsView() {
-		searchBar = new BakerySearch();
-		searchBar.getElement().setAttribute("slot", "item-search");
 		searchBar.setPlaceHolder("Search");
-
-		getElement().appendChild(searchBar.getElement());
 	}
 
 	public void addFilterChangeListener(Consumer<String> consumer) {
