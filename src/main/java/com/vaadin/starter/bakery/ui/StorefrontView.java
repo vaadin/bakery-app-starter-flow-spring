@@ -1,8 +1,9 @@
 package com.vaadin.starter.bakery.ui;
 
+import static com.vaadin.starter.bakery.ui.utils.StorefrontItemHeaderGenerator.computeEntriesWithHeader;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,18 +28,10 @@ import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.backend.service.ProductService;
 import com.vaadin.starter.bakery.backend.service.UserService;
-import com.vaadin.starter.bakery.ui.components.storefront.OrderEdit;
 import com.vaadin.starter.bakery.ui.components.storefront.OrderEditWrapper;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
-import com.vaadin.starter.bakery.ui.dataproviders.ProductsDataProvider;
 import com.vaadin.starter.bakery.ui.entities.Order;
-import com.vaadin.starter.bakery.ui.entities.Product;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
-import com.vaadin.ui.AttachEvent;
-
-import elemental.json.JsonObject;
-
-import static com.vaadin.starter.bakery.ui.utils.StorefrontItemHeaderGenerator.computeEntriesWithHeader;
 
 @Tag("bakery-storefront")
 @HtmlImport("context://src/storefront/bakery-storefront.html")
@@ -53,12 +46,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 		List<Order> getOrders();
 
-		void setProducts(List<Product> products);
-
-		void setSelectedOrder(Order order);
-
-		void getSelectedOrder(Order order);
-
 		void setEditing(boolean editing);
 	}
 	@Id("search")
@@ -69,18 +56,15 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	private ProductService productService;
 	private OrdersDataProvider ordersProvider;
 	private OrderService orderService;
-	private ProductsDataProvider productsDataProvider;
 	private UserService userService;
 
-	
 	@Autowired
 	public StorefrontView(OrdersDataProvider ordersProvider, ProductService productService, OrderService orderService,
-			UserService userService,ProductsDataProvider productsDataProvider) {
+			UserService userService) {
 		this.productService = productService;
 		this.ordersProvider = ordersProvider;
 		this.orderService = orderService;
 		this.userService = userService;
-		this.productsDataProvider = productsDataProvider;
 
 		searchBar.setActionText("New order");
 		searchBar.setCheckboxText("Show past orders");
@@ -88,9 +72,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		searchBar.addFilterChangeListener(this::filterItems);
 		searchBar.addActionClickListener(e -> getElement().callFunction("_openNewOrderDialog"));
 
-		getModel().setProducts(productsDataProvider.findAll());
 		filterItems(searchBar.getFilter(), searchBar.getShowPrevious());
-		
 
 		editWrapper.addSaveListener(e -> {
 			com.vaadin.starter.bakery.backend.data.entity.Order order = e.getOrder();
@@ -101,18 +83,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 			}
 		});
 		editWrapper.addCancelListener(e -> this.closeEditor());
-	}
-
-	@ClientDelegate
-	private void onSave(JsonObject order) {
-		try {
-			ordersProvider.save(order);
-		} catch (Exception e) {
-			getLogger().debug("There was a problem while saving the order", e);
-			toast("Order was not saved", true);
-		} finally {
-			filterItems(searchBar.getFilter(), searchBar.getShowPrevious());
-		}
 	}
 
 	private void filterItems(String filter, boolean showPrevious) {

@@ -92,8 +92,6 @@
         </vaadin-grid-column>
       </vaadin-grid>     
 
-      <!-- <storefront-item-edit-wrapper item="[[_editableItem]]" on-save="_onSave" on-closed="_onEditClosed" desktop-view="[[desktopView]]" products="[[products]]"></storefront-item-edit-wrapper>
- -->
       <template is="dom-if" if="[[!desktopView]]" restamp>
         <item-detail-dialog opened="[[_selectedItem]]">
           <storefront-item-detail item="[[_selectedItem]]" on-close="_unselectItem" on-edit="_onEdit" desktop-view="[[desktopView]]"></storefront-item-detail>
