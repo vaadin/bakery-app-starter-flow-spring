@@ -74,16 +74,6 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 		view.addFilterChangeListener(this::filterProducts);
 	}
 
-	@Override
-	protected void onAttach(AttachEvent attachEvent) {
-		if (!attachEvent.isInitialAttach()) {
-			// A workaround for a Flow issue (see BFF-243 for details).
-			initEditor();
-		}
-
-		super.onAttach(attachEvent);
-	}
-
 	private void initEditor() {
 		if (editor != null) {
 			getElement().removeChild(editor.getElement());

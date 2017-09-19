@@ -80,30 +80,16 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 		view.setActionText("New user");
 		view.addActionClickListener(this::createNewUser);
 		view.addFilterChangeListener(this::filterUsers);
-	}
 
-	@Override
-	protected void onAttach(AttachEvent event) {
-		super.onAttach(event);
-		if (!event.isInitialAttach()) {
-			// if it's an initial attach initialization would have happened in onLocationChange()
-			initChildComponents();
-		}
+		initChildComponents();
 	}
 
 	@Override
 	public void onLocationChange(LocationChangeEvent locationChangeEvent) {
-		if (editor == null) {
-			initChildComponents();
-		}
 		setEditableUser(locationChangeEvent.getPathParameter("id"));
 	}
 
 	private void initChildComponents() {
-		// A workaround for a Flow issue (see BFF-243 for details).
-		// The 'editor' and 'confirmationDialog' elements are re-created every time the view is attached.
-		// This is inefficient, but it helps to avoid the issue.
-		// Without the issue this initialization is needed only once.
 		if (editor != null) {
 			getElement().removeChild(editor.getElement());
 		}
