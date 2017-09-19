@@ -4,12 +4,11 @@
 <link rel="import" href="../../bower_components/paper-badge/paper-badge.html">
 <link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
-<link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="user-popup-menu.html">
 <link rel="import" href="../elements/user-avatar.html">
 
 <dom-module id="bakery-navigation">
-  <template is="dom-if" if="[[visible]]">
+  <template>
     <style>
       :host {
         display: block;
@@ -188,9 +187,6 @@
         return {
           page: {
             type: String
-          },
-          visible: {
-            type: Boolean
           },
           popupMenuOpened: {
             type: Boolean,

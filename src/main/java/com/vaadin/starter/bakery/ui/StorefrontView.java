@@ -1,18 +1,3 @@
-/*
- * Copyright 2000-2017 Vaadin Ltd.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package com.vaadin.starter.bakery.ui;
 
 import java.time.LocalDate;
@@ -21,24 +6,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.vaadin.annotations.Id;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.access.annotation.Secured;
 
 import com.vaadin.annotations.ClientDelegate;
-import com.vaadin.annotations.Convert;
+import com.vaadin.annotations.EventHandler;
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Id;
 import com.vaadin.annotations.Tag;
 import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
-import com.vaadin.hummingbird.ext.components.VaadinGrid;
 import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
-import com.vaadin.starter.bakery.app.BeanLocator;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.User;
@@ -46,7 +28,7 @@ import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.backend.service.ProductService;
 import com.vaadin.starter.bakery.backend.service.UserService;
 import com.vaadin.starter.bakery.ui.components.storefront.OrderEdit;
-import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
+import com.vaadin.starter.bakery.ui.components.storefront.OrderEditWrapper;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.starter.bakery.ui.dataproviders.ProductsDataProvider;
 import com.vaadin.starter.bakery.ui.entities.Order;
@@ -67,7 +49,6 @@ import static com.vaadin.starter.bakery.ui.utils.StorefrontItemHeaderGenerator.c
 public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implements View, HasLogger, HasToast {
 
 	public interface Model extends TemplateModel {
-
 		void setOrders(List<Order> orders);
 
 		List<Order> getOrders();
@@ -82,23 +63,24 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	}
 	@Id("search")
 	private BakerySearch searchBar;
-
-	private ProductsDataProvider productProvider;
-	private OrdersDataProvider ordersProvider;
-	private OrderService orderService;
-
-	private UserService userService;
-
-	@Id("order-edit")
+	@Id("order-edit-wrapper")
 	private OrderEditWrapper editWrapper;
 	
+	private ProductService productService;
+	private OrdersDataProvider ordersProvider;
+	private OrderService orderService;
+	private ProductsDataProvider productsDataProvider;
+	private UserService userService;
+
+	
 	@Autowired
-	public StorefrontView(OrdersDataProvider ordersProvider, ProductsDataProvider productProvider) {
-		this.productProvider = productProvider;
+	public StorefrontView(OrdersDataProvider ordersProvider, ProductService productService, OrderService orderService,
+			UserService userService,ProductsDataProvider productsDataProvider) {
+		this.productService = productService;
 		this.ordersProvider = ordersProvider;
 		this.orderService = orderService;
 		this.userService = userService;
-	}
+		this.productsDataProvider = productsDataProvider;
 
 		searchBar.setActionText("New order");
 		searchBar.setCheckboxText("Show past orders");
@@ -106,8 +88,19 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		searchBar.addFilterChangeListener(this::filterItems);
 		searchBar.addActionClickListener(e -> getElement().callFunction("_openNewOrderDialog"));
 
-		getModel().setProducts(productProvider.findAll());
+		getModel().setProducts(productsDataProvider.findAll());
 		filterItems(searchBar.getFilter(), searchBar.getShowPrevious());
+		
+
+		editWrapper.addSaveListener(e -> {
+			com.vaadin.starter.bakery.backend.data.entity.Order order = e.getOrder();
+			orderService.saveOrder(order);
+			closeEditor();
+			if (order.getId() != null) {
+				updateOrderInModel(order.getId().toString());
+			}
+		});
+		editWrapper.addCancelListener(e -> this.closeEditor());
 	}
 
 	@ClientDelegate
@@ -118,7 +111,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 			getLogger().debug("There was a problem while saving the order", e);
 			toast("Order was not saved", true);
 		} finally {
-			getElement().callFunction("_onFiltersChanged");
+			filterItems(searchBar.getFilter(), searchBar.getShowPrevious());
 		}
 	}
 
@@ -152,18 +145,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 			order = orderService.findOrder(Long.valueOf(id));
 		}
 
-		Runnable saveOrder = () -> {
-			orderService.saveOrder(order);
-			closeEditor();
-		};
-		Runnable cancelEdit = () -> {
-			this.closeEditor();
-			if (order.getId() != null) {
-				updateOrderInModel(order.getId().toString());
-			}
-		};
-
-		editWrapper.openEdit(order, currentUser, productService.getRepository().findAll(), saveOrder, cancelEdit);
+		editWrapper.openEdit(order, currentUser, productService.getRepository().findAll());
 		getModel().setEditing(true);
 
 	}
@@ -198,5 +180,10 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 			}
 		}
 		return -1;
+	}
+
+	private void setOrders(List<Order> orders, boolean showPrevious) {
+		getModel().setOrders(orders);
+		getElement().setPropertyJson("displayedHeaders", computeEntriesWithHeader(orders, showPrevious));
 	}
 }

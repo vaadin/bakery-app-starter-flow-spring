@@ -15,7 +15,6 @@ public class Order implements Serializable {
 	}
 
 	private String id;
-	private boolean selected;
 	private String status;
 	private String date;
 	private String time;
@@ -38,16 +37,6 @@ public class Order implements Serializable {
 		Good good = new Good(count, name, unitPrice, comment);
 		goods.add(good);
 		this.totalPrice += count * unitPrice;
-	}
-
-
-	
-	public boolean isSelected() {
-		return selected;
-	}
-
-	public void setSelected(boolean selected) {
-		this.selected = selected;
 	}
 
 	public String getStatus() {

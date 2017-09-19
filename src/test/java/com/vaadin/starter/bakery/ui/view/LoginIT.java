@@ -1,8 +1,8 @@
 package com.vaadin.starter.bakery.ui.view;
 
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
-import org.openqa.selenium.By;
 
 import com.vaadin.starter.bakery.AbstractIT;
 

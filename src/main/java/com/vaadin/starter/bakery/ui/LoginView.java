@@ -9,10 +9,9 @@ import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
-import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
-@Tag("user-login")
-@HtmlImport("frontend://src/login/user-login.html")
+@Tag("bakery-login")
+@HtmlImport("frontend://src/login/bakery-login.html")
 @Route("login")
 @Title("###Bakery###")
 @ParentView(BakeryApp.class)

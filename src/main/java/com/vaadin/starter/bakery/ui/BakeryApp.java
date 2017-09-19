@@ -27,7 +27,6 @@ public class BakeryApp extends PolymerTemplate<BakeryApp.Model> implements HasCh
 
 	public interface Model extends TemplateModel {
 		void setPage(String page);
-		void setNavigationVisible(boolean visible);
 	}
 
 	@Override

@@ -6,36 +6,6 @@
 
 <dom-module id="storefront-item-edit-wrapper">
   <template>
-     <style include="shared-styles">
-      :host {
-        display: flex;
-        flex-direction: column;
-        box-sizing: border-box;
-        height: 100%;
-      }
-
-      .at-icon {
-        display: inline-block;
-        width: 24px;
-        height: 24px;
-        font-size: 18px;
-        line-height: 24px;
-        text-align: center;
-      }
-
-      .at-icon::before {
-        content: '@';
-      }
-
-      .product {
-        margin-bottom: 1em;
-      }
-
-      .delete {
-        min-width: 0;
-      }
-    </style>
- 
     <div id="wrapper">
       <item-detail-dialog desktop-view$=[[desktopView]] opened="[[opened]]" on-before-close="_onBeforeClose">
         <storefront-item-edit desktop-view="[[desktopView]]" hidden$="[[review]]"
