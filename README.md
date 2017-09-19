@@ -11,7 +11,7 @@ barista@vaadin.com/barista for normal user access.
 
 Note that when running in development mode, the application will not work in IE11.
 
-# Running integration tests and Linter
+# Running Integration Tests and Linter
 
 Integration tests are implemented using TestBench. The tests take tens of minutes to run and are therefore included in a separate profile. To run the tests, execute
 
@@ -19,7 +19,7 @@ Integration tests are implemented using TestBench. The tests take tens of minute
 
 and make sure you have a valid TestBench license installed.
 
-Run Linter to check frontend code by adding `-DrunLint` to build/run command.
+Run linter to check frontend code by adding `-DrunLint` to build/run command.
 
 # Running the Project in Production Mode
 
