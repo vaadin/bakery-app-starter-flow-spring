@@ -32,6 +32,25 @@ Note that if you switch between running in production mode and development mode,
 mvn clean
 ```
 before running in the other mode.
+
+# Running scalability tests
+
+Scalability tests can be run as follows
+
+1. Configure the number of concurrent users and a suitable ramp up time in the end of the `src/test/scala/*.scala` files, e.g.:
+	```setUp(scn.inject(rampUsers(300) over (300 seconds))).protocols(httpProtocol)```
+
+2. If you are not running on localhost, configure the baseUrl in the beginning of the `src/test/scala/*.scala` files, e.g.:
+	```val baseUrl = "http://my.server.com"```
+
+3. Make sure the server is running at the given URL
+
+4. Start a test from the command line, e.g.:
+	 ```mvn -Pscalability gatling:execute -Dgatling.simulationClass=BaristaFlow```
+
+5. Test results are stored into target folder, e.g.:
+	```target/gatling/BaristaFlow-1487784042461/index.html```
+
 # License
 A paid Pro or Prime subscription is required for creating a new software project from this starter. After its creation, results can be used, developed and distributed freely, but licenses for the used commercial components are required during development. The starter or its parts cannot be redistributed as a code example or template.
 
