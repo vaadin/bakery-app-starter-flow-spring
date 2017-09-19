@@ -6,6 +6,8 @@
 
 <link rel="import" href="../elements/items-view.html">
 <link rel="import" href="../elements/utils-mixin.html">
+<link rel="import" href="../elements/confirm-dialog.html">
+<link rel="import" href="product-edit.html">
 
 <dom-module id="bakery-products">
   <template>
@@ -61,9 +63,9 @@
         </vaadin-grid-column>
       </vaadin-grid>
 
-      <slot name="product-editor" slot="editor"></slot>
+      <product-edit id="product-editor" slot="editor"></product-edit>
     </items-view>
-    <slot></slot>
+    <confirm-dialog id="confirmation-dialog"></confirm-dialog>
   </template>
 
   <script>
