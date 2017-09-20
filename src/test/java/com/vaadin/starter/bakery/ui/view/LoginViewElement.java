@@ -41,7 +41,7 @@ public class LoginViewElement extends AbstractElement {
 	}
 
 	private WebElement getPasswordInput() {
-		return getPassword().findElement(By.shadowSelector("::shadow input"));
+		return getPassword().findElement(By.shadowSelector("::shadow [part=value]"));
 	}
 
 	private WebElement getLogin() {
@@ -49,7 +49,7 @@ public class LoginViewElement extends AbstractElement {
 	}
 
 	private WebElement getLoginInput() {
-		return getLogin().findElement(By.shadowSelector("::shadow input"));
+		return getLogin().findElement(By.shadowSelector("::shadow [part=value]"));
 	}
 
 	String getLoginLabel() {
