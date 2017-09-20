@@ -11,7 +11,7 @@ import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
 
 @Tag("bakery-login")
-@HtmlImport("frontend://src/login/bakery-login.html")
+@HtmlImport("context://src/login/bakery-login.html")
 @Route("login")
 @Title("###Bakery###")
 @ParentView(BakeryApp.class)
