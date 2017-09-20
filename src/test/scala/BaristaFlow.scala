@@ -891,5 +891,5 @@ class BaristaFlow extends Simulation {
         .exec(navigateToStorefront)
     )
 
-  setUp(scn.inject(rampUsers(1) over (1 seconds))).protocols(httpProtocol)
+  setUp(scn.inject(rampUsers(100) over (300 seconds))).protocols(httpProtocol)
 }
