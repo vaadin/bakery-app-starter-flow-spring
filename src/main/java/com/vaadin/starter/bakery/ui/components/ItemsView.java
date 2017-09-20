@@ -13,7 +13,7 @@ import com.vaadin.ui.HasClickListeners.ClickEvent;
 import java.util.function.Consumer;
 
 @Tag("items-view")
-@HtmlImport("frontend://src/elements/items-view.html")
+@HtmlImport("context://src/elements/items-view.html")
 public class ItemsView extends PolymerTemplate<ItemsView.Model> {
 
 	public interface Model extends TemplateModel {

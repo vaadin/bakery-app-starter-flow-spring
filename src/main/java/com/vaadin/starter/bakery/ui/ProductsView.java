@@ -37,7 +37,7 @@ import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_OKBUTTON_DE
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_PRODUCTS;
 
 @Tag("bakery-products")
-@HtmlImport("frontend://src/products/bakery-products.html")
+@HtmlImport("context://src/products/bakery-products.html")
 @Route(PAGE_PRODUCTS + "/{id}")
 @ParentView(BakeryApp.class)
 @Secured(Role.ADMIN)

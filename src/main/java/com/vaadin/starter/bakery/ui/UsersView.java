@@ -43,7 +43,7 @@ import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_OKBUTTON_DE
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_USERS;
 
 @Tag("bakery-users")
-@HtmlImport("frontend://src/users/bakery-users.html")
+@HtmlImport("context://src/users/bakery-users.html")
 @Route(PAGE_USERS + "/{id}")
 @ParentView(BakeryApp.class)
 @Secured(Role.ADMIN)
