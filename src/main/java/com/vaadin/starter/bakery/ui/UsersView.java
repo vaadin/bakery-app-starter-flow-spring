@@ -1,6 +1,11 @@
 package com.vaadin.starter.bakery.ui;
 
-import com.vaadin.annotations.*;
+import com.vaadin.annotations.Convert;
+import com.vaadin.annotations.EventHandler;
+import com.vaadin.annotations.HtmlImport;
+import com.vaadin.annotations.Id;
+import com.vaadin.annotations.Include;
+import com.vaadin.annotations.Tag;
 import com.vaadin.flow.router.LocationChangeEvent;
 import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
@@ -26,7 +31,15 @@ import org.springframework.security.access.annotation.Secured;
 import java.util.List;
 import java.util.Optional;
 
-import static com.vaadin.starter.bakery.ui.utils.BakeryConst.*;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_CANCELBUTTON_CANCEL;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_CANCELBUTTON_DELETE;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_CAPTION_CANCEL;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_CAPTION_DELETE_USER;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_MESSAGE_CANCEL_USER;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_MESSAGE_DELETE;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_OKBUTTON_CANCEL;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_OKBUTTON_DELETE;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_USERS;
 
 @Tag("bakery-users")
 @HtmlImport("context://src/users/bakery-users.html")
