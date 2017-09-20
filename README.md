@@ -35,7 +35,7 @@ mvn clean
 ```
 before running in the other mode.
 
-# Running scalability tests
+# Running Scalability Tests
 
 Scalability tests can be run as follows
 

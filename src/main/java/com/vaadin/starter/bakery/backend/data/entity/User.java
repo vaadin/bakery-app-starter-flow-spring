@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-@Entity(name="user_entity")
+@Entity(name="UserInfo")
 public class User extends AbstractEntity {
 
 	@NotNull

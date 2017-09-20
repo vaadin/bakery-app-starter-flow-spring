@@ -44,11 +44,9 @@ class BaristaFlow extends Simulation {
   val textfield1IdExtract = regex("""node":\s(\d+),\n\s*"type":\s"put",\n\s*"key":\s"placeholder",\n\s*"feat":\s1,\n\s*"value":\s"Search""").saveAs("textfield1Id")
   val clearButtonIdExtract = regex("""node":\s(\d+),\n\s*"type":\s"put",\n\s*"key":\s"id",\n\s*"feat":\s3,\n\s*"value":\s"clear""").saveAs("clearButtonId")
 
-
   val syncIdExtract = regex("""syncId":\s?([0-9]*),""").saveAs("syncId")
   val clientIdExtract = regex("""clientId":\s?([0-9]*),""").saveAs("clientId")
   val xsrfTokenExtract = regex("""Vaadin-Security-Key":\s"([^"]*)""").saveAs("seckey")
-
 
   val clickNewOrderResponse = regex("""_openNewOrderDialog""")
   val submitOrderFormResponse = regex("""Order was not saved""")
@@ -742,8 +740,6 @@ class BaristaFlow extends Simulation {
         .get("/bower_components/iron-list/iron-list.html"),
       http("request_271")
         .get("/bower_components/vaadin-combo-box/vaadin-combo-box-dropdown.html"),
-      http("request_272")
-        .get("/bower_components/vaadin-combo-box/vaadin-combo-box-dropdown-mixin.html"),
       http("request_273")
         .get("/bower_components/neon-animation/neon-animation-runner-behavior.html"),
       http("request_274")
@@ -895,5 +891,5 @@ class BaristaFlow extends Simulation {
         .exec(navigateToStorefront)
     )
 
-  setUp(scn.inject(rampUsers(300) over (300 seconds))).protocols(httpProtocol)
+  setUp(scn.inject(rampUsers(1) over (1 seconds))).protocols(httpProtocol)
 }
