@@ -13,7 +13,7 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import javax.servlet.http.HttpServletResponse;
 
 @Tag("access-denied")
-@HtmlImport("frontend://src/admin/access-denied.html")
+@HtmlImport("context://src/admin/access-denied.html")
 @ParentView(BakeryApp.class)
 @Route(BakeryConst.ACCESS_DENIED)
 public class AccessDeniedView extends PolymerTemplate<TemplateModel> implements View {

@@ -11,7 +11,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.HasClickListeners.ClickEvent;
 
 @Tag("confirm-dialog")
-@HtmlImport("frontend://src/elements/confirm-dialog.html")
+@HtmlImport("context://src/elements/confirm-dialog.html")
 public class ConfirmationDialog extends PolymerTemplate<ConfirmationDialog.Model> {
 
 	public interface Model extends TemplateModel {

@@ -18,7 +18,7 @@ import com.vaadin.ui.TextField;
 import java.text.DecimalFormat;
 
 @Tag("product-edit")
-@HtmlImport("frontend://src/products/product-edit.html")
+@HtmlImport("context://src/products/product-edit.html")
 public class ProductEdit extends PolymerTemplate<TemplateModel> implements View {
 
 	@Id("title")

@@ -30,7 +30,7 @@ import elemental.json.JsonObject;
 import static com.vaadin.starter.bakery.ui.utils.StorefrontItemHeaderGenerator.computeEntriesWithHeader;
 
 @Tag("bakery-storefront")
-@HtmlImport("frontend://src/storefront/bakery-storefront.html")
+@HtmlImport("context://src/storefront/bakery-storefront.html")
 @Route(BakeryConst.PAGE_STOREFRONT)
 @Route(value = "")
 @ParentView(BakeryApp.class)
