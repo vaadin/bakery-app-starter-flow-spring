@@ -14,14 +14,13 @@ import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.Role;
+import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.UserFriendlyDataException;
 import com.vaadin.starter.bakery.backend.service.UserService;
 import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
 import com.vaadin.starter.bakery.ui.components.ItemsView;
 import com.vaadin.starter.bakery.ui.components.UserEdit;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
-import com.vaadin.starter.bakery.backend.data.entity.User;
-import com.vaadin.ui.AttachEvent;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HasClickListeners.ClickEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +34,8 @@ import java.util.Optional;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_CANCELBUTTON_CANCEL;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_CANCELBUTTON_DELETE;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_CAPTION_CANCEL;
-import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_CAPTION_DELETE_PRODUCT;
-import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_MESSAGE_CANCEL;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_CAPTION_DELETE_USER;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_MESSAGE_CANCEL_USER;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_MESSAGE_DELETE;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_OKBUTTON_CANCEL;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_OKBUTTON_DELETE;
@@ -51,7 +50,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 
 	public interface Model extends TemplateModel {
 
-		@Include({"id", "firstName", "lastName", "email", "photoUrl", "role"})
+		@Include({ "id", "firstName", "lastName", "email", "photoUrl", "role" })
 		@Convert(value = LongToStringConverter.class, path = "id")
 		void setUsers(List<User> users);
 	}
@@ -61,17 +60,16 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	@Id("view")
 	private ItemsView view;
 
-	// A workaround for a Flow issue (see BFF-243 for details).
-	// Initialize the two fields below with the @Id annotation instead of creating them at run-time on the server-side.
-	// The 'editor' and 'confirmationDialog' elements have to be created on the server (to apply the workaround).
-	// That's the reason why they are not initialized with @Id at the moment.
+	@Id("user-editor")
 	private UserEdit editor;
+
+	@Id("user-confirmation-dialog")
 	private ConfirmationDialog confirmationDialog;
 
 	@Autowired
 	public UsersView(UserService userService) {
 		this.userService = userService;
-
+		initUserEdit();
 		getElement().addEventListener("edit", e -> navigateToUser(e.getEventData().getString("event.detail")),
 				"event.detail");
 
@@ -83,42 +81,14 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	}
 
 	@Override
-	protected void onAttach(AttachEvent event) {
-		super.onAttach(event);
-		if (!event.isInitialAttach()) {
-			// if it's an initial attach initialization would have happened in onLocationChange()
-			initChildComponents();
-		}
-	}
-
-	@Override
 	public void onLocationChange(LocationChangeEvent locationChangeEvent) {
-		if (editor == null) {
-			initChildComponents();
-		}
 		setEditableUser(locationChangeEvent.getPathParameter("id"));
 	}
 
-	private void initChildComponents() {
-		// A workaround for a Flow issue (see BFF-243 for details).
-		// The 'editor' and 'confirmationDialog' elements are re-created every time the view is attached.
-		// This is inefficient, but it helps to avoid the issue.
-		// Without the issue this initialization is needed only once.
-		if (editor != null) {
-			getElement().removeChild(editor.getElement());
-		}
-		editor = new UserEdit();
+	private void initUserEdit() {
 		editor.addSaveListener(this::saveUser);
 		editor.addDeleteListener(this::onBeforeDelete);
 		editor.addCancelListener(cancelClickEvent -> onBeforeClose());
-		editor.getElement().setAttribute("slot", "user-editor");
-		getElement().appendChild(editor.getElement());
-
-		if (confirmationDialog != null) {
-			getElement().removeChild(confirmationDialog.getElement());
-		}
-		confirmationDialog = new ConfirmationDialog();
-		getElement().appendChild(confirmationDialog.getElement());
 	}
 
 	private void setEditableUser(String userId) {
@@ -161,7 +131,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	}
 
 	private void onBeforeDelete(ClickEvent<Button> deleteEvent) {
-		confirmationDialog.show(CONFIRM_CAPTION_DELETE_PRODUCT, CONFIRM_MESSAGE_DELETE, CONFIRM_OKBUTTON_DELETE,
+		confirmationDialog.show(CONFIRM_CAPTION_DELETE_USER, CONFIRM_MESSAGE_DELETE, CONFIRM_OKBUTTON_DELETE,
 				CONFIRM_CANCELBUTTON_DELETE, this::deleteUser, null);
 	}
 
@@ -222,7 +192,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	@EventHandler
 	private void onBeforeClose() {
 		if (editor.isDirty()) {
-			confirmationDialog.show(CONFIRM_CAPTION_CANCEL, CONFIRM_MESSAGE_CANCEL, CONFIRM_OKBUTTON_CANCEL,
+			confirmationDialog.show(CONFIRM_CAPTION_CANCEL, CONFIRM_MESSAGE_CANCEL_USER, CONFIRM_OKBUTTON_CANCEL,
 					CONFIRM_CANCELBUTTON_CANCEL, okButtonEvent -> navigateToUser(null), null);
 		} else {
 			navigateToUser(null);

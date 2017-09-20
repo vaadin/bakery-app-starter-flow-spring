@@ -1,5 +1,4 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../app/bakery-search.html">
 <link rel="import" href="item-detail-dialog.html">
 
 <dom-module id="items-view">
@@ -57,7 +56,7 @@
       }
     </style>
 
-    <bakery-search id="item-search"></bakery-search>
+    <slot name="item-search"></slot>
 
     <div class="flex flex1 overflow-auto">
       <div class="grid-wrapper">
