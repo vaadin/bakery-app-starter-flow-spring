@@ -66,8 +66,7 @@ public class UsersViewIT extends AbstractIT {
 
 		page.getDeleteButton().click();
 
-		WebElement dialogElement = findElements(By.tagName("confirm-dialog"))
-				.stream().filter(WebElement::isDisplayed).findFirst().get();
+		WebElement dialogElement = findElement(By.id("user-confirmation-dialog"));
 		Assert.assertNotNull(dialogElement);
 		ConfirmDialogElement dialog = ((TestBenchElement) dialogElement).wrap(ConfirmDialogElement.class);
 		dialog.confirm();
