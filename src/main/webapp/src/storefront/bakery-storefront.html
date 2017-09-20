@@ -8,7 +8,7 @@
 <link rel="import" href="storefront-item-detail-wrapper.html">
 
 <link rel="import" href="order-edit-wrapper.html">
-
+<link rel="import" href="../elements/confirm-dialog.html">
 <link rel="import" href="../elements/utils-mixin.html">
 
 <script src="../elements/copy-util.js"></script>
@@ -99,7 +99,7 @@
       </template>
       <order-edit-wrapper id="order-edit-wrapper" desktop-view$=[[desktopView]] opened=[[editing]] on-close="closeEditor"></order-edit-wrapper> 
     </div>
-
+    <confirm-dialog id="confirmation-dialog"></confirm-dialog>
   </template>
 
   <script>

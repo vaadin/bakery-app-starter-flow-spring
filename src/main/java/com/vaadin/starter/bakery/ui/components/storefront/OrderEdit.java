@@ -80,7 +80,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 	}
 
 	public OrderEdit() {
-		cancel.addClickListener(e -> fireEvent(new CancelEvent()));
+		cancel.addClickListener(e -> fireEvent(new CancelEvent(binder.hasChanges())));
 		review.addClickListener(e -> {
 			try {
 				binder.writeBean(this.order);
@@ -162,8 +162,15 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 
 	public class CancelEvent extends ComponentEvent<OrderEdit> {
 
-		CancelEvent() {
+		private final boolean hasChanges;
+
+		CancelEvent(boolean hasChanges) {
 			super(OrderEdit.this, false);
+			this.hasChanges = hasChanges;
+		}
+
+		public boolean hasChanges() {
+			return hasChanges;
 		}
 	}
 

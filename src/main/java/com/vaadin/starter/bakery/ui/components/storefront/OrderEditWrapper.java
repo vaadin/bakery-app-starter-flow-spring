@@ -31,7 +31,7 @@ public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 	}
 
 	public OrderEditWrapper() {
-		orderEdit.addCancelListener(e -> fireEvent(new CancelEvent()));
+		orderEdit.addCancelListener(e -> fireEvent(new CancelEvent(e.hasChanges())));
 		orderEdit.addReviewListener(e -> this.review());
 		orderDetail.addBackListener(e -> this.edit());
 		orderDetail.addSaveListener(e -> fireEvent(new SaveEvent()));
@@ -69,8 +69,15 @@ public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 	}
 
 	public class CancelEvent extends ComponentEvent<OrderEditWrapper> {
-		CancelEvent() {
+		private final boolean hasChanges;
+
+		CancelEvent(boolean hasChanges) {
 			super(OrderEditWrapper.this, false);
+			this.hasChanges = hasChanges;
+		}
+
+		public boolean hasChanges() {
+			return hasChanges;
 		}
 	}
 

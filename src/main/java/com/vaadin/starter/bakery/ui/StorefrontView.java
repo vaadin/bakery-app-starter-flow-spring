@@ -28,9 +28,11 @@ import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.backend.service.ProductService;
 import com.vaadin.starter.bakery.backend.service.UserService;
+import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
 import com.vaadin.starter.bakery.ui.components.storefront.OrderEditWrapper;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.starter.bakery.ui.entities.Order;
+import com.vaadin.starter.bakery.ui.messages.Message;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
 @Tag("bakery-storefront")
@@ -52,6 +54,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	private BakerySearch searchBar;
 	@Id("order-edit-wrapper")
 	private OrderEditWrapper editWrapper;
+	@Id("confirmation-dialog")
+	private ConfirmationDialog confirmationDialog;
 	
 	private ProductService productService;
 	private OrdersDataProvider ordersProvider;
@@ -82,7 +86,15 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 				updateOrderInModel(order.getId().toString());
 			}
 		});
-		editWrapper.addCancelListener(e -> this.closeEditor());
+		
+		Message CONFIRM_CANCEL = Message.UNSAVED_CHANGES.createMessage("Order");
+		editWrapper.addCancelListener(e -> {
+			if(e.hasChanges()) {
+				confirmationDialog.show(CONFIRM_CANCEL, ev -> this.closeEditor());
+			}else {
+				this.closeEditor();
+			}
+		});
 	}
 
 	private void filterItems(String filter, boolean showPrevious) {
