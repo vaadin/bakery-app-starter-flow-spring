@@ -50,7 +50,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	@Id("user-editor")
 	private UserEdit editor;
 
-	@Id("confirmation-dialog")
+	@Id("user-confirmation-dialog")
 	private ConfirmationDialog confirmationDialog;
 
 	@Autowired
@@ -118,7 +118,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	}
 
 	private void onBeforeDelete(ClickEvent<Button> deleteEvent) {
-		confirmationDialog.show(CONFIRM_CAPTION_DELETE_PRODUCT, CONFIRM_MESSAGE_DELETE, CONFIRM_OKBUTTON_DELETE,
+		confirmationDialog.show(CONFIRM_CAPTION_DELETE_USER, CONFIRM_MESSAGE_DELETE, CONFIRM_OKBUTTON_DELETE,
 				CONFIRM_CANCELBUTTON_DELETE, this::deleteUser, null);
 	}
 
@@ -179,7 +179,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	@EventHandler
 	private void onBeforeClose() {
 		if (editor.isDirty()) {
-			confirmationDialog.show(CONFIRM_CAPTION_CANCEL, CONFIRM_MESSAGE_CANCEL, CONFIRM_OKBUTTON_CANCEL,
+			confirmationDialog.show(CONFIRM_CAPTION_CANCEL, CONFIRM_MESSAGE_CANCEL_USER, CONFIRM_OKBUTTON_CANCEL,
 					CONFIRM_CANCELBUTTON_CANCEL, okButtonEvent -> navigateToUser(null), null);
 		} else {
 			navigateToUser(null);

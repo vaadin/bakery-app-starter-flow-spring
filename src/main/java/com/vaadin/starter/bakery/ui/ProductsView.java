@@ -49,7 +49,7 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 	@Id("product-editor")
 	private ProductEdit editor;
 
-	@Id("confirmation-dialog")
+	@Id("product-confirmation-dialog")
 	private ConfirmationDialog confirmationDialog;
 
 	@Autowired
@@ -80,7 +80,7 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 	@EventHandler
 	private void onBeforeClose() {
 		if (editor.isDirty()) {
-			confirmationDialog.show(CONFIRM_CAPTION_CANCEL, CONFIRM_MESSAGE_CANCEL, CONFIRM_OKBUTTON_CANCEL,
+			confirmationDialog.show(CONFIRM_CAPTION_CANCEL, CONFIRM_MESSAGE_CANCEL_PRODUCT, CONFIRM_OKBUTTON_CANCEL,
 					CONFIRM_CANCELBUTTON_CANCEL, okButtonEvent -> navigateToProduct(null), null);
 		} else {
 			navigateToProduct(null);
