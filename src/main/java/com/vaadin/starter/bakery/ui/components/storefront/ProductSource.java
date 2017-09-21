@@ -1,9 +1,8 @@
 package com.vaadin.starter.bakery.ui.components.storefront;
 
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import com.vaadin.data.Result;
 import com.vaadin.data.ValueContext;
@@ -15,7 +14,8 @@ class ProductSource implements BinderConverter<String, Product> {
 	private final Map<String, Product> products;
 
 	ProductSource(Collection<Product> availableProducts) {
-		products = availableProducts.stream().collect(Collectors.toMap(Product::getName, Function.identity()));
+		products = availableProducts.stream().collect(LinkedHashMap::new, (map, item) -> map.put(item.getName(), item),
+				(map1, map2) -> map1.putAll(map2));
 	}
 
 	@Override
@@ -31,7 +31,7 @@ class ProductSource implements BinderConverter<String, Product> {
 	void setupBeanComboBox(ComboBox<String> cb) {
 		cb.setItems(products.keySet());
 	}
-	
+
 	Product getProductByName(String name) {
 		return products.get(name);
 	}
