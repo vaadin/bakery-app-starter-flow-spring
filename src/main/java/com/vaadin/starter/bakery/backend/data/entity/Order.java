@@ -26,8 +26,10 @@ import org.hibernate.validator.constraints.NotEmpty;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 
 @Entity(name = "OrderInfo") // "Order" is a reserved word
-@NamedEntityGraph(name = "Order.summary", attributeNodes = { @NamedAttributeNode("customer"),
-		@NamedAttributeNode("pickupLocation") })
+@NamedEntityGraph(name = "Order.summary", attributeNodes = {
+		@NamedAttributeNode("customer"),
+		@NamedAttributeNode("pickupLocation")
+})
 public class Order extends AbstractEntity {
 
 	@NotNull
@@ -162,10 +164,6 @@ public class Order extends AbstractEntity {
 	}
 
 	public int getTotalPrice() {
-		if (items != null) {
-			return items.stream().mapToInt(OrderItem::getTotalPrice).sum();
-		} else {
-			return 0;
-		}
+		return items == null ? 0 : items.stream().mapToInt(OrderItem::getTotalPrice).sum();
 	}
 }

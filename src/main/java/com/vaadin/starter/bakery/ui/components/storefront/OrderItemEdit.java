@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.vaadin.starter.bakery.ui.components.storefront;
 
 import com.vaadin.annotations.HtmlImport;
@@ -22,14 +19,15 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.ComponentEvent;
 import com.vaadin.ui.TextField;
 
-/**
- *
- */
 @Tag("order-item-edit")
 @HtmlImport("frontend://src/storefront/order-item-edit.html")
 public class OrderItemEdit extends PolymerTemplate<OrderItemEdit.Model> implements HasValue<OrderItemEdit, OrderItem> {
 
-	private BeanValidationBinder<OrderItem> binder = new BeanValidationBinder<>(OrderItem.class);
+	public interface Model extends TemplateModel {
+		void setTotalPrice(Integer total);
+
+		Integer getTotalPrice();
+	}
 
 	@Id("products")
 	private ComboBox<String> products;
@@ -52,14 +50,9 @@ public class OrderItemEdit extends PolymerTemplate<OrderItemEdit.Model> implemen
 
 	private int totalPrice;
 
-	public interface Model extends TemplateModel {
-		void setTotalPrice(Integer total);
-
-		Integer getTotalPrice();
-	}
+	private BeanValidationBinder<OrderItem> binder = new BeanValidationBinder<>(OrderItem.class);
 
 	public OrderItemEdit(OrderItemsEdit parent, ProductSource productSource) {
-
 		this.productSource = productSource;
 		this.amount.setDisabled(true);
 		productSource.setupBeanComboBox(products);
@@ -74,15 +67,15 @@ public class OrderItemEdit extends PolymerTemplate<OrderItemEdit.Model> implemen
 			fireEvent(new ProductChangeEvent(productSource.getProductByName(products.getValue())));
 			this.setPrice();
 		});
+
 		amount.addValueChangeListener(e -> this.setPrice());
 		comment.addValueChangeListener(e -> fireEvent(new CommentChangeEvent(e.getValue())));
 
+		binder.forField(amount).bind("quantity");
+		binder.forField(comment).bind("comment");
+
 		// Bind with getter/setters to avoid required validation.
 		binder.forField(products).withConverter(productSource).bind(OrderItem::getProduct, OrderItem::setProduct);
-
-		binder.forField(amount).bind("quantity");
-
-		binder.forField(comment).bind("comment");
 
 		delete.addClickListener(e -> fireEvent(new DeleteEvent(totalPrice)));
 		this.setPrice();

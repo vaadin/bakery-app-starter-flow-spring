@@ -17,15 +17,16 @@
 
 <dom-module id="order-items-edit">
   <template>
-  <slot on-slotchange="_updateItems"></slot>
+    <slot on-slotchange="_updateItems"></slot>
   </template>
+
   <script>
     class OrderItemsEdit extends Polymer.Element {
 
       static get is() {
         return 'order-items-edit';
       }
-      
+
       static get properties() {
         return {
           desktopView: {

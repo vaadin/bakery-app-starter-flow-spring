@@ -11,9 +11,21 @@ import com.vaadin.flow.template.model.TemplateModel;
 @HtmlImport("frontend://src/elements/amount-field.html")
 public class AmountField extends PolymerTemplate<AmountField.Model> implements HasValue<AmountField, Integer> {
 
-	private final int MIN = 1;
+	public interface Model extends TemplateModel {
 
-	private final int MAX = 15;
+		void setDisabled(boolean disabled);
+
+		void setValue(Integer value);
+
+		void setPlusEnabled(boolean enabled);
+
+		void setMinusEnabled(boolean enabled);
+
+		void setReadOnly(boolean readOnly);
+	}
+
+	private static final int MIN = 1;
+	private static final int MAX = 15;
 
 	private Integer value;
 
@@ -82,18 +94,5 @@ public class AmountField extends PolymerTemplate<AmountField.Model> implements H
 		HasValue.super.setReadOnly(readOnly);
 		getModel().setReadOnly(readOnly);
 		updateCommands();
-	}
-
-	public interface Model extends TemplateModel {
-
-		void setDisabled(boolean disabled);
-
-		void setValue(Integer value);
-
-		void setPlusEnabled(boolean enabled);
-
-		void setMinusEnabled(boolean enabled);
-
-		void setReadOnly(boolean readOnly);
 	}
 }

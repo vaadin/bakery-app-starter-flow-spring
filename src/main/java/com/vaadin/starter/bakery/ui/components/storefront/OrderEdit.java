@@ -33,9 +33,14 @@ import com.vaadin.ui.TextField;
 @HtmlImport("frontend://src/storefront/order-edit.html")
 public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasToast {
 
-	private BeanValidationBinder<Order> binder = new BeanValidationBinder<>(Order.class);
+	public interface Model extends TemplateModel {
 
-	private User currentUser;
+		void setOpened(boolean opened);
+
+		void setTotalPrice(String totalPrice);
+
+		void setStatus(String status);
+	}
 
 	@Id("title")
 	private H2 title;
@@ -54,10 +59,13 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 
 	@Id("customer-name")
 	private TextField customerName;
+
 	@Id("customer-number")
 	private TextField customerNumber;
+
 	@Id("customer-details")
 	private TextField customerDetails;
+
 	@Id("items")
 	private OrderItemsEdit items;
 
@@ -69,15 +77,9 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 
 	private Order order;
 
-	public interface Model extends TemplateModel {
+	private User currentUser;
 
-		void setOpened(boolean opened);
-
-		void setTotalPrice(String totalPrice);
-
-		void setStatus(String status);
-
-	}
+	private BeanValidationBinder<Order> binder = new BeanValidationBinder<>(Order.class);
 
 	public OrderEdit() {
 		cancel.addClickListener(e -> fireEvent(new CancelEvent(binder.hasChanges())));
@@ -121,7 +123,6 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 
 	public void init(User currentUser, Collection<Product> availableProducts) {
 		this.currentUser = currentUser;
-
 		items.setProducts(availableProducts);
 	}
 

@@ -27,9 +27,14 @@
       </item-detail-dialog>
     </div>
   </template>
+
   <script>
-    class OrderEditWrapper extends window.EditableItemMixin( window.NotificationMixin(
-      window.LocaleUtilsMixin(window.ScrollShadowMixin(Polymer.Element)))) {
+    class OrderEditWrapper extends
+      window.EditableItemMixin(
+        window.NotificationMixin(
+          window.LocaleUtilsMixin(
+            window.ScrollShadowMixin(Polymer.Element)))) {
+
       static get is() {
         return 'order-edit-wrapper';
       }

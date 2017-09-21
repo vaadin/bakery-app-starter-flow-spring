@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.vaadin.starter.bakery.ui.components.storefront;
 
 import java.util.Collection;
@@ -24,7 +21,17 @@ import com.vaadin.ui.ComponentEvent;
 @Tag("order-items-edit")
 @HtmlImport("frontend://src/storefront/order-items-edit.html")
 public class OrderItemsEdit extends PolymerTemplate<OrderItemsEdit.Model>
-		implements HasValue<OrderItemsEdit, List<OrderItem>>{
+		implements HasValue<OrderItemsEdit, List<OrderItem>> {
+
+	public interface Model extends TemplateModel {
+		void setTotalPrice(Integer total);
+
+		Integer getTotalPrice();
+
+		@Include({ "comment", "quantity", "product.id" })
+		@Convert(value=LongToStringConverter.class,path="product.id")
+		void setValue(List<OrderItem> items);
+	}
 
 	private OrderItemEdit empty;
 
@@ -37,16 +44,6 @@ public class OrderItemsEdit extends PolymerTemplate<OrderItemsEdit.Model>
 	private ProductSource productSource;
 
 	private int totalPrice = 0;
-	
-	public interface Model extends TemplateModel {
-		void setTotalPrice(Integer total);
-
-		Integer getTotalPrice();
-
-		@Include({ "comment", "quantity", "product.id" })
-		@Convert(value=LongToStringConverter.class,path="product.id")
-		void setValue(List<OrderItem> items);
-	}
 
 	public void reset() {
 		registrations.forEach(Registration::remove);

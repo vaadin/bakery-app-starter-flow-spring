@@ -18,6 +18,12 @@ import com.vaadin.ui.ComponentEvent;
 @HtmlImport("frontend://src/storefront/order-edit-wrapper.html")
 public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 
+	public interface Model extends TemplateModel {
+		void setReview(boolean review);
+
+		void setOpened(boolean opened);
+	}
+
 	@Id("orderEdit")
 	private OrderEdit orderEdit;
 
@@ -25,12 +31,6 @@ public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 	private OrderDetail orderDetail;
 
 	private Order order;
-
-	public interface Model extends TemplateModel {
-		void setReview(boolean review);
-
-		void setOpened(boolean opened);
-	}
 
 	public OrderEditWrapper() {
 		orderEdit.addCancelListener(e -> fireEvent(new CancelEvent(e.hasChanges())));

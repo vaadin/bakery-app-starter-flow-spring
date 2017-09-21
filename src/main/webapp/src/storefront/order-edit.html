@@ -47,11 +47,9 @@
       .delete {
         min-width: 0;
       }
-
     </style>
 
     <div class="scrollable flex1" id="main">
-
       <h2 id="title"></h2>
 
       <iron-form id="itemEditForm">
@@ -69,7 +67,7 @@
                   <vaadin-date-picker  id="due-date">
                     <iron-icon slot="prefix" icon="valo:calendar"></iron-icon>
                   </vaadin-date-picker>
-    
+
                   <vaadin-combo-box id="due-time" allow-custom-value >
                     <iron-icon slot="prefix" icon="valo:clock"></iron-icon>
                   </vaadin-combo-box>
@@ -81,20 +79,20 @@
                 <div slot="prefix" class="at-icon"></div>
               </vaadin-combo-box>
             </vaadin-form-layout>
-    
+
             <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 3, 1)]]" colspan="3">
 
               <vaadin-text-field id="customer-name" label="Customer" colspan="2"
                 required>
                 <iron-icon slot="prefix" icon="valo:user"></iron-icon>
               </vaadin-text-field>
-    
+
               <vaadin-text-field id="customer-number" label="Phone number"  required>
                 <iron-icon slot="prefix" icon="valo:phone"></iron-icon>
               </vaadin-text-field>
-    
+
               <vaadin-text-field  id="customer-details" label="Aditional Details" colspan="2"></vaadin-text-field>
-    
+
               <vaadin-form-item colspan="3">
                 <label slot="label">Products</label>
                 <order-items-edit id="items" desktop-view$=[[desktopView]]></order-items-edit>
@@ -105,12 +103,12 @@
         </form>
       </iron-form>
     </div>
-    <div id="footer" class="footer">
-          <vaadin-button id="cancel">Cancel</vaadin-button>
-         <div class="total money">Total [[totalPrice]]</div>
-         <vaadin-button id="review" theme="primary">Review Order →</vaadin-button>
-    </div>
 
+    <div id="footer" class="footer">
+      <vaadin-button id="cancel">Cancel</vaadin-button>
+      <div class="total money">Total [[totalPrice]]</div>
+      <vaadin-button id="review" theme="primary">Review Order →</vaadin-button>
+    </div>
   </template>
 
   <script>
@@ -147,7 +145,6 @@
           labelsPosition: 'top'
         }];
       }
-
     }
 
     window.customElements.define(OrderEdit.is, OrderEdit);

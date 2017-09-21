@@ -69,14 +69,14 @@ public class OrderDetail extends PolymerTemplate<OrderDetail.Model> {
 
 	public class SaveEvent extends ComponentEvent<OrderDetail> {
 
-		SaveEvent() {
+		private SaveEvent() {
 			super(OrderDetail.this, false);
 		}
 	}
 
 	public class BackEvent extends ComponentEvent<OrderDetail> {
 
-		BackEvent() {
+		private BackEvent() {
 			super(OrderDetail.this, false);
 		}
 	}

@@ -16,10 +16,6 @@ public interface BinderConverter<PRESENTATION, MODEL> extends Converter<PRESENTA
 		return arg0 != null? convertToPresentationIfNotNull(arg0, arg1) : convertNullToPresentation(arg0, arg1);
 	}
 
-	Result<MODEL> convertToModelIfNotNull(PRESENTATION arg0, ValueContext arg1);
-
-	PRESENTATION convertToPresentationIfNotNull(MODEL arg0, ValueContext arg1);
-
 	default Result<MODEL> convertNullToModel(PRESENTATION arg0, ValueContext arg1) {
 		return Result.ok(null);
 	}
@@ -27,4 +23,8 @@ public interface BinderConverter<PRESENTATION, MODEL> extends Converter<PRESENTA
 	default PRESENTATION convertNullToPresentation(MODEL arg0, ValueContext arg1) {
 		return null;
 	}
+
+	Result<MODEL> convertToModelIfNotNull(PRESENTATION arg0, ValueContext arg1);
+
+	PRESENTATION convertToPresentationIfNotNull(MODEL arg0, ValueContext arg1);
 }
