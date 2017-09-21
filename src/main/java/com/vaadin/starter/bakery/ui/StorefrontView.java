@@ -54,10 +54,12 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	@Id("search")
 	private BakerySearch searchBar;
 
+	@Id("order-edit-wrapper")
+	private OrderEditWrapper editWrapper;
+
 	@Id("confirmation-dialog")
 	private ConfirmationDialog confirmationDialog;
 
-	private OrderEditWrapper editWrapper;
 	private OrdersDataProvider ordersProvider;
 	private OrderService orderService;
 	private ProductService productService;
@@ -79,14 +81,10 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 		filterItems(searchBar.getFilter(), searchBar.getShowPrevious());
 
-		initOrderEditWrapper(orderService);
+		prepareOrderEditWrapper(orderService);
 	}
 
-	private void initOrderEditWrapper(OrderService orderService) {
-		editWrapper = new OrderEditWrapper();
-		editWrapper.getElement().setAttribute("slot", "order-edit-wrapper");
-		getElement().appendChild(editWrapper.getElement());
-
+	private void prepareOrderEditWrapper(OrderService orderService) {
 		editWrapper.addSaveListener(e -> {
 			com.vaadin.starter.bakery.backend.data.entity.Order order = e.getOrder();
 			boolean isNew = order.getId() == null;
