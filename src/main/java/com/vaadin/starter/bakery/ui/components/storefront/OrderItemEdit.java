@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.vaadin.starter.bakery.ui.components.storefront;
 
@@ -26,7 +26,7 @@ import com.vaadin.ui.TextField;
  *
  */
 @Tag("order-item-edit")
-@HtmlImport("frontend://src/storefront/order-item-edit.html")
+@HtmlImport("context://src/storefront/order-item-edit.html")
 public class OrderItemEdit extends PolymerTemplate<OrderItemEdit.Model> implements HasValue<OrderItemEdit, OrderItem> {
 
 	private BeanValidationBinder<OrderItem> binder = new BeanValidationBinder<>(OrderItem.class);

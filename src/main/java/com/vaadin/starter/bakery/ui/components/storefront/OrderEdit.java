@@ -30,7 +30,7 @@ import com.vaadin.ui.DatePicker;
 import com.vaadin.ui.TextField;
 
 @Tag("order-edit")
-@HtmlImport("frontend://src/storefront/order-edit.html")
+@HtmlImport("context://src/storefront/order-edit.html")
 public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasToast {
 
 	private BeanValidationBinder<Order> binder = new BeanValidationBinder<>(Order.class);

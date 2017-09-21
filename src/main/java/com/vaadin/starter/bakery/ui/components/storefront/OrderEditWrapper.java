@@ -15,7 +15,7 @@ import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.ui.ComponentEvent;
 
 @Tag("order-edit-wrapper")
-@HtmlImport("frontend://src/storefront/order-edit-wrapper.html")
+@HtmlImport("context://src/storefront/order-edit-wrapper.html")
 public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 
 	@Id("orderEdit")

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.vaadin.starter.bakery.ui.components.storefront;
 
@@ -22,9 +22,9 @@ import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
 import com.vaadin.ui.ComponentEvent;
 
 @Tag("order-items-edit")
-@HtmlImport("frontend://src/storefront/order-items-edit.html")
+@HtmlImport("context://src/storefront/order-items-edit.html")
 public class OrderItemsEdit extends PolymerTemplate<OrderItemsEdit.Model>
-		implements HasValue<OrderItemsEdit, List<OrderItem>>{
+implements HasValue<OrderItemsEdit, List<OrderItem>>{
 
 	private OrderItemEdit empty;
 
@@ -37,7 +37,7 @@ public class OrderItemsEdit extends PolymerTemplate<OrderItemsEdit.Model>
 	private ProductSource productSource;
 
 	private int totalPrice = 0;
-	
+
 	public interface Model extends TemplateModel {
 		void setTotalPrice(Integer total);
 
