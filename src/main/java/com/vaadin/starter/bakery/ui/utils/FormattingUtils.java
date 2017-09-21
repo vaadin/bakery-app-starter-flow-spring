@@ -6,8 +6,8 @@ import java.util.Locale;
 
 public class FormattingUtils {
 
-	public static String formatAsCurrency(int i) {
-		return NumberFormat.getCurrencyInstance(Locale.US).format(BigDecimal.valueOf(i,2));
+	public static String formatAsCurrency(int valueInCents) {
+		return NumberFormat.getCurrencyInstance(Locale.US).format(BigDecimal.valueOf(valueInCents, 2));
 	}
 
 }

@@ -41,9 +41,9 @@ public class LocalTimeConverter implements ModelConverter<LocalTime, String>, Bi
 	}
 
 	@Override
-	public Result<LocalTime> convertToModelIfNotNull(String arg0, ValueContext arg1) {
+	public Result<LocalTime> convertToModelIfNotNull(String presentationValue, ValueContext valueContext) {
 		try {
-			return Result.ok(toModel(arg0));
+			return Result.ok(toModel(presentationValue));
 		} catch (DateTimeParseException e) {
 			return Result.error("Invalid time");
 		}

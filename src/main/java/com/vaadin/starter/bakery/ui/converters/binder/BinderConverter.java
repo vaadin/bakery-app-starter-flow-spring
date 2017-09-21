@@ -7,24 +7,27 @@ import com.vaadin.data.ValueContext;
 public interface BinderConverter<PRESENTATION, MODEL> extends Converter<PRESENTATION, MODEL> {
 
 	@Override
-	default Result<MODEL> convertToModel(PRESENTATION arg0, ValueContext arg1) {
-		return arg0 != null && !"".equals(arg0)? convertToModelIfNotNull(arg0, arg1) : convertNullToModel(arg0, arg1);
+	default Result<MODEL> convertToModel(PRESENTATION presentationValue, ValueContext valueContext) {
+		return presentationValue != null && !"".equals(presentationValue)
+				? convertToModelIfNotNull(presentationValue, valueContext)
+						: convertNullToModel(presentationValue, valueContext);
 	}
 
 	@Override
-	default PRESENTATION convertToPresentation(MODEL arg0, ValueContext arg1) {
-		return arg0 != null? convertToPresentationIfNotNull(arg0, arg1) : convertNullToPresentation(arg0, arg1);
+	default PRESENTATION convertToPresentation(MODEL modelValue, ValueContext valueContext) {
+		return modelValue != null ? convertToPresentationIfNotNull(modelValue, valueContext)
+				: convertNullToPresentation(modelValue, valueContext);
 	}
 
-	default Result<MODEL> convertNullToModel(PRESENTATION arg0, ValueContext arg1) {
+	default Result<MODEL> convertNullToModel(PRESENTATION presentationValue, ValueContext valueContext) {
 		return Result.ok(null);
 	}
 
-	default PRESENTATION convertNullToPresentation(MODEL arg0, ValueContext arg1) {
+	default PRESENTATION convertNullToPresentation(MODEL modelValue, ValueContext valueContext) {
 		return null;
 	}
 
-	Result<MODEL> convertToModelIfNotNull(PRESENTATION arg0, ValueContext arg1);
+	Result<MODEL> convertToModelIfNotNull(PRESENTATION presentationValue, ValueContext valueContext);
 
-	PRESENTATION convertToPresentationIfNotNull(MODEL arg0, ValueContext arg1);
+	PRESENTATION convertToPresentationIfNotNull(MODEL modelValue, ValueContext valueContext);
 }
