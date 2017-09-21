@@ -89,9 +89,12 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 		editWrapper.addSaveListener(e -> {
 			com.vaadin.starter.bakery.backend.data.entity.Order order = e.getOrder();
+			boolean isNew = order.getId() == null;
 			orderService.saveOrder(order);
 			closeEditor();
-			if (order.getId() != null) {
+			if (isNew) {
+				filterItems(searchBar.getFilter(), searchBar.getShowPrevious());
+			} else {
 				updateOrderInModel(order.getId().toString());
 			}
 		});
