@@ -12,10 +12,13 @@ import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.User;
+import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
 import com.vaadin.ui.ComponentEvent;
 
+import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
+
 @Tag("order-edit-wrapper")
-@HtmlImport("frontend://src/storefront/order-edit-wrapper.html")
+@HtmlImport("context://src/storefront/order-edit-wrapper.html")
 public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 
 	public interface Model extends TemplateModel {
@@ -24,15 +27,16 @@ public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 		void setOpened(boolean opened);
 	}
 
-	@Id("orderEdit")
-	private OrderEdit orderEdit;
+	private OrderEdit orderEdit = new OrderEdit();
 
-	@Id("orderDetail")
-	private OrderDetail orderDetail;
+	private OrderDetail orderDetail = new OrderDetail();
 
 	private Order order;
 
 	public OrderEditWrapper() {
+		addToSlot(this, orderEdit, "detail-dialog");
+		addToSlot(this, orderDetail, "detail-dialog");
+
 		orderEdit.addCancelListener(e -> fireEvent(new CancelEvent(e.hasChanges())));
 		orderEdit.addReviewListener(e -> this.review());
 		orderDetail.addBackListener(e -> this.edit());
@@ -55,12 +59,16 @@ public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 
 	private void edit() {
 		getModel().setReview(false);
+		orderEdit.getElement().setAttribute("hidden", false);
+		orderDetail.getElement().setAttribute("hidden", true);
 	}
 
 	private void review() {
 		final boolean review = true;
 		orderDetail.display(order, review);
 		getModel().setReview(review);
+		orderEdit.getElement().setAttribute("hidden", true);
+		orderDetail.getElement().setAttribute("hidden", false);
 	}
 
 	public Registration addSaveListener(ComponentEventListener<SaveEvent> listener) {

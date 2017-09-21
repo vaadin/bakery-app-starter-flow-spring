@@ -19,7 +19,7 @@ import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
 import com.vaadin.ui.ComponentEvent;
 
 @Tag("order-items-edit")
-@HtmlImport("frontend://src/storefront/order-items-edit.html")
+@HtmlImport("context://src/storefront/order-items-edit.html")
 public class OrderItemsEdit extends PolymerTemplate<OrderItemsEdit.Model>
 		implements HasValue<OrderItemsEdit, List<OrderItem>> {
 
@@ -29,7 +29,7 @@ public class OrderItemsEdit extends PolymerTemplate<OrderItemsEdit.Model>
 		Integer getTotalPrice();
 
 		@Include({ "comment", "quantity", "product.id" })
-		@Convert(value=LongToStringConverter.class,path="product.id")
+		@Convert(value = LongToStringConverter.class, path = "product.id")
 		void setValue(List<OrderItem> items);
 	}
 

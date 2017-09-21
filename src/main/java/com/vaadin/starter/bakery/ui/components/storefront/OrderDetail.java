@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.vaadin.starter.bakery.ui.components.storefront;
 
@@ -21,7 +21,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.ComponentEvent;
 
 @Tag("order-detail")
-@HtmlImport("frontend://src/storefront/order-detail.html")
+@HtmlImport("context://src/storefront/order-detail.html")
 public class OrderDetail extends PolymerTemplate<OrderDetail.Model> {
 
 	private Order order;
@@ -46,8 +46,8 @@ public class OrderDetail extends PolymerTemplate<OrderDetail.Model> {
 
 	public interface Model extends TemplateModel {
 		@Include({ "id", "dueDate", "dueTime", "state", "pickupLocation.name", "customer.fullName",
-				"customer.phoneNumber", "customer.details", "items.product.name", "items.comment", "items.quantity",
-				"items.product.price" })
+			"customer.phoneNumber", "customer.details", "items.product.name", "items.comment", "items.quantity",
+		"items.product.price" })
 		@Convert(value = LongToStringConverter.class, path = "id")
 		@Convert(value = LocalDateConverter.class, path = "dueDate")
 		@Convert(value = LocalTimeConverter.class, path = "dueTime")

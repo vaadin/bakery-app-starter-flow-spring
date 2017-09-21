@@ -23,14 +23,17 @@ import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.ui.HasToast;
 import com.vaadin.starter.bakery.ui.converters.LocalTimeConverter;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
+import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.ComponentEvent;
 import com.vaadin.ui.DatePicker;
 import com.vaadin.ui.TextField;
 
+import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
+
 @Tag("order-edit")
-@HtmlImport("frontend://src/storefront/order-edit.html")
+@HtmlImport("context://src/storefront/order-edit.html")
 public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasToast {
 
 	public interface Model extends TemplateModel {
@@ -66,14 +69,13 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 	@Id("customer-details")
 	private TextField customerDetails;
 
-	@Id("items")
-	private OrderItemsEdit items;
-
 	@Id("cancel")
 	private Button cancel;
 
 	@Id("review")
 	private Button review;
+
+	private OrderItemsEdit items = new OrderItemsEdit();
 
 	private Order order;
 
@@ -82,6 +84,8 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 	private BeanValidationBinder<Order> binder = new BeanValidationBinder<>(Order.class);
 
 	public OrderEdit() {
+		addToSlot(this, items, "order-items-edit");
+
 		cancel.addClickListener(e -> fireEvent(new CancelEvent(binder.hasChanges())));
 		review.addClickListener(e -> {
 			try {
