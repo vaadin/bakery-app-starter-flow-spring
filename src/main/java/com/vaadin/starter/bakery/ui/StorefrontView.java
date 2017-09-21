@@ -53,7 +53,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 	@Id("search")
 	private BakerySearch searchBar;
-
+	@Id("order-edit-wrapper")
 	private OrderEditWrapper editWrapper;
 	@Id("confirmation-dialog")
 	private ConfirmationDialog confirmationDialog;
@@ -70,9 +70,9 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		this.ordersProvider = ordersProvider;
 		this.orderService = orderService;
 		this.userService = userService;
-		editWrapper = new OrderEditWrapper();
-		editWrapper.getElement().setAttribute("slot", "order-edit-wrapper");
-		getElement().appendChild(editWrapper.getElement());
+		// editWrapper = new OrderEditWrapper();
+		// editWrapper.getElement().setAttribute("slot", "order-edit-wrapper");
+		// getElement().appendChild(editWrapper.getElement());
 		searchBar.setActionText("New order");
 		searchBar.setCheckboxText("Show past orders");
 		searchBar.setPlaceHolder("Search");

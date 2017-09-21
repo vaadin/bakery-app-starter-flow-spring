@@ -97,7 +97,7 @@
     
               <vaadin-form-item colspan="3">
                 <label slot="label">Products</label>
-                <order-items-edit id="items" desktop-view$=[[desktopView]]></order-items-edit>
+                <slot name="order-items-edit" on-slotchange="_updateDesktopViewOnItemsEdit"></slot>
               </vaadin-form-item>
 
             </vaadin-form-layout>
@@ -123,7 +123,8 @@
       static get properties() {
         return {
           desktopView: {
-            type: Boolean
+            type: Boolean,
+            observer: '_updateDesktopViewOnItemsEdit'
           },
           status: {
             type: String,
@@ -135,6 +136,10 @@
       ready() {
         super.ready();
         this.$.status.$.input.setAttribute('theme', 'status');
+      }
+
+      _updateDesktopViewOnItemsEdit() {
+        this.querySelectorAll('order-items-edit').forEach(item => item.desktopView = this.desktopView);
       }
 
       _onStatusChange() {

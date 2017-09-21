@@ -1,5 +1,7 @@
 package com.vaadin.starter.bakery.ui.components.storefront;
 
+import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
+
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Collection;
@@ -23,6 +25,7 @@ import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.ui.HasToast;
 import com.vaadin.starter.bakery.ui.converters.LocalTimeConverter;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
+import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.ComponentEvent;
@@ -58,14 +61,14 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 	private TextField customerNumber;
 	@Id("customer-details")
 	private TextField customerDetails;
-	@Id("items")
-	private OrderItemsEdit items;
 
 	@Id("cancel")
 	private Button cancel;
 
 	@Id("review")
 	private Button review;
+
+	private OrderItemsEdit items = new OrderItemsEdit();
 
 	private Order order;
 
@@ -80,6 +83,8 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 	}
 
 	public OrderEdit() {
+		addToSlot(this, items, "order-items-edit");
+
 		cancel.addClickListener(e -> fireEvent(new CancelEvent(binder.hasChanges())));
 		review.addClickListener(e -> {
 			try {

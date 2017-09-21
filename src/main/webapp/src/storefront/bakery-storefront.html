@@ -97,8 +97,7 @@
           <storefront-item-detail item="[[_selectedItem]]" on-close="_unselectItem" on-edit="_onEdit" desktop-view="[[desktopView]]"></storefront-item-detail>
         </item-detail-dialog>
       </template>
-      <slot id="slotOrderEditWrapper" name="order-edit-wrapper" on-slotchange="_updateDesktoViewOnEditWrapper"></slot>
-      <!-- <order-edit-wrapper id="order-edit-wrapper" desktop-view$=[[desktopView]] opened=[[editing]] on-close="closeEditor"></order-edit-wrapper> -->
+      <order-edit-wrapper id="order-edit-wrapper" desktop-view$=[[desktopView]] opened=[[editing]] on-close="closeEditor"></order-edit-wrapper>
     </div>
     <confirm-dialog id="confirmation-dialog"></confirm-dialog>
   </template>
@@ -112,8 +111,7 @@
       static get properties() {
         return {
           desktopView: {
-            type: Boolean,
-            observer: "_updateDesktoViewOnEditWrapper"
+            type: Boolean
           },
           orders: {
             type: Array,
@@ -130,13 +128,6 @@
             type: Object
           }
         };
-      }
-
-      _updateDesktoViewOnEditWrapper() {
-        var element = this.querySelector('order-edit-wrapper');
-        if (element) {
-          element.updateDesktopView(this.desktopView);
-        }
       }
 
       /*
