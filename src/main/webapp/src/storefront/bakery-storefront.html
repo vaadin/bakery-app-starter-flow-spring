@@ -6,8 +6,9 @@
 
 <link rel="import" href="../app/bakery-search.html">
 <link rel="import" href="storefront-item-detail-wrapper.html">
-<link rel="import" href="storefront-item-edit-wrapper.html">
 
+<link rel="import" href="order-edit-wrapper.html">
+<link rel="import" href="../elements/confirm-dialog.html">
 <link rel="import" href="../elements/utils-mixin.html">
 
 <script src="../elements/copy-util.js"></script>
@@ -49,6 +50,7 @@
         :host {
           max-width: none !important;
           flex-direction: column;
+          padding: 0 !important;
         }
 
         vaadin-grid {
@@ -90,20 +92,17 @@
         </vaadin-grid-column>
       </vaadin-grid>     
 
-      <storefront-item-edit-wrapper item="[[_editableItem]]" on-save="_onSave" on-closed="_onEditClosed" desktop-view="[[desktopView]]" products="[[products]]"></storefront-item-edit-wrapper>
-
       <template is="dom-if" if="[[!desktopView]]" restamp>
         <item-detail-dialog opened="[[_selectedItem]]">
           <storefront-item-detail item="[[_selectedItem]]" on-close="_unselectItem" on-edit="_onEdit" desktop-view="[[desktopView]]"></storefront-item-detail>
         </item-detail-dialog>
       </template>
-
+      <order-edit-wrapper id="order-edit-wrapper" desktop-view$=[[desktopView]] opened=[[editing]] on-close="closeEditor"></order-edit-wrapper>
     </div>
-
+    <confirm-dialog id="confirmation-dialog"></confirm-dialog>
   </template>
 
   <script>
-    /* global bakeryDeepCopy:false */
     class BakeryStorefront extends window.NotificationMixin(window.LocaleUtilsMixin(Polymer.Element)) {
       static get is() {
         return 'bakery-storefront';
@@ -111,9 +110,12 @@
 
       static get properties() {
         return {
-          desktopView: Boolean,
+          desktopView: {
+            type: Boolean
+          },
           orders: {
-            type: Array
+            type: Array,
+            notify: true
           },
           touchScrolling: {
             type: Boolean,
@@ -143,28 +145,17 @@
       }
 
       _openNewOrderDialog() {
-        // For new orders we estimate to be delivered today at last time
-        const d = new Date();
-        // Empty order
-        this._editableItem = {
-          status: 'new',
-          date: this._getDayIso(d.toString()),
-          time: '16:00',
-          customer: {'name': '', 'number': ''},
-          orderNumber: -1
-        };
+        this.$server.edit(null);
       }
 
       _resizeList() {
         this.$.list.notifyResize();
       }
 
-      _onEditClosed() {
-        this._editableItem = null;
-      }
-
       _onEdit(e) {
-        this._editableItem = bakeryDeepCopy(e.detail);
+        // this._editableItem = bakeryDeepCopy(e.detail);
+        e.preventDefault();
+        this.$server.edit(e.detail.id);
       }
 
       _onSave(e) {
