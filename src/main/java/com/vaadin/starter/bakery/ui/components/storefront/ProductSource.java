@@ -4,11 +4,9 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import com.vaadin.data.Result;
 import com.vaadin.data.ValueContext;
-import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.ui.converters.binder.BinderConverter;
 import com.vaadin.ui.ComboBox;

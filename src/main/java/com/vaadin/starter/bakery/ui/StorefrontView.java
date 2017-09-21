@@ -1,7 +1,5 @@
 package com.vaadin.starter.bakery.ui;
 
-import static com.vaadin.starter.bakery.ui.utils.StorefrontItemHeaderGenerator.computeEntriesWithHeader;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -35,6 +33,8 @@ import com.vaadin.starter.bakery.ui.entities.Order;
 import com.vaadin.starter.bakery.ui.messages.Message;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
+import static com.vaadin.starter.bakery.ui.utils.StorefrontItemHeaderGenerator.computeEntriesWithHeader;
+
 @Tag("bakery-storefront")
 @HtmlImport("context://src/storefront/bakery-storefront.html")
 @Route(BakeryConst.PAGE_STOREFRONT)
@@ -53,14 +53,16 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 	@Id("search")
 	private BakerySearch searchBar;
+
 	@Id("order-edit-wrapper")
 	private OrderEditWrapper editWrapper;
+
 	@Id("confirmation-dialog")
 	private ConfirmationDialog confirmationDialog;
 
-	private ProductService productService;
 	private OrdersDataProvider ordersProvider;
 	private OrderService orderService;
+	private ProductService productService;
 	private UserService userService;
 
 	@Autowired
@@ -70,9 +72,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		this.ordersProvider = ordersProvider;
 		this.orderService = orderService;
 		this.userService = userService;
-		// editWrapper = new OrderEditWrapper();
-		// editWrapper.getElement().setAttribute("slot", "order-edit-wrapper");
-		// getElement().appendChild(editWrapper.getElement());
+
 		searchBar.setActionText("New order");
 		searchBar.setCheckboxText("Show past orders");
 		searchBar.setPlaceHolder("Search");
@@ -81,11 +81,18 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 		filterItems(searchBar.getFilter(), searchBar.getShowPrevious());
 
+		prepareOrderEditWrapper(orderService);
+	}
+
+	private void prepareOrderEditWrapper(OrderService orderService) {
 		editWrapper.addSaveListener(e -> {
 			com.vaadin.starter.bakery.backend.data.entity.Order order = e.getOrder();
+			boolean isNew = order.getId() == null;
 			orderService.saveOrder(order);
 			closeEditor();
-			if (order.getId() != null) {
+			if (isNew) {
+				filterItems(searchBar.getFilter(), searchBar.getShowPrevious());
+			} else {
 				updateOrderInModel(order.getId().toString());
 			}
 		});

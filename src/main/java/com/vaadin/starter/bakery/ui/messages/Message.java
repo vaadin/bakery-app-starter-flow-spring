@@ -5,10 +5,6 @@ public class Message {
 	public static final MessageSupplier UNSAVED_CHANGES = createMessage("Unsaved Changes", "Yes", "Back",
 			"There are unsaved modifications to the %s. Are you sure to cancel the edition?");
 
-	private static MessageSupplier createMessage(String caption, String okText, String cancelText, String message) {
-		return (parameters) -> new Message(caption, okText, cancelText, String.format(message, parameters));
-	}
-
 	private final String caption;
 	private final String okText;
 	private final String cancelText;
@@ -19,6 +15,10 @@ public class Message {
 		this.okText = okText;
 		this.cancelText = cancelText;
 		this.message = message;
+	}
+
+	private static MessageSupplier createMessage(String caption, String okText, String cancelText, String message) {
+		return (parameters) -> new Message(caption, okText, cancelText, String.format(message, parameters));
 	}
 
 	public String getCaption() {

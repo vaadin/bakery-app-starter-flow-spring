@@ -1,8 +1,7 @@
 package com.vaadin.starter.bakery.ui.dataproviders;
 
+import java.util.function.Function;
 import java.util.function.Supplier;
-
-import org.springframework.cglib.core.internal.Function;
 
 import com.google.gson.Gson;
 
@@ -21,10 +20,6 @@ public class DataProviderUtil {
 
 	public static <S, T> T convertIfNotNull(S source, Function<S, T> converter) {
 		return convertIfNotNull(source, converter, () -> null);
-	}
-
-	public static <T> T convertIfNotEmpty(String source,Function<String, T> converter) {
-		return source != null && !"".equals(source) ? converter.apply(source) : null;
 	}
 
 	public static <S, T> T convertIfNotNull(S source, Function<S, T> converter, Supplier<T> nullValueSupplier) {

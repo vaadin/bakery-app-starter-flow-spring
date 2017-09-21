@@ -24,6 +24,7 @@
         opacity: 0.1;
       }
     </style>
+
     <vaadin-text-field id="amount" label="[[label]]" theme="center" pattern="\d*" part="text-field" prevent-invalid-input theme="center" value=[[value]] readonly="true">
       <iron-icon slot="prefix" id="minus" icon="valo:minus" on-click="minus" disabled$="[[!minusEnabled]]"></iron-icon>
       <iron-icon slot="suffix" id="plus" icon="valo:plus" on-click="plus" disabled$="[[!plusEnabled]]"></iron-icon>
@@ -47,13 +48,13 @@
             type: Number,
             value: 0
           },
-          disabled: { 
+          disabled: {
             type: Boolean,
             value: false,
             notify: true,
             reflectToAttribute: true
           },
-          readOnly: { 
+          readOnly: {
             type: Boolean,
             value: false,
             notify: true,
@@ -68,7 +69,6 @@
           label: String
         };
       }
-
     }
 
     window.customElements.define(AmountField.is, AmountField);

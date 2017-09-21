@@ -1,7 +1,5 @@
 package com.vaadin.starter.bakery.ui.components.storefront;
 
-import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
-
 import java.util.Collection;
 
 import com.vaadin.annotations.HtmlImport;
@@ -17,21 +15,23 @@ import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
 import com.vaadin.ui.ComponentEvent;
 
+import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
+
 @Tag("order-edit-wrapper")
 @HtmlImport("context://src/storefront/order-edit-wrapper.html")
 public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
-
-	private OrderEdit orderEdit = new OrderEdit();
-
-	private OrderDetail orderDetail = new OrderDetail();
-
-	private Order order;
 
 	public interface Model extends TemplateModel {
 		void setReview(boolean review);
 
 		void setOpened(boolean opened);
 	}
+
+	private OrderEdit orderEdit = new OrderEdit();
+
+	private OrderDetail orderDetail = new OrderDetail();
+
+	private Order order;
 
 	public OrderEditWrapper() {
 		addToSlot(this, orderEdit, "detail-dialog");

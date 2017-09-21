@@ -158,53 +158,10 @@
               </template>
             </table>
           </vaadin-form-item>
-          <!-- 
-          <template is="dom-if" if="[[!review]]">
-            <vaadin-form-item label-position="top">
-              <label slot="label">History</label>
-              <template is="dom-repeat" items="[[item.history]]" as="event">
-                <div class="history-line">
-                  <span class="bold">[[event.name]]</span>
-                  <span class="secondary">[[_getFullDate(event.date)]]</span>
-                  <storefront-item-badge status="[[event.status]]" small></storefront-item-badge>
-                </div>
-                <div class="comment">[[event.message]]</div>
-              </template>
-            </vaadin-form-item>
-
-            <vaadin-form-item>
-              <vaadin-text-field placeholder="Add comment" class="full-width"
-                                 value="{{_comment}}" on-keydown="_onCommentKeydown">
-                <div slot="suffix" class="comment-suffix">
-                  <vaadin-button theme="tertiary" on-click="_sendComment">Send</vaadin-button>
-                </div>
-              </vaadin-text-field>
-            </vaadin-form-item>
-          </template>
-           -->
         </vaadin-form-layout>
       </vaadin-form-layout>
     </div>
 
-    <!-- 
-    <div class="footer">
-      <vaadin-button on-click="_cancel">[[_cancelText()]]</vaadin-button>
-      <div class="total money">Total [[_getCurrency(item.totalPrice)]]</div>
-      <dom-if if="[[review]]" hidden>
-        <template>
-          <vaadin-button theme="primary success" class="edit-button">Place Order ✓</vaadin-button>
-        </template>
-      </dom-if>
-      <dom-if if="[[!review]]" hidden>
-        <template>
-          <vaadin-button theme="primary icon" class="edit-button" on-click="_edit">
-            <span>Edit order</span>
-            <iron-icon icon="valo:edit"></iron-icon>
-          </vaadin-button>
-        </template>
-      </dom-if>
-    </div>
-     -->
      <div  class="footer">
       <vaadin-button id="back">Back</vaadin-button>
       <div class="total money">Total [[totalPrice]]</span></div>
@@ -229,7 +186,6 @@
           }
         };
       }
-
 
       _computeResponsiveSteps(desktopView, desktopColumns, mobileColumns) {
         return [{

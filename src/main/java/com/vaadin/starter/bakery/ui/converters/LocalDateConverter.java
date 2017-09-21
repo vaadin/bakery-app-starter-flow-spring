@@ -1,10 +1,10 @@
 package com.vaadin.starter.bakery.ui.converters;
 
-import static com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil.convertIfNotNull;
+import com.vaadin.flow.template.model.ModelConverter;
 
 import java.time.LocalDate;
 
-import com.vaadin.flow.template.model.ModelConverter;
+import static com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil.convertIfNotNull;
 
 public class LocalDateConverter implements ModelConverter<LocalDate, String> {
 

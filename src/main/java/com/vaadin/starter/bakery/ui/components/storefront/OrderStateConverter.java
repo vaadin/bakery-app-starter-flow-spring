@@ -1,7 +1,5 @@
 package com.vaadin.starter.bakery.ui.components.storefront;
 
-import static com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil.convertIfNotNull;
-
 import java.util.Arrays;
 import java.util.Map;
 import java.util.function.Function;
@@ -12,6 +10,8 @@ import com.vaadin.data.Result;
 import com.vaadin.data.ValueContext;
 import com.vaadin.flow.template.model.ModelConverter;
 import com.vaadin.starter.bakery.backend.data.OrderState;
+
+import static com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil.convertIfNotNull;
 
 public class OrderStateConverter implements Converter<String, OrderState>, ModelConverter<OrderState, String> {
 

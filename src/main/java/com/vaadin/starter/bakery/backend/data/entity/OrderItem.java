@@ -43,10 +43,6 @@ public class OrderItem extends AbstractEntity {
 	}
 
 	public int getTotalPrice() {
-		if(quantity != null && product != null) {
-			return quantity * product.getPrice();
-		} else {
-			return 0;
-		}
+		return quantity == null || product == null ? 0 : quantity * product.getPrice();
 	}
 }

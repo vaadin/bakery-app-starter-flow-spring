@@ -25,26 +25,25 @@
       .delete {
         min-width: 0;
       }
-
     </style>
+
     <vaadin-form-layout class="product" responsive-steps="[[_computeResponsiveSteps(desktopView, 18, 10)]]">
-      <vaadin-combo-box  id="products" colspan="8" index="[[index]]"></vaadin-combo-box>
+      <vaadin-combo-box id="products" colspan="8" index="[[index]]"></vaadin-combo-box>
 
-       <vaadin-button id="delete" colspan="2" class="delete" index="[[index]]"
-          theme="narrow" style$="order: [[_getConditional(desktopView, 2, 0)]];">✕</vaadin-button>
+      <vaadin-button id="delete" colspan="2" class="delete" index="[[index]]"
+                     theme="narrow" style$="order: [[_getConditional(desktopView, 2, 0)]];">✕
+      </vaadin-button>
 
-         <amount-field id="amount" colspan="4" 
-           min="1" max="15" index="[[index]]"
-           style="order: 1"></amount-field>
+      <amount-field id="amount" colspan="4" min="1" max="15" index="[[index]]" style="order: 1"></amount-field>
 
-         <div id="product-price" colspan="4" class="money"
-           style="order: 1"></div>
+      <div id="product-price" colspan="4" class="money" style="order: 1"></div>
 
-         <vaadin-text-field id="comment" colspan$="[[_getConditional(desktopView, 12, 8)]]" placeholder="Details"
-           on-value-changed="_onDetailChange" index="[[index]]"
-           style="order: 3"></vaadin-text-field>
+      <vaadin-text-field id="comment" colspan$="[[_getConditional(desktopView, 12, 8)]]" placeholder="Details"
+                         on-value-changed="_onDetailChange" index="[[index]]"
+                         style="order: 3"></vaadin-text-field>
     </vaadin-form-layout>
   </template>
+
   <script>
     class OrderItemEdit extends Polymer.Element {
 
@@ -66,7 +65,7 @@
           labelsPosition: 'top'
         }];
       }
-      
+
       _getConditional(desktopView, desktopColspan, mobileColspan) {
         return desktopView ? desktopColspan : mobileColspan;
       }
@@ -74,7 +73,6 @@
       updateDesktopView(desktopView) {
         this.desktopView = desktopView;
       }
-
     }
 
     window.customElements.define(OrderItemEdit.is, OrderItemEdit);
