@@ -52,7 +52,7 @@ public class OrderItemEdit extends PolymerTemplate<OrderItemEdit.Model> implemen
 
 	private BeanValidationBinder<OrderItem> binder = new BeanValidationBinder<>(OrderItem.class);
 
-	public OrderItemEdit(OrderItemsEdit parent, ProductSource productSource) {
+	public OrderItemEdit(ProductSource productSource) {
 		this.productSource = productSource;
 		this.amount.setDisabled(true);
 		productSource.setupBeanComboBox(products);

@@ -21,7 +21,7 @@ import com.vaadin.ui.ComponentEvent;
 @Tag("order-items-edit")
 @HtmlImport("context://src/storefront/order-items-edit.html")
 public class OrderItemsEdit extends PolymerTemplate<OrderItemsEdit.Model>
-		implements HasValue<OrderItemsEdit, List<OrderItem>> {
+implements HasValue<OrderItemsEdit, List<OrderItem>> {
 
 	public interface Model extends TemplateModel {
 		void setTotalPrice(Integer total);
@@ -75,7 +75,7 @@ public class OrderItemsEdit extends PolymerTemplate<OrderItemsEdit.Model>
 	}
 
 	private OrderItemEdit createEditor(OrderItem value) {
-		OrderItemEdit editor = new OrderItemEdit(this, productSource);
+		OrderItemEdit editor = new OrderItemEdit(productSource);
 		editors.add(editor);
 		getElement().appendChild(editor.getElement());
 		Registration priceChangeRegistration = addRegistration(editor
