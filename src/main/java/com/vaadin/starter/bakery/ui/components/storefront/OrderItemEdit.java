@@ -110,6 +110,7 @@ public class OrderItemEdit extends PolymerTemplate<OrderItemEdit.Model> implemen
 		boolean noProductSelected = value == null || value.getProduct() == null;
 		amount.setDisabled(noProductSelected);
 		comment.setDisabled(noProductSelected);
+		this.setPrice();
 	}
 
 	@Override
