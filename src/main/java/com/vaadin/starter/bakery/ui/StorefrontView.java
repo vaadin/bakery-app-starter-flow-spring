@@ -50,13 +50,14 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 		void setEditing(boolean editing);
 	}
+
 	@Id("search")
 	private BakerySearch searchBar;
-	@Id("order-edit-wrapper")
+
 	private OrderEditWrapper editWrapper;
 	@Id("confirmation-dialog")
 	private ConfirmationDialog confirmationDialog;
-	
+
 	private ProductService productService;
 	private OrdersDataProvider ordersProvider;
 	private OrderService orderService;
@@ -69,7 +70,9 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		this.ordersProvider = ordersProvider;
 		this.orderService = orderService;
 		this.userService = userService;
-
+		editWrapper = new OrderEditWrapper();
+		editWrapper.getElement().setAttribute("slot", "order-edit-wrapper");
+		getElement().appendChild(editWrapper.getElement());
 		searchBar.setActionText("New order");
 		searchBar.setCheckboxText("Show past orders");
 		searchBar.setPlaceHolder("Search");
@@ -86,12 +89,12 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 				updateOrderInModel(order.getId().toString());
 			}
 		});
-		
+
 		Message CONFIRM_CANCEL = Message.UNSAVED_CHANGES.createMessage("Order");
 		editWrapper.addCancelListener(e -> {
-			if(e.hasChanges()) {
+			if (e.hasChanges()) {
 				confirmationDialog.show(CONFIRM_CANCEL, ev -> this.closeEditor());
-			}else {
+			} else {
 				this.closeEditor();
 			}
 		});

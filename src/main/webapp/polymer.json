@@ -1,34 +1,6 @@
 {
   "entrypoint": "src/storefront/bakery-storefront.html",
   "shell": "src/app/bakery-app.html",
-  "fragments": [
-    "src/dashboard/bakery-dashboard.html",
-    "src/products/bakery-products.html",
-    "src/elements/items-view.html",
-    "src/products/product-edit.html",
-    "src/elements/dialog-mixins.html",
-    "src/elements/confirm-dialog.html",
-    "src/elements/user-avatar.html",
-    "src/storefront/bakery-storefront.html",
-    "src/users/bakery-users.html",
-    "src/users/user-edit.html",
-    "src/404/bakery-404.html",
-    "src/admin/access-denied.html",
-    "src/app/bakery-navigation.html",
-    "src/app/bakery-search.html",
-    "src/login/bakery-login.html",
-    "src/storefront/order-edit-wrapper.html",
-    "src/storefront/order-edit.html",
-    "src/storefront/order-detail.html",
-    "src/storefront/order-item-edit.html",
-    "src/storefront/order-items-edit.html",
-    "src/elements/amount-field.html",
-    "bower_components/vaadin-text-field/vaadin-text-field.html",
-    "bower_components/vaadin-text-field/vaadin-password-field.html",
-    "bower_components/vaadin-combo-box/vaadin-combo-box.html",
-    "bower_components/vaadin-button/vaadin-button.html",
-    "bower_components/vaadin-date-picker/vaadin-date-picker.html"
-  ],
   "sources": [
     "src/**/*",
     "images/**/*",
@@ -43,13 +15,6 @@
     "rules": ["polymer-2"]
   },
   "builds": [
-    {
-      "name": "es5",
-      "js": { "minify": true, "compile": true },
-      "css": { "minify": true },
-      "html": { "minify": true },
-      "bundle": false
-    },
     {
       "name": "es6",
       "js": { "minify": true, "compile": false },

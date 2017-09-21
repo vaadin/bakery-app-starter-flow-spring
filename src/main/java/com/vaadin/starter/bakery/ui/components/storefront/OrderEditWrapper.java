@@ -28,6 +28,8 @@ public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 
 	public interface Model extends TemplateModel {
 		void setReview(boolean review);
+
+		void setOpened(boolean opened);
 	}
 
 	public OrderEditWrapper() {
@@ -41,13 +43,14 @@ public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 		this.order = order;
 		orderEdit.init(currentUser, availableProducts);
 		orderEdit.setEditableItem(order);
-
+		getModel().setOpened(true);
 		edit();
 	}
 
 	public void close() {
 		orderEdit.close();
 		this.order = null;
+		getModel().setOpened(false);
 	}
 
 	private void edit() {
