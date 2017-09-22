@@ -110,6 +110,10 @@
                     <groupId>com.vaadin</groupId>
                     <artifactId>flow-server-production-mode</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>com.vaadin</groupId>
+                    <artifactId>flow-data</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <!-- remove from here after new spring extension is fixed -->
