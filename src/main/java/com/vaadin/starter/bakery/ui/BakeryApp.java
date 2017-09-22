@@ -1,17 +1,17 @@
 package com.vaadin.starter.bakery.ui;
 
-import com.vaadin.annotations.HtmlImport;
-import com.vaadin.annotations.Id;
-import com.vaadin.annotations.Tag;
+import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.flow.router.HasChildView;
 import com.vaadin.flow.router.LocationChangeEvent;
 import com.vaadin.flow.router.View;
-import com.vaadin.flow.template.PolymerTemplate;
-import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.spring.annotations.UIScope;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
-import com.vaadin.ui.AttachEvent;
+import com.vaadin.ui.Tag;
 import com.vaadin.ui.UI;
+import com.vaadin.ui.common.AttachEvent;
+import com.vaadin.ui.common.HtmlImport;
+import com.vaadin.ui.polymertemplate.Id;
+import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 @Tag("bakery-app")
 @HtmlImport("context://src/app/bakery-app.html")

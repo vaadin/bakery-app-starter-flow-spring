@@ -7,17 +7,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.vaadin.flow.model.TemplateModel;
+import com.vaadin.ui.Tag;
+import com.vaadin.ui.common.AttachEvent;
+import com.vaadin.ui.common.HtmlImport;
+import com.vaadin.ui.event.EventData;
+import com.vaadin.ui.polymertemplate.EventHandler;
+import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 
 import com.google.gson.Gson;
-import com.vaadin.annotations.EventData;
-import com.vaadin.annotations.EventHandler;
-import com.vaadin.annotations.HtmlImport;
-import com.vaadin.annotations.Tag;
 import com.vaadin.flow.router.View;
-import com.vaadin.flow.template.PolymerTemplate;
-import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
 import com.vaadin.starter.bakery.backend.data.DashboardData;
@@ -33,7 +34,6 @@ import com.vaadin.starter.bakery.ui.utils.DashboardUtils;
 import com.vaadin.starter.bakery.ui.utils.DashboardUtils.OrdersCountData;
 import com.vaadin.starter.bakery.ui.utils.DashboardUtils.OrdersCountDataWithChart;
 import com.vaadin.starter.bakery.ui.utils.DashboardUtils.PageInfo;
-import com.vaadin.ui.AttachEvent;
 
 @Tag("bakery-dashboard")
 @HtmlImport("context://src/dashboard/bakery-dashboard.html")

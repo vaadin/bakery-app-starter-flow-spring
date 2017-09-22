@@ -4,19 +4,19 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.vaadin.annotations.Convert;
-import com.vaadin.annotations.HtmlImport;
-import com.vaadin.annotations.Include;
-import com.vaadin.annotations.Tag;
-import com.vaadin.components.data.HasValue;
-import com.vaadin.flow.event.ComponentEventListener;
-import com.vaadin.flow.template.PolymerTemplate;
-import com.vaadin.flow.template.model.TemplateModel;
+import com.vaadin.flow.model.Convert;
+import com.vaadin.flow.model.Include;
+import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
-import com.vaadin.ui.ComponentEvent;
+import com.vaadin.ui.Tag;
+import com.vaadin.ui.common.HasValue;
+import com.vaadin.ui.common.HtmlImport;
+import com.vaadin.ui.event.ComponentEvent;
+import com.vaadin.ui.event.ComponentEventListener;
+import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 @Tag("order-items-edit")
 @HtmlImport("context://src/storefront/order-items-edit.html")

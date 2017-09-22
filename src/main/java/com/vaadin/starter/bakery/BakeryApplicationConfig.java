@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
+import com.vaadin.hummingbird.ext.spring.ViewAccessVoter;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
@@ -46,7 +47,8 @@ import com.vaadin.starter.bakery.repositories.UserRepository;
     "com.vaadin.starter.bakery",
     "com.vaadin.starter.bakery.backend.service",
     "com.vaadin.starter.bakery.app",
-    "com.vaadin.starter.bakery.app.security" })
+    "com.vaadin.starter.bakery.app.security",
+    "com.vaadin.hummingbird.ext.spring" })
 @EnableJpaRepositories(basePackageClasses = { UserRepository.class})
 @EntityScan(basePackageClasses={User.class, LocalDateJpaConverter.class})
 public class BakeryApplicationConfig extends WebSecurityConfigurerAdapter {
@@ -110,4 +112,9 @@ public class BakeryApplicationConfig extends WebSecurityConfigurerAdapter {
     public static AccessDecisionVoterImpl voter() {
         return new AccessDecisionVoterImpl();
     }
+
+//    @Bean
+//    public static ViewAccessVoter voter_hummingbird_ext() {
+//        return new ViewAccessVoter();
+//    }
 }

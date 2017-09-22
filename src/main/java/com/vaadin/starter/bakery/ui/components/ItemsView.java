@@ -1,13 +1,13 @@
 package com.vaadin.starter.bakery.ui.components;
 
-import com.vaadin.annotations.HtmlImport;
-import com.vaadin.annotations.Tag;
-import com.vaadin.flow.template.PolymerTemplate;
-import com.vaadin.flow.template.model.TemplateModel;
-import com.vaadin.flow.event.ComponentEventListener;
+import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.starter.bakery.ui.BakerySearch;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.HasClickListeners.ClickEvent;
+import com.vaadin.ui.Tag;
+import com.vaadin.ui.button.Button;
+import com.vaadin.ui.common.HasClickListeners;
+import com.vaadin.ui.common.HtmlImport;
+import com.vaadin.ui.event.ComponentEventListener;
+import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 import java.util.function.Consumer;
 
@@ -33,7 +33,7 @@ public class ItemsView extends PolymerTemplate<ItemsView.Model> {
 		searchBar.addFilterChangeListener((filter, showPrevious) -> consumer.accept(filter));
 	}
 
-	public void addActionClickListener(ComponentEventListener<ClickEvent<Button>> listener) {
+	public void addActionClickListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {
 		searchBar.addActionClickListener(listener);
 	}
 

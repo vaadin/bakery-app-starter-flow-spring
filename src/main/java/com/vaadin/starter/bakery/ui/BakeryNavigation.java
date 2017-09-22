@@ -3,13 +3,8 @@ package com.vaadin.starter.bakery.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.vaadin.annotations.ClientDelegate;
-import com.vaadin.annotations.HtmlImport;
-import com.vaadin.annotations.Tag;
-import com.vaadin.flow.router.LocationChangeEvent;
+import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.flow.router.View;
-import com.vaadin.flow.template.PolymerTemplate;
-import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.spring.annotations.UIScope;
 import com.vaadin.starter.bakery.app.BeanLocator;
 import com.vaadin.starter.bakery.app.security.SecuredViewAccessControl;
@@ -18,9 +13,12 @@ import com.vaadin.starter.bakery.ui.dataproviders.UserDataProvider;
 import com.vaadin.starter.bakery.ui.entities.PageInfo;
 import com.vaadin.starter.bakery.ui.entities.User;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
-import com.vaadin.ui.AttachEvent;
 import com.vaadin.ui.History;
+import com.vaadin.ui.Tag;
 import com.vaadin.ui.UI;
+import com.vaadin.ui.common.ClientDelegate;
+import com.vaadin.ui.common.HtmlImport;
+import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 @UIScope
 @Tag("bakery-navigation")

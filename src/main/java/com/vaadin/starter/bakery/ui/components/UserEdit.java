@@ -1,23 +1,23 @@
 package com.vaadin.starter.bakery.ui.components;
 
-import com.vaadin.annotations.HtmlImport;
-import com.vaadin.annotations.Id;
-import com.vaadin.annotations.Tag;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
-import com.vaadin.flow.event.ComponentEventListener;
-import com.vaadin.flow.html.H3;
+import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.flow.router.View;
-import com.vaadin.flow.template.PolymerTemplate;
-import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.User;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.HasClickListeners.ClickEvent;
-import com.vaadin.ui.PasswordField;
-import com.vaadin.ui.TextField;
+import com.vaadin.ui.Tag;
+import com.vaadin.ui.button.Button;
+import com.vaadin.ui.combobox.ComboBox;
+import com.vaadin.ui.common.HasClickListeners;
+import com.vaadin.ui.common.HtmlImport;
+import com.vaadin.ui.event.ComponentEventListener;
+import com.vaadin.ui.html.H3;
+import com.vaadin.ui.passwordfield.PasswordField;
+import com.vaadin.ui.polymertemplate.Id;
+import com.vaadin.ui.polymertemplate.PolymerTemplate;
+import com.vaadin.ui.textfield.TextField;
 
 @Tag("user-edit")
 @HtmlImport("context://src/users/user-edit.html")
@@ -75,15 +75,15 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> implements View {
 		binder.addValueChangeListener(event -> saveButton.setDisabled(!isDirty()));
 	}
 
-	public Registration addSaveListener(ComponentEventListener<ClickEvent<Button>> listener) {
+	public Registration addSaveListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {
 		return saveButton.addClickListener(listener);
 	}
 
-	public Registration addDeleteListener(ComponentEventListener<ClickEvent<Button>> listener) {
+	public Registration addDeleteListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {
 		return deleteButton.addClickListener(listener);
 	}
 
-	public Registration addCancelListener(ComponentEventListener<ClickEvent<Button>> listener) {
+	public Registration addCancelListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {
 		return cancelButton.addClickListener(listener);
 	}
 

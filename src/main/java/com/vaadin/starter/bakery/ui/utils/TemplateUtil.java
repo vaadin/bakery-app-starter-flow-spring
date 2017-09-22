@@ -1,6 +1,6 @@
 package com.vaadin.starter.bakery.ui.utils;
 
-import com.vaadin.flow.template.PolymerTemplate;
+import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 public class TemplateUtil {
 

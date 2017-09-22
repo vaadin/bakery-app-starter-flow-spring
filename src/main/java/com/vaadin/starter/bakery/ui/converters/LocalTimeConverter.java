@@ -2,7 +2,7 @@ package com.vaadin.starter.bakery.ui.converters;
 
 import com.vaadin.data.Result;
 import com.vaadin.data.ValueContext;
-import com.vaadin.flow.template.model.ModelConverter;
+import com.vaadin.flow.model.ModelConverter;
 import com.vaadin.starter.bakery.ui.converters.binder.BinderConverter;
 
 import java.time.LocalTime;

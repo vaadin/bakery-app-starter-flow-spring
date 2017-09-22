@@ -1,19 +1,19 @@
 package com.vaadin.starter.bakery.ui.components;
 
-import com.vaadin.annotations.EventHandler;
-import com.vaadin.annotations.HtmlImport;
-import com.vaadin.annotations.Id;
-import com.vaadin.annotations.Tag;
-import com.vaadin.flow.event.ComponentEventListener;
-import com.vaadin.flow.html.H3;
+import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.flow.router.View;
-import com.vaadin.flow.template.PolymerTemplate;
-import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.HasClickListeners.ClickEvent;
-import com.vaadin.ui.TextField;
+import com.vaadin.ui.Tag;
+import com.vaadin.ui.button.Button;
+import com.vaadin.ui.common.HasClickListeners;
+import com.vaadin.ui.common.HtmlImport;
+import com.vaadin.ui.event.ComponentEventListener;
+import com.vaadin.ui.html.H3;
+import com.vaadin.ui.polymertemplate.EventHandler;
+import com.vaadin.ui.polymertemplate.Id;
+import com.vaadin.ui.polymertemplate.PolymerTemplate;
+import com.vaadin.ui.textfield.TextField;
 
 import java.text.DecimalFormat;
 
@@ -71,15 +71,15 @@ public class ProductEdit extends PolymerTemplate<TemplateModel> implements View 
 		title.setText((product.getId() == null ? "New" : "Edit") + " Product");
 	}
 
-	public Registration addSaveListener(ComponentEventListener<ClickEvent<Button>> listener) {
+	public Registration addSaveListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {
 		return saveButton.addClickListener(listener);
 	}
 
-	public Registration addDeleteListener(ComponentEventListener<ClickEvent<Button>> listener) {
+	public Registration addDeleteListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {
 		return deleteButton.addClickListener(listener);
 	}
 
-	public Registration addCancelListener(ComponentEventListener<ClickEvent<Button>> listener) {
+	public Registration addCancelListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {
 		return cancelButton.addClickListener(listener);
 	}
 

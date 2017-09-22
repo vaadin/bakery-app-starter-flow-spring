@@ -1,23 +1,23 @@
 package com.vaadin.starter.bakery.ui.components.storefront;
 
-import com.vaadin.annotations.HtmlImport;
-import com.vaadin.annotations.Id;
-import com.vaadin.annotations.Tag;
-import com.vaadin.components.data.HasValue;
 import com.vaadin.data.BeanValidationBinder;
-import com.vaadin.flow.event.ComponentEventListener;
-import com.vaadin.flow.html.Div;
-import com.vaadin.flow.template.PolymerTemplate;
-import com.vaadin.flow.template.model.TemplateModel;
+import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.ui.components.AmountField;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.ComponentEvent;
-import com.vaadin.ui.TextField;
+import com.vaadin.ui.Tag;
+import com.vaadin.ui.button.Button;
+import com.vaadin.ui.combobox.ComboBox;
+import com.vaadin.ui.common.HasValue;
+import com.vaadin.ui.common.HtmlImport;
+import com.vaadin.ui.event.ComponentEvent;
+import com.vaadin.ui.event.ComponentEventListener;
+import com.vaadin.ui.html.Div;
+import com.vaadin.ui.polymertemplate.Id;
+import com.vaadin.ui.polymertemplate.PolymerTemplate;
+import com.vaadin.ui.textfield.TextField;
 
 @Tag("order-item-edit")
 @HtmlImport("context://src/storefront/order-item-edit.html")

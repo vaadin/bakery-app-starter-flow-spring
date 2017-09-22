@@ -1,15 +1,10 @@
 package com.vaadin.starter.bakery.ui;
 
-import com.vaadin.annotations.Convert;
-import com.vaadin.annotations.EventHandler;
-import com.vaadin.annotations.HtmlImport;
-import com.vaadin.annotations.Id;
-import com.vaadin.annotations.Include;
-import com.vaadin.annotations.Tag;
+import com.vaadin.flow.model.Convert;
+import com.vaadin.flow.model.Include;
+import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.flow.router.LocationChangeEvent;
 import com.vaadin.flow.router.View;
-import com.vaadin.flow.template.PolymerTemplate;
-import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
 import com.vaadin.starter.bakery.app.HasLogger;
@@ -20,8 +15,13 @@ import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
 import com.vaadin.starter.bakery.ui.components.ItemsView;
 import com.vaadin.starter.bakery.ui.components.ProductEdit;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.HasClickListeners.ClickEvent;
+import com.vaadin.ui.Tag;
+import com.vaadin.ui.button.Button;
+import com.vaadin.ui.common.HasClickListeners;
+import com.vaadin.ui.common.HtmlImport;
+import com.vaadin.ui.polymertemplate.EventHandler;
+import com.vaadin.ui.polymertemplate.Id;
+import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.annotation.Secured;
@@ -85,7 +85,7 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 		editor.addSaveListener(saveClickEvent -> saveProduct(editor.getProduct()));
 	}
 
-	private void onBeforeDelete(ClickEvent<Button> deleteEvent) {
+	private void onBeforeDelete(HasClickListeners.ClickEvent<Button> deleteEvent) {
 		confirmationDialog.show(CONFIRM_CAPTION_DELETE_PRODUCT, CONFIRM_MESSAGE_DELETE, CONFIRM_OKBUTTON_DELETE,
 				CONFIRM_CANCELBUTTON_DELETE, okButtonEvent -> deleteProduct(editor.getProductId()), null);
 	}
@@ -139,7 +139,7 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 		getModel().setProducts(service.findAnyMatching(Optional.ofNullable(filter), null).getContent());
 	}
 
-	public void createNewProduct(ClickEvent<Button> newProductEvent) {
+	public void createNewProduct(HasClickListeners.ClickEvent<Button> newProductEvent) {
 		view.openDialog(true);
 		editor.setProduct(new Product());
 	}
