@@ -112,7 +112,7 @@
         return {
           desktopView: {
             type: Boolean,
-            observer: "_updateDesktoViewOnEditWrapper"
+            observer: '_updateDesktoViewOnEditWrapper'
           },
           orders: {
             type: Array,
@@ -208,7 +208,7 @@
 
       _updateDesktoViewOnEditWrapper() {
         const element = this.$.orderEditWrapper;
-        if(element) {
+        if (element) {
           element.desktopView = this.desktopView;
         }
       }
