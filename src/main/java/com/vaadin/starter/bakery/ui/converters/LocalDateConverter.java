@@ -1,6 +1,5 @@
 package com.vaadin.starter.bakery.ui.converters;
 
-
 import com.vaadin.flow.model.ModelConverter;
 
 import java.time.LocalDate;

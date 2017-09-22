@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
-import com.vaadin.hummingbird.ext.spring.ViewAccessVoter;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
@@ -112,9 +111,4 @@ public class BakeryApplicationConfig extends WebSecurityConfigurerAdapter {
     public static AccessDecisionVoterImpl voter() {
         return new AccessDecisionVoterImpl();
     }
-
-//    @Bean
-//    public static ViewAccessVoter voter_hummingbird_ext() {
-//        return new ViewAccessVoter();
-//    }
 }
