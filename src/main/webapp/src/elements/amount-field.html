@@ -1,7 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
-<link rel="import" href="../../bower_components/vaadin-themes/valo/icons.html">
+<link rel="import" href="../../bower_components/vaadin-valo-theme/icons.html">
 
 <dom-module id="amount-field">
   <template>
@@ -25,7 +25,7 @@
       }
     </style>
 
-    <vaadin-text-field id="amount" label="[[label]]" theme="center" pattern="\d*" part="text-field" prevent-invalid-input theme="center" value=[[value]] readonly="true">
+    <vaadin-text-field id="amount" label="[[label]]" theme="center" pattern="\d*" part="text-field" prevent-invalid-input value=[[value]] readonly="true">
       <iron-icon slot="prefix" id="minus" icon="valo:minus" on-click="minus" disabled$="[[!minusEnabled]]"></iron-icon>
       <iron-icon slot="suffix" id="plus" icon="valo:plus" on-click="plus" disabled$="[[!plusEnabled]]"></iron-icon>
     </vaadin-text-field>
