@@ -1,5 +1,6 @@
 package com.vaadin.starter.bakery.ui.components.storefront;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Collection;
@@ -100,6 +101,8 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 
 		binder.forField(status).withConverter(new OrderStateConverter()).bind(Order::getState,
 				(o, s) -> o.changeState(currentUser, s));
+
+		date.setValue(LocalDate.now());
 		binder.forField(date).bind("dueDate");
 
 		final LocalTimeConverter localTimeConverter = new LocalTimeConverter();
