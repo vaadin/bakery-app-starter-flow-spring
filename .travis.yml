@@ -32,6 +32,7 @@ deploy:
 branches:
   only:
     - master
+    - developer-preview
 cache:
   directories:
   - $HOME/.m2
