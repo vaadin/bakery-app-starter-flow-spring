@@ -3,7 +3,6 @@ package com.vaadin.starter.bakery.ui.components.storefront;
 import java.util.Collection;
 
 import com.vaadin.annotations.HtmlImport;
-import com.vaadin.annotations.Id;
 import com.vaadin.annotations.Tag;
 import com.vaadin.flow.event.ComponentEventListener;
 import com.vaadin.flow.template.PolymerTemplate;
@@ -12,7 +11,6 @@ import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.User;
-import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
 import com.vaadin.ui.ComponentEvent;
 
 import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
