@@ -1,5 +1,6 @@
 package com.vaadin.starter.bakery.ui.components.storefront;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Collection;
@@ -23,7 +24,6 @@ import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.ui.HasToast;
 import com.vaadin.starter.bakery.ui.converters.LocalTimeConverter;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
-import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.ComponentEvent;
@@ -101,6 +101,8 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 
 		binder.forField(status).withConverter(new OrderStateConverter()).bind(Order::getState,
 				(o, s) -> o.changeState(currentUser, s));
+
+		date.setValue(LocalDate.now());
 		binder.forField(date).bind("dueDate");
 
 		final LocalTimeConverter localTimeConverter = new LocalTimeConverter();
