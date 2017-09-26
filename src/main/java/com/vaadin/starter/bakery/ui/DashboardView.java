@@ -36,7 +36,7 @@ import com.vaadin.starter.bakery.ui.utils.DashboardUtils.PageInfo;
 import com.vaadin.ui.AttachEvent;
 
 @Tag("bakery-dashboard")
-@HtmlImport("frontend://src/dashboard/bakery-dashboard.html")
+@HtmlImport("context://src/dashboard/bakery-dashboard.html")
 @Route(BakeryConst.PAGE_DASHBOARD)
 @ParentView(BakeryApp.class)
 public class DashboardView extends PolymerTemplate<DashboardView.Model> implements View {

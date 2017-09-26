@@ -3,24 +3,33 @@ package com.vaadin.starter.bakery.backend.data.entity;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Index;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderColumn;
-import javax.persistence.Table;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import com.vaadin.starter.bakery.backend.data.OrderState;
 
 @Entity(name = "OrderInfo") // "Order" is a reserved word
+@NamedEntityGraph(name = "Order.summary", attributeNodes = {
+		@NamedAttributeNode("customer"),
+		@NamedAttributeNode("pickupLocation")
+})
 public class Order extends AbstractEntity {
 
 	@NotNull
@@ -29,22 +38,28 @@ public class Order extends AbstractEntity {
 	private LocalTime dueTime;
 	@NotNull
 	@OneToOne(cascade = CascadeType.ALL)
+	@Fetch(FetchMode.JOIN)
 	private PickupLocation pickupLocation;
 	@NotNull
 	@OneToOne(cascade = CascadeType.ALL)
+	@Fetch(FetchMode.JOIN)
 	private Customer customer;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	@OrderColumn(name = "ORDERITEM_INDEX")
 	@JoinColumn
+	@BatchSize(size = 1000)
+	@NotEmpty
+	@Valid
 	private List<OrderItem> items;
 	@NotNull
 	private OrderState state;
 
 	private boolean paid;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	@OrderColumn(name = "id")
+	@BatchSize(size = 1000)
 	private List<HistoryItem> history;
 
 	public Order(User createdBy) {
@@ -148,4 +163,7 @@ public class Order extends AbstractEntity {
 		}
 	}
 
+	public int getTotalPrice() {
+		return items == null ? 0 : items.stream().mapToInt(OrderItem::getTotalPrice).sum();
+	}
 }

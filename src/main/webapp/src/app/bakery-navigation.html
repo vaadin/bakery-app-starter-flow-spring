@@ -3,6 +3,8 @@
 <link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
+<link rel="import" href="../../bower_components/vaadin-valo-theme/icons.html">
 <link rel="import" href="user-popup-menu.html">
 <link rel="import" href="../elements/user-avatar.html">
 
@@ -44,7 +46,7 @@
         height: 100%;
       }
 
-      paper-tab a {
+      .navigation-label {
         /* These mixins (from iron-flex-layout) center the link text. */
         @apply --layout-vertical;
         @apply --layout-center-center;
@@ -59,11 +61,11 @@
         margin-bottom: var(--valo-space-xs);
       }
 
-      paper-tab.iron-selected a iron-icon {
+      paper-tab.iron-selected iron-icon {
         color: var(--valo-primary-color);
       }
 
-      paper-tab.iron-selected a span {
+      paper-tab.iron-selected span {
         color: var(--valo-body-text-color);
       }
 
@@ -105,7 +107,7 @@
           padding: 0 var(--valo-space-m);
         }
 
-        paper-tab a {
+        .navigation-label {
           padding: 0 var(--valo-space-xs);
         }
 
@@ -119,13 +121,13 @@
       }
 
       @media (min-width: 740px) {
-        paper-tab a {
+        .navigation-label {
           padding: 0 var(--valo-space-m);
         }
       }
 
       @media (min-width: 920px) {
-        paper-tab a {
+        .navigation-label {
           padding: 0 var(--valo-space-l);
         }
       }
@@ -141,13 +143,14 @@
           Sunshine
         </div>
 
-        <paper-tabs selected="[[page]]" attr-for-selected="page-id" class="navigation-tabs" align-bottom="[[_desktopView]]">
+        <paper-tabs selected="[[page]]" attr-for-selected="page-id" on-transitionend="_onNavAnimationEnd"
+                    class="navigation-tabs" align-bottom="[[_desktopView]]">
           <template is="dom-repeat" items="[[pages]]">
-            <paper-tab page-id="[[item.link]]">
-              <a router-link href="[[item.link]]">
+            <paper-tab page-id$="[[item.link]]">
+              <div class="navigation-label">
                 <iron-icon icon="valo:[[item.icon]]"></iron-icon>
                 <span>[[item.title]]</span>
-              </a>
+              </div>
             </paper-tab>
           </template>
         </paper-tabs>
@@ -209,6 +212,23 @@
       
       _logout() {
         this.$server.logout();
+      }
+
+      // Navigation should be implemented with plain <a router-link href="..."></a> elements.
+      // However, when done that way it causes the paper-ripple animation on the navigation paper-tabs to be laggy
+      // (see https://github.com/Polymer/paper-ripple/issues/10 for details).
+      // Hence this workaround: wait for the paper-ripple animation to finish, and then trigger navigation manually.
+      _onNavAnimationEnd(event) {
+        const pageId = event.target.getAttribute('page-id');
+        this._debouncer = Polymer.Debouncer.debounce(
+          this._debouncer,
+          Polymer.Async.timeOut.after(30),
+          () => {
+            if (this.page !== pageId) {
+              this.$server.navigateTo(pageId);
+            }
+          }
+        );
       }
     }
 

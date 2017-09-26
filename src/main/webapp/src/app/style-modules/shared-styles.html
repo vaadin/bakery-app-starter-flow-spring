@@ -1,17 +1,16 @@
-
 <link rel="import" href="../../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../../bower_components/vaadin-themes/valo/typography.html">
-<link rel="import" href="../../../bower_components/vaadin-themes/valo/color.html">
-<link rel="import" href="../../../bower_components/vaadin-themes/valo/sizing-and-spacing.html">
-<link rel="import" href="../../../bower_components/vaadin-themes/valo/style.html">
-<link rel="import" href="../../../bower_components/vaadin-themes/valo/icons.html">
-<link rel="import" href="../../../bower_components/vaadin-themes/valo/vaadin-button.html">
-<link rel="import" href="../../../bower_components/vaadin-themes/valo/vaadin-text-field.html">
-<link rel="import" href="../../../bower_components/vaadin-themes/valo/vaadin-checkbox.html">
-<link rel="import" href="../../../bower_components/vaadin-themes/valo/vaadin-date-picker.html">
-<link rel="import" href="../../../bower_components/vaadin-themes/valo/vaadin-form-layout.html">
-<link rel="import" href="../../../bower_components/vaadin-themes/valo/vaadin-form-item.html">
-<link rel="import" href="../../../bower_components/vaadin-themes/valo/vaadin-combo-box.html">
+<link rel="import" href="../../../bower_components/vaadin-valo-theme/typography.html">
+<link rel="import" href="../../../bower_components/vaadin-valo-theme/color.html">
+<link rel="import" href="../../../bower_components/vaadin-valo-theme/sizing-and-spacing.html">
+<link rel="import" href="../../../bower_components/vaadin-valo-theme/style.html">
+<link rel="import" href="../../../bower_components/vaadin-valo-theme/icons.html">
+<link rel="import" href="../../../bower_components/vaadin-valo-theme/vaadin-button.html">
+<link rel="import" href="../../../bower_components/vaadin-valo-theme/vaadin-text-field.html">
+<link rel="import" href="../../../bower_components/vaadin-valo-theme/vaadin-checkbox.html">
+<link rel="import" href="../../../bower_components/vaadin-valo-theme/vaadin-date-picker.html">
+<link rel="import" href="../../../bower_components/vaadin-valo-theme/vaadin-form-layout.html">
+<link rel="import" href="../../../bower_components/vaadin-valo-theme/vaadin-form-item.html">
+<link rel="import" href="../../../bower_components/vaadin-valo-theme/vaadin-combo-box.html">
 
 <!-- valo theme shows clear icons in date-picker and combo-box, but we want it hidden in bakery app -->
 <dom-module id="bakery-combo-box-date-picker-styles" theme-for="vaadin-combo-box vaadin-date-picker">
@@ -66,6 +65,10 @@
         color: var(--valo-error-color);
         background: var(--valo-error-color-10pct);
       }
+
+      :host([theme~="center"]) [part="value"] {
+        text-align: center;
+      }
     </style>
   </template>
 </dom-module>
@@ -89,6 +92,10 @@
       :host([focused]) {
         background: var(--valo-base-color);
         background-image: linear-gradient(var(--valo-tint-5pct), var(--valo-tint-5pct));
+      }
+
+      :host([selected])::before {
+        content: "";
       }
     </style>
   </template>

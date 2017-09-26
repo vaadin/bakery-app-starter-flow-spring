@@ -7,11 +7,12 @@ import com.vaadin.flow.event.ComponentEventListener;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.shared.Registration;
+import com.vaadin.starter.bakery.ui.messages.Message;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HasClickListeners.ClickEvent;
 
 @Tag("confirm-dialog")
-@HtmlImport("frontend://src/elements/confirm-dialog.html")
+@HtmlImport("context://src/elements/confirm-dialog.html")
 public class ConfirmationDialog extends PolymerTemplate<ConfirmationDialog.Model> {
 
 	public interface Model extends TemplateModel {
@@ -46,6 +47,11 @@ public class ConfirmationDialog extends PolymerTemplate<ConfirmationDialog.Model
 			cancelRegistration.remove();
 			cancelRegistration = null;
 		}
+	}
+
+	public void show(Message message, ComponentEventListener<ClickEvent<Button>> okListener) {
+		show(message.getCaption(), message.getMessage(), message.getOkText(), message.getCancelText(), okListener,
+				null);
 	}
 
 	public void show(String caption, String message, String okText, String cancelText,
