@@ -1,7 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
-<link rel="import" href="../../bower_components/vaadin-themes/valo/icons.html">
+<link rel="import" href="../../bower_components/vaadin-valo-theme/icons.html">
 
 <dom-module id="amount-field">
   <template>
@@ -24,9 +24,10 @@
         opacity: 0.1;
       }
     </style>
-    <vaadin-text-field value="{{value}}" label="[[label]]" theme="center" pattern="\d*" part="text-field" prevent-invalid-input theme="center">
-      <iron-icon slot="prefix" id="minus" icon="valo:minus" on-click="_minus" disabled$="[[_isEqual(value, min)]]"></iron-icon>
-      <iron-icon slot="suffix" id="plus" icon="valo:plus" on-click="_plus" disabled$="[[_isEqual(value, max)]]"></iron-icon>
+
+    <vaadin-text-field id="amount" label="[[label]]" theme="center" pattern="\d*" part="text-field" prevent-invalid-input value=[[value]] readonly="true">
+      <iron-icon slot="prefix" id="minus" icon="valo:minus" on-click="minus" disabled$="[[!minusEnabled]]"></iron-icon>
+      <iron-icon slot="suffix" id="plus" icon="valo:plus" on-click="plus" disabled$="[[!plusEnabled]]"></iron-icon>
     </vaadin-text-field>
   </template>
 
@@ -47,32 +48,26 @@
             type: Number,
             value: 0
           },
+          disabled: {
+            type: Boolean,
+            value: false,
+            notify: true,
+            reflectToAttribute: true
+          },
+          readOnly: {
+            type: Boolean,
+            value: false,
+            notify: true,
+            reflectToAttribute: true
+          },
           max: {
             type: Number,
             value: Number.MAX_SAFE_INTEGER || (Math.pow(2, 53) - 1) /* MSIE fallback */
           },
+          plusEnabled: {type: Boolean},
+          minusEnabled: {type: Boolean},
           label: String
         };
-      }
-
-      _plus() {
-        if (this.value < this.max) {
-          this.value++;
-        } else if (isNaN(parseInt(this.value, 10))) {
-          this.value = 1;
-        }
-      }
-
-      _minus() {
-        if (this.value > this.min) {
-          this.value--;
-        } if (isNaN(parseInt(this.value, 10))) {
-          this.value = 1;
-        }
-      }
-
-      _isEqual(value, boundry) {
-        return Math.max(this.min, Math.min(value, this.max)) === boundry;
       }
     }
 

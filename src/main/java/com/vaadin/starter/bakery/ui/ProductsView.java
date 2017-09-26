@@ -1,6 +1,11 @@
 package com.vaadin.starter.bakery.ui;
 
-import com.vaadin.annotations.*;
+import com.vaadin.annotations.Convert;
+import com.vaadin.annotations.EventHandler;
+import com.vaadin.annotations.HtmlImport;
+import com.vaadin.annotations.Id;
+import com.vaadin.annotations.Include;
+import com.vaadin.annotations.Tag;
 import com.vaadin.flow.router.LocationChangeEvent;
 import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
@@ -15,7 +20,6 @@ import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
 import com.vaadin.starter.bakery.ui.components.ItemsView;
 import com.vaadin.starter.bakery.ui.components.ProductEdit;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
-import com.vaadin.ui.AttachEvent;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HasClickListeners.ClickEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,14 +34,14 @@ import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_CANCELBUTTO
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_CANCELBUTTON_DELETE;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_CAPTION_CANCEL;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_CAPTION_DELETE_PRODUCT;
-import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_MESSAGE_CANCEL;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_MESSAGE_CANCEL_PRODUCT;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_MESSAGE_DELETE;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_OKBUTTON_CANCEL;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_OKBUTTON_DELETE;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_PRODUCTS;
 
 @Tag("bakery-products")
-@HtmlImport("frontend://src/products/bakery-products.html")
+@HtmlImport("context://src/products/bakery-products.html")
 @Route(PAGE_PRODUCTS + "/{id}")
 @ParentView(BakeryApp.class)
 @Secured(Role.ADMIN)
@@ -55,14 +59,15 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 	@Id("view")
 	private ItemsView view;
 
+	@Id("product-editor")
 	private ProductEdit editor;
+
+	@Id("product-confirmation-dialog")
 	private ConfirmationDialog confirmationDialog;
 
 	@Autowired
 	public ProductsView(ProductService service) {
 		this.service = service;
-		confirmationDialog = new ConfirmationDialog();
-		getElement().appendChild(confirmationDialog.getElement());
 		initEditor();
 		getElement().addEventListener("edit", e -> navigateToProduct(e.getEventData().getString("event.detail")),
 				"event.detail");
@@ -74,25 +79,7 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 		view.addFilterChangeListener(this::filterProducts);
 	}
 
-	@Override
-	protected void onAttach(AttachEvent attachEvent) {
-		if (!attachEvent.isInitialAttach()) {
-			// A workaround for a Flow issue (see BFF-243 for details).
-			initEditor();
-		}
-
-		super.onAttach(attachEvent);
-	}
-
 	private void initEditor() {
-		if (editor != null) {
-			getElement().removeChild(editor.getElement());
-		}
-
-		editor = new ProductEdit();
-		editor.getElement().setAttribute("slot", "product-editor");
-		getElement().appendChild(editor.getElement());
-
 		editor.addDeleteListener(this::onBeforeDelete);
 		editor.addCancelListener(cancelClickEvent -> onBeforeClose());
 		editor.addSaveListener(saveClickEvent -> saveProduct(editor.getProduct()));
@@ -106,7 +93,7 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 	@EventHandler
 	private void onBeforeClose() {
 		if (editor.isDirty()) {
-			confirmationDialog.show(CONFIRM_CAPTION_CANCEL, CONFIRM_MESSAGE_CANCEL, CONFIRM_OKBUTTON_CANCEL,
+			confirmationDialog.show(CONFIRM_CAPTION_CANCEL, CONFIRM_MESSAGE_CANCEL_PRODUCT, CONFIRM_OKBUTTON_CANCEL,
 					CONFIRM_CANCELBUTTON_CANCEL, okButtonEvent -> navigateToProduct(null), null);
 		} else {
 			navigateToProduct(null);

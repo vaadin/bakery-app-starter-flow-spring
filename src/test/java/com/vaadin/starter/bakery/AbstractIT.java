@@ -87,7 +87,7 @@ public class AbstractIT extends TestBenchTestCase {
 	 * 
 	 *         * @throws TimeoutException If 10 seconds passed.
 	 */
-	protected WebElement waitUntilElementPresent(By by) {
+	protected WebElement waitUntilElementPresent(org.openqa.selenium.By by) {
 		return new WebDriverWait(getDriver(), 10).until(ExpectedConditions.presenceOfElementLocated(by));
 	}
 }

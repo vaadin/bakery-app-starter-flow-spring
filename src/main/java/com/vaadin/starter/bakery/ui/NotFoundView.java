@@ -13,7 +13,7 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import javax.servlet.http.HttpServletResponse;
 
 @Tag("bakery-404")
-@HtmlImport("frontend://src/404/bakery-404.html")
+@HtmlImport("context://src/404/bakery-404.html")
 @Route(value = BakeryConst.PAGE_NOTFOUND)
 @ParentView(BakeryApp.class)
 public class NotFoundView extends PolymerTemplate<TemplateModel> implements View {
