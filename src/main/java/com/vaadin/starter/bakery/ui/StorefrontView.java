@@ -81,7 +81,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		searchBar.setCheckboxText("Show past orders");
 		searchBar.setPlaceHolder("Search");
 		searchBar.addFilterChangeListener(this::filterItems);
-		searchBar.addActionClickListener(e -> getElement().callFunction("_openNewOrderDialog"));
+		searchBar.addActionClickListener(e -> edit(null));
 
 		filterItems(searchBar.getFilter(), searchBar.getShowPrevious());
 
