@@ -14,9 +14,10 @@ public class UsersViewIT extends AbstractIT {
 
 	private UsersViewElement openTestPage() {
 		openLoginView().login("admin@vaadin.com", "admin");
-		WebElement usersNavLink = findElement(By.shadowSelector("bakery-app::shadow bakery-navigation::shadow a[href='users']"));
+		WebElement usersNavLink = findElement(By.shadowSelector("bakery-app::shadow bakery-navigation::shadow paper-tab[page-id='users']"));
 		usersNavLink.click();
-		return ((TestBenchElement) findElement(By.tagName("bakery-users"))).wrap(UsersViewElement.class);
+		WebElement usersViewElement = waitUntilElementPresent(By.tagName("bakery-users"));
+		return ((TestBenchElement) usersViewElement).wrap(UsersViewElement.class);
 	}
 
 	@Test
