@@ -117,6 +117,13 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> im
 	}
 
 	@ClientDelegate
+	private void navigateTo(String href) {
+		if (href != null) {
+			getUI().ifPresent(ui -> ui.navigateTo(href));
+		}
+	}
+
+	@ClientDelegate
 	private void logout() {
 		UI ui = getUI().get();
 		History history = ui.getPage().getHistory();
