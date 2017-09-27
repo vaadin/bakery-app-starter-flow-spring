@@ -1,7 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
-<link rel="import" href="../../bower_components/paper-badge/paper-badge.html">
 <link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
@@ -99,14 +98,6 @@
         margin-left: 32px;
       }
 
-      paper-badge.alarms {
-        --paper-badge-width: 10px;
-        --paper-badge-height: 10px;
-        --paper-badge-margin-bottom: -10px;
-        --paper-badge-margin-left: -10px;
-        z-index: 2;
-      }
-
       [hidden] {
         display: none;
       }
@@ -165,8 +156,6 @@
         </paper-tabs>
         <vaadin-button class="user-button" hidden$="[[!_desktopView]]" theme="tertiary" on-click="_showUserMenuPopup" popup-menu-opened$="[[popupMenuOpened]]">
           <user-avatar src="[[user.image]]" alt="[[user.name]]" class="user-image" id="desktop-user-image"></user-avatar>
-          <paper-badge for="desktop-user-image" class="alarms" hidden$="[[!_showAlarms(user.alarms, _desktopView, 'desktop')]]">
-          </paper-badge>
           [[user.name]]
           <iron-icon icon="valo:chevron-down"></iron-icon>
         </vaadin-button>
@@ -174,8 +163,6 @@
       </div>
 
       <user-avatar src="[[user.image]]" alt="[[user.name]]" class="user-image mobile-user-image" hidden$="[[_desktopView]]" on-click="_showUserMenuPopup"></user-avatar>
-      <paper-badge class="alarms mobile-alarms" hidden$="[[!_showAlarms(user.alarms, _desktopView, 'mobile')]]">
-      </paper-badge>
     </template>
   </template>
 
