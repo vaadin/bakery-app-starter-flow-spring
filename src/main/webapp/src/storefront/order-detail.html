@@ -92,6 +92,10 @@
           height: auto;
         }
       }
+
+      vaadin-form-item[hidden] {
+        display: none;
+      }
     </style>
 
     <div class="scrollable main-row" id="main">
@@ -161,15 +165,43 @@
               </template>
             </table>
           </vaadin-form-item>
+
+          <vaadin-form-item id="history" label-position="top">
+            <label slot="label">History</label>
+            <template is="dom-repeat" items="[[history]]" as="event">
+              <div class="history-line">
+                <span class="bold">[[event.createdBy.firstName]]</span>
+                <span class="secondary">[[_getFullDate(event.timestamp)]]</span>
+                <storefront-item-badge status="[[event.newState]]" small></storefront-item-badge>
+              </div>
+              <div class="comment">[[event.message]]</div>
+            </template>
+          </vaadin-form-item>
+
+          <vaadin-form-item id="comment">
+            <vaadin-text-field id="comment-field" placeholder="Add comment" class="full-width">
+              <div slot="suffix" class="comment-suffix">
+                <vaadin-button id="send-comment" theme="tertiary">Send</vaadin-button>
+              </div>
+            </vaadin-text-field>
+          </vaadin-form-item>
+
         </vaadin-form-layout>
       </vaadin-form-layout>
     </div>
 
-     <div  class="footer">
+    <div class="footer">
       <vaadin-button id="back">Back</vaadin-button>
-      <div class="total money">Total [[totalPrice]]</span></div>
-      <vaadin-button id="save" theme="primary success" class="edit-button">Place Order ✓</vaadin-button>     
-     </div>
+      <vaadin-button id="cancel">Cancel</vaadin-button>
+      <div class="total money">Total [[totalPrice]]</div>
+
+      <vaadin-button id="save" theme="primary success" class="edit-button">Place Order ✓</vaadin-button>
+
+      <vaadin-button id="edit" theme="primary icon" class="edit-button">
+        <span>Edit order</span>
+        <iron-icon icon="valo:edit"></iron-icon>
+      </vaadin-button>
+    </div>
   </template>
 
   <script>
@@ -182,10 +214,6 @@
         return {
           item: {
             type: Object
-          },
-          review: {
-            type: Boolean,
-            value: false
           }
         };
       }

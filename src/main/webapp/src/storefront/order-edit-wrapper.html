@@ -40,7 +40,7 @@
       }
 
       _updateItems() {
-        this.querySelectorAll('order-edit').forEach(item => item.desktopView = this.desktopView);
+        Array.from(this.children).forEach(item => item.desktopView = this.desktopView);
       }
 
       _onBeforeClose(e) {
