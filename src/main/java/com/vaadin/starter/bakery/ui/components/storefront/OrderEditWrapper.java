@@ -32,9 +32,6 @@ public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 	private Order order;
 
 	public OrderEditWrapper() {
-		addToSlot(this, orderEdit, "detail-dialog");
-		addToSlot(this, orderDetail, "detail-dialog");
-
 		orderEdit.addCancelListener(e -> fireEvent(new CancelEvent(e.hasChanges())));
 		orderEdit.addReviewListener(e -> this.review());
 		orderDetail.addBackListener(e -> this.edit());
@@ -42,6 +39,9 @@ public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 	}
 
 	public void openEdit(Order order, User currentUser, Collection<Product> availableProducts) {
+		// no-op if orderEdit is already a child of `this`
+		addToSlot(this, orderEdit, "detail-dialog");
+
 		this.order = order;
 		orderEdit.init(currentUser, availableProducts);
 		orderEdit.setEditableItem(order);
@@ -62,6 +62,9 @@ public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 	}
 
 	private void review() {
+		// no-op if orderDetail is already a child of `this`
+		addToSlot(this, orderDetail, "detail-dialog");
+
 		final boolean review = true;
 		orderDetail.display(order, review);
 		getModel().setReview(review);
