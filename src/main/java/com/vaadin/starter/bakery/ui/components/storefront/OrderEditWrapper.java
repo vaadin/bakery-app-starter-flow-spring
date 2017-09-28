@@ -3,7 +3,6 @@ package com.vaadin.starter.bakery.ui.components.storefront;
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Tag;
 import com.vaadin.flow.event.ComponentEventListener;
-import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.shared.Registration;
@@ -20,7 +19,7 @@ import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
 @Tag("order-edit-wrapper")
 @HtmlImport("context://src/storefront/order-edit-wrapper.html")
-public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> implements View {
+public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 
 	public interface Model extends TemplateModel {
 		void setOpened(boolean opened);
