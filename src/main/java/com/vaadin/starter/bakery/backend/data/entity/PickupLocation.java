@@ -24,4 +24,8 @@ public class PickupLocation extends AbstractEntity {
 		this.name = name;
 	}
 
+	@Override
+	public String toString() {
+		return "PickupLocation{" + "name='" + name + '\'' + '}';
+	}
 }

@@ -8,15 +8,19 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import com.vaadin.data.BeanValidationBinder;
+import com.vaadin.data.Result;
 import com.vaadin.data.ValidationException;
+import com.vaadin.data.ValueContext;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
+import com.vaadin.starter.bakery.backend.data.entity.PickupLocation;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.ui.HasToast;
 import com.vaadin.starter.bakery.ui.converters.LocalTimeConverter;
+import com.vaadin.starter.bakery.ui.converters.binder.BinderConverter;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
@@ -86,7 +90,10 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 	public OrderEdit() {
 		addToSlot(this, items, "order-items-edit");
 
-		cancel.addClickListener(e -> fireEvent(new CancelEvent(binder.hasChanges())));
+		cancel.addClickListener(e -> {
+			System.out.println("bean: " + binder.getBean());
+			fireEvent(new CancelEvent(binder.hasChanges()));
+		});
 		review.addClickListener(e -> {
 			try {
 				binder.writeBean(this.order);
@@ -99,8 +106,8 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 		status.setItems(Arrays.stream(OrderState.values()).map(OrderState::getDisplayName));
 		status.addValueChangeListener(e -> getModel().setStatus(e.getValue()));
 
-		binder.forField(status).withConverter(new OrderStateConverter()).bind(Order::getState,
-				(o, s) -> o.changeState(currentUser, s));
+		binder.forField(status).withConverter(new OrderStateConverter())
+				.bind(Order::getState, (o, s) -> o.changeState(currentUser, s));
 
 		date.setValue(LocalDate.now());
 		binder.forField(date).bind("dueDate");
@@ -112,7 +119,27 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 		binder.forField(time).withConverter(localTimeConverter).bind("dueTime");
 
 		pickupLocation.setItems("Bakery", "Store");
-		binder.forField(pickupLocation).bind("pickupLocation.name");
+		binder.forField(pickupLocation).withConverter(new BinderConverter<String, PickupLocation>() {
+			@Override
+			public String convertNullToPresentation(PickupLocation modelValue, ValueContext valueContext) {
+				return "";
+			}
+
+			@Override
+			public Result<PickupLocation> convertToModelIfNotNull(String presentationValue, ValueContext valueContext) {
+				PickupLocation location = new PickupLocation();
+				location.setName(presentationValue);
+				return Result.ok(location);
+			}
+
+			@Override
+			public String convertToPresentationIfNotNull(PickupLocation modelValue, ValueContext valueContext) {
+				if (modelValue.getName() == null) {
+					return "";
+				}
+				return modelValue.getName();
+			}
+		}).bind(Order::getPickupLocation, Order::setPickupLocation);
 
 		customerName.setRequired(true);
 		binder.forField(customerName).bind("customer.fullName");
@@ -141,8 +168,12 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 
 	public void setEditableItem(Order order) {
 		this.order = order;
+		System.out.println("orde: " + order);
 		getModel().setOpened(true);
 		binder.readBean(order);
+
+		System.out.println("bean after load: " + pickupLocation.getValue());
+
 		boolean newOrder = order.getId() == null;
 		title.setText(String.format("%s Order", newOrder ? "New" : "Edit"));
 		review.setDisabled(true);

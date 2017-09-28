@@ -20,8 +20,8 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Dependencies -->
-        <vaadin.version>10.0-SNAPSHOT</vaadin.version>
-        <flow.version>1.0.0.alpha2</flow.version>
+        <vaadin.version>10.0.0.alpha3</vaadin.version>
+        <flow.version>1.0.0.alpha3</flow.version>
 
         <spring-boot.version>1.5.4.RELEASE</spring-boot.version>
         <failOnMissingWebXml>false</failOnMissingWebXml>
@@ -111,11 +111,6 @@
                     <artifactId>flow-server-production-mode</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>flow</artifactId>
-            <version>${flow.version}</version>
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>

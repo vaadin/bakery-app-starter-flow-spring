@@ -15,7 +15,7 @@ import com.vaadin.starter.bakery.ui.NotFoundView;
  * The main servlet for the application.
  *
  */
-@VaadinServletConfiguration(routerConfigurator = SpringAwareConfigurator.class, productionMode = false)
+@VaadinServletConfiguration(routerConfigurator = SpringAwareConfigurator.class, productionMode = false, usingNewRouting = false)
 public class BakeryServlet extends VaadinServlet {
 
     @Override

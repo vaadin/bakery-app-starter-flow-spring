@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.vaadin.flow.model.TemplateModel;
-import com.vaadin.flow.router.View;
-import com.vaadin.hummingbird.ext.spring.annotations.UIScope;
 import com.vaadin.starter.bakery.app.BeanLocator;
 import com.vaadin.starter.bakery.app.security.SecuredViewAccessControl;
 import com.vaadin.starter.bakery.app.security.SecurityUtils;
@@ -20,10 +18,9 @@ import com.vaadin.ui.common.ClientDelegate;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
-@UIScope
 @Tag("bakery-navigation")
 @HtmlImport("context://src/app/bakery-navigation.html")
-public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> implements View {
+public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> {
 	private boolean loggedIn;
 	
 	public static class UserModel {

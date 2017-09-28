@@ -48,7 +48,6 @@ implements HasValue<OrderItemsEdit, List<OrderItem>> {
 	public void reset() {
 		registrations.forEach(Registration::remove);
 		registrations.clear();
-		editors.forEach(i -> getElement().removeChild(i.getElement()));
 		editors.clear();
 		if (items != null)
 			items.clear();
