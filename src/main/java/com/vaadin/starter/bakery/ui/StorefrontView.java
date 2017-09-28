@@ -11,10 +11,10 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.access.annotation.Secured;
 
 import com.vaadin.annotations.ClientDelegate;
-import com.vaadin.annotations.EventHandler;
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Id;
 import com.vaadin.annotations.Tag;
+import com.vaadin.flow.router.LocationChangeEvent;
 import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
@@ -22,7 +22,6 @@ import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.Role;
-import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.backend.service.ProductService;
 import com.vaadin.starter.bakery.backend.service.UserService;
@@ -32,14 +31,14 @@ import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.starter.bakery.ui.entities.Order;
 import com.vaadin.starter.bakery.ui.messages.Message;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
-import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
 
 import static com.vaadin.starter.bakery.ui.utils.StorefrontItemHeaderGenerator.computeEntriesWithHeader;
 import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
 @Tag("bakery-storefront")
 @HtmlImport("context://src/storefront/bakery-storefront.html")
-@Route(BakeryConst.PAGE_STOREFRONT)
+@Route(BakeryConst.PAGE_STOREFRONT + "/{id}")
+@Route(BakeryConst.PAGE_STOREFRONT + "/{id}/edit")
 @Route(value = "")
 @ParentView(BakeryApp.class)
 @Secured(Role.BARISTA)
@@ -49,8 +48,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		void setOrders(List<Order> orders);
 
 		List<Order> getOrders();
-
-		void setEditing(boolean editing);
 	}
 
 	@Id("search")
@@ -74,7 +71,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		this.orderService = orderService;
 		this.userService = userService;
 
-		editWrapper = new OrderEditWrapper();
+		editWrapper = new OrderEditWrapper(productService, userService);
 		addToSlot(this, editWrapper, "order-edit-wrapper");
 
 		searchBar.setActionText("New order");
@@ -109,6 +106,15 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 				this.closeEditor();
 			}
 		});
+
+		editWrapper.addCommentListener(e -> {
+			if (e.getOrderId() == null) {
+				return;
+			}
+
+			addComment(e.getOrderId().toString(), e.getMessage());
+			editWrapper.openDetails(orderService.findOrder(e.getOrderId()));
+		});
 	}
 
 	private void filterItems(String filter, boolean showPrevious) {
@@ -131,25 +137,40 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 	@ClientDelegate
 	private void edit(String id) {
-		com.vaadin.starter.bakery.backend.data.entity.Order order;
-		User currentUser = userService.getCurrentUser();
-		if (id == null) {
-			order = new com.vaadin.starter.bakery.backend.data.entity.Order(currentUser);
-			order.setDueTime(LocalTime.of(16, 0));
-			order.setDueDate(LocalDate.now());
-		} else {
-			order = orderService.findOrder(Long.valueOf(id));
+		if (id != null && !id.isEmpty()) {
+			getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT + "/" + id + "/edit"));
+			return;
 		}
 
-		editWrapper.openEdit(order, currentUser, productService.getRepository().findAll());
-		getModel().setEditing(true);
-
+		com.vaadin.starter.bakery.backend.data.entity.Order order;
+		order = new com.vaadin.starter.bakery.backend.data.entity.Order(userService.getCurrentUser());
+		order.setDueTime(LocalTime.of(16, 0));
+		order.setDueDate(LocalDate.now());
+		openOrderEditor(order);
 	}
 
-	@EventHandler
-	public void closeEditor() {
-		getModel().setEditing(false);
+	private void closeEditor() {
 		editWrapper.close();
+		getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT));
+	}
+
+	private void openOrderEditor(com.vaadin.starter.bakery.backend.data.entity.Order order) {
+		editWrapper.openEdit(order, userService.getCurrentUser(), productService.getRepository().findAll());
+	}
+
+	@Override
+	public void onLocationChange(LocationChangeEvent locationChangeEvent) {
+		String orderId = locationChangeEvent.getPathParameter("id");
+		try {
+			Long id = Long.parseLong(orderId);
+			com.vaadin.starter.bakery.backend.data.entity.Order order = orderService.findOrder(id);
+			if (locationChangeEvent.getLocation().getSegments().contains("edit")) {
+				editWrapper.openEdit(order, userService.getCurrentUser(), productService.getRepository().findAll());
+			} else {
+				editWrapper.openDetails(order);
+			}
+		} catch (Exception e) {
+		}
 	}
 
 	private void updateOrderInModel(String orderId) {

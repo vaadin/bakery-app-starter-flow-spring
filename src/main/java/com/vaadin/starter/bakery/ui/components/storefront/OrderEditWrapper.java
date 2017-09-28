@@ -1,7 +1,5 @@
 package com.vaadin.starter.bakery.ui.components.storefront;
 
-import java.util.Collection;
-
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Tag;
 import com.vaadin.flow.event.ComponentEventListener;
@@ -11,7 +9,11 @@ import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.User;
+import com.vaadin.starter.bakery.backend.service.ProductService;
+import com.vaadin.starter.bakery.backend.service.UserService;
 import com.vaadin.ui.ComponentEvent;
+
+import java.util.Collection;
 
 import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
@@ -20,8 +22,6 @@ import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 
 	public interface Model extends TemplateModel {
-		void setReview(boolean review);
-
 		void setOpened(boolean opened);
 	}
 
@@ -31,11 +31,14 @@ public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 
 	private Order order;
 
-	public OrderEditWrapper() {
+	public OrderEditWrapper(ProductService productService, UserService userService) {
 		orderEdit.addCancelListener(e -> fireEvent(new CancelEvent(e.hasChanges())));
-		orderEdit.addReviewListener(e -> this.review());
+		orderEdit.addReviewListener(e -> this.details(true));
 		orderDetail.addBackListener(e -> this.edit());
 		orderDetail.addSaveListener(e -> fireEvent(new SaveEvent()));
+		orderDetail.addEditListener(
+				e -> openEdit(order, userService.getCurrentUser(), productService.getRepository().findAll()));
+		orderDetail.addCancelListener(e -> fireEvent(new CancelEvent(false)));
 	}
 
 	public void openEdit(Order order, User currentUser, Collection<Product> availableProducts) {
@@ -53,6 +56,12 @@ public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 		edit();
 	}
 
+	public void openDetails(Order order) {
+		this.order = order;
+		details(false);
+		getModel().setOpened(true);
+	}
+
 	public void close() {
 		orderEdit.close();
 		this.order = null;
@@ -60,22 +69,18 @@ public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 	}
 
 	private void edit() {
-		getModel().setReview(false);
 		orderEdit.getElement().setAttribute("hidden", false);
 		orderDetail.getElement().setAttribute("hidden", true);
 	}
 
-	private void review() {
+	private void details(boolean isReview) {
 		// This is a workaround for a Safari 11 issue.
 		// If the orderDetail is injected into the page in the OrderEditWrapper constructor,
 		// Safari fails to set the styles correctly.
 		if (orderDetail.getElement().getParent() == null) {
 			addToSlot(this, orderDetail, "detail-dialog");
 		}
-
-		final boolean review = true;
-		orderDetail.display(order, review);
-		getModel().setReview(review);
+		orderDetail.display(order, isReview);
 		orderEdit.getElement().setAttribute("hidden", true);
 		orderDetail.getElement().setAttribute("hidden", false);
 	}
@@ -86,6 +91,10 @@ public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 
 	public Registration addCancelListener(ComponentEventListener<CancelEvent> listener) {
 		return addListener(CancelEvent.class, listener);
+	}
+
+	public Registration addCommentListener(ComponentEventListener<OrderDetail.CommentEvent> listener) {
+		return orderDetail.addCommentListener(listener);
 	}
 
 	public class CancelEvent extends ComponentEvent<OrderEditWrapper> {
