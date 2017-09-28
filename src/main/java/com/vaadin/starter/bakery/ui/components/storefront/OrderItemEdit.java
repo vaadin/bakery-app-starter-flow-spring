@@ -56,7 +56,7 @@ public class OrderItemEdit extends PolymerTemplate<OrderItemEdit.Model> implemen
 		this.productSource = productSource;
 		this.amount.setDisabled(true);
 		productSource.setupBeanComboBox(products);
-		products.addChangeListener(e -> {
+		products.addValueChangeListener(e -> {
 			if (this.amount.getValue() == null) {
 				this.amount.setDisabled(false);
 				this.amount.setValue(1);
