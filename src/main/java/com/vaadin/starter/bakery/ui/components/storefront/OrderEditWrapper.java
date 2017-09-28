@@ -13,7 +13,6 @@ import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.ProductService;
 import com.vaadin.starter.bakery.backend.service.UserService;
 import com.vaadin.ui.ComponentEvent;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collection;
 
