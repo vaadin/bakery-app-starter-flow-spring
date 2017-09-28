@@ -39,8 +39,12 @@ public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 	}
 
 	public void openEdit(Order order, User currentUser, Collection<Product> availableProducts) {
-		// no-op if orderEdit is already a child of `this`
-		addToSlot(this, orderEdit, "detail-dialog");
+		// This is a workaround for a Safari 11 issue.
+		// If the orderEdit is injected into the page in the OrderEditWrapper constructor,
+		// Safari fails to set the styles correctly.
+		if (orderEdit.getElement().getParent() == null) {
+			addToSlot(this, orderEdit, "detail-dialog");
+		}
 
 		this.order = order;
 		orderEdit.init(currentUser, availableProducts);
@@ -62,8 +66,12 @@ public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 	}
 
 	private void review() {
-		// no-op if orderDetail is already a child of `this`
-		addToSlot(this, orderDetail, "detail-dialog");
+		// This is a workaround for a Safari 11 issue.
+		// If the orderDetail is injected into the page in the OrderEditWrapper constructor,
+		// Safari fails to set the styles correctly.
+		if (orderDetail.getElement().getParent() == null) {
+			addToSlot(this, orderDetail, "detail-dialog");
+		}
 
 		final boolean review = true;
 		orderDetail.display(order, review);
