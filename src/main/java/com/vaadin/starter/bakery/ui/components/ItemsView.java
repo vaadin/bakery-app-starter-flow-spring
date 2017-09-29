@@ -1,7 +1,6 @@
 package com.vaadin.starter.bakery.ui.components;
 
 import com.vaadin.annotations.HtmlImport;
-import com.vaadin.annotations.Id;
 import com.vaadin.annotations.Tag;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
@@ -13,18 +12,21 @@ import com.vaadin.ui.HasClickListeners.ClickEvent;
 import java.util.function.Consumer;
 
 @Tag("items-view")
-@HtmlImport("frontend://src/elements/items-view.html")
+@HtmlImport("context://src/elements/items-view.html")
 public class ItemsView extends PolymerTemplate<ItemsView.Model> {
 
 	public interface Model extends TemplateModel {
 		void setEditing(Boolean editing);
 	}
 
-	@Id("item-search")
 	private BakerySearch searchBar;
 
 	public ItemsView() {
+		searchBar = new BakerySearch();
+		searchBar.getElement().setAttribute("slot", "item-search");
 		searchBar.setPlaceHolder("Search");
+
+		getElement().appendChild(searchBar.getElement());
 	}
 
 	public void addFilterChangeListener(Consumer<String> consumer) {

@@ -65,6 +65,11 @@ public class OrderService {
 	}
 
 	@Transactional(rollbackOn = Exception.class)
+	public Order saveOrder(Order order) {
+		return getOrderRepository().save(order);
+	}
+	
+	@Transactional(rollbackOn = Exception.class)
 	public Order addComment(Long id, String comment) {
 		Order order = findOrder(id);
 		order.addHistoryItem(getUserService().getCurrentUser(), comment);

@@ -20,7 +20,7 @@ import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 
 @Tag("user-edit")
-@HtmlImport("frontend://src/users/user-edit.html")
+@HtmlImport("context://src/users/user-edit.html")
 public class UserEdit extends PolymerTemplate<UserEdit.Model> implements View {
 
 	public interface Model extends TemplateModel {

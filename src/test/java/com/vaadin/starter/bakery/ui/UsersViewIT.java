@@ -14,9 +14,10 @@ public class UsersViewIT extends AbstractIT {
 
 	private UsersViewElement openTestPage() {
 		openLoginView().login("admin@vaadin.com", "admin");
-		WebElement usersNavLink = findElement(By.shadowSelector("bakery-app::shadow bakery-navigation::shadow a[href='users']"));
+		WebElement usersNavLink = findElement(By.shadowSelector("bakery-app::shadow bakery-navigation::shadow paper-tab[page-id='users']"));
 		usersNavLink.click();
-		return ((TestBenchElement) findElement(By.tagName("bakery-users"))).wrap(UsersViewElement.class);
+		WebElement usersViewElement = waitUntilElementPresent(By.tagName("bakery-users"));
+		return ((TestBenchElement) usersViewElement).wrap(UsersViewElement.class);
 	}
 
 	@Test
@@ -66,8 +67,7 @@ public class UsersViewIT extends AbstractIT {
 
 		page.getDeleteButton().click();
 
-		WebElement dialogElement = findElements(By.tagName("confirm-dialog"))
-				.stream().filter(WebElement::isDisplayed).findFirst().get();
+		WebElement dialogElement = findElement(By.shadowSelector("bakery-users::shadow #user-confirmation-dialog"));
 		Assert.assertNotNull(dialogElement);
 		ConfirmDialogElement dialog = ((TestBenchElement) dialogElement).wrap(ConfirmDialogElement.class);
 		dialog.confirm();

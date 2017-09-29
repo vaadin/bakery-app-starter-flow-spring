@@ -1,0 +1,231 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
+<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-item.html">
+<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
+<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../elements/utils-mixin.html">
+
+<link rel="import" href="storefront-item-badge.html">
+
+<dom-module id="order-detail">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        height: 100%;
+      }
+
+      .main-row {
+        flex: 1;
+      }
+
+      h3 {
+        margin: 0;
+      }
+
+      .date,
+      .time {
+        white-space: nowrap;
+      }
+
+      .dim,
+      .secondary {
+        color: var(--valo-secondary-text-color);
+      }
+
+      .secondary {
+        font-size: var(--valo-font-size-xs);
+        line-height: var(--valo-font-size-xl);
+      }
+
+      .meta-row {
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: var(--valo-space-s);
+      }
+
+      .products {
+        width: 100%;
+      }
+
+      .products td {
+        text-align: center;
+        vertical-align: middle;
+        padding: var(--valo-space-xs);
+        border: none;
+        border-bottom: 1px solid var(--valo-contrast-10pct);
+      }
+
+      .products td.product-name {
+        text-align: left;
+        padding-left: 0;
+        width: 100%;
+      }
+
+      .products td.number {
+        text-align: right;
+      }
+
+      .products td.money {
+        text-align: right;
+        padding-right: 0;
+      }
+
+      .history-line {
+        margin: var(--valo-space-xs) 0;
+      }
+
+      .comment {
+        font-size: var(--valo-font-size-s);
+      }
+
+      @media (min-width: 600px) {
+        .bottom-row {
+          height: auto;
+        }
+
+        .main-row {
+          padding: var(--valo-space-l);
+          height: auto;
+        }
+      }
+
+      vaadin-form-item[hidden] {
+        display: none;
+      }
+    </style>
+
+    <div class="scrollable main-row" id="main">
+      <div class="meta-row">
+        <storefront-item-badge status="[[item.state]]"></storefront-item-badge>
+        <span class="dim">Order #[[item.id]]</span>
+      </div>
+
+      <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 4, 1)]]">
+        <vaadin-form-item>
+          <label slot="label">Due</label>
+          <vaadin-form-layout responsive-steps='[{"columns": 1}, {"minWidth": "180px", "columns": 2}]'>
+            <div class="date">
+              <h3>[[_getDay(item.dueDate)]]</h3>
+              <span class="dim">[[_getWeekday(item.dueDate)]]</span>
+            </div>
+            <div class="time">
+              <h3>[[_getTime(item.dueTime)]]</h3>
+              <span class="dim">[[item.pickupLocation.name]]</span>
+            </div>
+          </vaadin-form-layout>
+        </vaadin-form-item>
+
+        <vaadin-form-item colspan="2">
+          <label slot="label">Customer</label>
+          <h3>[[item.customer.fullName]]</h3>
+        </vaadin-form-item>
+
+        <vaadin-form-item>
+          <label slot="label">Phone number</label>
+          <h3>[[item.customer.phoneNumber]]</h3>
+        </vaadin-form-item>
+      </vaadin-form-layout>
+
+      <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 4, 1)]]">
+        <div></div>
+
+        <vaadin-form-layout colspan="2" responsive-steps='[{"columns": 1, "labelsPosition": "top"}]'>
+          <template is="dom-if" if="[[item.customer.details]]">
+            <vaadin-form-item label-position="top">
+              <label slot="label">Additional details</label>
+              <span>[[item.customer.details]]</span>
+            </vaadin-form-item>
+          </template>
+
+          <vaadin-form-item>
+            <label slot="label">Products</label>
+            <table class="products">
+              <template is="dom-repeat" items="[[item.items]]" as="item">
+                <dom-if if="[[item.product.name]]" hidden>
+                  <template>
+                    <tr>
+                      <td class="product-name">
+                        <div class="bold">[[item.product.name]]</div>
+                        <div class="secondary">[[item.comment]]</div>
+                      </td>
+                      <td class="number">
+                        <span class="count">[[item.quantity]]</span>
+                      </td>
+                      <td class="dim">&times;</td>
+                      <td class="money">
+                        [[_getCurrency(item.product.price)]]
+                      </td>
+                    </tr>
+                  </template>
+                </dom-if>
+              </template>
+            </table>
+          </vaadin-form-item>
+
+          <vaadin-form-item id="history" label-position="top">
+            <label slot="label">History</label>
+            <template is="dom-repeat" items="[[history]]" as="event">
+              <div class="history-line">
+                <span class="bold">[[event.createdBy.firstName]]</span>
+                <span class="secondary">[[_getFullDate(event.timestamp)]]</span>
+                <storefront-item-badge status="[[event.newState]]" small></storefront-item-badge>
+              </div>
+              <div class="comment">[[event.message]]</div>
+            </template>
+          </vaadin-form-item>
+
+          <vaadin-form-item id="comment">
+            <vaadin-text-field id="comment-field" placeholder="Add comment" class="full-width">
+              <div slot="suffix" class="comment-suffix">
+                <vaadin-button id="send-comment" theme="tertiary">Send</vaadin-button>
+              </div>
+            </vaadin-text-field>
+          </vaadin-form-item>
+
+        </vaadin-form-layout>
+      </vaadin-form-layout>
+    </div>
+
+    <div class="footer">
+      <vaadin-button id="back">Back</vaadin-button>
+      <vaadin-button id="cancel">Cancel</vaadin-button>
+      <div class="total money">Total [[totalPrice]]</div>
+
+      <vaadin-button id="save" theme="primary success" class="edit-button">Place Order ✓</vaadin-button>
+
+      <vaadin-button id="edit" theme="primary icon" class="edit-button">
+        <span>Edit order</span>
+        <iron-icon icon="valo:edit"></iron-icon>
+      </vaadin-button>
+    </div>
+  </template>
+
+  <script>
+    class OrderDetail extends window.LocaleUtilsMixin(window.ScrollShadowMixin(Polymer.Element)) {
+      static get is() {
+        return 'order-detail';
+      }
+
+      static get properties() {
+        return {
+          item: {
+            type: Object
+          }
+        };
+      }
+
+      _computeResponsiveSteps(desktopView, desktopColumns, mobileColumns) {
+        return [{
+          columns: desktopView ? desktopColumns : mobileColumns,
+          labelsPosition: 'top'
+        }];
+      }
+    }
+
+    window.customElements.define(OrderDetail.is, OrderDetail);
+  </script>
+</dom-module>

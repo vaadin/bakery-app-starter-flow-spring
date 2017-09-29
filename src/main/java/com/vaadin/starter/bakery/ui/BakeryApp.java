@@ -14,7 +14,7 @@ import com.vaadin.ui.AttachEvent;
 import com.vaadin.ui.UI;
 
 @Tag("bakery-app")
-@HtmlImport("frontend://src/app/bakery-app.html")
+@HtmlImport("context://src/app/bakery-app.html")
 @UIScope
 public class BakeryApp extends PolymerTemplate<BakeryApp.Model> implements HasChildView {
 
@@ -35,7 +35,7 @@ public class BakeryApp extends PolymerTemplate<BakeryApp.Model> implements HasCh
 
 		// TODO(vlukashov, 2017.08.11): Remove this once https://github.com/vaadin/flow/issues/1969 is closed.
 		// ensure the app shell bundle is loaded before any others
-		UI.getCurrent().getPage().addHtmlImport("frontend://src/app/bakery-app.html");
+		UI.getCurrent().getPage().addHtmlImport("context://src/app/bakery-app.html");
 	}
 
 	@Override

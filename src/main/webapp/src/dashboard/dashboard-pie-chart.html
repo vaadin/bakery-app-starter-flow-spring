@@ -1,4 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/vaadin-charts/data-series.html">
 <link rel="import" href="../../bower_components/vaadin-charts/vaadin-pie-chart.html">
 
 <dom-module id="dashboard-pie-chart">
@@ -12,7 +13,7 @@
     </style>
     <div class="wrapper">
     <vaadin-pie-chart id="donut">
-      <chart border-radius="4" background-color="var(--valo-tint)"></chart>
+      <chart border-radius="4" background-color="rgb(255, 255, 255)"></chart>
       <chart-title>
         <text>[[data.title]]</text>
         <chart-style>
