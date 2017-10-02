@@ -1,7 +1,5 @@
 package com.vaadin.starter.bakery.backend.service;
 
-import static java.util.stream.Collectors.toSet;
-
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
@@ -13,7 +11,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 import javax.transaction.Transactional;
 import javax.validation.ValidationException;
@@ -31,6 +28,8 @@ import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.repositories.CustomerRepository;
 import com.vaadin.starter.bakery.repositories.OrderRepository;
+
+import static java.util.stream.Collectors.toSet;
 
 @Service
 public class OrderService {
@@ -87,7 +86,7 @@ public class OrderService {
 
 	public Page<Order> findAnyMatchingAfterDueDate(Optional<String> optionalFilter,
 			Optional<LocalDate> optionalFilterDate, Pageable pageable) {
-		if (optionalFilter.isPresent()) {
+		if (optionalFilter.isPresent() && !optionalFilter.get().isEmpty()) {
 			if (optionalFilterDate.isPresent()) {
 				return getOrderRepository().findByCustomerFullNameContainingIgnoreCaseOrStateInAndDueDateAfter(
 						optionalFilter.get(), matchingStates(optionalFilter.get()), optionalFilterDate.get(), pageable);

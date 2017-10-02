@@ -1,0 +1,2 @@
+{"csrfToken":"${seckey}","rpc":[{"type":"navigation","location":"storefront","link":1}],"syncId":${syncId},"clientId":${clientId}}
+
