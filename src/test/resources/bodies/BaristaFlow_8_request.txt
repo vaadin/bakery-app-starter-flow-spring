@@ -1,0 +1,1 @@
+{"csrfToken":"${seckey}","rpc":[{"type":"publishedEventHandler","node":${ordersPageId},"templateEventMethodName":"loadOrdersPage","templateEventMethodArgs":[1,50]}],"syncId":${syncId},"clientId":${clientId}}
