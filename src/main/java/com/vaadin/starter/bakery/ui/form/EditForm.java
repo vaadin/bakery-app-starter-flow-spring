@@ -36,9 +36,6 @@ public class EditForm extends PolymerTemplate<TemplateModel> implements View, Ha
 	@Id("cancel")
 	private Button cancelButton;
 
-	@Id("confirmation-dialog")
-	private ConfirmationDialog confirmationDialog;
-
 	private String entityName;
 
 	public <E> void init(Binder<E> binder, Supplier<E> entitySupplier, String entityName) {
