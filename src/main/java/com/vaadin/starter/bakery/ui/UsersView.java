@@ -23,13 +23,13 @@ import com.vaadin.starter.bakery.ui.components.ItemsView;
 import com.vaadin.starter.bakery.ui.components.UserEdit;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
+import com.vaadin.starter.bakery.ui.form.EditFormUtil;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HasClickListeners.ClickEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
@@ -93,8 +93,8 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 
 	private void initUserEdit() {
 		editor.setupBinding(passwordEncoder);
-		editor.addSaveListener(this::saveUser);
-		editor.addDeleteListener(this::onBeforeDelete);
+		editor.addSaveListener(e -> saveUser());
+		editor.addDeleteListener(e -> deleteUser());
 		editor.addCancelListener(cancelClickEvent -> onBeforeClose());
 	}
 
@@ -113,7 +113,6 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 				getLogger().error(errorMessage);
 				return;
 			}
-
 			view.openDialog(true);
 			editor.setUser(user);
 		} catch (NumberFormatException e) {
@@ -137,12 +136,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 		view.openDialog(true);
 	}
 
-	private void onBeforeDelete(ClickEvent<Button> deleteEvent) {
-		confirmationDialog.show(CONFIRM_CAPTION_DELETE_USER, CONFIRM_MESSAGE_DELETE, CONFIRM_OKBUTTON_DELETE,
-				CONFIRM_CANCELBUTTON_DELETE, this::deleteUser, null);
-	}
-
-	private void deleteUser(ClickEvent<Button> confirmOkDeleteEvent) {
+	private void deleteUser() {
 		try {
 			userService.delete(editor.getUser().getId());
 			navigateToUser(null);
@@ -171,38 +165,17 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 		}
 	}
 
-	private void saveUser(ClickEvent<Button> saveEvent) {
-		try {
+	private void saveUser() {
+		EditFormUtil.handleSave(this, () -> {
 			editor.writeEditsToUser();
 			userService.save(editor.getUser());
 			navigateToUser(null);
-		} catch (DataIntegrityViolationException e) {
-			// Commit failed because of validation errors
-			toast(e.getMessage(), true);
-			getLogger().debug("Data integrity violation error while updating entity of type "
-					+ com.vaadin.starter.bakery.backend.data.entity.User.class.getName(), e);
-		} catch (OptimisticLockingFailureException e) {
-			// Somebody else probably edited the data at the same time
-			toast("Somebody else might have updated the data. Please refresh and try again.", true);
-			getLogger().debug("Optimistic locking error while saving entity of type "
-					+ com.vaadin.starter.bakery.backend.data.entity.User.class.getName(), e);
-		} catch (Exception e) {
-			// Something went wrong, no idea what
-			toast("A problem occurred while saving the data. Please check the fields.", true);
-			getLogger().error("Unable to save entity of type "
-					+ com.vaadin.starter.bakery.backend.data.entity.User.class.getName(), e);
-		} finally {
-			filterUsers(view.getFilter());
-		}
+		});
+		filterUsers(view.getFilter());
 	}
 
 	@EventHandler
 	private void onBeforeClose() {
-		if (editor.isDirty()) {
-			confirmationDialog.show(CONFIRM_CAPTION_CANCEL, CONFIRM_MESSAGE_CANCEL_USER, CONFIRM_OKBUTTON_CANCEL,
-					CONFIRM_CANCELBUTTON_CANCEL, okButtonEvent -> navigateToUser(null), null);
-		} else {
-			navigateToUser(null);
-		}
+		EditFormUtil.handeCancel(confirmationDialog, "User", editor.isDirty(), () -> navigateToUser(null));
 	}
 }
