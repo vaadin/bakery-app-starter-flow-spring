@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.vaadin.annotations.Title;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 
@@ -39,6 +40,7 @@ import com.vaadin.ui.AttachEvent;
 @HtmlImport("context://src/dashboard/bakery-dashboard.html")
 @Route(BakeryConst.PAGE_DASHBOARD)
 @ParentView(BakeryApp.class)
+@Title(BakeryConst.TITLE_DASHBOARD)
 public class DashboardView extends PolymerTemplate<DashboardView.Model> implements View {
 
 	private final OrdersDataProvider ordersProvider;

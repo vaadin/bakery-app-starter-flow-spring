@@ -6,7 +6,6 @@ import com.vaadin.annotations.Id;
 import com.vaadin.annotations.Tag;
 import com.vaadin.flow.event.ComponentEventListener;
 import com.vaadin.flow.html.H3;
-import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.shared.Registration;
@@ -19,7 +18,7 @@ import java.text.DecimalFormat;
 
 @Tag("product-edit")
 @HtmlImport("context://src/products/product-edit.html")
-public class ProductEdit extends PolymerTemplate<TemplateModel> implements View {
+public class ProductEdit extends PolymerTemplate<TemplateModel> {
 
 	@Id("title")
 	private H3 title;
