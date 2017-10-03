@@ -4,6 +4,7 @@ import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Id;
 import com.vaadin.annotations.Tag;
 import com.vaadin.data.BeanValidationBinder;
+import com.vaadin.data.ValidationException;
 import com.vaadin.flow.event.ComponentEventListener;
 import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
@@ -22,7 +23,7 @@ import com.vaadin.ui.TextField;
 
 @Tag("user-edit")
 @HtmlImport("context://src/users/user-edit.html")
-public class UserEdit extends PolymerTemplate<UserEdit.Model> implements View {
+public class UserEdit extends PolymerTemplate<UserEdit.Model> implements View, EntityEditView<User> {
 
 	public interface Model extends TemplateModel {
 		void setAvatar(String avatar);
@@ -46,11 +47,10 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> implements View {
 	@Id("user-edit-form")
 	private EditForm editForm;
 
-	private User user;
 	private BeanValidationBinder<User> binder = new BeanValidationBinder<>(User.class);
 
 	public UserEdit() {
-		editForm.init(binder, () -> user, "User");
+		editForm.init(binder, "User");
 		roleField.setItems(Role.getAllRoles());
 		binder.bind(firstnameField, "firstName");
 		binder.bind(lastnameField, "lastName");
@@ -79,18 +79,18 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> implements View {
 		return editForm.addListener(ValidationFailedEvent.class, listener);
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void read(User user) {
 		binder.readBean(user);
 		getModel().setAvatar(user.getPhotoUrl());
 		editForm.showEditor(user.isNew());
 	}
 
-	public User getUser() {
-		return user;
-	}
-
 	public boolean isDirty() {
 		return binder.hasChanges();
+	}
+
+	@Override
+	public void write(User entity) throws ValidationException {
+		binder.writeBean(entity);
 	}
 }
