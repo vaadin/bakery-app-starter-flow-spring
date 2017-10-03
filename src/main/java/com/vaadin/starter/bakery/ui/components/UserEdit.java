@@ -14,6 +14,7 @@ import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.event.DeleteEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
+import com.vaadin.starter.bakery.ui.event.ValidationFailedEvent;
 import com.vaadin.starter.bakery.ui.form.EditForm;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.PasswordField;
@@ -72,6 +73,10 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> implements View {
 
 	public Registration addCancelListener(ComponentEventListener<CancelEvent> listener) {
 		return editForm.addListener(CancelEvent.class, listener);
+	}
+
+	public Registration addValidationFailedEvent(ComponentEventListener<ValidationFailedEvent> listener) {
+		return editForm.addListener(ValidationFailedEvent.class, listener);
 	}
 
 	public void setUser(User user) {
