@@ -4,7 +4,6 @@ import com.vaadin.data.ValidationException;
 import com.vaadin.flow.event.ComponentEventListener;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
-import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.event.DeleteEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
