@@ -18,6 +18,7 @@ import com.vaadin.starter.bakery.ui.HasToast;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.event.DeleteEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
+import com.vaadin.starter.bakery.ui.event.ValidationFailedEvent;
 import com.vaadin.ui.Button;
 
 @Tag("edit-form")
@@ -46,7 +47,7 @@ public class EditForm extends PolymerTemplate<TemplateModel> implements View, Ha
 				binder.writeBean(entitySupplier.get());
 				fireEvent(new SaveEvent(this, false));
 			} catch (ValidationException ex) {
-				toast("Please fill out all required fields before proceeding.");
+				fireEvent(new ValidationFailedEvent(this));
 			}
 		});
 		cancelButton.addClickListener(e -> fireEvent(new CancelEvent(EditForm.this, false)));

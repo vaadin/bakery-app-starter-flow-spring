@@ -90,6 +90,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 		editor.addSaveListener(e -> saveUser());
 		editor.addDeleteListener(e -> deleteUser());
 		editor.addCancelListener(cancelClickEvent -> onBeforeClose());
+		editor.addValidationFailedEvent(e -> toast("Please fill out all required fields before proceeding."));
 	}
 
 	private void setEditableUser(String userId) {
