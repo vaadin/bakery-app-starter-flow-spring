@@ -9,7 +9,6 @@ import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.flow.event.ComponentEventListener;
 import com.vaadin.flow.html.H3;
-import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.shared.Registration;
@@ -23,7 +22,7 @@ import com.vaadin.ui.TextField;
 
 @Tag("user-edit")
 @HtmlImport("context://src/users/user-edit.html")
-public class UserEdit extends PolymerTemplate<UserEdit.Model> implements View {
+public class UserEdit extends PolymerTemplate<UserEdit.Model> {
 
 	public interface Model extends TemplateModel {
 		void setAvatar(String avatar);
