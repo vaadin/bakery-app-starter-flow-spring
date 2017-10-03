@@ -4,23 +4,19 @@ import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Id;
 import com.vaadin.annotations.Tag;
 import com.vaadin.data.BeanValidationBinder;
-import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.flow.event.ComponentEventListener;
-import com.vaadin.flow.html.H3;
 import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.User;
-import com.vaadin.starter.bakery.ui.components.storefront.OrderEdit.CancelEvent;
-import com.vaadin.starter.bakery.ui.components.storefront.OrderItemEdit.DeleteEvent;
+import com.vaadin.starter.bakery.ui.event.CancelEvent;
+import com.vaadin.starter.bakery.ui.event.DeleteEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
 import com.vaadin.starter.bakery.ui.form.EditForm;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.HasClickListeners.ClickEvent;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 
@@ -54,20 +50,17 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> implements View {
 	private BeanValidationBinder<User> binder = new BeanValidationBinder<>(User.class);
 
 	public UserEdit() {
-		roleField.setItems(Role.getAllRoles());
 		editForm.init(binder, () -> user, "User");
-		binder.bind(firstnameField, User::getFirstName, User::setFirstName);
-		binder.bind(lastnameField, User::getLastName, User::setLastName);
-		binder.bind(emailField, User::getEmail, User::setEmail);
-		binder.bind(passwordField,
-				(user) -> passwordField.getEmptyValue(),
-				(user, password) -> {
-					if (!passwordField.getEmptyValue().equals(password)) {
-						user.setPassword(password);
-					}
-				});
-		binder.bind(roleField, User::getRole, User::setRole);
-
+		roleField.setItems(Role.getAllRoles());
+		binder.bind(firstnameField, "firstName");
+		binder.bind(lastnameField, "lastName");
+		binder.bind(emailField, "email");
+		binder.bind(passwordField, (user) -> passwordField.getEmptyValue(), (user, password) -> {
+			if (!passwordField.getEmptyValue().equals(password)) {
+				user.setPassword(password);
+			}
+		});
+		binder.bind(roleField, "role");
 	}
 
 	public Registration addSaveListener(ComponentEventListener<SaveEvent> listener) {
@@ -85,15 +78,12 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> implements View {
 	public void setUser(User user) {
 		this.user = user;
 		binder.readBean(user);
+		getModel().setAvatar(user.getPhotoUrl());
 		editForm.showEditor(user.isNew());
 	}
 
 	public User getUser() {
 		return user;
-	}
-
-	public void writeEditsToUser() throws ValidationException {
-		binder.writeBean(user);
 	}
 
 	public boolean isDirty() {

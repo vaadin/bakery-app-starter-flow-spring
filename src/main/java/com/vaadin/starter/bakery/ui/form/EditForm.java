@@ -17,6 +17,7 @@ import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.starter.bakery.ui.HasToast;
 import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
+import com.vaadin.starter.bakery.ui.event.DeleteEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
 import com.vaadin.ui.Button;
 
@@ -40,7 +41,7 @@ public class EditForm extends PolymerTemplate<TemplateModel> implements View, Ha
 
 	public <E> void init(Binder<E> binder, Supplier<E> entitySupplier, String entityName) {
 		this.entityName = entityName;
-		binder.addValueChangeListener(e -> saveButton.setDisabled(binder.hasChanges()));
+		binder.addValueChangeListener(e -> saveButton.setDisabled(!binder.hasChanges()));
 		saveButton.addClickListener(e -> {
 			try {
 				binder.writeBean(entitySupplier.get());
@@ -50,6 +51,7 @@ public class EditForm extends PolymerTemplate<TemplateModel> implements View, Ha
 			}
 		});
 		cancelButton.addClickListener(e -> fireEvent(new CancelEvent(EditForm.this, false)));
+		deleteButton.addClickListener(e -> fireEvent(new DeleteEvent(EditForm.this, false)));
 
 	}
 
@@ -57,6 +59,5 @@ public class EditForm extends PolymerTemplate<TemplateModel> implements View, Ha
 		title.setText((isNewEntity ? "New" : "Edit") + " " + entityName);
 		saveButton.setDisabled(true);
 		deleteButton.setDisabled(isNewEntity);
-
 	}
 }

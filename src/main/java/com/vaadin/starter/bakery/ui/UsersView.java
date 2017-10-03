@@ -131,37 +131,15 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	}
 
 	private void deleteUser() {
-		try {
+		EditFormUtil.executeJPAOperation(this, () -> {
 			userService.delete(editor.getUser().getId());
 			navigateToUser(null);
-		} catch (UserFriendlyDataException e) {
-			// Commit failed because of application-level data constraints
-			toast(e.getMessage(), true);
-			getLogger().debug("User-friendly data exception while deleting entity of type "
-					+ com.vaadin.starter.bakery.backend.data.entity.User.class.getName(), e);
-		} catch (DataIntegrityViolationException e) {
-			// Commit failed because of validation errors
-			toast("The given entity cannot be deleted as there are references to it in the database", true);
-			getLogger().error("Data integrity violation error while deleting entity of type "
-					+ com.vaadin.starter.bakery.backend.data.entity.User.class.getName(), e);
-		} catch (OptimisticLockingFailureException e) {
-			// Somebody else probably edited the data at the same time
-			toast("Somebody else might have updated the data. Please refresh and try again.", true);
-			getLogger().debug("Optimistic locking error while deleting entity of type "
-					+ com.vaadin.starter.bakery.backend.data.entity.User.class.getName(), e);
-		} catch (Exception e) {
-			// Something went wrong, no idea what
-			toast("A problem occurred while deleting the data. Please refresh and try again.", true);
-			getLogger().error("Unable to delete entity of type "
-					+ com.vaadin.starter.bakery.backend.data.entity.User.class.getName(), e);
-		} finally {
-			filterUsers(view.getFilter());
-		}
+		});
+		filterUsers(view.getFilter());
 	}
 
 	private void saveUser() {
-		EditFormUtil.handleSave(this, () -> {
-			editor.writeEditsToUser();
+		EditFormUtil.executeJPAOperation(this, () -> {
 			userService.save(editor.getUser());
 			navigateToUser(null);
 		});

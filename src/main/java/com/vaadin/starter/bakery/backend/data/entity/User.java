@@ -6,32 +6,31 @@ import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity(name="UserInfo")
 public class User extends AbstractEntity {
 
-	@NotNull
 	@NotEmpty
+	@Email
 	@Size(max = 255)
 	private String email;
 
 	@NotNull
-	@NotEmpty
 	@Size(min = 4, max = 255)
 	private String password;
 
-	@NotNull
-	@NotEmpty
+	@NotBlank
 	@Size(max = 255)
 	private String firstName;
 
-	@NotNull
-	@NotEmpty
+	@NotBlank
 	@Size(max = 255)
 	private String lastName;
 
-	@NotNull
+	@NotBlank
 	@Size(max = 255)
 	private String role;
 
