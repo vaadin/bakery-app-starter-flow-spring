@@ -4,7 +4,6 @@ import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Id;
 import com.vaadin.annotations.Tag;
 import com.vaadin.data.BeanValidationBinder;
-import com.vaadin.data.ValidationException;
 import com.vaadin.flow.event.ComponentEventListener;
 import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
