@@ -10,8 +10,7 @@
 
 <dom-module id="user-edit">
   <template>
-    <style include="shared-styles">
-
+    <style >
       user-avatar {
         width: 56px;
         height: 56px;
@@ -23,20 +22,23 @@
 
 
     <edit-form id="user-edit-form">
-      <template is="dom-if" if="[[avatar]]">
-        <div class="flex" colspan="2">
-          <user-avatar src="[[avatar]]"></user-avatar>
-        </div>
+      <vaadin-form-layout>
+        <template is="dom-if" if="[[avatar]]">
+         <div class="flex" colspan="2">
+            <user-avatar src="[[avatar]]"></user-avatar>
+          </div>
+          <br>
+        </template>
+
+        <vaadin-text-field id="email" label="Email (login)" colspan="2"></vaadin-text-field>
         <br>
-      </template>
-      <vaadin-text-field id="email" label="Email (login)" colspan="2"></vaadin-text-field>
-      <br>
-      <vaadin-text-field id="first" label="First Name" colspan="2"></vaadin-text-field>
-      <vaadin-text-field id="last" label="Last Name" colspan="2"></vaadin-text-field>
-      <br>
-      <vaadin-password-field id="password" label="Password" colspan="2"></vaadin-password-field>
-      <br>
-      <vaadin-combo-box id="role" label="Role" colspan="2"></vaadin-combo-box>
+        <vaadin-text-field id="first" label="First Name" colspan="2"></vaadin-text-field>
+        <vaadin-text-field id="last" label="Last Name" colspan="2"></vaadin-text-field>
+        <br>
+        <vaadin-password-field id="password" label="Password" colspan="2"></vaadin-password-field>
+        <br>
+        <vaadin-combo-box id="role" label="Role" colspan="2"></vaadin-combo-box>
+      </vaadin-form-layout>
     </edit-form>
   </template>
 

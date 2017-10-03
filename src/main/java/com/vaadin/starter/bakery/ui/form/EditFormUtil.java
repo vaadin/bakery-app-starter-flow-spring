@@ -8,6 +8,7 @@ import org.springframework.dao.OptimisticLockingFailureException;
 
 import com.vaadin.data.ValidationException;
 import com.vaadin.starter.bakery.app.HasLogger;
+import com.vaadin.starter.bakery.backend.service.UserFriendlyDataException;
 import com.vaadin.starter.bakery.ui.HasToast;
 import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
 import com.vaadin.starter.bakery.ui.messages.Message;
@@ -24,13 +25,17 @@ public class EditFormUtil {
 		}
 	}
 
-	public static <V extends HasToast & HasLogger> boolean handleSave(V view, Saver saver) {
+	public static <V extends HasToast & HasLogger> boolean executeJPAOperation(V view, JPAOperation operation) {
 		try {
-			saver.save();
+			operation.execute();
 			return true;
+		} catch (UserFriendlyDataException e) {
+			// Commit failed because of application-level data constraints
+			view.toast(e.getMessage(), true);
+			view.getLogger().debug("User-friendly data exception while deleting", e);
 		} catch (DataIntegrityViolationException e) {
 			// Commit failed because of validation errors
-			view.toast(e.getMessage(), true);
+			view.toast("The operation can not be executed as there are references to entity in the database", true);
 			view.getLogger().debug("Data integrity violation error while updating entity", e);
 		} catch (OptimisticLockingFailureException e) {
 			// Somebody else probably edited the data at the same time
@@ -44,7 +49,7 @@ public class EditFormUtil {
 		return false;
 	}
 
-	public interface Saver {
-		void save() throws ValidationException;
+	public interface JPAOperation {
+		void execute() throws ValidationException;
 	}
 }
