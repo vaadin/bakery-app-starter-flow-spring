@@ -1,5 +1,13 @@
 package com.vaadin.starter.bakery.ui;
 
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_USERS;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+
 import com.vaadin.annotations.Convert;
 import com.vaadin.annotations.EventHandler;
 import com.vaadin.annotations.HtmlImport;
@@ -19,10 +27,10 @@ import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.UserFriendlyDataException;
 import com.vaadin.starter.bakery.backend.service.UserService;
 import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
+import com.vaadin.starter.bakery.ui.components.EntityView;
 import com.vaadin.starter.bakery.ui.components.ItemsView;
 import com.vaadin.starter.bakery.ui.components.UserEdit;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
-import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.form.EditFormUtil;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HasClickListeners.ClickEvent;
@@ -50,7 +58,7 @@ import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_USERS;
 @ParentView(BakeryApp.class)
 @Title(BakeryConst.TITLE_USERS)
 @Secured(Role.ADMIN)
-public class UsersView extends PolymerTemplate<UsersView.Model> implements View, HasToast, HasLogger {
+public class UsersView extends PolymerTemplate<UsersView.Model> implements View, EntityView {
 
 	public interface Model extends TemplateModel {
 
@@ -60,7 +68,6 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	}
 
 	private final UserService userService;
-	private final PasswordEncoder passwordEncoder;
 
 	@Id("view")
 	private ItemsView view;
@@ -71,18 +78,19 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	@Id("user-confirmation-dialog")
 	private ConfirmationDialog confirmationDialog;
 
+	private EntityEditPresenter<User> presenter;
+
 	@Autowired
-	public UsersView(UserService userService, PasswordEncoder passwordEncoder) {
+	public UsersView(UserService userService) {
 		this.userService = userService;
-		this.passwordEncoder = passwordEncoder;
-		initUserEdit();
+		presenter = new EntityEditPresenter<User>(userService, editor, this, "User");
 		getElement().addEventListener("edit", e -> navigateToUser(e.getEventData().getString("event.detail")),
 				"event.detail");
 
 		filterUsers(view.getFilter());
 
 		view.setActionText("New user");
-		view.addActionClickListener(this::createNewUser);
+		view.addActionClickListener(e -> presenter.createNew(new User()));
 		view.addFilterChangeListener(this::filterUsers);
 	}
 
@@ -91,33 +99,16 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 		setEditableUser(locationChangeEvent.getPathParameter("id"));
 	}
 
-	private void initUserEdit() {
-		editor.setupBinding(passwordEncoder);
-		editor.addSaveListener(e -> saveUser());
-		editor.addDeleteListener(e -> deleteUser());
-		editor.addCancelListener(cancelClickEvent -> onBeforeClose());
-		editor.addValidationFailedEvent(e -> toast("Please fill out all required fields before proceeding."));
-	}
-
 	private void setEditableUser(String userId) {
 		if (userId == null || userId.isEmpty()) {
 			view.openDialog(false);
 			return;
 		}
 
-		String errorMessage = "Cannot find a user with the id '" + userId + "'. Please refresh the page and try again.";
 		try {
-			Long longId = Long.parseLong(userId);
-			User user = userService.getRepository().findOne(longId);
-			if (user == null) {
-				toast(errorMessage, false);
-				getLogger().error(errorMessage);
-				return;
-			}
-			view.openDialog(true);
-			editor.setUser(user);
+			presenter.edit(Long.parseLong(userId));
 		} catch (NumberFormatException e) {
-			toast(errorMessage, false);
+			toast("Invalid id", false);
 			getLogger().error("Expected to get a numeric user id, but got: " + userId, e);
 			view.openDialog(false);
 		}
@@ -132,29 +123,26 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 		getModel().setUsers(userService.findAnyMatching(Optional.ofNullable(filter), null).getContent());
 	}
 
-	private void createNewUser(ClickEvent<Button> newUserEvent) {
-		editor.setUser(new User());
-		view.openDialog(true);
-	}
-
-	private void deleteUser() {
-		EditFormUtil.executeJPAOperation(this, () -> {
-			userService.delete(editor.getUser().getId());
-			navigateToUser(null);
-		});
-		filterUsers(view.getFilter());
-	}
-
-	private void saveUser() {
-		EditFormUtil.executeJPAOperation(this, () -> {
-			userService.save(editor.getUser());
-			navigateToUser(null);
-		});
-		filterUsers(view.getFilter());
-	}
-
 	@EventHandler
 	private void onBeforeClose() {
-		EditFormUtil.handeCancel(confirmationDialog, "User", editor.isDirty(), () -> navigateToUser(null));
+		presenter.cancel();
+	}
+
+	@Override
+	public void closeDialog(boolean updated) {
+		view.openDialog(false);
+		if (updated) {
+			filterUsers(view.getFilter());
+		}
+	}
+
+	@Override
+	public void confirm(Message message, Runnable operation) {
+		confirmationDialog.show(message, ev -> operation.run());
+	}
+
+	@Override
+	public void openDialog() {
+		view.openDialog(true);
 	}
 }
