@@ -6,6 +6,7 @@ import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Id;
 import com.vaadin.annotations.Include;
 import com.vaadin.annotations.Tag;
+import com.vaadin.annotations.Title;
 import com.vaadin.flow.router.LocationChangeEvent;
 import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
@@ -39,11 +40,13 @@ import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_MESSAGE_DEL
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_OKBUTTON_CANCEL;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_OKBUTTON_DELETE;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_PRODUCTS;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_PRODUCTS;
 
 @Tag("bakery-products")
 @HtmlImport("context://src/products/bakery-products.html")
 @Route(PAGE_PRODUCTS + "/{id}")
 @ParentView(BakeryApp.class)
+@Title(TITLE_PRODUCTS)
 @Secured(Role.ADMIN)
 public class ProductsView extends PolymerTemplate<ProductsView.Model> implements View, HasToast, HasLogger {
 

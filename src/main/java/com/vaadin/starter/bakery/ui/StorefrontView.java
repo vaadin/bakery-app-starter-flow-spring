@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.vaadin.annotations.Title;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -32,6 +33,7 @@ import com.vaadin.starter.bakery.ui.entities.Order;
 import com.vaadin.starter.bakery.ui.messages.Message;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_STOREFRONT;
 import static com.vaadin.starter.bakery.ui.utils.StorefrontItemHeaderGenerator.computeEntriesWithHeader;
 import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
@@ -41,6 +43,7 @@ import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 @Route(BakeryConst.PAGE_STOREFRONT + "/{id}/edit")
 @Route(value = "")
 @ParentView(BakeryApp.class)
+@Title(TITLE_STOREFRONT)
 @Secured(Role.BARISTA)
 public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implements View, HasLogger, HasToast {
 

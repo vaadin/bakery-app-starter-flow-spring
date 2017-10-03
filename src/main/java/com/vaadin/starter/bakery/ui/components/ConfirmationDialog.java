@@ -3,6 +3,7 @@ package com.vaadin.starter.bakery.ui.components;
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Id;
 import com.vaadin.annotations.Tag;
+import com.vaadin.annotations.Title;
 import com.vaadin.flow.event.ComponentEventListener;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
