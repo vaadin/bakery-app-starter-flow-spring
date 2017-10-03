@@ -22,6 +22,7 @@ import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
 import com.vaadin.starter.bakery.ui.components.ItemsView;
 import com.vaadin.starter.bakery.ui.components.UserEdit;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
+import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HasClickListeners.ClickEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,13 +42,12 @@ import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_MESSAGE_DEL
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_OKBUTTON_CANCEL;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_OKBUTTON_DELETE;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_USERS;
-import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_USERS;
 
 @Tag("bakery-users")
 @HtmlImport("context://src/users/bakery-users.html")
 @Route(PAGE_USERS + "/{id}")
 @ParentView(BakeryApp.class)
-@Title(TITLE_USERS)
+@Title(BakeryConst.TITLE_USERS)
 @Secured(Role.ADMIN)
 public class UsersView extends PolymerTemplate<UsersView.Model> implements View, HasToast, HasLogger {
 

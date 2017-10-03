@@ -13,12 +13,10 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
 import javax.servlet.http.HttpServletResponse;
 
-import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_NOT_FOUND;
-
 @Tag("bakery-404")
 @HtmlImport("context://src/404/bakery-404.html")
 @Route(value = BakeryConst.PAGE_NOTFOUND)
-@Title(TITLE_NOT_FOUND)
+@Title(BakeryConst.TITLE_NOT_FOUND)
 @ParentView(BakeryApp.class)
 public class NotFoundView extends PolymerTemplate<TemplateModel> implements View {
 	@Override
