@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
@@ -59,6 +60,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	}
 
 	private final UserService userService;
+	private final PasswordEncoder passwordEncoder;
 
 	@Id("view")
 	private ItemsView view;
@@ -70,8 +72,9 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	private ConfirmationDialog confirmationDialog;
 
 	@Autowired
-	public UsersView(UserService userService) {
+	public UsersView(UserService userService, PasswordEncoder passwordEncoder) {
 		this.userService = userService;
+		this.passwordEncoder = passwordEncoder;
 		initUserEdit();
 		getElement().addEventListener("edit", e -> navigateToUser(e.getEventData().getString("event.detail")),
 				"event.detail");
@@ -89,6 +92,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	}
 
 	private void initUserEdit() {
+		editor.setupBinding(passwordEncoder);
 		editor.addSaveListener(this::saveUser);
 		editor.addDeleteListener(this::onBeforeDelete);
 		editor.addCancelListener(cancelClickEvent -> onBeforeClose());

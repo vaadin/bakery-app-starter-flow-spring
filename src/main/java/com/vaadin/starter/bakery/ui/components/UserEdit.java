@@ -1,5 +1,7 @@
 package com.vaadin.starter.bakery.ui.components;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Id;
 import com.vaadin.annotations.Tag;
@@ -58,7 +60,9 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> {
 
 	public UserEdit() {
 		roleField.setItems(Role.getAllRoles());
+	}
 
+	public void setupBinding(PasswordEncoder passwordEncoder) {
 		binder.bind(firstnameField, User::getFirstName, User::setFirstName);
 		binder.bind(lastnameField, User::getLastName, User::setLastName);
 		binder.bind(emailField, User::getEmail, User::setEmail);
@@ -66,7 +70,7 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> {
 				(user) -> passwordField.getEmptyValue(),
 				(user, password) -> {
 					if (!passwordField.getEmptyValue().equals(password)) {
-						user.setPassword(password);
+						user.setPassword(passwordEncoder.encode(password));
 					}
 				});
 		binder.bind(roleField, User::getRole, User::setRole);
