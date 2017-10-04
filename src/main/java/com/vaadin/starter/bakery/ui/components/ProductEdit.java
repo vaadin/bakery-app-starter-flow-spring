@@ -15,6 +15,8 @@ import com.vaadin.ui.HasClickListeners.ClickEvent;
 import com.vaadin.ui.TextField;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.ParseException;
 
 @Tag("product-edit")
 @HtmlImport("context://src/products/product-edit.html")
@@ -41,7 +43,13 @@ public class ProductEdit extends PolymerTemplate<TemplateModel> {
 	private Product product;
 
 	private static final String DECIMAL_ZERO = "0.00";
-	private static final DecimalFormat df = new DecimalFormat("#" + DECIMAL_ZERO);
+	private static final DecimalFormat df;
+
+	static {
+		DecimalFormatSymbols sep = new DecimalFormatSymbols();
+		sep.setDecimalSeparator('.');
+		df = new DecimalFormat("#" + DECIMAL_ZERO, sep);
+	}
 
 	public ProductEdit() {
 		nameField.addValueChangeListener(valueChangeEvent -> saveButton.setDisabled(!isDirty()));
@@ -105,10 +113,17 @@ public class ProductEdit extends PolymerTemplate<TemplateModel> {
 	}
 
 	private String toUiPrice() {
-		return product == null ? DECIMAL_ZERO : df.format(product.getPrice() / 100f);
+		return product == null ? DECIMAL_ZERO : df.format(product.getPrice() / 100d);
 	}
 
 	private int fromUiPrice() {
-		return priceField.getValue().isEmpty() ? 0 : (int) Math.round(Double.parseDouble(priceField.getValue()) * 100);
+		if (priceField.getValue() == null || priceField.getValue().isEmpty()) {
+			return 0;
+		}
+		try {
+			return (int) Math.round(df.parse(priceField.getValue()).doubleValue() * 100);
+		} catch (ParseException e) {
+			return 0;
+		}
 	}
 }
