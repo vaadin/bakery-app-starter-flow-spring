@@ -43,7 +43,6 @@ import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 @Route(value = "")
 @ParentView(BakeryApp.class)
 @Title(BakeryConst.TITLE_STOREFRONT)
-@Secured(Role.BARISTA)
 public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implements View, HasLogger, HasToast {
 
 	public interface Model extends TemplateModel {
