@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.flow.router.LocationChangeEvent;
+import com.vaadin.router.Title;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.ClientDelegate;
 import com.vaadin.ui.common.HtmlImport;
@@ -41,6 +42,7 @@ import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 @Route(BakeryConst.PAGE_STOREFRONT + "/{id}/edit")
 @Route(value = "")
 @ParentView(BakeryApp.class)
+@Title(BakeryConst.TITLE_STOREFRONT)
 @Secured(Role.BARISTA)
 public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implements View, HasLogger, HasToast {
 

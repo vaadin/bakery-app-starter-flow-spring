@@ -7,6 +7,7 @@ import com.vaadin.flow.router.LocationChangeEvent;
 import com.vaadin.flow.router.View;
 import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
+import com.vaadin.router.Title;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
@@ -15,6 +16,7 @@ import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
 import com.vaadin.starter.bakery.ui.components.ItemsView;
 import com.vaadin.starter.bakery.ui.components.ProductEdit;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
+import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
 import com.vaadin.ui.common.HasClickListeners;
@@ -44,6 +46,7 @@ import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_PRODUCTS;
 @HtmlImport("context://src/products/bakery-products.html")
 @Route(PAGE_PRODUCTS + "/{id}")
 @ParentView(BakeryApp.class)
+@Title(BakeryConst.TITLE_PRODUCTS)
 @Secured(Role.ADMIN)
 public class ProductsView extends PolymerTemplate<ProductsView.Model> implements View, HasToast, HasLogger {
 

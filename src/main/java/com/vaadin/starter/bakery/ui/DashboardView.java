@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.vaadin.flow.model.TemplateModel;
+import com.vaadin.router.Title;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.AttachEvent;
 import com.vaadin.ui.common.HtmlImport;
@@ -39,6 +40,7 @@ import com.vaadin.starter.bakery.ui.utils.DashboardUtils.PageInfo;
 @HtmlImport("context://src/dashboard/bakery-dashboard.html")
 @Route(BakeryConst.PAGE_DASHBOARD)
 @ParentView(BakeryApp.class)
+@Title(BakeryConst.TITLE_DASHBOARD)
 public class DashboardView extends PolymerTemplate<DashboardView.Model> implements View {
 
 	private final OrdersDataProvider ordersProvider;

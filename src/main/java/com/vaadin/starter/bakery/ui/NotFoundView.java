@@ -5,6 +5,7 @@ import com.vaadin.flow.router.LocationChangeEvent;
 import com.vaadin.flow.router.View;
 import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
+import com.vaadin.router.Title;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HtmlImport;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 @Tag("bakery-404")
 @HtmlImport("context://src/404/bakery-404.html")
 @Route(value = BakeryConst.PAGE_NOTFOUND)
+@Title(BakeryConst.TITLE_NOT_FOUND)
 @ParentView(BakeryApp.class)
 public class NotFoundView extends PolymerTemplate<TemplateModel> implements View {
 	@Override

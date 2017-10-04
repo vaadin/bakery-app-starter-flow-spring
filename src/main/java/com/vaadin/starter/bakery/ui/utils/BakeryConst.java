@@ -15,6 +15,8 @@ public class BakeryConst {
 	public static final String TITLE_DASHBOARD = "Dashboard";
 	public static final String TITLE_USERS = "Users";
 	public static final String TITLE_PRODUCTS = "Products";
+	public static final String TITLE_NOT_FOUND = "Page was not found";
+	public static final String TITLE_ACCESS_DENIED = "Access denied";
 
 	public static final String ICON_STOREFRONT = "edit";
 	public static final String ICON_DASHBOARD = "clock";

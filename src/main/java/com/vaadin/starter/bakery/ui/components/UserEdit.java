@@ -3,7 +3,6 @@ package com.vaadin.starter.bakery.ui.components;
 import com.vaadin.data.Binder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.flow.model.TemplateModel;
-import com.vaadin.flow.router.View;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.User;
@@ -18,10 +17,11 @@ import com.vaadin.ui.passwordfield.PasswordField;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import com.vaadin.ui.textfield.TextField;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Tag("user-edit")
 @HtmlImport("context://src/users/user-edit.html")
-public class UserEdit extends PolymerTemplate<UserEdit.Model> implements View {
+public class UserEdit extends PolymerTemplate<UserEdit.Model> {
 
 	public interface Model extends TemplateModel {
 		void setAvatar(String avatar);
@@ -59,7 +59,9 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> implements View {
 
 	public UserEdit() {
 		roleField.setItems(Role.getAllRoles());
+	}
 
+	public void setupBinding(PasswordEncoder passwordEncoder) {
 		binder.bind(firstnameField, User::getFirstName, User::setFirstName);
 		binder.bind(lastnameField, User::getLastName, User::setLastName);
 		binder.bind(emailField, User::getEmail, User::setEmail);
@@ -67,7 +69,7 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> implements View {
 				(user) -> passwordField.getEmptyValue(),
 				(user, password) -> {
 					if (!passwordField.getEmptyValue().equals(password)) {
-						user.setPassword(password);
+						user.setPassword(passwordEncoder.encode(password));
 					}
 				});
 		binder.bind(roleField, User::getRole, User::setRole);

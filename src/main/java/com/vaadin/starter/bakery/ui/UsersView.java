@@ -7,6 +7,7 @@ import com.vaadin.flow.router.LocationChangeEvent;
 import com.vaadin.flow.router.View;
 import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
+import com.vaadin.router.Title;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.User;
@@ -16,6 +17,7 @@ import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
 import com.vaadin.starter.bakery.ui.components.ItemsView;
 import com.vaadin.starter.bakery.ui.components.UserEdit;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
+import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
 import com.vaadin.ui.common.HasClickListeners;
@@ -27,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
@@ -45,6 +48,7 @@ import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_USERS;
 @HtmlImport("context://src/users/bakery-users.html")
 @Route(PAGE_USERS + "/{id}")
 @ParentView(BakeryApp.class)
+@Title(BakeryConst.TITLE_USERS)
 @Secured(Role.ADMIN)
 public class UsersView extends PolymerTemplate<UsersView.Model> implements View, HasToast, HasLogger {
 
@@ -56,6 +60,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	}
 
 	private final UserService userService;
+	private final PasswordEncoder passwordEncoder;
 
 	@Id("view")
 	private ItemsView view;
@@ -67,8 +72,9 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	private ConfirmationDialog confirmationDialog;
 
 	@Autowired
-	public UsersView(UserService userService) {
+	public UsersView(UserService userService, PasswordEncoder passwordEncoder) {
 		this.userService = userService;
+		this.passwordEncoder = passwordEncoder;
 		initUserEdit();
 		getElement().addEventListener("edit", e -> navigateToUser(e.getEventData().getString("event.detail")),
 				"event.detail");
@@ -86,6 +92,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	}
 
 	private void initUserEdit() {
+		editor.setupBinding(passwordEncoder);
 		editor.addSaveListener(this::saveUser);
 		editor.addDeleteListener(this::onBeforeDelete);
 		editor.addCancelListener(cancelClickEvent -> onBeforeClose());

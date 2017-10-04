@@ -1,7 +1,6 @@
 package com.vaadin.starter.bakery.ui.components;
 
 import com.vaadin.flow.model.TemplateModel;
-import com.vaadin.flow.router.View;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.ui.Tag;
@@ -19,7 +18,7 @@ import java.text.DecimalFormat;
 
 @Tag("product-edit")
 @HtmlImport("context://src/products/product-edit.html")
-public class ProductEdit extends PolymerTemplate<TemplateModel> implements View {
+public class ProductEdit extends PolymerTemplate<TemplateModel> {
 
 	@Id("title")
 	private H3 title;
