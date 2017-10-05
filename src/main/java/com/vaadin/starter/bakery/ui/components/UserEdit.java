@@ -1,5 +1,8 @@
 package com.vaadin.starter.bakery.ui.components;
 
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Id;
 import com.vaadin.annotations.Tag;
@@ -47,7 +50,9 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> implements View, E
 	@Id("user-edit-form")
 	private EditForm editForm;
 
-	private BeanValidationBinder<User> binder = new BeanValidationBinder<>(User.class);
+	private final BeanValidationBinder<User> binder = new BeanValidationBinder<>(User.class);
+
+	private PasswordEncoder passwordEncoder = NoOpPasswordEncoder.getInstance();
 
 	public UserEdit() {
 		editForm.init(binder, "User");
@@ -93,4 +98,9 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> implements View, E
 	public void write(User entity) throws ValidationException {
 		binder.writeBean(entity);
 	}
+
+	public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+		this.passwordEncoder = passwordEncoder;
+	}
+
 }
