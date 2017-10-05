@@ -100,9 +100,10 @@ public class EntityEditPresenter<T extends AbstractEntity> {
 			String errorMessage = "Cannot find a user with the id '" + id + "'. Please refresh the page and try again.";
 			view.showError(errorMessage);
 			view.closeDialog(true);
+		} else {
+			editor.read(entity);
+			view.openDialog();
 		}
-		editor.read(entity);
-		view.openDialog();
 	}
 
 	public void createNew(T entity) {
