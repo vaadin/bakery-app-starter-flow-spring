@@ -9,7 +9,6 @@ import com.vaadin.annotations.Title;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.security.access.annotation.Secured;
 
 import com.vaadin.annotations.ClientDelegate;
 import com.vaadin.annotations.HtmlImport;
@@ -22,7 +21,6 @@ import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
 import com.vaadin.starter.bakery.app.HasLogger;
-import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.backend.service.ProductService;
 import com.vaadin.starter.bakery.backend.service.UserService;
@@ -43,7 +41,6 @@ import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 @Route(value = "")
 @ParentView(BakeryApp.class)
 @Title(BakeryConst.TITLE_STOREFRONT)
-@Secured(Role.BARISTA)
 public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implements View, HasLogger, HasToast {
 
 	public interface Model extends TemplateModel {
