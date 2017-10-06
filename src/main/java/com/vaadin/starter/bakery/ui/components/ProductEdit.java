@@ -3,6 +3,7 @@ package com.vaadin.starter.bakery.ui.components;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
+import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
 import com.vaadin.ui.common.HasClickListeners;
@@ -15,6 +16,9 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import com.vaadin.ui.textfield.TextField;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
+
+import static com.vaadin.starter.bakery.ui.utils.FormattingUtils.DECIMAL_ZERO;
 
 @Tag("product-edit")
 @HtmlImport("context://src/products/product-edit.html")
@@ -40,8 +44,7 @@ public class ProductEdit extends PolymerTemplate<TemplateModel> {
 
 	private Product product;
 
-	private static final String DECIMAL_ZERO = "0.00";
-	private static final DecimalFormat df = new DecimalFormat("#" + DECIMAL_ZERO);
+	private final DecimalFormat df = FormattingUtils.getUiPriceFormatter();
 
 	public ProductEdit() {
 		nameField.addValueChangeListener(valueChangeEvent -> saveButton.setDisabled(!isDirty()));
@@ -105,10 +108,17 @@ public class ProductEdit extends PolymerTemplate<TemplateModel> {
 	}
 
 	private String toUiPrice() {
-		return product == null ? DECIMAL_ZERO : df.format(product.getPrice() / 100f);
+		return product == null ? DECIMAL_ZERO : df.format(product.getPrice() / 100d);
 	}
 
 	private int fromUiPrice() {
-		return priceField.getValue().isEmpty() ? 0 : (int) Math.round(Double.parseDouble(priceField.getValue()) * 100);
+		if (priceField.getValue() == null || priceField.getValue().isEmpty()) {
+			return 0;
+		}
+		try {
+			return (int) Math.round(df.parse(priceField.getValue()).doubleValue() * 100);
+		} catch (ParseException e) {
+			return 0;
+		}
 	}
 }

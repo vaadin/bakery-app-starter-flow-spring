@@ -114,8 +114,8 @@
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
-            <artifactId>hummingbird-ext</artifactId>
-            <version>10.0.0-SNAPSHOT</version>
+            <artifactId>flow-ext</artifactId>
+            <version>1.0.0.alpha3</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.vaadin</groupId>
