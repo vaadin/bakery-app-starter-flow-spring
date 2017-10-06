@@ -21,13 +21,7 @@ import com.vaadin.ui.TextField;
 
 @Tag("order-item-edit")
 @HtmlImport("context://src/storefront/order-item-edit.html")
-public class OrderItemEdit extends PolymerTemplate<OrderItemEdit.Model> implements HasValue<OrderItemEdit, OrderItem> {
-
-	public interface Model extends TemplateModel {
-		void setTotalPrice(Integer total);
-
-		Integer getTotalPrice();
-	}
+public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements HasValue<OrderItemEdit, OrderItem> {
 
 	@Id("products")
 	private ComboBox<String> products;
