@@ -18,13 +18,16 @@
         margin-top: 8px;
       }
 
+      vaadin-combo-box {
+        margin-top: var(--valo-space-m);
+      }
     </style>
 
 
     <edit-form id="user-edit-form">
       <vaadin-form-layout>
         <template is="dom-if" if="[[avatar]]">
-         <div class="flex" colspan="2">
+          <div class="flex" colspan="2">
             <user-avatar src="[[avatar]]"></user-avatar>
           </div>
           <br>
@@ -46,11 +49,6 @@
     class UserEdit extends Polymer.Element {
       static get is() {
         return 'user-edit';
-      }
-
-      constructor() {
-        super();
-        this._editableItemName = 'User';
       }
     }
 

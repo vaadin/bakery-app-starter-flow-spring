@@ -22,6 +22,10 @@ public interface CrudService<T extends AbstractEntity> {
 		getRepository().delete(entity);
 	}
 
+	default void delete(long id) {
+		delete(load(id));
+	}
+
 	default long count() {
 		return getRepository().count();
 	}

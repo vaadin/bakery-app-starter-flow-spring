@@ -11,7 +11,6 @@ import com.vaadin.starter.bakery.backend.service.CrudService;
 import com.vaadin.starter.bakery.backend.service.UserFriendlyDataException;
 import com.vaadin.starter.bakery.ui.components.EntityEditView;
 import com.vaadin.starter.bakery.ui.components.EntityView;
-import com.vaadin.starter.bakery.ui.messages.ErrorMessage;
 import com.vaadin.starter.bakery.ui.messages.Message;
 
 public class EntityEditPresenter<T extends AbstractEntity> {
@@ -60,22 +59,18 @@ public class EntityEditPresenter<T extends AbstractEntity> {
 			return true;
 		} catch (UserFriendlyDataException e) {
 			// Commit failed because of application-level data constraints
-			view.toast(e.getMessage(), true);
-			view.getLogger().debug("User-friendly data exception while deleting", e);
+			showError(e, e.getMessage(), true);
 		} catch (DataIntegrityViolationException e) {
 			// Commit failed because of validation errors
-			view.toast("The operation can not be executed as there are references to entity in the database", true);
-			view.getLogger().debug("Data integrity violation error while updating entity", e);
+			showError(e, "The operation can not be executed as there are references to entity in the database", true);
 		} catch (OptimisticLockingFailureException e) {
 			// Somebody else probably edited the data at the same time
-			view.toast("Somebody else might have updated the data. Please refresh and try again.", true);
-			view.getLogger().debug("Optimistic locking error while saving entity", e);
+			showError(e, "Somebody else might have updated the data. Please refresh and try again.", true);
 		} catch (EntityNotFoundException e) {
-			showError(ErrorMessage.ENTITY_NOT_FOUND, entityName);
-			view.getLogger().debug("Entity not found in the database", e);
+			showError(e, String.format("The selected %s was not found.", entityName), false);
 		} catch (Exception e) {
 			// Something went wrong, no idea what
-			view.toast("A problem occurred while saving the data. Please check the fields.", true);
+			view.showError("A problem occurred while saving the data. Please check the fields.", true);
 			view.getLogger().error("Unable to save entity", e);
 		}
 		return false;
@@ -116,7 +111,9 @@ public class EntityEditPresenter<T extends AbstractEntity> {
 		view.openDialog();
 	}
 
-	private void showError(ErrorMessage message, Object... parameters) {
-		view.toast(message.getMessage(parameters), message.isPersistent());
+	private void showError(Exception e, String message, boolean isPersistent) {
+		view.showError(message, isPersistent);
+		view.getLogger().debug(message, e);
+
 	}
 }

@@ -12,7 +12,7 @@ public interface EntityView extends HasToast, HasLogger {
 
 	void openDialog();
 
-	default void showError(String message) {
-		toast(message, false);
+	default void showError(String message, boolean isPersistent) {
+		toast(message, isPersistent);
 	}
 }
