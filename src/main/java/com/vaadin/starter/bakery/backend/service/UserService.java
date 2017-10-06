@@ -75,6 +75,7 @@ public class UserService implements CrudService<User> {
 		return getRepository().saveAndFlush(entity);
 	}
 
+	@Override
 	@Transactional
 	public void delete(User user) {
 		throwIfDeletingSelf(user);
