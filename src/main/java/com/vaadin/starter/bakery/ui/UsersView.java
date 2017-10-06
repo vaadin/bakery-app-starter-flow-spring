@@ -67,8 +67,8 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 		this.userService = userService;
 		editor.setPasswordEncoder(passwordEncoder);
 		presenter = new EntityEditPresenter<User>(userService, editor, this, "User");
-		getElement().addEventListener("edit", e -> navigateToUser(e.getEventData().getString("event.detail")),
-				"event.detail");
+		getElement().addEventListener("edit",
+				e -> navigateToEntity(getUI(), PAGE_USERS, e.getEventData().getString("event.detail")), "event.detail");
 
 		filterUsers(view.getFilter());
 
@@ -80,7 +80,6 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	@Override
 	public void onLocationChange(LocationChangeEvent locationChangeEvent) {
 		setEditableUser(locationChangeEvent.getPathParameter("id"));
-
 	}
 
 	private void setEditableUser(String userId) {
@@ -98,11 +97,6 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 		}
 	}
 
-	private void navigateToUser(String id) {
-		final String location = PAGE_USERS + (id == null || id.isEmpty() ? "" : "/" + id);
-		getUI().ifPresent(ui -> ui.navigateTo(location));
-	}
-
 	private void filterUsers(String filter) {
 		getModel().setUsers(userService.findAnyMatching(Optional.ofNullable(filter), null).getContent());
 	}
@@ -115,6 +109,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	@Override
 	public void closeDialog(boolean updated) {
 		view.openDialog(false);
+		navigateToEntity(getUI(), PAGE_USERS, null);
 		if (updated) {
 			filterUsers(view.getFilter());
 		}

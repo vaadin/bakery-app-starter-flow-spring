@@ -89,7 +89,7 @@ public class EntityEditPresenter<T extends AbstractEntity> {
 	public void cancel() {
 		if (editor.isDirty()) {
 			Message CONFIRM_CANCEL = Message.UNSAVED_CHANGES.createMessage(entityName);
-			view.confirm(CONFIRM_CANCEL, () -> view.closeDialog(false));
+			view.confirm(CONFIRM_CANCEL, () -> close(false));
 		} else {
 			close(false);
 		}
