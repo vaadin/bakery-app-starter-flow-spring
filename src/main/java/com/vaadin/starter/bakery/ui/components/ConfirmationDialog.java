@@ -31,7 +31,7 @@ public class ConfirmationDialog extends PolymerTemplate<ConfirmationDialog.Model
 	@Id("ok")
 	private Button okButton;
 
-	@Id("cancel")
+	@Id("confirm-dialog-cancel")
 	private Button cancelButton;
 
 	private Registration okRegistration;

@@ -178,7 +178,7 @@
             </template>
           </vaadin-form-item>
 
-          <vaadin-form-item id="comment">
+          <vaadin-form-item id="order-detail-comment">
             <vaadin-text-field id="comment-field" placeholder="Add comment" class="full-width">
               <div slot="suffix" class="comment-suffix">
                 <vaadin-button id="send-comment" theme="tertiary">Send</vaadin-button>
@@ -191,13 +191,13 @@
     </div>
 
     <div class="footer">
-      <vaadin-button id="back">Back</vaadin-button>
-      <vaadin-button id="cancel">Cancel</vaadin-button>
+      <vaadin-button id="order-detail-back">Back</vaadin-button>
+      <vaadin-button id="order-detail-cancel">Cancel</vaadin-button>
       <div class="total money">Total [[totalPrice]]</div>
 
-      <vaadin-button id="save" theme="primary success" class="edit-button">Place Order ✓</vaadin-button>
+      <vaadin-button id="order-detail-save" theme="primary success" class="edit-button">Place Order ✓</vaadin-button>
 
-      <vaadin-button id="edit" theme="primary icon" class="edit-button">
+      <vaadin-button id="order-detail-edit" theme="primary icon" class="edit-button">
         <span>Edit order</span>
         <iron-icon icon="valo:edit"></iron-icon>
       </vaadin-button>

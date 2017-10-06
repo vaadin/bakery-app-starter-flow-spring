@@ -25,7 +25,7 @@
       }
     </style>
 
-    <vaadin-text-field id="amount" label="[[label]]" theme="center" pattern="\d*" part="text-field" prevent-invalid-input value=[[value]] readonly="true">
+    <vaadin-text-field id="amount-field-amount" label="[[label]]" theme="center" pattern="\d*" part="text-field" prevent-invalid-input value=[[value]] readonly="true">
       <iron-icon slot="prefix" id="minus" icon="valo:minus" on-click="minus" disabled$="[[!minusEnabled]]"></iron-icon>
       <iron-icon slot="suffix" id="plus" icon="valo:plus" on-click="plus" disabled$="[[!plusEnabled]]"></iron-icon>
     </vaadin-text-field>

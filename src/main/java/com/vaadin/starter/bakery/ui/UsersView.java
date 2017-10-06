@@ -62,7 +62,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	private final UserService userService;
 	private final PasswordEncoder passwordEncoder;
 
-	@Id("view")
+	@Id("bakery-users-items-view")
 	private ItemsView view;
 
 	@Id("user-editor")

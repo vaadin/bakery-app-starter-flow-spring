@@ -49,10 +49,10 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 		void setStatus(String status);
 	}
 
-	@Id("title")
+	@Id("order-edit-title")
 	private H2 title;
 
-	@Id("status")
+	@Id("order-edit-status")
 	private ComboBox<String> status;
 
 	@Id("due-date")
@@ -73,7 +73,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 	@Id("customer-details")
 	private TextField customerDetails;
 
-	@Id("cancel")
+	@Id("order-edit-cancel")
 	private Button cancel;
 
 	@Id("review")

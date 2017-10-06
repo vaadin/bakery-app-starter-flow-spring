@@ -59,7 +59,7 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 
 	private final ProductService service;
 
-	@Id("view")
+	@Id("bakery-products-items-view")
 	private ItemsView view;
 
 	@Id("product-editor")

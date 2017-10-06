@@ -32,16 +32,16 @@ public class OrderItemEdit extends PolymerTemplate<OrderItemEdit.Model> implemen
 	@Id("products")
 	private ComboBox<String> products;
 
-	@Id("delete")
+	@Id("order-item-edit-delete")
 	private Button delete;
 
-	@Id("amount")
+	@Id("order-item-edit-amount")
 	private AmountField amount;
 
 	@Id("product-price")
 	private Div price;
 
-	@Id("comment")
+	@Id("order-item-edit-comment")
 	private TextField comment;
 
 	private OrderItem orderItem;

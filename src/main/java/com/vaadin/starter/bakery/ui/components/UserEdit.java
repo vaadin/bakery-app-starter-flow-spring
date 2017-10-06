@@ -27,7 +27,7 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> {
 		void setAvatar(String avatar);
 	}
 
-	@Id("title")
+	@Id("user-edit-title")
 	private H3 title;
 
 	@Id("first")
@@ -39,19 +39,19 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> {
 	@Id("email")
 	private TextField emailField;
 
-	@Id("password")
+	@Id("user-edit-password")
 	private PasswordField passwordField;
 
 	@Id("role")
 	private ComboBox<String> roleField;
 
-	@Id("save")
+	@Id("user-edit-save")
 	private Button saveButton;
 
-	@Id("delete")
+	@Id("user-edit-delete")
 	private Button deleteButton;
 
-	@Id("cancel")
+	@Id("user-edit-cancel")
 	private Button cancelButton;
 
 	private User user;

@@ -24,22 +24,22 @@ import static com.vaadin.starter.bakery.ui.utils.FormattingUtils.DECIMAL_ZERO;
 @HtmlImport("context://src/products/product-edit.html")
 public class ProductEdit extends PolymerTemplate<TemplateModel> {
 
-	@Id("title")
+	@Id("product-edit-title")
 	private H3 title;
 
-	@Id("name")
+	@Id("product-edit-name")
 	private TextField nameField;
 
 	@Id("price")
 	private TextField priceField;
 
-	@Id("save")
+	@Id("product-edit-save")
 	private Button saveButton;
 
-	@Id("delete")
+	@Id("product-edit-delete")
 	private Button deleteButton;
 
-	@Id("cancel")
+	@Id("product-edit-cancel")
 	private Button cancelButton;
 
 	private Product product;
