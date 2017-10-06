@@ -10,13 +10,15 @@ import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
+import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HasClickListeners.ClickEvent;
 import com.vaadin.ui.TextField;
 
 import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
+
+import static com.vaadin.starter.bakery.ui.utils.FormattingUtils.DECIMAL_ZERO;
 
 @Tag("product-edit")
 @HtmlImport("context://src/products/product-edit.html")
@@ -42,14 +44,7 @@ public class ProductEdit extends PolymerTemplate<TemplateModel> {
 
 	private Product product;
 
-	private static final String DECIMAL_ZERO = "0.00";
-	private static final DecimalFormat df;
-
-	static {
-		DecimalFormatSymbols sep = new DecimalFormatSymbols();
-		sep.setDecimalSeparator('.');
-		df = new DecimalFormat("#" + DECIMAL_ZERO, sep);
-	}
+	private final DecimalFormat df = FormattingUtils.getUiPriceFormatter();
 
 	public ProductEdit() {
 		nameField.addValueChangeListener(valueChangeEvent -> saveButton.setDisabled(!isDirty()));
