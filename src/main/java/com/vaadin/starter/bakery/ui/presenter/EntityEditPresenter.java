@@ -1,5 +1,7 @@
 package com.vaadin.starter.bakery.ui.presenter;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;
 
@@ -9,6 +11,7 @@ import com.vaadin.starter.bakery.backend.service.CrudService;
 import com.vaadin.starter.bakery.backend.service.UserFriendlyDataException;
 import com.vaadin.starter.bakery.ui.components.EntityEditView;
 import com.vaadin.starter.bakery.ui.components.EntityView;
+import com.vaadin.starter.bakery.ui.messages.ErrorMessage;
 import com.vaadin.starter.bakery.ui.messages.Message;
 
 public class EntityEditPresenter<T extends AbstractEntity> {
@@ -38,10 +41,9 @@ public class EntityEditPresenter<T extends AbstractEntity> {
 	private void delete() {
 		Message CONFIRM_DELETE = Message.CONFIRM_DELETE.createMessage();
 		view.confirm(CONFIRM_DELETE, () -> executeJPAOperation(() -> {
-			crudService.delete(entity.getId());
+			crudService.delete(entity);
 			close(true);
 		}));
-
 	}
 
 	private void save() {
@@ -68,6 +70,9 @@ public class EntityEditPresenter<T extends AbstractEntity> {
 			// Somebody else probably edited the data at the same time
 			view.toast("Somebody else might have updated the data. Please refresh and try again.", true);
 			view.getLogger().debug("Optimistic locking error while saving entity", e);
+		} catch (EntityNotFoundException e) {
+			showError(ErrorMessage.ENTITY_NOT_FOUND, entityName);
+			view.getLogger().debug("Entity not found in the database", e);
 		} catch (Exception e) {
 			// Something went wrong, no idea what
 			view.toast("A problem occurred while saving the data. Please check the fields.", true);
@@ -95,14 +100,13 @@ public class EntityEditPresenter<T extends AbstractEntity> {
 	}
 
 	public void edit(Long id) {
-		this.entity = crudService.getRepository().findOne(id);
-		if (this.entity == null) {
-			String errorMessage = "Cannot find a user with the id '" + id + "'. Please refresh the page and try again.";
-			view.showError(errorMessage);
-			view.closeDialog(true);
-		} else {
+		boolean loaded = executeJPAOperation(() -> {
+			this.entity = crudService.load(id);
 			editor.read(entity);
 			view.openDialog();
+		});
+		if (!loaded) {
+			view.closeDialog(true);
 		}
 	}
 
@@ -110,5 +114,9 @@ public class EntityEditPresenter<T extends AbstractEntity> {
 		this.entity = entity;
 		editor.read(entity);
 		view.openDialog();
+	}
+
+	private void showError(ErrorMessage message, Object... parameters) {
+		view.toast(message.getMessage(parameters), message.isPersistent());
 	}
 }
