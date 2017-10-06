@@ -7,7 +7,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.vaadin.annotations.Convert;
 import com.vaadin.annotations.EventHandler;
@@ -25,7 +24,6 @@ import com.vaadin.hummingbird.ext.spring.annotations.Route;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.User;
-import com.vaadin.starter.bakery.backend.service.UserFriendlyDataException;
 import com.vaadin.starter.bakery.backend.service.UserService;
 import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
 import com.vaadin.starter.bakery.ui.components.EntityView;
@@ -35,6 +33,26 @@ import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
 import com.vaadin.starter.bakery.ui.messages.Message;
 import com.vaadin.starter.bakery.ui.presenter.EntityEditPresenter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.HasClickListeners.ClickEvent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.List;
+import java.util.Optional;
+
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_CANCELBUTTON_CANCEL;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_CANCELBUTTON_DELETE;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_CAPTION_CANCEL;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_CAPTION_DELETE_USER;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_MESSAGE_CANCEL_USER;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_MESSAGE_DELETE;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_OKBUTTON_CANCEL;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.CONFIRM_OKBUTTON_DELETE;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_USERS;
 
 @Tag("bakery-users")
 @HtmlImport("context://src/users/bakery-users.html")
@@ -42,7 +60,7 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 @ParentView(BakeryApp.class)
 @Title(BakeryConst.TITLE_USERS)
 @Secured(Role.ADMIN)
-public class UsersView extends PolymerTemplate<UsersView.Model> implements View, HasToast, HasLogger {
+public class UsersView extends PolymerTemplate<UsersView.Model> implements View, EntityView {
 
 	public interface Model extends TemplateModel {
 
@@ -65,7 +83,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	private EntityEditPresenter<User> presenter;
 
 	@Autowired
-	public UsersView(UserService userService) {
+	public UsersView(UserService userService, PasswordEncoder passwordEncoder) {
 		this.userService = userService;
 		editor.setPasswordEncoder(passwordEncoder);
 		presenter = new EntityEditPresenter<User>(userService, editor, this, "User");
@@ -82,6 +100,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	@Override
 	public void onLocationChange(LocationChangeEvent locationChangeEvent) {
 		setEditableUser(locationChangeEvent.getPathParameter("id"));
+
 	}
 
 	private void setEditableUser(String userId) {

@@ -25,7 +25,7 @@ import com.vaadin.ui.TextField;
 
 @Tag("user-edit")
 @HtmlImport("context://src/users/user-edit.html")
-public class UserEdit extends PolymerTemplate<UserEdit.Model> implements View, EntityEditView<User> {
+public class UserEdit extends PolymerTemplate<UserEdit.Model> implements EntityEditView<User> {
 
 	public interface Model extends TemplateModel {
 		void setAvatar(String avatar);
