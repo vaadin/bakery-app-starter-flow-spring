@@ -34,7 +34,8 @@ public class EntityEditPresenter<T extends AbstractEntity> {
 		editor.addSaveListener(e -> save());
 		editor.addDeleteListener(e -> delete());
 		editor.addCancelListener(cancelClickEvent -> cancel());
-		editor.addValidationFailedEvent(e -> view.toast("Please fill out all required fields before proceeding."));
+		editor.addValidationFailedEvent(
+				e -> view.showError("Please fill out all required fields before proceeding.", false));
 	}
 
 	private void delete() {

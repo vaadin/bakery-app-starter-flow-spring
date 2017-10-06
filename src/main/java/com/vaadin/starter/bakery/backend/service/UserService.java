@@ -76,11 +76,10 @@ public class UserService implements CrudService<User> {
 	}
 
 	@Transactional
-	public void delete(long userId) {
-		User user = load(userId);
+	public void delete(User user) {
 		throwIfDeletingSelf(user);
 		throwIfUserLocked(user);
-		delete(user);
+		CrudService.super.delete(user);
 	}
 
 	private void throwIfDeletingSelf(User user) {
