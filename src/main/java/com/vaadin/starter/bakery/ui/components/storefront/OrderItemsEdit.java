@@ -4,34 +4,15 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.vaadin.flow.model.Convert;
-import com.vaadin.flow.model.Include;
-import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
-import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
-import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HasValue;
-import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.event.ComponentEvent;
 import com.vaadin.ui.event.ComponentEventListener;
-import com.vaadin.ui.polymertemplate.PolymerTemplate;
+import com.vaadin.ui.html.Div;
 
-@Tag("order-items-edit")
-@HtmlImport("context://src/storefront/order-items-edit.html")
-public class OrderItemsEdit extends PolymerTemplate<OrderItemsEdit.Model>
-implements HasValue<OrderItemsEdit, List<OrderItem>> {
-
-	public interface Model extends TemplateModel {
-		void setTotalPrice(Integer total);
-
-		Integer getTotalPrice();
-
-		@Include({ "comment", "quantity", "product.id" })
-		@Convert(value = LongToStringConverter.class, path = "product.id")
-		void setValue(List<OrderItem> items);
-	}
+public class OrderItemsEdit extends Div implements HasValue<OrderItemsEdit, List<OrderItem>> {
 
 	private OrderItemEdit empty;
 
@@ -45,6 +26,8 @@ implements HasValue<OrderItemsEdit, List<OrderItem>> {
 
 	private int totalPrice = 0;
 
+	private boolean hasChanges = false;
+
 	public void reset() {
 		registrations.forEach(Registration::remove);
 		registrations.clear();
@@ -53,7 +36,7 @@ implements HasValue<OrderItemsEdit, List<OrderItem>> {
 			items.clear();
 		getElement().removeAllChildren();
 		this.totalPrice = 0;
-		getModel().setValue(null);
+		this.hasChanges = false;
 	}
 
 	void setProducts(Collection<Product> products) {
@@ -70,7 +53,7 @@ implements HasValue<OrderItemsEdit, List<OrderItem>> {
 		}
 
 		createEmptyElement();
-		getModel().setValue(items);
+		setHasChanges(false);
 	}
 
 	private OrderItemEdit createEditor(OrderItem value) {
@@ -82,7 +65,7 @@ implements HasValue<OrderItemsEdit, List<OrderItem>> {
 		Registration productChangeRegistration = addRegistration(
 				editor.addProductChangeListener(e -> this.productChanged(e.getSource(), e.getProduct())));
 		Registration commentChangeRegistration = addRegistration(
-				editor.addCommentChangeListener(e -> getModel().setValue(items)));
+				editor.addCommentChangeListener(e -> setHasChanges(true)));
 		editor.addDeleteListener(e -> {
 			if (empty != editor) {
 				OrderItem orderItem = editor.getValue();
@@ -93,7 +76,7 @@ implements HasValue<OrderItemsEdit, List<OrderItem>> {
 				removeRegistration(commentChangeRegistration);
 				getElement().removeChild(editor.getElement());
 				updateTotalPriceOnItemPriceChange(e.getTotalPrice(), 0);
-				getModel().setValue(items);
+				setHasChanges(true);
 			}
 		});
 		editor.setValue(value);
@@ -122,20 +105,21 @@ implements HasValue<OrderItemsEdit, List<OrderItem>> {
 	}
 
 	private void productChanged(OrderItemEdit item, Product product) {
+		setHasChanges(true);
 		if (empty == item) {
 			createEmptyElement();
 			OrderItem orderItem = new OrderItem();
 			orderItem.setProduct(product);
 			items.add(orderItem);
 			item.setValue(orderItem);
-			getModel().setValue(items);
+			fireEvent(new NewEditorEvent());
 		}
 	}
 
 	private void updateTotalPriceOnItemPriceChange(int oldItemPrice, int newItemPrice) {
 		final int delta = newItemPrice - oldItemPrice;
 		totalPrice += delta;
-		getModel().setValue(items);
+		setHasChanges(true);
 		fireEvent(new PriceChangeEvent(totalPrice));
 	}
 
@@ -146,6 +130,17 @@ implements HasValue<OrderItemsEdit, List<OrderItem>> {
 
 	public Registration addPriceChangeListener(ComponentEventListener<PriceChangeEvent> listener) {
 		return addListener(PriceChangeEvent.class, listener);
+	}
+
+	public boolean hasChanges() {
+		return hasChanges;
+	}
+
+	private void setHasChanges(boolean hasChanges) {
+		this.hasChanges = hasChanges;
+		if (hasChanges) {
+			fireEvent(new ValueChangeEvent());
+		}
 	}
 
 	public class PriceChangeEvent extends ComponentEvent<OrderItemsEdit> {
@@ -161,6 +156,20 @@ implements HasValue<OrderItemsEdit, List<OrderItem>> {
 			return totalPrice;
 		}
 
+	}
+
+	public class ValueChangeEvent extends ComponentEvent<OrderItemsEdit> {
+
+		ValueChangeEvent() {
+			super(OrderItemsEdit.this, false);
+		}
+	}
+
+	public class NewEditorEvent extends ComponentEvent<OrderItemsEdit> {
+
+		NewEditorEvent() {
+			super(OrderItemsEdit.this, false);
+		}
 	}
 
 }

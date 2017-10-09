@@ -2,6 +2,8 @@ package com.vaadin.starter.bakery.backend.service;
 
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,8 +18,12 @@ public interface CrudService<T extends AbstractEntity> {
 		return getRepository().saveAndFlush(entity);
 	}
 
+	default void delete(T entity) {
+		getRepository().delete(entity);
+	}
+
 	default void delete(long id) {
-		getRepository().delete(id);
+		delete(load(id));
 	}
 
 	default long count() {
@@ -25,7 +31,11 @@ public interface CrudService<T extends AbstractEntity> {
 	}
 
 	default T load(long id) {
-		return getRepository().findOne(id);
+		T entity = getRepository().findOne(id);
+		if (entity == null) {
+			throw new EntityNotFoundException();
+		}
+		return entity;
 	}
 
 	long countAnyMatching(Optional<String> filter);

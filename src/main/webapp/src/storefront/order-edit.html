@@ -1,5 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="order-items-edit.html">
+<link rel="import" href="order-item-edit.html">
 <link rel="import" href="../elements/utils-mixin.html">
 <link rel="import" href="../app/style-modules/shared-styles.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
@@ -88,7 +88,7 @@
 
               <vaadin-form-item colspan="3">
                 <label slot="label">Products</label>
-                <slot name="order-items-edit" on-slotchange="_updateDesktopViewOnItemsEdit"></slot>
+                <slot name="order-items-edit"></slot>
               </vaadin-form-item>
 
             </vaadin-form-layout>
@@ -134,7 +134,7 @@
       }
 
       _updateDesktopViewOnItemsEdit() {
-        this.querySelectorAll('order-items-edit').forEach(item => item.desktopView = this.desktopView);
+        this.querySelectorAll('order-item-edit').forEach(item => item.updateDesktopView(this.desktopView));
       }
 
       _onStatusChange() {

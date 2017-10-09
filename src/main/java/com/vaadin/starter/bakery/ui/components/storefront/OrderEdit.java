@@ -90,10 +90,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 	public OrderEdit() {
 		addToSlot(this, items, "order-items-edit");
 
-		cancel.addClickListener(e -> {
-			System.out.println("bean: " + binder.getBean());
-			fireEvent(new CancelEvent(binder.hasChanges()));
-		});
+		cancel.addClickListener(e -> fireEvent(new CancelEvent(binder.hasChanges() || items.hasChanges())));
 		review.addClickListener(e -> {
 			try {
 				binder.writeBean(this.order);
@@ -151,7 +148,13 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 		binder.forField(items).bind("items");
 		items.addPriceChangeListener(e -> setTotalPrice(e.getTotalPrice()));
 
+		items.addListener(OrderItemsEdit.ValueChangeEvent.class, e -> review.setDisabled(false));
+		items.addListener(OrderItemsEdit.NewEditorEvent.class, e -> updateDesktopViewOnItemsEdit());
 		binder.addValueChangeListener(e -> review.setDisabled(false));
+	}
+
+	private void updateDesktopViewOnItemsEdit() {
+		getElement().callFunction("_updateDesktopViewOnItemsEdit");
 	}
 
 	public void init(User currentUser, Collection<Product> availableProducts) {
@@ -168,15 +171,12 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 
 	public void setEditableItem(Order order) {
 		this.order = order;
-		System.out.println("orde: " + order);
 		getModel().setOpened(true);
 		binder.readBean(order);
-
-		System.out.println("bean after load: " + pickupLocation.getValue());
-
 		boolean newOrder = order.getId() == null;
 		title.setText(String.format("%s Order", newOrder ? "New" : "Edit"));
 		review.setDisabled(true);
+		updateDesktopViewOnItemsEdit();
 	}
 
 	public Registration addReviewListener(ComponentEventListener<ReviewEvent> listener) {

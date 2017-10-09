@@ -1,34 +1,35 @@
 package com.vaadin.starter.bakery.ui.components;
 
-import com.vaadin.data.Binder;
+import com.vaadin.starter.bakery.ui.event.ValidationFailedEvent;
+import com.vaadin.starter.bakery.ui.form.EditForm;
+import com.vaadin.ui.event.ComponentEventListener;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.User;
+import com.vaadin.starter.bakery.ui.event.CancelEvent;
+import com.vaadin.starter.bakery.ui.event.DeleteEvent;
+import com.vaadin.starter.bakery.ui.event.SaveEvent;
 import com.vaadin.ui.Tag;
-import com.vaadin.ui.button.Button;
 import com.vaadin.ui.combobox.ComboBox;
-import com.vaadin.ui.common.HasClickListeners;
 import com.vaadin.ui.common.HtmlImport;
-import com.vaadin.ui.event.ComponentEventListener;
-import com.vaadin.ui.html.H3;
 import com.vaadin.ui.passwordfield.PasswordField;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import com.vaadin.ui.textfield.TextField;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Tag("user-edit")
 @HtmlImport("context://src/users/user-edit.html")
-public class UserEdit extends PolymerTemplate<UserEdit.Model> {
+public class UserEdit extends PolymerTemplate<UserEdit.Model> implements EntityEditView<User> {
 
 	public interface Model extends TemplateModel {
 		void setAvatar(String avatar);
 	}
-
-	@Id("user-edit-title")
-	private H3 title;
 
 	@Id("first")
 	private TextField firstnameField;
@@ -45,69 +46,60 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> {
 	@Id("role")
 	private ComboBox<String> roleField;
 
-	@Id("user-edit-save")
-	private Button saveButton;
+	@Id("user-edit-form")
+	private EditForm editForm;
 
-	@Id("user-edit-delete")
-	private Button deleteButton;
+	private final BeanValidationBinder<User> binder = new BeanValidationBinder<>(User.class);
 
-	@Id("user-edit-cancel")
-	private Button cancelButton;
-
-	private User user;
-	private Binder<User> binder = new Binder<>();
+	private PasswordEncoder passwordEncoder = NoOpPasswordEncoder.getInstance();
 
 	public UserEdit() {
+		editForm.init(binder, "User");
 		roleField.setItems(Role.getAllRoles());
+		binder.bind(firstnameField, "firstName");
+		binder.bind(lastnameField, "lastName");
+		binder.bind(emailField, "email");
+		binder.bind(passwordField, (user) -> passwordField.getEmptyValue(), (user, password) -> {
+			if (!passwordField.getEmptyValue().equals(password)) {
+				user.setPassword(passwordEncoder.encode(password));
+			}
+		});
+		binder.bind(roleField, "role");
 	}
 
-	public void setupBinding(PasswordEncoder passwordEncoder) {
-		binder.bind(firstnameField, User::getFirstName, User::setFirstName);
-		binder.bind(lastnameField, User::getLastName, User::setLastName);
-		binder.bind(emailField, User::getEmail, User::setEmail);
-		binder.bind(passwordField,
-				(user) -> passwordField.getEmptyValue(),
-				(user, password) -> {
-					if (!passwordField.getEmptyValue().equals(password)) {
-						user.setPassword(passwordEncoder.encode(password));
-					}
-				});
-		binder.bind(roleField, User::getRole, User::setRole);
-
-		binder.addValueChangeListener(event -> saveButton.setDisabled(!isDirty()));
+	public Registration addSaveListener(ComponentEventListener<SaveEvent> listener) {
+		return editForm.addListener(SaveEvent.class, listener);
 	}
 
-	public Registration addSaveListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {
-		return saveButton.addClickListener(listener);
+	public Registration addDeleteListener(ComponentEventListener<DeleteEvent> listener) {
+		return editForm.addListener(DeleteEvent.class, listener);
 	}
 
-	public Registration addDeleteListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {
-		return deleteButton.addClickListener(listener);
+	public Registration addCancelListener(ComponentEventListener<CancelEvent> listener) {
+		return editForm.addListener(CancelEvent.class, listener);
 	}
 
-	public Registration addCancelListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {
-		return cancelButton.addClickListener(listener);
+	public Registration addValidationFailedEvent(ComponentEventListener<ValidationFailedEvent> listener) {
+		return editForm.addListener(ValidationFailedEvent.class, listener);
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void read(User user) {
 		binder.readBean(user);
-
-		title.setText((user.isNew() ? "New" : "Edit") + " User");
 		getModel().setAvatar(user.getPhotoUrl());
-		saveButton.setDisabled(true);
-		deleteButton.setDisabled(user.isNew());
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void writeEditsToUser() throws ValidationException {
-		binder.writeBean(user);
+		editForm.showEditor(user.isNew());
 	}
 
 	public boolean isDirty() {
 		return binder.hasChanges();
 	}
+
+	@Override
+	public void write(User entity) throws ValidationException {
+		binder.writeBean(entity);
+	}
+
+	public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+		this.passwordEncoder = passwordEncoder;
+	}
+
 }
