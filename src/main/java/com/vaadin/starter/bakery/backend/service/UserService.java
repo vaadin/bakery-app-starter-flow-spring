@@ -71,36 +71,27 @@ public class UserService implements CrudService<User> {
 	@Override
 	@Transactional
 	public User save(User entity) {
-		throwIfUserLocked(entity.getId());
+		throwIfUserLocked(entity);
 		return getRepository().saveAndFlush(entity);
 	}
 
 	@Override
 	@Transactional
-	public void delete(long userId) {
-		throwIfDeletingSelf(userId);
-		throwIfUserLocked(userId);
-		getRepository().delete(userId);
+	public void delete(User user) {
+		throwIfDeletingSelf(user);
+		throwIfUserLocked(user);
+		CrudService.super.delete(user);
 	}
 
-	private void throwIfDeletingSelf(Long userId) {
-		if (userId == null) {
-			return;
-		}
-
+	private void throwIfDeletingSelf(User user) {
 		User current = getCurrentUser();
-		if (current.getId().equals(userId)) {
+		if (current.equals(user)) {
 			throw new UserFriendlyDataException(DELETING_SELF_NOT_PERMITTED);
 		}
 	}
 
-	private void throwIfUserLocked(Long userId) {
-		if (userId == null) {
-			return;
-		}
-
-		User dbUser = getRepository().findOne(userId);
-		if (dbUser.isLocked()) {
+	private void throwIfUserLocked(User entity) {
+		if (entity.isLocked()) {
 			throw new UserFriendlyDataException(MODIFY_LOCKED_USER_NOT_PERMITTED);
 		}
 	}

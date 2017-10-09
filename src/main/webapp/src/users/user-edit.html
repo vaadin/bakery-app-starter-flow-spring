@@ -6,17 +6,11 @@
 <link rel="import" href="../../bower_components/vaadin-text-field/vaadin-password-field.html">
 <link rel="import" href="../elements/utils-mixin.html">
 <link rel="import" href="../elements/user-avatar.html">
+<link rel="import" href="../elements/edit-form.html">
 
 <dom-module id="user-edit">
   <template>
-    <style include="shared-styles">
-      :host {
-        display: flex;
-        flex-direction: column;
-        box-sizing: border-box;
-        height: 100%;
-      }
-
+    <style>
       user-avatar {
         width: 56px;
         height: 56px;
@@ -24,24 +18,13 @@
         margin-top: 8px;
       }
 
-      label {
-        font-size: var(--valo-font-size-s);
-        color: var(--valo-contrast-60pct);
-        font-weight: 500;
-      }
-
-      .header-title {
-        position: relative;
-        padding-left: 15px;
-      }
-
       vaadin-combo-box {
         margin-top: var(--valo-space-m);
       }
     </style>
 
-    <h3 id="title" class="header-title"></h3>
-    <div class="scrollable flex1" id="main">
+
+    <edit-form id="user-edit-form">
       <vaadin-form-layout>
         <template is="dom-if" if="[[avatar]]">
           <div class="flex" colspan="2">
@@ -49,6 +32,7 @@
           </div>
           <br>
         </template>
+
         <vaadin-text-field id="email" label="Email (login)" colspan="2"></vaadin-text-field>
         <br>
         <vaadin-text-field id="first" label="First Name" colspan="2"></vaadin-text-field>
@@ -58,24 +42,13 @@
         <br>
         <vaadin-combo-box id="role" label="Role" colspan="2"></vaadin-combo-box>
       </vaadin-form-layout>
-    </div>
-    <div class="footer">
-      <vaadin-button id="save" theme="primary">Save</vaadin-button>
-      <vaadin-button id="cancel">Cancel</vaadin-button>
-      <div class="flex1"></div>
-      <vaadin-button id="delete" theme="danger tertiary" class="right">Delete</vaadin-button>
-    </div>
+    </edit-form>
   </template>
 
   <script>
-    class UserEdit extends window.EditableItemMixin(Polymer.Element) {
+    class UserEdit extends Polymer.Element {
       static get is() {
         return 'user-edit';
-      }
-
-      constructor() {
-        super();
-        this._editableItemName = 'User';
       }
     }
 

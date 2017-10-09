@@ -24,11 +24,11 @@ class UsersViewElement extends AbstractElement {
 	}
 
 	WebElement getUpdateButton() {
-		return findElement(By.shadowSelector("::shadow #user-editor::shadow vaadin-button[theme='primary']"));
+		return findElement(By.shadowSelector("::shadow #user-editor::shadow #user-edit-form::shadow vaadin-button[theme='primary']"));
 	}
 
 	WebElement getDeleteButton() {
-		return findElement(By.shadowSelector("::shadow #user-editor::shadow vaadin-button[theme~='danger']"));
+		return findElement(By.shadowSelector("::shadow #user-editor::shadow #user-edit-form::shadow vaadin-button[theme~='danger']"));
 	}
 
 	WebElement getGridCell(String text) {
