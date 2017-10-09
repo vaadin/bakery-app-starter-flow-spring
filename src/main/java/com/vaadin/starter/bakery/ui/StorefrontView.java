@@ -54,7 +54,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	@Id("search")
 	private BakerySearch searchBar;
 
-	private ViewSelector editWrapper;
+	private ViewSelector viewSelector;
 
 	@Id("confirmation-dialog")
 	private ConfirmationDialog confirmationDialog;
@@ -72,8 +72,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		this.orderService = orderService;
 		this.userService = userService;
 
-		editWrapper = new ViewSelector(productService, userService);
-		addToSlot(this, editWrapper, "view-selector");
+		viewSelector = new ViewSelector(productService, userService);
+		addToSlot(this, viewSelector, "view-selector");
 
 		searchBar.setActionText("New order");
 		searchBar.setCheckboxText("Show past orders");
@@ -88,7 +88,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	}
 
 	private void prepareOrderEditWrapper(OrderService orderService) {
-		editWrapper.addSaveListener(e -> {
+		viewSelector.addSaveListener(e -> {
 			com.vaadin.starter.bakery.backend.data.entity.Order order = e.getOrder();
 			boolean isNew = order.getId() == null;
 			orderService.saveOrder(order);
@@ -101,7 +101,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		});
 
 		Message CONFIRM_CANCEL = Message.UNSAVED_CHANGES.createMessage("Order");
-		editWrapper.addCancelListener(e -> {
+		viewSelector.addCancelListener(e -> {
 			if (e.hasChanges()) {
 				confirmationDialog.show(CONFIRM_CANCEL, ev -> this.closeEditor());
 			} else {
@@ -109,13 +109,13 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 			}
 		});
 
-		editWrapper.addCommentListener(e -> {
+		viewSelector.addCommentListener(e -> {
 			if (e.getOrderId() == null) {
 				return;
 			}
 
 			addComment(e.getOrderId().toString(), e.getMessage());
-			editWrapper.openDetails(orderService.findOrder(e.getOrderId()));
+			viewSelector.openDetails(orderService.findOrder(e.getOrderId()));
 		});
 	}
 
@@ -152,13 +152,13 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	}
 
 	private void closeEditor() {
-		editWrapper.close();
+		viewSelector.close();
 		getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT));
 		getModel().setEditing(false);
 	}
 
 	private void openOrderEditor(com.vaadin.starter.bakery.backend.data.entity.Order order) {
-		editWrapper.openEdit(order, userService.getCurrentUser(), productService.getRepository().findAll());
+		viewSelector.openEdit(order, userService.getCurrentUser(), productService.getRepository().findAll());
 		getModel().setEditing(true);
 	}
 
@@ -171,7 +171,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 			if (locationChangeEvent.getLocation().getSegments().contains("edit")) {
 				openOrderEditor(order);
 			} else {
-				editWrapper.openDetails(order);
+				viewSelector.openDetails(order);
 			}
 		} catch (Exception e) {
 		}
