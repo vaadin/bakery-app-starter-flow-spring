@@ -6,11 +6,10 @@
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-column.html">
 
 <link rel="import" href="../app/bakery-search.html">
-<link rel="import" href="order-edit-wrapper.html">
+<link rel="import" href="view-selector.html">
 <link rel="import" href="storefront-item-detail.html">
 <link rel="import" href="storefront-item-detail-wrapper.html">
 
-<link rel="import" href="order-edit-wrapper.html">
 <link rel="import" href="../elements/confirm-dialog.html">
 <link rel="import" href="../elements/item-detail-dialog.html">
 <link rel="import" href="../elements/utils-mixin.html">
@@ -100,7 +99,7 @@
         </item-detail-dialog>
       </template>
       <item-detail-dialog desktop-view$=[[desktopView]] opened=[[editing]] on-before-close="_onBeforeCloseEdit">
-        <slot name="order-edit-wrapper" on-slotchange="_updateEditWrapperSlot"></slot>
+        <slot name="view-selector" on-slotchange="_updateEditWrapperSlot"></slot>
       </item-detail-dialog>
     </div>
     <confirm-dialog id="confirmation-dialog"></confirm-dialog>
@@ -201,7 +200,7 @@
       }
 
       _updateEditWrapperSlot() {
-        this.$.orderEditWrapper = this.querySelector('order-edit-wrapper');
+        this.$.orderEditWrapper = this.querySelector('view-selector');
         this._updateDesktoViewOnEditWrapper();
       }
 

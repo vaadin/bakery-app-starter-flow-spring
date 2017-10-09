@@ -1,25 +1,25 @@
 package com.vaadin.starter.bakery.ui.components.storefront;
 
-import java.util.Collection;
-
-import com.vaadin.flow.model.TemplateModel;
+import com.vaadin.annotations.HtmlImport;
+import com.vaadin.annotations.Tag;
+import com.vaadin.flow.event.ComponentEventListener;
+import com.vaadin.flow.template.PolymerTemplate;
+import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.ProductService;
 import com.vaadin.starter.bakery.backend.service.UserService;
-import com.vaadin.ui.Tag;
-import com.vaadin.ui.common.HtmlImport;
-import com.vaadin.ui.event.ComponentEvent;
-import com.vaadin.ui.event.ComponentEventListener;
-import com.vaadin.ui.polymertemplate.PolymerTemplate;
+import com.vaadin.ui.ComponentEvent;
+
+import java.util.Collection;
 
 import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
-@Tag("order-edit-wrapper")
-@HtmlImport("context://src/storefront/order-edit-wrapper.html")
-public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
+@Tag("view-selector")
+@HtmlImport("context://src/storefront/view-selector.html")
+public class ViewSelector extends PolymerTemplate<ViewSelector.Model> {
 
 	public interface Model extends TemplateModel {
 		void setOpened(boolean opened);
@@ -31,10 +31,10 @@ public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 
 	private Order order;
 
-	public OrderEditWrapper(ProductService productService, UserService userService) {
+	public ViewSelector(ProductService productService, UserService userService) {
 		orderEdit.addCancelListener(e -> fireEvent(new CancelEvent(e.hasChanges())));
 		orderEdit.addReviewListener(e -> this.details(true));
-		orderDetail.addBackListener(e -> this.edit(true));
+		orderDetail.addBackListener(e -> this.edit());
 		orderDetail.addSaveListener(e -> fireEvent(new SaveEvent()));
 		orderDetail.addEditListener(
 				e -> openEdit(order, userService.getCurrentUser(), productService.getRepository().findAll()));
@@ -53,7 +53,7 @@ public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 		orderEdit.init(currentUser, availableProducts);
 		orderEdit.setEditableItem(order);
 		getModel().setOpened(true);
-		edit(false);
+		edit();
 	}
 
 	public void openDetails(Order order) {
@@ -68,8 +68,7 @@ public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 		getModel().setOpened(false);
 	}
 
-	private void edit(boolean initialHasChanges) {
-		orderEdit.setInitialHasChanges(initialHasChanges);
+	private void edit() {
 		orderEdit.getElement().setAttribute("hidden", false);
 		orderDetail.getElement().setAttribute("hidden", true);
 	}
@@ -98,11 +97,11 @@ public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 		return orderDetail.addCommentListener(listener);
 	}
 
-	public class CancelEvent extends ComponentEvent<OrderEditWrapper> {
+	public class CancelEvent extends ComponentEvent<ViewSelector> {
 		private final boolean hasChanges;
 
 		CancelEvent(boolean hasChanges) {
-			super(OrderEditWrapper.this, false);
+			super(ViewSelector.this, false);
 			this.hasChanges = hasChanges;
 		}
 
@@ -111,10 +110,10 @@ public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 		}
 	}
 
-	public class SaveEvent extends ComponentEvent<OrderEditWrapper> {
+	public class SaveEvent extends ComponentEvent<ViewSelector> {
 
 		SaveEvent() {
-			super(OrderEditWrapper.this, false);
+			super(ViewSelector.this, false);
 		}
 
 		public Order getOrder() {

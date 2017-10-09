@@ -5,20 +5,20 @@
 <link rel="import" href="../elements/utils-mixin.html">
 <link rel="import" href="../app/style-modules/shared-styles.html">
 
-<dom-module id="order-edit-wrapper">
+<dom-module id="view-selector">
   <template>
       <slot name="detail-dialog" on-slotchange="_updateItems"></slot>
   </template>
 
   <script>
-    class OrderEditWrapper extends
+    class ViewSelector extends
       window.EditableItemMixin(
         window.NotificationMixin(
           window.LocaleUtilsMixin(
             window.ScrollShadowMixin(Polymer.Element)))) {
 
       static get is() {
-        return 'order-edit-wrapper';
+        return 'view-selector';
       }
 
       static get properties() {
@@ -41,6 +41,6 @@
 
     }
 
-    window.customElements.define(OrderEditWrapper.is, OrderEditWrapper);
+    window.customElements.define(ViewSelector.is, ViewSelector);
   </script>
 </dom-module>

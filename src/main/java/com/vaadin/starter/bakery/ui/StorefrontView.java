@@ -25,7 +25,7 @@ import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.backend.service.ProductService;
 import com.vaadin.starter.bakery.backend.service.UserService;
 import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
-import com.vaadin.starter.bakery.ui.components.storefront.OrderEditWrapper;
+import com.vaadin.starter.bakery.ui.components.storefront.ViewSelector;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.starter.bakery.ui.entities.Order;
 import com.vaadin.starter.bakery.ui.messages.Message;
@@ -54,7 +54,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	@Id("search")
 	private BakerySearch searchBar;
 
-	private OrderEditWrapper editWrapper;
+	private ViewSelector editWrapper;
 
 	@Id("confirmation-dialog")
 	private ConfirmationDialog confirmationDialog;
@@ -72,8 +72,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		this.orderService = orderService;
 		this.userService = userService;
 
-		editWrapper = new OrderEditWrapper(productService, userService);
-		addToSlot(this, editWrapper, "order-edit-wrapper");
+		editWrapper = new ViewSelector(productService, userService);
+		addToSlot(this, editWrapper, "view-selector");
 
 		searchBar.setActionText("New order");
 		searchBar.setCheckboxText("Show past orders");
