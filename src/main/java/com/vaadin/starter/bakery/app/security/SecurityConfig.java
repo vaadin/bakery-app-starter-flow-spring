@@ -75,7 +75,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 						"/manifest.json",
 
 						// production-mode static resources
-						"/build/**");
+						"/build/**",
+						"/frontend-es6/**");
 	}
 
 	private boolean isFrameworkInternalRequest(HttpServletRequest request) {
