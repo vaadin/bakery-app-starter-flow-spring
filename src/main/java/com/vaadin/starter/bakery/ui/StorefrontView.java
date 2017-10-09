@@ -1,22 +1,23 @@
 package com.vaadin.starter.bakery.ui;
 
+import static com.vaadin.starter.bakery.ui.utils.StorefrontItemHeaderGenerator.computeEntriesWithHeader;
+import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.vaadin.flow.model.TemplateModel;
-import com.vaadin.flow.router.LocationChangeEvent;
-import com.vaadin.router.Title;
-import com.vaadin.ui.Tag;
-import com.vaadin.ui.common.ClientDelegate;
-import com.vaadin.ui.common.HtmlImport;
-import com.vaadin.ui.polymertemplate.Id;
-import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 
+import com.vaadin.annotations.ClientDelegate;
+import com.vaadin.annotations.HtmlImport;
+import com.vaadin.annotations.Id;
+import com.vaadin.annotations.Tag;
+import com.vaadin.annotations.Title;
+import com.vaadin.flow.router.LocationChangeEvent;
 import com.vaadin.flow.router.View;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
@@ -27,14 +28,11 @@ import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.backend.service.ProductService;
 import com.vaadin.starter.bakery.backend.service.UserService;
 import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
-import com.vaadin.starter.bakery.ui.components.storefront.ViewSelector;
+import com.vaadin.starter.bakery.ui.components.viewselector.ViewSelector;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.starter.bakery.ui.entities.Order;
 import com.vaadin.starter.bakery.ui.messages.Message;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
-
-import static com.vaadin.starter.bakery.ui.utils.StorefrontItemHeaderGenerator.computeEntriesWithHeader;
-import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
 @Tag("bakery-storefront")
 @HtmlImport("context://src/storefront/bakery-storefront.html")
@@ -76,7 +74,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 		viewSelector = new ViewSelector(productService, userService);
 		addToSlot(this, viewSelector, "view-selector");
-
 		searchBar.setActionText("New order");
 		searchBar.setCheckboxText("Show past orders");
 		searchBar.setPlaceHolder("Search");
