@@ -86,7 +86,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 	public OrderEdit() {
 		addToSlot(this, items, "order-items-edit");
 
-		cancel.addClickListener(e -> fireEvent(new CancelEvent(binder.hasChanges() || items.hasChanges())));
+		cancel.addClickListener(e -> fireEvent(new CancelEvent(hasChanges())));
 		review.addClickListener(e -> {
 			try {
 				binder.writeBean(this.order);
@@ -124,9 +124,13 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 		binder.forField(items).bind("items");
 		items.addPriceChangeListener(e -> setTotalPrice(e.getTotalPrice()));
 
-		items.addListener(OrderItemsEdit.ValueChangeEvent.class, e -> review.setDisabled(false));
+		items.addListener(OrderItemsEdit.ValueChangeEvent.class, e -> review.setDisabled(!hasChanges()));
 		items.addListener(OrderItemsEdit.NewEditorEvent.class, e -> updateDesktopViewOnItemsEdit());
-		binder.addValueChangeListener(e -> review.setDisabled(false));
+		binder.addValueChangeListener(e -> review.setDisabled(!hasChanges()));
+	}
+
+	private boolean hasChanges() {
+		return binder.hasChanges() || items.hasChanges();
 	}
 
 	private void updateDesktopViewOnItemsEdit() {
