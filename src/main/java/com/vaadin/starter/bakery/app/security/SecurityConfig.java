@@ -76,6 +76,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 						// production-mode static resources
 						"/build/**",
+						"/frontend-es5/**",
 						"/frontend-es6/**");
 	}
 

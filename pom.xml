@@ -327,7 +327,7 @@
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <version>${spring-boot.version}</version>
                         <configuration>
-                            <jvmArguments>-Dvaadin.frontend.url.es6=context://build/frontend-es6/ -Dvaadin.productionMode</jvmArguments>
+                            <jvmArguments>-Dvaadin.frontend.url.es5=context://build/frontend-es5/ -Dvaadin.frontend.url.es6=context://build/frontend-es6/ -Dvaadin.productionMode</jvmArguments>
                         </configuration>
                     </plugin>
                 </plugins>
