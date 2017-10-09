@@ -7,11 +7,7 @@
 
 <dom-module id="order-edit-wrapper">
   <template>
-    <div id="wrapper">
-      <item-detail-dialog desktop-view$=[[desktopView]] opened=[[opened]] on-before-close="_onBeforeClose">
-        <slot name="detail-dialog" on-slotchange="_updateItems"></slot>
-      </item-detail-dialog>
-    </div>
+      <slot name="detail-dialog" on-slotchange="_updateItems"></slot>
   </template>
 
   <script>
@@ -43,9 +39,6 @@
         Array.from(this.children).forEach(item => item.desktopView = this.desktopView);
       }
 
-      _onBeforeClose(e) {
-        e.preventDefault();
-      }
     }
 
     window.customElements.define(OrderEditWrapper.is, OrderEditWrapper);

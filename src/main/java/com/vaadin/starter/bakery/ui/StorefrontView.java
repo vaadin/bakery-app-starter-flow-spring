@@ -47,6 +47,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		void setOrders(List<Order> orders);
 
 		List<Order> getOrders();
+
+		void setEditing(boolean editing);
 	}
 
 	@Id("search")
@@ -82,6 +84,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		filterItems(searchBar.getFilter(), searchBar.getShowPrevious());
 
 		prepareOrderEditWrapper(orderService);
+		getModel().setEditing(false);
 	}
 
 	private void prepareOrderEditWrapper(OrderService orderService) {
@@ -151,10 +154,12 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	private void closeEditor() {
 		editWrapper.close();
 		getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT));
+		getModel().setEditing(false);
 	}
 
 	private void openOrderEditor(com.vaadin.starter.bakery.backend.data.entity.Order order) {
 		editWrapper.openEdit(order, userService.getCurrentUser(), productService.getRepository().findAll());
+		getModel().setEditing(true);
 	}
 
 	@Override
@@ -164,7 +169,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 			Long id = Long.parseLong(orderId);
 			com.vaadin.starter.bakery.backend.data.entity.Order order = orderService.findOrder(id);
 			if (locationChangeEvent.getLocation().getSegments().contains("edit")) {
-				editWrapper.openEdit(order, userService.getCurrentUser(), productService.getRepository().findAll());
+				openOrderEditor(order);
 			} else {
 				editWrapper.openDetails(order);
 			}
