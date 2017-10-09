@@ -1,5 +1,5 @@
 {
-  "entrypoint": "src/storefront/bakery-storefront.html",
+  "entrypoint": "src/app/bakery-app.html",
   "shell": "src/app/bakery-app.html",
   "sources": [
     "src/**/*",
@@ -15,6 +15,13 @@
     "rules": ["polymer-2"]
   },
   "builds": [
+    {
+      "name": "es5",
+      "js": { "minify": true, "compile": true },
+      "css": { "minify": true },
+      "html": { "minify": true },
+      "bundle": true
+    },
     {
       "name": "es6",
       "js": { "minify": true, "compile": false },
