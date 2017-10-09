@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery.ui.components.storefront;
+package com.vaadin.starter.bakery.ui.components.viewselector;
 
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Tag;
@@ -11,6 +11,8 @@ import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.ProductService;
 import com.vaadin.starter.bakery.backend.service.UserService;
+import com.vaadin.starter.bakery.ui.components.storefront.OrderDetail;
+import com.vaadin.starter.bakery.ui.components.storefront.OrderEdit;
 import com.vaadin.ui.ComponentEvent;
 
 import java.util.Collection;
@@ -18,7 +20,7 @@ import java.util.Collection;
 import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
 @Tag("view-selector")
-@HtmlImport("context://src/storefront/view-selector.html")
+@HtmlImport("context://src/elements/viewselector/view-selector.html")
 public class ViewSelector extends PolymerTemplate<ViewSelector.Model> {
 
 	public interface Model extends TemplateModel {
