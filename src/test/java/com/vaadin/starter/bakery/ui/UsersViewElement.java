@@ -5,39 +5,36 @@ import java.util.List;
 import org.openqa.selenium.WebElement;
 
 import com.vaadin.starter.bakery.By;
+import com.vaadin.starter.bakery.elements.GridElement;
+import com.vaadin.starter.bakery.ui.components.ItemsViewElement;
+import com.vaadin.starter.bakery.ui.components.UserEditElement;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elementsbase.Element;
 
 @Element("bakery-users")
 public class UsersViewElement extends TestBenchElement {
-	List<WebElement> getGridCells() {
-		return findElements(By.shadowSelector("::shadow #grid > vaadin-grid-cell-content"));
+
+	public GridElement getGrid() {
+		return $(GridElement.class).id("grid");
 	}
 
-	WebElement getEditorDialog() {
-		return findElement(By.shadowSelector("::shadow items-view::shadow item-detail-dialog"));
+	public List<WebElement> getGridCells() {
+		return getGrid().findElements(By.cssSelector("vaadin-grid-cell-content"));
 	}
 
-	WebElement getFirstTextField() {
-		return findElement(By.shadowSelector("user-edit[slot='user-editor']::shadow vaadin-form-layout > vaadin-text-field"));
+	public ItemsViewElement getItemsView() {
+		return $(ItemsViewElement.class).first();
 	}
 
-	WebElement getPasswordField() {
-		return findElement(
-				By.shadowSelector("user-edit[slot='user-editor']::shadow vaadin-form-layout > vaadin-password-field"));
+	public UserEditElement getUserEdit() {
+		return $(UserEditElement.class).id("user-editor");
 	}
 
-	WebElement getUpdateButton() {
-		return findElement(By.shadowSelector(
-				"user-edit[slot='user-editor']::shadow #user-edit-form::shadow vaadin-button[theme='primary']"));
-	}
-
-	WebElement getDeleteButton() {
-		return findElement(By.shadowSelector(
-				"user-edit[slot='user-editor']::shadow #user-edit-form::shadow vaadin-button[theme~='danger']"));
-	}
-
-	WebElement getGridCell(String text) {
+	public WebElement getGridCell(String text) {
 		return getGridCells().stream().filter(cell -> cell.getText().equals(text)).findFirst().orElse(null);
+	}
+
+	public ConfirmationDialogElement getConfirmDialog() {
+		return $(ConfirmationDialogElement.class).id("user-confirmation-dialog");
 	}
 }
