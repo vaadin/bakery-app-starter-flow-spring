@@ -19,7 +19,7 @@ import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 @Tag("bakery-navigation")
-@HtmlImport("frontend://src/app/bakery-navigation.html")
+@HtmlImport("context://src/app/bakery-navigation.html")
 public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> {
 	private boolean loggedIn;
 	

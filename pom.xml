@@ -226,9 +226,6 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring-boot.version}</version>
-                    <configuration>
-                        <jvmArguments>-Dvaadin.frontend.url.dev=context://</jvmArguments>
-                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
