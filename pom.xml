@@ -322,6 +322,13 @@
                             <warSourceExcludes>**/build/</warSourceExcludes>
                         </configuration>
                     </plugin>
+
+                    <!-- When running the app locally with spring-boot:run the build output is not copied anywhere and
+                         stays in the ${frontend.directory}/build directory (accessible via context://build/frontend-es5
+                         and context://build/frontend-es6).
+
+                         That's not where Flow expects to find it by default (context://frontend-es5 and context://frontend-es6)
+                         hence the custom system properties are necessary for spring-boot:run -->
                     <plugin>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
