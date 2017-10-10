@@ -46,7 +46,8 @@ import com.vaadin.starter.bakery.repositories.UserRepository;
     "com.vaadin.starter.bakery",
     "com.vaadin.starter.bakery.backend.service",
     "com.vaadin.starter.bakery.app",
-    "com.vaadin.starter.bakery.app.security" })
+    "com.vaadin.starter.bakery.app.security",
+    "com.vaadin.hummingbird.ext.spring" })
 @EnableJpaRepositories(basePackageClasses = { UserRepository.class})
 @EntityScan(basePackageClasses={User.class, LocalDateJpaConverter.class})
 public class BakeryApplicationConfig extends WebSecurityConfigurerAdapter {

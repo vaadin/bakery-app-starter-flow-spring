@@ -16,14 +16,14 @@
   },
   "builds": [
     {
-      "name": "es5",
+      "name": "frontend-es5",
       "js": { "minify": true, "compile": true },
       "css": { "minify": true },
       "html": { "minify": true },
       "bundle": true
     },
     {
-      "name": "es6",
+      "name": "frontend-es6",
       "js": { "minify": true, "compile": false },
       "css": { "minify": true },
       "html": { "minify": true },

@@ -3,19 +3,19 @@
  */
 package com.vaadin.starter.bakery.ui.form;
 
-import com.vaadin.annotations.HtmlImport;
-import com.vaadin.annotations.Id;
-import com.vaadin.annotations.Tag;
 import com.vaadin.data.Binder;
-import com.vaadin.flow.html.H3;
+import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.flow.router.View;
-import com.vaadin.flow.template.PolymerTemplate;
-import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.starter.bakery.ui.HasToast;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.event.DeleteEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
-import com.vaadin.ui.Button;
+import com.vaadin.ui.Tag;
+import com.vaadin.ui.button.Button;
+import com.vaadin.ui.common.HtmlImport;
+import com.vaadin.ui.html.H3;
+import com.vaadin.ui.polymertemplate.Id;
+import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 @Tag("edit-form")
 @HtmlImport("context://src/elements/edit-form.html")

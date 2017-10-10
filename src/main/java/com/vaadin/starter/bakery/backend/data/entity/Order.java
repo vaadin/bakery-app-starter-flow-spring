@@ -166,4 +166,11 @@ public class Order extends AbstractEntity {
 	public int getTotalPrice() {
 		return items == null ? 0 : items.stream().mapToInt(OrderItem::getTotalPrice).sum();
 	}
+
+	@Override
+	public String toString() {
+		return "Order{" + "dueDate=" + dueDate + ", dueTime=" + dueTime + ", pickupLocation=" + pickupLocation
+				+ ", customer=" + customer + ", items=" + items + ", state=" + state + ", paid=" + paid + ", history="
+				+ history + '}';
+	}
 }

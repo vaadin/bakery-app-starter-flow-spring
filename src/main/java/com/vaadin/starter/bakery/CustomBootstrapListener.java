@@ -1,8 +1,8 @@
 package com.vaadin.starter.bakery;
 
-import com.vaadin.external.jsoup.nodes.Element;
 import com.vaadin.server.BootstrapListener;
 import com.vaadin.server.BootstrapPageResponse;
+import org.jsoup.nodes.Element;
 
 public class CustomBootstrapListener implements BootstrapListener {
 	public void modifyBootstrapPage(BootstrapPageResponse response) {

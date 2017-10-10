@@ -8,7 +8,7 @@ import com.vaadin.data.Result;
 import com.vaadin.data.ValueContext;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.ui.converters.binder.BinderConverter;
-import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.combobox.ComboBox;
 
 class ProductSource implements BinderConverter<String, Product> {
 	private final Map<String, Product> products;

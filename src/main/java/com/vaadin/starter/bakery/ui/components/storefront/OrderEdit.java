@@ -7,28 +7,32 @@ import java.util.Collection;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import com.vaadin.annotations.HtmlImport;
-import com.vaadin.annotations.Id;
-import com.vaadin.annotations.Tag;
 import com.vaadin.data.BeanValidationBinder;
+import com.vaadin.data.Result;
 import com.vaadin.data.ValidationException;
-import com.vaadin.flow.event.ComponentEventListener;
-import com.vaadin.flow.html.H2;
-import com.vaadin.flow.template.PolymerTemplate;
-import com.vaadin.flow.template.model.TemplateModel;
+import com.vaadin.data.ValueContext;
+import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
+import com.vaadin.starter.bakery.backend.data.entity.PickupLocation;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.ui.HasToast;
 import com.vaadin.starter.bakery.ui.converters.LocalTimeConverter;
+import com.vaadin.starter.bakery.ui.converters.binder.BinderConverter;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.ComponentEvent;
-import com.vaadin.ui.DatePicker;
-import com.vaadin.ui.TextField;
+import com.vaadin.ui.Tag;
+import com.vaadin.ui.button.Button;
+import com.vaadin.ui.combobox.ComboBox;
+import com.vaadin.ui.common.HtmlImport;
+import com.vaadin.ui.datepicker.DatePicker;
+import com.vaadin.ui.event.ComponentEvent;
+import com.vaadin.ui.event.ComponentEventListener;
+import com.vaadin.ui.html.H2;
+import com.vaadin.ui.polymertemplate.Id;
+import com.vaadin.ui.polymertemplate.PolymerTemplate;
+import com.vaadin.ui.textfield.TextField;
 
 import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
@@ -45,10 +49,10 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 		void setStatus(String status);
 	}
 
-	@Id("title")
+	@Id("order-edit-title")
 	private H2 title;
 
-	@Id("status")
+	@Id("order-edit-status")
 	private ComboBox<String> status;
 
 	@Id("due-date")
@@ -69,7 +73,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 	@Id("customer-details")
 	private TextField customerDetails;
 
-	@Id("cancel")
+	@Id("order-edit-cancel")
 	private Button cancel;
 
 	@Id("review")
@@ -99,8 +103,8 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 		status.setItems(Arrays.stream(OrderState.values()).map(OrderState::getDisplayName));
 		status.addValueChangeListener(e -> getModel().setStatus(e.getValue()));
 
-		binder.forField(status).withConverter(new OrderStateConverter()).bind(Order::getState,
-				(o, s) -> o.changeState(currentUser, s));
+		binder.forField(status).withConverter(new OrderStateConverter())
+				.bind(Order::getState, (o, s) -> o.changeState(currentUser, s));
 
 		date.setValue(LocalDate.now());
 		binder.forField(date).bind("dueDate");
@@ -112,7 +116,27 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 		binder.forField(time).withConverter(localTimeConverter).bind("dueTime");
 
 		pickupLocation.setItems("Bakery", "Store");
-		binder.forField(pickupLocation).bind("pickupLocation.name");
+		binder.forField(pickupLocation).withConverter(new BinderConverter<String, PickupLocation>() {
+			@Override
+			public String convertNullToPresentation(PickupLocation modelValue, ValueContext valueContext) {
+				return "";
+			}
+
+			@Override
+			public Result<PickupLocation> convertToModelIfNotNull(String presentationValue, ValueContext valueContext) {
+				PickupLocation location = new PickupLocation();
+				location.setName(presentationValue);
+				return Result.ok(location);
+			}
+
+			@Override
+			public String convertToPresentationIfNotNull(PickupLocation modelValue, ValueContext valueContext) {
+				if (modelValue.getName() == null) {
+					return "";
+				}
+				return modelValue.getName();
+			}
+		}).bind(Order::getPickupLocation, Order::setPickupLocation);
 
 		customerName.setRequired(true);
 		binder.forField(customerName).bind("customer.fullName");

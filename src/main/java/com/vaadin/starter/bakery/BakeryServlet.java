@@ -1,9 +1,9 @@
 package com.vaadin.starter.bakery;
 
-import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.function.DeploymentConfiguration;
+import com.vaadin.server.VaadinServletConfiguration;
 import com.vaadin.hummingbird.ext.spring.SpringAwareConfigurator;
 import com.vaadin.hummingbird.ext.spring.SpringAwareVaadinService;
-import com.vaadin.server.DeploymentConfiguration;
 import com.vaadin.server.ServiceException;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.VaadinServletService;

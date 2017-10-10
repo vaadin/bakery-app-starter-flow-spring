@@ -9,19 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.vaadin.annotations.Convert;
-import com.vaadin.annotations.EventHandler;
-import com.vaadin.annotations.HtmlImport;
-import com.vaadin.annotations.Id;
-import com.vaadin.annotations.Include;
-import com.vaadin.annotations.Tag;
-import com.vaadin.annotations.Title;
+import com.vaadin.flow.model.Convert;
+import com.vaadin.flow.model.Include;
+import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.flow.router.LocationChangeEvent;
 import com.vaadin.flow.router.View;
-import com.vaadin.flow.template.PolymerTemplate;
-import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
+import com.vaadin.router.Title;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.UserService;
@@ -33,6 +28,11 @@ import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
 import com.vaadin.starter.bakery.ui.messages.Message;
 import com.vaadin.starter.bakery.ui.presenter.EntityEditPresenter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
+import com.vaadin.ui.Tag;
+import com.vaadin.ui.common.HtmlImport;
+import com.vaadin.ui.polymertemplate.EventHandler;
+import com.vaadin.ui.polymertemplate.Id;
+import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 @Tag("bakery-users")
 @HtmlImport("context://src/users/bakery-users.html")
@@ -51,7 +51,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 
 	private final UserService userService;
 
-	@Id("view")
+	@Id("bakery-users-items-view")
 	private ItemsView view;
 
 	@Id("user-editor")

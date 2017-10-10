@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import com.vaadin.data.Converter;
 import com.vaadin.data.Result;
 import com.vaadin.data.ValueContext;
-import com.vaadin.flow.template.model.ModelConverter;
+import com.vaadin.flow.model.ModelConverter;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 
 import static com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil.convertIfNotNull;

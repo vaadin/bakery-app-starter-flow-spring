@@ -28,9 +28,9 @@
       }
     </style>
 
-    <h3 id="title"></h3>
+    <h3 id="product-edit-title"></h3>
     <vaadin-form-layout>
-      <vaadin-text-field id="name" label="Product name" colspan="2" required pattern=".*[^ ].*"
+      <vaadin-text-field id="product-edit-name" label="Product name" colspan="2" required pattern=".*[^ ].*"
                          error-message="Please enter a valid name"></vaadin-text-field>
       <br>
       <vaadin-text-field id="price" label="Unit price" colspan="2" on-focus="priceFocusGained" on-blur="priceFocusLost"
@@ -39,10 +39,10 @@
       </vaadin-text-field>
     </vaadin-form-layout>
     <div class="flex buttons">
-      <vaadin-button id="save" theme="primary">Save</vaadin-button>
-      <vaadin-button id="cancel">Cancel</vaadin-button>
+      <vaadin-button id="product-edit-save" theme="primary">Save</vaadin-button>
+      <vaadin-button id="product-edit-cancel">Cancel</vaadin-button>
       <div class="flex1"></div>
-      <vaadin-button id="delete" theme="danger tertiary" class="right">Delete</vaadin-button>
+      <vaadin-button id="product-edit-delete" theme="danger tertiary" class="right">Delete</vaadin-button>
     </div>
   </template>
 

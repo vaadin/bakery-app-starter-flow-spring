@@ -1,15 +1,15 @@
 package com.vaadin.starter.bakery.ui;
 
-import com.vaadin.annotations.HtmlImport;
-import com.vaadin.annotations.Tag;
-import com.vaadin.annotations.Title;
+import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.flow.router.LocationChangeEvent;
 import com.vaadin.flow.router.View;
-import com.vaadin.flow.template.PolymerTemplate;
-import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
+import com.vaadin.router.Title;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
+import com.vaadin.ui.Tag;
+import com.vaadin.ui.common.HtmlImport;
+import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 import javax.servlet.http.HttpServletResponse;
 

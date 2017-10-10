@@ -3,15 +3,10 @@
  */
 package com.vaadin.starter.bakery.ui.components.storefront;
 
-import com.vaadin.annotations.Convert;
-import com.vaadin.annotations.HtmlImport;
-import com.vaadin.annotations.Id;
-import com.vaadin.annotations.Include;
-import com.vaadin.annotations.Tag;
 import com.vaadin.flow.dom.Element;
-import com.vaadin.flow.event.ComponentEventListener;
-import com.vaadin.flow.template.PolymerTemplate;
-import com.vaadin.flow.template.model.TemplateModel;
+import com.vaadin.flow.model.Convert;
+import com.vaadin.flow.model.Include;
+import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.HistoryItem;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
@@ -20,10 +15,15 @@ import com.vaadin.starter.bakery.ui.converters.LocalDateTimeConverter;
 import com.vaadin.starter.bakery.ui.converters.LocalTimeConverter;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.ComponentEvent;
-import com.vaadin.ui.HasClickListeners;
-import com.vaadin.ui.TextField;
+import com.vaadin.ui.Tag;
+import com.vaadin.ui.button.Button;
+import com.vaadin.ui.common.HasClickListeners;
+import com.vaadin.ui.common.HtmlImport;
+import com.vaadin.ui.event.ComponentEvent;
+import com.vaadin.ui.event.ComponentEventListener;
+import com.vaadin.ui.polymertemplate.Id;
+import com.vaadin.ui.polymertemplate.PolymerTemplate;
+import com.vaadin.ui.textfield.TextField;
 
 import java.util.List;
 
@@ -33,22 +33,22 @@ public class OrderDetail extends PolymerTemplate<OrderDetail.Model> {
 
 	private Order order;
 
-	@Id("back")
+	@Id("order-detail-back")
 	private Button back;
 
-	@Id("cancel")
+	@Id("order-detail-cancel")
 	private Button cancel;
 
-	@Id("save")
+	@Id("order-detail-save")
 	private Button save;
 
-	@Id("edit")
+	@Id("order-detail-edit")
 	private Button edit;
 
 	@Id("history")
 	private Element history;
 
-	@Id("comment")
+	@Id("order-detail-comment")
 	private Element comment;
 
 	@Id("send-comment")
