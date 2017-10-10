@@ -15,11 +15,7 @@ import com.vaadin.ui.HasComponents;
 
 @Tag("view-selector")
 @HtmlImport("context://src/elements/viewselector/view-selector.html")
-public class ViewSelector extends PolymerTemplate<ViewSelector.Model> implements HasComponents {
-
-	public interface Model extends TemplateModel {
-		void setOpened(boolean opened);
-	}
+public class ViewSelector extends PolymerTemplate<TemplateModel> implements HasComponents {
 
 	public void select(Component component) {
 		Validate.isTrue(this.equals(component.getParent().get()));

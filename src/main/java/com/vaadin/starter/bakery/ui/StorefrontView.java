@@ -254,7 +254,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 				addComment(e.getOrderId().toString(), e.getMessage());
 				openDetails(orderService.findOrder(e.getOrderId()));
 			});
-
 		}
 
 		private void selectComponent(Component component) {
@@ -273,21 +272,17 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 			this.order = order;
 			orderEdit.init(currentUser, availableProducts);
 			orderEdit.setEditableItem(order);
-
-			// viewSelector.getModel().setOpened(true);
 			edit();
 		}
 
 		public void openDetails(com.vaadin.starter.bakery.backend.data.entity.Order order) {
 			this.order = order;
 			details(false);
-			// viewSelector.getModel().setOpened(true);
 		}
 
 		public void close() {
 			orderEdit.close();
 			this.order = null;
-			// viewSelector.getModel().setOpened(false);
 		}
 
 		private void edit() {
