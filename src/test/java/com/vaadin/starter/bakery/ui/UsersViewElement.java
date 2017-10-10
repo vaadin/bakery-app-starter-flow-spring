@@ -6,7 +6,9 @@ import org.openqa.selenium.WebElement;
 
 import com.vaadin.starter.bakery.By;
 import com.vaadin.testbench.TestBenchElement;
+import com.vaadin.testbench.elementsbase.Element;
 
+@Element("bakery-users")
 class UsersViewElement extends TestBenchElement {
 	List<WebElement> getGridCells() {
 		return findElements(By.shadowSelector("::shadow #grid > vaadin-grid-cell-content"));

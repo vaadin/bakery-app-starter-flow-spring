@@ -14,10 +14,10 @@ public class UsersViewIT extends AbstractIT {
 
 	private UsersViewElement openTestPage() {
 		openLoginView().login("admin@vaadin.com", "admin");
-		WebElement usersNavLink = findElement(By.shadowSelector("bakery-app::shadow bakery-navigation::shadow paper-tab[page-id='users']"));
+		WebElement usersNavLink = findElement(
+				By.shadowSelector("bakery-app::shadow bakery-navigation::shadow paper-tab[page-id='users']"));
 		usersNavLink.click();
-		WebElement usersViewElement = waitUntilElementPresent(By.tagName("bakery-users"));
-		return ((TestBenchElement) usersViewElement).wrap(UsersViewElement.class);
+		return $(UsersViewElement.class).waitForFirst();
 	}
 
 	@Test
@@ -29,7 +29,7 @@ public class UsersViewIT extends AbstractIT {
 
 		WebElement bakerCell = page.getGridCell("baker@vaadin.com");
 		Assert.assertNotNull(bakerCell);
-		
+
 		bakerCell.click();
 		Assert.assertTrue(editor.isDisplayed());
 

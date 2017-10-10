@@ -3,10 +3,7 @@ package com.vaadin.starter.bakery;
 import org.junit.Before;
 import org.junit.Rule;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.LoggerFactory;
 
 import com.vaadin.starter.bakery.ui.view.LoginViewElement;
@@ -76,18 +73,7 @@ public class AbstractIT extends TestBenchTestCase {
 
 	protected LoginViewElement openLoginView(WebDriver driver, String url) {
 		driver.get(url);
-		return ((TestBenchElement) findElement(By.tagName("bakery-login"))).wrap(LoginViewElement.class);
+		return $(LoginViewElement.class).waitForFirst();
 	}
 
-	/**
-	 * Waits for a WebElement matching the selector to be found and returns the
-	 * object. The default timeout is 10 seconds.
-	 *
-	 * @return a {@link WebElement} object if found before timeout
-	 * 
-	 *         * @throws TimeoutException If 10 seconds passed.
-	 */
-	protected WebElement waitUntilElementPresent(org.openqa.selenium.By by) {
-		return new WebDriverWait(getDriver(), 10).until(ExpectedConditions.presenceOfElementLocated(by));
-	}
 }
