@@ -99,7 +99,7 @@
         </item-detail-dialog>
       </template>
       <item-detail-dialog desktop-view$=[[desktopView]] opened=[[editing]] on-before-close="_onBeforeCloseEdit">
-        <slot name="view-selector" on-slotchange="_updateEditWrapperSlot"></slot>
+        <slot name="view-selector" on-slotchange="_updateViewSelectorSlot"></slot>
       </item-detail-dialog>
     </div>
     <confirm-dialog id="confirmation-dialog"></confirm-dialog>
@@ -115,7 +115,7 @@
         return {
           desktopView: {
             type: Boolean,
-            observer: '_updateDesktoViewOnEditWrapper'
+            observer: '_updateDesktopViewOnViewSelectorChildren'
           },
           orders: {
             type: Array,
@@ -199,15 +199,15 @@
         return desktopView ? !_editableItem : !_selectedItem && !_editableItem;
       }
 
-      _updateEditWrapperSlot() {
-        this.$.orderEditWrapper = this.querySelector('view-selector');
-        this._updateDesktoViewOnEditWrapper();
+      _updateViewSelectorSlot() {
+        this.$.viewSelector = this.querySelector('view-selector');
+        this.$.viewSelector.addEventListener('children-list-changed',this._updateDesktopViewOnViewSelectorChildren.bind(this));
+        this._updateDesktopViewOnViewSelectorChildren();
       }
 
-      _updateDesktoViewOnEditWrapper() {
-        const element = this.$.orderEditWrapper;
-        if (element) {
-          element.desktopView = this.desktopView;
+      _updateDesktopViewOnViewSelectorChildren() {
+        if (this.$.viewSelector) {
+          this.$.viewSelector.forEachChild(child => child.desktopView = this.desktopView);
         }
       }
 

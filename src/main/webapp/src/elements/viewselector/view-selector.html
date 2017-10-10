@@ -1,9 +1,9 @@
-<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
 
 
 <dom-module id="view-selector">
   <template>
-      <slot on-slotchange="_updateItems"></slot>
+      <slot on-slotchange="_fireChildrenListChangedEvent"></slot>
   </template>
 
   <script>
@@ -13,17 +13,12 @@
         return 'view-selector';
       }
 
-      static get properties() {
-        return {
-          desktopView: {
-            type: Boolean,
-            observer: '_updateItems'
-          }
-        };
+      _fireChildrenListChangedEvent() {
+        this.dispatchEvent(new CustomEvent('children-list-changed', {bubbles: true, composed: true}));
       }
 
-      _updateItems() {
-        Array.from(this.children).forEach(item => item.desktopView = this.desktopView);
+      forEachChild(childConsumer) {
+        Array.from(this.children).forEach(childConsumer);
       }
 
     }
