@@ -1,27 +1,27 @@
 package com.vaadin.starter.bakery.ui.components;
 
+import com.vaadin.starter.bakery.ui.event.ValidationFailedEvent;
+import com.vaadin.starter.bakery.ui.form.EditForm;
+import com.vaadin.ui.event.ComponentEventListener;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.vaadin.annotations.HtmlImport;
-import com.vaadin.annotations.Id;
-import com.vaadin.annotations.Tag;
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.ValidationException;
-import com.vaadin.flow.event.ComponentEventListener;
-import com.vaadin.flow.template.PolymerTemplate;
-import com.vaadin.flow.template.model.TemplateModel;
+import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.event.DeleteEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
-import com.vaadin.starter.bakery.ui.event.ValidationFailedEvent;
-import com.vaadin.starter.bakery.ui.form.EditForm;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.PasswordField;
-import com.vaadin.ui.TextField;
+import com.vaadin.ui.Tag;
+import com.vaadin.ui.combobox.ComboBox;
+import com.vaadin.ui.common.HtmlImport;
+import com.vaadin.ui.passwordfield.PasswordField;
+import com.vaadin.ui.polymertemplate.Id;
+import com.vaadin.ui.polymertemplate.PolymerTemplate;
+import com.vaadin.ui.textfield.TextField;
 
 @Tag("user-edit")
 @HtmlImport("context://src/users/user-edit.html")
@@ -40,7 +40,7 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> implements EntityE
 	@Id("email")
 	private TextField emailField;
 
-	@Id("password")
+	@Id("user-edit-password")
 	private PasswordField passwordField;
 
 	@Id("role")

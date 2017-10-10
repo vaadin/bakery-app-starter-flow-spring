@@ -4,13 +4,13 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.vaadin.components.data.HasValue;
-import com.vaadin.flow.event.ComponentEventListener;
-import com.vaadin.flow.html.Div;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
-import com.vaadin.ui.ComponentEvent;
+import com.vaadin.ui.common.HasValue;
+import com.vaadin.ui.event.ComponentEvent;
+import com.vaadin.ui.event.ComponentEventListener;
+import com.vaadin.ui.html.Div;
 
 public class OrderItemsEdit extends Div implements HasValue<OrderItemsEdit, List<OrderItem>> {
 
@@ -31,7 +31,6 @@ public class OrderItemsEdit extends Div implements HasValue<OrderItemsEdit, List
 	public void reset() {
 		registrations.forEach(Registration::remove);
 		registrations.clear();
-		editors.forEach(i -> getElement().removeChild(i.getElement()));
 		editors.clear();
 		if (items != null)
 			items.clear();

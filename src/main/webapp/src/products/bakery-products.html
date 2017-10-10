@@ -36,10 +36,10 @@
         }
       }
     </style>
-    
+
     <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
 
-    <items-view id="view" desktop-view=[[desktopView]] on-before-close="onBeforeClose">
+    <items-view id="bakery-products-items-view" desktop-view=[[desktopView]] on-before-close="onBeforeClose">
 
       <vaadin-grid slot="grid" id="grid" items="[[products]]" active-item="{{_activeItem}}">
         <vaadin-grid-column flex-grow="10">

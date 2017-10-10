@@ -1,11 +1,11 @@
 package com.vaadin.starter.bakery.ui.components;
 
-import com.vaadin.annotations.EventHandler;
-import com.vaadin.annotations.HtmlImport;
-import com.vaadin.annotations.Tag;
-import com.vaadin.components.data.HasValue;
-import com.vaadin.flow.template.PolymerTemplate;
-import com.vaadin.flow.template.model.TemplateModel;
+import com.vaadin.flow.model.TemplateModel;
+import com.vaadin.ui.Tag;
+import com.vaadin.ui.common.HasValue;
+import com.vaadin.ui.common.HtmlImport;
+import com.vaadin.ui.polymertemplate.EventHandler;
+import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 @Tag("amount-field")
 @HtmlImport("context://src/elements/amount-field.html")

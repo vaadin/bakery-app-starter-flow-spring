@@ -20,8 +20,8 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Dependencies -->
-        <vaadin.version>10.0-SNAPSHOT</vaadin.version>
-        <flow.version>0.1.22</flow.version>
+        <vaadin.version>10.0.0.alpha3</vaadin.version>
+        <flow.version>1.0.0.alpha3</flow.version>
 
         <spring-boot.version>1.5.4.RELEASE</spring-boot.version>
         <failOnMissingWebXml>false</failOnMissingWebXml>
@@ -110,52 +110,20 @@
                     <groupId>com.vaadin</groupId>
                     <artifactId>flow-server-production-mode</artifactId>
                 </exclusion>
-                <exclusion>
-                    <groupId>com.vaadin</groupId>
-                    <artifactId>flow-data</artifactId>
-                </exclusion>
             </exclusions>
         </dependency>
-        <!-- remove from here after new spring extension is fixed -->
         <dependency>
             <groupId>com.vaadin</groupId>
-            <artifactId>flow-server</artifactId>
-            <version>${flow.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>flow-push</artifactId>
-            <version>${flow.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>flow-client</artifactId>
-            <version>${flow.version}</version>
-        </dependency>
-        <dependency>
-          <groupId>com.vaadin</groupId>
-          <artifactId>flow-components</artifactId>
-          <version>${flow.version}</version>
-        </dependency>
-        <dependency>
-          <groupId>com.vaadin</groupId>
-          <artifactId>flow-generated-components</artifactId>
-          <version>${flow.version}</version>
-        </dependency>
-        <dependency>
-          <groupId>com.vaadin</groupId>
-          <artifactId>flow-html-components</artifactId>
-          <version>${flow.version}</version>
-        </dependency>
-        <!-- remove up to here after new spring extension is fixed -->
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>hummingbird-ext</artifactId>
-            <version>4.0.0-SNAPSHOT</version>
+            <artifactId>flow-ext</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.vaadin</groupId>
                     <artifactId>flow</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.vaadin</groupId>
+                    <artifactId>flow-components</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -258,6 +226,9 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring-boot.version}</version>
+                    <configuration>
+                        <jvmArguments>-Dvaadin.frontend.url.dev=context://</jvmArguments>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -346,17 +317,24 @@
                             <webResources>
                                 <resource>
                                     <directory>${frontend.directory}/build</directory>
-                                    <targetPath>${vaadin.frontend.path}</targetPath>
                                 </resource>
                             </webResources>
+                            <warSourceExcludes>**/build/</warSourceExcludes>
                         </configuration>
                     </plugin>
+
+                    <!-- When running the app locally with spring-boot:run the build output is not copied anywhere and
+                         stays in the ${frontend.directory}/build directory (accessible via context://build/frontend-es5
+                         and context://build/frontend-es6).
+
+                         That's not where Flow expects to find it by default (context://frontend-es5 and context://frontend-es6)
+                         hence the custom system properties are necessary for spring-boot:run -->
                     <plugin>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <version>${spring-boot.version}</version>
                         <configuration>
-                            <jvmArguments>-Dvaadin.frontend.url.es5=context://build/es5/ -Dvaadin.frontend.url.es6=context://build/es6/ -Dvaadin.productionMode</jvmArguments>
+                            <jvmArguments>-Dvaadin.frontend.url.es5=context://build/frontend-es5/ -Dvaadin.frontend.url.es6=context://build/frontend-es6/ -Dvaadin.productionMode</jvmArguments>
                         </configuration>
                     </plugin>
                 </plugins>

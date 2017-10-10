@@ -24,7 +24,7 @@
         margin: var(--valo-space-s) 0;
       }
 
-      #status {
+      #storefront-item-status {
         width: 100px;
       }
 
@@ -90,7 +90,7 @@
     </style>
 
     <div id="info-wrapper" class="flex">
-      <storefront-item-badge id="status" status="[[item.status]]"></storefront-item-badge>
+      <storefront-item-badge id="storefront-item-status" status="[[item.status]]"></storefront-item-badge>
 
       <div id="time-place">
         <template is="dom-if" if="[[_isRecent(item.date)]]">

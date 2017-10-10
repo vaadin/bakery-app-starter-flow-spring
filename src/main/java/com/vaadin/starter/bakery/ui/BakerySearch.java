@@ -1,14 +1,14 @@
 package com.vaadin.starter.bakery.ui;
 
-import com.vaadin.annotations.HtmlImport;
-import com.vaadin.annotations.Id;
-import com.vaadin.annotations.Tag;
-import com.vaadin.flow.event.ComponentEventListener;
-import com.vaadin.flow.template.PolymerTemplate;
-import com.vaadin.flow.template.model.TemplateModel;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.HasClickListeners.ClickEvent;
-import com.vaadin.ui.TextField;
+import com.vaadin.flow.model.TemplateModel;
+import com.vaadin.ui.Tag;
+import com.vaadin.ui.button.Button;
+import com.vaadin.ui.common.HasClickListeners;
+import com.vaadin.ui.common.HtmlImport;
+import com.vaadin.ui.event.ComponentEventListener;
+import com.vaadin.ui.polymertemplate.Id;
+import com.vaadin.ui.polymertemplate.PolymerTemplate;
+import com.vaadin.ui.textfield.TextField;
 
 import java.util.function.BiConsumer;
 
@@ -71,7 +71,7 @@ public class BakerySearch extends PolymerTemplate<BakerySearch.Model> {
 				e -> consumer.accept(textField.getValue(), getModel().getCheckboxChecked()));
 	}
 
-	public void addActionClickListener(ComponentEventListener<ClickEvent<Button>> listener) {
+	public void addActionClickListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {
 		actionButton.addClickListener(listener);
 	}
 }
