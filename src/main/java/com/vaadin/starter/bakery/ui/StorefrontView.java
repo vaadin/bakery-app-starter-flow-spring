@@ -33,6 +33,7 @@ import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.starter.bakery.ui.entities.Order;
 import com.vaadin.starter.bakery.ui.messages.Message;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
+import com.vaadin.ui.Component;
 
 @Tag("bakery-storefront")
 @HtmlImport("context://src/storefront/bakery-storefront.html")
@@ -206,4 +207,105 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		getModel().setOrders(orders);
 		getElement().setPropertyJson("displayedHeaders", computeEntriesWithHeader(orders, showPrevious));
 	}
+<<<<<<< Upstream, based on origin/master
+=======
+
+	class SelectionControl {
+
+		private ViewSelector viewSelector;
+
+		private final OrderEdit orderEdit = new OrderEdit();
+		private final OrderDetail orderDetail = new OrderDetail();
+		private com.vaadin.starter.bakery.backend.data.entity.Order order;
+
+		private void setup() {
+			viewSelector = new ViewSelector();
+			addToSlot(StorefrontView.this, viewSelector, "view-selector");
+
+			Message CONFIRM_CANCEL = Message.UNSAVED_CHANGES.createMessage("Order");
+			orderEdit.addCancelListener(e -> {
+				if (e.hasChanges()) {
+					confirmationDialog.show(CONFIRM_CANCEL, ev -> this.closeEditor());
+				} else {
+					this.closeEditor();
+				}
+			});
+			orderEdit.addReviewListener(e -> this.details(true));
+			orderDetail.addBackListener(e -> this.edit());
+			orderDetail.addSaveListener(e -> {
+				Long id = order.getId();
+				boolean isNew = id == null;
+				orderService.saveOrder(order);
+				closeEditor();
+				if (isNew) {
+					filterItems(searchBar.getFilter(), searchBar.getShowPrevious());
+				} else {
+					updateOrderInModel(id.toString());
+				}
+			});
+			orderDetail.addEditListener(e -> openOrderEditor(order, userService.getCurrentUser(),
+					productService.getRepository().findAll()));
+			orderDetail.addCancelListener(e -> this.closeEditor());
+			orderDetail.addCommentListener(e -> {
+				if (e.getOrderId() == null) {
+					return;
+				}
+
+				addComment(e.getOrderId().toString(), e.getMessage());
+				openDetails(orderService.findOrder(e.getOrderId()));
+			});
+
+		}
+
+		private void selectComponent(Component component) {
+			// This is a workaround for a Safari 11 issue.
+			// If the orderEdit is injected into the page in the OrderEditWrapper
+			// constructor,
+			// Safari fails to set the styles correctly.
+			if (component.getElement().getParent() == null) {
+				viewSelector.add(component);
+			}
+			viewSelector.select(component);
+		}
+
+		private void openOrderEditor(com.vaadin.starter.bakery.backend.data.entity.Order order, User currentUser,
+				Collection<Product> availableProducts) {
+			this.order = order;
+			orderEdit.init(currentUser, availableProducts);
+			orderEdit.setEditableItem(order);
+
+			// viewSelector.getModel().setOpened(true);
+			edit();
+		}
+
+		public void openDetails(com.vaadin.starter.bakery.backend.data.entity.Order order) {
+			this.order = order;
+			details(false);
+			// viewSelector.getModel().setOpened(true);
+		}
+
+		public void close() {
+			orderEdit.close();
+			this.order = null;
+			// viewSelector.getModel().setOpened(false);
+		}
+
+		private void edit() {
+			getModel().setEditing(true);
+			selectComponent(orderEdit);
+		}
+
+		private void details(boolean isReview) {
+			selectComponent(orderDetail);
+			orderDetail.display(order, isReview);
+		}
+
+		private void closeEditor() {
+			close();
+			getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT));
+			getModel().setEditing(false);
+		}
+
+	}
+>>>>>>> 9dc9b8b Implemented basic viewselector
 }

@@ -1,31 +1,37 @@
 package com.vaadin.starter.bakery.ui.components.viewselector;
 
+import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.setSlot;
+
+import java.util.Arrays;
+
 import com.vaadin.annotations.HtmlImport;
 import com.vaadin.annotations.Tag;
-import com.vaadin.flow.event.ComponentEventListener;
+import com.vaadin.external.jsoup.helper.Validate;
 import com.vaadin.flow.template.PolymerTemplate;
 import com.vaadin.flow.template.model.TemplateModel;
-import com.vaadin.shared.Registration;
-import com.vaadin.starter.bakery.backend.data.entity.Order;
-import com.vaadin.starter.bakery.backend.data.entity.Product;
-import com.vaadin.starter.bakery.backend.data.entity.User;
-import com.vaadin.starter.bakery.backend.service.ProductService;
-import com.vaadin.starter.bakery.backend.service.UserService;
-import com.vaadin.starter.bakery.ui.components.storefront.OrderDetail;
-import com.vaadin.starter.bakery.ui.components.storefront.OrderEdit;
-import com.vaadin.ui.ComponentEvent;
-
-import java.util.Collection;
-
-import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
+import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.HasComponents;
 
 @Tag("view-selector")
 @HtmlImport("context://src/elements/viewselector/view-selector.html")
-public class ViewSelector extends PolymerTemplate<ViewSelector.Model> {
+public class ViewSelector extends PolymerTemplate<ViewSelector.Model> implements HasComponents {
 
 	public interface Model extends TemplateModel {
 		void setOpened(boolean opened);
 	}
 
+	public void select(Component component) {
+		Validate.isTrue(this.equals(component.getParent().get()));
+		getElement().getChildren().forEach(child -> {
+			boolean visible = child.getComponent().isPresent() && child.getComponent().get().equals(component);
+			child.setAttribute("hidden", !visible);
+		});
+	}
 
+	@Override
+	public void add(Component... components) {
+		HasComponents.super.add(components);
+		Arrays.stream(components).forEach(component -> setSlot(component, "detail-dialog"));
+	}
 }
