@@ -1,18 +1,13 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../elements/item-detail-dialog.html">
-<link rel="import" href="../elements/utils-mixin.html">
+
 
 <dom-module id="view-selector">
   <template>
-      <slot name="detail-dialog" on-slotchange="_updateItems"></slot>
+      <slot on-slotchange="_updateItems"></slot>
   </template>
 
   <script>
-    class ViewSelector extends
-      window.EditableItemMixin(
-        window.NotificationMixin(
-          window.LocaleUtilsMixin(
-            window.ScrollShadowMixin(Polymer.Element)))) {
+    class ViewSelector extends Polymer.Element {
 
       static get is() {
         return 'view-selector';
@@ -20,11 +15,6 @@
 
       static get properties() {
         return {
-          opened: {
-            type: Boolean,
-            value: false,
-            reflectToAttribute: true
-          },
           desktopView: {
             type: Boolean,
             observer: '_updateItems'
