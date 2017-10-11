@@ -5,7 +5,7 @@
   "author": "Vaadin Ltd",
   "license": "SEE LICENSE IN http://vaadin.com/license/cvtl-1",
   "devDependencies": {
-    "bower": "1.8.0",
+    "bower": "1.8.2",
     "eslint": "3.19.0",
     "eslint-config-vaadin": "0.2.3",
     "eslint-plugin-html": "3.1.1",
