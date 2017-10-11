@@ -1,5 +1,7 @@
 package com.vaadin.starter.bakery.ui.components.storefront;
 
+import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
@@ -8,9 +10,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import com.vaadin.data.BeanValidationBinder;
-import com.vaadin.data.Result;
 import com.vaadin.data.ValidationException;
-import com.vaadin.data.ValueContext;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.OrderState;
@@ -20,7 +20,7 @@ import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.ui.HasToast;
 import com.vaadin.starter.bakery.ui.converters.LocalTimeConverter;
-import com.vaadin.starter.bakery.ui.converters.binder.BinderConverter;
+import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
@@ -33,8 +33,6 @@ import com.vaadin.ui.html.H2;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import com.vaadin.ui.textfield.TextField;
-
-import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
 @Tag("order-edit")
 @HtmlImport("context://src/storefront/order-edit.html")
@@ -87,7 +85,6 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 
 	private OrderItemsEdit items = new OrderItemsEdit();
 
-
 	private boolean initialHasChanges;
 
 	private User currentUser;
@@ -103,20 +100,8 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 	public OrderEdit() {
 		addToSlot(this, items, "order-items-edit");
 
-		cancel.addClickListener(e -> fireEvent(new CancelEvent(hasChanges())));
-		review.addClickListener(e -> {
-			try {
-				order.setDueTime(localTimeConverter.toModel(time.getValue()));
-				PickupLocation location = new PickupLocation();
-				location.setName(pickupLocation.getValue());
-				order.setPickupLocation(location);
-				order.changeState(currentUser, OrderState.forDisplayName(status.getValue()));
-				binder.writeBean(this.order);
-				fireEvent(new ReviewEvent());
-			} catch (ValidationException ex) {
-				toast("Please fill out all required fields before proceeding.");
-			}
-		});
+		cancel.addClickListener(e -> fireEvent(new CancelEvent(this, false)));
+		review.addClickListener(e -> fireEvent(new ReviewEvent()));
 
 		status.setItems(Arrays.stream(OrderState.values()).map(OrderState::getDisplayName));
 		status.addValueChangeListener(e -> {
@@ -160,7 +145,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 		review.setDisabled(!hasChanges());
 	}
 
-	private boolean hasChanges() {
+	public boolean hasChanges() {
 		return initialHasChanges || binder.hasChanges() || items.hasChanges() || hasChanges;
 	}
 
@@ -184,11 +169,11 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 
 	public void write(Order order) throws ValidationException {
 		order.setDueTime(localTimeConverter.toModel(time.getValue()));
-				PickupLocation location = new PickupLocation();
-				location.setName(pickupLocation.getValue());
-				order.setPickupLocation(location);
-				order.changeState(currentUser, OrderState.forDisplayName(status.getValue()));
-		
+		PickupLocation location = new PickupLocation();
+		location.setName(pickupLocation.getValue());
+		order.setPickupLocation(location);
+		order.changeState(currentUser, OrderState.forDisplayName(status.getValue()));
+
 		binder.writeBean(order);
 	}
 
@@ -206,7 +191,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 
 		if (order.getPickupLocation() != null) {
 			getModel().setPickupLocation(order.getPickupLocation().getName());
-		}		
+		}
 		review.setDisabled(true);
 		updateDesktopViewOnItemsEdit();
 	}
@@ -227,20 +212,6 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 
 		ReviewEvent() {
 			super(OrderEdit.this, false);
-		}
-	}
-
-	public class CancelEvent extends ComponentEvent<OrderEdit> {
-
-		private final boolean hasChanges;
-
-		CancelEvent(boolean hasChanges) {
-			super(OrderEdit.this, false);
-			this.hasChanges = hasChanges;
-		}
-
-		public boolean hasChanges() {
-			return hasChanges;
 		}
 	}
 

@@ -6,7 +6,6 @@ import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.event.DeleteEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
-import com.vaadin.starter.bakery.ui.event.ValidationFailedEvent;
 import com.vaadin.ui.event.ComponentEventListener;
 
 public interface EntityEditView<T extends AbstractEntity> {

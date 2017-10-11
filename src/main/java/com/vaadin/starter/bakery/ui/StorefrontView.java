@@ -184,8 +184,11 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 			super(orderService, selectionControl, selectionControl, "User");
 			this.selectionControl = selectionControl;
 			selectionControl.orderEdit.addReviewListener(e -> {
-				if (writeEntity()) {
+				try {
+					writeEntity();
 					selectionControl.details(getEntity(), true);
+				} catch (ValidationException ex) {
+					showValidationError();
 				}
 			});
 			selectionControl.orderDetail.addBackListener(e -> selectionControl.showOrderEdit());
@@ -204,8 +207,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		}
 
 		@Override
-		protected JPAOperation getSaver() {
-			return () -> saveEntity();
+		protected void beforeSave() throws ValidationException {
+			// Entity already updated
 		}
 
 		@Override

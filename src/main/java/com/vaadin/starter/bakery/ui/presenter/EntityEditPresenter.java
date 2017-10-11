@@ -1,6 +1,7 @@
 package com.vaadin.starter.bakery.ui.presenter;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.ConstraintViolationException;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;
@@ -48,31 +49,31 @@ public class EntityEditPresenter<T extends AbstractEntity> implements HasLogger 
 
 	private void save() {
 
-		executeJPAOperation(() -> getSaver());
-		view.update(entity);
-		close(true);
+		try {
+			beforeSave();
+			if (executeJPAOperation(() -> saveEntity())) {
+				view.update(entity);
+				close(true);
+			}
+		} catch (ValidationException e) {
+			showValidationError();
+		}
+	}
+
+	protected void showValidationError() {
+		view.showError("Please fill out all required fields before proceeding.", false);
 	}
 
 	protected void saveEntity() {
 		crudService.save(entity);
 	}
 
-	protected JPAOperation getSaver() {
-		return () -> {
-			if (writeEntity()) {
-				saveEntity();
-			}
-		};
+	protected void beforeSave() throws ValidationException {
+		writeEntity();
 	}
 
-	protected boolean writeEntity() {
-		try {
-			editor.write(entity);
-			return true;
-		} catch (ValidationException e) {
-			view.showError("Please fill out all required fields before proceeding.", false);
-			return false;
-		}
+	protected void writeEntity() throws ValidationException {
+		editor.write(entity);
 	}
 
 	private boolean executeJPAOperation(JPAOperation operation) {
@@ -90,16 +91,14 @@ public class EntityEditPresenter<T extends AbstractEntity> implements HasLogger 
 			showError(e, "Somebody else might have updated the data. Please refresh and try again.", true);
 		} catch (EntityNotFoundException e) {
 			showError(e, String.format("The selected %s was not found.", entityName), false);
-		} catch (Exception e) {
-			// Something went wrong, no idea what
-			view.showError("A problem occurred while saving the data. Please check the fields.", true);
-			getLogger().error("Unable to save entity", e);
+		} catch (ConstraintViolationException e) {
+			showValidationError();
 		}
 		return false;
 	}
 
 	public interface JPAOperation {
-		void execute() throws ValidationException;
+		void execute();
 	}
 
 	private void close(boolean updated) {
