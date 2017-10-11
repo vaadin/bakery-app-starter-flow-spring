@@ -34,7 +34,7 @@ public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 	public OrderEditWrapper(ProductService productService, UserService userService) {
 		orderEdit.addCancelListener(e -> fireEvent(new CancelEvent(e.hasChanges())));
 		orderEdit.addReviewListener(e -> this.details(true));
-		orderDetail.addBackListener(e -> this.edit());
+		orderDetail.addBackListener(e -> this.edit(true));
 		orderDetail.addSaveListener(e -> fireEvent(new SaveEvent()));
 		orderDetail.addEditListener(
 				e -> openEdit(order, userService.getCurrentUser(), productService.getRepository().findAll()));
@@ -53,7 +53,7 @@ public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 		orderEdit.init(currentUser, availableProducts);
 		orderEdit.setEditableItem(order);
 		getModel().setOpened(true);
-		edit();
+		edit(false);
 	}
 
 	public void openDetails(Order order) {
@@ -68,7 +68,8 @@ public class OrderEditWrapper extends PolymerTemplate<OrderEditWrapper.Model> {
 		getModel().setOpened(false);
 	}
 
-	private void edit() {
+	private void edit(boolean initialHasChanges) {
+		orderEdit.setInitialHasChanges(initialHasChanges);
 		orderEdit.getElement().setAttribute("hidden", false);
 		orderDetail.getElement().setAttribute("hidden", true);
 	}
