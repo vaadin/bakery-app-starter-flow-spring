@@ -83,6 +83,8 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 
 	private Order order;
 
+	private boolean initialHasChanges;
+
 	private User currentUser;
 
 	private BeanValidationBinder<Order> binder = new BeanValidationBinder<>(Order.class);
@@ -153,8 +155,12 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 		binder.addValueChangeListener(e -> review.setDisabled(!hasChanges()));
 	}
 
+	public void setInitialHasChanges(boolean initialHasChanges) {
+		this.initialHasChanges = initialHasChanges;
+	}
+
 	private boolean hasChanges() {
-		return binder.hasChanges() || items.hasChanges();
+		return initialHasChanges || binder.hasChanges() || items.hasChanges();
 	}
 
 	private void updateDesktopViewOnItemsEdit() {
@@ -175,6 +181,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 
 	public void setEditableItem(Order order) {
 		this.order = order;
+		this.initialHasChanges = false;
 		getModel().setOpened(true);
 		binder.readBean(order);
 		boolean newOrder = order.getId() == null;
