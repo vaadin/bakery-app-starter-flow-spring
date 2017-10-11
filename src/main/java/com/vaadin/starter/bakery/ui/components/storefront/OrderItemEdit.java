@@ -21,7 +21,11 @@ import com.vaadin.ui.textfield.TextField;
 
 @Tag("order-item-edit")
 @HtmlImport("context://src/storefront/order-item-edit.html")
-public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements HasValue<OrderItemEdit, OrderItem> {
+public class OrderItemEdit extends PolymerTemplate<OrderItemEdit.Model> implements HasValue<OrderItemEdit, OrderItem> {
+
+	public interface Model extends TemplateModel {
+		void setProduct(String product);
+	}
 
 	@Id("products")
 	private ComboBox<String> products;
@@ -58,7 +62,10 @@ public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements Has
 			if (this.comment.isDisabled()) {
 				this.comment.setDisabled(false);
 			}
-			fireEvent(new ProductChangeEvent(productSource.getProductByName(products.getValue())));
+			Product newProductValue = productSource.getProductByName(products.getValue());
+
+			fireEvent(new ProductChangeEvent(newProductValue));
+			orderItem.setProduct(newProductValue);
 			this.setPrice();
 		});
 
@@ -67,9 +74,6 @@ public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements Has
 
 		binder.forField(amount).bind("quantity");
 		binder.forField(comment).bind("comment");
-
-		// Bind with getter/setters to avoid required validation.
-		binder.forField(products).withConverter(productSource).bind(OrderItem::getProduct, OrderItem::setProduct);
 
 		delete.addClickListener(e -> fireEvent(new DeleteEvent(totalPrice)));
 		this.setPrice();
@@ -102,6 +106,9 @@ public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements Has
 		this.orderItem = value;
 		binder.setBean(value);
 		boolean noProductSelected = value == null || value.getProduct() == null;
+		if (!noProductSelected) {
+			getModel().setProduct(value.getProduct().getName());
+		}
 		amount.setDisabled(noProductSelected);
 		comment.setDisabled(noProductSelected);
 		this.setPrice();

@@ -46,7 +46,11 @@ public class EditForm extends PolymerTemplate<TemplateModel> implements View, Ha
 
 	public void showEditor(boolean isNewEntity) {
 		title.setText((isNewEntity ? "New" : "Edit") + " " + entityName);
-		saveButton.setDisabled(true);
+		setIsDirty(false);
 		deleteButton.setDisabled(isNewEntity);
+	}
+
+	public void setIsDirty(boolean isDirty) {
+		saveButton.setDisabled(!isDirty);
 	}
 }

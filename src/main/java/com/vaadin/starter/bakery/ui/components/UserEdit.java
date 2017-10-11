@@ -29,6 +29,8 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> implements EntityE
 
 	public interface Model extends TemplateModel {
 		void setAvatar(String avatar);
+
+		void setUserRole(String userRole);
 	}
 
 	@Id("first")
@@ -53,6 +55,10 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> implements EntityE
 
 	private PasswordEncoder passwordEncoder = NoOpPasswordEncoder.getInstance();
 
+	private User user;
+
+	private boolean isDirty = false;
+
 	public UserEdit() {
 		editForm.init(binder, "User");
 		roleField.setItems(Role.getAllRoles());
@@ -64,7 +70,14 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> implements EntityE
 				user.setPassword(passwordEncoder.encode(password));
 			}
 		});
-		binder.bind(roleField, "role");
+		roleField.addValueChangeListener(e -> {
+			setIsDirty(user == null || user.getRole() == null || !user.getRole().equals(e.getValue()));
+		});
+	}
+
+	private void setIsDirty(boolean isDirty) {
+		this.isDirty = isDirty;
+		editForm.setIsDirty(isDirty());
 	}
 
 	public Registration addSaveListener(ComponentEventListener<SaveEvent> listener) {
@@ -80,18 +93,26 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> implements EntityE
 	}
 
 	public void read(User user) {
+		this.user = user;
 		binder.readBean(user);
 		getModel().setAvatar(user.getPhotoUrl());
+		getModel().setUserRole(user.getRole());
+		isDirty = false;
 		editForm.showEditor(user.isNew());
 	}
 
+	public void clear() {
+		getModel().setUserRole("");
+	}
+
 	public boolean isDirty() {
-		return binder.hasChanges();
+		return binder.hasChanges() || isDirty;
 	}
 
 	@Override
 	public void write(User entity) throws ValidationException {
 		binder.writeBean(entity);
+		entity.setRole(roleField.getValue());
 	}
 
 	public void setPasswordEncoder(PasswordEncoder passwordEncoder) {

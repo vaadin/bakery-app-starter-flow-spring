@@ -52,7 +52,7 @@
           <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 4, 1)]]">
             <vaadin-form-layout responsive-steps='[{"columns": 1, "labelsPosition": "top"}]'>
 
-              <vaadin-combo-box label="Status" id="order-edit-status">
+              <vaadin-combo-box label="Status" id="order-edit-status" value="[[statusValue]]">
               </vaadin-combo-box>
 
               <vaadin-form-item>
@@ -61,14 +61,14 @@
                   <vaadin-date-picker  id="due-date">
                   </vaadin-date-picker>
 
-                  <vaadin-combo-box id="due-time" allow-custom-value >
+                  <vaadin-combo-box id="due-time" allow-custom-value value="[[time]]">
                     <iron-icon slot="prefix" icon="valo:clock"></iron-icon>
                   </vaadin-combo-box>
                 </vaadin-form-layout>
 
               </vaadin-form-item>
 
-              <vaadin-combo-box id="pickup-location" class="full-width" >
+              <vaadin-combo-box id="pickup-location" class="full-width" value="[[pickupLocation]]">
                 <div slot="prefix" class="at-icon"></div>
               </vaadin-combo-box>
             </vaadin-form-layout>

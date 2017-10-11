@@ -110,6 +110,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	@Override
 	public void closeDialog(boolean updated) {
 		view.openDialog(false);
+		editor.clear();
 		navigateToEntity(getUI(), PAGE_USERS, null);
 		if (updated) {
 			filterUsers(view.getFilter());
