@@ -51,15 +51,9 @@
         static get properties() {
           return {
             activeItem: {
-              observer: '_activeItemChanged'
+              notify: true
             }
           };
-        }
-
-        _activeItemChanged(item) {
-          if (item) {
-            this.$server.navigateToOrder(item.id);
-          }
         }
 
         ready() {
