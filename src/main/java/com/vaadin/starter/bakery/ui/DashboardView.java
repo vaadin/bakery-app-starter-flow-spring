@@ -9,11 +9,13 @@ import java.util.stream.Collectors;
 
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.router.Title;
+import com.vaadin.starter.bakery.ui.components.DashboardOrdersList;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.AttachEvent;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.event.EventData;
 import com.vaadin.ui.polymertemplate.EventHandler;
+import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -42,6 +44,9 @@ import com.vaadin.starter.bakery.ui.utils.DashboardUtils.PageInfo;
 @ParentView(BakeryApp.class)
 @Title(BakeryConst.TITLE_DASHBOARD)
 public class DashboardView extends PolymerTemplate<DashboardView.Model> implements View {
+
+	@Id("ordersList")
+	private DashboardOrdersList ordersList;
 
 	private final OrdersDataProvider ordersProvider;
 
