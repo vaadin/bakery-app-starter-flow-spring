@@ -85,8 +85,7 @@
         left: -286px;
       }
 
-      .user-image.mobile-user-image,
-      .alarms.mobile-alarms {
+      .user-image.mobile-user-image {
         position: fixed;
         top: var(--valo-space-m);
         right: var(--valo-space-m);
@@ -134,7 +133,7 @@
       }
     </style>
 
-    <template is="dom-if" if="[[user.name]]">
+
       <iron-media-query query="(min-width: 600px)" query-matches="{{_desktopView}}"></iron-media-query>
 
       <div class="toolbar">
@@ -154,16 +153,16 @@
           </template>
         </paper-tabs>
         <vaadin-button class="user-button" hidden$="[[!_desktopView]]" theme="tertiary" on-click="_showUserMenuPopup" popup-menu-opened$="[[popupMenuOpened]]">
-          <user-avatar src="[[user.image]]" alt="[[user.name]]" class="user-image" id="desktop-user-image"></user-avatar>
-          [[user.name]]
+          <user-avatar src="[[user.photoUrl]]" alt="[[user.firstName]]" class="user-image" id="desktop-user-image"></user-avatar>
+          [[user.firstName]]
           <iron-icon icon="valo:chevron-down"></iron-icon>
         </vaadin-button>
         <user-popup-menu opened="{{popupMenuOpened}}" desktop-view$="[[_desktopView]]" user="[[user]]" notifications="[[notifications]]" on-logout="_logout"></user-popup-menu>
       </div>
 
-      <user-avatar src="[[user.image]]" alt="[[user.name]]" class="user-image mobile-user-image" hidden$="[[_desktopView]]" on-click="_showUserMenuPopup"></user-avatar>
+      <user-avatar src="[[user.photoUrl]]" alt="[[user.firstName]]" class="user-image mobile-user-image" hidden$="[[_desktopView]]" on-click="_showUserMenuPopup"></user-avatar>
     </template>
-  </template>
+
 
   <script>
     class BakeryNavigation extends Polymer.Element {
@@ -180,29 +179,8 @@
           popupMenuOpened: {
             type: Boolean,
             value: false
-          },
-          notifications: {
-            type: Array,
-            value: function() {
-              return [
-                {
-                  from: 'Alberta Simmons',
-                  date: 'Jun 6, 7:24 AM',
-                  description: 'We’re out of pink sugarcoating! Don’t accept any new orders with the pink stuff.'
-                },
-                {
-                  from: 'Anna Roberts',
-                  date: 'July 12, 8:10 PM',
-                  description: 'Hello, what are you going to do today?'
-                }
-              ];
-            }
           }
         };
-      }
-
-      _showAlarms(alarms, desktopView, element) {
-        return element === 'mobile' ? alarms && !desktopView : alarms && desktopView;
       }
 
       _showUserMenuPopup() {

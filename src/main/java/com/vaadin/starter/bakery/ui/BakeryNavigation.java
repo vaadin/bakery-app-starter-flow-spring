@@ -3,13 +3,14 @@ package com.vaadin.starter.bakery.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.vaadin.flow.model.Include;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.starter.bakery.app.BeanLocator;
 import com.vaadin.starter.bakery.app.security.SecuredViewAccessControl;
 import com.vaadin.starter.bakery.app.security.SecurityUtils;
-import com.vaadin.starter.bakery.ui.dataproviders.UserDataProvider;
+import com.vaadin.starter.bakery.backend.data.entity.User;
+import com.vaadin.starter.bakery.backend.service.UserService;
 import com.vaadin.starter.bakery.ui.entities.PageInfo;
-import com.vaadin.starter.bakery.ui.entities.User;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.ui.History;
 import com.vaadin.ui.Tag;
@@ -17,84 +18,46 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.common.ClientDelegate;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Tag("bakery-navigation")
 @HtmlImport("context://src/app/bakery-navigation.html")
 public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> {
 	private boolean loggedIn;
-	
-	public static class UserModel {
-		private String name;
-		private String email;
-		private String image;
-		private boolean alarms;
-
-		public String getName() {
-			return name;
-		}
-
-		public void setName(String name) {
-			this.name = name;
-		}
-
-		public String getEmail() {
-			return email;
-		}
-
-		public void setEmail(String email) {
-			this.email = email;
-		}
-
-		public String getImage() {
-			return image;
-		}
-
-		public void setImage(String image) {
-			this.image = image;
-		}
-
-		public boolean isAlarms() {
-			return alarms;
-		}
-
-		public void setAlarms(boolean alarms) {
-			this.alarms = alarms;
-		}
-	}
 
 	public interface Model extends TemplateModel {
-		void setUser(UserModel user);
+		@Include({ "firstName", "email", "photoUrl" })
+		void setUser(User user);
 
 		void setPages(List<PageInfo> pages);
 	}
 
-	private UserDataProvider usersProvider;
+	@Autowired
+	private UserService userService;
 
-	private UserDataProvider getUsersProvider() {
-		if (usersProvider == null) {
-			usersProvider = BeanLocator.find(UserDataProvider.class);
+	private UserService getUserService() {
+		if (userService == null) {
+			userService = BeanLocator.find(UserService.class);
 		}
-		return usersProvider;
+		return userService;
 	}
 
 	public void updateUser() {
 		if (!loggedIn && SecurityUtils.isUserLoggedIn()) {
 			setupNavigationButtons();
-			User uiUser = getUsersProvider().getCurrentUser();
-			UserModel user = new UserModel();
-			user.setName(uiUser.getName());
-			user.setEmail(uiUser.getEmail());
-			user.setImage(uiUser.getPicture());
-			user.setAlarms(true);
+			User user = getUserService().getCurrentUser();
 			getModel().setUser(user);
 			loggedIn = true;
 		}else if(!loggedIn){
 			getModel().setUser(null);
 		}
+		setVisible(loggedIn);
 	}
 
-	
-	
+	private void setVisible(boolean isVisible) {
+		getElement().setAttribute("hidden", !isVisible);
+	}
+
 	private void setupNavigationButtons() {
 		List<PageInfo> pages = new ArrayList<>();
 

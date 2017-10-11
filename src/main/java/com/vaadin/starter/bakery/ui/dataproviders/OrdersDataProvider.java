@@ -1,13 +1,11 @@
 package com.vaadin.starter.bakery.ui.dataproviders;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.MonthDay;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,26 +15,19 @@ import org.springframework.stereotype.Service;
 import com.vaadin.starter.bakery.backend.data.DashboardData;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
-import com.vaadin.starter.bakery.backend.data.entity.Product;
-import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.ui.entities.Customer;
-import com.vaadin.starter.bakery.ui.entities.Good;
 import com.vaadin.starter.bakery.ui.entities.Order;
 import com.vaadin.starter.bakery.ui.utils.DashboardUtils.PageInfo;
-
-import elemental.json.JsonObject;
 
 @Service
 public class OrdersDataProvider {
 
 	private final OrderService orderService;
-	private final ProductsDataProvider productsProvider;
 
 	@Autowired
-	public OrdersDataProvider(ProductsDataProvider productsProvider, OrderService orderService) {
+	public OrdersDataProvider(OrderService orderService) {
 		this.orderService = orderService;
-		this.productsProvider = productsProvider;
 	}
 
 	public PageInfo getOrdersList(String filter, boolean showPrevious, Pageable pageable) {
@@ -73,13 +64,6 @@ public class OrdersDataProvider {
 
 	private OrderService getOrderService() {
 		return orderService;
-	}
-
-	public void save(JsonObject orderData) {
-		Order order = DataProviderUtil.toUIEntity(orderData, Order.class);
-
-		getOrderService().saveOrder(DataProviderUtil.readId(order.getId()),
-				(u, o) -> new DataOrderFiller(productsProvider::getProduct, u).fill(o, order));
 	}
 
 	public void addOrderComment(String orderId, String message) {
@@ -145,48 +129,5 @@ public class OrdersDataProvider {
 						item.getComment());
 			});
 		}
-	}
-
-	/**
-	 * 
-	 * Responsible for filling the model object with the user input.
-	 * 
-	 */
-	static class DataOrderFiller {
-
-		private final Function<String, Product> productProvider;
-
-		private final User currentUser;
-
-		DataOrderFiller(Function<String, Product> productProvider, User currentUser) {
-			this.productProvider = productProvider;
-			this.currentUser = currentUser;
-		}
-
-		void fill(com.vaadin.starter.bakery.backend.data.entity.Order dataEntity, Order uiEntity) {
-			fillDataCustomerEntity(dataEntity.getCustomer(), uiEntity.getCustomer());
-			LocalDate date = DataProviderUtil.convertIfNotNull(uiEntity.getDate(), LocalDate::parse, LocalDate::now);
-			OrderState state = DataProviderUtil.convertIfNotNull(uiEntity.getStatus(), OrderState::forDisplayName);
-			dataEntity.changeState(currentUser, state);
-			dataEntity.setDueDate(date);
-			dataEntity.setDueTime(LocalTime.parse(uiEntity.getTime()));
-			dataEntity.getPickupLocation().setName(uiEntity.getPlace());
-			fillOrderItems(dataEntity, uiEntity.getGoods());
-		}
-
-		private void fillDataCustomerEntity(com.vaadin.starter.bakery.backend.data.entity.Customer dataEntity,
-				Customer uiCustomer) {
-			dataEntity.setFullName(uiCustomer.getName());
-			dataEntity.setPhoneNumber(uiCustomer.getNumber());
-			dataEntity.setDetails(uiCustomer.getDetails());
-		}
-
-		private void fillOrderItems(com.vaadin.starter.bakery.backend.data.entity.Order dataEntity, List<Good> goods) {
-			dataEntity.clearItems();
-			goods.stream().filter(good -> good.getName() != null).forEach(good -> {
-				dataEntity.addOrderItem(productProvider.apply(good.getName()), good.getCount(), good.getDescription());
-			});
-		}
-
 	}
 }
