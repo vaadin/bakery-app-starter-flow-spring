@@ -67,6 +67,14 @@
         </repository>
 
         <repository>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>vaadin-snapshots</id>
+            <url>https://repo.vaadin.com/nexus/content/repositories/vaadin-snapshots/</url>
+        </repository>
+
+        <repository>
             <id>vaadin-addons</id>
             <url>http://maven.vaadin.com/vaadin-addons</url>
         </repository>
