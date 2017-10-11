@@ -1,5 +1,7 @@
 package com.vaadin.starter.bakery.ui.components.storefront;
 
+import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
@@ -7,30 +9,34 @@ import java.util.Collection;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import com.vaadin.annotations.HtmlImport;
-import com.vaadin.annotations.Id;
-import com.vaadin.annotations.Tag;
 import com.vaadin.data.BeanValidationBinder;
+import com.vaadin.data.Result;
 import com.vaadin.data.ValidationException;
-import com.vaadin.flow.event.ComponentEventListener;
-import com.vaadin.flow.html.H2;
-import com.vaadin.flow.template.PolymerTemplate;
-import com.vaadin.flow.template.model.TemplateModel;
+import com.vaadin.data.ValueContext;
+import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
+import com.vaadin.starter.bakery.backend.data.entity.PickupLocation;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.ui.HasToast;
+import com.vaadin.starter.bakery.ui.components.storefront.OrderEdit.ReviewEvent;
 import com.vaadin.starter.bakery.ui.converters.LocalTimeConverter;
+import com.vaadin.starter.bakery.ui.converters.binder.BinderConverter;
+import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.ComponentEvent;
-import com.vaadin.ui.DatePicker;
-import com.vaadin.ui.TextField;
-
-import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
+import com.vaadin.ui.Tag;
+import com.vaadin.ui.button.Button;
+import com.vaadin.ui.combobox.ComboBox;
+import com.vaadin.ui.common.HtmlImport;
+import com.vaadin.ui.datepicker.DatePicker;
+import com.vaadin.ui.event.ComponentEvent;
+import com.vaadin.ui.event.ComponentEventListener;
+import com.vaadin.ui.html.H2;
+import com.vaadin.ui.polymertemplate.Id;
+import com.vaadin.ui.polymertemplate.PolymerTemplate;
+import com.vaadin.ui.textfield.TextField;
 
 @Tag("order-edit")
 @HtmlImport("context://src/storefront/order-edit.html")
@@ -146,7 +152,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 		this.initialHasChanges = initialHasChanges;
 	}
 
-	private boolean hasChanges() {
+	public boolean hasChanges() {
 		return initialHasChanges || binder.hasChanges() || items.hasChanges();
 	}
 
@@ -160,7 +166,6 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 	}
 
 	public void close() {
-		this.order = null;
 		items.reset();
 		this.setTotalPrice(0);
 		getModel().setStatus(null);
@@ -168,7 +173,6 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 
 	public void write(Order order) throws ValidationException {
 		binder.writeBean(order);
-		getModel().setOpened(true);
 	}
 
 	public void read(Order order) {

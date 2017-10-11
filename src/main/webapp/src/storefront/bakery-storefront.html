@@ -121,6 +121,9 @@
             type: Array,
             notify: true
           },
+          editing: {
+            type: Boolean
+          },
           touchScrolling: {
             type: Boolean,
             computed: '_enableTouchScrolling(desktopView, _selectedItem, _editableItem)',

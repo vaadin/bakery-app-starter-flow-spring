@@ -132,7 +132,7 @@ public class EntityEditPresenter<T extends AbstractEntity> implements HasLogger 
 
 	public void createNew(T entity) {
 		this.entity = entity;
-		view.openDialog(entity, true);
+		openDialog(entity, true);
 	}
 
 	private void showError(Exception e, String message, boolean isPersistent) {
