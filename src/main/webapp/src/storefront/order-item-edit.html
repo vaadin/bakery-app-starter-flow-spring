@@ -20,7 +20,7 @@
     </style>
 
     <vaadin-form-layout class="product" responsive-steps="[[_computeResponsiveSteps(desktopView, 18, 10)]]">
-      <vaadin-combo-box id="products" colspan="8" index="[[index]]"></vaadin-combo-box>
+      <vaadin-combo-box id="products" colspan="8" index="[[index]]" value="[[product]]"></vaadin-combo-box>
 
       <vaadin-button id="order-item-edit-delete" colspan="2" class="delete" index="[[index]]"
                      theme="narrow" style$="order: [[_getConditional(desktopView, 2, 0)]];">✕
