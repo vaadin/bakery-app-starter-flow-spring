@@ -6,6 +6,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;
 
 import com.vaadin.data.ValidationException;
+import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
 import com.vaadin.starter.bakery.backend.service.CrudService;
 import com.vaadin.starter.bakery.backend.service.UserFriendlyDataException;
@@ -13,11 +14,11 @@ import com.vaadin.starter.bakery.ui.components.EntityEditView;
 import com.vaadin.starter.bakery.ui.components.EntityView;
 import com.vaadin.starter.bakery.ui.messages.Message;
 
-public class EntityEditPresenter<T extends AbstractEntity> {
+public class EntityEditPresenter<T extends AbstractEntity> implements HasLogger {
 
 	private CrudService<T> crudService;
 
-	private EntityView view;
+	private EntityView<T> view;
 
 	private EntityEditView<T> editor;
 
@@ -25,7 +26,7 @@ public class EntityEditPresenter<T extends AbstractEntity> {
 
 	private T entity;
 
-	public EntityEditPresenter(CrudService<T> crudService, EntityEditView<T> editor, EntityView view,
+	public EntityEditPresenter(CrudService<T> crudService, EntityEditView<T> editor, EntityView<T> view,
 			String entityName) {
 		this.crudService = crudService;
 		this.editor = editor;
@@ -33,9 +34,8 @@ public class EntityEditPresenter<T extends AbstractEntity> {
 		this.entityName = entityName;
 		editor.addSaveListener(e -> save());
 		editor.addDeleteListener(e -> delete());
-		editor.addCancelListener(cancelClickEvent -> cancel());
-		editor.addValidationFailedEvent(
-				e -> view.showError("Please fill out all required fields before proceeding.", false));
+		editor.addCancelListener(e -> cancel());
+
 	}
 
 	private void delete() {
@@ -47,11 +47,32 @@ public class EntityEditPresenter<T extends AbstractEntity> {
 	}
 
 	private void save() {
-		executeJPAOperation(() -> {
+
+		executeJPAOperation(() -> getSaver());
+		view.update(entity);
+		close(true);
+	}
+
+	protected void saveEntity() {
+		crudService.save(entity);
+	}
+
+	protected JPAOperation getSaver() {
+		return () -> {
+			if (writeEntity()) {
+				saveEntity();
+			}
+		};
+	}
+
+	protected boolean writeEntity() {
+		try {
 			editor.write(entity);
-			crudService.save(entity);
-			close(true);
-		});
+			return true;
+		} catch (ValidationException e) {
+			view.showError("Please fill out all required fields before proceeding.", false);
+			return false;
+		}
 	}
 
 	private boolean executeJPAOperation(JPAOperation operation) {
@@ -72,7 +93,7 @@ public class EntityEditPresenter<T extends AbstractEntity> {
 		} catch (Exception e) {
 			// Something went wrong, no idea what
 			view.showError("A problem occurred while saving the data. Please check the fields.", true);
-			view.getLogger().error("Unable to save entity", e);
+			getLogger().error("Unable to save entity", e);
 		}
 		return false;
 	}
@@ -95,26 +116,33 @@ public class EntityEditPresenter<T extends AbstractEntity> {
 		}
 	}
 
-	public void edit(Long id) {
+	public void loadEntity(Long id, boolean edit) {
 		boolean loaded = executeJPAOperation(() -> {
 			this.entity = crudService.load(id);
-			editor.read(entity);
-			view.openDialog();
+			openDialog(entity, edit);
 		});
 		if (!loaded) {
 			view.closeDialog(true);
 		}
 	}
 
+	protected void openDialog(T entity, boolean edit) {
+		view.openDialog(entity, edit);
+	}
+
 	public void createNew(T entity) {
 		this.entity = entity;
-		editor.read(entity);
-		view.openDialog();
+		view.openDialog(entity, true);
 	}
 
 	private void showError(Exception e, String message, boolean isPersistent) {
 		view.showError(message, isPersistent);
-		view.getLogger().debug(message, e);
+		getLogger().debug(message, e);
 
 	}
+
+	protected T getEntity() {
+		return entity;
+	}
+
 }

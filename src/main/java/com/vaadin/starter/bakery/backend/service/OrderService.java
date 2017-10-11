@@ -17,6 +17,7 @@ import javax.validation.ValidationException;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import com.vaadin.starter.bakery.app.BeanLocator;
@@ -32,7 +33,7 @@ import com.vaadin.starter.bakery.repositories.OrderRepository;
 import static java.util.stream.Collectors.toSet;
 
 @Service
-public class OrderService {
+public class OrderService implements CrudService<Order> {
 
 	private OrderRepository orderRepository;
 
@@ -68,7 +69,7 @@ public class OrderService {
 	public Order saveOrder(Order order) {
 		return getOrderRepository().save(order);
 	}
-	
+
 	@Transactional(rollbackOn = Exception.class)
 	public Order addComment(Long id, String comment) {
 		Order order = findOrder(id);
@@ -106,7 +107,7 @@ public class OrderService {
 	private static Set<OrderState> matchingStates(String filter) {
 		return filter.isEmpty() ? Collections.emptySet()
 				: Arrays.stream(OrderState.values())
-						.filter(e -> e.getDisplayName().toLowerCase().contains(filter.toLowerCase())).collect(toSet());
+				.filter(e -> e.getDisplayName().toLowerCase().contains(filter.toLowerCase())).collect(toSet());
 	}
 
 	public long countAfterDueDateWithState(LocalDate filterDate, List<OrderState> states) {
@@ -223,4 +224,10 @@ public class OrderService {
 		}
 		return userService;
 	}
+
+	@Override
+	public JpaRepository<Order, Long> getRepository() {
+		return orderRepository;
+	}
+
 }

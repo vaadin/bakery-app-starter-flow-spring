@@ -9,14 +9,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.vaadin.flow.model.Convert;
-import com.vaadin.flow.model.Include;
-import com.vaadin.flow.model.TemplateModel;
+import com.vaadin.annotations.Convert;
+import com.vaadin.annotations.EventHandler;
+import com.vaadin.annotations.HtmlImport;
+import com.vaadin.annotations.Id;
+import com.vaadin.annotations.Include;
+import com.vaadin.annotations.Tag;
+import com.vaadin.annotations.Title;
 import com.vaadin.flow.router.LocationChangeEvent;
 import com.vaadin.flow.router.View;
+import com.vaadin.flow.template.PolymerTemplate;
+import com.vaadin.flow.template.model.TemplateModel;
 import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
-import com.vaadin.router.Title;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.UserService;
@@ -40,7 +45,7 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 @ParentView(BakeryApp.class)
 @Title(BakeryConst.TITLE_USERS)
 @Secured(Role.ADMIN)
-public class UsersView extends PolymerTemplate<UsersView.Model> implements View, EntityView {
+public class UsersView extends PolymerTemplate<UsersView.Model> implements View, HasLogger, EntityView<User> {
 
 	public interface Model extends TemplateModel {
 
@@ -89,7 +94,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 		}
 
 		try {
-			presenter.edit(Long.parseLong(userId));
+			presenter.loadEntity(Long.parseLong(userId), true);
 		} catch (NumberFormatException e) {
 			toast("Invalid id", false);
 			getLogger().error("Expected to get a numeric user id, but got: " + userId, e);
@@ -121,7 +126,8 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	}
 
 	@Override
-	public void openDialog() {
+	public void openDialog(User user, boolean edit) {
+		editor.read(user);
 		view.openDialog(true);
 	}
 }

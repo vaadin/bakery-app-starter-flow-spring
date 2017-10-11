@@ -31,7 +31,6 @@ public class UserService implements CrudService<User> {
 		return getRepository().findByEmail(SecurityUtils.getUsername());
 	}
 
-	@Override
 	public Page<User> findAnyMatching(Optional<String> filter, Pageable pageable) {
 		if (filter.isPresent()) {
 			String repositoryFilter = "%" + filter.get() + "%";
@@ -43,7 +42,6 @@ public class UserService implements CrudService<User> {
 		}
 	}
 
-	@Override
 	public long countAnyMatching(Optional<String> filter) {
 		if (filter.isPresent()) {
 			String repositoryFilter = "%" + filter.get() + "%";
@@ -59,7 +57,6 @@ public class UserService implements CrudService<User> {
 		return BeanLocator.find(UserRepository.class);
 	}
 
-	@Override
 	public Page<User> find(Pageable pageable) {
 		return getRepository().findBy(pageable);
 	}

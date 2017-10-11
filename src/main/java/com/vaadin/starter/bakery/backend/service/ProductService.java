@@ -13,7 +13,6 @@ import com.vaadin.starter.bakery.repositories.ProductRepository;
 @Service
 public class ProductService implements CrudService<Product> {
 
-	@Override
 	public Page<Product> findAnyMatching(Optional<String> filter, Pageable pageable) {
 		if (filter.isPresent()) {
 			String repositoryFilter = "%" + filter.get() + "%";
@@ -23,7 +22,6 @@ public class ProductService implements CrudService<Product> {
 		}
 	}
 
-	@Override
 	public long countAnyMatching(Optional<String> filter) {
 		if (filter.isPresent()) {
 			String repositoryFilter = "%" + filter.get() + "%";
@@ -38,7 +36,6 @@ public class ProductService implements CrudService<Product> {
 		return BeanLocator.find(ProductRepository.class);
 	}
 
-	@Override
 	public Page<Product> find(Pageable pageable) {
 		return getRepository().findBy(pageable);
 	}

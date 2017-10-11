@@ -17,10 +17,6 @@ public interface EntityEditView<T extends AbstractEntity> {
 
 	Registration addCancelListener(ComponentEventListener<CancelEvent> listener);
 
-	Registration addValidationFailedEvent(ComponentEventListener<ValidationFailedEvent> listener);
-
-	void read(T entity);
-
 	boolean isDirty();
 
 	void write(T entity) throws ValidationException;

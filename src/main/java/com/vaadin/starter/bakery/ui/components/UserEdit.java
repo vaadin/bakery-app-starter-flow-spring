@@ -79,10 +79,6 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> implements EntityE
 		return editForm.addListener(CancelEvent.class, listener);
 	}
 
-	public Registration addValidationFailedEvent(ComponentEventListener<ValidationFailedEvent> listener) {
-		return editForm.addListener(ValidationFailedEvent.class, listener);
-	}
-
 	public void read(User user) {
 		binder.readBean(user);
 		getModel().setAvatar(user.getPhotoUrl());
