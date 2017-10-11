@@ -96,7 +96,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 
 	private final OrderStateConverter orderStateConverter = new OrderStateConverter();
 
-	private boolean isDirty = false;
+	private boolean hasChanges = false;
 
 	public OrderEdit() {
 		addToSlot(this, items, "order-items-edit");
@@ -119,7 +119,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 		status.setItems(Arrays.stream(OrderState.values()).map(OrderState::getDisplayName));
 		status.addValueChangeListener(e -> {
 			getModel().setStatus(e.getValue());
-			setIsDirty(true);
+			setHasChanges(true);
 		});
 
 		date.setValue(LocalDate.now());
@@ -129,10 +129,10 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 		final Stream<String> defaultTimes = IntStream.rangeClosed(8, 16)
 				.mapToObj(i -> localTimeConverter.toPresentation(LocalTime.of(i, 0)));
 		time.setItems(defaultTimes);
-		time.addValueChangeListener(e -> setIsDirty(true));
+		time.addValueChangeListener(e -> setHasChanges(true));
 
 		pickupLocation.setItems("Bakery", "Store");
-		pickupLocation.addValueChangeListener(e -> setIsDirty(true));
+		pickupLocation.addValueChangeListener(e -> setHasChanges(true));
 
 		customerName.setRequired(true);
 		binder.forField(customerName).bind("customer.fullName");
@@ -153,13 +153,13 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 		this.initialHasChanges = initialHasChanges;
 	}
 
-	public void setIsDirty(boolean isDirty) {
-		this.isDirty = isDirty;
+	public void setHasChanges(boolean hasChanges) {
+		this.hasChanges = hasChanges;
 		review.setDisabled(!hasChanges());
 	}
 
 	private boolean hasChanges() {
-		return initialHasChanges || binder.hasChanges() || items.hasChanges() || isDirty;
+		return initialHasChanges || binder.hasChanges() || items.hasChanges() || hasChanges;
 	}
 
 	private void updateDesktopViewOnItemsEdit() {

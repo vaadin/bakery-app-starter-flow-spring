@@ -50,8 +50,6 @@ public class OrderItemEdit extends PolymerTemplate<OrderItemEdit.Model> implemen
 
 	private BeanValidationBinder<OrderItem> binder = new BeanValidationBinder<>(OrderItem.class);
 
-	private boolean isDirty = false;
-
 	public OrderItemEdit(ProductSource productSource) {
 		this.productSource = productSource;
 		this.amount.setDisabled(true);
@@ -114,7 +112,6 @@ public class OrderItemEdit extends PolymerTemplate<OrderItemEdit.Model> implemen
 		amount.setDisabled(noProductSelected);
 		comment.setDisabled(noProductSelected);
 		this.setPrice();
-		isDirty = false;
 	}
 
 	@Override
