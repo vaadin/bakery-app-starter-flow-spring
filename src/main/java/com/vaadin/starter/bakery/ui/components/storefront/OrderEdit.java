@@ -153,7 +153,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 		this.initialHasChanges = initialHasChanges;
 	}
 
-	public void setHasChanges(boolean hasChanges) {
+	private void setHasChanges(boolean hasChanges) {
 		this.hasChanges = hasChanges;
 		review.setDisabled(!hasChanges());
 	}
