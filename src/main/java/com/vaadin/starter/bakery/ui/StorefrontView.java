@@ -293,13 +293,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 		@Override
 		public void update(com.vaadin.starter.bakery.backend.data.entity.Order order) {
-			Long id = order.getId();
-			boolean isNew = id == null;
-			if (isNew) {
-				filterItems(searchBar.getFilter(), searchBar.getShowPrevious());
-			} else {
-				updateOrderInModel(id.toString());
-			}
+			filterItems(searchBar.getFilter(), searchBar.getShowPrevious());
 		}
 
 		@Override
