@@ -11,9 +11,11 @@ import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.router.Title;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.AttachEvent;
+import com.vaadin.ui.common.ClientDelegate;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.event.EventData;
 import com.vaadin.ui.polymertemplate.EventHandler;
+import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -85,6 +87,11 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> implemen
 		// It should be easier to use a complex object as function argument
 		String json = new Gson().toJson(pageInfo);
 		getElement().callFunction("loadPage", json);
+	}
+
+	@ClientDelegate
+	private void navigateToOrderDetails(String orderId) {
+		getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT + "/" + orderId));
 	}
 
 	private void populateDeliveriesCharts(DashboardData data) {

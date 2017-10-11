@@ -72,7 +72,7 @@
       </vaadin-board-row>
       <vaadin-board-row>
         <dashboard-pie-chart data="[[productDeliveriesThisMonth]]"></dashboard-pie-chart>
-        <dashboard-orders-list id="ordersList" orders-count="[[ordersCount]]" on-page-request="loadOrdersPage"></dashboard-orders-list>
+        <dashboard-orders-list id="ordersList" orders-count="[[ordersCount]]" on-page-request="loadOrdersPage" active-item="{{activeItem}}"></dashboard-orders-list>
       </vaadin-board-row>
     </vaadin-board>
   </template>
@@ -81,6 +81,20 @@
     class BakeryDashboard extends Polymer.Element {
       static get is() {
         return 'bakery-dashboard';
+      }
+
+      static get properties() {
+        return {
+          activeItem: {
+            observer: '_activeItemChanged'
+          }
+        };
+      }
+
+      _activeItemChanged(item) {
+        if (item) {
+          this.$server.navigateToOrderDetails(item.id);
+        }
       }
 
       loadPage(pageInfo) {
