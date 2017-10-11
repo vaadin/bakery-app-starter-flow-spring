@@ -18,7 +18,6 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.common.ClientDelegate;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Tag("bakery-navigation")
 @HtmlImport("context://src/app/bakery-navigation.html")
@@ -32,7 +31,6 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> {
 		void setPages(List<PageInfo> pages);
 	}
 
-	@Autowired
 	private UserService userService;
 
 	private UserService getUserService() {
