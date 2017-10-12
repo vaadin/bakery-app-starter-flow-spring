@@ -10,8 +10,6 @@ public interface EntityView<T> extends HasToast {
 
 	void closeDialog(boolean updated);
 
-	void confirm(Message message, Runnable operation);
-
 	void openDialog(T entity, boolean edit);
 
 	default void showError(String message, boolean isPersistent) {
@@ -26,4 +24,6 @@ public interface EntityView<T> extends HasToast {
 	default void update(T entity) {
 
 	}
+
+	Confirmer getConfirmer();
 }

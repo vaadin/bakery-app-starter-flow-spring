@@ -27,6 +27,7 @@ import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.backend.service.ProductService;
 import com.vaadin.starter.bakery.backend.service.UserService;
 import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
+import com.vaadin.starter.bakery.ui.components.Confirmer;
 import com.vaadin.starter.bakery.ui.components.EntityEditView;
 import com.vaadin.starter.bakery.ui.components.EntityView;
 import com.vaadin.starter.bakery.ui.components.storefront.OrderDetail;
@@ -45,6 +46,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.ClientDelegate;
 import com.vaadin.ui.common.HtmlImport;
+import com.vaadin.ui.event.ComponentEvent;
 import com.vaadin.ui.event.ComponentEventListener;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
@@ -89,7 +91,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		this.orderService = orderService;
 		this.userService = userService;
 		addToSlot(this, viewSelector, "view-selector-slot");
-
 		this.presenter = new Presenter(new SelectionControl());
 
 		searchBar.setActionText("New order");
@@ -209,7 +210,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 		@Override
 		protected void openDialog(com.vaadin.starter.bakery.backend.data.entity.Order entity, boolean edit) {
-			getModel().setEditing(true);
 			selectionControl.orderEdit.init(userService.getCurrentUser(), productService.getRepository().findAll());
 			super.openDialog(entity, edit);
 		}
@@ -260,6 +260,12 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		}
 
 		@Override
+		public <E extends ComponentEvent<?>> Registration addListener(Class<E> eventType,
+				ComponentEventListener<E> listener) {
+			return StorefrontView.this.addListener(eventType, listener);
+		}
+
+		@Override
 		public boolean isDirty() {
 			return orderEdit.hasChanges();
 		}
@@ -272,12 +278,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		@Override
 		public void closeDialog(boolean updated) {
 			orderEdit.close();
+			getModel().setEditing(false);
 			getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT));
-		}
-
-		@Override
-		public void confirm(Message message, Runnable operation) {
-			confirmationDialog.show(message, ev -> operation.run());
 		}
 
 		@Override
@@ -300,5 +302,11 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		public Element getElement() {
 			return StorefrontView.this.getElement();
 		}
+
+		@Override
+		public Confirmer getConfirmer() {
+			return confirmationDialog;
+		}
+
 	}
 }

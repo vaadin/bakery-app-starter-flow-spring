@@ -22,11 +22,11 @@ import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.UserService;
 import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
+import com.vaadin.starter.bakery.ui.components.Confirmer;
 import com.vaadin.starter.bakery.ui.components.EntityView;
 import com.vaadin.starter.bakery.ui.components.ItemsView;
 import com.vaadin.starter.bakery.ui.components.UserEdit;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
-import com.vaadin.starter.bakery.ui.messages.Message;
 import com.vaadin.starter.bakery.ui.presenter.EntityEditPresenter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.ui.Tag;
@@ -118,13 +118,13 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	}
 
 	@Override
-	public void confirm(Message message, Runnable operation) {
-		confirmationDialog.show(message, ev -> operation.run());
-	}
-
-	@Override
 	public void openDialog(User user, boolean edit) {
 		editor.read(user);
 		view.openDialog(true);
+	}
+
+	@Override
+	public Confirmer getConfirmer() {
+		return confirmationDialog;
 	}
 }

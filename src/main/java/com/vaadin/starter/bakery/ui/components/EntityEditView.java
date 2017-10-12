@@ -6,6 +6,7 @@ import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.event.DeleteEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
+import com.vaadin.ui.event.ComponentEvent;
 import com.vaadin.ui.event.ComponentEventListener;
 
 public interface EntityEditView<T extends AbstractEntity> {
@@ -15,6 +16,8 @@ public interface EntityEditView<T extends AbstractEntity> {
 	Registration addDeleteListener(ComponentEventListener<DeleteEvent> listener);
 
 	Registration addCancelListener(ComponentEventListener<CancelEvent> listener);
+
+	<E extends ComponentEvent<?>> Registration addListener(Class<E> eventType, ComponentEventListener<E> listener);
 
 	boolean isDirty();
 

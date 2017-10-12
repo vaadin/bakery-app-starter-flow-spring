@@ -13,6 +13,7 @@ import com.vaadin.starter.bakery.backend.service.CrudService;
 import com.vaadin.starter.bakery.backend.service.UserFriendlyDataException;
 import com.vaadin.starter.bakery.ui.components.EntityEditView;
 import com.vaadin.starter.bakery.ui.components.EntityView;
+import com.vaadin.starter.bakery.ui.event.DecisionEvent;
 import com.vaadin.starter.bakery.ui.messages.Message;
 
 public class EntityEditPresenter<T extends AbstractEntity> implements HasLogger {
@@ -27,6 +28,8 @@ public class EntityEditPresenter<T extends AbstractEntity> implements HasLogger 
 
 	private T entity;
 
+	private Runnable operationWaitingConfirmation;
+
 	public EntityEditPresenter(CrudService<T> crudService, EntityEditView<T> editor, EntityView<T> view,
 			String entityName) {
 		this.crudService = crudService;
@@ -36,12 +39,12 @@ public class EntityEditPresenter<T extends AbstractEntity> implements HasLogger 
 		editor.addSaveListener(e -> save());
 		editor.addDeleteListener(e -> delete());
 		editor.addCancelListener(e -> cancel());
-
+		view.getConfirmer().addDecisionListener(this::confirmationDecisionReceived);
 	}
 
 	private void delete() {
 		Message CONFIRM_DELETE = Message.CONFIRM_DELETE.createMessage();
-		view.confirm(CONFIRM_DELETE, () -> executeJPAOperation(() -> {
+		confirmIfNecessary(true, CONFIRM_DELETE, () -> executeJPAOperation(() -> {
 			crudService.delete(entity);
 			close(true);
 		}));
@@ -107,11 +110,20 @@ public class EntityEditPresenter<T extends AbstractEntity> implements HasLogger 
 	}
 
 	public void cancel() {
-		if (editor.isDirty()) {
-			Message CONFIRM_CANCEL = Message.UNSAVED_CHANGES.createMessage(entityName);
-			view.confirm(CONFIRM_CANCEL, () -> close(false));
+		confirmIfNecessary(editor.isDirty(), Message.UNSAVED_CHANGES.createMessage(entityName), () -> close(false));
+	}
+
+	public void confirmationDecisionReceived(DecisionEvent event) {
+		event.ifConfirmed(this.operationWaitingConfirmation);
+		this.operationWaitingConfirmation = null;
+	}
+
+	protected void confirmIfNecessary(boolean isNecessary, Message message, Runnable operation) {
+		if (isNecessary) {
+			this.operationWaitingConfirmation = operation;
+			view.getConfirmer().show(message);
 		} else {
-			close(false);
+			operation.run();
 		}
 	}
 
@@ -137,7 +149,6 @@ public class EntityEditPresenter<T extends AbstractEntity> implements HasLogger 
 	private void showError(Exception e, String message, boolean isPersistent) {
 		view.showError(message, isPersistent);
 		getLogger().debug(message, e);
-
 	}
 
 	protected T getEntity() {
