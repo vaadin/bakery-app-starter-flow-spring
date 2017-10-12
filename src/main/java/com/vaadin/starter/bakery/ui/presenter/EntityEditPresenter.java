@@ -44,7 +44,7 @@ public class EntityEditPresenter<T extends AbstractEntity> implements HasLogger 
 
 	private void delete() {
 		Message CONFIRM_DELETE = Message.CONFIRM_DELETE.createMessage();
-		confirmIfNecessary(true, CONFIRM_DELETE, () -> executeJPAOperation(() -> {
+		confirmIfNecessaryAndExecute(true, CONFIRM_DELETE, () -> executeJPAOperation(() -> {
 			crudService.delete(entity);
 			close(true);
 		}));
@@ -106,7 +106,8 @@ public class EntityEditPresenter<T extends AbstractEntity> implements HasLogger 
 	}
 
 	public void cancel() {
-		confirmIfNecessary(editor.isDirty(), Message.UNSAVED_CHANGES.createMessage(entityName), () -> close(false));
+		confirmIfNecessaryAndExecute(editor.isDirty(), Message.UNSAVED_CHANGES.createMessage(entityName),
+				() -> close(false));
 	}
 
 	public void confirmationDecisionReceived(DecisionEvent event) {
@@ -114,8 +115,8 @@ public class EntityEditPresenter<T extends AbstractEntity> implements HasLogger 
 		this.operationWaitingConfirmation = null;
 	}
 
-	protected void confirmIfNecessary(boolean isNecessary, Message message, Runnable operation) {
-		if (isNecessary) {
+	protected void confirmIfNecessaryAndExecute(boolean needsConfirmation, Message message, Runnable operation) {
+		if (needsConfirmation) {
 			this.operationWaitingConfirmation = operation;
 			view.getConfirmer().show(message);
 		} else {
