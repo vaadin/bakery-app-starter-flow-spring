@@ -3,7 +3,6 @@ package com.vaadin.starter.bakery.ui.components;
 import java.util.Optional;
 
 import com.vaadin.starter.bakery.ui.HasToast;
-import com.vaadin.starter.bakery.ui.messages.Message;
 import com.vaadin.ui.UI;
 
 public interface EntityView<T> extends HasToast {

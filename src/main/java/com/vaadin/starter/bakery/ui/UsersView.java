@@ -29,6 +29,7 @@ import com.vaadin.starter.bakery.ui.components.UserEdit;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
 import com.vaadin.starter.bakery.ui.presenter.EntityEditPresenter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
+import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.polymertemplate.EventHandler;
@@ -80,22 +81,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 
 	@Override
 	public void onLocationChange(LocationChangeEvent locationChangeEvent) {
-		setEditableUser(locationChangeEvent.getPathParameter("id"));
-	}
-
-	private void setEditableUser(String userId) {
-		if (userId == null || userId.isEmpty()) {
-			view.openDialog(false);
-			return;
-		}
-
-		try {
-			presenter.loadEntity(Long.parseLong(userId), true);
-		} catch (NumberFormatException e) {
-			toast("Invalid id", false);
-			getLogger().error("Expected to get a numeric user id, but got: " + userId, e);
-			view.openDialog(false);
-		}
+		TemplateUtil.handleEntityNavigation(presenter, locationChangeEvent, true);
 	}
 
 	private void filterUsers(String filter) {
