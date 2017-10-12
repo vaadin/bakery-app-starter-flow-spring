@@ -5,7 +5,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,13 +19,11 @@ public class UserService implements CrudService<User> {
 			"User has been locked and cannot be modified or deleted";
 	private static final String DELETING_SELF_NOT_PERMITTED = "You cannot delete your own account";
 	private final UserRepository userRepository;
-	private final PasswordEncoder passwordEncoder;
 
 
 	@Autowired
-	public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+	public UserService(UserRepository userRepository) {
 		this.userRepository = userRepository;
-		this.passwordEncoder = passwordEncoder;
 	}
 
 	public User getCurrentUser() {
@@ -44,16 +41,6 @@ public class UserService implements CrudService<User> {
 		}
 	}
 
-	public long countAnyMatching(Optional<String> filter) {
-		if (filter.isPresent()) {
-			String repositoryFilter = "%" + filter.get() + "%";
-			return getRepository().countByEmailLikeIgnoreCaseOrFirstNameLikeIgnoreCaseOrLastNameLikeIgnoreCase(
-					repositoryFilter, repositoryFilter, repositoryFilter);
-		} else {
-			return getRepository().count();
-		}
-	}
-
 	@Override
 	public UserRepository getRepository() {
 		return userRepository;
@@ -61,10 +48,6 @@ public class UserService implements CrudService<User> {
 
 	public Page<User> find(Pageable pageable) {
 		return getRepository().findBy(pageable);
-	}
-
-	public String encodePassword(String value) {
-		return passwordEncoder.encode(value);
 	}
 
 	@Override
