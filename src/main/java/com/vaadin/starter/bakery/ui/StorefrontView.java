@@ -87,7 +87,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		this.ordersProvider = ordersProvider;
 		this.orderService = orderService;
 		this.userService = userService;
-		addToSlot(StorefrontView.this, viewSelector, "view-selector");
+		addToSlot(StorefrontView.this, viewSelector, "view-selector-slot");
 
 		this.presenter = new Presenter(new SelectionControl());
 

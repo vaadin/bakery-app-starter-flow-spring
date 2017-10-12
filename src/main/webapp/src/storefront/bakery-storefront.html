@@ -106,7 +106,7 @@ Added dynamically
         </item-detail-dialog>
       </template>
       <item-detail-dialog desktop-view$=[[desktopView]] opened=[[editing]] on-before-close="_onBeforeCloseEdit">
-        <slot name="view-selector" on-slotchange="_updateViewSelectorSlot"></slot>
+        <slot name="view-selector-slot" on-slotchange="_updateViewSelectorSlot"></slot>
       </item-detail-dialog>
     </div>
     <confirm-dialog id="confirmation-dialog"></confirm-dialog>
