@@ -204,7 +204,7 @@
 
       _updateViewSelectorSlot() {
         this.$.viewSelector = this.querySelector('view-selector');
-        this.$.viewSelector.addEventListener('children-list-changed',this._updateDesktopViewOnViewSelectorChildren.bind(this));
+        this.$.viewSelector.addEventListener('children-list-changed', this._updateDesktopViewOnViewSelectorChildren.bind(this));
         this._updateDesktopViewOnViewSelectorChildren();
       }
 
