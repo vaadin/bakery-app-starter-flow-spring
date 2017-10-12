@@ -7,12 +7,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.vaadin.starter.bakery.app.BeanLocator;
 import com.vaadin.starter.bakery.app.security.SecurityUtils;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.repositories.UserRepository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService implements CrudService<User> {
@@ -20,10 +19,13 @@ public class UserService implements CrudService<User> {
 	public static final String MODIFY_LOCKED_USER_NOT_PERMITTED =
 			"User has been locked and cannot be modified or deleted";
 	private static final String DELETING_SELF_NOT_PERMITTED = "You cannot delete your own account";
+	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
 
+
 	@Autowired
-	public UserService(PasswordEncoder passwordEncoder) {
+	public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
 	}
 
@@ -54,7 +56,7 @@ public class UserService implements CrudService<User> {
 
 	@Override
 	public UserRepository getRepository() {
-		return BeanLocator.find(UserRepository.class);
+		return userRepository;
 	}
 
 	public Page<User> find(Pageable pageable) {
