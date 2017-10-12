@@ -73,23 +73,16 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> implements EntityE
 		roleField.addValueChangeListener(e -> {
 			setIsDirty(user == null || user.getRole() == null || !user.getRole().equals(e.getValue()));
 		});
+
+		// Forward these events to the presenter
+		editForm.addListener(SaveEvent.class, this::fireEvent);
+		editForm.addListener(DeleteEvent.class, this::fireEvent);
+		editForm.addListener(CancelEvent.class, this::fireEvent);
 	}
 
 	private void setIsDirty(boolean isDirty) {
 		this.isDirty = isDirty;
 		editForm.setIsDirty(isDirty());
-	}
-
-	public Registration addSaveListener(ComponentEventListener<SaveEvent> listener) {
-		return editForm.addListener(SaveEvent.class, listener);
-	}
-
-	public Registration addDeleteListener(ComponentEventListener<DeleteEvent> listener) {
-		return editForm.addListener(DeleteEvent.class, listener);
-	}
-
-	public Registration addCancelListener(ComponentEventListener<CancelEvent> listener) {
-		return editForm.addListener(CancelEvent.class, listener);
 	}
 
 	public void read(User user) {

@@ -222,10 +222,15 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		private final OrderEdit orderEdit = new OrderEdit();
 		private final OrderDetail orderDetail = new OrderDetail();
 
+		public SelectionControl() {
+			orderEdit.addCancelListener(StorefrontView.this::fireEvent);
+			orderDetail.addListener(SaveEvent.class, StorefrontView.this::fireEvent);
+		}
+
 		private void selectComponent(Component component) {
 			// This is a workaround for a Safari 11 issue.
-			// If the orderEdit is injected into the page in the OrderEditWrapper
-			// constructor,
+			// If the orderEdit is injected in the ViewSelector
+			// on the constructor,
 			// Safari fails to set the styles correctly.
 			if (component.getElement().getParent() == null) {
 				viewSelector.add(component);
@@ -240,23 +245,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		private void details(com.vaadin.starter.bakery.backend.data.entity.Order order, boolean isReview) {
 			selectComponent(orderDetail);
 			orderDetail.display(order, isReview);
-		}
-
-		@Override
-		public Registration addSaveListener(ComponentEventListener<SaveEvent> listener) {
-			return orderDetail.addListener(SaveEvent.class, listener);
-		}
-
-		@Override
-		public Registration addDeleteListener(ComponentEventListener<DeleteEvent> listener) {
-			// Not Supported
-			return () -> {
-			};
-		}
-
-		@Override
-		public Registration addCancelListener(ComponentEventListener<CancelEvent> listener) {
-			return orderEdit.addCancelListener(listener);
 		}
 
 		@Override

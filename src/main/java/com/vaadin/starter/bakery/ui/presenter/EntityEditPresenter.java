@@ -13,7 +13,10 @@ import com.vaadin.starter.bakery.backend.service.CrudService;
 import com.vaadin.starter.bakery.backend.service.UserFriendlyDataException;
 import com.vaadin.starter.bakery.ui.components.EntityEditView;
 import com.vaadin.starter.bakery.ui.components.EntityView;
+import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.event.DecisionEvent;
+import com.vaadin.starter.bakery.ui.event.DeleteEvent;
+import com.vaadin.starter.bakery.ui.event.SaveEvent;
 import com.vaadin.starter.bakery.ui.messages.Message;
 
 public class EntityEditPresenter<T extends AbstractEntity> implements HasLogger {
@@ -36,9 +39,9 @@ public class EntityEditPresenter<T extends AbstractEntity> implements HasLogger 
 		this.editor = editor;
 		this.view = view;
 		this.entityName = entityName;
-		editor.addSaveListener(e -> save());
-		editor.addDeleteListener(e -> delete());
-		editor.addCancelListener(e -> cancel());
+		editor.addListener(SaveEvent.class, e -> save());
+		editor.addListener(DeleteEvent.class, e -> delete());
+		editor.addListener(CancelEvent.class, e -> cancel());
 		view.getConfirmer().addDecisionListener(this::confirmationDecisionReceived);
 	}
 

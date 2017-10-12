@@ -1,25 +1,13 @@
 package com.vaadin.starter.bakery.ui.components;
 
 import com.vaadin.data.ValidationException;
-import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
-import com.vaadin.starter.bakery.ui.event.CancelEvent;
-import com.vaadin.starter.bakery.ui.event.DeleteEvent;
-import com.vaadin.starter.bakery.ui.event.SaveEvent;
-import com.vaadin.ui.event.ComponentEvent;
-import com.vaadin.ui.event.ComponentEventListener;
+import com.vaadin.ui.event.ComponentEventNotifier;
 
-public interface EntityEditView<T extends AbstractEntity> {
-
-	Registration addSaveListener(ComponentEventListener<SaveEvent> listener);
-
-	Registration addDeleteListener(ComponentEventListener<DeleteEvent> listener);
-
-	Registration addCancelListener(ComponentEventListener<CancelEvent> listener);
-
-	<E extends ComponentEvent<?>> Registration addListener(Class<E> eventType, ComponentEventListener<E> listener);
+public interface EntityEditView<T extends AbstractEntity> extends ComponentEventNotifier {
 
 	boolean isDirty();
 
 	void write(T entity) throws ValidationException;
+
 }
