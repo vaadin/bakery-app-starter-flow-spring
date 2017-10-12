@@ -79,9 +79,9 @@ public class EntityEditPresenter<T extends AbstractEntity> implements HasLogger 
 		editor.write(entity);
 	}
 
-	private boolean executeJPAOperation(JPAOperation operation) {
+	private boolean executeJPAOperation(Runnable operation) {
 		try {
-			operation.execute();
+			operation.run();
 			return true;
 		} catch (UserFriendlyDataException e) {
 			// Commit failed because of application-level data constraints
@@ -98,10 +98,6 @@ public class EntityEditPresenter<T extends AbstractEntity> implements HasLogger 
 			showValidationError();
 		}
 		return false;
-	}
-
-	public interface JPAOperation {
-		void execute();
 	}
 
 	private void close(boolean updated) {
