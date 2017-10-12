@@ -17,10 +17,10 @@ import com.vaadin.starter.bakery.backend.data.entity.Order;
 public interface OrderRepository extends JpaRepository<Order, Long> {
 	Page<Order> findByDueDateAfterAndStateIn(LocalDate dueDate, Collection<OrderState> states, Pageable page);
 
-    @EntityGraph(value = "Order.summary", type = EntityGraphType.LOAD)
+	@EntityGraph(value = "Order.summary", type = EntityGraphType.LOAD)
 	Page<Order> findByDueDateAfter(LocalDate filterDate, Pageable pageable);
 
-    @EntityGraph(value = "Order.summary", type = EntityGraphType.LOAD)
+	@EntityGraph(value = "Order.summary", type = EntityGraphType.LOAD)
 	Page<Order> findByCustomerFullNameContainingIgnoreCaseOrStateIn(String searchQuery,
 			Collection<OrderState> orderStates, Pageable pageable);
 
@@ -32,8 +32,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 	@Override
 	@EntityGraph(value = "Order.summary", type = EntityGraphType.LOAD)
 	List<Order> findAll();
-	
-	long countByDueDateAfterAndStateIn(LocalDate dueDate, Collection<OrderState> states);
 
 	long countByDueDateAfter(LocalDate dueDate);
 
