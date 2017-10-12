@@ -40,6 +40,7 @@ import com.vaadin.starter.bakery.ui.event.SaveEvent;
 import com.vaadin.starter.bakery.ui.messages.Message;
 import com.vaadin.starter.bakery.ui.presenter.EntityEditPresenter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
+import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.ClientDelegate;
@@ -87,7 +88,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		this.ordersProvider = ordersProvider;
 		this.orderService = orderService;
 		this.userService = userService;
-		addToSlot(StorefrontView.this, viewSelector, "view-selector-slot");
+		addToSlot(this, viewSelector, "view-selector-slot");
 
 		this.presenter = new Presenter(new SelectionControl());
 
@@ -136,13 +137,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 	@Override
 	public void onLocationChange(LocationChangeEvent locationChangeEvent) {
-		String orderId = locationChangeEvent.getPathParameter("id");
-		boolean idProvided = orderId != null && !orderId.isEmpty();
-		if (idProvided) {
-			boolean edit = locationChangeEvent.getLocation().getSegments().contains("edit");
-			presenter.loadEntity(Long.parseLong(orderId), edit);
-		}
-		getModel().setEditing(idProvided);
+		TemplateUtil.handleEntityNavigation(presenter, locationChangeEvent,
+				locationChangeEvent.getLocation().getSegments().contains("edit"));
 	}
 
 	private void updateOrderInModel(String orderId) {
@@ -181,7 +177,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		private SelectionControl selectionControl;
 
 		public Presenter(SelectionControl selectionControl) {
-			super(orderService, selectionControl, selectionControl, "User");
+			super(orderService, selectionControl, selectionControl, "Order");
 			this.selectionControl = selectionControl;
 			selectionControl.orderEdit.addReviewListener(e -> {
 				try {
@@ -213,6 +209,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 		@Override
 		protected void openDialog(com.vaadin.starter.bakery.backend.data.entity.Order entity, boolean edit) {
+			getModel().setEditing(true);
 			selectionControl.orderEdit.init(userService.getCurrentUser(), productService.getRepository().findAll());
 			super.openDialog(entity, edit);
 		}
