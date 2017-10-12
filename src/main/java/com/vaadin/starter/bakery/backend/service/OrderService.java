@@ -29,7 +29,6 @@ import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.User;
-import com.vaadin.starter.bakery.repositories.CustomerRepository;
 import com.vaadin.starter.bakery.repositories.OrderRepository;
 
 @Service
@@ -40,8 +39,7 @@ public class OrderService implements CrudService<Order> {
 	private final UserService userService;
 
 	@Autowired
-	public OrderService(OrderRepository orderRepository, CustomerRepository customerRepository,
-			UserService userService) {
+	public OrderService(OrderRepository orderRepository, UserService userService) {
 		super();
 		this.orderRepository = orderRepository;
 		this.userService = userService;
