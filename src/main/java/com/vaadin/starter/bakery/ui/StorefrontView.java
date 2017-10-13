@@ -6,6 +6,7 @@ import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,8 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 @Route(value = "")
 @ParentView(BakeryApp.class)
 @Title(BakeryConst.TITLE_STOREFRONT)
-public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implements View, HasLogger, HasToast {
+public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
+implements HasLogger, EntityView<com.vaadin.starter.bakery.backend.data.entity.Order> {
 
 	public interface Model extends TemplateModel {
 		void setOrders(List<Order> orders);
@@ -69,7 +71,9 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	@Id("confirmation-dialog")
 	private ConfirmationDialog confirmationDialog;
 
-	private ViewSelector viewSelector = new ViewSelector();
+	private final ViewSelector viewSelector = new ViewSelector();
+	private final OrderEdit orderEdit = new OrderEdit();
+	private final OrderDetail orderDetail = new OrderDetail();
 
 	private Presenter presenter;
 
@@ -86,7 +90,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		this.orderService = orderService;
 		this.userService = userService;
 		addToSlot(this, viewSelector, "view-selector-slot");
-		this.presenter = new Presenter(new SelectionControl());
+		this.presenter = new Presenter();
 
 		searchBar.setActionText("New order");
 		searchBar.setCheckboxText("Show past orders");
@@ -108,13 +112,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 	@ClientDelegate
 	private void addComment(String orderId, String message) {
-		try {
-			ordersProvider.addOrderComment(orderId, message);
-		} catch (Exception e) {
-			toast(e.getMessage(), true);
-		} finally {
-			updateOrderInModel(orderId);
-		}
+		presenter.addComment(Long.parseLong(orderId), message);
 	}
 
 	@ClientDelegate
@@ -131,30 +129,16 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		presenter.onLocationChange(locationChangeEvent);
 	}
 
-	private void updateOrderInModel(String orderId) {
-		int idx = findOrderIndexInModel(orderId);
-		if (idx == -1) {
-			return;
-		}
-
-		try {
-			getModel().getOrders().set(idx, ordersProvider.getOrder(orderId));
-		} catch (Exception e) {
-			// exclude the order from the model if ordersProvider.getOrder() throws
-			setOrders(getModel().getOrders().stream().filter(order -> !order.getId().equals(orderId))
-					.collect(Collectors.toList()), false);
-		}
-	}
-
-	private int findOrderIndexInModel(String orderId) {
-		List<Order> orders = getModel().getOrders();
-		for (int i = 0; i < orders.size(); i += 1) {
-			Order modelOrder = orders.get(i);
-			if (modelOrder.getId().equals(orderId)) {
-				return i;
+	private void updateOrderInModel(com.vaadin.starter.bakery.backend.data.entity.Order dataOrder) {
+		String orderId = dataOrder.getId().toString();
+		ListIterator<Order> orderIterator = getModel().getOrders().listIterator();
+		while (orderIterator.hasNext()) {
+			Order order = orderIterator.next();
+			if (orderId.equals(order.getId())) {
+				orderIterator.set(ordersProvider.toUIEntity(dataOrder));
+				break;
 			}
 		}
-		return -1;
 	}
 
 	private void setOrders(List<Order> orders, boolean showPrevious) {
@@ -162,33 +146,88 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		getElement().setPropertyJson("displayedHeaders", computeEntriesWithHeader(orders, showPrevious));
 	}
 
+	private void selectComponent(Component component) {
+		// This is a workaround for a Safari 11 issue.
+		// If the orderEdit is injected in the ViewSelector
+		// on the constructor,
+		// Safari fails to set the styles correctly.
+		if (component.getElement().getParent() == null) {
+			viewSelector.add(component);
+		}
+		viewSelector.select(component);
+	}
+
+	private void showOrderEdit() {
+		selectComponent(orderEdit);
+	}
+
+	private void details(com.vaadin.starter.bakery.backend.data.entity.Order order, boolean isReview) {
+		selectComponent(orderDetail);
+		orderDetail.display(order, isReview);
+	}
+
+	@Override
+	public boolean isDirty() {
+		return orderEdit.hasChanges();
+	}
+
+	@Override
+	public void write(com.vaadin.starter.bakery.backend.data.entity.Order entity) throws ValidationException {
+		orderEdit.write(entity);
+	}
+
+	@Override
+	public void closeDialog(boolean updated) {
+		orderEdit.close();
+		getModel().setEditing(false);
+		getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT));
+	}
+
+	@Override
+	public void openDialog(com.vaadin.starter.bakery.backend.data.entity.Order order, boolean edit) {
+		getModel().setEditing(true);
+		if (edit) {
+			orderEdit.read(order);
+			showOrderEdit();
+		} else {
+			details(order, false);
+		}
+	}
+
+	@Override
+	public void update(com.vaadin.starter.bakery.backend.data.entity.Order order) {
+		filterItems(searchBar.getFilter(), searchBar.getShowPrevious());
+	}
+
+	@Override
+	public Confirmer getConfirmer() {
+		return confirmationDialog;
+	}
+
 	class Presenter extends EntityViewPresenter<com.vaadin.starter.bakery.backend.data.entity.Order> {
 
-		private SelectionControl selectionControl;
-
-		public Presenter(SelectionControl selectionControl) {
-			super(orderService, selectionControl, "Order");
-			this.selectionControl = selectionControl;
-			selectionControl.orderEdit.addReviewListener(e -> {
+		public Presenter() {
+			super(orderService, StorefrontView.this, "Order");
+			orderEdit.addReviewListener(e -> {
 				try {
 					writeEntity();
-					selectionControl.details(getEntity(), true);
+					StorefrontView.this.details(getEntity(), true);
 				} catch (ValidationException ex) {
 					showValidationError();
 				}
 			});
-			selectionControl.orderDetail.addBackListener(e -> selectionControl.showOrderEdit());
-			selectionControl.orderDetail.addEditListener(e -> {
-				selectionControl.orderEdit.read(getEntity());
-				selectionControl.showOrderEdit();
+			orderDetail.addBackListener(e -> StorefrontView.this.showOrderEdit());
+			orderDetail.addEditListener(e -> {
+				StorefrontView.this.orderEdit.read(getEntity());
+				StorefrontView.this.showOrderEdit();
 			});
-			selectionControl.orderDetail.addCommentListener(e -> {
+			StorefrontView.this.orderDetail.addCommentListener(e -> {
 				if (e.getOrderId() == null) {
 					return;
 				}
 
-				addComment(e.getOrderId().toString(), e.getMessage());
-				selectionControl.details(orderService.findOrder(e.getOrderId()), false);
+				addComment(e.getOrderId(), e.getMessage());
+				StorefrontView.this.details(orderService.findOrder(e.getOrderId()), false);
 			});
 		}
 
@@ -204,90 +243,16 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 		@Override
 		protected void openDialog(com.vaadin.starter.bakery.backend.data.entity.Order entity, boolean edit) {
-			selectionControl.orderEdit.init(userService.getCurrentUser(), productService.getRepository().findAll());
+			StorefrontView.this.orderEdit.init(userService.getCurrentUser(), productService.getRepository().findAll());
 			super.openDialog(entity, edit);
 		}
-	}
 
-	class SelectionControl implements
-	EntityView<com.vaadin.starter.bakery.backend.data.entity.Order> {
-
-		private final OrderEdit orderEdit = new OrderEdit();
-		private final OrderDetail orderDetail = new OrderDetail();
-
-		public SelectionControl() {
-			orderEdit.addCancelListener(StorefrontView.this::fireEvent);
-			orderDetail.addListener(SaveEvent.class, StorefrontView.this::fireEvent);
-		}
-
-		private void selectComponent(Component component) {
-			// This is a workaround for a Safari 11 issue.
-			// If the orderEdit is injected in the ViewSelector
-			// on the constructor,
-			// Safari fails to set the styles correctly.
-			if (component.getElement().getParent() == null) {
-				viewSelector.add(component);
-			}
-			viewSelector.select(component);
-		}
-
-		private void showOrderEdit() {
-			selectComponent(orderEdit);
-		}
-
-		private void details(com.vaadin.starter.bakery.backend.data.entity.Order order, boolean isReview) {
-			selectComponent(orderDetail);
-			orderDetail.display(order, isReview);
-		}
-
-		@Override
-		public <E extends ComponentEvent<?>> Registration addListener(Class<E> eventType,
-				ComponentEventListener<E> listener) {
-			return StorefrontView.this.addListener(eventType, listener);
-		}
-
-		@Override
-		public boolean isDirty() {
-			return orderEdit.hasChanges();
-		}
-
-		@Override
-		public void write(com.vaadin.starter.bakery.backend.data.entity.Order entity) throws ValidationException {
-			orderEdit.write(entity);
-		}
-
-		@Override
-		public void closeDialog(boolean updated) {
-			orderEdit.close();
-			getModel().setEditing(false);
-			getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT));
-		}
-
-		@Override
-		public void openDialog(com.vaadin.starter.bakery.backend.data.entity.Order order, boolean edit) {
-			getModel().setEditing(true);
-			if (edit) {
-				orderEdit.read(order);
-				showOrderEdit();
-			} else {
-				details(order, false);
+		public void addComment(Long id, String comment) {
+			if (executeJPAOperation(() -> setEntity(orderService.addComment(id, comment)))) {
+				updateOrderInModel(getEntity());
 			}
 		}
 
-		@Override
-		public void update(com.vaadin.starter.bakery.backend.data.entity.Order order) {
-			filterItems(searchBar.getFilter(), searchBar.getShowPrevious());
-		}
-
-		@Override
-		public Element getElement() {
-			return StorefrontView.this.getElement();
-		}
-
-		@Override
-		public Confirmer getConfirmer() {
-			return confirmationDialog;
-		}
-
 	}
+
 }

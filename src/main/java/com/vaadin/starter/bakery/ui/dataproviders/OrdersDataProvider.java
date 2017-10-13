@@ -75,7 +75,7 @@ public class OrdersDataProvider {
 		return toUIEntity(dataEntity);
 	}
 
-	private Order toUIEntity(com.vaadin.starter.bakery.backend.data.entity.Order dataEntity) {
+	public Order toUIEntity(com.vaadin.starter.bakery.backend.data.entity.Order dataEntity) {
 		Order order = new Order();
 		new UIOrderFiller().fill(order, dataEntity);
 		return order;
@@ -89,9 +89,9 @@ public class OrdersDataProvider {
 	}
 
 	/**
-	 * 
+	 *
 	 * Responsible for filling the UI Order object with the data from model object.
-	 * 
+	 *
 	 */
 	static class UIOrderFiller {
 

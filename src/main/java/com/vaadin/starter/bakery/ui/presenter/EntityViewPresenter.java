@@ -77,7 +77,7 @@ public class EntityViewPresenter<T extends AbstractEntity> implements HasLogger 
 		view.write(entity);
 	}
 
-	private boolean executeJPAOperation(Runnable operation) {
+	protected boolean executeJPAOperation(Runnable operation) {
 		try {
 			operation.run();
 			return true;
@@ -165,6 +165,10 @@ public class EntityViewPresenter<T extends AbstractEntity> implements HasLogger 
 
 	protected T getEntity() {
 		return entity;
+	}
+
+	protected void setEntity(T entity) {
+		this.entity = entity;
 	}
 
 }
