@@ -54,7 +54,6 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	@Id("bakery-users-items-view")
 	private ItemsView view;
 
-	@Id("user-editor")
 	private UserEdit editor;
 
 	@Id("user-confirmation-dialog")
@@ -65,6 +64,11 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	@Autowired
 	public UsersView(UserService userService, PasswordEncoder passwordEncoder) {
 		this.userService = userService;
+
+		editor = new UserEdit();
+		editor.getElement().setAttribute("slot", "user-editor");
+		getElement().appendChild(editor.getElement());
+
 		editor.setPasswordEncoder(passwordEncoder);
 		presenter = new EntityEditPresenter<User>(userService, editor, this, "User");
 		getElement().addEventListener("edit",
