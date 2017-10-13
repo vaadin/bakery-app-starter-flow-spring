@@ -4,6 +4,7 @@ import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.ui.event.DecisionEvent;
 import com.vaadin.starter.bakery.ui.messages.Message;
+import com.vaadin.starter.bakery.ui.presenter.Confirmer;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
 import com.vaadin.ui.common.HtmlImport;

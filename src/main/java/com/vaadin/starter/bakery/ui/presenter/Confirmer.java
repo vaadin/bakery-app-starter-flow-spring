@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.vaadin.starter.bakery.ui.components;
+package com.vaadin.starter.bakery.ui.presenter;
 
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.ui.event.DecisionEvent;

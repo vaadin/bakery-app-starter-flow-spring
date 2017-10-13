@@ -2,6 +2,7 @@ package com.vaadin.starter.bakery.ui.components;
 
 import com.vaadin.starter.bakery.ui.event.ValidationFailedEvent;
 import com.vaadin.starter.bakery.ui.form.EditForm;
+import com.vaadin.starter.bakery.ui.presenter.EntityEditView;
 import com.vaadin.ui.event.ComponentEventListener;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;

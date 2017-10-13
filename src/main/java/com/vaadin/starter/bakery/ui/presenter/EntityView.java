@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery.ui.components;
+package com.vaadin.starter.bakery.ui.presenter;
 
 import java.util.Optional;
 

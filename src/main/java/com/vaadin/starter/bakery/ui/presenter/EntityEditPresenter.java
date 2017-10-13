@@ -11,8 +11,6 @@ import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
 import com.vaadin.starter.bakery.backend.service.CrudService;
 import com.vaadin.starter.bakery.backend.service.UserFriendlyDataException;
-import com.vaadin.starter.bakery.ui.components.EntityEditView;
-import com.vaadin.starter.bakery.ui.components.EntityView;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.event.DecisionEvent;
 import com.vaadin.starter.bakery.ui.event.DeleteEvent;
