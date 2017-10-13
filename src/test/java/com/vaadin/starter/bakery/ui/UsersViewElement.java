@@ -17,22 +17,22 @@ class UsersViewElement extends TestBenchElement {
 	}
 
 	WebElement getFirstTextField() {
-		return findElement(By.shadowSelector("::shadow #user-editor::shadow vaadin-form-layout > vaadin-text-field"));
+		return findElement(By.shadowSelector("user-edit[slot='user-editor']::shadow vaadin-form-layout > vaadin-text-field"));
 	}
 
 	WebElement getPasswordField() {
 		return findElement(
-				By.shadowSelector("::shadow #user-editor::shadow vaadin-form-layout > vaadin-password-field"));
+				By.shadowSelector("user-edit[slot='user-editor']::shadow vaadin-form-layout > vaadin-password-field"));
 	}
 
 	WebElement getUpdateButton() {
 		return findElement(By.shadowSelector(
-				"::shadow #user-editor::shadow #user-edit-form::shadow vaadin-button[theme='primary']"));
+				"user-edit[slot='user-editor']::shadow #user-edit-form::shadow vaadin-button[theme='primary']"));
 	}
 
 	WebElement getDeleteButton() {
 		return findElement(By.shadowSelector(
-				"::shadow #user-editor::shadow #user-edit-form::shadow vaadin-button[theme~='danger']"));
+				"user-edit[slot='user-editor']::shadow #user-edit-form::shadow vaadin-button[theme~='danger']"));
 	}
 
 	WebElement getGridCell(String text) {
