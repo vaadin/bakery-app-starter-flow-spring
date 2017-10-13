@@ -9,9 +9,9 @@ import com.vaadin.starter.bakery.AbstractIT;
 public class LoginIT extends AbstractIT {
 
 	@Test
-	public void logingWorks() {
+	public void loginWorks() {
 		LoginViewElement loginView = openLoginView();
-		assertEquals("Email", loginView.getLoginLabel());
+		assertEquals("Email", loginView.getLogin().getLabel());
 		loginView.login("barista@vaadin.com", "barista");
 	}
 
