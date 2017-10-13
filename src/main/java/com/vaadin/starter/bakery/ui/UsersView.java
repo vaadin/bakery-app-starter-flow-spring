@@ -26,6 +26,9 @@ import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
 import com.vaadin.starter.bakery.ui.components.ItemsView;
 import com.vaadin.starter.bakery.ui.components.UserEdit;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
+import com.vaadin.starter.bakery.ui.event.CancelEvent;
+import com.vaadin.starter.bakery.ui.event.DeleteEvent;
+import com.vaadin.starter.bakery.ui.event.SaveEvent;
 import com.vaadin.starter.bakery.ui.presenter.Confirmer;
 import com.vaadin.starter.bakery.ui.presenter.EntityView;
 import com.vaadin.starter.bakery.ui.presenter.EntityViewPresenter;
@@ -77,6 +80,10 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 		view.setActionText("New user");
 		view.addActionClickListener(e -> presenter.createNew());
 		view.addFilterChangeListener(this::filterUsers);
+		// Forward these events to the presenter
+		editor.addListener(SaveEvent.class, this::fireEvent);
+		editor.addListener(DeleteEvent.class, this::fireEvent);
+		editor.addListener(CancelEvent.class, this::fireEvent);
 	}
 
 	@Override

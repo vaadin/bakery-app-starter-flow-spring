@@ -75,10 +75,14 @@ public class OrdersDataProvider {
 		return toUIEntity(dataEntity);
 	}
 
-	public Order toUIEntity(com.vaadin.starter.bakery.backend.data.entity.Order dataEntity) {
+	private Order toUIEntity(com.vaadin.starter.bakery.backend.data.entity.Order dataEntity) {
 		Order order = new Order();
-		new UIOrderFiller().fill(order, dataEntity);
+		fillOrder(order, dataEntity);
 		return order;
+	}
+
+	public void fillOrder(Order uiEntity, com.vaadin.starter.bakery.backend.data.entity.Order dataEntity) {
+		new UIOrderFiller().fill(uiEntity, dataEntity);
 	}
 
 	private com.vaadin.starter.bakery.backend.data.entity.Order findOrderById(String orderId) {

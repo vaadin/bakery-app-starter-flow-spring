@@ -120,6 +120,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 
 		pickupLocation.setItems("Bakery", "Store");
 		pickupLocation.addValueChangeListener(e -> setHasChanges(true));
+		pickupLocation.setRequired(true);
 
 		customerName.setRequired(true);
 		binder.forField(customerName).bind("customer.fullName");

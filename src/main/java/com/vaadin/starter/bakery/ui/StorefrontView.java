@@ -3,27 +3,20 @@ package com.vaadin.starter.bakery.ui;
 import static com.vaadin.starter.bakery.ui.utils.StorefrontItemHeaderGenerator.computeEntriesWithHeader;
 import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 
 import com.vaadin.data.ValidationException;
-import com.vaadin.flow.dom.Element;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.flow.router.LocationChangeEvent;
-import com.vaadin.flow.router.View;
 import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
 import com.vaadin.router.Title;
-import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.app.HasLogger;
-import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.backend.service.ProductService;
 import com.vaadin.starter.bakery.backend.service.UserService;
@@ -42,8 +35,6 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.ClientDelegate;
 import com.vaadin.ui.common.HtmlImport;
-import com.vaadin.ui.event.ComponentEvent;
-import com.vaadin.ui.event.ComponentEventListener;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
@@ -92,6 +83,10 @@ implements HasLogger, EntityView<com.vaadin.starter.bakery.backend.data.entity.O
 		addToSlot(this, viewSelector, "view-selector-slot");
 		this.presenter = new Presenter();
 
+		// Bubble events
+		orderEdit.addCancelListener(StorefrontView.this::fireEvent);
+		orderDetail.addListener(SaveEvent.class, StorefrontView.this::fireEvent);
+
 		searchBar.setActionText("New order");
 		searchBar.setCheckboxText("Show past orders");
 		searchBar.setPlaceHolder("Search");
@@ -131,14 +126,8 @@ implements HasLogger, EntityView<com.vaadin.starter.bakery.backend.data.entity.O
 
 	private void updateOrderInModel(com.vaadin.starter.bakery.backend.data.entity.Order dataOrder) {
 		String orderId = dataOrder.getId().toString();
-		ListIterator<Order> orderIterator = getModel().getOrders().listIterator();
-		while (orderIterator.hasNext()) {
-			Order order = orderIterator.next();
-			if (orderId.equals(order.getId())) {
-				orderIterator.set(ordersProvider.toUIEntity(dataOrder));
-				break;
-			}
-		}
+		getModel().getOrders().stream().filter(o -> o.getId().equals(orderId)).findFirst()
+		.ifPresent(o -> ordersProvider.fillOrder(o, dataOrder));
 	}
 
 	private void setOrders(List<Order> orders, boolean showPrevious) {
