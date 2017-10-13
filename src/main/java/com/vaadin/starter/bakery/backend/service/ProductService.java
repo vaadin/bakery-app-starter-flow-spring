@@ -48,4 +48,9 @@ public class ProductService implements CrudService<Product> {
 	public JpaRepository<Product, Long> getRepository() {
 		return productRepository;
 	}
+
+	@Override
+	public Product createNew() {
+		return new Product();
+	}
 }

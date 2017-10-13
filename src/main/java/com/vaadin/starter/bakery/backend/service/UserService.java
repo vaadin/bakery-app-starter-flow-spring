@@ -77,4 +77,9 @@ public class UserService implements CrudService<User> {
 			throw new UserFriendlyDataException(MODIFY_LOCKED_USER_NOT_PERMITTED);
 		}
 	}
+
+	@Override
+	public User createNew() {
+		return new User();
+	}
 }

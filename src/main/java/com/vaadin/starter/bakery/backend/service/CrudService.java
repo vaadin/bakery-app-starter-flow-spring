@@ -34,4 +34,5 @@ public interface CrudService<T extends AbstractEntity> {
 		return entity;
 	}
 
+	T createNew();
 }

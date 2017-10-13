@@ -2,10 +2,12 @@ package com.vaadin.starter.bakery.ui.presenter;
 
 import java.util.Optional;
 
+import com.vaadin.data.ValidationException;
 import com.vaadin.starter.bakery.ui.HasToast;
 import com.vaadin.ui.UI;
+import com.vaadin.ui.event.ComponentEventNotifier;
 
-public interface EntityView<T> extends HasToast {
+public interface EntityView<T> extends HasToast, ComponentEventNotifier {
 
 	void closeDialog(boolean updated);
 
@@ -25,4 +27,8 @@ public interface EntityView<T> extends HasToast {
 	}
 
 	Confirmer getConfirmer();
+
+	boolean isDirty();
+
+	void write(T entity) throws ValidationException;
 }

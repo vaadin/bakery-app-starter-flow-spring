@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.vaadin.data.ValidationException;
 import com.vaadin.flow.model.Convert;
 import com.vaadin.flow.model.Include;
 import com.vaadin.flow.model.TemplateModel;
@@ -26,10 +27,9 @@ import com.vaadin.starter.bakery.ui.components.ItemsView;
 import com.vaadin.starter.bakery.ui.components.UserEdit;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
 import com.vaadin.starter.bakery.ui.presenter.Confirmer;
-import com.vaadin.starter.bakery.ui.presenter.EntityEditPresenter;
 import com.vaadin.starter.bakery.ui.presenter.EntityView;
+import com.vaadin.starter.bakery.ui.presenter.EntityViewPresenter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
-import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.polymertemplate.EventHandler;
@@ -62,26 +62,26 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	@Id("user-confirmation-dialog")
 	private ConfirmationDialog confirmationDialog;
 
-	private EntityEditPresenter<User> presenter;
+	private EntityViewPresenter<User> presenter;
 
 	@Autowired
 	public UsersView(UserService userService, PasswordEncoder passwordEncoder) {
 		this.userService = userService;
 		editor.setPasswordEncoder(passwordEncoder);
-		presenter = new EntityEditPresenter<User>(userService, editor, this, "User");
+		presenter = new EntityViewPresenter<User>(userService, this, "User");
 		getElement().addEventListener("edit",
 				e -> navigateToEntity(getUI(), PAGE_USERS, e.getEventData().getString("event.detail")), "event.detail");
 
 		filterUsers(view.getFilter());
 
 		view.setActionText("New user");
-		view.addActionClickListener(e -> presenter.createNew(new User()));
+		view.addActionClickListener(e -> presenter.createNew());
 		view.addFilterChangeListener(this::filterUsers);
 	}
 
 	@Override
 	public void onLocationChange(LocationChangeEvent locationChangeEvent) {
-		TemplateUtil.handleEntityNavigation(presenter, locationChangeEvent, true);
+		presenter.onLocationChange(locationChangeEvent);
 	}
 
 	private void filterUsers(String filter) {
@@ -112,5 +112,15 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	@Override
 	public Confirmer getConfirmer() {
 		return confirmationDialog;
+	}
+
+	@Override
+	public boolean isDirty() {
+		return editor.isDirty();
+	}
+
+	@Override
+	public void write(User entity) throws ValidationException {
+		editor.write(entity);
 	}
 }

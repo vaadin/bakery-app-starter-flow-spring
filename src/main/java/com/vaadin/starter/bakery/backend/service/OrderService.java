@@ -3,6 +3,7 @@ package com.vaadin.starter.bakery.backend.service;
 import static java.util.stream.Collectors.toSet;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -191,6 +192,15 @@ public class OrderService implements CrudService<Order> {
 	@Override
 	public JpaRepository<Order, Long> getRepository() {
 		return orderRepository;
+	}
+
+	@Override
+	@Transactional
+	public Order createNew() {
+		Order order = new Order(userService.getCurrentUser());
+		order.setDueTime(LocalTime.of(16, 0));
+		order.setDueDate(LocalDate.now());
+		return order;
 	}
 
 }

@@ -32,16 +32,11 @@ import com.vaadin.starter.bakery.ui.components.storefront.OrderEdit;
 import com.vaadin.starter.bakery.ui.components.viewselector.ViewSelector;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.starter.bakery.ui.entities.Order;
-import com.vaadin.starter.bakery.ui.event.CancelEvent;
-import com.vaadin.starter.bakery.ui.event.DeleteEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
-import com.vaadin.starter.bakery.ui.messages.Message;
 import com.vaadin.starter.bakery.ui.presenter.Confirmer;
-import com.vaadin.starter.bakery.ui.presenter.EntityEditPresenter;
-import com.vaadin.starter.bakery.ui.presenter.EntityEditView;
 import com.vaadin.starter.bakery.ui.presenter.EntityView;
+import com.vaadin.starter.bakery.ui.presenter.EntityViewPresenter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
-import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.ClientDelegate;
@@ -76,7 +71,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 	private ViewSelector viewSelector = new ViewSelector();
 
-	private EntityEditPresenter<com.vaadin.starter.bakery.backend.data.entity.Order> presenter;
+	private Presenter presenter;
 
 	private OrdersDataProvider ordersProvider;
 	private OrderService orderService;
@@ -128,18 +123,12 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 			getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT + "/" + id + "/edit"));
 			return;
 		}
-		com.vaadin.starter.bakery.backend.data.entity.Order order;
-		User currentUser = userService.getCurrentUser();
-		order = new com.vaadin.starter.bakery.backend.data.entity.Order(currentUser);
-		order.setDueTime(LocalTime.of(16, 0));
-		order.setDueDate(LocalDate.now());
-		presenter.createNew(order);
+		presenter.createNew();
 	}
 
 	@Override
 	public void onLocationChange(LocationChangeEvent locationChangeEvent) {
-		TemplateUtil.handleEntityNavigation(presenter, locationChangeEvent,
-				locationChangeEvent.getLocation().getSegments().contains("edit"));
+		presenter.onLocationChange(locationChangeEvent);
 	}
 
 	private void updateOrderInModel(String orderId) {
@@ -173,12 +162,12 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		getElement().setPropertyJson("displayedHeaders", computeEntriesWithHeader(orders, showPrevious));
 	}
 
-	class Presenter extends EntityEditPresenter<com.vaadin.starter.bakery.backend.data.entity.Order> {
+	class Presenter extends EntityViewPresenter<com.vaadin.starter.bakery.backend.data.entity.Order> {
 
 		private SelectionControl selectionControl;
 
 		public Presenter(SelectionControl selectionControl) {
-			super(orderService, selectionControl, selectionControl, "Order");
+			super(orderService, selectionControl, "Order");
 			this.selectionControl = selectionControl;
 			selectionControl.orderEdit.addReviewListener(e -> {
 				try {
@@ -204,6 +193,11 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		}
 
 		@Override
+		protected void loadEntity(Long id, LocationChangeEvent locationChangeEvent) {
+			loadEntity(id, locationChangeEvent.getLocation().getSegments().contains("edit"));
+		}
+
+		@Override
 		protected void beforeSave() throws ValidationException {
 			// Entity already updated
 		}
@@ -213,10 +207,9 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 			selectionControl.orderEdit.init(userService.getCurrentUser(), productService.getRepository().findAll());
 			super.openDialog(entity, edit);
 		}
-
 	}
 
-	class SelectionControl implements EntityEditView<com.vaadin.starter.bakery.backend.data.entity.Order>,
+	class SelectionControl implements
 	EntityView<com.vaadin.starter.bakery.backend.data.entity.Order> {
 
 		private final OrderEdit orderEdit = new OrderEdit();

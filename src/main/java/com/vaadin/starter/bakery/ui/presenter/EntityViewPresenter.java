@@ -7,6 +7,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;
 
 import com.vaadin.data.ValidationException;
+import com.vaadin.flow.router.LocationChangeEvent;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
 import com.vaadin.starter.bakery.backend.service.CrudService;
@@ -17,13 +18,11 @@ import com.vaadin.starter.bakery.ui.event.DeleteEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
 import com.vaadin.starter.bakery.ui.messages.Message;
 
-public class EntityEditPresenter<T extends AbstractEntity> implements HasLogger {
+public class EntityViewPresenter<T extends AbstractEntity> implements HasLogger {
 
 	private CrudService<T> crudService;
 
 	private EntityView<T> view;
-
-	private EntityEditView<T> editor;
 
 	private String entityName;
 
@@ -31,15 +30,13 @@ public class EntityEditPresenter<T extends AbstractEntity> implements HasLogger 
 
 	private Runnable operationWaitingConfirmation;
 
-	public EntityEditPresenter(CrudService<T> crudService, EntityEditView<T> editor, EntityView<T> view,
-			String entityName) {
+	public EntityViewPresenter(CrudService<T> crudService, EntityView<T> view, String entityName) {
 		this.crudService = crudService;
-		this.editor = editor;
 		this.view = view;
 		this.entityName = entityName;
-		editor.addListener(SaveEvent.class, e -> save());
-		editor.addListener(DeleteEvent.class, e -> delete());
-		editor.addListener(CancelEvent.class, e -> cancel());
+		view.addListener(SaveEvent.class, e -> save());
+		view.addListener(DeleteEvent.class, e -> delete());
+		view.addListener(CancelEvent.class, e -> cancel());
 		view.getConfirmer().addDecisionListener(this::confirmationDecisionReceived);
 	}
 
@@ -77,7 +74,7 @@ public class EntityEditPresenter<T extends AbstractEntity> implements HasLogger 
 	}
 
 	protected void writeEntity() throws ValidationException {
-		editor.write(entity);
+		view.write(entity);
 	}
 
 	private boolean executeJPAOperation(Runnable operation) {
@@ -107,13 +104,30 @@ public class EntityEditPresenter<T extends AbstractEntity> implements HasLogger 
 	}
 
 	public void cancel() {
-		confirmIfNecessaryAndExecute(editor.isDirty(), Message.UNSAVED_CHANGES.createMessage(entityName),
+		confirmIfNecessaryAndExecute(view.isDirty(), Message.UNSAVED_CHANGES.createMessage(entityName),
 				() -> close(false));
 	}
 
 	public void confirmationDecisionReceived(DecisionEvent event) {
 		event.ifConfirmed(this.operationWaitingConfirmation);
 		this.operationWaitingConfirmation = null;
+	}
+
+	public void onLocationChange(LocationChangeEvent locationChangeEvent) {
+		try {
+			String id = locationChangeEvent.getPathParameter("id");
+			boolean idProvided = id != null && !id.isEmpty();
+			if (idProvided) {
+				loadEntity(Long.parseLong(id), locationChangeEvent);
+			}
+		} catch (NumberFormatException e) {
+			// Bad id
+			locationChangeEvent.rerouteToErrorView();
+		}
+	}
+
+	protected void loadEntity(Long id, LocationChangeEvent locationChangeEvent) {
+		loadEntity(id, true);
 	}
 
 	protected void confirmIfNecessaryAndExecute(boolean needsConfirmation, Message message, Runnable operation) {
@@ -139,8 +153,8 @@ public class EntityEditPresenter<T extends AbstractEntity> implements HasLogger 
 		view.openDialog(entity, edit);
 	}
 
-	public void createNew(T entity) {
-		this.entity = entity;
+	public void createNew() {
+		this.entity = crudService.createNew();
 		openDialog(entity, true);
 	}
 
