@@ -1,11 +1,7 @@
 package com.vaadin.starter.bakery.backend.service;
 
-import java.util.Optional;
-
 import javax.persistence.EntityNotFoundException;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
@@ -38,9 +34,5 @@ public interface CrudService<T extends AbstractEntity> {
 		return entity;
 	}
 
-	long countAnyMatching(Optional<String> filter);
-
-	Page<T> findAnyMatching(Optional<String> filter, Pageable pageable);
-
-	Page<T> find(Pageable pageable);
+	T createNew();
 }
