@@ -13,6 +13,7 @@ import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.HistoryItem;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.ui.components.storefront.converter.StorefrontLocalDateConverter;
+import com.vaadin.starter.bakery.ui.converters.CurrencyFormatter;
 import com.vaadin.starter.bakery.ui.converters.LocalDateTimeConverter;
 import com.vaadin.starter.bakery.ui.converters.LocalTimeConverter;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
@@ -93,6 +94,7 @@ public class OrderDetail extends PolymerTemplate<OrderDetail.Model> {
 		@Convert(value = StorefrontLocalDateConverter.class, path = "dueDate")
 		@Convert(value = LocalTimeConverter.class, path = "dueTime")
 		@Convert(value = OrderStateConverter.class, path = "state")
+		@Convert(value = CurrencyFormatter.class, path = "items.product.price")
 		void setItem(Order order);
 
 		@Include({ "message", "createdBy.firstName", "timestamp", "newState" })

@@ -15,9 +15,13 @@ public class CurrencyFormatter implements ModelConverter<Integer, String> {
 	}
 
 	@Override
+	public Class<Integer> getModelType() {
+		return Integer.TYPE;
+	}
+
+	@Override
 	public Integer toModel(String presentationValue) {
 		// Not implemented
 		throw new UnsupportedOperationException();
 	}
-
 }

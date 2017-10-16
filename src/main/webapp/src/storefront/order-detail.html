@@ -157,7 +157,7 @@
                       </td>
                       <td class="dim">&times;</td>
                       <td class="money">
-                        [[_getCurrency(item.product.price)]]
+                        [[item.product.price]]
                       </td>
                     </tr>
                   </template>
@@ -171,7 +171,7 @@
             <template is="dom-repeat" items="[[history]]" as="event">
               <div class="history-line">
                 <span class="bold">[[event.createdBy.firstName]]</span>
-                <span class="secondary">[[_getFullDate(event.timestamp)]]</span>
+                <span class="secondary">[[event.timestamp]]</span>
                 <storefront-item-badge status="[[event.newState]]" small></storefront-item-badge>
               </div>
               <div class="comment">[[event.message]]</div>
@@ -205,7 +205,7 @@
   </template>
 
   <script>
-    class OrderDetail extends window.LocaleUtilsMixin(window.ScrollShadowMixin(Polymer.Element)) {
+    class OrderDetail extends window.ScrollShadowMixin(Polymer.Element) {
       static get is() {
         return 'order-detail';
       }
