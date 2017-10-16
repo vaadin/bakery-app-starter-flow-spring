@@ -105,11 +105,7 @@
   </template>
 
   <script>
-    class OrderEdit extends
-      window.EditableItemMixin(
-        window.NotificationMixin(
-          window.LocaleUtilsMixin(
-            window.ScrollShadowMixin(Polymer.Element)))) {
+    class OrderEdit extends window.ScrollShadowMixin(Polymer.Element) {
 
       static get is() {
         return 'order-edit';
