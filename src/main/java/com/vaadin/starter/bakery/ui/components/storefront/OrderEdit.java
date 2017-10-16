@@ -21,6 +21,7 @@ import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.ui.HasToast;
 import com.vaadin.starter.bakery.ui.converters.LocalTimeConverter;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
+import com.vaadin.starter.bakery.ui.event.SaveEvent;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;

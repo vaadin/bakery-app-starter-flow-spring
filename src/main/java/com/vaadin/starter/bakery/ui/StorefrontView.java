@@ -16,6 +16,7 @@ import com.vaadin.flow.router.LocationChangeEvent;
 import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
 import com.vaadin.router.Title;
+import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.backend.service.ProductService;
@@ -26,6 +27,8 @@ import com.vaadin.starter.bakery.ui.components.storefront.OrderEdit;
 import com.vaadin.starter.bakery.ui.components.viewselector.ViewSelector;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.starter.bakery.ui.entities.Order;
+import com.vaadin.starter.bakery.ui.event.CancelEvent;
+import com.vaadin.starter.bakery.ui.event.DeleteEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
 import com.vaadin.starter.bakery.ui.presenter.Confirmer;
 import com.vaadin.starter.bakery.ui.presenter.EntityView;
@@ -35,6 +38,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.ClientDelegate;
 import com.vaadin.ui.common.HtmlImport;
+import com.vaadin.ui.event.ComponentEventListener;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
@@ -82,10 +86,6 @@ implements HasLogger, EntityView<com.vaadin.starter.bakery.backend.data.entity.O
 		this.userService = userService;
 		addToSlot(this, viewSelector, "view-selector-slot");
 		this.presenter = new Presenter();
-
-		// Bubble events
-		orderEdit.addCancelListener(StorefrontView.this::fireEvent);
-		orderDetail.addListener(SaveEvent.class, StorefrontView.this::fireEvent);
 
 		searchBar.setActionText("New order");
 		searchBar.setCheckboxText("Show past orders");
@@ -193,6 +193,21 @@ implements HasLogger, EntityView<com.vaadin.starter.bakery.backend.data.entity.O
 		return confirmationDialog;
 	}
 
+	@Override
+	public Registration addSaveListener(ComponentEventListener<SaveEvent> listener) {
+		return orderDetail.addSaveListenter(listener);
+	}
+
+	@Override
+	public Registration addCancelListener(ComponentEventListener<CancelEvent> listener) {
+		return orderEdit.addCancelListener(listener);
+	}
+
+	@Override
+	public Registration addDeleteListener(ComponentEventListener<DeleteEvent> listener) {
+		return null; // Not supported.
+	}
+
 	class Presenter extends EntityViewPresenter<com.vaadin.starter.bakery.backend.data.entity.Order> {
 
 		public Presenter() {
@@ -200,23 +215,23 @@ implements HasLogger, EntityView<com.vaadin.starter.bakery.backend.data.entity.O
 			orderEdit.addReviewListener(e -> {
 				try {
 					writeEntity();
-					StorefrontView.this.details(getEntity(), true);
+					details(getEntity(), true);
 				} catch (ValidationException ex) {
 					showValidationError();
 				}
 			});
-			orderDetail.addBackListener(e -> StorefrontView.this.showOrderEdit());
+			orderDetail.addBackListener(e -> showOrderEdit());
 			orderDetail.addEditListener(e -> {
-				StorefrontView.this.orderEdit.read(getEntity());
-				StorefrontView.this.showOrderEdit();
+				orderEdit.read(getEntity());
+				showOrderEdit();
 			});
-			StorefrontView.this.orderDetail.addCommentListener(e -> {
+			orderDetail.addCommentListener(e -> {
 				if (e.getOrderId() == null) {
 					return;
 				}
 
 				addComment(e.getOrderId(), e.getMessage());
-				StorefrontView.this.details(orderService.findOrder(e.getOrderId()), false);
+				details(orderService.findOrder(e.getOrderId()), false);
 			});
 		}
 
@@ -232,7 +247,7 @@ implements HasLogger, EntityView<com.vaadin.starter.bakery.backend.data.entity.O
 
 		@Override
 		protected void openDialog(com.vaadin.starter.bakery.backend.data.entity.Order entity, boolean edit) {
-			StorefrontView.this.orderEdit.init(userService.getCurrentUser(), productService.getRepository().findAll());
+			orderEdit.init(userService.getCurrentUser(), productService.getRepository().findAll());
 			super.openDialog(entity, edit);
 		}
 

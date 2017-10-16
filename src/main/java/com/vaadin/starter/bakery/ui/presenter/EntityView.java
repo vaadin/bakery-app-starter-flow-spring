@@ -3,11 +3,15 @@ package com.vaadin.starter.bakery.ui.presenter;
 import java.util.Optional;
 
 import com.vaadin.data.ValidationException;
+import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.ui.HasToast;
+import com.vaadin.starter.bakery.ui.event.CancelEvent;
+import com.vaadin.starter.bakery.ui.event.DeleteEvent;
+import com.vaadin.starter.bakery.ui.event.SaveEvent;
 import com.vaadin.ui.UI;
-import com.vaadin.ui.event.ComponentEventNotifier;
+import com.vaadin.ui.event.ComponentEventListener;
 
-public interface EntityView<T> extends HasToast, ComponentEventNotifier {
+public interface EntityView<T> extends HasToast {
 
 	void closeDialog(boolean updated);
 
@@ -31,4 +35,11 @@ public interface EntityView<T> extends HasToast, ComponentEventNotifier {
 	boolean isDirty();
 
 	void write(T entity) throws ValidationException;
+
+	Registration addSaveListener(ComponentEventListener<SaveEvent> listener);
+
+	Registration addCancelListener(ComponentEventListener<CancelEvent> listener);
+
+	Registration addDeleteListener(ComponentEventListener<DeleteEvent> listener);
+
 }

@@ -109,6 +109,10 @@ public class OrderDetail extends PolymerTemplate<OrderDetail.Model> {
 		void setTotalPrice(String totalPrice);
 	}
 
+	public Registration addSaveListenter(ComponentEventListener<SaveEvent> listener) {
+		return addListener(SaveEvent.class, listener);
+	}
+
 	public Registration addEditListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {
 		return edit.addClickListener(listener);
 	}

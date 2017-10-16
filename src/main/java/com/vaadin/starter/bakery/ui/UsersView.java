@@ -18,6 +18,7 @@ import com.vaadin.flow.router.View;
 import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
 import com.vaadin.router.Title;
+import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.User;
@@ -35,6 +36,7 @@ import com.vaadin.starter.bakery.ui.presenter.EntityViewPresenter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HtmlImport;
+import com.vaadin.ui.event.ComponentEventListener;
 import com.vaadin.ui.polymertemplate.EventHandler;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
@@ -84,10 +86,6 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 		view.setActionText("New user");
 		view.addActionClickListener(e -> presenter.createNew());
 		view.addFilterChangeListener(this::filterUsers);
-		// Forward these events to the presenter
-		editor.addListener(SaveEvent.class, this::fireEvent);
-		editor.addListener(DeleteEvent.class, this::fireEvent);
-		editor.addListener(CancelEvent.class, this::fireEvent);
 	}
 
 	@Override
@@ -133,5 +131,20 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	@Override
 	public void write(User entity) throws ValidationException {
 		editor.write(entity);
+	}
+
+	@Override
+	public Registration addSaveListener(ComponentEventListener<SaveEvent> listener) {
+		return editor.addListener(SaveEvent.class, listener);
+	}
+
+	@Override
+	public Registration addCancelListener(ComponentEventListener<CancelEvent> listener) {
+		return editor.addListener(CancelEvent.class, listener);
+	}
+
+	@Override
+	public Registration addDeleteListener(ComponentEventListener<DeleteEvent> listener) {
+		return editor.addListener(DeleteEvent.class, listener);
 	}
 }
