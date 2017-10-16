@@ -1,21 +1,20 @@
 package com.vaadin.starter.bakery.ui.view;
 
-import org.openqa.selenium.support.ui.ExpectedConditions;
-
-import com.vaadin.starter.bakery.By;
 import com.vaadin.starter.bakery.elements.ButtonElement;
 import com.vaadin.starter.bakery.elements.PasswordFieldElement;
 import com.vaadin.starter.bakery.elements.TextFieldElement;
 import com.vaadin.testbench.TestBenchElement;
+import com.vaadin.testbench.elementsbase.Element;
 
+@Element("bakery-login")
 public class LoginViewElement extends TestBenchElement {
 
-	public void login(String username, String password) {
+	public StoreFrontViewElement login(String username, String password) {
 		getLogin().setValue(username);
 		getPassword().setValue(password);
 		getSignIn().click();
 
-		waitUntil(ExpectedConditions.presenceOfElementLocated(By.tagName("bakery-storefront")));
+		return $(StoreFrontViewElement.class).onPage().waitForFirst();
 	}
 
 	public ButtonElement getSignIn() {

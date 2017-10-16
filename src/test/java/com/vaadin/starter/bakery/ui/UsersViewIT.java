@@ -8,16 +8,14 @@ import org.openqa.selenium.WebElement;
 
 import com.vaadin.starter.bakery.AbstractIT;
 import com.vaadin.starter.bakery.By;
+import com.vaadin.starter.bakery.ui.view.StoreFrontViewElement;
 import com.vaadin.testbench.TestBenchElement;
 
 public class UsersViewIT extends AbstractIT {
 
 	private UsersViewElement openTestPage() {
-		openLoginView().login("admin@vaadin.com", "admin");
-		WebElement usersNavLink = findElement(By.shadowSelector("bakery-app::shadow bakery-navigation::shadow paper-tab[page-id='users']"));
-		usersNavLink.click();
-		WebElement usersViewElement = waitUntilElementPresent(By.tagName("bakery-users"));
-		return ((TestBenchElement) usersViewElement).wrap(UsersViewElement.class);
+		StoreFrontViewElement storefront = openLoginView().login("admin@vaadin.com", "admin");
+		return storefront.getMenu().navigateToUsers();
 	}
 
 	@Test
@@ -29,7 +27,7 @@ public class UsersViewIT extends AbstractIT {
 
 		WebElement bakerCell = page.getGridCell("baker@vaadin.com");
 		Assert.assertNotNull(bakerCell);
-		
+
 		bakerCell.click();
 		Assert.assertTrue(editor.isDisplayed());
 
