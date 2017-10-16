@@ -22,7 +22,7 @@ public class UserEditElement extends TestBenchElement {
 	}
 
 	public PasswordFieldElement getPasswordField() {
-		return $(PasswordFieldElement.class).id("password");
+		return $(PasswordFieldElement.class).id("user-edit-password");
 	}
 
 	public EditFormElement getEditForm() {
