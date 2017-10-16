@@ -109,11 +109,11 @@
           <label slot="label">Due</label>
           <vaadin-form-layout responsive-steps='[{"columns": 1}, {"minWidth": "180px", "columns": 2}]'>
             <div class="date">
-              <h3>[[_getDay(item.dueDate)]]</h3>
-              <span class="dim">[[_getWeekday(item.dueDate)]]</span>
+              <h3>[[item.dueDate.day]]</h3>
+              <span class="dim">[[item.dueDate.weekday]]</span>
             </div>
             <div class="time">
-              <h3>[[_getTime(item.dueTime)]]</h3>
+              <h3>[[item.dueTime]]</h3>
               <span class="dim">[[item.pickupLocation.name]]</span>
             </div>
           </vaadin-form-layout>

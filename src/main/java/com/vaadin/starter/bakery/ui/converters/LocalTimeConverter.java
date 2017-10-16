@@ -24,7 +24,7 @@ public class LocalTimeConverter implements ModelConverter<LocalTime, String>, Bi
 		ampm.put(0L, "a.m.");
 		ampm.put(1L, "p.m.");
 		formatter = new DateTimeFormatterBuilder().parseCaseInsensitive().parseLenient()
-				.appendValue(java.time.temporal.ChronoField.HOUR_OF_DAY, 1, 2, SignStyle.NOT_NEGATIVE)
+				.appendValue(java.time.temporal.ChronoField.CLOCK_HOUR_OF_AMPM, 1, 2, SignStyle.NOT_NEGATIVE)
 				.appendLiteral(':').appendValue(java.time.temporal.ChronoField.MINUTE_OF_HOUR, 2).optionalStart()
 				.appendLiteral(' ').optionalEnd().appendText(java.time.temporal.ChronoField.AMPM_OF_DAY, ampm)
 				.toFormatter();

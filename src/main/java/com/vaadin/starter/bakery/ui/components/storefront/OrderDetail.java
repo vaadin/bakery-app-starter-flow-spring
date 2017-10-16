@@ -3,6 +3,8 @@
  */
 package com.vaadin.starter.bakery.ui.components.storefront;
 
+import java.util.List;
+
 import com.vaadin.flow.dom.Element;
 import com.vaadin.flow.model.Convert;
 import com.vaadin.flow.model.Include;
@@ -10,7 +12,7 @@ import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.HistoryItem;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
-import com.vaadin.starter.bakery.ui.converters.LocalDateConverter;
+import com.vaadin.starter.bakery.ui.components.storefront.converter.StorefrontLocalDateConverter;
 import com.vaadin.starter.bakery.ui.converters.LocalDateTimeConverter;
 import com.vaadin.starter.bakery.ui.converters.LocalTimeConverter;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
@@ -24,8 +26,6 @@ import com.vaadin.ui.event.ComponentEventListener;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import com.vaadin.ui.textfield.TextField;
-
-import java.util.List;
 
 @Tag("order-detail")
 @HtmlImport("context://src/storefront/order-detail.html")
@@ -86,11 +86,11 @@ public class OrderDetail extends PolymerTemplate<OrderDetail.Model> {
 	}
 
 	public interface Model extends TemplateModel {
-		@Include({ "id", "dueDate", "dueTime", "state", "pickupLocation.name", "customer.fullName",
-				"customer.phoneNumber", "customer.details", "items.product.name", "items.comment", "items.quantity",
-				"items.product.price" })
+		@Include({ "id", "dueDate.day", "dueDate.weekday", "dueTime", "state", "pickupLocation.name", "customer.fullName",
+			"customer.phoneNumber", "customer.details", "items.product.name", "items.comment", "items.quantity",
+		"items.product.price" })
 		@Convert(value = LongToStringConverter.class, path = "id")
-		@Convert(value = LocalDateConverter.class, path = "dueDate")
+		@Convert(value = StorefrontLocalDateConverter.class, path = "dueDate")
 		@Convert(value = LocalTimeConverter.class, path = "dueTime")
 		@Convert(value = OrderStateConverter.class, path = "state")
 		void setItem(Order order);
