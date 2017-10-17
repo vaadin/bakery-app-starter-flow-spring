@@ -8,6 +8,7 @@ import com.vaadin.flow.router.View;
 import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
 import com.vaadin.router.Title;
+import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
@@ -16,6 +17,7 @@ import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
 import com.vaadin.starter.bakery.ui.components.ItemsView;
 import com.vaadin.starter.bakery.ui.components.ProductEdit;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
+import com.vaadin.starter.bakery.ui.event.DecisionEvent;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
@@ -90,17 +92,32 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 
 	private void onBeforeDelete(HasClickListeners.ClickEvent<Button> deleteEvent) {
 		confirmationDialog.show(CONFIRM_CAPTION_DELETE, CONFIRM_MESSAGE_DELETE, CONFIRM_OKBUTTON_DELETE,
-				CONFIRM_CANCELBUTTON_DELETE, okButtonEvent -> deleteProduct(editor.getProductId()), null);
+				CONFIRM_CANCELBUTTON_DELETE);
+		RegistrationHolder registrationHolder = new RegistrationHolder();
+		registrationHolder.registration = confirmationDialog.addListener(DecisionEvent.class,
+				e -> {
+					registrationHolder.registration.remove();
+					e.ifConfirmed(() -> deleteProduct(editor.getProductId()));
+				});
 	}
 
 	@EventHandler
 	private void onBeforeClose() {
 		if (editor.isDirty()) {
 			confirmationDialog.show(CONFIRM_CAPTION_CANCEL, CONFIRM_MESSAGE_CANCEL_PRODUCT, CONFIRM_OKBUTTON_CANCEL,
-					CONFIRM_CANCELBUTTON_CANCEL, okButtonEvent -> navigateToProduct(null), null);
+					CONFIRM_CANCELBUTTON_CANCEL);
+			RegistrationHolder registrationHolder = new RegistrationHolder();
+			registrationHolder.registration = confirmationDialog.addListener(DecisionEvent.class, e -> {
+				registrationHolder.registration.remove();
+				e.ifConfirmed(() -> navigateToProduct(null));
+			});
 		} else {
 			navigateToProduct(null);
 		}
+	}
+
+	class RegistrationHolder {
+		private Registration registration;
 	}
 
 	@Override

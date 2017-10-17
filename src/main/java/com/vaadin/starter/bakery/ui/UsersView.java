@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.vaadin.data.ValidationException;
 import com.vaadin.flow.model.Convert;
 import com.vaadin.flow.model.Include;
 import com.vaadin.flow.model.TemplateModel;
@@ -17,19 +18,25 @@ import com.vaadin.flow.router.View;
 import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
 import com.vaadin.hummingbird.ext.spring.annotations.Route;
 import com.vaadin.router.Title;
+import com.vaadin.shared.Registration;
+import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.UserService;
 import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
-import com.vaadin.starter.bakery.ui.components.EntityView;
 import com.vaadin.starter.bakery.ui.components.ItemsView;
 import com.vaadin.starter.bakery.ui.components.UserEdit;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
-import com.vaadin.starter.bakery.ui.messages.Message;
-import com.vaadin.starter.bakery.ui.presenter.EntityEditPresenter;
+import com.vaadin.starter.bakery.ui.event.CancelEvent;
+import com.vaadin.starter.bakery.ui.event.DeleteEvent;
+import com.vaadin.starter.bakery.ui.event.SaveEvent;
+import com.vaadin.starter.bakery.ui.presenter.Confirmer;
+import com.vaadin.starter.bakery.ui.presenter.EntityView;
+import com.vaadin.starter.bakery.ui.presenter.EntityViewPresenter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HtmlImport;
+import com.vaadin.ui.event.ComponentEventListener;
 import com.vaadin.ui.polymertemplate.EventHandler;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
@@ -40,7 +47,7 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 @ParentView(BakeryApp.class)
 @Title(BakeryConst.TITLE_USERS)
 @Secured(Role.ADMIN)
-public class UsersView extends PolymerTemplate<UsersView.Model> implements View, EntityView {
+public class UsersView extends PolymerTemplate<UsersView.Model> implements View, HasLogger, EntityView<User> {
 
 	public interface Model extends TemplateModel {
 
@@ -59,7 +66,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	@Id("user-confirmation-dialog")
 	private ConfirmationDialog confirmationDialog;
 
-	private EntityEditPresenter<User> presenter;
+	private EntityViewPresenter<User> presenter;
 
 	@Autowired
 	public UsersView(UserService userService, PasswordEncoder passwordEncoder) {
@@ -70,35 +77,20 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 		getElement().appendChild(editor.getElement());
 
 		editor.setPasswordEncoder(passwordEncoder);
-		presenter = new EntityEditPresenter<User>(userService, editor, this, "User");
+		presenter = new EntityViewPresenter<User>(userService, this, "User");
 		getElement().addEventListener("edit",
 				e -> navigateToEntity(getUI(), PAGE_USERS, e.getEventData().getString("event.detail")), "event.detail");
 
 		filterUsers(view.getFilter());
 
 		view.setActionText("New user");
-		view.addActionClickListener(e -> presenter.createNew(new User()));
+		view.addActionClickListener(e -> presenter.createNew());
 		view.addFilterChangeListener(this::filterUsers);
 	}
 
 	@Override
 	public void onLocationChange(LocationChangeEvent locationChangeEvent) {
-		setEditableUser(locationChangeEvent.getPathParameter("id"));
-	}
-
-	private void setEditableUser(String userId) {
-		if (userId == null || userId.isEmpty()) {
-			view.openDialog(false);
-			return;
-		}
-
-		try {
-			presenter.edit(Long.parseLong(userId));
-		} catch (NumberFormatException e) {
-			toast("Invalid id", false);
-			getLogger().error("Expected to get a numeric user id, but got: " + userId, e);
-			view.openDialog(false);
-		}
+		presenter.onLocationChange(locationChangeEvent);
 	}
 
 	private void filterUsers(String filter) {
@@ -121,12 +113,38 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	}
 
 	@Override
-	public void confirm(Message message, Runnable operation) {
-		confirmationDialog.show(message, ev -> operation.run());
+	public void openDialog(User user, boolean edit) {
+		editor.read(user);
+		view.openDialog(true);
 	}
 
 	@Override
-	public void openDialog() {
-		view.openDialog(true);
+	public Confirmer getConfirmer() {
+		return confirmationDialog;
+	}
+
+	@Override
+	public boolean isDirty() {
+		return editor.isDirty();
+	}
+
+	@Override
+	public void write(User entity) throws ValidationException {
+		editor.write(entity);
+	}
+
+	@Override
+	public Registration addSaveListener(ComponentEventListener<SaveEvent> listener) {
+		return editor.addListener(SaveEvent.class, listener);
+	}
+
+	@Override
+	public Registration addCancelListener(ComponentEventListener<CancelEvent> listener) {
+		return editor.addListener(CancelEvent.class, listener);
+	}
+
+	@Override
+	public Registration addDeleteListener(ComponentEventListener<DeleteEvent> listener) {
+		return editor.addListener(DeleteEvent.class, listener);
 	}
 }

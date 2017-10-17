@@ -6,14 +6,20 @@
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-column.html">
 
 <link rel="import" href="../app/bakery-search.html">
-<link rel="import" href="order-edit-wrapper.html">
 <link rel="import" href="storefront-item-detail.html">
 <link rel="import" href="storefront-item-detail-wrapper.html">
 
-<link rel="import" href="order-edit-wrapper.html">
 <link rel="import" href="../elements/confirm-dialog.html">
 <link rel="import" href="../elements/item-detail-dialog.html">
 <link rel="import" href="../elements/utils-mixin.html">
+<link rel="import" href="../elements/viewselector/view-selector.html">
+
+<!-- 
+Added dynamically
+ -->
+<link rel="import" href="order-edit.html">
+<link rel="import" href="order-detail.html">
+
 
 <dom-module id="bakery-storefront">
   <template>
@@ -99,7 +105,9 @@
           <storefront-item-detail item="[[_selectedItem]]" on-close="_unselectItem" on-edit="_onEdit" desktop-view="[[desktopView]]"></storefront-item-detail>
         </item-detail-dialog>
       </template>
-      <slot name="order-edit-wrapper" on-slotchange="_updateEditWrapperSlot"></slot>
+      <item-detail-dialog desktop-view$=[[desktopView]] opened=[[editing]] on-before-close="_onBeforeCloseEdit">
+        <slot name="view-selector-slot" on-slotchange="_updateViewSelectorSlot"></slot>
+      </item-detail-dialog>
     </div>
     <confirm-dialog id="confirmation-dialog"></confirm-dialog>
   </template>
@@ -114,11 +122,14 @@
         return {
           desktopView: {
             type: Boolean,
-            observer: '_updateDesktoViewOnEditWrapper'
+            observer: '_updateDesktopViewOnViewSelectorChildren'
           },
           orders: {
             type: Array,
             notify: true
+          },
+          editing: {
+            type: Boolean
           },
           touchScrolling: {
             type: Boolean,
@@ -163,6 +174,7 @@
 
       _onCommentAdded(e) {
         this.$server.addComment(e.detail.orderId, e.detail.message);
+        this._notifyResize();
       }
 
       _isSelected(order) {
@@ -198,16 +210,20 @@
         return desktopView ? !_editableItem : !_selectedItem && !_editableItem;
       }
 
-      _updateEditWrapperSlot() {
-        this.$.orderEditWrapper = this.querySelector('order-edit-wrapper');
-        this._updateDesktoViewOnEditWrapper();
+      _updateViewSelectorSlot() {
+        this.$.viewSelector = this.querySelector('view-selector');
+        this.$.viewSelector.addEventListener('children-list-changed', this._updateDesktopViewOnViewSelectorChildren.bind(this));
+        this._updateDesktopViewOnViewSelectorChildren();
       }
 
-      _updateDesktoViewOnEditWrapper() {
-        const element = this.$.orderEditWrapper;
-        if (element) {
-          element.desktopView = this.desktopView;
+      _updateDesktopViewOnViewSelectorChildren() {
+        if (this.$.viewSelector) {
+          this.$.viewSelector.forEachChild(child => child.desktopView = this.desktopView);
         }
+      }
+
+      _onBeforeCloseEdit(e) {
+        e.preventDefault();
       }
     }
 

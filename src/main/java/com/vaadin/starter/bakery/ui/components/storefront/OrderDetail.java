@@ -14,6 +14,8 @@ import com.vaadin.starter.bakery.ui.converters.LocalDateConverter;
 import com.vaadin.starter.bakery.ui.converters.LocalDateTimeConverter;
 import com.vaadin.starter.bakery.ui.converters.LocalTimeConverter;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
+import com.vaadin.starter.bakery.ui.event.CancelEvent;
+import com.vaadin.starter.bakery.ui.event.SaveEvent;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
@@ -63,6 +65,8 @@ public class OrderDetail extends PolymerTemplate<OrderDetail.Model> {
 				fireEvent(new CommentEvent(order.getId(), commentField.getValue()));
 			}
 		});
+		save.addClickListener(e -> fireEvent(new SaveEvent(this, false)));
+		cancel.addClickListener(e -> fireEvent(new CancelEvent(this, false)));
 	}
 
 	public void display(Order order, boolean review) {
@@ -87,8 +91,8 @@ public class OrderDetail extends PolymerTemplate<OrderDetail.Model> {
 
 	public interface Model extends TemplateModel {
 		@Include({ "id", "dueDate", "dueTime", "state", "pickupLocation.name", "customer.fullName",
-				"customer.phoneNumber", "customer.details", "items.product.name", "items.comment", "items.quantity",
-				"items.product.price" })
+			"customer.phoneNumber", "customer.details", "items.product.name", "items.comment", "items.quantity",
+		"items.product.price" })
 		@Convert(value = LongToStringConverter.class, path = "id")
 		@Convert(value = LocalDateConverter.class, path = "dueDate")
 		@Convert(value = LocalTimeConverter.class, path = "dueTime")
@@ -105,12 +109,8 @@ public class OrderDetail extends PolymerTemplate<OrderDetail.Model> {
 		void setTotalPrice(String totalPrice);
 	}
 
-	public Registration addSaveListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {
-		return save.addClickListener(listener);
-	}
-
-	public Registration addCancelListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {
-		return cancel.addClickListener(listener);
+	public Registration addSaveListenter(ComponentEventListener<SaveEvent> listener) {
+		return addListener(SaveEvent.class, listener);
 	}
 
 	public Registration addEditListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {
