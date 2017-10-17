@@ -8,6 +8,11 @@ import com.vaadin.testbench.elementsbase.Element;
 @Element("bakery-navigation")
 public class BakeryNavigationElement extends TestBenchElement {
 
+	public DashboardViewElement navigateToDashboard() {
+		$(PaperTabElement.class).attribute("page-id", "dashboard").first().click();
+		return $(DashboardViewElement.class).onPage().waitForFirst();
+	}
+
 	public UsersViewElement navigateToUsers() {
 		$(PaperTabElement.class).attribute("page-id", "users").first().click();
 		return $(UsersViewElement.class).onPage().waitForFirst();
