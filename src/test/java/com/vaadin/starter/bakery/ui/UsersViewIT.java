@@ -4,10 +4,10 @@ import static com.vaadin.starter.bakery.backend.service.UserService.MODIFY_LOCKE
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import com.vaadin.starter.bakery.AbstractIT;
-import com.vaadin.starter.bakery.By;
 import com.vaadin.starter.bakery.elements.PaperToastElement;
 import com.vaadin.starter.bakery.elements.PasswordFieldElement;
 import com.vaadin.starter.bakery.elements.TextFieldElement;
