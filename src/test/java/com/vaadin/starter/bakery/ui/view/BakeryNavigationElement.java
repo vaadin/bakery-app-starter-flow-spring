@@ -13,4 +13,9 @@ public class BakeryNavigationElement extends TestBenchElement {
 		return $(UsersViewElement.class).onPage().waitForFirst();
 	}
 
+	public ProductsViewElement navigateToProducts() {
+		$(PaperTabElement.class).attribute("page-id", "products").first().click();
+		return $(ProductsViewElement.class).onPage().waitForFirst();
+	}
+
 }

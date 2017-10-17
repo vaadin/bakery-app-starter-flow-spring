@@ -42,7 +42,8 @@ public class StorefrontViewIT extends AbstractIT {
 
 		Assert.assertFalse(firstOrder.isOrderSelected());
 
-		//	order-edit is not put into slot after click.
+		//	url is not changed and order-edit is not put into slot after click.
+		//  getDriver().getCurrentUrl().endsWith("edit");
 		//	OrderEditElement orderEdit = storefrontPage.getOrderEdit();
 	}
 
