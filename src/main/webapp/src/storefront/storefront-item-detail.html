@@ -190,16 +190,16 @@
     </div>
 
     <div class="footer">
-      <vaadin-button on-click="_cancel">[[_cancelText()]]</vaadin-button>
+      <vaadin-button id="collapse-order-detail" on-click="_cancel">[[_cancelText()]]</vaadin-button>
       <div class="total money">Total [[_getCurrency(item.totalPrice)]]</div>
       <dom-if if="[[review]]" hidden>
         <template>
-          <vaadin-button theme="primary success" class="edit-button" on-click="_save">Place Order ✓</vaadin-button>
+          <vaadin-button id="place-order" theme="primary success" class="edit-button" on-click="_save">Place Order ✓</vaadin-button>
         </template>
       </dom-if>
       <dom-if if="[[!review]]" hidden>
         <template>
-          <vaadin-button theme="primary icon" class="edit-button" on-click="_edit">
+          <vaadin-button id="edit-order-detail" theme="primary icon" class="edit-button" on-click="_edit">
             <span>Edit order</span>
             <iron-icon icon="valo:edit"></iron-icon>
           </vaadin-button>

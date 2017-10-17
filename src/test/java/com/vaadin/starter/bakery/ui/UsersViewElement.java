@@ -1,5 +1,6 @@
 package com.vaadin.starter.bakery.ui;
 
+import com.vaadin.starter.bakery.ui.view.HasGrid;
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -12,14 +13,11 @@ import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elementsbase.Element;
 
 @Element("bakery-users")
-public class UsersViewElement extends TestBenchElement {
+public class UsersViewElement extends TestBenchElement implements HasGrid {
 
+	@Override
 	public GridElement getGrid() {
 		return $(GridElement.class).id("grid");
-	}
-
-	public List<WebElement> getGridCells() {
-		return getGrid().findElements(By.cssSelector("vaadin-grid-cell-content"));
 	}
 
 	public ItemsViewElement getItemsView() {
@@ -28,10 +26,6 @@ public class UsersViewElement extends TestBenchElement {
 
 	public UserEditElement getUserEdit() {
 		return $(UserEditElement.class).first();
-	}
-
-	public WebElement getGridCell(String text) {
-		return getGridCells().stream().filter(cell -> cell.getText().equals(text)).findFirst().orElse(null);
 	}
 
 	public ConfirmationDialogElement getConfirmDialog() {
