@@ -109,11 +109,11 @@
           <label slot="label">Due</label>
           <vaadin-form-layout responsive-steps='[{"columns": 1}, {"minWidth": "180px", "columns": 2}]'>
             <div class="date">
-              <h3>[[_getDay(item.dueDate)]]</h3>
-              <span class="dim">[[_getWeekday(item.dueDate)]]</span>
+              <h3>[[item.dueDate.day]]</h3>
+              <span class="dim">[[item.dueDate.weekday]]</span>
             </div>
             <div class="time">
-              <h3>[[_getTime(item.dueTime)]]</h3>
+              <h3>[[item.dueTime]]</h3>
               <span class="dim">[[item.pickupLocation.name]]</span>
             </div>
           </vaadin-form-layout>
@@ -157,7 +157,7 @@
                       </td>
                       <td class="dim">&times;</td>
                       <td class="money">
-                        [[_getCurrency(item.product.price)]]
+                        [[item.product.price]]
                       </td>
                     </tr>
                   </template>
@@ -171,7 +171,7 @@
             <template is="dom-repeat" items="[[history]]" as="event">
               <div class="history-line">
                 <span class="bold">[[event.createdBy.firstName]]</span>
-                <span class="secondary">[[_getFullDate(event.timestamp)]]</span>
+                <span class="secondary">[[event.timestamp]]</span>
                 <storefront-item-badge status="[[event.newState]]" small></storefront-item-badge>
               </div>
               <div class="comment">[[event.message]]</div>
@@ -205,7 +205,7 @@
   </template>
 
   <script>
-    class OrderDetail extends window.LocaleUtilsMixin(window.ScrollShadowMixin(Polymer.Element)) {
+    class OrderDetail extends window.ScrollShadowMixin(Polymer.Element) {
       static get is() {
         return 'order-detail';
       }
