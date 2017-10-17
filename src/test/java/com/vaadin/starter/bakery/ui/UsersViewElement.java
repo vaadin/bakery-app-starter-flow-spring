@@ -27,7 +27,7 @@ public class UsersViewElement extends TestBenchElement {
 	}
 
 	public UserEditElement getUserEdit() {
-		return findElement(By.shadowSelector("user-edit[slot='user-editor']")).$(UserEditElement.class).onPage().first();
+		return $(UserEditElement.class).first();
 	}
 
 	public WebElement getGridCell(String text) {
