@@ -3,8 +3,6 @@
  */
 package com.vaadin.starter.bakery.ui.components.storefront;
 
-import java.util.List;
-
 import com.vaadin.flow.dom.Element;
 import com.vaadin.flow.model.Convert;
 import com.vaadin.flow.model.Include;
@@ -17,6 +15,8 @@ import com.vaadin.starter.bakery.ui.converters.CurrencyFormatter;
 import com.vaadin.starter.bakery.ui.converters.LocalDateTimeConverter;
 import com.vaadin.starter.bakery.ui.converters.LocalTimeConverter;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
+import com.vaadin.starter.bakery.ui.event.CancelEvent;
+import com.vaadin.starter.bakery.ui.event.SaveEvent;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
@@ -27,6 +27,8 @@ import com.vaadin.ui.event.ComponentEventListener;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import com.vaadin.ui.textfield.TextField;
+
+import java.util.List;
 
 @Tag("order-detail")
 @HtmlImport("context://src/storefront/order-detail.html")
@@ -64,6 +66,8 @@ public class OrderDetail extends PolymerTemplate<OrderDetail.Model> {
 				fireEvent(new CommentEvent(order.getId(), commentField.getValue()));
 			}
 		});
+		save.addClickListener(e -> fireEvent(new SaveEvent(this, false)));
+		cancel.addClickListener(e -> fireEvent(new CancelEvent(this, false)));
 	}
 
 	public void display(Order order, boolean review) {
@@ -107,12 +111,8 @@ public class OrderDetail extends PolymerTemplate<OrderDetail.Model> {
 		void setTotalPrice(String totalPrice);
 	}
 
-	public Registration addSaveListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {
-		return save.addClickListener(listener);
-	}
-
-	public Registration addCancelListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {
-		return cancel.addClickListener(listener);
+	public Registration addSaveListenter(ComponentEventListener<SaveEvent> listener) {
+		return addListener(SaveEvent.class, listener);
 	}
 
 	public Registration addEditListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {

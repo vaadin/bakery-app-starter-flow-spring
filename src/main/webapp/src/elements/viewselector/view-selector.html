@@ -1,0 +1,28 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+
+
+<dom-module id="view-selector">
+  <template>
+      <slot on-slotchange="_fireChildrenListChangedEvent"></slot>
+  </template>
+
+  <script>
+    class ViewSelector extends Polymer.Element {
+
+      static get is() {
+        return 'view-selector';
+      }
+
+      _fireChildrenListChangedEvent() {
+        this.dispatchEvent(new CustomEvent('children-list-changed', {bubbles: true, composed: true}));
+      }
+
+      forEachChild(childConsumer) {
+        Array.from(this.children).forEach(childConsumer);
+      }
+
+    }
+
+    window.customElements.define(ViewSelector.is, ViewSelector);
+  </script>
+</dom-module>

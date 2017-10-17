@@ -1,6 +1,9 @@
 package com.vaadin.starter.bakery.backend.service;
 
+import static java.util.stream.Collectors.toSet;
+
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,36 +18,39 @@ import java.util.function.BiConsumer;
 import javax.transaction.Transactional;
 import javax.validation.ValidationException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import com.vaadin.starter.bakery.app.BeanLocator;
 import com.vaadin.starter.bakery.backend.data.DashboardData;
 import com.vaadin.starter.bakery.backend.data.DeliveryStats;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.User;
-import com.vaadin.starter.bakery.repositories.CustomerRepository;
 import com.vaadin.starter.bakery.repositories.OrderRepository;
 
-import static java.util.stream.Collectors.toSet;
-
 @Service
-public class OrderService {
+public class OrderService implements CrudService<Order> {
 
-	private OrderRepository orderRepository;
+	private final OrderRepository orderRepository;
 
-	private CustomerRepository customerRepository;
+	private final UserService userService;
 
-	private UserService userService;
+	@Autowired
+	public OrderService(OrderRepository orderRepository, UserService userService) {
+		super();
+		this.orderRepository = orderRepository;
+		this.userService = userService;
+	}
 
 	private static final Set<OrderState> notAvailableStates = Collections.unmodifiableSet(
 			EnumSet.complementOf(EnumSet.of(OrderState.DELIVERED, OrderState.READY, OrderState.CANCELLED)));
 
 	public Order findOrder(Long id) {
-		Order order = getOrderRepository().findOne(id);
+		Order order = orderRepository.findOne(id);
 		if (order == null) {
 			throw new ValidationException("Someone has already deleted the order. Please refresh the page.");
 		}
@@ -53,7 +59,7 @@ public class OrderService {
 
 	@Transactional(rollbackOn = Exception.class)
 	public Order saveOrder(Long id,BiConsumer<User,Order> orderFiller) {
-		User currentUser = getUserService().getCurrentUser();
+		User currentUser = userService.getCurrentUser();
 		Order order;
 		if(id == null) {
 			order = new Order(currentUser);
@@ -61,44 +67,36 @@ public class OrderService {
 			order = findOrder(id);
 		}
 		orderFiller.accept(currentUser,order);
-		return getOrderRepository().save(order);
+		return orderRepository.save(order);
 	}
 
 	@Transactional(rollbackOn = Exception.class)
 	public Order saveOrder(Order order) {
-		return getOrderRepository().save(order);
+		return orderRepository.save(order);
 	}
-	
+
 	@Transactional(rollbackOn = Exception.class)
 	public Order addComment(Long id, String comment) {
 		Order order = findOrder(id);
-		order.addHistoryItem(getUserService().getCurrentUser(), comment);
-		return getOrderRepository().save(order);
-	}
-
-	public Page<Order> findAfterDueDateWithState(LocalDate filterDate, List<OrderState> states, Pageable pageable) {
-		return getOrderRepository().findByDueDateAfterAndStateIn(filterDate, states, pageable);
-	}
-
-	public Page<Order> findAfterDueDate(LocalDate filterDate, Pageable pageable) {
-		return getOrderRepository().findByDueDateAfter(filterDate, pageable);
+		order.addHistoryItem(userService.getCurrentUser(), comment);
+		return orderRepository.save(order);
 	}
 
 	public Page<Order> findAnyMatchingAfterDueDate(Optional<String> optionalFilter,
 			Optional<LocalDate> optionalFilterDate, Pageable pageable) {
 		if (optionalFilter.isPresent() && !optionalFilter.get().isEmpty()) {
 			if (optionalFilterDate.isPresent()) {
-				return getOrderRepository().findByCustomerFullNameContainingIgnoreCaseOrStateInAndDueDateAfter(
+				return orderRepository.findByCustomerFullNameContainingIgnoreCaseOrStateInAndDueDateAfter(
 						optionalFilter.get(), matchingStates(optionalFilter.get()), optionalFilterDate.get(), pageable);
 			} else {
-				return getOrderRepository().findByCustomerFullNameContainingIgnoreCaseOrStateIn(optionalFilter.get(),
+				return orderRepository.findByCustomerFullNameContainingIgnoreCaseOrStateIn(optionalFilter.get(),
 						matchingStates(optionalFilter.get()), pageable);
 			}
 		} else {
 			if (optionalFilterDate.isPresent()) {
-				return getOrderRepository().findByDueDateAfter(optionalFilterDate.get(), pageable);
+				return orderRepository.findByDueDateAfter(optionalFilterDate.get(), pageable);
 			} else {
-				return getOrderRepository().findAll(pageable);
+				return orderRepository.findAll(pageable);
 			}
 		}
 	}
@@ -106,44 +104,32 @@ public class OrderService {
 	private static Set<OrderState> matchingStates(String filter) {
 		return filter.isEmpty() ? Collections.emptySet()
 				: Arrays.stream(OrderState.values())
-						.filter(e -> e.getDisplayName().toLowerCase().contains(filter.toLowerCase())).collect(toSet());
-	}
-
-	public long countAfterDueDateWithState(LocalDate filterDate, List<OrderState> states) {
-		return getOrderRepository().countByDueDateAfterAndStateIn(filterDate, states);
+				.filter(e -> e.getDisplayName().toLowerCase().contains(filter.toLowerCase())).collect(toSet());
 	}
 
 	public long countAnyMatchingAfterDueDate(Optional<String> optionalFilter, Optional<LocalDate> optionalFilterDate) {
 		if (optionalFilter.isPresent() && optionalFilterDate.isPresent()) {
-			return getOrderRepository().countByCustomerFullNameContainingIgnoreCaseAndDueDateAfter(optionalFilter.get(),
+			return orderRepository.countByCustomerFullNameContainingIgnoreCaseAndDueDateAfter(optionalFilter.get(),
 					optionalFilterDate.get());
 		} else if (optionalFilter.isPresent()) {
-			return getOrderRepository().countByCustomerFullNameContainingIgnoreCase(optionalFilter.get());
+			return orderRepository.countByCustomerFullNameContainingIgnoreCase(optionalFilter.get());
 		} else if (optionalFilterDate.isPresent()) {
-			return getOrderRepository().countByDueDateAfter(optionalFilterDate.get());
+			return orderRepository.countByDueDateAfter(optionalFilterDate.get());
 		} else {
-			return getOrderRepository().count();
-		}
-	}
-
-	public long countAfterDueDate(Optional<LocalDate> filterDate) {
-		if (filterDate.isPresent()) {
-			return getOrderRepository().countByDueDateAfter(filterDate.get());
-		} else {
-			return getOrderRepository().count();
+			return orderRepository.count();
 		}
 	}
 
 	private DeliveryStats getDeliveryStats() {
 		DeliveryStats stats = new DeliveryStats();
 		LocalDate today = LocalDate.now();
-		stats.setDueToday((int) getOrderRepository().countByDueDate(today));
-		stats.setDueTomorrow((int) getOrderRepository().countByDueDate(today.plusDays(1)));
-		stats.setDeliveredToday((int) getOrderRepository().countByDueDateAndStateIn(today,
+		stats.setDueToday((int) orderRepository.countByDueDate(today));
+		stats.setDueTomorrow((int) orderRepository.countByDueDate(today.plusDays(1)));
+		stats.setDeliveredToday((int) orderRepository.countByDueDateAndStateIn(today,
 				Collections.singleton(OrderState.DELIVERED)));
 
-		stats.setNotAvailableToday((int) getOrderRepository().countByDueDateAndStateIn(today, notAvailableStates));
-		stats.setNewOrders((int) getOrderRepository().countByState(OrderState.NEW));
+		stats.setNotAvailableToday((int) orderRepository.countByDueDateAndStateIn(today, notAvailableStates));
+		stats.setNewOrders((int) orderRepository.countByState(OrderState.NEW));
 
 		return stats;
 	}
@@ -156,7 +142,7 @@ public class OrderService {
 
 		Number[][] salesPerMonth = new Number[3][12];
 		data.setSalesPerMonth(salesPerMonth);
-		List<Object[]> sales = getOrderRepository().sumPerMonthLastThreeYears(OrderState.DELIVERED, year);
+		List<Object[]> sales = orderRepository.sumPerMonthLastThreeYears(OrderState.DELIVERED, year);
 
 		for (Object[] salesData : sales) {
 			// year, month, deliveries
@@ -172,7 +158,7 @@ public class OrderService {
 
 		LinkedHashMap<Product, Integer> productDeliveries = new LinkedHashMap<>();
 		data.setProductDeliveries(productDeliveries);
-		for (Object[] result : getOrderRepository().countPerProduct(OrderState.DELIVERED, year, month)) {
+		for (Object[] result : orderRepository.countPerProduct(OrderState.DELIVERED, year, month)) {
 			int sum = ((Long) result[0]).intValue();
 			Product p = (Product) result[1];
 			productDeliveries.put(p, sum);
@@ -184,11 +170,11 @@ public class OrderService {
 	private List<Number> getDeliveriesPerDay(int month, int year) {
 		int daysInMonth = YearMonth.of(year, month).lengthOfMonth();
 		return flattenAndReplaceMissingWithNull(daysInMonth,
-				getOrderRepository().countPerDay(OrderState.DELIVERED, year, month));
+				orderRepository.countPerDay(OrderState.DELIVERED, year, month));
 	}
 
 	private List<Number> getDeliveriesPerMonth(int year) {
-		return flattenAndReplaceMissingWithNull(12, getOrderRepository().countPerMonth(OrderState.DELIVERED, year));
+		return flattenAndReplaceMissingWithNull(12, orderRepository.countPerMonth(OrderState.DELIVERED, year));
 	}
 
 	private List<Number> flattenAndReplaceMissingWithNull(int length, List<Object[]> list) {
@@ -203,24 +189,18 @@ public class OrderService {
 		return counts;
 	}
 
-	protected OrderRepository getOrderRepository() {
-		if (orderRepository == null) {
-			orderRepository = BeanLocator.find(OrderRepository.class);
-		}
+	@Override
+	public JpaRepository<Order, Long> getRepository() {
 		return orderRepository;
 	}
 
-	protected CustomerRepository getCustomerRepository() {
-		if (customerRepository == null) {
-			customerRepository = BeanLocator.find(CustomerRepository.class);
-		}
-		return customerRepository;
+	@Override
+	@Transactional
+	public Order createNew() {
+		Order order = new Order(userService.getCurrentUser());
+		order.setDueTime(LocalTime.of(16, 0));
+		order.setDueDate(LocalDate.now());
+		return order;
 	}
 
-	protected UserService getUserService() {
-		if (userService == null) {
-			userService = BeanLocator.find(UserService.class);
-		}
-		return userService;
-	}
 }
