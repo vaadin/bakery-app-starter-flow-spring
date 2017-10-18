@@ -10,13 +10,12 @@ import com.vaadin.starter.bakery.ui.view.LoginViewElement;
 import com.vaadin.testbench.ScreenshotOnFailureRule;
 import com.vaadin.testbench.TestBench;
 import com.vaadin.testbench.TestBenchDriverProxy;
-import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.TestBenchTestCase;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 
-public class AbstractIT extends TestBenchTestCase {
+public abstract class AbstractIT extends TestBenchTestCase {
 
 	public static final String APP_URL = "http://localhost:8080/";
 
@@ -44,29 +43,6 @@ public class AbstractIT extends TestBenchTestCase {
 		return (TestBenchDriverProxy) super.getDriver();
 	}
 
-	protected static boolean hasAttribute(TestBenchElement element, String name) {
-		return internalGetAttribute(element, name) != null;
-	}
-
-	protected static Object internalGetAttribute(TestBenchElement element, String name) {
-		return element.getCommandExecutor().executeScript("return arguments[0].getAttribute(arguments[1]);", element,
-				name);
-	}
-
-	/**
-	 * Checks if the given element has the given class name.
-	 *
-	 * @param element
-	 *            the element to check
-	 * @param className
-	 *            the class name to check for
-	 * @return <code>true</code> if the element has the given class name,
-	 *         <code>false</code> otherwise
-	 */
-	protected static boolean hasClassName(TestBenchElement element, String className) {
-		return element.getClassNames().contains(className);
-	}
-
 	protected LoginViewElement openLoginView() {
 		return openLoginView(getDriver(), APP_URL);
 	}
@@ -75,5 +51,4 @@ public class AbstractIT extends TestBenchTestCase {
 		driver.get(url);
 		return $(LoginViewElement.class).waitForFirst();
 	}
-
 }
