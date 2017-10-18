@@ -81,7 +81,6 @@ public class BakeryApplicationConfig extends WebSecurityConfigurerAdapter {
     @PostConstruct
     private void init() {
         Locale.setDefault(Locale.Category.FORMAT, Locale.US);
-//        initService.initDatabase();
     }
 
     private static class AccessDecisionVoterImpl implements AccessDecisionVoter<Object> {

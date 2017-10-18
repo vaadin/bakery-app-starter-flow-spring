@@ -9,8 +9,8 @@ import com.vaadin.ui.button.Button;
 import com.vaadin.ui.common.HasClickListeners;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.event.ComponentEventListener;
-import com.vaadin.ui.html.Div;
 import com.vaadin.ui.html.H3;
+import com.vaadin.ui.html.Span;
 import com.vaadin.ui.polymertemplate.EventHandler;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
@@ -57,10 +57,8 @@ public class ProductEdit extends PolymerTemplate<TemplateModel> {
 	}
 
 	private void setCurrencySymbol() {
-		Div currencySign = new Div();
 		Currency currency = Currency.getInstance(Locale.getDefault());
-		currencySign.setText(currency.getSymbol());
-		priceField.addToPrefix(currencySign);
+		priceField.addToPrefix(new Span(currency.getSymbol()));
 	}
 
 	public Long getProductId() {
