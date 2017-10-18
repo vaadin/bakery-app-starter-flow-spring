@@ -25,11 +25,12 @@ public class BakeryNavigationElement extends TestBenchElement {
 		return $(ProductsViewElement.class).onPage().waitForFirst();
 	}
 
-	public UserPopupMenuElement getLogoutButton() {
+	public void openUserMenu() {
 		$(UserAvatarElement.class).first().click();
-		UserPopupMenuElement menu = $(UserPopupMenuElement.class).first();
-		waitUntil(c -> menu.isDisplayed());
-		return menu;
+	}
+
+	public UserPopupMenuElement getUserPopupMenu() {
+		return $(UserPopupMenuElement.class).first();
 	}
 
 }

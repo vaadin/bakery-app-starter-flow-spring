@@ -1,8 +1,10 @@
 package com.vaadin.starter.bakery.ui.view;
 
 import com.vaadin.starter.bakery.AbstractIT;
+import com.vaadin.starter.bakery.ui.components.UserPopupMenuElement;
 import org.junit.Assert;
 import org.junit.Test;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import static org.junit.Assert.assertEquals;
 
@@ -19,8 +21,10 @@ public class LoginIT extends AbstractIT {
 	public void logout() {
 		LoginViewElement loginView = openLoginView();
 		StoreFrontViewElement storefront = loginView.login("barista@vaadin.com", "barista");
-		storefront.getMenu().getLogoutButton().click();
-
+		storefront.getMenu().openUserMenu();
+		UserPopupMenuElement popupMenu = storefront.getMenu().getUserPopupMenu();
+		waitUntil(ExpectedConditions.visibilityOf(popupMenu.getLogoutButton()), 3);
+		popupMenu.getLogoutButton().click();
 		Assert.assertTrue(getDriver().getCurrentUrl().endsWith("login"));
 	}
 
