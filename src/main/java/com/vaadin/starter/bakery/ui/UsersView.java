@@ -29,6 +29,7 @@ import com.vaadin.starter.bakery.ui.components.UserEdit;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.event.DeleteEvent;
+import com.vaadin.starter.bakery.ui.event.EditEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
 import com.vaadin.starter.bakery.ui.presenter.Confirmer;
 import com.vaadin.starter.bakery.ui.presenter.EntityView;
@@ -78,8 +79,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 
 		editor.setPasswordEncoder(passwordEncoder);
 		presenter = new EntityViewPresenter<User>(userService, this, "User");
-		getElement().addEventListener("edit",
-				e -> navigateToEntity(getUI(), PAGE_USERS, e.getEventData().getString("event.detail")), "event.detail");
+		addListener(EditEvent.class, e -> navigateToEntity(getUI(), PAGE_USERS, e.getId()));
 
 		filterUsers(view.getFilter());
 

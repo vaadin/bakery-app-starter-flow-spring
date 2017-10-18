@@ -18,6 +18,7 @@ import com.vaadin.starter.bakery.ui.components.ItemsView;
 import com.vaadin.starter.bakery.ui.components.ProductEdit;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
 import com.vaadin.starter.bakery.ui.event.DecisionEvent;
+import com.vaadin.starter.bakery.ui.event.EditEvent;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
@@ -74,9 +75,7 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 	public ProductsView(ProductService service) {
 		this.service = service;
 		initEditor();
-		getElement().addEventListener("edit", e -> navigateToProduct(e.getEventData().getString("event.detail")),
-				"event.detail");
-
+		addListener(EditEvent.class, e -> navigateToProduct(e.getId()));
 		filterProducts(view.getFilter());
 
 		view.setActionText("New product");
