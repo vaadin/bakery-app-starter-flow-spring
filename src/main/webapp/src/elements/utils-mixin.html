@@ -155,64 +155,20 @@
      * Mixin for grids.
      */
     window.EditableListMixin = subclass => class extends subclass {
-      static get properties() {
-        return {
-          _activeItem: {
-            observer: '_onActiveItem'
-          },
-          _editableItem: Object
-        };
+
+      ready() {
+        super.ready();
+        this.$.grid.addEventListener('active-item-changed', e => this._onActiveItemChanged(e));
       }
 
-      get dirty() {
-        return this.$.editor.dirty;
-      }
-
-      _onActiveItem() {
-        this._editItem();
-      }
-
-      _newItem() {
-        this._editableItem = {};
-      }
-
-      _editItem() {
-        // activeItem is set after clicking on grid elements
-        setTimeout(() => {
-          this._editableItem = this._activeItem;
-        });
-      }
-
-      _onClose() {
-        this.$.grid.selectedItems = [];
+      _onActiveItemChanged(e) {
+        const id = e.detail.value ? e.detail.value.id : null;
+        if (id) {
+          this.dispatchEvent(new CustomEvent('edit', {bubbles: true, composed: true, detail: id}));
+        }
+        // It's easier to remove the active item here than from a server-side when the editor dialog is closed.
+        // When there is a server-side wrapper for vaadin-grid, this approach should be revisited.
         this.$.grid.activeItem = null;
-        this._editableItem = null;
-      }
-
-      _onBeforeClose(e) {
-        if (this.dirty) {
-          e.preventDefault();
-        }
-      }
-
-      _onSave(e) {
-        window.console.log('SAVE', e.detail);
-      }
-
-      _onDelete(e) {
-        window.console.log('DELETE', e.detail);
-      }
-
-      _filterItems(change, filter) {
-        const items = change.base;
-        if (items && filter) {
-          return items.filter((item) => {
-            return Object.keys(item).reduce((last, current) => {
-              return last || String(item[current]).toLowerCase().includes(filter.toLowerCase());
-            }, false);
-          });
-        }
-        return items;
       }
     };
 

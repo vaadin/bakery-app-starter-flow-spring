@@ -81,10 +81,6 @@
       static get properties() {
         return {
           desktopView: Boolean,
-          item: {
-            type: Object,
-            observer: '_onItemChanged'
-          },
           editing: {
             type: Boolean,
             value: false,
@@ -93,19 +89,12 @@
         };
       }
 
-      _onItemChanged(item) {
-        this.editing = !!item;
-      }
-
       _onBeforeClose(e) {
         // We need to forward the event because the dialog before-close event does not bubble.
-        e.stopPropagation();
+        e.preventDefault();
         var customEvent = new CustomEvent('before-close',
-          {bubbles: true, composed: true, cancelable: true, detail: this.item});
+          {bubbles: true, composed: true, cancelable: true});
         this.dispatchEvent(customEvent);
-        if (customEvent.defaultPrevented) {
-          e.preventDefault();
-        }
       }
     }
 

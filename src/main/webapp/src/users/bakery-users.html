@@ -55,7 +55,7 @@
 
     <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
 
-    <items-view id="bakery-users-items-view" desktop-view=[[desktopView]] item="[[_editableItem]]" on-before-close="onBeforeClose">
+    <items-view id="bakery-users-items-view" desktop-view=[[desktopView]] on-before-close="onBeforeClose">
 
       <vaadin-grid slot="grid" id="grid" items="[[users]]" active-item="{{_activeItem}}">
         <vaadin-grid-column width="80px" flex-grow="0">
@@ -111,25 +111,6 @@
         };
       }
 
-      /* @Override EditableListMixin._onActiveItem() */
-      _onActiveItem(value, old) {
-        if (old === undefined || value === null) {
-          return;
-        }
-
-        const id = value ? value.id : '';
-        this.dispatchEvent(new CustomEvent('edit', {bubbles: true, composed: true, detail: id}));
-
-        // It's easier to remove the active item here than from a server-side when the editor dialog is closed.
-        // When there is a server-side wrapper for vaadin-grid, this approach should be revisited.
-        this.$.grid.activeItem = null;
-      }
-
-      onBeforeClose(e) {
-        // Cancel closing dialog and send message to server to check dirty and show confirmation.
-        // Can be removed when all the dialog open/close logic will be moved to server.
-        e.preventDefault();
-      }
     }
 
     window.customElements.define(BakeryUsers.is, BakeryUsers);
