@@ -2,6 +2,8 @@ package com.vaadin.starter.bakery.ui.view;
 
 import com.vaadin.starter.bakery.elements.PaperTabElement;
 import com.vaadin.starter.bakery.ui.UsersViewElement;
+import com.vaadin.starter.bakery.ui.components.UserAvatarElement;
+import com.vaadin.starter.bakery.ui.components.UserPopupMenuElement;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elementsbase.Element;
 
@@ -21,6 +23,13 @@ public class BakeryNavigationElement extends TestBenchElement {
 	public ProductsViewElement navigateToProducts() {
 		$(PaperTabElement.class).attribute("page-id", "products").first().click();
 		return $(ProductsViewElement.class).onPage().waitForFirst();
+	}
+
+	public UserPopupMenuElement getLogoutButton() {
+		$(UserAvatarElement.class).first().click();
+		UserPopupMenuElement menu = $(UserPopupMenuElement.class).first();
+		waitUntil(c -> menu.isDisplayed());
+		return menu;
 	}
 
 }

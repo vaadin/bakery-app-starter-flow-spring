@@ -1,7 +1,7 @@
 package com.vaadin.starter.bakery.ui.components;
 
+import com.vaadin.starter.bakery.elements.ButtonElement;
 import com.vaadin.starter.bakery.elements.TextFieldElement;
-import com.vaadin.starter.bakery.ui.form.EditFormElement;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elementsbase.Element;
 
@@ -16,8 +16,8 @@ public class ProductEditElement extends TestBenchElement {
 		return $(TextFieldElement.class).id("price");
 	}
 
-	public EditFormElement getEditForm() {
-		return $(EditFormElement.class).id("product-edit-form");
+	public ButtonElement getSaveButton() {
+		return $(ButtonElement.class).id("product-edit-save");
 	}
 
 }
