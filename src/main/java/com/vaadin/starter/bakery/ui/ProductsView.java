@@ -16,6 +16,7 @@ import com.vaadin.starter.bakery.backend.service.ProductService;
 import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
 import com.vaadin.starter.bakery.ui.components.ItemsView;
 import com.vaadin.starter.bakery.ui.components.ProductEdit;
+import com.vaadin.starter.bakery.ui.converters.CurrencyFormatter;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
 import com.vaadin.starter.bakery.ui.event.DecisionEvent;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
@@ -56,6 +57,7 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 
 		@Include({ "id", "name", "price" })
 		@Convert(value = LongToStringConverter.class, path = "id")
+		@Convert(value = CurrencyFormatter.class, path = "price")
 		void setProducts(List<Product> products);
 	}
 
