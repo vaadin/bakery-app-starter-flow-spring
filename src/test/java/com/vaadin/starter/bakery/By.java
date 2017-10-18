@@ -18,7 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class By extends com.vaadin.testbench.By {
+public abstract class By extends org.openqa.selenium.By {
 	public static org.openqa.selenium.By shadowSelector(final String selector) {
 		if (selector == null || selector.equals("")) {
 			throw new IllegalArgumentException(
@@ -28,14 +28,13 @@ public abstract class By extends com.vaadin.testbench.By {
 		return new ByShadowSelector(selector);
 	}
 
-	private static class ByShadowSelector extends ByVaadin {
+	private static class ByShadowSelector extends By {
 		private final String selector;
 
 		private static final String QUERY_SELECTOR_IN_SHADOW_ROOT_JS =
 				getResource("query-selector-in-shadow-root.js");
 
 		private ByShadowSelector(final String selector) {
-			super(selector);
 			this.selector = selector;
 		}
 
