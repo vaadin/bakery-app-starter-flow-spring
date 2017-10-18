@@ -398,8 +398,6 @@ class BaristaFlow extends Simulation {
         .get("/src/app/bakery-search.html"),
       http("request_113")
         .get("/src/storefront/storefront-item-detail-wrapper.html"),
-      http("request_114")
-        .get("/src/storefront/storefront-item-edit-wrapper.html"),
       http("request_115")
         .get("/src/elements/utils-mixin.html"),
       http("request_116")
@@ -493,8 +491,6 @@ class BaristaFlow extends Simulation {
         .get("/src/storefront/storefront-item-detail.html"),
       http("request_157")
         .get("/src/elements/item-detail-dialog.html"),
-      http("request_158")
-        .get("/src/storefront/storefront-item-edit.html"),
       http("request_159")
         .get("/bower_components/paper-toast/paper-toast.html"),
       http("request_160")
