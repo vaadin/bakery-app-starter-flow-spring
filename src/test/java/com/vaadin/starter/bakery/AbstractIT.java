@@ -32,6 +32,7 @@ public class AbstractIT extends TestBenchTestCase {
 	@Before
 	public void setup() {
 		setDriver(createDriver());
+		getDriver().resizeViewPortTo(800, 600);
 	}
 
 	protected WebDriver createDriver() {
