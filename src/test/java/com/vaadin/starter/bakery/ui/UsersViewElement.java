@@ -2,9 +2,9 @@ package com.vaadin.starter.bakery.ui;
 
 import java.util.List;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import com.vaadin.starter.bakery.By;
 import com.vaadin.starter.bakery.elements.GridElement;
 import com.vaadin.starter.bakery.ui.components.ItemsViewElement;
 import com.vaadin.starter.bakery.ui.components.UserEditElement;

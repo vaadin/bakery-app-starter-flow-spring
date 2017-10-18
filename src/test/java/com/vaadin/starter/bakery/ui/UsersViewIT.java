@@ -7,7 +7,6 @@ import org.junit.Test;
 import org.openqa.selenium.WebElement;
 
 import com.vaadin.starter.bakery.AbstractIT;
-import com.vaadin.starter.bakery.By;
 import com.vaadin.starter.bakery.elements.PaperToastElement;
 import com.vaadin.starter.bakery.elements.PasswordFieldElement;
 import com.vaadin.starter.bakery.elements.TextFieldElement;
@@ -57,9 +56,9 @@ public class UsersViewIT extends AbstractIT {
 		field.setValue(field.getValue() + "-updated");
 		userEdit.getEditForm().getSaveButton().click();
 
-		WebElement toast = findElement(By.id("_persistentToast"));
-		Assert.assertEquals(MODIFY_LOCKED_USER_NOT_PERMITTED, toast.getAttribute("text"));
-		Assert.assertEquals("paper-toast-open", toast.getAttribute("class"));
+		PaperToastElement toast = $(PaperToastElement.class).onPage().id("_persistentToast");
+		Assert.assertEquals(MODIFY_LOCKED_USER_NOT_PERMITTED, toast.getText());
+		Assert.assertTrue(toast.isDisplayed());
 	}
 
 	@Test
