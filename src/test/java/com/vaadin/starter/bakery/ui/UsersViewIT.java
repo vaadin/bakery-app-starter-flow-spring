@@ -8,8 +8,12 @@ import org.openqa.selenium.WebElement;
 
 import com.vaadin.starter.bakery.AbstractIT;
 import com.vaadin.starter.bakery.By;
+import com.vaadin.starter.bakery.elements.PaperToastElement;
+import com.vaadin.starter.bakery.elements.PasswordFieldElement;
+import com.vaadin.starter.bakery.elements.TextFieldElement;
+import com.vaadin.starter.bakery.ui.components.ItemDetailDialogElement;
+import com.vaadin.starter.bakery.ui.components.UserEditElement;
 import com.vaadin.starter.bakery.ui.view.StoreFrontViewElement;
-import com.vaadin.testbench.TestBenchElement;
 
 public class UsersViewIT extends AbstractIT {
 
@@ -20,22 +24,22 @@ public class UsersViewIT extends AbstractIT {
 
 	@Test
 	public void updatePassword() {
-		UsersViewElement page = openTestPage();
+		UsersViewElement usersView = openTestPage();
 
-		WebElement editor = page.getEditorDialog();
+		ItemDetailDialogElement editor = usersView.getItemsView().getEditorDialog();
 		Assert.assertFalse(editor.isDisplayed());
 
-		WebElement bakerCell = page.getGridCell("baker@vaadin.com");
+		WebElement bakerCell = usersView.getGridCell("baker@vaadin.com");
 		Assert.assertNotNull(bakerCell);
 
 		bakerCell.click();
 		Assert.assertTrue(editor.isDisplayed());
 
-		WebElement password = page.getPasswordField();
-		Assert.assertEquals("", password.getAttribute("value"));
+		PasswordFieldElement password = usersView.getUserEdit().getPasswordField();
+		Assert.assertEquals("", password.getValue());
 
-		password.sendKeys("foobar");
-		page.getUpdateButton().click();
+		password.setValue("foobar");
+		usersView.getUserEdit().getEditForm().getSaveButton().click();
 		Assert.assertFalse(editor.isDisplayed());
 
 		bakerCell.click();
@@ -48,9 +52,10 @@ public class UsersViewIT extends AbstractIT {
 
 		page.getGridCell("barista@vaadin.com").click();
 
-		WebElement field = page.getFirstTextField();
-		field.sendKeys("-updated");
-		page.getUpdateButton().click();
+		UserEditElement userEdit = page.getUserEdit();
+		TextFieldElement field = userEdit.getFirstField();
+		field.setValue(field.getValue() + "-updated");
+		userEdit.getEditForm().getSaveButton().click();
 
 		WebElement toast = findElement(By.id("_persistentToast"));
 		Assert.assertEquals(MODIFY_LOCKED_USER_NOT_PERMITTED, toast.getAttribute("text"));
@@ -62,16 +67,13 @@ public class UsersViewIT extends AbstractIT {
 		UsersViewElement page = openTestPage();
 
 		page.getGridCell("barista@vaadin.com").click();
+		page.getUserEdit().getEditForm().getDeleteButton().click();
 
-		page.getDeleteButton().click();
-
-		WebElement dialogElement = findElement(By.shadowSelector("bakery-users::shadow #user-confirmation-dialog"));
-		Assert.assertNotNull(dialogElement);
-		ConfirmDialogElement dialog = ((TestBenchElement) dialogElement).wrap(ConfirmDialogElement.class);
+		ConfirmationDialogElement dialog = page.getConfirmDialog();
 		dialog.confirm();
 
-		WebElement toast = findElement(By.id("_persistentToast"));
-		Assert.assertEquals(MODIFY_LOCKED_USER_NOT_PERMITTED, toast.getAttribute("text"));
-		Assert.assertEquals("paper-toast-open", toast.getAttribute("class"));
+		PaperToastElement toast = $(PaperToastElement.class).onPage().id("_persistentToast");
+		Assert.assertEquals(MODIFY_LOCKED_USER_NOT_PERMITTED, toast.getText());
+		Assert.assertTrue(toast.isDisplayed());
 	}
 }
