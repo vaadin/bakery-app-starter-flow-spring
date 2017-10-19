@@ -65,7 +65,7 @@
       </div>
 
       <div class="editor-wrapper">
-        <item-detail-dialog opened="[[editing]]" side="right" desktop-view$=[[desktopView]] on-before-close="_onBeforeClose">
+        <item-detail-dialog opened="[[editing]]" side="right" desktop-view$=[[desktopView]]>
           <slot name="editor"></slot>
         </item-detail-dialog>
       </div>
@@ -89,13 +89,6 @@
         };
       }
 
-      _onBeforeClose(e) {
-        // We need to forward the event because the dialog before-close event does not bubble.
-        e.preventDefault();
-        var customEvent = new CustomEvent('before-close',
-          {bubbles: true, composed: true, cancelable: true});
-        this.dispatchEvent(customEvent);
-      }
     }
 
     window.customElements.define(ItemsView.is, ItemsView);

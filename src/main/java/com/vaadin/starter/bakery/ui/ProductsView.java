@@ -85,7 +85,7 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 
 	private void initEditor() {
 		editor.addDeleteListener(this::onBeforeDelete);
-		editor.addCancelListener(cancelClickEvent -> onBeforeClose());
+		editor.addCancelListener(cancelClickEvent -> onCloseDialog());
 		editor.addSaveListener(saveClickEvent -> saveProduct(editor.getProduct()));
 	}
 
@@ -101,7 +101,7 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 	}
 
 	@EventHandler
-	private void onBeforeClose() {
+	private void onCloseDialog() {
 		if (editor.isDirty()) {
 			confirmationDialog.show(CONFIRM_CAPTION_CANCEL, CONFIRM_MESSAGE_CANCEL_PRODUCT, CONFIRM_OKBUTTON_CANCEL,
 					CONFIRM_CANCELBUTTON_CANCEL);
@@ -126,7 +126,6 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 
 	private void setEditableProduct(String id) {
 		if (id == null || id.isEmpty()) {
-			view.openDialog(false);
 			return;
 		}
 
