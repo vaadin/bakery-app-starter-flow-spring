@@ -36,7 +36,7 @@ public class ProductsViewIT extends AbstractIT {
 		Assert.assertTrue(getDriver().getCurrentUrl().endsWith("products/"));
 
 		productsPage.getGridCell("Strawberry Bun").click();
-		Assert.assertTrue(productsPage.getProductEdit().getPrice().getValue().equals("123.45"));
+		Assert.assertEquals("123.45", productsPage.getProductEdit().getPrice().getValue());
 
 		//Return initial value
 		editElement.getPrice().setValue(initialValue);

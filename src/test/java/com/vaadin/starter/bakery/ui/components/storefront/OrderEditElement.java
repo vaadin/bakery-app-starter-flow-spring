@@ -6,8 +6,4 @@ import com.vaadin.testbench.elementsbase.Element;
 @Element("order-edit")
 public class OrderEditElement extends TestBenchElement {
 
-	public boolean isDisplayed() {
-		return getAttribute("hidden") == null;
-	}
-
 }

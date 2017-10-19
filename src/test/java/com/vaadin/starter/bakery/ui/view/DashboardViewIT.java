@@ -5,8 +5,6 @@ import com.vaadin.starter.bakery.ui.components.DashboardOrdersCounterElement;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.concurrent.TimeUnit;
-
 public class DashboardViewIT extends AbstractIT {
 
 	private DashboardViewElement openDashboardPage() {
@@ -17,14 +15,14 @@ public class DashboardViewIT extends AbstractIT {
 	@Test
 	public void checkRowsCount() {
 		DashboardViewElement dashboardPage = openDashboardPage();
-		Assert.assertTrue(dashboardPage.getBoard().getRows().size() == 4);
+		Assert.assertEquals(4, dashboardPage.getBoard().getRows().size());
 	}
 
 	@Test
 	public void checkCounters() {
 		DashboardViewElement dashboardPage = openDashboardPage();
 		int count = dashboardPage.getBoard().getRows().get(0).$(DashboardOrdersCounterElement.class).all().size();
-		Assert.assertTrue(count == 4);
+		Assert.assertEquals(4, count);
 	}
 
 }
