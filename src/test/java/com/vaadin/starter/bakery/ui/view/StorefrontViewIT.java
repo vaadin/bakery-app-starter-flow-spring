@@ -36,7 +36,7 @@ public class StorefrontViewIT extends AbstractIT {
 
 	}
 
-	@Ignore
+	@Ignore("until the issue BFF-339 is fixed")
 	@Test
 	public void editOrder() {
 		StoreFrontViewElement storefrontPage = openStorefrontPage();
