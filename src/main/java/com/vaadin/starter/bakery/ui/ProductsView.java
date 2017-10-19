@@ -171,6 +171,7 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 	private void saveProduct(Product product) {
 		try {
 			service.save(product);
+			view.openDialog(false);
 			navigateToProduct(null);
 		} catch (ConstraintViolationException e) {
 			String errorMessage = getErrorMessage(e);
