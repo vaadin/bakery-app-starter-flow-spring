@@ -19,6 +19,7 @@ import com.vaadin.starter.bakery.ui.components.ProductEdit;
 import com.vaadin.starter.bakery.ui.converters.CurrencyFormatter;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
 import com.vaadin.starter.bakery.ui.event.DecisionEvent;
+import com.vaadin.starter.bakery.ui.event.EditEvent;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
@@ -76,9 +77,7 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 	public ProductsView(ProductService service) {
 		this.service = service;
 		initEditor();
-		getElement().addEventListener("edit", e -> navigateToProduct(e.getEventData().getString("event.detail")),
-				"event.detail");
-
+		addListener(EditEvent.class, e -> navigateToProduct(e.getId()));
 		filterProducts(view.getFilter());
 
 		view.setActionText("New product");
@@ -88,7 +87,7 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 
 	private void initEditor() {
 		editor.addDeleteListener(this::onBeforeDelete);
-		editor.addCancelListener(cancelClickEvent -> onBeforeClose());
+		editor.addCancelListener(cancelClickEvent -> onCloseDialog());
 		editor.addSaveListener(saveClickEvent -> saveProduct(editor.getProduct()));
 	}
 
@@ -104,17 +103,21 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 	}
 
 	@EventHandler
-	private void onBeforeClose() {
+	private void onCloseDialog() {
+		Runnable closeDialog = () -> {
+			view.openDialog(false);
+			navigateToProduct(null);
+		};
 		if (editor.isDirty()) {
 			confirmationDialog.show(CONFIRM_CAPTION_CANCEL, CONFIRM_MESSAGE_CANCEL_PRODUCT, CONFIRM_OKBUTTON_CANCEL,
 					CONFIRM_CANCELBUTTON_CANCEL);
 			RegistrationHolder registrationHolder = new RegistrationHolder();
 			registrationHolder.registration = confirmationDialog.addListener(DecisionEvent.class, e -> {
 				registrationHolder.registration.remove();
-				e.ifConfirmed(() -> navigateToProduct(null));
+				e.ifConfirmed(closeDialog);
 			});
 		} else {
-			navigateToProduct(null);
+			closeDialog.run();
 		}
 	}
 
@@ -129,7 +132,6 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 
 	private void setEditableProduct(String id) {
 		if (id == null || id.isEmpty()) {
-			view.openDialog(false);
 			return;
 		}
 
@@ -169,6 +171,7 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 	private void saveProduct(Product product) {
 		try {
 			service.save(product);
+			view.openDialog(false);
 			navigateToProduct(null);
 		} catch (ConstraintViolationException e) {
 			String errorMessage = getErrorMessage(e);
