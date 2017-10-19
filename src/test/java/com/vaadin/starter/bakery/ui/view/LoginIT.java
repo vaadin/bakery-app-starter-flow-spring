@@ -21,7 +21,7 @@ public class LoginIT extends AbstractIT {
 	public void logout() {
 		LoginViewElement loginView = openLoginView();
 		StoreFrontViewElement storefront = loginView.login("barista@vaadin.com", "barista");
-		storefront.getMenu().openUserMenu();
+		storefront.getMenu().openUserPopupMenu();
 		UserPopupMenuElement popupMenu = storefront.getMenu().getUserPopupMenu();
 		waitUntil(ExpectedConditions.visibilityOf(popupMenu.getLogoutButton()), 3);
 		popupMenu.getLogoutButton().click();

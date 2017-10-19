@@ -25,7 +25,7 @@ public class BakeryNavigationElement extends TestBenchElement {
 		return $(ProductsViewElement.class).onPage().waitForFirst();
 	}
 
-	public void openUserMenu() {
+	public void openUserPopupMenu() {
 		$(UserAvatarElement.class).first().click();
 	}
 
