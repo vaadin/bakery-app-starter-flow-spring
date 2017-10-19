@@ -104,16 +104,20 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 
 	@EventHandler
 	private void onCloseDialog() {
+		Runnable closeDialog = () -> {
+			view.openDialog(false);
+			navigateToProduct(null);
+		};
 		if (editor.isDirty()) {
 			confirmationDialog.show(CONFIRM_CAPTION_CANCEL, CONFIRM_MESSAGE_CANCEL_PRODUCT, CONFIRM_OKBUTTON_CANCEL,
 					CONFIRM_CANCELBUTTON_CANCEL);
 			RegistrationHolder registrationHolder = new RegistrationHolder();
 			registrationHolder.registration = confirmationDialog.addListener(DecisionEvent.class, e -> {
 				registrationHolder.registration.remove();
-				e.ifConfirmed(() -> navigateToProduct(null));
+				e.ifConfirmed(closeDialog);
 			});
 		} else {
-			navigateToProduct(null);
+			closeDialog.run();
 		}
 	}
 

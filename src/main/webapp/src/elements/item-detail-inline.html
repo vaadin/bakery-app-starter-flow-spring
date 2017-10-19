@@ -18,6 +18,15 @@
       static get is() {
         return 'item-detail-inline';
       }
+
+      ready() {
+        super.ready();
+        this.addEventListener('close',e => this.close());
+      }
+
+      close() {
+        this.opened = false;
+      }
     }
 
     window.customElements.define(ItemDetailInline.is, ItemDetailInline);
