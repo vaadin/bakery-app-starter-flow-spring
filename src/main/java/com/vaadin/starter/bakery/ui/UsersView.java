@@ -98,7 +98,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	}
 
 	@EventHandler
-	private void onBeforeClose() {
+	private void onCloseDialog() {
 		presenter.cancel();
 	}
 
