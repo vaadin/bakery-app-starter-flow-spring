@@ -2,7 +2,6 @@
 <link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
-<link rel="import" href="../elements/utils-mixin.html">
 
 <dom-module id="product-edit">
   <template>
@@ -35,7 +34,6 @@
       <br>
       <vaadin-text-field id="price" label="Unit price" colspan="2" on-focus="priceFocusGained" on-blur="priceFocusLost"
         pattern="\d+(\.\d?\d?)?$" required prevent-invalid-input>
-        <div slot="prefix">$</div>
       </vaadin-text-field>
     </vaadin-form-layout>
     <div class="flex buttons">
@@ -47,13 +45,9 @@
   </template>
 
   <script>
-    class ProductEdit extends window.NotificationMixin(window.EditableItemMixin(Polymer.Element)) {
+    class ProductEdit extends Polymer.Element {
       static get is() {
         return 'product-edit';
-      }
-
-      _createConfirmDialog() {
-        // Need to be removed after EditableItemMixin.ready() will stop create new dialogs
       }
     }
 

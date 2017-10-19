@@ -1,7 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
-<link rel="import" href="../elements/utils-mixin.html">
 
 <dom-module id="edit-form">
   <template>
@@ -32,7 +31,7 @@
   </template>
 
   <script>
-    class EditForm extends window.EditableItemMixin(Polymer.Element) {
+    class EditForm extends Polymer.Element {
       static get is() {
         return 'edit-form';
       }

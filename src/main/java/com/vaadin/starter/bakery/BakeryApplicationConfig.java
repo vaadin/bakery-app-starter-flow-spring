@@ -2,6 +2,7 @@ package com.vaadin.starter.bakery;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -79,7 +80,7 @@ public class BakeryApplicationConfig extends WebSecurityConfigurerAdapter {
 
     @PostConstruct
     private void init() {
-//        initService.initDatabase();
+        Locale.setDefault(Locale.Category.FORMAT, Locale.US);
     }
 
     private static class AccessDecisionVoterImpl implements AccessDecisionVoter<Object> {

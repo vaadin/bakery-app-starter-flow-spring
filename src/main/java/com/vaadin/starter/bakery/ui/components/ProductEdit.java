@@ -10,6 +10,7 @@ import com.vaadin.ui.common.HasClickListeners;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.event.ComponentEventListener;
 import com.vaadin.ui.html.H3;
+import com.vaadin.ui.html.Span;
 import com.vaadin.ui.polymertemplate.EventHandler;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
@@ -17,6 +18,8 @@ import com.vaadin.ui.textfield.TextField;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.util.Currency;
+import java.util.Locale;
 
 import static com.vaadin.starter.bakery.ui.utils.FormattingUtils.DECIMAL_ZERO;
 
@@ -50,6 +53,12 @@ public class ProductEdit extends PolymerTemplate<TemplateModel> {
 		nameField.addValueChangeListener(valueChangeEvent -> saveButton.setDisabled(!isDirty()));
 		priceField.addValueChangeListener(valueChangeEvent -> saveButton.setDisabled(!isDirty()));
 		title.setText("New Product");
+		setCurrencySymbol();
+	}
+
+	private void setCurrencySymbol() {
+		Currency currency = Currency.getInstance(Locale.getDefault());
+		priceField.addToPrefix(new Span(currency.getSymbol()));
 	}
 
 	public Long getProductId() {
