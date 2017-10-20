@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.vaadin.flow.model.Include;
 import com.vaadin.flow.model.TemplateModel;
-import com.vaadin.server.VaadinSession;
 import com.vaadin.starter.bakery.app.BeanLocator;
 import com.vaadin.starter.bakery.app.security.SecuredViewAccessControl;
 import com.vaadin.starter.bakery.app.security.SecurityUtils;
