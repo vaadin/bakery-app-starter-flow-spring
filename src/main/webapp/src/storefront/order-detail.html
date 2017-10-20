@@ -145,7 +145,7 @@
             <label slot="label">Products</label>
             <table class="products">
               <template is="dom-repeat" items="[[item.items]]" as="item">
-                <dom-if if="[[item.product.name]]" hidden>
+                <dom-if if="[[item.product.name]]">
                   <template>
                     <tr>
                       <td class="product-name">
@@ -166,9 +166,9 @@
             </table>
           </vaadin-form-item>
 
-          <vaadin-form-item id="history" label-position="top">
+          <vaadin-form-item id="history" label-position="top" hidden="[[review]]">
             <label slot="label">History</label>
-            <template is="dom-repeat" items="[[history]]" as="event">
+            <template is="dom-repeat" items="[[item.history]]" as="event">
               <div class="history-line">
                 <span class="bold">[[event.createdBy.firstName]]</span>
                 <span class="secondary">[[event.timestamp]]</span>
@@ -178,7 +178,7 @@
             </template>
           </vaadin-form-item>
 
-          <vaadin-form-item id="order-detail-comment">
+          <vaadin-form-item id="order-detail-comment" hidden="[[review]]">
             <vaadin-text-field id="comment-field" placeholder="Add comment" class="full-width">
               <div slot="suffix" class="comment-suffix">
                 <vaadin-button id="send-comment" theme="tertiary">Send</vaadin-button>
@@ -191,13 +191,13 @@
     </div>
 
     <div class="footer">
-      <vaadin-button id="order-detail-back">Back</vaadin-button>
-      <vaadin-button id="order-detail-cancel">Cancel</vaadin-button>
+      <vaadin-button id="order-detail-back" hidden="[[!review]]">Back</vaadin-button>
+      <vaadin-button id="order-detail-cancel" on-click="close" hidden="[[review]]">Cancel</vaadin-button>
       <div class="total money">Total [[totalPrice]]</div>
 
-      <vaadin-button id="order-detail-save" theme="primary success" class="edit-button">Place Order ✓</vaadin-button>
+      <vaadin-button id="order-detail-save" theme="primary success" class="edit-button" hidden="[[!review]]">Place Order ✓</vaadin-button>
 
-      <vaadin-button id="order-detail-edit" theme="primary icon" class="edit-button">
+      <vaadin-button id="order-detail-edit" theme="primary icon" class="edit-button" on-click="edit" hidden="[[review]]">
         <span>Edit order</span>
         <iron-icon icon="valo:edit"></iron-icon>
       </vaadin-button>
@@ -214,8 +214,25 @@
         return {
           item: {
             type: Object
+          },
+          review: {
+            type: Boolean,
+            value: false
           }
         };
+      }
+
+      close() {
+        if (!this.review) {
+          this.dispatchEvent(new CustomEvent('close', {bubbles: true, composed: true}));
+        }
+      }
+
+      edit(type) {
+        const localItem = this.item;
+        Polymer.RenderStatus.afterNextRender(this, () =>
+        this.dispatchEvent(new CustomEvent("edit", {bubbles: true, composed: true, detail: localItem})));
+        setTimeout(this.close.bind(this), 2);
       }
 
       _computeResponsiveSteps(desktopView, desktopColumns, mobileColumns) {

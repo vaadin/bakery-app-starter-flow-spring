@@ -7,10 +7,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.vaadin.flow.model.Convert;
+import com.vaadin.flow.model.Include;
 import com.vaadin.router.HasUrlParameter;
 import com.vaadin.router.OptionalParameter;
 import com.vaadin.router.QueryParameters;
 import com.vaadin.router.event.BeforeNavigationEvent;
+import com.vaadin.starter.bakery.backend.data.entity.Order;
+import com.vaadin.starter.bakery.ui.components.storefront.OrderStateConverter;
+import com.vaadin.starter.bakery.ui.components.storefront.converter.StorefrontLocalDateConverter;
+import com.vaadin.starter.bakery.ui.converters.CurrencyFormatter;
+import com.vaadin.starter.bakery.ui.converters.LocalDateTimeConverter;
+import com.vaadin.starter.bakery.ui.converters.LocalTimeConverter;
+import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
+import com.vaadin.starter.bakery.ui.entities.OrderTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -29,7 +39,6 @@ import com.vaadin.starter.bakery.ui.components.storefront.OrderDetail;
 import com.vaadin.starter.bakery.ui.components.storefront.OrderEdit;
 import com.vaadin.starter.bakery.ui.components.viewselector.ViewSelector;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
-import com.vaadin.starter.bakery.ui.entities.Order;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.event.DeleteEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
@@ -49,13 +58,22 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 @HtmlImport("context://src/storefront/bakery-storefront.html")
 @Route(value = BakeryConst.PAGE_STOREFRONT, layout = BakeryApp.class)
 @PageTitle(BakeryConst.TITLE_STOREFRONT)
-public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implements HasLogger,
-		HasUrlParameter<Long>, EntityView<com.vaadin.starter.bakery.backend.data.entity.Order> {
+public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 
 	public interface Model extends TemplateModel {
+		@Include({ "id", "dueDate.day", "dueDate.weekday", "dueDate.date", "dueTime", "state", "pickupLocation.name", "customer.fullName",
+				"customer.phoneNumber", "customer.details", "items.product.name", "items.comment", "items.quantity",
+				"items.product.price", "history.message", "history.createdBy.firstName", "history.timestamp", "history.newState" })
+		@Convert(value = LongToStringConverter.class, path = "id")
+		@Convert(value = StorefrontLocalDateConverter.class, path = "dueDate")
+		@Convert(value = LocalTimeConverter.class, path = "dueTime")
+		@Convert(value = OrderStateConverter.class, path = "state")
+		@Convert(value = CurrencyFormatter.class, path = "items.product.price")
+		@Convert(value = LocalDateTimeConverter.class, path = "history.timestamp")
+		@Convert(value = OrderStateConverter.class, path = "history.newState")
 		void setOrders(List<Order> orders);
 
-		List<Order> getOrders();
+		List<OrderTO> getOrders();
 
 		void setEditing(boolean editing);
 	}
@@ -136,7 +154,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		.ifPresent(o -> ordersProvider.fillOrder(o, dataOrder));
 	}
 
-	private void setOrders(List<Order> orders, boolean showPrevious) {
+	private void setOrders(List<com.vaadin.starter.bakery.backend.data.entity.Order> orders, boolean showPrevious) {
 		getModel().setOrders(orders);
 		getElement().setPropertyJson("displayedHeaders", computeEntriesWithHeader(orders, showPrevious));
 	}
@@ -239,6 +257,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 				addComment(e.getOrderId(), e.getMessage());
 				details(orderService.findOrder(e.getOrderId()), false);
 			});
+			orderDetail.addCancelListener(e -> closeDialog(false));
 		}
 
 		@Override

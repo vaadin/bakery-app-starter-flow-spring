@@ -36,11 +36,6 @@
         return moment(new Date(date)).format('DD/MM/YYYY HH:mm');
       }
 
-      _setHour(str, date) {
-        const hour = parseInt(str.split(/:/)[0]);
-        date.setHours(hour, 0, 0);
-      }
-
       _getDayIso(str) {
         if (str) {
           return moment(new Date(Date.parse(str))).format('YYYY-MM-DD');

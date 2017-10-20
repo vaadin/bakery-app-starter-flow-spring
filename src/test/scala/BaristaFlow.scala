@@ -487,8 +487,6 @@ class BaristaFlow extends Simulation {
         .get("/src/storefront/storefront-item.html"),
       http("request_155")
         .get("/src/elements/item-detail-inline.html"),
-      http("request_156")
-        .get("/src/storefront/storefront-item-detail.html"),
       http("request_157")
         .get("/src/elements/item-detail-dialog.html"),
       http("request_159")
