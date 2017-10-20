@@ -75,15 +75,9 @@ public class OrderDetail extends PolymerTemplate<OrderDetail.Model> {
 		getModel().setItem(order);
 		getModel().setTotalPrice(FormattingUtils.formatAsCurrency(order.getTotalPrice()));
 		if (!review) {
-			getModel().setHistory(order.getHistory());
 			commentField.clear();
 		}
-		setHidden(cancel.getElement(), review);
-		setHidden(back.getElement(), !review);
-		setHidden(edit.getElement(), review);
-		setHidden(save.getElement(), !review);
-		setHidden(history, review);
-		setHidden(comment, review);
+		getModel().setReview(review);
 	}
 
 	private void setHidden(Element e, boolean hide) {
@@ -91,20 +85,17 @@ public class OrderDetail extends PolymerTemplate<OrderDetail.Model> {
 	}
 
 	public interface Model extends TemplateModel {
-		@Include({ "id", "dueDate.day", "dueDate.weekday", "dueTime", "state", "pickupLocation.name", "customer.fullName",
-			"customer.phoneNumber", "customer.details", "items.product.name", "items.comment", "items.quantity",
-		"items.product.price" })
+		@Include({ "id", "dueDate.day", "dueDate.weekday", "dueDate.date", "dueTime", "state", "pickupLocation.name", "customer.fullName",
+				"customer.phoneNumber", "customer.details", "items.product.name", "items.comment", "items.quantity",
+				"items.product.price", "history.message", "history.createdBy.firstName", "history.timestamp", "history.newState" })
 		@Convert(value = LongToStringConverter.class, path = "id")
 		@Convert(value = StorefrontLocalDateConverter.class, path = "dueDate")
 		@Convert(value = LocalTimeConverter.class, path = "dueTime")
 		@Convert(value = OrderStateConverter.class, path = "state")
 		@Convert(value = CurrencyFormatter.class, path = "items.product.price")
+		@Convert(value = LocalDateTimeConverter.class, path = "history.timestamp")
+		@Convert(value = OrderStateConverter.class, path = "history.newState")
 		void setItem(Order order);
-
-		@Include({ "message", "createdBy.firstName", "timestamp", "newState" })
-		@Convert(value = LocalDateTimeConverter.class, path = "timestamp")
-		@Convert(value = OrderStateConverter.class, path = "newState")
-		void setHistory(List<HistoryItem> history);
 
 		void setReview(boolean review);
 
@@ -125,6 +116,10 @@ public class OrderDetail extends PolymerTemplate<OrderDetail.Model> {
 
 	public Registration addCommentListener(ComponentEventListener<CommentEvent> listener) {
 		return addListener(CommentEvent.class, listener);
+	}
+
+	public Registration addCancelListener(ComponentEventListener<CancelEvent> listener) {
+		return addListener(CancelEvent.class, listener);
 	}
 
 	public class CommentEvent extends ComponentEvent<OrderDetail> {

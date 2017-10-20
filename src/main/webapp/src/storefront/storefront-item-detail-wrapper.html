@@ -1,6 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="storefront-item.html">
-<link rel="import" href="storefront-item-detail.html">
+<link rel="import" href="order-detail.html">
 <link rel="import" href="../elements/item-detail-inline.html">
 
 <dom-module id="storefront-item-detail-wrapper">
@@ -72,7 +72,7 @@
 
       <template is="dom-if" if="[[desktopView]]" restamp>
         <item-detail-inline opened="[[_showDetailsDesktop(selected, desktopView)]]">
-          <storefront-item-detail item="[[order]]" desktop-view="[[desktopView]]"></storefront-item-detail>
+          <order-detail item="[[order]]" desktop-view="[[desktopView]]"></order-detail>
         </item-detail-inline>
       </template>
     </div>

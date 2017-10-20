@@ -1,6 +1,5 @@
 package com.vaadin.starter.bakery.ui.utils;
 
-import com.vaadin.starter.bakery.ui.entities.Order;
 import com.vaadin.starter.bakery.ui.entities.StorefrontItemHeader;
 import elemental.json.JsonObject;
 import elemental.json.impl.JreJsonFactory;
@@ -34,16 +33,16 @@ public class StorefrontItemHeaderGenerator {
 				(date, showPrevious) -> headerIfUpcoming(date));
 	}
 
-	public static JsonObject computeEntriesWithHeader(List<Order> orders, boolean showPrevious) {
+	public static JsonObject computeEntriesWithHeader(List<com.vaadin.starter.bakery.backend.data.entity.Order> orders, boolean showPrevious) {
 		Map<String, StorefrontItemHeader> result = new HashMap<>(HEADER_FUNCTIONS.size());
 		boolean[] usedGroups = new boolean[HEADER_FUNCTIONS.size()];
-		ordersLoop: for (Order order : orders) {
+		ordersLoop: for (com.vaadin.starter.bakery.backend.data.entity.Order order : orders) {
 			for (int i = 0; i < HEADER_FUNCTIONS.size(); i++) {
 				Optional<StorefrontItemHeader> header
-						= HEADER_FUNCTIONS.get(i).apply(toDate(order.getDate()), showPrevious);
+						= HEADER_FUNCTIONS.get(i).apply(order.getDueDate(), showPrevious);
 				if (!usedGroups[i] && header.isPresent()) {
 					usedGroups[i] = true;
-					result.put(order.getId(), header.get());
+					result.put(order.getId().toString(), header.get());
 					if (i == usedGroups.length - 1) {
 						break ordersLoop;
 					}
