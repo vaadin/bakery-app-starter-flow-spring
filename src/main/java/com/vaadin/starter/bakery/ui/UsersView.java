@@ -35,12 +35,12 @@ import com.vaadin.starter.bakery.ui.presenter.Confirmer;
 import com.vaadin.starter.bakery.ui.presenter.EntityView;
 import com.vaadin.starter.bakery.ui.presenter.EntityViewPresenter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
+import com.vaadin.starter.bakery.ui.view.DefaultEntityView;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.event.ComponentEventListener;
 import com.vaadin.ui.polymertemplate.EventHandler;
 import com.vaadin.ui.polymertemplate.Id;
-import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 @Tag("bakery-users")
 @HtmlImport("context://src/users/bakery-users.html")
@@ -48,7 +48,7 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 @ParentView(BakeryApp.class)
 @Title(BakeryConst.TITLE_USERS)
 @Secured(Role.ADMIN)
-public class UsersView extends PolymerTemplate<UsersView.Model> implements View, HasLogger, EntityView<User> {
+public class UsersView extends DefaultEntityView<User, UsersView.Model> implements View, HasLogger {
 
 	public interface Model extends TemplateModel {
 
@@ -59,13 +59,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 
 	private final UserService userService;
 
-	@Id("bakery-users-items-view")
-	private ItemsView view;
-
 	private UserEdit editor;
-
-	@Id("user-confirmation-dialog")
-	private ConfirmationDialog confirmationDialog;
 
 	private EntityViewPresenter<User> presenter;
 
