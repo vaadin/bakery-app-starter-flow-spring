@@ -7,7 +7,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;
 
 import com.vaadin.data.ValidationException;
-import com.vaadin.flow.router.LocationChangeEvent;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
 import com.vaadin.starter.bakery.backend.service.CrudService;
@@ -108,23 +107,6 @@ public class EntityViewPresenter<T extends AbstractEntity> implements HasLogger 
 	public void confirmationDecisionReceived(DecisionEvent event) {
 		event.ifConfirmed(this.operationWaitingConfirmation);
 		this.operationWaitingConfirmation = null;
-	}
-
-	public void onLocationChange(LocationChangeEvent locationChangeEvent) {
-		try {
-			String id = locationChangeEvent.getPathParameter("id");
-			boolean idProvided = id != null && !id.isEmpty();
-			if (idProvided) {
-				loadEntity(Long.parseLong(id), locationChangeEvent);
-			}
-		} catch (NumberFormatException e) {
-			// Bad id
-			locationChangeEvent.rerouteToErrorView();
-		}
-	}
-
-	protected void loadEntity(Long id, LocationChangeEvent locationChangeEvent) {
-		loadEntity(id, true);
 	}
 
 	protected void confirmIfNecessaryAndExecute(boolean needsConfirmation, Message message, Runnable operation) {

@@ -5,6 +5,9 @@ import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_USERS;
 import java.util.List;
 import java.util.Optional;
 
+import com.vaadin.router.HasUrlParameter;
+import com.vaadin.router.OptionalParameter;
+import com.vaadin.router.event.BeforeNavigationEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,11 +16,8 @@ import com.vaadin.data.ValidationException;
 import com.vaadin.flow.model.Convert;
 import com.vaadin.flow.model.Include;
 import com.vaadin.flow.model.TemplateModel;
-import com.vaadin.flow.router.LocationChangeEvent;
-import com.vaadin.flow.router.View;
-import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
-import com.vaadin.hummingbird.ext.spring.annotations.Route;
-import com.vaadin.router.Title;
+import com.vaadin.router.Route;
+import com.vaadin.router.PageTitle;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.Role;
@@ -44,11 +44,11 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 @Tag("bakery-users")
 @HtmlImport("context://src/users/bakery-users.html")
-@Route(PAGE_USERS + "/{id}")
-@ParentView(BakeryApp.class)
-@Title(BakeryConst.TITLE_USERS)
+@Route(value = PAGE_USERS, layout = BakeryApp.class)
+@PageTitle(BakeryConst.TITLE_USERS)
 @Secured(Role.ADMIN)
-public class UsersView extends PolymerTemplate<UsersView.Model> implements View, HasLogger, EntityView<User> {
+public class UsersView extends PolymerTemplate<UsersView.Model> implements HasUrlParameter<Long>, HasLogger,
+		EntityView<User> {
 
 	public interface Model extends TemplateModel {
 
@@ -78,7 +78,7 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 		getElement().appendChild(editor.getElement());
 
 		editor.setPasswordEncoder(passwordEncoder);
-		presenter = new EntityViewPresenter<User>(userService, this, "User");
+		presenter = new EntityViewPresenter<>(userService, this, "User");
 		addListener(EditEvent.class, e -> navigateToEntity(getUI(), PAGE_USERS, e.getId()));
 
 		filterUsers(view.getFilter());
@@ -89,8 +89,10 @@ public class UsersView extends PolymerTemplate<UsersView.Model> implements View,
 	}
 
 	@Override
-	public void onLocationChange(LocationChangeEvent locationChangeEvent) {
-		presenter.onLocationChange(locationChangeEvent);
+	public void setParameter(BeforeNavigationEvent event, @OptionalParameter Long userId) {
+		if (userId != null) {
+			presenter.loadEntity(userId, true);
+		}
 	}
 
 	private void filterUsers(String filter) {
