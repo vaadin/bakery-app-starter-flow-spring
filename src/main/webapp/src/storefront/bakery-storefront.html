@@ -104,7 +104,7 @@ Added dynamically
         <order-detail-mobile-dialog selected-item="[[_selectedItem]]" on-close="_unselectItem" on-edit="_onEdit"
                                     desktop-view="[[desktopView]]"></order-detail-mobile-dialog>
       </template>
-      <item-detail-dialog desktop-view$=[[desktopView]] opened=[[editing]]>
+      <item-detail-dialog desktop-view$=[[desktopView]] opened=[[editing]] on-comment-added="_onCommentAdded">
         <slot name="view-selector-slot" on-slotchange="_updateViewSelectorSlot"></slot>
       </item-detail-dialog>
     </div>

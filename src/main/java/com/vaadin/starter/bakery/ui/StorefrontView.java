@@ -148,12 +148,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		}
 	}
 
-	private void updateOrderInModel(Order dataOrder) {
-		String orderId = dataOrder.getId().toString();
-		getModel().getOrders().stream().filter(o -> o.getId().equals(orderId)).findFirst()
-		.ifPresent(o -> o.setHistory(dataOrder.getHistory()));
-	}
-
 	private void setOrders(List<Order> orders, boolean showPrevious) {
 		getModel().setOrders(orders);
 		getElement().setPropertyJson("displayedHeaders", computeEntriesWithHeader(orders, showPrevious));
@@ -250,11 +244,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 				showOrderEdit();
 			});
 			orderDetail.addCommentListener(e -> {
-				if (e.getOrderId() == null) {
-					return;
-				}
-
-				addComment(e.getOrderId(), e.getMessage());
 				details(orderService.findOrder(e.getOrderId()), false);
 			});
 			orderDetail.addCancelListener(e -> closeDialog(false));
@@ -273,7 +262,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 		public void addComment(Long id, String comment) {
 			if (executeJPAOperation(() -> setEntity(orderService.addComment(id, comment)))) {
-				updateOrderInModel(getEntity());
+				// TODO: Update order in model when Grid API will allow
 			}
 		}
 

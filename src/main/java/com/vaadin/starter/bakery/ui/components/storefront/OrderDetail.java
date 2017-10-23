@@ -8,7 +8,6 @@ import com.vaadin.flow.model.Convert;
 import com.vaadin.flow.model.Include;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.shared.Registration;
-import com.vaadin.starter.bakery.backend.data.entity.HistoryItem;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.ui.components.storefront.converter.StorefrontLocalDateConverter;
 import com.vaadin.starter.bakery.ui.converters.CurrencyFormatter;
@@ -17,7 +16,6 @@ import com.vaadin.starter.bakery.ui.converters.LocalTimeConverter;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
-import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
 import com.vaadin.ui.common.HasClickListeners;
@@ -27,8 +25,6 @@ import com.vaadin.ui.event.ComponentEventListener;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import com.vaadin.ui.textfield.TextField;
-
-import java.util.List;
 
 @Tag("order-detail")
 @HtmlImport("context://src/storefront/order-detail.html")
@@ -62,9 +58,7 @@ public class OrderDetail extends PolymerTemplate<OrderDetail.Model> {
 
 	public OrderDetail() {
 		sendComment.addClickListener(e -> {
-			if (commentField.getValue() != null && !commentField.getValue().isEmpty()) {
-				fireEvent(new CommentEvent(order.getId(), commentField.getValue()));
-			}
+			fireEvent(new CommentEvent(order.getId(), commentField.getValue()));
 		});
 		save.addClickListener(e -> fireEvent(new SaveEvent(this, false)));
 		cancel.addClickListener(e -> fireEvent(new CancelEvent(this, false)));
@@ -77,10 +71,6 @@ public class OrderDetail extends PolymerTemplate<OrderDetail.Model> {
 			commentField.clear();
 		}
 		getModel().setReview(review);
-	}
-
-	private void setHidden(Element e, boolean hide) {
-		e.setAttribute("hidden", hide);
 	}
 
 	public interface Model extends TemplateModel {
