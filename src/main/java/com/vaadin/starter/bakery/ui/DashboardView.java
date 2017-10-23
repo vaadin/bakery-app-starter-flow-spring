@@ -8,22 +8,19 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.vaadin.flow.model.TemplateModel;
-import com.vaadin.router.Title;
+import com.vaadin.router.PageTitle;
 import com.vaadin.ui.Tag;
-import com.vaadin.ui.common.AttachEvent;
+import com.vaadin.ui.event.AttachEvent;
 import com.vaadin.ui.common.ClientDelegate;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.event.EventData;
 import com.vaadin.ui.polymertemplate.EventHandler;
-import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 
 import com.google.gson.Gson;
-import com.vaadin.flow.router.View;
-import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
-import com.vaadin.hummingbird.ext.spring.annotations.Route;
+import com.vaadin.router.Route;
 import com.vaadin.starter.bakery.backend.data.DashboardData;
 import com.vaadin.starter.bakery.backend.data.DeliveryStats;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
@@ -40,10 +37,9 @@ import com.vaadin.starter.bakery.ui.utils.DashboardUtils.PageInfo;
 
 @Tag("bakery-dashboard")
 @HtmlImport("context://src/dashboard/bakery-dashboard.html")
-@Route(BakeryConst.PAGE_DASHBOARD)
-@ParentView(BakeryApp.class)
-@Title(BakeryConst.TITLE_DASHBOARD)
-public class DashboardView extends PolymerTemplate<DashboardView.Model> implements View {
+@Route(value = BakeryConst.PAGE_DASHBOARD, layout = BakeryApp.class)
+@PageTitle(BakeryConst.TITLE_DASHBOARD)
+public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 
 	private final OrdersDataProvider ordersProvider;
 

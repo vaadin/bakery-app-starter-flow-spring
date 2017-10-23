@@ -8,6 +8,9 @@ import java.util.Optional;
 import com.vaadin.data.ValidationException;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.flow.router.LocationChangeEvent;
+import com.vaadin.router.HasUrlParameter;
+import com.vaadin.router.OptionalParameter;
+import com.vaadin.router.event.BeforeNavigationEvent;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
 import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
@@ -22,7 +25,7 @@ import com.vaadin.starter.bakery.ui.presenter.ListableEntityView;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 public abstract class DefaultEntityView<E extends AbstractEntity, T extends TemplateModel> extends PolymerTemplate<T>
-implements HasLogger, ListableEntityView<E> {
+implements HasLogger, ListableEntityView<E>, HasUrlParameter<Long> {
 
 	private String basePage;
 
@@ -63,8 +66,10 @@ implements HasLogger, ListableEntityView<E> {
 	}
 
 	@Override
-	public void onLocationChange(LocationChangeEvent locationChangeEvent) {
-		presenter.onLocationChange(locationChangeEvent);
+	public void setParameter(BeforeNavigationEvent event, @OptionalParameter Long userId) {
+		if (userId != null) {
+			presenter.loadEntity(userId, true);
+		}
 	}
 
 	@Override

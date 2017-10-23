@@ -3,19 +3,22 @@ package com.vaadin.starter.bakery.ui;
 import static com.vaadin.starter.bakery.ui.utils.StorefrontItemHeaderGenerator.computeEntriesWithHeader;
 import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.ListIterator;
+import java.util.Map;
 
+import com.vaadin.router.HasUrlParameter;
+import com.vaadin.router.OptionalParameter;
+import com.vaadin.router.QueryParameters;
+import com.vaadin.router.event.BeforeNavigationEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 
 import com.vaadin.data.ValidationException;
 import com.vaadin.flow.model.TemplateModel;
-import com.vaadin.flow.router.LocationChangeEvent;
-import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
-import com.vaadin.hummingbird.ext.spring.annotations.Route;
-import com.vaadin.router.Title;
+import com.vaadin.router.Route;
+import com.vaadin.router.PageTitle;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.service.OrderService;
@@ -44,13 +47,10 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 @Tag("bakery-storefront")
 @HtmlImport("context://src/storefront/bakery-storefront.html")
-@Route(BakeryConst.PAGE_STOREFRONT + "/{id}")
-@Route(BakeryConst.PAGE_STOREFRONT + "/{id}/edit")
-@Route(value = "")
-@ParentView(BakeryApp.class)
-@Title(BakeryConst.TITLE_STOREFRONT)
-public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
-implements HasLogger, EntityView<com.vaadin.starter.bakery.backend.data.entity.Order> {
+@Route(value = BakeryConst.PAGE_STOREFRONT, layout = BakeryApp.class)
+@PageTitle(BakeryConst.TITLE_STOREFRONT)
+public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implements HasLogger,
+		HasUrlParameter<Long>, EntityView<com.vaadin.starter.bakery.backend.data.entity.Order> {
 
 	public interface Model extends TemplateModel {
 		void setOrders(List<Order> orders);
@@ -115,15 +115,21 @@ implements HasLogger, EntityView<com.vaadin.starter.bakery.backend.data.entity.O
 	@ClientDelegate
 	private void edit(String id) {
 		if (id != null && !id.isEmpty()) {
-			getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT + "/" + id + "/edit"));
+			Map<String, String> parameters = new HashMap<>();
+			parameters.put("edit", "");
+			getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT + "/" + id,
+					QueryParameters.simple(parameters)));
 			return;
 		}
 		presenter.createNew();
 	}
 
 	@Override
-	public void onLocationChange(LocationChangeEvent locationChangeEvent) {
-		presenter.onLocationChange(locationChangeEvent);
+	public void setParameter(BeforeNavigationEvent event, @OptionalParameter Long orderId) {
+		if (orderId != null) {
+			boolean editView = event.getLocation().getQueryParameters().getParameters().containsKey("edit");
+			presenter.loadEntity(orderId, editView);
+		}
 	}
 
 	private void updateOrderInModel(com.vaadin.starter.bakery.backend.data.entity.Order dataOrder) {
@@ -220,11 +226,6 @@ implements HasLogger, EntityView<com.vaadin.starter.bakery.backend.data.entity.O
 				addComment(e.getOrderId(), e.getMessage());
 				details(orderService.findOrder(e.getOrderId()), false);
 			});
-		}
-
-		@Override
-		protected void loadEntity(Long id, LocationChangeEvent locationChangeEvent) {
-			loadEntity(id, locationChangeEvent.getLocation().getSegments().contains("edit"));
 		}
 
 		@Override

@@ -12,9 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.vaadin.flow.model.Convert;
 import com.vaadin.flow.model.Include;
 import com.vaadin.flow.model.TemplateModel;
-import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
-import com.vaadin.hummingbird.ext.spring.annotations.Route;
-import com.vaadin.router.Title;
+import com.vaadin.router.Route;
+import com.vaadin.router.PageTitle;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.UserService;
@@ -27,14 +26,12 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.view.DefaultEntityView;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HtmlImport;
-import com.vaadin.ui.polymertemplate.EventHandler;
 import com.vaadin.ui.polymertemplate.Id;
 
 @Tag("bakery-users")
 @HtmlImport("context://src/users/bakery-users.html")
-@Route(PAGE_USERS + "/{id}")
-@ParentView(BakeryApp.class)
-@Title(BakeryConst.TITLE_USERS)
+@Route(value = PAGE_USERS, layout = BakeryApp.class)
+@PageTitle(BakeryConst.TITLE_USERS)
 @Secured(Role.ADMIN)
 public class UsersView extends DefaultEntityView<User, UsersView.Model> {
 
