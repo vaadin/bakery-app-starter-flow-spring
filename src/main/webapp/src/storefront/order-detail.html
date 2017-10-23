@@ -231,7 +231,7 @@
       edit(type) {
         const localItem = this.item;
         Polymer.RenderStatus.afterNextRender(this, () =>
-        this.dispatchEvent(new CustomEvent("edit", {bubbles: true, composed: true, detail: localItem})));
+          this.dispatchEvent(new CustomEvent('edit', {bubbles: true, composed: true, detail: localItem})));
         setTimeout(this.close.bind(this), 2);
       }
 
