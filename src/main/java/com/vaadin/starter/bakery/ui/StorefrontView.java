@@ -20,7 +20,6 @@ import com.vaadin.starter.bakery.ui.converters.CurrencyFormatter;
 import com.vaadin.starter.bakery.ui.converters.LocalDateTimeConverter;
 import com.vaadin.starter.bakery.ui.converters.LocalTimeConverter;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
-import com.vaadin.starter.bakery.ui.entities.OrderTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -74,7 +73,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		@Convert(value = CurrencyFormatter.class, path = "totalPrice")
 		void setOrders(List<Order> orders);
 
-		List<OrderTO> getOrders();
+		List<Order> getOrders();
 
 		void setEditing(boolean editing);
 	}
@@ -149,10 +148,10 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		}
 	}
 
-	private void updateOrderInModel(com.vaadin.starter.bakery.backend.data.entity.Order dataOrder) {
+	private void updateOrderInModel(Order dataOrder) {
 		String orderId = dataOrder.getId().toString();
 		getModel().getOrders().stream().filter(o -> o.getId().equals(orderId)).findFirst()
-		.ifPresent(o -> ordersProvider.fillOrder(o, dataOrder));
+		.ifPresent(o -> o.setHistory(dataOrder.getHistory()));
 	}
 
 	private void setOrders(List<Order> orders, boolean showPrevious) {
@@ -186,7 +185,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	}
 
 	@Override
-	public void write(com.vaadin.starter.bakery.backend.data.entity.Order entity) throws ValidationException {
+	public void write(Order entity) throws ValidationException {
 		orderEdit.write(entity);
 	}
 
@@ -198,7 +197,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	}
 
 	@Override
-	public void openDialog(com.vaadin.starter.bakery.backend.data.entity.Order order, boolean edit) {
+	public void openDialog(Order order, boolean edit) {
 		getModel().setEditing(true);
 		if (edit) {
 			orderEdit.read(order);
@@ -209,7 +208,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	}
 
 	@Override
-	public void update(com.vaadin.starter.bakery.backend.data.entity.Order order) {
+	public void update(Order order) {
 		filterItems(searchBar.getFilter(), searchBar.getShowPrevious());
 	}
 
@@ -233,7 +232,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		return null; // Not supported.
 	}
 
-	class Presenter extends EntityViewPresenter<com.vaadin.starter.bakery.backend.data.entity.Order> {
+	class Presenter extends EntityViewPresenter<Order> {
 
 		public Presenter() {
 			super(orderService, StorefrontView.this, "Order");
@@ -267,7 +266,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		}
 
 		@Override
-		protected void openDialog(com.vaadin.starter.bakery.backend.data.entity.Order entity, boolean edit) {
+		protected void openDialog(Order entity, boolean edit) {
 			orderEdit.init(userService.getCurrentUser(), productService.getRepository().findAll());
 			super.openDialog(entity, edit);
 		}
