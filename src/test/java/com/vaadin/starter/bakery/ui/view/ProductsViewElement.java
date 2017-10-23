@@ -20,7 +20,7 @@ public class ProductsViewElement extends TestBenchElement implements HasApp, Has
 	}
 
 	public ProductEditElement getProductEdit() {
-		return getItemsView().$(ProductEditElement.class).first();
+		return $(ProductEditElement.class).first();
 	}
 
 	public ConfirmationDialogElement getConfirmDialog() {
