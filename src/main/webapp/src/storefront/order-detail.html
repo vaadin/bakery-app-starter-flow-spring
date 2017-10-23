@@ -181,7 +181,7 @@
           <vaadin-form-item id="order-detail-comment" hidden="[[review]]">
             <vaadin-text-field id="comment-field" placeholder="Add comment" class="full-width">
               <div slot="suffix" class="comment-suffix">
-                <vaadin-button id="send-comment" theme="tertiary">Send</vaadin-button>
+                <vaadin-button id="send-comment" theme="tertiary" on-click="_sendComment" on-keydown="_onCommentKeydown">Send</vaadin-button>
               </div>
             </vaadin-text-field>
           </vaadin-form-item>
@@ -233,6 +233,35 @@
         Polymer.RenderStatus.afterNextRender(this, () =>
           this.dispatchEvent(new CustomEvent('edit', {bubbles: true, composed: true, detail: localItem})));
         setTimeout(this.close.bind(this), 2);
+      }
+
+      _sendComment() {
+        const _comment = this.$['comment-field'].value.trim();
+        if (_comment === '') {
+          return;
+        }
+
+        if (!this.item.history) {
+          this.set('item.history', []);
+        }
+        this.push('item.history', {
+          createdBy: {firstName: 'You'},
+          newState: this.item.state,
+          message: _comment
+        });
+
+        const detail = {
+          orderId: this.item.id,
+          message: _comment
+        };
+        this.dispatchEvent(new CustomEvent('comment-added', {bubbles: true, composed: true, detail: detail}));
+        this.$['comment-field'].value = '';
+      }
+
+      _onCommentKeydown(event) {
+        if (event.key === 'Enter') {
+          this._sendComment();
+        }
       }
 
       _computeResponsiveSteps(desktopView, desktopColumns, mobileColumns) {
