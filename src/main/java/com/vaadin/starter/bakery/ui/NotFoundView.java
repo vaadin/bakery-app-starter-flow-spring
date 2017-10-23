@@ -1,12 +1,11 @@
 package com.vaadin.starter.bakery.ui;
 
 import com.vaadin.flow.dom.ElementFactory;
-import com.vaadin.flow.router.LocationChangeEvent;
-import com.vaadin.flow.router.View;
-import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
-import com.vaadin.hummingbird.ext.spring.annotations.Route;
+import com.vaadin.router.NavigationHandler;
+import com.vaadin.router.PageTitle;
+import com.vaadin.router.Route;
 import com.vaadin.router.RouterLink;
-import com.vaadin.router.Title;
+import com.vaadin.router.event.NavigationEvent;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Composite;
@@ -15,10 +14,9 @@ import com.vaadin.ui.html.Div;
 
 import javax.servlet.http.HttpServletResponse;
 
-@Route(value = BakeryConst.PAGE_NOTFOUND)
-@Title(BakeryConst.TITLE_NOT_FOUND)
-@ParentView(BakeryApp.class)
-public class NotFoundView extends Composite<Div> implements View {
+@Route(value = BakeryConst.PAGE_NOTFOUND, layout = BakeryApp.class)
+@PageTitle(BakeryConst.TITLE_NOT_FOUND)
+public class NotFoundView extends Composite<Div> implements NavigationHandler {
 
 	public NotFoundView() {
 		// This should be simply `new RouterLink("Go to the front page.", StorefrontView.class)`
@@ -31,7 +29,7 @@ public class NotFoundView extends Composite<Div> implements View {
 	}
 
 	@Override
-	public void onLocationChange(LocationChangeEvent locationChangeEvent) {
-		locationChangeEvent.setStatusCode(HttpServletResponse.SC_NOT_FOUND);
+	public int handle(NavigationEvent event) {
+		return HttpServletResponse.SC_NOT_FOUND;
 	}
 }

@@ -1,14 +1,13 @@
 package com.vaadin.starter.bakery;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
-import org.springframework.beans.factory.config.CustomScopeConfigurer;
+import com.vaadin.starter.bakery.backend.data.Role;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -22,10 +21,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.vaadin.hummingbird.ext.spring.SpringAwareConfigurator;
-import com.vaadin.hummingbird.ext.spring.VaadinUIScope;
-import com.vaadin.hummingbird.ext.spring.annotations.UIScope;
-import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.util.LocalDateJpaConverter;
 import com.vaadin.starter.bakery.repositories.UserRepository;
@@ -35,10 +30,7 @@ import com.vaadin.starter.bakery.repositories.UserRepository;
  * <p>
  * For now it does:
  * <ul>
- * <li>Create and configure custom Vaadin UI scope</li>
  * <li>Disables HTTP security (gives access to anyone to any page)</li>
- * <li>Creates a fake AccessDecisionVoter to make
- * {@link SpringAwareConfigurator} happy</li>
  * </ul>
  *
  */
@@ -47,8 +39,7 @@ import com.vaadin.starter.bakery.repositories.UserRepository;
     "com.vaadin.starter.bakery",
     "com.vaadin.starter.bakery.backend.service",
     "com.vaadin.starter.bakery.app",
-    "com.vaadin.starter.bakery.app.security",
-    "com.vaadin.hummingbird.ext.spring" })
+    "com.vaadin.starter.bakery.app.security" })
 @EnableJpaRepositories(basePackageClasses = { UserRepository.class})
 @EntityScan(basePackageClasses={User.class, LocalDateJpaConverter.class})
 public class BakeryApplicationConfig extends WebSecurityConfigurerAdapter {
@@ -62,20 +53,6 @@ public class BakeryApplicationConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    /**
-     * Creates a custom scope configurer to be able to use Vaadin UI scope
-     * ({@link UIScope}).
-     *
-     * @return a Vaadin UI scope configurer
-     */
-    @Bean
-    public static CustomScopeConfigurer customScopeConfigurer() {
-        CustomScopeConfigurer result = new CustomScopeConfigurer();
-        result.setScopes(Collections.singletonMap(
-                VaadinUIScope.VAADIN_UI_SCOPE_NAME, new VaadinUIScope()));
-        return result;
     }
 
     @PostConstruct
@@ -95,14 +72,14 @@ public class BakeryApplicationConfig extends WebSecurityConfigurerAdapter {
             return false;
         }
 
-		@Override
-		public int vote(Authentication authentication, Object object, Collection<ConfigAttribute> attributes) {
-			Set<String> authenticatedUserRoles = authentication.getAuthorities().stream()
-					.map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
-			boolean hasAccess = authenticatedUserRoles.contains(Role.ADMIN) || attributes.stream()
-					.map(ConfigAttribute::getAttribute).anyMatch(authenticatedUserRoles::contains);
-			return hasAccess ? ACCESS_GRANTED : ACCESS_ABSTAIN;
-		}
+        @Override
+        public int vote(Authentication authentication, Object object, Collection<ConfigAttribute> attributes) {
+            Set<String> authenticatedUserRoles = authentication.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
+            boolean hasAccess = authenticatedUserRoles.contains(Role.ADMIN) || attributes.stream()
+                    .map(ConfigAttribute::getAttribute).anyMatch(authenticatedUserRoles::contains);
+            return hasAccess ? ACCESS_GRANTED : ACCESS_ABSTAIN;
+        }
     }
 
     /**

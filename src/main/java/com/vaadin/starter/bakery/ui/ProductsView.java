@@ -3,11 +3,11 @@ package com.vaadin.starter.bakery.ui;
 import com.vaadin.flow.model.Convert;
 import com.vaadin.flow.model.Include;
 import com.vaadin.flow.model.TemplateModel;
-import com.vaadin.flow.router.LocationChangeEvent;
-import com.vaadin.flow.router.View;
-import com.vaadin.hummingbird.ext.spring.annotations.ParentView;
-import com.vaadin.hummingbird.ext.spring.annotations.Route;
-import com.vaadin.router.Title;
+import com.vaadin.router.HasUrlParameter;
+import com.vaadin.router.OptionalParameter;
+import com.vaadin.router.PageTitle;
+import com.vaadin.router.Route;
+import com.vaadin.router.event.BeforeNavigationEvent;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.Role;
@@ -48,11 +48,11 @@ import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_PRODUCTS;
 
 @Tag("bakery-products")
 @HtmlImport("context://src/products/bakery-products.html")
-@Route(PAGE_PRODUCTS + "/{id}")
-@ParentView(BakeryApp.class)
-@Title(BakeryConst.TITLE_PRODUCTS)
+@Route(value = PAGE_PRODUCTS, layout = BakeryApp.class)
+@PageTitle(BakeryConst.TITLE_PRODUCTS)
 @Secured(Role.ADMIN)
-public class ProductsView extends PolymerTemplate<ProductsView.Model> implements View, HasToast, HasLogger {
+public class ProductsView extends PolymerTemplate<ProductsView.Model> implements HasUrlParameter<Long>, HasToast,
+		HasLogger {
 
 	public interface Model extends TemplateModel {
 
@@ -126,31 +126,16 @@ public class ProductsView extends PolymerTemplate<ProductsView.Model> implements
 	}
 
 	@Override
-	public void onLocationChange(LocationChangeEvent locationChangeEvent) {
-		setEditableProduct(locationChangeEvent.getPathParameter("id"));
-	}
-
-	private void setEditableProduct(String id) {
-		if (id == null || id.isEmpty()) {
-			return;
-		}
-
-		try {
-			Long longId = Long.parseLong(id);
-			Product product = service.getRepository().findOne(longId);
+	public void setParameter(BeforeNavigationEvent event, @OptionalParameter Long productId) {
+		if (productId != null) {
+			Product product = service.getRepository().findOne(productId);
 			if (product == null) {
-				String errorMessage = "Product with id " + id + " was not found.";
-				toast(errorMessage, false);
-				getLogger().error(errorMessage);
-				return;
+				getLogger().error("Product with id " + productId + " was not found.");
+				event.rerouteTo(NotFoundView.class);
 			}
 
 			view.openDialog(true);
 			editor.setProduct(product);
-		} catch (NumberFormatException e) {
-			toast("Wrong product id: " + id, false);
-			getLogger().error("Failed to parse id: " + id);
-			view.openDialog(false);
 		}
 	}
 
