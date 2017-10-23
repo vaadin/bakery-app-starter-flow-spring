@@ -31,8 +31,6 @@ public class OrdersDataProvider {
 	}
 
 	public PageInfo getOrdersList(String filter, boolean showPrevious, Pageable pageable) {
-	//	List<OrderTO> list = new ArrayList<>();
-	//	fetchFromBackEnd(filter, showPrevious, pageable).forEach(entityOrder -> list.add(toUIEntity(entityOrder)));
 		return new PageInfo(fetchFromBackEnd(filter, showPrevious, pageable).getContent(), pageable.getPageNumber());
 	}
 

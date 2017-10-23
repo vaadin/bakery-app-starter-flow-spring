@@ -73,7 +73,6 @@ public class OrderDetail extends PolymerTemplate<OrderDetail.Model> {
 	public void display(Order order, boolean review) {
 		this.order = order;
 		getModel().setItem(order);
-		getModel().setTotalPrice(FormattingUtils.formatAsCurrency(order.getTotalPrice()));
 		if (!review) {
 			commentField.clear();
 		}
@@ -87,7 +86,7 @@ public class OrderDetail extends PolymerTemplate<OrderDetail.Model> {
 	public interface Model extends TemplateModel {
 		@Include({ "id", "dueDate.day", "dueDate.weekday", "dueDate.date", "dueTime", "state", "pickupLocation.name", "customer.fullName",
 				"customer.phoneNumber", "customer.details", "items.product.name", "items.comment", "items.quantity",
-				"items.product.price", "history.message", "history.createdBy.firstName", "history.timestamp", "history.newState" })
+				"items.product.price", "history.message", "history.createdBy.firstName", "history.timestamp", "history.newState", "totalPrice" })
 		@Convert(value = LongToStringConverter.class, path = "id")
 		@Convert(value = StorefrontLocalDateConverter.class, path = "dueDate")
 		@Convert(value = LocalTimeConverter.class, path = "dueTime")
@@ -95,11 +94,10 @@ public class OrderDetail extends PolymerTemplate<OrderDetail.Model> {
 		@Convert(value = CurrencyFormatter.class, path = "items.product.price")
 		@Convert(value = LocalDateTimeConverter.class, path = "history.timestamp")
 		@Convert(value = OrderStateConverter.class, path = "history.newState")
+		@Convert(value = CurrencyFormatter.class, path = "totalPrice")
 		void setItem(Order order);
 
 		void setReview(boolean review);
-
-		void setTotalPrice(String totalPrice);
 	}
 
 	public Registration addSaveListenter(ComponentEventListener<SaveEvent> listener) {

@@ -63,7 +63,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	public interface Model extends TemplateModel {
 		@Include({ "id", "dueDate.day", "dueDate.weekday", "dueDate.date", "dueTime", "state", "pickupLocation.name", "customer.fullName",
 				"customer.phoneNumber", "customer.details", "items.product.name", "items.comment", "items.quantity",
-				"items.product.price", "history.message", "history.createdBy.firstName", "history.timestamp", "history.newState" })
+				"items.product.price", "history.message", "history.createdBy.firstName", "history.timestamp", "history.newState", "totalPrice" })
 		@Convert(value = LongToStringConverter.class, path = "id")
 		@Convert(value = StorefrontLocalDateConverter.class, path = "dueDate")
 		@Convert(value = LocalTimeConverter.class, path = "dueTime")
@@ -71,6 +71,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		@Convert(value = CurrencyFormatter.class, path = "items.product.price")
 		@Convert(value = LocalDateTimeConverter.class, path = "history.timestamp")
 		@Convert(value = OrderStateConverter.class, path = "history.newState")
+		@Convert(value = CurrencyFormatter.class, path = "totalPrice")
 		void setOrders(List<Order> orders);
 
 		List<OrderTO> getOrders();
@@ -154,7 +155,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		.ifPresent(o -> ordersProvider.fillOrder(o, dataOrder));
 	}
 
-	private void setOrders(List<com.vaadin.starter.bakery.backend.data.entity.Order> orders, boolean showPrevious) {
+	private void setOrders(List<Order> orders, boolean showPrevious) {
 		getModel().setOrders(orders);
 		getElement().setPropertyJson("displayedHeaders", computeEntriesWithHeader(orders, showPrevious));
 	}
@@ -174,7 +175,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		selectComponent(orderEdit);
 	}
 
-	private void details(com.vaadin.starter.bakery.backend.data.entity.Order order, boolean isReview) {
+	private void details(Order order, boolean isReview) {
 		selectComponent(orderDetail);
 		orderDetail.display(order, isReview);
 	}
