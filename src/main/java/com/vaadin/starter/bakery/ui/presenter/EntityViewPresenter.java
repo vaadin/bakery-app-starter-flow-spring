@@ -31,13 +31,9 @@ public class EntityViewPresenter<T extends AbstractEntity> implements HasLogger 
 		this.crudService = crudService;
 		this.view = view;
 		this.entityName = entityName;
-		view.addSaveListener(e -> save());
-		view.addDeleteListener(e -> delete());
-		view.addCancelListener(e -> cancel());
-		view.getConfirmer().addDecisionListener(this::confirmationDecisionReceived);
 	}
 
-	private void delete() {
+	public void delete() {
 		Message CONFIRM_DELETE = Message.CONFIRM_DELETE.createMessage();
 		confirmIfNecessaryAndExecute(true, CONFIRM_DELETE, () -> executeJPAOperation(() -> {
 			crudService.delete(entity);
@@ -45,13 +41,12 @@ public class EntityViewPresenter<T extends AbstractEntity> implements HasLogger 
 		}));
 	}
 
-	private void save() {
+	public void save() {
 
 		try {
 			beforeSave();
 			if (executeJPAOperation(() -> saveEntity())) {
-				view.update(entity);
-				close(true);
+				onSaveSuccess();
 			}
 		} catch (ValidationException e) {
 			showValidationError();
@@ -68,6 +63,11 @@ public class EntityViewPresenter<T extends AbstractEntity> implements HasLogger 
 
 	protected void beforeSave() throws ValidationException {
 		writeEntity();
+	}
+
+	protected void onSaveSuccess() {
+		view.update(entity);
+		close(true);
 	}
 
 	protected void writeEntity() throws ValidationException {

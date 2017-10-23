@@ -41,7 +41,6 @@ public class EditForm extends PolymerTemplate<TemplateModel> implements View, Ha
 		saveButton.addClickListener(e -> fireEvent(new SaveEvent(this, false)));
 		cancelButton.addClickListener(e -> fireEvent(new CancelEvent(EditForm.this, false)));
 		deleteButton.addClickListener(e -> fireEvent(new DeleteEvent(EditForm.this, false)));
-
 	}
 
 	public void showEditor(boolean isNewEntity) {

@@ -2,6 +2,7 @@
 <link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
+<link rel="import" href="../elements/edit-form.html">
 
 <dom-module id="product-edit">
   <template>
@@ -17,31 +18,18 @@
         font-weight: 500;
       }
 
-      .buttons {
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        border-top: 1px solid var(--valo-contrast-60pct);
-        padding: 10px;
-      }
     </style>
 
-    <h3 id="product-edit-title"></h3>
-    <vaadin-form-layout>
-      <vaadin-text-field id="product-edit-name" label="Product name" colspan="2" required pattern=".*[^ ].*"
-                         error-message="Please enter a valid name"></vaadin-text-field>
-      <br>
-      <vaadin-text-field id="price" label="Unit price" colspan="2" on-focus="priceFocusGained" on-blur="priceFocusLost"
-        pattern="\d+(\.\d?\d?)?$" required prevent-invalid-input>
-      </vaadin-text-field>
-    </vaadin-form-layout>
-    <div class="flex buttons">
-      <vaadin-button id="product-edit-save" theme="primary">Save</vaadin-button>
-      <vaadin-button id="product-edit-cancel">Cancel</vaadin-button>
-      <div class="flex1"></div>
-      <vaadin-button id="product-edit-delete" theme="danger tertiary" class="right">Delete</vaadin-button>
-    </div>
+    <edit-form id="product-edit-form">
+      <vaadin-form-layout>
+        <vaadin-text-field id="product-edit-name" label="Product name" colspan="2" required pattern=".*[^ ].*"
+                       error-message="Please enter a valid name"></vaadin-text-field>
+        <br>
+        <vaadin-text-field id="price" label="Unit price" colspan="2" on-focus="priceFocusGained"
+          pattern="\d+(\.\d?\d?)?$" required prevent-invalid-input>
+        </vaadin-text-field>
+      </vaadin-form-layout>
+    </edit-form>
   </template>
 
   <script>

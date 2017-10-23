@@ -92,7 +92,9 @@ implements HasLogger, EntityView<com.vaadin.starter.bakery.backend.data.entity.O
 		searchBar.setPlaceHolder("Search");
 		searchBar.addFilterChangeListener(this::filterItems);
 		searchBar.addActionClickListener(e -> edit(null));
-
+		orderDetail.addListener(SaveEvent.class, e -> presenter.save());
+		orderEdit.addListener(CancelEvent.class, e -> presenter.cancel());
+		confirmationDialog.addDecisionListener(presenter::confirmationDecisionReceived);
 		filterItems(searchBar.getFilter(), searchBar.getShowPrevious());
 
 		getModel().setEditing(false);
@@ -191,21 +193,6 @@ implements HasLogger, EntityView<com.vaadin.starter.bakery.backend.data.entity.O
 	@Override
 	public Confirmer getConfirmer() {
 		return confirmationDialog;
-	}
-
-	@Override
-	public Registration addSaveListener(ComponentEventListener<SaveEvent> listener) {
-		return orderDetail.addSaveListenter(listener);
-	}
-
-	@Override
-	public Registration addCancelListener(ComponentEventListener<CancelEvent> listener) {
-		return orderEdit.addCancelListener(listener);
-	}
-
-	@Override
-	public Registration addDeleteListener(ComponentEventListener<DeleteEvent> listener) {
-		return null; // Not supported.
 	}
 
 	class Presenter extends EntityViewPresenter<com.vaadin.starter.bakery.backend.data.entity.Order> {

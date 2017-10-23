@@ -1,34 +1,37 @@
 package com.vaadin.starter.bakery.ui.components;
 
+import static com.vaadin.starter.bakery.ui.utils.FormattingUtils.DECIMAL_ZERO;
+
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.util.Currency;
+import java.util.Locale;
+
+import com.vaadin.data.BeanValidationBinder;
+import com.vaadin.data.Result;
+import com.vaadin.data.ValidationException;
+import com.vaadin.data.ValueContext;
 import com.vaadin.flow.model.TemplateModel;
-import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
+import com.vaadin.starter.bakery.ui.converters.binder.BinderConverter;
+import com.vaadin.starter.bakery.ui.event.CancelEvent;
+import com.vaadin.starter.bakery.ui.event.DeleteEvent;
+import com.vaadin.starter.bakery.ui.event.SaveEvent;
+import com.vaadin.starter.bakery.ui.form.EditForm;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
+import com.vaadin.starter.bakery.ui.view.EntityEditor;
 import com.vaadin.ui.Tag;
-import com.vaadin.ui.button.Button;
-import com.vaadin.ui.common.HasClickListeners;
 import com.vaadin.ui.common.HtmlImport;
-import com.vaadin.ui.event.ComponentEventListener;
-import com.vaadin.ui.html.H3;
 import com.vaadin.ui.html.Span;
 import com.vaadin.ui.polymertemplate.EventHandler;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import com.vaadin.ui.textfield.TextField;
 
-import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.util.Currency;
-import java.util.Locale;
-
-import static com.vaadin.starter.bakery.ui.utils.FormattingUtils.DECIMAL_ZERO;
-
 @Tag("product-edit")
 @HtmlImport("context://src/products/product-edit.html")
-public class ProductEdit extends PolymerTemplate<TemplateModel> {
-
-	@Id("product-edit-title")
-	private H3 title;
+public class ProductEdit extends PolymerTemplate<TemplateModel> implements EntityEditor<Product> {
 
 	@Id("product-edit-name")
 	private TextField nameField;
@@ -36,62 +39,32 @@ public class ProductEdit extends PolymerTemplate<TemplateModel> {
 	@Id("price")
 	private TextField priceField;
 
-	@Id("product-edit-save")
-	private Button saveButton;
+	@Id("product-edit-form")
+	private EditForm editForm;
 
-	@Id("product-edit-delete")
-	private Button deleteButton;
-
-	@Id("product-edit-cancel")
-	private Button cancelButton;
-
-	private Product product;
+	private final BeanValidationBinder<Product> binder = new BeanValidationBinder<>(Product.class);
 
 	private final DecimalFormat df = FormattingUtils.getUiPriceFormatter();
 
 	public ProductEdit() {
-		nameField.addValueChangeListener(valueChangeEvent -> saveButton.setDisabled(!isDirty()));
-		priceField.addValueChangeListener(valueChangeEvent -> saveButton.setDisabled(!isDirty()));
-		title.setText("New Product");
-		setCurrencySymbol();
+		editForm.init(binder, "Product");
+		binder.bind(nameField, "name");
+		binder.forField(priceField).withConverter(new PriceConverter()).bind("price");
+		priceField.addToPrefix(new Span(Currency.getInstance(Locale.getDefault()).getSymbol()));
+
+		// Forward these events to the presenter
+		editForm.addListener(SaveEvent.class, this::fireEvent);
+		editForm.addListener(DeleteEvent.class, this::fireEvent);
+		editForm.addListener(CancelEvent.class, this::fireEvent);
 	}
 
-	private void setCurrencySymbol() {
-		Currency currency = Currency.getInstance(Locale.getDefault());
-		priceField.addToPrefix(new Span(currency.getSymbol()));
+	public void read(Product product) {
+		binder.readBean(product);
+		editForm.showEditor(product.isNew());
 	}
 
-	public Long getProductId() {
-		return product == null ? null : product.getId();
-	}
-
-	public Product getProduct() {
-		if (product != null) {
-			product.setName(nameField.getValue());
-			product.setPrice(fromUiPrice());
-		}
-
-		return product;
-	}
-
-	public void setProduct(Product product) {
-		this.product = product;
-		nameField.setValue(product.getName());
-		priceField.setValue(toUiPrice());
-		deleteButton.setDisabled(product.getId() == null);
-		title.setText((product.getId() == null ? "New" : "Edit") + " Product");
-	}
-
-	public Registration addSaveListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {
-		return saveButton.addClickListener(listener);
-	}
-
-	public Registration addDeleteListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {
-		return deleteButton.addClickListener(listener);
-	}
-
-	public Registration addCancelListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {
-		return cancelButton.addClickListener(listener);
+	public void write(Product product) throws ValidationException {
+		binder.writeBean(product);
 	}
 
 	@EventHandler
@@ -101,33 +74,29 @@ public class ProductEdit extends PolymerTemplate<TemplateModel> {
 		}
 	}
 
-	@EventHandler
-	public void priceFocusLost() {
-		if (fromUiPrice() <= 0) {
-			priceField.setValue(DECIMAL_ZERO);
-		}
-	}
-
 	public boolean isDirty() {
-		if (product != null && product.getId() != null) {
-			return !product.getName().equals(nameField.getValue()) || product.getPrice() != fromUiPrice();
-		}
-
-		return !nameField.getValue().trim().isEmpty() || fromUiPrice() > 0;
+		return binder.hasChanges();
 	}
 
-	private String toUiPrice() {
-		return product == null ? DECIMAL_ZERO : df.format(product.getPrice() / 100d);
-	}
+	class PriceConverter implements BinderConverter<String, Integer> {
 
-	private int fromUiPrice() {
-		if (priceField.getValue() == null || priceField.getValue().isEmpty()) {
-			return 0;
+		@Override
+		public Result<Integer> convertToModelIfNotNull(String presentationValue, ValueContext valueContext) {
+			try {
+				return Result.ok((int) Math.round(df.parse(presentationValue).doubleValue() * 100));
+			} catch (ParseException e) {
+				return Result.error("Invalid value");
+			}
 		}
-		try {
-			return (int) Math.round(df.parse(priceField.getValue()).doubleValue() * 100);
-		} catch (ParseException e) {
-			return 0;
+
+		@Override
+		public Result<Integer> convertNullToModel(String presentationValue, ValueContext valueContext) {
+			return Result.error("Price is required");
+		}
+
+		@Override
+		public String convertToPresentationIfNotNull(Integer modelValue, ValueContext valueContext) {
+			return df.format(BigDecimal.valueOf(modelValue, 2));
 		}
 	}
 }

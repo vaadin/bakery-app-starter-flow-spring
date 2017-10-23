@@ -54,7 +54,6 @@ public class ConfirmationDialog extends PolymerTemplate<ConfirmationDialog.Model
 		getModel().setOpened(true);
 	}
 
-	@Override
 	public Registration addDecisionListener(ComponentEventListener<DecisionEvent> listener) {
 		return addListener(DecisionEvent.class, listener);
 	}

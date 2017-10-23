@@ -11,6 +11,4 @@ import com.vaadin.ui.event.ComponentEventListener;
 public interface Confirmer {
 
 	void show(Message message);
-
-	Registration addDecisionListener(ComponentEventListener<DecisionEvent> listener);
 }
