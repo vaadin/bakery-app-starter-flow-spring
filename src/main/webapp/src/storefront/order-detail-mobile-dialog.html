@@ -1,0 +1,29 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="order-detail.html">
+
+<dom-module id="order-detail-mobile-dialog">
+  <template>
+    <item-detail-dialog opened="[[selectedItem]]">
+      <order-detail item="[[selectedItem]]" desktop-view="[[desktopView]]"></order-detail>
+    </item-detail-dialog>
+  </template>
+
+  <script>
+    class OrderDetailMobileDialog extends Polymer.Element {
+      static get is() {
+        return 'order-detail-mobile-dialog';
+      }
+
+      static get properties() {
+        return {
+          desktopView: {
+            type: Boolean
+          },
+          selectedItem: Object
+        };
+      }
+    }
+
+    window.customElements.define(OrderDetailMobileDialog.is, OrderDetailMobileDialog);
+  </script>
+</dom-module>
