@@ -22,7 +22,7 @@ public class StorefrontViewIT extends AbstractIT {
 		GridElement grid = storefrontPage.getGrid();
 		Assert.assertTrue(grid.getGridSize() >= 0);
 
-		StoreFrontItemDetailWrapperElement firstOrder = storefrontPage.getOrderDetailWrapper(0);
+		StoreFrontItemDetailWrapperElement firstOrder = storefrontPage.getFirstOrderDetailWrapper();
 		Assert.assertNotNull(firstOrder);
 		Assert.assertFalse(firstOrder.isOrderSelected());
 
@@ -42,7 +42,7 @@ public class StorefrontViewIT extends AbstractIT {
 	public void editOrder() {
 		StoreFrontViewElement storefrontPage = openStorefrontPage();
 
-		StoreFrontItemDetailWrapperElement firstOrder = storefrontPage.getOrderDetailWrapper(0);
+		StoreFrontItemDetailWrapperElement firstOrder = storefrontPage.getFirstOrderDetailWrapper();
 		Assert.assertNotNull(firstOrder);
 		firstOrder.click();
 		ButtonElement editBtn = firstOrder.getDetail().getEditButton();
