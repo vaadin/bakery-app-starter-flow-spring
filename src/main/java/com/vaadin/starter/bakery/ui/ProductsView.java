@@ -1,6 +1,7 @@
 package com.vaadin.starter.bakery.ui;
 
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_PRODUCTS;
+import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
 import java.util.List;
 
@@ -46,7 +47,6 @@ public class ProductsView extends DefaultEntityView<Product, ProductsView.Model>
 	@Id("bakery-products-items-view")
 	private ItemsView view;
 
-	@Id("product-editor")
 	private ProductEdit editor;
 
 	@Id("product-confirmation-dialog")
@@ -56,6 +56,8 @@ public class ProductsView extends DefaultEntityView<Product, ProductsView.Model>
 
 	@Autowired
 	public ProductsView(ProductService service) {
+		editor = new ProductEdit();
+		addToSlot(this, editor, "product-editor");
 		presenter = new DefaultEntityPresenter<Product>(service, this, "Product");
 		setup(PAGE_PRODUCTS, presenter, editor, confirmationDialog, view, "New product");
 		presenter.init();

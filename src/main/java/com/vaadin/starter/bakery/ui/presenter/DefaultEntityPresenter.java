@@ -33,4 +33,10 @@ public class DefaultEntityPresenter<T extends AbstractEntity> extends EntityView
 		super.onSaveSuccess();
 	}
 
+	@Override
+	protected void onDeleteSuccess() {
+		filter(Optional.empty());
+		super.onDeleteSuccess();
+	}
+
 }

@@ -36,7 +36,7 @@ public class EntityViewPresenter<T extends AbstractEntity> implements HasLogger 
 		Message CONFIRM_DELETE = Message.CONFIRM_DELETE.createMessage();
 		confirmIfNecessaryAndExecute(true, CONFIRM_DELETE, () -> executeJPAOperation(() -> {
 			crudService.delete(entity);
-			close(true);
+			onDeleteSuccess();
 		}));
 	}
 
@@ -66,6 +66,10 @@ public class EntityViewPresenter<T extends AbstractEntity> implements HasLogger 
 
 	protected void onSaveSuccess() {
 		view.update(entity);
+		close(true);
+	}
+
+	protected void onDeleteSuccess() {
 		close(true);
 	}
 
