@@ -17,9 +17,6 @@ public class DefaultEntityPresenter<T extends AbstractEntity> extends EntityView
 		super(crudService, view, entityName);
 		this.crudService = crudService;
 		this.view = view;
-	}
-
-	public void init() {
 		filter(Optional.empty());
 	}
 

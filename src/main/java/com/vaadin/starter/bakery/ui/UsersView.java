@@ -55,13 +55,12 @@ public class UsersView extends PolymerEntityView<User, UsersView.Model> {
 
 	@Autowired
 	public UsersView(UserService userService, PasswordEncoder passwordEncoder) {
-		this.editor = new UserEdit();
+		editor = new UserEdit();
 		editor.setPasswordEncoder(passwordEncoder);
 		addToSlot(this, editor, "user-editor");
-		this.presenter = new DefaultEntityPresenter<User>(userService, this, "User");
+		presenter = new DefaultEntityPresenter<>(userService, this, "User");
 		setupEventListeners();
 		view.setActionText("New user");
-		presenter.init();
 	}
 
 	@Override

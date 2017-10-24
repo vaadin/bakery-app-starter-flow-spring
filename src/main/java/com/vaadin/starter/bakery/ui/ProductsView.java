@@ -59,10 +59,9 @@ public class ProductsView extends PolymerEntityView<Product, ProductsView.Model>
 	public ProductsView(ProductService service) {
 		editor = new ProductEdit();
 		addToSlot(this, editor, "product-editor");
-		presenter = new DefaultEntityPresenter<Product>(service, this, "Product");
+		presenter = new DefaultEntityPresenter<>(service, this, "Product");
 		setupEventListeners();
 		view.setActionText("New product");
-		presenter.init();
 	}
 
 	@Override
