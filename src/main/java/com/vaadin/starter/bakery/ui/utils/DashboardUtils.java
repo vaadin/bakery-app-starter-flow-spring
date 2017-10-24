@@ -241,7 +241,7 @@ public class DashboardUtils {
 	}
 
 	public static class PageInfo implements Serializable {
-		private Integer pageNumber;
+		private int pageNumber;
 		private List<Order> orders;
 
 		public PageInfo(){
@@ -252,11 +252,11 @@ public class DashboardUtils {
 			this.pageNumber = pageNumber;
 		}
 
-		public Integer getPageNumber() {
+		public int getPageNumber() {
 			return pageNumber;
 		}
 
-		public void setPageNumber(Integer pageNumber) {
+		public void setPageNumber(int pageNumber) {
 			this.pageNumber = pageNumber;
 		}
 

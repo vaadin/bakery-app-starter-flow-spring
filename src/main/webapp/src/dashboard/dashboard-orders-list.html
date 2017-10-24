@@ -59,10 +59,9 @@
         }
 
         loadPage(pageInfo) {
-          if (pageInfo) {
-            const pageInfoJSON = JSON.parse(pageInfo);
-            this.callbacks[pageInfoJSON.pageNumber](pageInfoJSON.orders);
-            this.callbacks[pageInfoJSON.pageNumber] = null;
+          if (pageInfo && pageInfo.orders) {
+            this.callbacks[pageInfo.pageNumber](pageInfo.orders);
+            this.callbacks[pageInfo.pageNumber] = null;
           }
         }
 
