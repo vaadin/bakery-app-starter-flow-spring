@@ -1,6 +1,6 @@
 package com.vaadin.starter.bakery.ui.utils;
 
-import com.vaadin.starter.bakery.ui.entities.Order;
+import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.ui.entities.StorefrontItemHeader;
 import elemental.json.JsonObject;
 import elemental.json.impl.JreJsonFactory;
@@ -17,13 +17,11 @@ import java.util.function.BiFunction;
 public class StorefrontItemHeaderGenerator {
 
 	private static final JreJsonFactory JSON_FACTORY;
-	private static final DateTimeFormatter MODEL_DATE_TIME_FORMATTER;
 	private static final DateTimeFormatter HEADER_DATE_TIME_FORMATTER;
 	private static final List<BiFunction<LocalDate, Boolean, Optional<StorefrontItemHeader>>> HEADER_FUNCTIONS;
 
 	static {
 		JSON_FACTORY = new JreJsonFactory();
-		MODEL_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		HEADER_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("EEE, MMM d");
 		HEADER_FUNCTIONS = Arrays.asList(
 				(date, showPrevious) -> headerIfRecent(date),
@@ -40,10 +38,10 @@ public class StorefrontItemHeaderGenerator {
 		ordersLoop: for (Order order : orders) {
 			for (int i = 0; i < HEADER_FUNCTIONS.size(); i++) {
 				Optional<StorefrontItemHeader> header
-						= HEADER_FUNCTIONS.get(i).apply(toDate(order.getDate()), showPrevious);
+						= HEADER_FUNCTIONS.get(i).apply(order.getDueDate(), showPrevious);
 				if (!usedGroups[i] && header.isPresent()) {
 					usedGroups[i] = true;
-					result.put(order.getId(), header.get());
+					result.put(order.getId().toString(), header.get());
 					if (i == usedGroups.length - 1) {
 						break ordersLoop;
 					}
@@ -112,10 +110,6 @@ public class StorefrontItemHeaderGenerator {
 		LocalDate nextWeekStart = today.minusDays(today.getDayOfWeek().getValue() - 1).plusWeeks(1);
 		return Optional.ofNullable(date.isEqual(nextWeekStart) || date.isAfter(nextWeekStart) ?
 				new StorefrontItemHeader("Upcoming", "After this week") : null);
-	}
-
-	private static LocalDate toDate(String date) {
-		return LocalDate.parse(date, MODEL_DATE_TIME_FORMATTER);
 	}
 
 	private static String secondaryHeaderFor(LocalDate date) {

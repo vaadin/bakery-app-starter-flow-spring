@@ -241,30 +241,30 @@ public class DashboardUtils {
 	}
 
 	public static class PageInfo implements Serializable {
-		private Integer pageNumber;
-		private List<com.vaadin.starter.bakery.ui.entities.Order> orders;
+		private int pageNumber;
+		private List<Order> orders;
 
 		public PageInfo(){
 		}
 
-		public PageInfo(List<com.vaadin.starter.bakery.ui.entities.Order> orders, Integer pageNumber) {
+		public PageInfo(List<Order> orders, Integer pageNumber) {
 			this.orders = orders;
 			this.pageNumber = pageNumber;
 		}
 
-		public Integer getPageNumber() {
+		public int getPageNumber() {
 			return pageNumber;
 		}
 
-		public void setPageNumber(Integer pageNumber) {
+		public void setPageNumber(int pageNumber) {
 			this.pageNumber = pageNumber;
 		}
 
-		public List<com.vaadin.starter.bakery.ui.entities.Order> getOrders() {
+		public List<Order> getOrders() {
 			return orders;
 		}
 
-		public void setOrders(List<com.vaadin.starter.bakery.ui.entities.Order> orders) {
+		public void setOrders(List<Order> orders) {
 			this.orders = orders;
 		}
 	}
