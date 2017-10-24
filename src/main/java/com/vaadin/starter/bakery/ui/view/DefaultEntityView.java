@@ -7,7 +7,6 @@ import java.util.Optional;
 
 import com.vaadin.data.ValidationException;
 import com.vaadin.flow.model.TemplateModel;
-import com.vaadin.flow.router.LocationChangeEvent;
 import com.vaadin.router.HasUrlParameter;
 import com.vaadin.router.OptionalParameter;
 import com.vaadin.router.event.BeforeNavigationEvent;
