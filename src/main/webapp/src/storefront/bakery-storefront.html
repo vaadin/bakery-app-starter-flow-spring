@@ -41,17 +41,10 @@ Added dynamically
       }
 
       vaadin-grid {
-        background: initial;
-        border: initial;
         flex: 1;
         height: 100%;
         width: 100%;
         position: absolute;
-        --vaadin-grid-cell: {
-            padding: initial;
-            border: initial;
-            background: initial;
-        };
       }
 
       @media (min-width: 600px) {
@@ -78,7 +71,7 @@ Added dynamically
 
     <div class="grid-wrapper">
 
-      <vaadin-grid id="list" items="[[orders]]">
+      <vaadin-grid id="list" items="[[orders]]" theme="storefront-grid">
         <vaadin-grid-column>
           <template>
             <div class="flex justify-center">

@@ -15,8 +15,11 @@ public class StoreFrontViewElement extends TestBenchElement implements HasApp, H
 		return $(GridElement.class).id("list");
 	}
 
-	public StoreFrontItemDetailWrapperElement getOrderDetailWrapper(int index) {
-		return getGrid().$(StoreFrontItemDetailWrapperElement.class).all().get(index);
+	public StoreFrontItemDetailWrapperElement getFirstOrderDetailWrapper() {
+		// vaadin-grid does not yet have a public API to get the currently displayed items
+		// (see https://github.com/vaadin/vaadin-grid/issues/1054)
+		// Using a hack here until there is a better API - BFF-359.
+		return getGrid().$(StoreFrontItemDetailWrapperElement.class).all().get(4);
 	}
 
 	private ViewSelectorElement getOrderDialog() {

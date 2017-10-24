@@ -17,7 +17,6 @@
   <template>
     <style include="shared-styles">
       :host {
-        padding: var(--valo-space-s);
         max-width: none !important;
         display: flex;
       }
@@ -42,22 +41,13 @@
       vaadin-grid-sorter {
         width: 70px;
       }
-
-      vaadin-grid {
-        /* Effective for <vaadin-grid> 3 only */
-        --primary-background-color: var(--valo-base-color);
-        --vaadin-grid-cell: {
-          background: var(--valo-base-color);
-          background-image: linear-gradient(var(--valo-tint-5pct), var(--valo-tint-5pct));
-        }
-      }
     </style>
 
     <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
 
     <items-view id="bakery-users-items-view" desktop-view=[[desktopView]] on-close-dialog="onCloseDialog">
 
-      <vaadin-grid slot="grid" id="grid" items="[[users]]" active-item="{{_activeItem}}">
+      <vaadin-grid slot="grid" id="grid" items="[[users]]" active-item="{{_activeItem}}" theme="borderless">
         <vaadin-grid-column width="80px" flex-grow="0">
           <template>
             <div class="picture-cell">

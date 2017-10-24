@@ -19,16 +19,7 @@
         @apply --margin-style;
         @apply --fourth-row-style;
       }
-
-      vaadin-grid {
-        /* Effective for <vaadin-grid> 3 only */
-        --primary-background-color: var(--valo-base-color);
-        --vaadin-grid-cell: {
-          background: var(--valo-base-color);
-          background-image: linear-gradient(var(--valo-tint-5pct), var(--valo-tint-5pct));
-        }
-      }
-	</style>
+    </style>
 
     <div id="dashboard-orders-list-wrapper">
       <vaadin-grid class="orders-list" data-provider="[[dataProvider]]" size="[[ordersCount]]" active-item="{{activeItem}}">
