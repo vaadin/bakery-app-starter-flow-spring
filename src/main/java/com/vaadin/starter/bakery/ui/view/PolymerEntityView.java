@@ -65,9 +65,9 @@ implements HasLogger, ListableEntityView<E>, HasUrlParameter<Long> {
 	}
 
 	@Override
-	public void setParameter(BeforeNavigationEvent event, @OptionalParameter Long userId) {
-		if (userId != null) {
-			presenter.loadEntity(userId, true);
+	public void setParameter(BeforeNavigationEvent event, @OptionalParameter Long id) {
+		if (id != null) {
+			presenter.loadEntity(id, true);
 		}
 	}
 
