@@ -78,8 +78,8 @@ implements HasLogger, ListableEntityView<E>, HasUrlParameter<Long> {
 	}
 
 	@Override
-	public void openDialog(E user, boolean edit) {
-		editor.read(user);
+	public void openDialog(E entity, boolean edit) {
+		editor.read(entity);
 		itemsView.openDialog(true);
 	}
 
