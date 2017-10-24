@@ -1,10 +1,7 @@
 package com.vaadin.starter.bakery.ui.presenter;
 
-import java.util.Optional;
-
 import com.vaadin.data.ValidationException;
 import com.vaadin.starter.bakery.ui.HasToast;
-import com.vaadin.ui.UI;
 
 public interface EntityView<T> extends HasToast {
 
@@ -14,11 +11,6 @@ public interface EntityView<T> extends HasToast {
 
 	default void showError(String message, boolean isPersistent) {
 		toast(message, isPersistent);
-	}
-
-	default void navigateToEntity(Optional<UI> ui, String basePage, String id) {
-		final String location = basePage + (id == null || id.isEmpty() ? "" : "/" + id);
-		ui.ifPresent(u -> u.navigateTo(location));
 	}
 
 	default void update(T entity) {
