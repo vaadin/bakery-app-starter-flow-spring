@@ -6,8 +6,8 @@
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-column.html">
 
 <link rel="import" href="../app/bakery-search.html">
-<link rel="import" href="storefront-item-detail.html">
 <link rel="import" href="storefront-item-detail-wrapper.html">
+<link rel="import" href="order-detail-mobile-dialog.html">
 
 <link rel="import" href="../elements/confirm-dialog.html">
 <link rel="import" href="../elements/item-detail-dialog.html">
@@ -41,17 +41,10 @@ Added dynamically
       }
 
       vaadin-grid {
-        background: initial;
-        border: initial;
         flex: 1;
         height: 100%;
         width: 100%;
         position: absolute;
-        --vaadin-grid-cell: {
-            padding: initial;
-            border: initial;
-            background: initial;
-        };
       }
 
       @media (min-width: 600px) {
@@ -78,7 +71,7 @@ Added dynamically
 
     <div class="grid-wrapper">
 
-      <vaadin-grid id="list" items="[[orders]]">
+      <vaadin-grid id="list" items="[[orders]]" theme="storefront-grid">
         <vaadin-grid-column>
           <template>
             <div class="flex justify-center">
@@ -98,14 +91,13 @@ Added dynamically
             </div>
           </template>
         </vaadin-grid-column>
-      </vaadin-grid>     
+      </vaadin-grid>
 
       <template is="dom-if" if="[[!desktopView]]" restamp>
-        <item-detail-dialog opened="[[_selectedItem]]">
-          <storefront-item-detail item="[[_selectedItem]]" on-close="_unselectItem" on-edit="_onEdit" desktop-view="[[desktopView]]"></storefront-item-detail>
-        </item-detail-dialog>
+        <order-detail-mobile-dialog selected-item="[[_selectedItem]]" on-close="_unselectItem" on-edit="_onEdit">
+        </order-detail-mobile-dialog>
       </template>
-      <item-detail-dialog desktop-view$=[[desktopView]] opened=[[editing]]>
+      <item-detail-dialog desktop-view$=[[desktopView]] opened=[[editing]] on-comment-added="_onCommentAdded">
         <slot name="view-selector-slot" on-slotchange="_updateViewSelectorSlot"></slot>
       </item-detail-dialog>
     </div>

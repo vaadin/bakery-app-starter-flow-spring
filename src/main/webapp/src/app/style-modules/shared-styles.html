@@ -11,6 +11,7 @@
 <link rel="import" href="../../../bower_components/vaadin-valo-theme/vaadin-form-layout.html">
 <link rel="import" href="../../../bower_components/vaadin-valo-theme/vaadin-form-item.html">
 <link rel="import" href="../../../bower_components/vaadin-valo-theme/vaadin-combo-box.html">
+<link rel="import" href="../../../bower_components/vaadin-valo-theme/vaadin-grid.html">
 
 <!-- valo theme shows clear icons in date-picker and combo-box, but we want it hidden in bakery app -->
 <dom-module id="bakery-combo-box-date-picker-styles" theme-for="vaadin-combo-box vaadin-date-picker">
@@ -105,6 +106,39 @@
   </template>
 </dom-module>
 
+<!-- Theme for the vaadin-grid -->
+<dom-module id="bakery-grid-styles" theme-for="vaadin-grid">
+  <template>
+    <style include="vaadin-grid-default-theme">
+      [part~="header-cell"]:not(:empty):not([details-cell]) {
+        padding-top: var(--valo-space-l);
+        padding-bottom: var(--valo-space-m);
+
+        font-size: var(--valo-font-size-s);
+        border-bottom: 1px solid var(--valo-shade-5pct);
+      }
+
+      [part~="body-cell"] {
+        border-bottom: 1px solid var(--valo-shade-5pct);
+      }
+
+      /* a special grid theme for the bakery storefront view */
+      :host([theme~="storefront-grid"]) {
+        background: transparent;
+      }
+
+      :host([theme~="storefront-grid"]) [part~="cell"]:not(:empty):not([details-cell]) {
+        padding: 0;
+      }
+
+      :host([theme~="storefront-grid"]) [part~="body-cell"] {
+        border-bottom: none;
+        background: transparent;
+      }
+    </style>
+  </template>
+</dom-module>
+
 
 <!-- style for the main page -->
 <custom-style>
@@ -129,6 +163,12 @@
 <dom-module id="shared-styles">
   <template>
     <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
       :host([hidden]) {
         display: none !important;
       }

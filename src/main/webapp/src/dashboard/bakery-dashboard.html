@@ -19,12 +19,6 @@
         overflow-y: scroll;
       }
 
-      @media screen and (min-width: 600px) {
-        :host {
-          margin: 6px;
-        }
-      }
-
       dashboard-pie-chart,
       dashboard-orders-list {
         --fourth-row-style: {
@@ -87,6 +81,9 @@
         return {
           activeItem: {
             observer: '_activeItemChanged'
+          },
+          pageInfo: {
+            value: {}
           }
         };
       }
@@ -97,8 +94,8 @@
         }
       }
 
-      loadPage(pageInfo) {
-        this.$.ordersList.loadPage(pageInfo);
+      loadPage() {
+        this.$.ordersList.loadPage(this.pageInfo);
       }
     }
 

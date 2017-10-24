@@ -8,45 +8,6 @@
      * Adds a bunch of utility date manipulation methods.
      */
     window.LocaleUtilsMixin = subclass => class extends subclass {
-      _getDay(date) {
-        return moment(new Date(date)).format('MMM D');
-      }
-
-      _getHeaderDay(date) {
-        return moment(new Date(date)).format('ddd, MMM D');
-      }
-
-      _getWeekRangeBefore() {
-        var dayBeforeYesterday = moment().subtract(2, 'day').startOf('day');
-        return this._getHeaderDay(moment().startOf('isoWeek')) + ' - ' +
-               this._getHeaderDay(dayBeforeYesterday);
-      }
-
-      _getWeekRangeAfter(date) {
-        var tomorrow = moment().add(1, 'day').startOf('day');
-        return this._getHeaderDay(tomorrow) + ' - ' +
-               this._getHeaderDay(moment().endOf('isoWeek'));
-      }
-
-      _getWeekday(date) {
-        return moment(new Date(date)).format('dddd');
-      }
-
-      _getFullDate(date) {
-        return moment(new Date(date)).format('DD/MM/YYYY HH:mm');
-      }
-
-      _setHour(str, date) {
-        const hour = parseInt(str.split(/:/)[0]);
-        date.setHours(hour, 0, 0);
-      }
-
-      _getDayIso(str) {
-        if (str) {
-          return moment(new Date(Date.parse(str))).format('YYYY-MM-DD');
-        }
-      }
-
       _isYesterday(date) {
         return moment().subtract(1, 'days').startOf('day').isSame(new Date(date), 'day');
       }
@@ -75,10 +36,6 @@
         return moment(new Date(date)).isAfter(moment().endOf('week').add(1, 'day'));
       }
 
-      _getTime(time) {
-        return moment(time, 'HH:mm').format('hh:mm a');
-      }
-
       _getShortDay(date) {
         return moment(new Date(date)).format('ddd D');
       }
@@ -89,16 +46,6 @@
 
       _getMonth(date) {
         return moment(new Date(date)).format('MMM D');
-      }
-
-      _getCurrency(price) {
-        price = price || 0;
-        return (price / 100).toLocaleString('en-US', {style: 'currency', currency: 'USD'});
-      }
-
-      _getPrice(price) {
-        price = price || 0;
-        return (price / 100).toLocaleString('en-US', {style: 'decimal', minimumFractionDigits: 2});
       }
     };
 

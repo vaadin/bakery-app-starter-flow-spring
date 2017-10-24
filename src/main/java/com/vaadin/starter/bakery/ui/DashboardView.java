@@ -7,8 +7,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.vaadin.flow.model.Convert;
+import com.vaadin.flow.model.Include;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.router.PageTitle;
+import com.vaadin.starter.bakery.ui.components.storefront.OrderStateConverter;
+import com.vaadin.starter.bakery.ui.components.storefront.converter.StorefrontLocalDateConverter;
+import com.vaadin.starter.bakery.ui.converters.LocalTimeConverter;
+import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.event.AttachEvent;
 import com.vaadin.ui.common.ClientDelegate;
@@ -19,14 +25,12 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 
-import com.google.gson.Gson;
 import com.vaadin.router.Route;
 import com.vaadin.starter.bakery.backend.data.DashboardData;
 import com.vaadin.starter.bakery.backend.data.DeliveryStats;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.starter.bakery.ui.entities.NamedSeries;
-import com.vaadin.starter.bakery.ui.entities.Order;
 import com.vaadin.starter.bakery.ui.entities.chart.ColumnChartData;
 import com.vaadin.starter.bakery.ui.entities.chart.ProductDeliveriesChartData;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
@@ -80,9 +84,8 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 	private void loadOrdersPage(@EventData("event.detail.page") int page,
 			@EventData("event.detail.pageSize") int pageSize) {
 		PageInfo pageInfo = ordersProvider.getOrdersList(null, false, new PageRequest(page, pageSize));
-		// It should be easier to use a complex object as function argument
-		String json = new Gson().toJson(pageInfo);
-		getElement().callFunction("loadPage", json);
+		getModel().setPageInfo(pageInfo);
+		getElement().callFunction("loadPage");
 	}
 
 	@ClientDelegate
@@ -119,7 +122,14 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 	}
 
 	public interface Model extends TemplateModel {
-		void setOrders(List<Order> orders);
+		@Include({ "orders.id", "orders.dueDate.day", "orders.dueDate.weekday", "orders.dueDate.date", "orders.dueTime",
+				"orders.items.product.name", "orders.items.quantity",
+				"orders.state", "orders.pickupLocation.name", "orders.customer.fullName", "orders.customer.details", "pageNumber" })
+		@Convert(value = LongToStringConverter.class, path = "orders.id")
+		@Convert(value = StorefrontLocalDateConverter.class, path = "orders.dueDate")
+		@Convert(value = LocalTimeConverter.class, path = "orders.dueTime")
+		@Convert(value = OrderStateConverter.class, path = "orders.state")
+		void setPageInfo(PageInfo pageInfo);
 
 		void setOrdersCount(Integer ordersCount);
 

@@ -20,6 +20,7 @@ public class StorefrontLocalDateConverter implements ModelConverter<LocalDate, S
 			result = new StorefrontDate();
 			result.setDay(DAY_FORMATTER.format(modelValue));
 			result.setWeekday(WEEKDAY_FORMATTER.format(modelValue));
+			result.setDate(modelValue.toString());
 		}
 		return result;
 	}

@@ -7,10 +7,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.vaadin.flow.model.Convert;
+import com.vaadin.flow.model.Include;
 import com.vaadin.router.HasUrlParameter;
 import com.vaadin.router.OptionalParameter;
 import com.vaadin.router.QueryParameters;
 import com.vaadin.router.event.BeforeNavigationEvent;
+import com.vaadin.starter.bakery.backend.data.entity.Order;
+import com.vaadin.starter.bakery.ui.components.storefront.OrderStateConverter;
+import com.vaadin.starter.bakery.ui.components.storefront.converter.StorefrontLocalDateConverter;
+import com.vaadin.starter.bakery.ui.converters.CurrencyFormatter;
+import com.vaadin.starter.bakery.ui.converters.LocalDateTimeConverter;
+import com.vaadin.starter.bakery.ui.converters.LocalTimeConverter;
+import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -29,7 +38,6 @@ import com.vaadin.starter.bakery.ui.components.storefront.OrderDetail;
 import com.vaadin.starter.bakery.ui.components.storefront.OrderEdit;
 import com.vaadin.starter.bakery.ui.components.viewselector.ViewSelector;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
-import com.vaadin.starter.bakery.ui.entities.Order;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.event.DeleteEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
@@ -49,10 +57,20 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 @HtmlImport("context://src/storefront/bakery-storefront.html")
 @Route(value = BakeryConst.PAGE_STOREFRONT, layout = BakeryApp.class)
 @PageTitle(BakeryConst.TITLE_STOREFRONT)
-public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implements HasLogger,
-		HasUrlParameter<Long>, EntityView<com.vaadin.starter.bakery.backend.data.entity.Order> {
+public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 
 	public interface Model extends TemplateModel {
+		@Include({ "id", "dueDate.day", "dueDate.weekday", "dueDate.date", "dueTime", "state", "pickupLocation.name", "customer.fullName",
+				"customer.phoneNumber", "customer.details", "items.product.name", "items.comment", "items.quantity",
+				"items.product.price", "history.message", "history.createdBy.firstName", "history.timestamp", "history.newState", "totalPrice" })
+		@Convert(value = LongToStringConverter.class, path = "id")
+		@Convert(value = StorefrontLocalDateConverter.class, path = "dueDate")
+		@Convert(value = LocalTimeConverter.class, path = "dueTime")
+		@Convert(value = OrderStateConverter.class, path = "state")
+		@Convert(value = CurrencyFormatter.class, path = "items.product.price")
+		@Convert(value = LocalDateTimeConverter.class, path = "history.timestamp")
+		@Convert(value = OrderStateConverter.class, path = "history.newState")
+		@Convert(value = CurrencyFormatter.class, path = "totalPrice")
 		void setOrders(List<Order> orders);
 
 		List<Order> getOrders();
@@ -132,12 +150,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		}
 	}
 
-	private void updateOrderInModel(com.vaadin.starter.bakery.backend.data.entity.Order dataOrder) {
-		String orderId = dataOrder.getId().toString();
-		getModel().getOrders().stream().filter(o -> o.getId().equals(orderId)).findFirst()
-		.ifPresent(o -> ordersProvider.fillOrder(o, dataOrder));
-	}
-
 	private void setOrders(List<Order> orders, boolean showPrevious) {
 		getModel().setOrders(orders);
 		getElement().setPropertyJson("displayedHeaders", computeEntriesWithHeader(orders, showPrevious));
@@ -158,7 +170,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		selectComponent(orderEdit);
 	}
 
-	private void details(com.vaadin.starter.bakery.backend.data.entity.Order order, boolean isReview) {
+	private void details(Order order, boolean isReview) {
 		selectComponent(orderDetail);
 		orderDetail.display(order, isReview);
 	}
@@ -169,7 +181,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	}
 
 	@Override
-	public void write(com.vaadin.starter.bakery.backend.data.entity.Order entity) throws ValidationException {
+	public void write(Order entity) throws ValidationException {
 		orderEdit.write(entity);
 	}
 
@@ -181,7 +193,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	}
 
 	@Override
-	public void openDialog(com.vaadin.starter.bakery.backend.data.entity.Order order, boolean edit) {
+	public void openDialog(Order order, boolean edit) {
 		getModel().setEditing(true);
 		if (edit) {
 			orderEdit.read(order);
@@ -192,7 +204,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	}
 
 	@Override
-	public void update(com.vaadin.starter.bakery.backend.data.entity.Order order) {
+	public void update(Order order) {
 		filterItems(searchBar.getFilter(), searchBar.getShowPrevious());
 	}
 
@@ -201,7 +213,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		return confirmationDialog;
 	}
 
-	class Presenter extends EntityViewPresenter<com.vaadin.starter.bakery.backend.data.entity.Order> {
+	class Presenter extends EntityViewPresenter<Order> {
 
 		public Presenter() {
 			super(orderService, StorefrontView.this, "Order");
@@ -219,11 +231,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 				showOrderEdit();
 			});
 			orderDetail.addCommentListener(e -> {
-				if (e.getOrderId() == null) {
-					return;
-				}
-
-				addComment(e.getOrderId(), e.getMessage());
 				details(orderService.findOrder(e.getOrderId()), false);
 			});
 		}
@@ -234,14 +241,14 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		}
 
 		@Override
-		protected void openDialog(com.vaadin.starter.bakery.backend.data.entity.Order entity, boolean edit) {
+		protected void openDialog(Order entity, boolean edit) {
 			orderEdit.init(userService.getCurrentUser(), productService.getRepository().findAll());
 			super.openDialog(entity, edit);
 		}
 
 		public void addComment(Long id, String comment) {
 			if (executeJPAOperation(() -> setEntity(orderService.addComment(id, comment)))) {
-				updateOrderInModel(getEntity());
+				// TODO: Update order in model when Grid API will allow (BFF-361)
 			}
 		}
 
