@@ -4,7 +4,7 @@
 <dom-module id="order-detail-mobile-dialog">
   <template>
     <item-detail-dialog opened="[[selectedItem]]">
-      <order-detail item="[[selectedItem]]" desktop-view="[[desktopView]]"></order-detail>
+      <order-detail item="[[selectedItem]]" desktop-view="false"></order-detail>
     </item-detail-dialog>
   </template>
 
@@ -16,9 +16,6 @@
 
       static get properties() {
         return {
-          desktopView: {
-            type: Boolean
-          },
           selectedItem: Object
         };
       }

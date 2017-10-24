@@ -262,7 +262,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 
 		public void addComment(Long id, String comment) {
 			if (executeJPAOperation(() -> setEntity(orderService.addComment(id, comment)))) {
-				// TODO: Update order in model when Grid API will allow
+				// TODO: Update order in model when Grid API will allow (BFF-361)
 			}
 		}
 
