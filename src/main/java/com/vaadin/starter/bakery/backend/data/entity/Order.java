@@ -57,8 +57,6 @@ public class Order extends AbstractEntity {
 
 	private boolean paid;
 
-	private int totalPrice;
-
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	@OrderColumn(name = "id")
 	@BatchSize(size = 1000)
@@ -166,12 +164,7 @@ public class Order extends AbstractEntity {
 	}
 
 	public int getTotalPrice() {
-		totalPrice = items == null ? 0 : items.stream().mapToInt(OrderItem::getTotalPrice).sum();
-		return totalPrice;
-	}
-
-	public void setTotalPrice(int totalPrice) {
-		this.totalPrice = totalPrice;
+		return items == null ? 0 : items.stream().mapToInt(OrderItem::getTotalPrice).sum();
 	}
 
 	@Override
