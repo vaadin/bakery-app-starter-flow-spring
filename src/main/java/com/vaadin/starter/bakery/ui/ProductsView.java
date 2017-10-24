@@ -23,7 +23,7 @@ import com.vaadin.starter.bakery.ui.converters.CurrencyFormatter;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
 import com.vaadin.starter.bakery.ui.presenter.DefaultEntityPresenter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
-import com.vaadin.starter.bakery.ui.view.DefaultEntityView;
+import com.vaadin.starter.bakery.ui.view.PolymerEntityView;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.polymertemplate.Id;
@@ -33,7 +33,7 @@ import com.vaadin.ui.polymertemplate.Id;
 @Route(value = PAGE_PRODUCTS, layout = BakeryApp.class)
 @PageTitle(BakeryConst.TITLE_PRODUCTS)
 @Secured(Role.ADMIN)
-public class ProductsView extends DefaultEntityView<Product, ProductsView.Model> {
+public class ProductsView extends PolymerEntityView<Product, ProductsView.Model> {
 
 	public interface Model extends TemplateModel {
 

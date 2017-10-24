@@ -23,7 +23,7 @@ import com.vaadin.starter.bakery.ui.components.UserEdit;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
 import com.vaadin.starter.bakery.ui.presenter.DefaultEntityPresenter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
-import com.vaadin.starter.bakery.ui.view.DefaultEntityView;
+import com.vaadin.starter.bakery.ui.view.PolymerEntityView;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.polymertemplate.Id;
@@ -33,7 +33,7 @@ import com.vaadin.ui.polymertemplate.Id;
 @Route(value = PAGE_USERS, layout = BakeryApp.class)
 @PageTitle(BakeryConst.TITLE_USERS)
 @Secured(Role.ADMIN)
-public class UsersView extends DefaultEntityView<User, UsersView.Model> {
+public class UsersView extends PolymerEntityView<User, UsersView.Model> {
 
 	public interface Model extends TemplateModel {
 

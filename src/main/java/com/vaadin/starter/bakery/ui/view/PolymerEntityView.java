@@ -23,7 +23,7 @@ import com.vaadin.starter.bakery.ui.presenter.DefaultEntityPresenter;
 import com.vaadin.starter.bakery.ui.presenter.ListableEntityView;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
-public abstract class DefaultEntityView<E extends AbstractEntity, T extends TemplateModel> extends PolymerTemplate<T>
+public abstract class PolymerEntityView<E extends AbstractEntity, T extends TemplateModel> extends PolymerTemplate<T>
 implements HasLogger, ListableEntityView<E>, HasUrlParameter<Long> {
 
 	private String basePage;
