@@ -23,6 +23,7 @@ import com.vaadin.starter.bakery.ui.converters.CurrencyFormatter;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
 import com.vaadin.starter.bakery.ui.presenter.DefaultEntityPresenter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
+import com.vaadin.starter.bakery.ui.view.EntityEditor;
 import com.vaadin.starter.bakery.ui.view.PolymerEntityView;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HtmlImport;
@@ -59,13 +60,39 @@ public class ProductsView extends PolymerEntityView<Product, ProductsView.Model>
 		editor = new ProductEdit();
 		addToSlot(this, editor, "product-editor");
 		presenter = new DefaultEntityPresenter<Product>(service, this, "Product");
-		setup(PAGE_PRODUCTS, presenter, editor, confirmationDialog, view, "New product");
+		setupEventListeners();
+		view.setActionText("New product");
 		presenter.init();
 	}
 
 	@Override
 	public void list(List<Product> entities) {
 		getModel().setProducts(entities);
+	}
+
+	@Override
+	public ConfirmationDialog getConfirmer() {
+		return confirmationDialog;
+	}
+
+	@Override
+	protected DefaultEntityPresenter<Product> getPresenter() {
+		return presenter;
+	}
+
+	@Override
+	protected String getBasePage() {
+		return PAGE_PRODUCTS;
+	}
+
+	@Override
+	protected EntityEditor<Product> getEditor() {
+		return editor;
+	}
+
+	@Override
+	protected ItemsView getItemsView() {
+		return view;
 	}
 
 }

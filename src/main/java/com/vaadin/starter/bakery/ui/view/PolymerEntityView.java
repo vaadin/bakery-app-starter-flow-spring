@@ -26,70 +26,58 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 public abstract class PolymerEntityView<E extends AbstractEntity, T extends TemplateModel> extends PolymerTemplate<T>
 implements HasLogger, ListableEntityView<E>, HasUrlParameter<Long> {
 
-	private String basePage;
-
-	private ConfirmationDialog confirmer;
-
-	private DefaultEntityPresenter<E> presenter;
-
-	private EntityEditor<E> editor;
-
-	private ItemsView itemsView;
-
-	protected void setup(String basePage, DefaultEntityPresenter<E> presenter, EntityEditor<E> editor,
-			ConfirmationDialog confirmer,
-			ItemsView itemsView, String actionText) {
-		this.basePage = basePage;
-		this.confirmer = confirmer;
-		this.presenter = presenter;
-		this.editor = editor;
-		this.itemsView = itemsView;
+	protected void setupEventListeners() {
 		addListener(EditEvent.class, e -> navigateToEntity(e.getId()));
-		addListener(CloseDialogEvent.class, e -> presenter.cancel());
-		editor.addListener(CancelEvent.class, e -> presenter.cancel());
-		editor.addListener(SaveEvent.class, e -> presenter.save());
-		editor.addListener(DeleteEvent.class, e -> presenter.delete());
-		confirmer.addDecisionListener(presenter::confirmationDecisionReceived);
-		itemsView.setActionText(actionText);
-		itemsView.addActionClickListener(e -> presenter.createNew());
-		itemsView.addFilterChangeListener(f -> presenter.filter(Optional.ofNullable(f)));
+		addListener(CloseDialogEvent.class, e -> getPresenter().cancel());
+		getEditor().addListener(CancelEvent.class, e -> getPresenter().cancel());
+		getEditor().addListener(SaveEvent.class, e -> getPresenter().save());
+		getEditor().addListener(DeleteEvent.class, e -> getPresenter().delete());
+		getConfirmer().addDecisionListener(getPresenter()::confirmationDecisionReceived);
+		getItemsView().addActionClickListener(e -> getPresenter().createNew());
+		getItemsView().addFilterChangeListener(f -> getPresenter().filter(Optional.ofNullable(f)));
 	}
 
-	public ConfirmationDialog getConfirmer() {
-		return confirmer;
-	}
+	public abstract ConfirmationDialog getConfirmer();
+
+	protected abstract DefaultEntityPresenter<E> getPresenter();
+
+	protected abstract String getBasePage();
+
+	protected abstract EntityEditor<E> getEditor();
+
+	protected abstract ItemsView getItemsView();
 
 	protected void navigateToEntity(String id) {
-		final String location = basePage + (id == null || id.isEmpty() ? "" : "/" + id);
+		final String location = getBasePage() + (id == null || id.isEmpty() ? "" : "/" + id);
 		getUI().ifPresent(ui -> ui.navigateTo(location));
 	}
 
 	@Override
 	public void setParameter(BeforeNavigationEvent event, @OptionalParameter Long id) {
 		if (id != null) {
-			presenter.loadEntity(id, true);
+			getPresenter().loadEntity(id, true);
 		}
 	}
 
 	@Override
 	public void closeDialog(boolean updated) {
-		itemsView.openDialog(false);
+		getItemsView().openDialog(false);
 		navigateToEntity(null);
 	}
 
 	@Override
 	public void openDialog(E entity, boolean edit) {
-		editor.read(entity);
-		itemsView.openDialog(true);
+		getEditor().read(entity);
+		getItemsView().openDialog(true);
 	}
 
 	@Override
 	public boolean isDirty() {
-		return editor.isDirty();
+		return getEditor().isDirty();
 	}
 
 	@Override
 	public void write(E entity) throws ValidationException {
-		editor.write(entity);
+		getEditor().write(entity);
 	}
 }

@@ -23,6 +23,7 @@ import com.vaadin.starter.bakery.ui.components.UserEdit;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
 import com.vaadin.starter.bakery.ui.presenter.DefaultEntityPresenter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
+import com.vaadin.starter.bakery.ui.view.EntityEditor;
 import com.vaadin.starter.bakery.ui.view.PolymerEntityView;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HtmlImport;
@@ -58,7 +59,8 @@ public class UsersView extends PolymerEntityView<User, UsersView.Model> {
 		editor.setPasswordEncoder(passwordEncoder);
 		addToSlot(this, editor, "user-editor");
 		this.presenter = new DefaultEntityPresenter<User>(userService, this, "User");
-		setup(PAGE_USERS, presenter, editor, confirmationDialog, view, "New user");
+		setupEventListeners();
+		view.setActionText("New user");
 		presenter.init();
 	}
 
@@ -71,6 +73,31 @@ public class UsersView extends PolymerEntityView<User, UsersView.Model> {
 	@Override
 	public void list(List<User> entities) {
 		getModel().setUsers(entities);
+	}
+
+	@Override
+	public ConfirmationDialog getConfirmer() {
+		return confirmationDialog;
+	}
+
+	@Override
+	protected DefaultEntityPresenter<User> getPresenter() {
+		return presenter;
+	}
+
+	@Override
+	protected String getBasePage() {
+		return PAGE_USERS;
+	}
+
+	@Override
+	protected EntityEditor<User> getEditor() {
+		return editor;
+	}
+
+	@Override
+	protected ItemsView getItemsView() {
+		return view;
 	}
 
 }
