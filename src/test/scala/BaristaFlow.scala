@@ -481,11 +481,9 @@ class BaristaFlow extends Simulation {
 
   val afterLoginHtmlFiles3 =
     exec(http("Load html files after login (3/8)")
-      .get("/src/app/bakery-icons.html")
+      .get("/src/storefront/storefront-item.html")
       .headers(headers_0)
-      .resources(http("request_154")
-        .get("/src/storefront/storefront-item.html"),
-      http("request_155")
+      .resources(http("request_155")
         .get("/src/elements/item-detail-inline.html"),
       http("request_157")
         .get("/src/elements/item-detail-dialog.html"),
