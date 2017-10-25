@@ -1,13 +1,13 @@
 package com.vaadin.starter.bakery.ui;
 
-import com.vaadin.flow.router.View;
+import com.vaadin.ui.common.HasElement;
 
 /**
  * 
  * Unidirectional (server -> client) companion for client-side NotificationsMixin.
  *
  */
-public interface HasToast extends View {
+public interface HasToast extends HasElement {
 
 	default void toast(String message) {
 		toast(message, false);
