@@ -22,7 +22,7 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import com.vaadin.ui.textfield.TextField;
 
 @Tag("user-edit")
-@HtmlImport("context://src/users/user-edit.html")
+@HtmlImport("src/users/user-edit.html")
 public class UserEdit extends PolymerTemplate<UserEdit.Model> implements EntityEditor<User> {
 
 	public interface Model extends TemplateModel {

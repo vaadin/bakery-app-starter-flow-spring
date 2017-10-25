@@ -40,7 +40,7 @@ import com.vaadin.starter.bakery.ui.utils.DashboardUtils.OrdersCountDataWithChar
 import com.vaadin.starter.bakery.ui.utils.DashboardUtils.PageInfo;
 
 @Tag("bakery-dashboard")
-@HtmlImport("context://src/dashboard/bakery-dashboard.html")
+@HtmlImport("src/dashboard/bakery-dashboard.html")
 @Route(value = BakeryConst.PAGE_DASHBOARD, layout = BakeryApp.class)
 @PageTitle(BakeryConst.TITLE_DASHBOARD)
 public class DashboardView extends PolymerTemplate<DashboardView.Model> {

@@ -14,7 +14,7 @@ import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 @Tag("bakery-app")
-@HtmlImport("context://src/app/bakery-app.html")
+@HtmlImport("src/app/bakery-app.html")
 @VaadinSessionScope
 public class BakeryApp extends PolymerTemplate<BakeryApp.Model> implements RouterLayout, BeforeNavigationListener {
 

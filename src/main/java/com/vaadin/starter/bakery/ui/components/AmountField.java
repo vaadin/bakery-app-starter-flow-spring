@@ -8,7 +8,7 @@ import com.vaadin.ui.polymertemplate.EventHandler;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 @Tag("amount-field")
-@HtmlImport("context://src/elements/amount-field.html")
+@HtmlImport("src/elements/amount-field.html")
 public class AmountField extends PolymerTemplate<AmountField.Model> implements HasValue<AmountField, Integer> {
 
 	public interface Model extends TemplateModel {

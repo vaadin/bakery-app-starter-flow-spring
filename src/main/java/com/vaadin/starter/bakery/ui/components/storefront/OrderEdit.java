@@ -21,7 +21,6 @@ import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.ui.HasToast;
 import com.vaadin.starter.bakery.ui.converters.LocalTimeConverter;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
-import com.vaadin.starter.bakery.ui.event.SaveEvent;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
@@ -36,7 +35,7 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import com.vaadin.ui.textfield.TextField;
 
 @Tag("order-edit")
-@HtmlImport("context://src/storefront/order-edit.html")
+@HtmlImport("src/storefront/order-edit.html")
 public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasToast {
 
 	public interface Model extends TemplateModel {
@@ -165,7 +164,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 		getModel().setTime("");
 		getModel().setStatusValue("");
 		getModel().setPickupLocation("");
-		this.setTotalPrice(0);
+		setTotalPrice(0);
 		getModel().setStatus(null);
 	}
 
@@ -181,7 +180,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 
 	public void read(Order order) {
 		binder.readBean(order);
-		this.initialHasChanges = false;
+		initialHasChanges = false;
 		title.setText(String.format("%s Order", order.isNew() ? "New" : "Edit"));
 		getModel().setTime(localTimeConverter.toPresentation(order.getDueTime()));
 

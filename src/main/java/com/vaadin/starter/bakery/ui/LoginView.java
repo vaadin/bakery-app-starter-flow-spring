@@ -10,7 +10,7 @@ import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 @Tag("bakery-login")
-@HtmlImport("context://src/login/bakery-login.html")
+@HtmlImport("src/login/bakery-login.html")
 @Route(value = "login", layout = BakeryApp.class)
 @PageTitle("###Bakery###")
 public class LoginView extends PolymerTemplate<LoginView.Model> implements AfterNavigationListener {

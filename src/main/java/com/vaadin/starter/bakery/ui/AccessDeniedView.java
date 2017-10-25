@@ -13,7 +13,7 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import javax.servlet.http.HttpServletResponse;
 
 @Tag("access-denied")
-@HtmlImport("context://src/admin/access-denied.html")
+@HtmlImport("src/admin/access-denied.html")
 @Route(value = BakeryConst.ACCESS_DENIED, layout = BakeryApp.class)
 @PageTitle(BakeryConst.TITLE_ACCESS_DENIED)
 public class AccessDeniedView extends PolymerTemplate<TemplateModel> implements NavigationHandler {

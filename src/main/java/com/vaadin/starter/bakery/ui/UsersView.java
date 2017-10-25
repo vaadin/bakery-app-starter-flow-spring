@@ -30,7 +30,7 @@ import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.polymertemplate.Id;
 
 @Tag("bakery-users")
-@HtmlImport("context://src/users/bakery-users.html")
+@HtmlImport("src/users/bakery-users.html")
 @Route(value = PAGE_USERS, layout = BakeryApp.class)
 @PageTitle(BakeryConst.TITLE_USERS)
 @Secured(Role.ADMIN)

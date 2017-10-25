@@ -20,7 +20,7 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import com.vaadin.ui.textfield.TextField;
 
 @Tag("order-item-edit")
-@HtmlImport("context://src/storefront/order-item-edit.html")
+@HtmlImport("src/storefront/order-item-edit.html")
 public class OrderItemEdit extends PolymerTemplate<OrderItemEdit.Model> implements HasValue<OrderItemEdit, OrderItem> {
 
 	public interface Model extends TemplateModel {
