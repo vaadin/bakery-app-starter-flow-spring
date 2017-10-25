@@ -45,7 +45,7 @@
 
     <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
 
-    <items-view id="bakery-users-items-view" desktop-view=[[desktopView]] on-close-dialog="onCloseDialog">
+    <items-view id="bakery-users-items-view" desktop-view=[[desktopView]]>
 
       <vaadin-grid slot="grid" id="grid" items="[[users]]" active-item="{{_activeItem}}" theme="borderless">
         <vaadin-grid-column width="80px" flex-grow="0">

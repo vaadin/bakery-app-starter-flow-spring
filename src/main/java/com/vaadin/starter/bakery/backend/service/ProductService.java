@@ -1,5 +1,6 @@
 package com.vaadin.starter.bakery.backend.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,7 @@ import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.repositories.ProductRepository;
 
 @Service
-public class ProductService implements CrudService<Product> {
+public class ProductService implements FilterableCrudService<Product> {
 
 	private final ProductRepository productRepository;
 
@@ -21,12 +22,12 @@ public class ProductService implements CrudService<Product> {
 		this.productRepository = productRepository;
 	}
 
-	public Page<Product> findAnyMatching(Optional<String> filter, Pageable pageable) {
+	public List<Product> findAnyMatching(Optional<String> filter) {
 		if (filter.isPresent()) {
 			String repositoryFilter = "%" + filter.get() + "%";
-			return productRepository.findByNameLikeIgnoreCase(repositoryFilter, pageable);
+			return productRepository.findByNameLikeIgnoreCase(repositoryFilter, null).getContent();
 		} else {
-			return find(pageable);
+			return find(null).getContent();
 		}
 	}
 

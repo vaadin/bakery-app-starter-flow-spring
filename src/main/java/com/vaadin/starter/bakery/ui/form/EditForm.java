@@ -19,7 +19,7 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 @Tag("edit-form")
 @HtmlImport("context://src/elements/edit-form.html")
-public class EditForm extends PolymerTemplate<TemplateModel> implements View, HasToast {
+public class EditForm extends PolymerTemplate<TemplateModel> {
 
 	@Id("title")
 	private H3 title;
@@ -41,7 +41,6 @@ public class EditForm extends PolymerTemplate<TemplateModel> implements View, Ha
 		saveButton.addClickListener(e -> fireEvent(new SaveEvent(this, false)));
 		cancelButton.addClickListener(e -> fireEvent(new CancelEvent(EditForm.this, false)));
 		deleteButton.addClickListener(e -> fireEvent(new DeleteEvent(EditForm.this, false)));
-
 	}
 
 	public void showEditor(boolean isNewEntity) {

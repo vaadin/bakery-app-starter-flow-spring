@@ -12,6 +12,7 @@ import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.event.DeleteEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
 import com.vaadin.starter.bakery.ui.form.EditForm;
+import com.vaadin.starter.bakery.ui.view.EntityEditor;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.combobox.ComboBox;
 import com.vaadin.ui.common.HtmlImport;
@@ -22,7 +23,7 @@ import com.vaadin.ui.textfield.TextField;
 
 @Tag("user-edit")
 @HtmlImport("context://src/users/user-edit.html")
-public class UserEdit extends PolymerTemplate<UserEdit.Model> {
+public class UserEdit extends PolymerTemplate<UserEdit.Model> implements EntityEditor<User> {
 
 	public interface Model extends TemplateModel {
 		void setAvatar(String avatar);

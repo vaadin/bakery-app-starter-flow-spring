@@ -30,7 +30,7 @@ public class ProductsViewIT extends AbstractIT {
 
 		editElement.getPrice().setValue("123.45");
 
-		editElement.getSaveButton().click();
+		editElement.getEditForm().getSaveButton().click();
 
 		Assert.assertFalse(editor.isDisplayed());
 		Assert.assertTrue(getDriver().getCurrentUrl().endsWith("products"));
@@ -41,7 +41,7 @@ public class ProductsViewIT extends AbstractIT {
 		//Return initial value
 		editElement.getPrice().setValue(initialValue);
 
-		editElement.getSaveButton().click();
+		editElement.getEditForm().getSaveButton().click();
 
 	}
 
