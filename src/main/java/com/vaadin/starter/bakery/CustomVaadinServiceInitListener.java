@@ -14,7 +14,7 @@ public class CustomVaadinServiceInitListener implements VaadinServiceInitListene
             if (filterContext.getService().getDeploymentConfiguration().isProductionMode()) {
                 dependencies.removeIf(e -> e.getType().equals(Dependency.Type.HTML_IMPORT));
                 dependencies.add(new Dependency(Dependency.Type.HTML_IMPORT,
-                        "frontend://src/app/bakery-app.html", LoadMode.EAGER));
+                        "src/app/bakery-app.html", LoadMode.EAGER));
             }
             return dependencies;
         });

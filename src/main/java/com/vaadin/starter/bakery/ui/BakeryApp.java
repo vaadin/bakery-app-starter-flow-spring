@@ -28,15 +28,6 @@ public class BakeryApp extends PolymerTemplate<BakeryApp.Model> implements Route
 	}
 
 	@Override
-	protected void onAttach(AttachEvent attachEvent) {
-		super.onAttach(attachEvent);
-
-		// TODO(vlukashov, 2017.08.11): Remove this once https://github.com/vaadin/flow/issues/1969 is closed.
-		// ensure the app shell bundle is loaded before any others
-		UI.getCurrent().getPage().addHtmlImport("context://src/app/bakery-app.html");
-	}
-
-	@Override
 	public void beforeNavigation(BeforeNavigationEvent event) {
 		String path = event.getLocation().getFirstSegment();
 		if (path.isEmpty()) {
