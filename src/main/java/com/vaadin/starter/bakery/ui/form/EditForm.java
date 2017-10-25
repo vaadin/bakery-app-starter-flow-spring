@@ -5,8 +5,6 @@ package com.vaadin.starter.bakery.ui.form;
 
 import com.vaadin.data.Binder;
 import com.vaadin.flow.model.TemplateModel;
-import com.vaadin.flow.router.View;
-import com.vaadin.starter.bakery.ui.HasToast;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.event.DeleteEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
