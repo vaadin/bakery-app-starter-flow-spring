@@ -5,6 +5,8 @@ import com.vaadin.router.RouterLayout;
 import com.vaadin.router.event.BeforeNavigationEvent;
 import com.vaadin.router.event.BeforeNavigationListener;
 import com.vaadin.spring.annotation.VaadinSessionScope;
+import com.vaadin.starter.bakery.app.security.SecuredViewAccessControl;
+import com.vaadin.starter.bakery.ui.exceptions.AccessDeniedException;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.UI;
@@ -38,6 +40,10 @@ public class BakeryApp extends PolymerTemplate<BakeryApp.Model> implements Route
 
 	@Override
 	public void beforeNavigation(BeforeNavigationEvent event) {
+		if (!SecuredViewAccessControl.isAccessGranted(event.getNavigationTarget())) {
+			event.rerouteToError(AccessDeniedException.class);
+			return;
+		}
 		String path = event.getLocation().getFirstSegment();
 		if (path.isEmpty()) {
 			event.rerouteTo(BakeryConst.PAGE_DEFAULT);
