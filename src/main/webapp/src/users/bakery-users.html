@@ -90,7 +90,7 @@
   </template>
 
   <script>
-    class BakeryUsers extends window.NotificationMixin(window.EditableListMixin(Polymer.Element)) {
+    class BakeryUsers extends window.HasNotificationsMixin(window.EditableListMixin(Polymer.Element)) {
       static get is() {
         return 'bakery-users';
       }

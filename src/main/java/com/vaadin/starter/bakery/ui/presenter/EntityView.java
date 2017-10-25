@@ -1,16 +1,16 @@
 package com.vaadin.starter.bakery.ui.presenter;
 
 import com.vaadin.data.ValidationException;
-import com.vaadin.starter.bakery.ui.HasToast;
+import com.vaadin.starter.bakery.ui.HasNotifications;
 
-public interface EntityView<T> extends HasToast {
+public interface EntityView<T> extends HasNotifications {
 
 	void closeDialog(boolean updated);
 
 	void openDialog(T entity, boolean edit);
 
 	default void showError(String message, boolean isPersistent) {
-		toast(message, isPersistent);
+		showNotification(message, isPersistent);
 	}
 
 	default void update(T entity) {
