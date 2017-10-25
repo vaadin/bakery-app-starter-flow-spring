@@ -8,7 +8,7 @@ import java.util.Optional;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
 import com.vaadin.starter.bakery.backend.service.FilterableCrudService;
 
-public class DefaultEntityPresenter<T extends AbstractEntity> extends EntityViewPresenter<T> {
+public class DefaultEntityPresenter<T extends AbstractEntity> extends EntityPresenter<T> {
 
 	private FilterableCrudService<T> crudService;
 	private ListableEntityView<T> view;
