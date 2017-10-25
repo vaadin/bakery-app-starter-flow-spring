@@ -1,5 +1,6 @@
 package com.vaadin.starter.bakery.backend.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.repositories.UserRepository;
 
 @Service
-public class UserService implements CrudService<User> {
+public class UserService implements FilterableCrudService<User> {
 
 	public static final String MODIFY_LOCKED_USER_NOT_PERMITTED =
 			"User has been locked and cannot be modified or deleted";
@@ -30,14 +31,15 @@ public class UserService implements CrudService<User> {
 		return getRepository().findByEmail(SecurityUtils.getUsername());
 	}
 
-	public Page<User> findAnyMatching(Optional<String> filter, Pageable pageable) {
+	public List<User> findAnyMatching(Optional<String> filter) {
 		if (filter.isPresent()) {
 			String repositoryFilter = "%" + filter.get() + "%";
 			return getRepository()
 					.findByEmailLikeIgnoreCaseOrFirstNameLikeIgnoreCaseOrLastNameLikeIgnoreCaseOrRoleLikeIgnoreCase(
-							repositoryFilter, repositoryFilter, repositoryFilter, repositoryFilter, pageable);
+							repositoryFilter, repositoryFilter, repositoryFilter, repositoryFilter, null)
+					.getContent();
 		} else {
-			return find(pageable);
+			return find(null).getContent();
 		}
 	}
 
@@ -62,7 +64,7 @@ public class UserService implements CrudService<User> {
 	public void delete(User user) {
 		throwIfDeletingSelf(user);
 		throwIfUserLocked(user);
-		CrudService.super.delete(user);
+		FilterableCrudService.super.delete(user);
 	}
 
 	private void throwIfDeletingSelf(User user) {
@@ -82,4 +84,5 @@ public class UserService implements CrudService<User> {
 	public User createNew() {
 		return new User();
 	}
+
 }

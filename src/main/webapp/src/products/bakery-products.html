@@ -29,7 +29,7 @@
 
     <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
 
-    <items-view id="bakery-products-items-view" desktop-view=[[desktopView]] on-close-dialog="onCloseDialog">
+    <items-view id="bakery-products-items-view" desktop-view=[[desktopView]] >
 
       <vaadin-grid slot="grid" id="grid" items="[[products]]" theme="borderless">
         <vaadin-grid-column flex-grow="10">
@@ -55,7 +55,7 @@
         </vaadin-grid-column>
       </vaadin-grid>
 
-      <product-edit id="product-editor" slot="editor"></product-edit>
+      <slot name="product-editor" slot="editor"></slot>
     </items-view>
     <confirm-dialog id="product-confirmation-dialog"></confirm-dialog>
   </template>
