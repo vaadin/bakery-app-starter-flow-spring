@@ -28,7 +28,6 @@ import com.vaadin.data.ValidationException;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.router.Route;
 import com.vaadin.router.PageTitle;
-import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.backend.service.ProductService;
@@ -39,17 +38,15 @@ import com.vaadin.starter.bakery.ui.components.storefront.OrderEdit;
 import com.vaadin.starter.bakery.ui.components.viewselector.ViewSelector;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
-import com.vaadin.starter.bakery.ui.event.DeleteEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
 import com.vaadin.starter.bakery.ui.presenter.Confirmer;
 import com.vaadin.starter.bakery.ui.presenter.EntityView;
-import com.vaadin.starter.bakery.ui.presenter.EntityViewPresenter;
+import com.vaadin.starter.bakery.ui.presenter.EntityPresenter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.ClientDelegate;
 import com.vaadin.ui.common.HtmlImport;
-import com.vaadin.ui.event.ComponentEventListener;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
@@ -213,7 +210,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		return confirmationDialog;
 	}
 
-	class Presenter extends EntityViewPresenter<Order> {
+	class Presenter extends EntityPresenter<Order> {
 
 		public Presenter() {
 			super(orderService, StorefrontView.this, "Order");

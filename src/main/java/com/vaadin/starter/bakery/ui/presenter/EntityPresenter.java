@@ -14,7 +14,7 @@ import com.vaadin.starter.bakery.backend.service.UserFriendlyDataException;
 import com.vaadin.starter.bakery.ui.event.DecisionEvent;
 import com.vaadin.starter.bakery.ui.messages.Message;
 
-public class EntityViewPresenter<T extends AbstractEntity> implements HasLogger {
+public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 
 	private CrudService<T> crudService;
 
@@ -26,7 +26,7 @@ public class EntityViewPresenter<T extends AbstractEntity> implements HasLogger 
 
 	private Runnable operationWaitingConfirmation;
 
-	public EntityViewPresenter(CrudService<T> crudService, EntityView<T> view, String entityName) {
+	public EntityPresenter(CrudService<T> crudService, EntityView<T> view, String entityName) {
 		this.crudService = crudService;
 		this.view = view;
 		this.entityName = entityName;
