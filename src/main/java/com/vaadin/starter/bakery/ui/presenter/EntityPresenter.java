@@ -65,7 +65,6 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 	}
 
 	protected void onSaveSuccess() {
-		view.update(entity);
 		close(true);
 	}
 

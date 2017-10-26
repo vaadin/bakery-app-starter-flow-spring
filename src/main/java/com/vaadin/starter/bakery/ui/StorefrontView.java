@@ -105,21 +105,14 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		searchBar.setActionText("New order");
 		searchBar.setCheckboxText("Show past orders");
 		searchBar.setPlaceHolder("Search");
-		searchBar.addFilterChangeListener(this::filterItems);
+		searchBar.addFilterChangeListener(presenter::filterChanged);
 		searchBar.addActionClickListener(e -> edit(null));
 		orderDetail.addListener(SaveEvent.class, e -> presenter.save());
 		orderEdit.addListener(CancelEvent.class, e -> presenter.cancel());
 		confirmationDialog.addDecisionListener(presenter::confirmationDecisionReceived);
-		filterItems(searchBar.getFilter(), searchBar.getShowPrevious());
+		setOrders(ordersProvider.getOriginalOrdersList(), false);
 
 		getModel().setEditing(false);
-	}
-
-	private void filterItems(String filter, boolean showPrevious) {
-		// the hardcoded limit of 200 is here until lazy loading is implemented (see
-		// BFF-120)
-		PageRequest pr = new PageRequest(0, 200, Direction.ASC, "dueDate", "dueTime", "id");
-		setOrders(ordersProvider.getOrdersList(filter, showPrevious, pr).getOrders(), showPrevious);
 	}
 
 	@ClientDelegate
@@ -201,11 +194,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	}
 
 	@Override
-	public void update(Order order) {
-		filterItems(searchBar.getFilter(), searchBar.getShowPrevious());
-	}
-
-	@Override
 	public Confirmer getConfirmer() {
 		return confirmationDialog;
 	}
@@ -232,9 +220,23 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 			});
 		}
 
+		void filterChanged(String filter, boolean showPrevious) {
+			// the hardcoded limit of 200 is here until lazy loading is implemented (see BFF-120)
+			PageRequest pr = new PageRequest(0, 200, Direction.ASC, "dueDate", "dueTime", "id");
+			setOrders(ordersProvider.getOrdersList(filter, showPrevious, pr).getOrders(), showPrevious);
+		}
+
 		@Override
 		protected void beforeSave() throws ValidationException {
 			// Entity already updated
+		}
+
+		@Override
+		protected void onSaveSuccess() {
+			super.onSaveSuccess();
+
+			// refresh the orders list (to be able to see the changes from the just saved order, if any)
+			filterChanged(searchBar.getFilter(), searchBar.getShowPrevious());
 		}
 
 		@Override
