@@ -13,10 +13,6 @@ public interface EntityView<T> extends HasNotifications {
 		showNotification(message, isPersistent);
 	}
 
-	default void update(T entity) {
-
-	}
-
 	Confirmer getConfirmer();
 
 	boolean isDirty();
