@@ -7,10 +7,11 @@ import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.ValidationException;
+import com.vaadin.data.provider.DataProvider;
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.OrderState;
@@ -103,7 +104,9 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 		cancel.addClickListener(e -> fireEvent(new CancelEvent(this, false)));
 		review.addClickListener(e -> fireEvent(new ReviewEvent()));
 
-		status.setItems(Arrays.stream(OrderState.values()).map(OrderState::getDisplayName));
+		ListDataProvider<String> stateProvider = DataProvider
+				.fromStream(Arrays.stream(OrderState.values()).map(orderStateConverter::toPresentation));
+		status.setDataProvider(stateProvider);
 		status.addValueChangeListener(e -> {
 			getModel().setStatus(e.getValue());
 			setHasChanges(true);
@@ -112,13 +115,13 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 		date.setValue(LocalDate.now());
 		binder.forField(date).bind("dueDate");
 
-		final LocalTimeConverter localTimeConverter = new LocalTimeConverter();
-		final Stream<String> defaultTimes = IntStream.rangeClosed(8, 16)
-				.mapToObj(i -> localTimeConverter.toPresentation(LocalTime.of(i, 0)));
-		time.setItems(defaultTimes);
+		ListDataProvider<String> timeDataProvider = DataProvider.fromStream(
+				IntStream.rangeClosed(8, 16).mapToObj(i -> localTimeConverter.toPresentation(LocalTime.of(i, 0))));
+		time.setDataProvider(timeDataProvider);
 		time.addValueChangeListener(e -> setHasChanges(true));
 
-		pickupLocation.setItems("Bakery", "Store");
+		ListDataProvider<String> locationProvider = DataProvider.ofItems(PickupLocation.values());
+		pickupLocation.setDataProvider(locationProvider);
 		pickupLocation.addValueChangeListener(e -> setHasChanges(true));
 		pickupLocation.setRequired(true);
 
@@ -165,7 +168,6 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 		getModel().setStatusValue("");
 		getModel().setPickupLocation("");
 		setTotalPrice(0);
-		getModel().setStatus(null);
 	}
 
 	public void write(Order order) throws ValidationException {
@@ -173,7 +175,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 		PickupLocation location = new PickupLocation();
 		location.setName(pickupLocation.getValue());
 		order.setPickupLocation(location);
-		order.changeState(currentUser, OrderState.forDisplayName(status.getValue()));
+		order.changeState(currentUser, orderStateConverter.toModel(status.getValue()));
 
 		binder.writeBean(order);
 	}
@@ -199,10 +201,6 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 
 	public Registration addReviewListener(ComponentEventListener<ReviewEvent> listener) {
 		return addListener(ReviewEvent.class, listener);
-	}
-
-	public Registration addCancelListener(ComponentEventListener<CancelEvent> listener) {
-		return addListener(CancelEvent.class, listener);
 	}
 
 	private void setTotalPrice(int totalPrice) {
