@@ -1,23 +1,14 @@
 package com.vaadin.starter.bakery;
 
-import java.util.Collection;
 import java.util.Locale;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import javax.annotation.PostConstruct;
 
-import com.vaadin.starter.bakery.backend.data.Role;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.security.access.AccessDecisionVoter;
-import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -58,35 +49,5 @@ public class BakeryApplicationConfig extends WebSecurityConfigurerAdapter {
     @PostConstruct
     private void init() {
         Locale.setDefault(Locale.Category.FORMAT, Locale.US);
-    }
-
-    private static class AccessDecisionVoterImpl implements AccessDecisionVoter<Object> {
-
-        @Override
-        public boolean supports(ConfigAttribute attribute) {
-            return false;
-        }
-
-        @Override
-        public boolean supports(Class<?> clazz) {
-            return false;
-        }
-
-        @Override
-        public int vote(Authentication authentication, Object object, Collection<ConfigAttribute> attributes) {
-            Set<String> authenticatedUserRoles = authentication.getAuthorities().stream()
-                    .map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
-            boolean hasAccess = authenticatedUserRoles.contains(Role.ADMIN) || attributes.stream()
-                    .map(ConfigAttribute::getAttribute).anyMatch(authenticatedUserRoles::contains);
-            return hasAccess ? ACCESS_GRANTED : ACCESS_ABSTAIN;
-        }
-    }
-
-    /**
-     * Provides a decision voter.
-     */
-    @Bean
-    public static AccessDecisionVoterImpl voter() {
-        return new AccessDecisionVoterImpl();
     }
 }
