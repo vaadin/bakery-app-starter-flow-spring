@@ -63,15 +63,15 @@ public class SecurityUtils {
 	 * Checks if access is granted for the current user for the given secured view
 	 * within the given ui.
 	 *
-	 * @param viewSecured
+	 * @param secured
 	 * @return true if access is granted, false otherwise.
 	 */
-	public static boolean isAccessGranted(Secured viewSecured) {
-		if (viewSecured == null) {
+	public static boolean isAccessGranted(Secured secured) {
+		if (secured == null) {
 			return true;
 		}
 
-		return Arrays.asList(viewSecured.value()).stream().anyMatch(SecurityUtils::isCurrentUserInRole);
+		return Arrays.asList(secured.value()).stream().anyMatch(SecurityUtils::isCurrentUserInRole);
 	}
 
 	public static boolean isUserLoggedIn() {

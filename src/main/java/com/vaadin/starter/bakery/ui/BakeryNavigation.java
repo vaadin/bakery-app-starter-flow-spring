@@ -6,7 +6,7 @@ import java.util.List;
 import com.vaadin.flow.model.Include;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.starter.bakery.app.BeanLocator;
-import com.vaadin.starter.bakery.app.security.SecuredViewAccessControl;
+import com.vaadin.starter.bakery.app.security.SecuredAccessControl;
 import com.vaadin.starter.bakery.app.security.SecurityUtils;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.UserService;
@@ -62,10 +62,10 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> {
 		pages.add(new PageInfo(BakeryConst.PAGE_STOREFRONT, BakeryConst.ICON_STOREFRONT, BakeryConst.TITLE_STOREFRONT));
 		pages.add(new PageInfo(BakeryConst.PAGE_DASHBOARD, BakeryConst.ICON_DASHBOARD, BakeryConst.TITLE_DASHBOARD));
 
-		if (SecuredViewAccessControl.isAccessGranted(UsersView.class)) {
+		if (SecuredAccessControl.isAccessGranted(UsersView.class)) {
 			pages.add(new PageInfo(BakeryConst.PAGE_USERS, BakeryConst.ICON_USERS, BakeryConst.TITLE_USERS));
 		}
-		if (SecuredViewAccessControl.isAccessGranted(ProductsView.class)) {
+		if (SecuredAccessControl.isAccessGranted(ProductsView.class)) {
 			pages.add(new PageInfo(BakeryConst.PAGE_PRODUCTS, BakeryConst.ICON_PRODUCTS, BakeryConst.TITLE_PRODUCTS));
 		}
 
