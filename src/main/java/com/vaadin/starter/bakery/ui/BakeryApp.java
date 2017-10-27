@@ -16,7 +16,7 @@ import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 @Tag("bakery-app")
-@HtmlImport("context://src/app/bakery-app.html")
+@HtmlImport("src/app/bakery-app.html")
 @VaadinSessionScope
 public class BakeryApp extends PolymerTemplate<BakeryApp.Model> implements RouterLayout, BeforeNavigationListener {
 
@@ -27,15 +27,6 @@ public class BakeryApp extends PolymerTemplate<BakeryApp.Model> implements Route
 
 	public interface Model extends TemplateModel {
 		void setPage(String page);
-	}
-
-	@Override
-	protected void onAttach(AttachEvent attachEvent) {
-		super.onAttach(attachEvent);
-
-		// TODO(vlukashov, 2017.08.11): Remove this once https://github.com/vaadin/flow/issues/1969 is closed.
-		// ensure the app shell bundle is loaded before any others
-		UI.getCurrent().getPage().addHtmlImport("context://src/app/bakery-app.html");
 	}
 
 	@Override

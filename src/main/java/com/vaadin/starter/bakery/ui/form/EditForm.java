@@ -18,7 +18,7 @@ import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 @Tag("edit-form")
-@HtmlImport("context://src/elements/edit-form.html")
+@HtmlImport("src/elements/edit-form.html")
 public class EditForm extends PolymerTemplate<TemplateModel> {
 
 	@Id("title")

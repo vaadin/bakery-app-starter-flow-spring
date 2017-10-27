@@ -13,7 +13,7 @@ import com.vaadin.ui.textfield.TextField;
 import java.util.function.BiConsumer;
 
 @Tag("bakery-search")
-@HtmlImport("context://src/app/bakery-search.html")
+@HtmlImport("src/app/bakery-search.html")
 public class BakerySearch extends PolymerTemplate<BakerySearch.Model> {
 
 	public interface Model extends TemplateModel {

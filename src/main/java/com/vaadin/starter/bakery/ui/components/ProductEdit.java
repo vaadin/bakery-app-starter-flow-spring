@@ -30,7 +30,7 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import com.vaadin.ui.textfield.TextField;
 
 @Tag("product-edit")
-@HtmlImport("context://src/products/product-edit.html")
+@HtmlImport("src/products/product-edit.html")
 public class ProductEdit extends PolymerTemplate<TemplateModel> implements EntityEditor<Product> {
 
 	@Id("product-edit-name")

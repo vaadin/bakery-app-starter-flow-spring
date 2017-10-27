@@ -8,7 +8,7 @@ import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 @Tag("view-selector")
-@HtmlImport("context://src/elements/viewselector/view-selector.html")
+@HtmlImport("src/elements/viewselector/view-selector.html")
 public class ViewSelector extends PolymerTemplate<TemplateModel> implements HasComponents {
 
 	public void select(Component component) {

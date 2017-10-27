@@ -27,7 +27,7 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import com.vaadin.ui.textfield.TextField;
 
 @Tag("order-detail")
-@HtmlImport("context://src/storefront/order-detail.html")
+@HtmlImport("src/storefront/order-detail.html")
 public class OrderDetail extends PolymerTemplate<OrderDetail.Model> {
 
 	private Order order;
@@ -74,9 +74,10 @@ public class OrderDetail extends PolymerTemplate<OrderDetail.Model> {
 	}
 
 	public interface Model extends TemplateModel {
-		@Include({ "id", "dueDate.day", "dueDate.weekday", "dueDate.date", "dueTime", "state", "pickupLocation.name", "customer.fullName",
-				"customer.phoneNumber", "customer.details", "items.product.name", "items.comment", "items.quantity",
-				"items.product.price", "history.message", "history.createdBy.firstName", "history.timestamp", "history.newState", "totalPrice" })
+		@Include({ "id", "dueDate.day", "dueDate.weekday", "dueDate.date", "dueTime", "state", "pickupLocation.name",
+				"customer.fullName", "customer.phoneNumber", "customer.details", "items.product.name", "items.comment",
+				"items.quantity", "items.product.price", "history.message", "history.createdBy.firstName",
+				"history.timestamp", "history.newState", "totalPrice" })
 		@Convert(value = LongToStringConverter.class, path = "id")
 		@Convert(value = StorefrontLocalDateConverter.class, path = "dueDate")
 		@Convert(value = LocalTimeConverter.class, path = "dueTime")

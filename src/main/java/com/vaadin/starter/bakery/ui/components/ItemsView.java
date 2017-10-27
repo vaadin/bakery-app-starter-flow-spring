@@ -12,7 +12,7 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import java.util.function.Consumer;
 
 @Tag("items-view")
-@HtmlImport("context://src/elements/items-view.html")
+@HtmlImport("src/elements/items-view.html")
 public class ItemsView extends PolymerTemplate<ItemsView.Model> {
 
 	public interface Model extends TemplateModel {

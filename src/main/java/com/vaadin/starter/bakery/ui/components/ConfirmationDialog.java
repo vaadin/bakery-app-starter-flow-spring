@@ -13,7 +13,7 @@ import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 @Tag("confirm-dialog")
-@HtmlImport("context://src/elements/confirm-dialog.html")
+@HtmlImport("src/elements/confirm-dialog.html")
 public class ConfirmationDialog extends PolymerTemplate<ConfirmationDialog.Model> implements Confirmer {
 
 	public interface Model extends TemplateModel {
