@@ -21,11 +21,11 @@ import com.vaadin.starter.bakery.ui.event.EditEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
 import com.vaadin.starter.bakery.ui.messages.Message;
 import com.vaadin.starter.bakery.ui.presenter.DefaultEntityPresenter;
-import com.vaadin.starter.bakery.ui.presenter.ListableEntityView;
+import com.vaadin.starter.bakery.ui.presenter.EntityView;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 public abstract class PolymerEntityView<E extends AbstractEntity, T extends TemplateModel> extends PolymerTemplate<T>
-implements HasLogger, ListableEntityView<E>, HasUrlParameter<Long> {
+implements HasLogger, EntityView<E>, HasUrlParameter<Long> {
 
 	protected void setupEventListeners() {
 		addListener(EditEvent.class, e -> navigateToEntity(e.getId()));

@@ -54,7 +54,8 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 @HtmlImport("context://src/storefront/bakery-storefront.html")
 @Route(value = BakeryConst.PAGE_STOREFRONT, layout = BakeryApp.class)
 @PageTitle(BakeryConst.TITLE_STOREFRONT)
-public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
+public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implements HasLogger, HasUrlParameter<Long>,
+		EntityView<Order> {
 
 	public interface Model extends TemplateModel {
 		@Include({ "id", "dueDate.day", "dueDate.weekday", "dueDate.date", "dueTime", "state", "pickupLocation.name", "customer.fullName",
@@ -138,6 +139,11 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 			boolean editView = event.getLocation().getQueryParameters().getParameters().containsKey("edit");
 			presenter.loadEntity(orderId, editView);
 		}
+	}
+
+	@Override
+	public void setListItems(List<Order> orders) {
+		setOrders(orders, searchBar.getShowPrevious());
 	}
 
 	private void setOrders(List<Order> orders, boolean showPrevious) {
