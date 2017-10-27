@@ -4,16 +4,27 @@ import com.vaadin.data.ValidationException;
 import com.vaadin.starter.bakery.ui.HasNotifications;
 import com.vaadin.starter.bakery.ui.messages.Message;
 
+import java.util.List;
+
 /**
- * A view with a dialog to show a single entity of the type <code>T</code>.
- * The dialog has two modes: view mode and edit mode.
+ * A master / detail view for entities of the type <code>T</code>. The view
+ * has a list of entities (the 'master' part) and a dialog to show a single
+ * entity (the 'detail' part). The dialog has two modes: a view mode and an
+ * edit mode.
  * <p>
- * The entity view can also show notifications, error messages, and
- * confirmation requests.
+ * The view can also show notifications, error messages, and confirmation
+ * requests.
  *
  * @param <T> the entity type
  */
 public interface EntityView<T> extends HasNotifications {
+
+	/**
+	 * Sets / refreshes the entities in 'entity list' section of the view.
+	 *
+	 * @param entities the list of entities to show
+	 */
+	void setListItems(List<T> entities);
 
 	/**
 	 * Opens a dialog showing details of a single entity.

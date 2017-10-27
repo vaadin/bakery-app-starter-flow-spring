@@ -70,7 +70,7 @@ public class UsersView extends PolymerEntityView<User, UsersView.Model> {
 	}
 
 	@Override
-	public void list(List<User> entities) {
+	public void setListItems(List<User> entities) {
 		getModel().setUsers(entities);
 	}
 
