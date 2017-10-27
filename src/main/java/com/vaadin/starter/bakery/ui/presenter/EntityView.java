@@ -24,7 +24,7 @@ public interface EntityView<T> extends HasNotifications {
 	 *
 	 * @param entities the list of entities to show
 	 */
-	void setListItems(List<T> entities);
+	void setItems(List<T> entities);
 
 	/**
 	 * Opens a dialog showing details of a single entity.

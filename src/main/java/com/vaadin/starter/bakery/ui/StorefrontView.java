@@ -142,7 +142,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	}
 
 	@Override
-	public void setListItems(List<Order> orders) {
+	public void setItems(List<Order> orders) {
 		setOrders(orders, searchBar.getShowPrevious());
 	}
 

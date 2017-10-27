@@ -65,7 +65,7 @@ public class ProductsView extends PolymerEntityView<Product, ProductsView.Model>
 	}
 
 	@Override
-	public void setListItems(List<Product> entities) {
+	public void setItems(List<Product> entities) {
 		getModel().setProducts(entities);
 	}
 
