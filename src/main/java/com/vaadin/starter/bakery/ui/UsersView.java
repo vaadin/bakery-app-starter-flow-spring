@@ -75,7 +75,7 @@ public class UsersView extends PolymerEntityView<User, UsersView.Model> {
 	}
 
 	@Override
-	public ConfirmationDialog getConfirmer() {
+	public ConfirmationDialog getConfirmationDialog() {
 		return confirmationDialog;
 	}
 

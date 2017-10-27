@@ -4,7 +4,6 @@ import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.ui.event.DecisionEvent;
 import com.vaadin.starter.bakery.ui.messages.Message;
-import com.vaadin.starter.bakery.ui.presenter.Confirmer;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
 import com.vaadin.ui.common.HtmlImport;
@@ -14,7 +13,7 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 @Tag("confirm-dialog")
 @HtmlImport("context://src/elements/confirm-dialog.html")
-public class ConfirmationDialog extends PolymerTemplate<ConfirmationDialog.Model> implements Confirmer {
+public class ConfirmationDialog extends PolymerTemplate<ConfirmationDialog.Model> {
 
 	public interface Model extends TemplateModel {
 

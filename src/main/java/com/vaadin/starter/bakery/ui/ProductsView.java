@@ -70,7 +70,7 @@ public class ProductsView extends PolymerEntityView<Product, ProductsView.Model>
 	}
 
 	@Override
-	public ConfirmationDialog getConfirmer() {
+	public ConfirmationDialog getConfirmationDialog() {
 		return confirmationDialog;
 	}
 
