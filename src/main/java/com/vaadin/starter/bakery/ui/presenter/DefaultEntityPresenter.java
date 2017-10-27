@@ -21,7 +21,7 @@ public class DefaultEntityPresenter<T extends AbstractEntity> extends EntityPres
 	}
 
 	public void filter(Optional<String> filter) {
-		view.setListItems(crudService.findAnyMatching(filter));
+		view.setItems(crudService.findAnyMatching(filter));
 	}
 
 	@Override
