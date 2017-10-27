@@ -176,7 +176,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	}
 
 	@Override
-	public void closeDialog(boolean updated) {
+	public void closeDialog() {
 		orderEdit.close();
 		getModel().setEditing(false);
 		getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT));

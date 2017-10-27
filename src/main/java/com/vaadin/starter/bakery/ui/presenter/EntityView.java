@@ -6,9 +6,9 @@ import com.vaadin.starter.bakery.ui.messages.Message;
 
 public interface EntityView<T> extends HasNotifications {
 
-	void closeDialog(boolean updated);
-
 	void openDialog(T entity, boolean edit);
+
+	void closeDialog();
 
 	void showConfirmationRequest(Message message);
 

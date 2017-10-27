@@ -61,7 +61,7 @@ implements HasLogger, ListableEntityView<E>, HasUrlParameter<Long> {
 	}
 
 	@Override
-	public void closeDialog(boolean updated) {
+	public void closeDialog() {
 		getItemsView().openDialog(false);
 		navigateToEntity(null);
 	}
