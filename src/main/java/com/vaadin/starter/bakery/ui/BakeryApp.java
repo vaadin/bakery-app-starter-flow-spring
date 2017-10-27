@@ -5,13 +5,13 @@ import com.vaadin.router.RouterLayout;
 import com.vaadin.router.event.BeforeNavigationEvent;
 import com.vaadin.router.event.BeforeNavigationListener;
 import com.vaadin.spring.annotation.VaadinSessionScope;
-import com.vaadin.starter.bakery.app.security.SecuredAccessControl;
+import com.vaadin.starter.bakery.app.security.SecurityUtils;
 import com.vaadin.starter.bakery.ui.exceptions.AccessDeniedException;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.UI;
-import com.vaadin.ui.event.AttachEvent;
 import com.vaadin.ui.common.HtmlImport;
+import com.vaadin.ui.event.AttachEvent;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
@@ -20,7 +20,8 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 @VaadinSessionScope
 public class BakeryApp extends PolymerTemplate<BakeryApp.Model> implements RouterLayout, BeforeNavigationListener {
 
-	// TODO(vlukashov, 2017.08.11): Remove this once https://github.com/vaadin/flow/issues/2152 is closed.
+	// TODO(vlukashov, 2017.08.11): Remove this once
+	// https://github.com/vaadin/flow/issues/2152 is closed.
 	// when bundling is enabled the Flow's sub-template feature does not work
 	@Id("navigation")
 	private BakeryNavigation navigation;
@@ -31,7 +32,7 @@ public class BakeryApp extends PolymerTemplate<BakeryApp.Model> implements Route
 
 	@Override
 	public void beforeNavigation(BeforeNavigationEvent event) {
-		if (!SecuredAccessControl.isAccessGranted(event.getNavigationTarget())) {
+		if (!SecurityUtils.isAccessGranted(event.getNavigationTarget())) {
 			event.rerouteToError(AccessDeniedException.class);
 			return;
 		}
