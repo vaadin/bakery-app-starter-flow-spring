@@ -65,11 +65,11 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 	}
 
 	protected void onSaveSuccess() {
-		close(true);
+		close();
 	}
 
 	protected void onDeleteSuccess() {
-		close(true);
+		close();
 	}
 
 	protected void writeEntity() throws ValidationException {
@@ -97,14 +97,13 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 		return false;
 	}
 
-	private void close(boolean updated) {
-		view.closeDialog(updated);
+	private void close() {
+		view.closeDialog();
 		this.entity = null;
 	}
 
 	public void cancel() {
-		confirmIfNecessaryAndExecute(view.isDirty(), Message.UNSAVED_CHANGES.createMessage(entityName),
-				() -> close(false));
+		confirmIfNecessaryAndExecute(view.isDirty(), Message.UNSAVED_CHANGES.createMessage(entityName), this::close);
 	}
 
 	public void confirmationDecisionReceived(DecisionEvent event) {
@@ -127,7 +126,7 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 			openDialog(entity, edit);
 		});
 		if (!loaded) {
-			view.closeDialog(true);
+			view.closeDialog();
 		}
 	}
 
