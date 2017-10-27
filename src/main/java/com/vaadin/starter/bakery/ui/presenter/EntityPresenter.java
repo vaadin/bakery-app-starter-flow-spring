@@ -115,7 +115,7 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 	protected void confirmIfNecessaryAndExecute(boolean needsConfirmation, Message message, Runnable operation) {
 		if (needsConfirmation) {
 			this.operationWaitingConfirmation = operation;
-			view.getConfirmer().show(message);
+			view.showConfirmationRequest(message);
 		} else {
 			operation.run();
 		}

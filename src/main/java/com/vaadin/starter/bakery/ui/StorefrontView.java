@@ -20,6 +20,7 @@ import com.vaadin.starter.bakery.ui.converters.CurrencyFormatter;
 import com.vaadin.starter.bakery.ui.converters.LocalDateTimeConverter;
 import com.vaadin.starter.bakery.ui.converters.LocalTimeConverter;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
+import com.vaadin.starter.bakery.ui.messages.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -39,7 +40,6 @@ import com.vaadin.starter.bakery.ui.components.viewselector.ViewSelector;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
-import com.vaadin.starter.bakery.ui.presenter.Confirmer;
 import com.vaadin.starter.bakery.ui.presenter.EntityView;
 import com.vaadin.starter.bakery.ui.presenter.EntityPresenter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
@@ -194,8 +194,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	}
 
 	@Override
-	public Confirmer getConfirmer() {
-		return confirmationDialog;
+	public void showConfirmationRequest(Message message) {
+		confirmationDialog.show(message);
 	}
 
 	class Presenter extends EntityPresenter<Order> {
