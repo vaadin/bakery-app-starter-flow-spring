@@ -120,7 +120,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasTo
 		time.setDataProvider(timeDataProvider);
 		time.addValueChangeListener(e -> setHasChanges(true));
 
-		ListDataProvider<String> locationProvider = DataProvider.ofItems(PickupLocation.values());
+		ListDataProvider<String> locationProvider = DataProvider.ofItems(PickupLocation.getAllPickupLocations());
 		pickupLocation.setDataProvider(locationProvider);
 		pickupLocation.addValueChangeListener(e -> setHasChanges(true));
 		pickupLocation.setRequired(true);

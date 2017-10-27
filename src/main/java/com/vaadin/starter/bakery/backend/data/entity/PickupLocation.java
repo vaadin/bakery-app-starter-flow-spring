@@ -29,7 +29,7 @@ public class PickupLocation extends AbstractEntity {
 		return "PickupLocation{" + "name='" + name + '\'' + '}';
 	}
 
-	public static String [] values() {
+	public static String [] getAllPickupLocations() {
 		return new String[] { "Bakery", "Store" };
 	}
 }
