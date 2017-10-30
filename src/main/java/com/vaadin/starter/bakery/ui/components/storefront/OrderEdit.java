@@ -6,17 +6,19 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.IntStream;
 
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.provider.ListDataProvider;
+import com.vaadin.data.provider.Query;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.shared.Registration;
+import com.vaadin.starter.bakery.app.BeanLocator;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
-import com.vaadin.starter.bakery.backend.data.entity.PickupLocation;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.ui.HasNotifications;
@@ -96,6 +98,8 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasNo
 
 	private final OrderStateConverter orderStateConverter = new OrderStateConverter();
 
+	private PickupLocationComboBoxDataProvider locationProvider = BeanLocator.find(PickupLocationComboBoxDataProvider.class);
+
 	private boolean hasChanges = false;
 
 	public OrderEdit() {
@@ -120,7 +124,6 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasNo
 		time.setDataProvider(timeDataProvider);
 		time.addValueChangeListener(e -> setHasChanges(true));
 
-		ListDataProvider<String> locationProvider = DataProvider.ofItems(PickupLocation.getAllPickupLocations());
 		pickupLocation.setDataProvider(locationProvider);
 		pickupLocation.addValueChangeListener(e -> setHasChanges(true));
 		pickupLocation.setRequired(true);
@@ -172,9 +175,9 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasNo
 
 	public void write(Order order) throws ValidationException {
 		order.setDueTime(localTimeConverter.toModel(time.getValue()));
-		PickupLocation location = new PickupLocation();
-		location.setName(pickupLocation.getValue());
-		order.setPickupLocation(location);
+		Query<String, String> locationQuery = new Query<>(0, 1, Collections.emptyList(), null,
+				pickupLocation.getValue());
+		locationProvider.findLocations(locationQuery).stream().findFirst().ifPresent(p -> order.setPickupLocation(p));
 		order.changeState(currentUser, orderStateConverter.toModel(status.getValue()));
 
 		binder.writeBean(order);
