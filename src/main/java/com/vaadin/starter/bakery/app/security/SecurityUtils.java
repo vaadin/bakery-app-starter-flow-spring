@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -60,8 +61,7 @@ public class SecurityUtils {
 	}
 
 	/**
-	 * Checks if access is granted for the current user for the given secured view
-	 * within the given ui.
+	 * Checks if access is granted for the current user for the given secured view.
 	 *
 	 * @param secured
 	 * @return true if access is granted, false otherwise.
@@ -74,9 +74,22 @@ public class SecurityUtils {
 		return Arrays.asList(secured.value()).stream().anyMatch(SecurityUtils::isCurrentUserInRole);
 	}
 
+	/**
+	 * Checks if access is granted for the current user for the given secured view,
+	 * defined by the view class.
+	 *
+	 * @param securedClass
+	 * @return true if access is granted, false otherwise.
+	 */
+	public static boolean isAccessGranted(Class<?> securedClass) {
+		Secured secured = AnnotationUtils.findAnnotation(securedClass, Secured.class);
+		return isAccessGranted(secured);
+	}
+
 	public static boolean isUserLoggedIn() {
 		SecurityContext context = SecurityContextHolder.getContext();
 		return context.getAuthentication() != null
 				&& !(context.getAuthentication() instanceof AnonymousAuthenticationToken);
 	}
+
 }
