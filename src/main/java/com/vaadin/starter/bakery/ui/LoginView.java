@@ -4,7 +4,7 @@ import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.router.PageTitle;
 import com.vaadin.router.Route;
 import com.vaadin.router.event.AfterNavigationEvent;
-import com.vaadin.router.event.AfterNavigationListener;
+import com.vaadin.router.event.AfterNavigationObserver;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
@@ -13,7 +13,7 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 @HtmlImport("src/login/bakery-login.html")
 @Route(value = "login", layout = BakeryApp.class)
 @PageTitle("###Bakery###")
-public class LoginView extends PolymerTemplate<LoginView.Model> implements AfterNavigationListener {
+public class LoginView extends PolymerTemplate<LoginView.Model> implements AfterNavigationObserver {
 
 @Override
 public void afterNavigation(AfterNavigationEvent event) {
