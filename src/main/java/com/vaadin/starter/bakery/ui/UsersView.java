@@ -64,18 +64,18 @@ public class UsersView extends PolymerEntityView<User, UsersView.Model> {
 	}
 
 	@Override
-	public void closeDialog(boolean updated) {
+	public void closeDialog() {
 		editor.clear();
-		super.closeDialog(updated);
+		super.closeDialog();
 	}
 
 	@Override
-	public void list(List<User> entities) {
+	public void setItems(List<User> entities) {
 		getModel().setUsers(entities);
 	}
 
 	@Override
-	public ConfirmationDialog getConfirmer() {
+	public ConfirmationDialog getConfirmationDialog() {
 		return confirmationDialog;
 	}
 

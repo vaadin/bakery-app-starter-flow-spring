@@ -14,7 +14,7 @@ import com.vaadin.starter.bakery.backend.service.UserFriendlyDataException;
 import com.vaadin.starter.bakery.ui.event.DecisionEvent;
 import com.vaadin.starter.bakery.ui.messages.Message;
 
-public class EntityViewPresenter<T extends AbstractEntity> implements HasLogger {
+public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 
 	private CrudService<T> crudService;
 
@@ -26,7 +26,7 @@ public class EntityViewPresenter<T extends AbstractEntity> implements HasLogger 
 
 	private Runnable operationWaitingConfirmation;
 
-	public EntityViewPresenter(CrudService<T> crudService, EntityView<T> view, String entityName) {
+	public EntityPresenter(CrudService<T> crudService, EntityView<T> view, String entityName) {
 		this.crudService = crudService;
 		this.view = view;
 		this.entityName = entityName;
@@ -65,12 +65,11 @@ public class EntityViewPresenter<T extends AbstractEntity> implements HasLogger 
 	}
 
 	protected void onSaveSuccess() {
-		view.update(entity);
-		close(true);
+		close();
 	}
 
 	protected void onDeleteSuccess() {
-		close(true);
+		close();
 	}
 
 	protected void writeEntity() throws ValidationException {
@@ -98,14 +97,13 @@ public class EntityViewPresenter<T extends AbstractEntity> implements HasLogger 
 		return false;
 	}
 
-	private void close(boolean updated) {
-		view.closeDialog(updated);
+	private void close() {
+		view.closeDialog();
 		this.entity = null;
 	}
 
 	public void cancel() {
-		confirmIfNecessaryAndExecute(view.isDirty(), Message.UNSAVED_CHANGES.createMessage(entityName),
-				() -> close(false));
+		confirmIfNecessaryAndExecute(view.isDirty(), Message.UNSAVED_CHANGES.createMessage(entityName), this::close);
 	}
 
 	public void confirmationDecisionReceived(DecisionEvent event) {
@@ -116,7 +114,7 @@ public class EntityViewPresenter<T extends AbstractEntity> implements HasLogger 
 	protected void confirmIfNecessaryAndExecute(boolean needsConfirmation, Message message, Runnable operation) {
 		if (needsConfirmation) {
 			this.operationWaitingConfirmation = operation;
-			view.getConfirmer().show(message);
+			view.showConfirmationRequest(message);
 		} else {
 			operation.run();
 		}
@@ -128,7 +126,7 @@ public class EntityViewPresenter<T extends AbstractEntity> implements HasLogger 
 			openDialog(entity, edit);
 		});
 		if (!loaded) {
-			view.closeDialog(true);
+			view.closeDialog();
 		}
 	}
 
