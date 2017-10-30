@@ -3,50 +3,42 @@ package com.vaadin.starter.bakery.ui;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_USERS;
 import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.vaadin.flow.model.Convert;
-import com.vaadin.flow.model.Include;
 import com.vaadin.flow.model.TemplateModel;
-import com.vaadin.router.Route;
 import com.vaadin.router.PageTitle;
+import com.vaadin.router.Route;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.UserService;
 import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
 import com.vaadin.starter.bakery.ui.components.ItemsView;
 import com.vaadin.starter.bakery.ui.components.UserEdit;
-import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
 import com.vaadin.starter.bakery.ui.presenter.DefaultEntityPresenter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.view.EntityEditor;
 import com.vaadin.starter.bakery.ui.view.PolymerEntityView;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HtmlImport;
+import com.vaadin.ui.grid.Grid;
 import com.vaadin.ui.polymertemplate.Id;
+import com.vaadin.ui.renderers.TemplateRenderer;
 
 @Tag("bakery-users")
 @HtmlImport("src/users/bakery-users.html")
 @Route(value = PAGE_USERS, layout = BakeryApp.class)
 @PageTitle(BakeryConst.TITLE_USERS)
 @Secured(Role.ADMIN)
-public class UsersView extends PolymerEntityView<User, UsersView.Model> {
-
-	public interface Model extends TemplateModel {
-
-		@Include({ "id", "firstName", "lastName", "email", "photoUrl", "role" })
-		@Convert(value = LongToStringConverter.class, path = "id")
-		void setUsers(List<User> users);
-	}
+public class UsersView extends PolymerEntityView<User, TemplateModel> {
 
 	@Id("bakery-users-items-view")
 	private ItemsView view;
 
 	private UserEdit editor;
+
+	private Grid<User> grid = new Grid<>();
 
 	@Id("user-confirmation-dialog")
 	private ConfirmationDialog confirmationDialog;
@@ -61,17 +53,34 @@ public class UsersView extends PolymerEntityView<User, UsersView.Model> {
 		presenter = new DefaultEntityPresenter<>(userService, this, "User");
 		setupEventListeners();
 		view.setActionText("New user");
+		setupGrid();
+	}
+
+	private void setupGrid() {
+		grid.setId("grid");
+		grid.getElement().setAttribute("theme", "borderless");
+
+		grid.addColumn("Email", User::getEmail).setWidth("270px").setFlexGrow(5);
+		grid.addColumn("Name", u -> u.getFirstName() + " " + u.getLastName()).setWidth("200px").setFlexGrow(5);
+		grid.addColumn("Role", User::getRole);
+
+		Grid.Column<User> iconColumn = grid.addColumn("",
+				TemplateRenderer.<User>of("<iron-icon icon=\"valo:edit\" class=\"edit-icon\"></iron-icon>"))
+				.setWidth("80px").setFlexGrow(0);
+		iconColumn.setId("icon-column");
+
+		addToSlot(this, grid, "items-grid");
+	}
+
+	@Override
+	public Grid<User> getGrid() {
+		return grid;
 	}
 
 	@Override
 	public void closeDialog() {
 		editor.clear();
 		super.closeDialog();
-	}
-
-	@Override
-	public void setItems(List<User> entities) {
-		getModel().setUsers(entities);
 	}
 
 	@Override

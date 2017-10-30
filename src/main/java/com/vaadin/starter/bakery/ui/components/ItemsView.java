@@ -7,6 +7,7 @@ import com.vaadin.ui.button.Button;
 import com.vaadin.ui.common.HasClickListeners;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.event.ComponentEventListener;
+import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 import java.util.function.Consumer;

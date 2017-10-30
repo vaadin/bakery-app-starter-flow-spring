@@ -21,6 +21,7 @@ import com.vaadin.starter.bakery.ui.converters.LocalDateTimeConverter;
 import com.vaadin.starter.bakery.ui.converters.LocalTimeConverter;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
 import com.vaadin.starter.bakery.ui.messages.Message;
+import com.vaadin.ui.grid.Grid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -142,8 +143,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 	}
 
 	@Override
-	public void setItems(List<Order> orders) {
-		setOrders(orders, searchBar.getShowPrevious());
+	public Grid<Order> getGrid() {
+		return null;
 	}
 
 	private void setOrders(List<Order> orders, boolean showPrevious) {

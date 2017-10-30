@@ -20,85 +20,41 @@
         max-width: none !important;
         display: flex;
       }
-
-      .picture-cell {
-        display: flex;
-        justify-content: flex-end;
-      }
-
-      .picture {
-        width: var(--valo-size-xs);
-        height: var(--valo-size-xs);
-      }
-
-      .edit-icon {
-        --iron-icon-height: var(--valo-size-xs);
-        --iron-icon-width: var(--valo-size-xs);
-        color: var(--valo-shade-50pct);
-        cursor: pointer;
-      }
-
-      vaadin-grid-sorter {
-        width: 70px;
-      }
     </style>
 
     <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
 
     <items-view id="bakery-users-items-view" desktop-view=[[desktopView]]>
-
-      <vaadin-grid slot="grid" id="grid" items="[[users]]" active-item="{{_activeItem}}" theme="borderless">
-        <vaadin-grid-column width="80px" flex-grow="0">
-          <template>
-            <div class="picture-cell">
-              <user-avatar src="[[item.photoUrl]]" alt="[[item.firstName]]" class="picture"></user-avatar>
-            </div>
-          </template>
-        </vaadin-grid-column>
-        <vaadin-grid-column width="270px" flex-grow="5">
-          <template class="header">
-            <vaadin-grid-sorter path="email">Email</vaadin-grid-sorter>
-          </template>
-          <template>
-            <div>
-              [[item.email]]
-            </div>
-          </template>
-        </vaadin-grid-column>
-        <vaadin-grid-column width="200px" flex-grow="5">
-          <template class="header">
-            <vaadin-grid-sorter path="name">Name</vaadin-grid-sorter>
-          </template>
-          <template>[[item.firstName]] [[item.lastName]]</template>
-        </vaadin-grid-column>
-        <vaadin-grid-column>
-          <template class="header">
-            <vaadin-grid-sorter path="role">Role</vaadin-grid-sorter>
-          </template>
-          <template>[[item.role]]</template>
-        </vaadin-grid-column>
-        <vaadin-grid-column width="80px" flex-grow="0" hidden="[[!desktopView]]">
-          <template>
-            <iron-icon icon="valo:edit" class="edit-icon"></iron-icon>
-          </template>
-        </vaadin-grid-column>
-      </vaadin-grid>
-
+      <slot name="items-grid" slot="grid" on-slotchange="_desktopViewChanged"></slot>
       <slot name="user-editor" slot="editor"></slot>
     </items-view>
     <confirm-dialog id="user-confirmation-dialog"></confirm-dialog>
   </template>
 
   <script>
-    class BakeryUsers extends window.HasNotificationsMixin(window.EditableListMixin(Polymer.Element)) {
+    class BakeryUsers extends window.HasNotificationsMixin(Polymer.Element) {
       static get is() {
         return 'bakery-users';
       }
 
       static get properties() {
         return {
-          desktopView: Boolean
+          desktopView: {
+            type: Boolean,
+            observer: '_desktopViewChanged'
+          }
         };
+      }
+
+      _desktopViewChanged() {
+        const iconColumn = this.querySelector('#icon-column');
+        if (iconColumn) {
+          if (this.desktopView) {
+            iconColumn.removeAttribute('hidden');
+          } else {
+            iconColumn.setAttribute('hidden', !this.desktopView);
+          }
+        }
       }
 
     }

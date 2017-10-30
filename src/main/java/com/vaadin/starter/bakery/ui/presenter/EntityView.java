@@ -1,8 +1,11 @@
 package com.vaadin.starter.bakery.ui.presenter;
 
 import com.vaadin.data.ValidationException;
+import com.vaadin.data.provider.DataProvider;
+import com.vaadin.starter.bakery.ui.HasGrid;
 import com.vaadin.starter.bakery.ui.HasNotifications;
 import com.vaadin.starter.bakery.ui.messages.Message;
+import com.vaadin.ui.grid.Grid;
 
 import java.util.List;
 
@@ -17,14 +20,7 @@ import java.util.List;
  *
  * @param <T> the entity type
  */
-public interface EntityView<T> extends HasNotifications {
-
-	/**
-	 * Sets / refreshes the entities in 'entity list' section of the view.
-	 *
-	 * @param entities the list of entities to show
-	 */
-	void setItems(List<T> entities);
+public interface EntityView<T> extends HasNotifications, HasGrid<T> {
 
 	/**
 	 * Opens a dialog showing details of a single entity.

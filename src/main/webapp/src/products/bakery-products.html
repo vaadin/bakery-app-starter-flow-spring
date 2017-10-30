@@ -18,42 +18,13 @@
         max-width: none !important;
         display: flex;
       }
-
-      .edit-icon {
-        --iron-icon-height: var(--valo-size-xs);
-        --iron-icon-width: var(--valo-size-xs);
-        color: var(--valo-shade-50pct);
-        cursor: pointer;
-      }
     </style>
 
     <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
 
     <items-view id="bakery-products-items-view" desktop-view=[[desktopView]] >
 
-      <vaadin-grid slot="grid" id="grid" items="[[products]]" theme="borderless">
-        <vaadin-grid-column flex-grow="10">
-          <template class="header">
-            <vaadin-grid-sorter path="name">Product Name</vaadin-grid-sorter>
-          </template>
-          <template>
-            <div>
-              [[item.name]]
-            </div>
-          </template>
-        </vaadin-grid-column>
-        <vaadin-grid-column>
-          <template class="header">
-            <vaadin-grid-sorter path="price">Unit Price</vaadin-grid-sorter>
-          </template>
-          <template>[[item.price]]</template>
-        </vaadin-grid-column>
-        <vaadin-grid-column width="80px" flex-grow="0" hidden="[[!desktopView]]">
-          <template>
-            <iron-icon icon="valo:edit" class="edit-icon" product-id="[[item.id]]"></iron-icon>
-          </template>
-        </vaadin-grid-column>
-      </vaadin-grid>
+      <slot name="items-grid" slot="grid"></slot>
 
       <slot name="product-editor" slot="editor"></slot>
     </items-view>
@@ -61,10 +32,7 @@
   </template>
 
   <script>
-    class BakeryProducts extends
-      window.HasNotificationsMixin(
-        window.EditableListMixin(
-          Polymer.Element)) {
+    class BakeryProducts extends window.HasNotificationsMixin(Polymer.Element) {
 
       static get is() {
         return 'bakery-products';
@@ -72,10 +40,23 @@
 
       static get properties() {
         return {
-          desktopView: Boolean
+          desktopView: {
+            type: Boolean,
+            observer: '_desktopViewChanged'
+          }
         };
       }
 
+      _desktopViewChanged() {
+        const iconColumn = this.querySelector('#icon-column');
+        if (iconColumn) {
+          if (this.desktopView) {
+            iconColumn.removeAttribute('hidden');
+          } else {
+            iconColumn.setAttribute('hidden', !this.desktopView);
+          }
+        }
+      }
     }
 
     window.customElements.define(BakeryProducts.is, BakeryProducts);

@@ -18,13 +18,15 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 
 	private CrudService<T> crudService;
 
-	private EntityView<T> view;
+	protected EntityView<T> view;
 
 	private String entityName;
 
 	private T entity;
 
 	private Runnable operationWaitingConfirmation;
+
+	protected boolean isNew = false;
 
 	public EntityPresenter(CrudService<T> crudService, EntityView<T> view, String entityName) {
 		this.crudService = crudService;
@@ -123,6 +125,7 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 	public void loadEntity(Long id, boolean edit) {
 		boolean loaded = executeJPAOperation(() -> {
 			this.entity = crudService.load(id);
+			this.isNew = false;
 			openDialog(entity, edit);
 		});
 		if (!loaded) {
@@ -136,6 +139,7 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 
 	public void createNew() {
 		this.entity = crudService.createNew();
+		this.isNew = true;
 		openDialog(entity, true);
 	}
 
