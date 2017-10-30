@@ -65,12 +65,12 @@ public class ProductsView extends PolymerEntityView<Product, ProductsView.Model>
 	}
 
 	@Override
-	public void list(List<Product> entities) {
+	public void setItems(List<Product> entities) {
 		getModel().setProducts(entities);
 	}
 
 	@Override
-	public ConfirmationDialog getConfirmer() {
+	public ConfirmationDialog getConfirmationDialog() {
 		return confirmationDialog;
 	}
 

@@ -123,7 +123,7 @@
      * Mixin for editors.
      */
     /* @polymerMixin */
-    window.NotificationMixin = subclass => class extends subclass {
+    window.HasNotificationsMixin = subclass => class extends subclass {
 
       static get properties() {
         return {
@@ -154,7 +154,7 @@
         });
       }
 
-      displayToast(message, persistent) {
+      showNotification(message, persistent) {
         Polymer.RenderStatus.afterNextRender(this, () => {
           const toast = persistent ? this._persistentToast : this._defaultToast;
           toast.style['z-index'] = 1000;

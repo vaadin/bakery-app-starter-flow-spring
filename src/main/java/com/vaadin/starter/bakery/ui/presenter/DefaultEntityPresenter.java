@@ -8,12 +8,12 @@ import java.util.Optional;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
 import com.vaadin.starter.bakery.backend.service.FilterableCrudService;
 
-public class DefaultEntityPresenter<T extends AbstractEntity> extends EntityViewPresenter<T> {
+public class DefaultEntityPresenter<T extends AbstractEntity> extends EntityPresenter<T> {
 
 	private FilterableCrudService<T> crudService;
-	private ListableEntityView<T> view;
+	private EntityView<T> view;
 
-	public DefaultEntityPresenter(FilterableCrudService<T> crudService, ListableEntityView<T> view, String entityName) {
+	public DefaultEntityPresenter(FilterableCrudService<T> crudService, EntityView<T> view, String entityName) {
 		super(crudService, view, entityName);
 		this.crudService = crudService;
 		this.view = view;
@@ -21,7 +21,7 @@ public class DefaultEntityPresenter<T extends AbstractEntity> extends EntityView
 	}
 
 	public void filter(Optional<String> filter) {
-		view.list(crudService.findAnyMatching(filter));
+		view.setItems(crudService.findAnyMatching(filter));
 	}
 
 	@Override

@@ -19,12 +19,13 @@ import com.vaadin.starter.bakery.ui.event.CloseDialogEvent;
 import com.vaadin.starter.bakery.ui.event.DeleteEvent;
 import com.vaadin.starter.bakery.ui.event.EditEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
+import com.vaadin.starter.bakery.ui.messages.Message;
 import com.vaadin.starter.bakery.ui.presenter.DefaultEntityPresenter;
-import com.vaadin.starter.bakery.ui.presenter.ListableEntityView;
+import com.vaadin.starter.bakery.ui.presenter.EntityView;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 public abstract class PolymerEntityView<E extends AbstractEntity, T extends TemplateModel> extends PolymerTemplate<T>
-implements HasLogger, ListableEntityView<E>, HasUrlParameter<Long> {
+implements HasLogger, EntityView<E>, HasUrlParameter<Long> {
 
 	protected void setupEventListeners() {
 		addListener(EditEvent.class, e -> navigateToEntity(e.getId()));
@@ -32,12 +33,12 @@ implements HasLogger, ListableEntityView<E>, HasUrlParameter<Long> {
 		getEditor().addListener(CancelEvent.class, e -> getPresenter().cancel());
 		getEditor().addListener(SaveEvent.class, e -> getPresenter().save());
 		getEditor().addListener(DeleteEvent.class, e -> getPresenter().delete());
-		getConfirmer().addDecisionListener(getPresenter()::confirmationDecisionReceived);
+		getConfirmationDialog().addDecisionListener(getPresenter()::confirmationDecisionReceived);
 		getItemsView().addActionClickListener(e -> getPresenter().createNew());
 		getItemsView().addFilterChangeListener(f -> getPresenter().filter(Optional.ofNullable(f)));
 	}
 
-	public abstract ConfirmationDialog getConfirmer();
+	public abstract ConfirmationDialog getConfirmationDialog();
 
 	protected abstract DefaultEntityPresenter<E> getPresenter();
 
@@ -60,7 +61,7 @@ implements HasLogger, ListableEntityView<E>, HasUrlParameter<Long> {
 	}
 
 	@Override
-	public void closeDialog(boolean updated) {
+	public void closeDialog() {
 		getItemsView().openDialog(false);
 		navigateToEntity(null);
 	}
@@ -79,5 +80,10 @@ implements HasLogger, ListableEntityView<E>, HasUrlParameter<Long> {
 	@Override
 	public void write(E entity) throws ValidationException {
 		getEditor().write(entity);
+	}
+
+	@Override
+	public void showConfirmationRequest(Message message) {
+		getConfirmationDialog().show(message);
 	}
 }
