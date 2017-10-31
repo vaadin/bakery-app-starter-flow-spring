@@ -1,5 +1,7 @@
 package com.vaadin.starter.bakery.ui.components;
 
+import com.vaadin.data.provider.DataProvider;
+import com.vaadin.data.provider.ListDataProvider;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -59,7 +61,9 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> implements EntityE
 
 	public UserEdit() {
 		editForm.init(binder, "User");
-		roleField.setItems(Role.getAllRoles());
+
+		ListDataProvider<String> roleProvider = DataProvider.ofItems(Role.getAllRoles());
+		roleField.setDataProvider(roleProvider);
 		binder.bind(firstnameField, "firstName");
 		binder.bind(lastnameField, "lastName");
 		binder.bind(emailField, "email");

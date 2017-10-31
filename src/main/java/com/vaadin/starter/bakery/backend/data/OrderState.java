@@ -13,19 +13,4 @@ public enum OrderState {
 	public String getDisplayName() {
 		return name().toLowerCase();
 	}
-
-	/**
-	 * Gets a enum value for which {@link #getDisplayName()} returns the given
-	 * string. Match is case-insensitive.
-	 *
-	 * @return the enum value with a matching display name
-	 */
-	public static OrderState forDisplayName(String displayName) {
-		for (OrderState state : values()) {
-			if (displayName.toLowerCase().equals(state.getDisplayName().toLowerCase())) {
-				return state;
-			}
-		}
-		return null;
-	}
 }
