@@ -123,7 +123,7 @@ public class DataGenerator implements HasLogger {
 		Order order = new Order(barista);
 
 		fillCustomer(order.getCustomer());
-		order.getPickupLocation().setName(getRandomPickupLocation().getName());
+		order.setPickupLocation(getRandomPickupLocation());
 		order.setDueDate(dueDate);
 		order.setDueTime(getRandomDueTime());
 		order.changeState(barista,getRandomState(order.getDueDate()));

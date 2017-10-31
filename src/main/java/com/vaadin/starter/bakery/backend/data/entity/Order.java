@@ -65,7 +65,6 @@ public class Order extends AbstractEntity {
 	public Order(User createdBy) {
 		this.state = OrderState.NEW;
 		setCustomer(new Customer());
-		setPickupLocation(new PickupLocation());
 		addHistoryItem(createdBy, "Order placed");
 		this.items = new ArrayList<>();
 	}
