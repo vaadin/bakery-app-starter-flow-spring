@@ -12,7 +12,9 @@ public class LoginViewElement extends TestBenchElement {
 	public StoreFrontViewElement login(String username, String password) {
 		getLogin().setValue(username);
 		getPassword().setValue(password);
-		getSignIn().click();
+
+		// Workaround for https://github.com/webcomponents/shadydom/issues/141
+		executeScript("arguments[0].click()", getSignIn());
 
 		return $(StoreFrontViewElement.class).onPage().waitForFirst();
 	}
