@@ -15,9 +15,9 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
  * org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration.
  * class })
  */
-public class BakeryInitializer extends SpringBootServletInitializer {
+public class Application extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
-		SpringApplication.run(BakeryInitializer.class, args);
+		SpringApplication.run(Application.class, args);
 	}
 }
