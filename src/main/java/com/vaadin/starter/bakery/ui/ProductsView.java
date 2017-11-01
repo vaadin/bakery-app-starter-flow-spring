@@ -4,7 +4,6 @@ import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_PRODUCTS;
 import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
 import com.vaadin.ui.grid.Grid;
-import com.vaadin.ui.renderers.TemplateRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 
@@ -68,11 +67,6 @@ public class ProductsView extends PolymerEntityView<Product, TemplateModel> {
 
 		grid.addColumn("Product Name", Product::getName).setFlexGrow(10);
 		grid.addColumn("Unit Price", p -> currencyFormatter.toPresentation(p.getPrice()));
-
-		Grid.Column<Product> iconColumn = grid.addColumn("",
-				TemplateRenderer.<Product>of("<iron-icon icon=\"valo:edit\" class=\"edit-icon\"></iron-icon>"))
-				.setWidth("80px").setFlexGrow(0);
-		iconColumn.setId("icon-column");
 
 		addToSlot(this, grid, "items-grid");
 	}

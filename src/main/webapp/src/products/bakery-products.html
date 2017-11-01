@@ -41,21 +41,9 @@
       static get properties() {
         return {
           desktopView: {
-            type: Boolean,
-            observer: '_desktopViewChanged'
+            type: Boolean
           }
         };
-      }
-
-      _desktopViewChanged() {
-        const iconColumn = this.querySelector('#icon-column');
-        if (iconColumn) {
-          if (this.desktopView) {
-            iconColumn.removeAttribute('hidden');
-          } else {
-            iconColumn.setAttribute('hidden', !this.desktopView);
-          }
-        }
       }
     }
 

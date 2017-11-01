@@ -25,7 +25,7 @@
     <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
 
     <items-view id="bakery-users-items-view" desktop-view=[[desktopView]]>
-      <slot name="items-grid" slot="grid" on-slotchange="_desktopViewChanged"></slot>
+      <slot name="items-grid" slot="grid"></slot>
       <slot name="user-editor" slot="editor"></slot>
     </items-view>
     <confirm-dialog id="user-confirmation-dialog"></confirm-dialog>
@@ -40,23 +40,10 @@
       static get properties() {
         return {
           desktopView: {
-            type: Boolean,
-            observer: '_desktopViewChanged'
+            type: Boolean
           }
         };
       }
-
-      _desktopViewChanged() {
-        const iconColumn = this.querySelector('#icon-column');
-        if (iconColumn) {
-          if (this.desktopView) {
-            iconColumn.removeAttribute('hidden');
-          } else {
-            iconColumn.setAttribute('hidden', !this.desktopView);
-          }
-        }
-      }
-
     }
 
     window.customElements.define(BakeryUsers.is, BakeryUsers);

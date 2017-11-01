@@ -24,7 +24,6 @@ import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.grid.Grid;
 import com.vaadin.ui.polymertemplate.Id;
-import com.vaadin.ui.renderers.TemplateRenderer;
 
 @Tag("bakery-users")
 @HtmlImport("src/users/bakery-users.html")
@@ -63,11 +62,6 @@ public class UsersView extends PolymerEntityView<User, TemplateModel> {
 		grid.addColumn("Email", User::getEmail).setWidth("270px").setFlexGrow(5);
 		grid.addColumn("Name", u -> u.getFirstName() + " " + u.getLastName()).setWidth("200px").setFlexGrow(5);
 		grid.addColumn("Role", User::getRole);
-
-		Grid.Column<User> iconColumn = grid.addColumn("",
-				TemplateRenderer.<User>of("<iron-icon icon=\"valo:edit\" class=\"edit-icon\"></iron-icon>"))
-				.setWidth("80px").setFlexGrow(0);
-		iconColumn.setId("icon-column");
 
 		addToSlot(this, grid, "items-grid");
 	}
