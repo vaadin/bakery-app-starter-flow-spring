@@ -2,12 +2,9 @@ package com.vaadin.starter.bakery.ui.presenter;
 
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.provider.DataProvider;
-import com.vaadin.starter.bakery.ui.HasGrid;
 import com.vaadin.starter.bakery.ui.HasNotifications;
 import com.vaadin.starter.bakery.ui.messages.Message;
 import com.vaadin.ui.grid.Grid;
-
-import java.util.List;
 
 /**
  * A master / detail view for entities of the type <code>T</code>. The view
@@ -20,7 +17,21 @@ import java.util.List;
  *
  * @param <T> the entity type
  */
-public interface EntityView<T> extends HasNotifications, HasGrid<T> {
+public interface EntityView<T> extends HasNotifications {
+
+	/**
+	 * Returns grid displayed on view.
+	 */
+	Grid<T> getGrid();
+
+	/**
+	 * Sets / refreshes the entities in grid.
+	 *
+	 * @param dataProvider provides entities for grid
+	 */
+	default void setDataProvider(DataProvider<T, Void> dataProvider) {
+		getGrid().setDataProvider(dataProvider);
+	}
 
 	/**
 	 * Opens a dialog showing details of a single entity.

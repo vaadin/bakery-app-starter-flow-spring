@@ -21,7 +21,6 @@ import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.User;
-import com.vaadin.starter.bakery.ui.HasNotifications;
 import com.vaadin.starter.bakery.ui.converters.LocalTimeConverter;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
@@ -39,7 +38,7 @@ import com.vaadin.ui.textfield.TextField;
 
 @Tag("order-edit")
 @HtmlImport("src/storefront/order-edit.html")
-public class OrderEdit extends PolymerTemplate<OrderEdit.Model> implements HasNotifications {
+public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 
 	public interface Model extends TemplateModel {
 

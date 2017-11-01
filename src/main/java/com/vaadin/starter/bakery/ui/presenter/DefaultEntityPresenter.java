@@ -11,7 +11,7 @@ import com.vaadin.starter.bakery.backend.service.FilterableCrudService;
 
 public class DefaultEntityPresenter<T extends AbstractEntity> extends EntityPresenter<T> {
 
-	private final ConfigurableFilterDataProvider<T, String, String> filteredDataProvider;
+	private final ConfigurableFilterDataProvider<T, Void, String> filteredDataProvider;
 
 	public DefaultEntityPresenter(FilterableCrudService<T> crudService, EntityView<T> view, String entityName) {
 		super(crudService, view, entityName);
@@ -20,7 +20,7 @@ public class DefaultEntityPresenter<T extends AbstractEntity> extends EntityPres
 				query -> crudService.findAnyMatching(query.getFilter()).stream(),
 				query -> crudService.findAnyMatching(query.getFilter()).size());
 
-		filteredDataProvider = dataProvider.withConfigurableFilter((String queryFilter, String filter) -> filter);
+		filteredDataProvider = dataProvider.withConfigurableFilter();
 		view.setDataProvider(filteredDataProvider);
 	}
 
