@@ -4,7 +4,6 @@ import com.vaadin.data.ValidationException;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.starter.bakery.ui.HasNotifications;
 import com.vaadin.starter.bakery.ui.messages.Message;
-import com.vaadin.ui.grid.Grid;
 
 /**
  * A master / detail view for entities of the type <code>T</code>. The view
