@@ -30,7 +30,7 @@ import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.User;
-import com.vaadin.starter.bakery.repositories.OrderRepository;
+import com.vaadin.starter.bakery.backend.repositories.OrderRepository;
 
 @Service
 public class OrderService implements CrudService<Order> {

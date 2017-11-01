@@ -14,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.util.LocalDateJpaConverter;
-import com.vaadin.starter.bakery.repositories.UserRepository;
+import com.vaadin.starter.bakery.backend.repositories.UserRepository;
 
 /**
  * Spring boot application configuration class.

@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery.repositories;
+package com.vaadin.starter.bakery.backend.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
