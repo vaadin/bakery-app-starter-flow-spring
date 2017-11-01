@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.vaadin.starter.bakery.app.BeanLocator;
 import com.vaadin.starter.bakery.backend.data.entity.PickupLocation;
-import com.vaadin.starter.bakery.repositories.PickupLocationRepository;
+import com.vaadin.starter.bakery.backend.repositories.PickupLocationRepository;
 
 @Service
 public class PickupLocationService {

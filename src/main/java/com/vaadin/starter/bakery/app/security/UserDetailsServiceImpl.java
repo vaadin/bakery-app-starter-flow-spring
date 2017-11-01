@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.vaadin.starter.bakery.backend.data.entity.User;
-import com.vaadin.starter.bakery.repositories.UserRepository;
+import com.vaadin.starter.bakery.backend.repositories.UserRepository;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
