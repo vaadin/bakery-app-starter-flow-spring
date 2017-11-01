@@ -13,8 +13,7 @@ import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.event.DeleteEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
-import com.vaadin.starter.bakery.ui.form.EditForm;
-import com.vaadin.starter.bakery.ui.view.EntityEditor;
+import com.vaadin.starter.bakery.ui.view.admin.EntityEditor;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.combobox.ComboBox;
 import com.vaadin.ui.common.HtmlImport;
@@ -28,7 +27,6 @@ import com.vaadin.ui.textfield.TextField;
 public class UserEdit extends PolymerTemplate<UserEdit.Model> implements EntityEditor<User> {
 
 	public interface Model extends TemplateModel {
-		void setAvatar(String avatar);
 
 		void setUserRole(String userRole);
 	}
@@ -90,7 +88,6 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> implements EntityE
 	public void read(User user) {
 		this.user = user;
 		binder.readBean(user);
-		getModel().setAvatar(user.getPhotoUrl());
 		getModel().setUserRole(user.getRole());
 		isDirty = false;
 		editForm.showEditor(user.isNew());

@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import com.vaadin.starter.bakery.backend.data.entity.Product;
-import com.vaadin.starter.bakery.repositories.ProductRepository;
+import com.vaadin.starter.bakery.backend.repositories.ProductRepository;
 
 @Service
 public class ProductService implements FilterableCrudService<Product> {

@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.vaadin.starter.bakery.app.security.SecurityUtils;
 import com.vaadin.starter.bakery.backend.data.entity.User;
-import com.vaadin.starter.bakery.repositories.UserRepository;
+import com.vaadin.starter.bakery.backend.repositories.UserRepository;
 
 @Service
 public class UserService implements FilterableCrudService<User> {

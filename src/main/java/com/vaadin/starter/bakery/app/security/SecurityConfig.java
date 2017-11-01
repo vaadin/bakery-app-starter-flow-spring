@@ -3,6 +3,7 @@ package com.vaadin.starter.bakery.app.security;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.vaadin.starter.bakery.app.ApplicationConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -16,7 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 
-import com.vaadin.starter.bakery.BakeryApplicationConfig;
 import com.vaadin.starter.bakery.backend.data.Role;
 
 @EnableWebSecurity
@@ -49,12 +49,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					.requestMatchers(this::isFrameworkInternalRequest).permitAll()
 					.anyRequest().hasAnyAuthority(Role.getAllRoles())
 				.and().formLogin()
-					.loginPage(BakeryApplicationConfig.LOGIN_URL).permitAll()
-					.loginProcessingUrl(BakeryApplicationConfig.LOGIN_PROCESSING_URL)
-					.failureUrl(BakeryApplicationConfig.LOGIN_FAILURE_URL)
+					.loginPage(ApplicationConfiguration.LOGIN_URL).permitAll()
+					.loginProcessingUrl(ApplicationConfiguration.LOGIN_PROCESSING_URL)
+					.failureUrl(ApplicationConfiguration.LOGIN_FAILURE_URL)
 					.successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
 				.and().logout()
-					.logoutSuccessUrl(BakeryApplicationConfig.LOGOUT_URL);
+					.logoutSuccessUrl(ApplicationConfiguration.LOGOUT_URL);
 	}
 
 	@Override

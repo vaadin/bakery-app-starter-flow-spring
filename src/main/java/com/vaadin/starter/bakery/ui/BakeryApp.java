@@ -6,6 +6,7 @@ import com.vaadin.router.event.BeforeNavigationEvent;
 import com.vaadin.router.event.BeforeNavigationObserver;
 import com.vaadin.spring.annotation.VaadinSessionScope;
 import com.vaadin.starter.bakery.app.security.SecurityUtils;
+import com.vaadin.starter.bakery.ui.components.BakeryNavigation;
 import com.vaadin.starter.bakery.ui.exceptions.AccessDeniedException;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.ui.Tag;

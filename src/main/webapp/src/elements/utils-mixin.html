@@ -99,27 +99,6 @@
     };
 
     /**
-     * Mixin for grids.
-     */
-    window.EditableListMixin = subclass => class extends subclass {
-
-      ready() {
-        super.ready();
-        this.$.grid.addEventListener('active-item-changed', e => this._onActiveItemChanged(e));
-      }
-
-      _onActiveItemChanged(e) {
-        const id = e.detail.value ? e.detail.value.id : null;
-        if (id) {
-          this.dispatchEvent(new CustomEvent('edit', {bubbles: true, composed: true, detail: id}));
-        }
-        // It's easier to remove the active item here than from a server-side when the editor dialog is closed.
-        // When there is a server-side wrapper for vaadin-grid, this approach should be revisited.
-        this.$.grid.activeItem = null;
-      }
-    };
-
-    /**
      * Mixin for editors.
      */
     /* @polymerMixin */

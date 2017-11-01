@@ -1,15 +1,14 @@
 package com.vaadin.starter.bakery.ui.components;
 
+import java.util.function.Consumer;
+
 import com.vaadin.flow.model.TemplateModel;
-import com.vaadin.starter.bakery.ui.BakerySearch;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
 import com.vaadin.ui.common.HasClickListeners;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.event.ComponentEventListener;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
-
-import java.util.function.Consumer;
 
 @Tag("items-view")
 @HtmlImport("src/elements/items-view.html")

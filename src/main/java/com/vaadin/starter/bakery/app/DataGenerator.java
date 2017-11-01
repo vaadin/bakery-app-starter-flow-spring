@@ -23,11 +23,11 @@ import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.PickupLocation;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.User;
-import com.vaadin.starter.bakery.repositories.CustomerRepository;
-import com.vaadin.starter.bakery.repositories.OrderRepository;
-import com.vaadin.starter.bakery.repositories.PickupLocationRepository;
-import com.vaadin.starter.bakery.repositories.ProductRepository;
-import com.vaadin.starter.bakery.repositories.UserRepository;
+import com.vaadin.starter.bakery.backend.repositories.CustomerRepository;
+import com.vaadin.starter.bakery.backend.repositories.OrderRepository;
+import com.vaadin.starter.bakery.backend.repositories.PickupLocationRepository;
+import com.vaadin.starter.bakery.backend.repositories.ProductRepository;
+import com.vaadin.starter.bakery.backend.repositories.UserRepository;
 
 @Component
 public class DataGenerator implements HasLogger {
