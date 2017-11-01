@@ -20,18 +20,11 @@ import com.vaadin.ui.grid.Grid;
 public interface EntityView<T> extends HasNotifications {
 
 	/**
-	 * Returns grid displayed on view.
-	 */
-	Grid<T> getGrid();
-
-	/**
 	 * Sets / refreshes the entities in grid.
 	 *
 	 * @param dataProvider provides entities for grid
 	 */
-	default void setDataProvider(DataProvider<T, Void> dataProvider) {
-		getGrid().setDataProvider(dataProvider);
-	}
+	void setDataProvider(DataProvider<T, Void> dataProvider);
 
 	/**
 	 * Opens a dialog showing details of a single entity.

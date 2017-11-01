@@ -4,6 +4,7 @@
 package com.vaadin.starter.bakery.ui.view;
 
 import com.vaadin.data.ValidationException;
+import com.vaadin.data.provider.DataProvider;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.router.HasUrlParameter;
 import com.vaadin.router.OptionalParameter;
@@ -19,6 +20,7 @@ import com.vaadin.starter.bakery.ui.event.SaveEvent;
 import com.vaadin.starter.bakery.ui.messages.Message;
 import com.vaadin.starter.bakery.ui.presenter.DefaultEntityPresenter;
 import com.vaadin.starter.bakery.ui.presenter.EntityView;
+import com.vaadin.ui.grid.Grid;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 public abstract class PolymerEntityView<E extends AbstractEntity, T extends TemplateModel> extends PolymerTemplate<T>
@@ -47,6 +49,13 @@ public abstract class PolymerEntityView<E extends AbstractEntity, T extends Temp
 	protected abstract EntityEditor<E> getEditor();
 
 	protected abstract ItemsView getItemsView();
+
+	protected abstract Grid<E> getGrid();
+
+	@Override
+	public void setDataProvider(DataProvider<E, Void> dataProvider) {
+		getGrid().setDataProvider(dataProvider);
+	}
 
 	protected void navigateToEntity(String id) {
 		final String location = getBasePage() + (id == null || id.isEmpty() ? "" : "/" + id);

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.vaadin.data.provider.DataProvider;
 import com.vaadin.flow.model.Convert;
 import com.vaadin.flow.model.Include;
 import com.vaadin.router.HasUrlParameter;
@@ -142,11 +143,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		}
 	}
 
-	@Override
-	public Grid<Order> getGrid() {
-		return null;
-	}
-
 	private void setOrders(List<Order> orders, boolean showPrevious) {
 		getModel().setOrders(orders);
 		getElement().setPropertyJson("displayedHeaders", computeEntriesWithHeader(orders, showPrevious));
@@ -187,6 +183,10 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		orderEdit.close();
 		getModel().setEditing(false);
 		getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT));
+	}
+
+	@Override
+	public void setDataProvider(DataProvider<Order, Void> dataProvider) {
 	}
 
 	@Override
