@@ -1,14 +1,9 @@
 package com.vaadin.starter.bakery.ui;
 
-import com.vaadin.starter.bakery.ui.view.HasGrid;
-import java.util.List;
-
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-
 import com.vaadin.starter.bakery.elements.GridElement;
 import com.vaadin.starter.bakery.ui.components.ItemsViewElement;
 import com.vaadin.starter.bakery.ui.components.UserEditElement;
+import com.vaadin.starter.bakery.ui.view.HasGrid;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elementsbase.Element;
 
