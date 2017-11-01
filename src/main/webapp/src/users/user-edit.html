@@ -15,13 +15,6 @@
         padding: var(--valo-space-m) 0;
       }
 
-      user-avatar {
-        width: 56px;
-        height: 56px;
-        margin-right: 20px;
-        margin-top: 8px;
-      }
-
       vaadin-combo-box {
         margin-top: var(--valo-space-m);
       }
@@ -30,13 +23,6 @@
 
     <edit-form id="user-edit-form">
       <vaadin-form-layout>
-        <template is="dom-if" if="[[avatar]]">
-          <div class="flex" colspan="2">
-            <user-avatar src="[[avatar]]"></user-avatar>
-          </div>
-          <br>
-        </template>
-
         <vaadin-text-field id="email" label="Email (login)" colspan="2"></vaadin-text-field>
         <br>
         <vaadin-text-field id="first" label="First Name" colspan="2"></vaadin-text-field>
