@@ -1,13 +1,13 @@
 package com.vaadin.starter.bakery.ui.view;
 
-import com.vaadin.starter.bakery.AbstractIT;
-import com.vaadin.starter.bakery.elements.ButtonElement;
-import com.vaadin.starter.bakery.elements.GridElement;
-import com.vaadin.starter.bakery.ui.components.storefront.OrderEditElement;
-import com.vaadin.starter.bakery.ui.components.storefront.StoreFrontItemDetailWrapperElement;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import com.vaadin.starter.bakery.AbstractIT;
+import com.vaadin.starter.bakery.elements.ButtonElement;
+import com.vaadin.starter.bakery.elements.GridElement;
+import com.vaadin.starter.bakery.ui.components.storefront.StoreFrontItemDetailWrapperElement;
 
 public class StorefrontViewIT extends AbstractIT {
 
@@ -29,11 +29,11 @@ public class StorefrontViewIT extends AbstractIT {
 		firstOrder.click();
 		Assert.assertTrue(firstOrder.isOrderSelected());
 
-// 		Cancel button doesn't work sometimes; uncomment after BFF-339 fixed
-//		ButtonElement collapseOrderDetails = firstOrder.getDetail().getCancelButton();
-//		collapseOrderDetails.scrollIntoView();
-//		collapseOrderDetails.click();
-//		Assert.assertFalse(firstOrder.isOrderSelected());
+		// 		Cancel button doesn't work sometimes; uncomment after BFF-339 fixed
+		//		ButtonElement collapseOrderDetails = firstOrder.getDetail().getCancelButton();
+		//		collapseOrderDetails.scrollIntoView();
+		//		collapseOrderDetails.click();
+		//		Assert.assertFalse(firstOrder.isOrderSelected());
 
 	}
 
@@ -52,7 +52,6 @@ public class StorefrontViewIT extends AbstractIT {
 		Assert.assertFalse(firstOrder.isOrderSelected());
 
 		Assert.assertTrue(getDriver().getCurrentUrl().endsWith("edit"));
-		OrderEditElement orderEdit = storefrontPage.getOrderEdit();
 	}
 
 }

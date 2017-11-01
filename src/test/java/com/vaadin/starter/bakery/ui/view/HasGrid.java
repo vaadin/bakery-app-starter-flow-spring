@@ -1,12 +1,10 @@
 package com.vaadin.starter.bakery.ui.view;
 
+import java.util.List;
+
 import com.vaadin.starter.bakery.elements.GridElement;
 import com.vaadin.starter.bakery.elements.VaadinGridCellContentElement;
 import com.vaadin.testbench.HasElementQuery;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-
-import java.util.List;
 
 public interface HasGrid extends HasElementQuery {
 
