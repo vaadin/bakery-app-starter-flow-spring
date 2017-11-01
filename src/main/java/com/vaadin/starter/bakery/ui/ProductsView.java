@@ -3,13 +3,10 @@ package com.vaadin.starter.bakery.ui;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_PRODUCTS;
 import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
-import java.util.List;
-
+import com.vaadin.ui.grid.Grid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 
-import com.vaadin.flow.model.Convert;
-import com.vaadin.flow.model.Include;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.router.PageTitle;
 import com.vaadin.router.Route;
@@ -20,7 +17,6 @@ import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
 import com.vaadin.starter.bakery.ui.components.ItemsView;
 import com.vaadin.starter.bakery.ui.components.ProductEdit;
 import com.vaadin.starter.bakery.ui.converters.CurrencyFormatter;
-import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
 import com.vaadin.starter.bakery.ui.presenter.DefaultEntityPresenter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.view.EntityEditor;
@@ -34,26 +30,26 @@ import com.vaadin.ui.polymertemplate.Id;
 @Route(value = PAGE_PRODUCTS, layout = BakeryApp.class)
 @PageTitle(BakeryConst.TITLE_PRODUCTS)
 @Secured(Role.ADMIN)
-public class ProductsView extends PolymerEntityView<Product, ProductsView.Model> {
-
-	public interface Model extends TemplateModel {
-
-		@Include({ "id", "name", "price" })
-		@Convert(value = LongToStringConverter.class, path = "id")
-		@Convert(value = CurrencyFormatter.class, path = "price")
-		void setProducts(List<Product> products);
-	}
-
+public class ProductsView extends PolymerEntityView<Product, TemplateModel> {
 
 	@Id("bakery-products-items-view")
 	private ItemsView view;
 
 	private ProductEdit editor;
 
+	private Grid<Product> grid = new Grid<>();
+
+	@Override
+	public Grid<Product> getGrid() {
+		return grid;
+	}
+
 	@Id("product-confirmation-dialog")
 	private ConfirmationDialog confirmationDialog;
 
 	private DefaultEntityPresenter<Product> presenter;
+
+	private CurrencyFormatter currencyFormatter = new CurrencyFormatter();
 
 	@Autowired
 	public ProductsView(ProductService service) {
@@ -62,11 +58,17 @@ public class ProductsView extends PolymerEntityView<Product, ProductsView.Model>
 		presenter = new DefaultEntityPresenter<>(service, this, "Product");
 		setupEventListeners();
 		view.setActionText("New product");
+		setupGrid();
 	}
 
-	@Override
-	public void setItems(List<Product> entities) {
-		getModel().setProducts(entities);
+	private void setupGrid() {
+		grid.setId("grid");
+		grid.getElement().setAttribute("theme", "borderless");
+
+		grid.addColumn("Product Name", Product::getName).setFlexGrow(10);
+		grid.addColumn("Unit Price", p -> currencyFormatter.toPresentation(p.getPrice()));
+
+		addToSlot(this, grid, "items-grid");
 	}
 
 	@Override
@@ -93,5 +95,4 @@ public class ProductsView extends PolymerEntityView<Product, ProductsView.Model>
 	protected ItemsView getItemsView() {
 		return view;
 	}
-
 }

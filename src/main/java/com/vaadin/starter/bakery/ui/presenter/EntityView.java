@@ -1,10 +1,10 @@
 package com.vaadin.starter.bakery.ui.presenter;
 
 import com.vaadin.data.ValidationException;
+import com.vaadin.data.provider.DataProvider;
 import com.vaadin.starter.bakery.ui.HasNotifications;
 import com.vaadin.starter.bakery.ui.messages.Message;
-
-import java.util.List;
+import com.vaadin.ui.grid.Grid;
 
 /**
  * A master / detail view for entities of the type <code>T</code>. The view
@@ -20,11 +20,11 @@ import java.util.List;
 public interface EntityView<T> extends HasNotifications {
 
 	/**
-	 * Sets / refreshes the entities in 'entity list' section of the view.
+	 * Sets / refreshes the entities in grid.
 	 *
-	 * @param entities the list of entities to show
+	 * @param dataProvider provides entities for grid
 	 */
-	void setItems(List<T> entities);
+	void setDataProvider(DataProvider<T, Void> dataProvider);
 
 	/**
 	 * Opens a dialog showing details of a single entity.

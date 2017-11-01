@@ -7,6 +7,6 @@ import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
 
 public interface FilterableCrudService<T extends AbstractEntity> extends CrudService<T> {
 
-	public List<T> findAnyMatching(Optional<String> filter);
+	List<T> findAnyMatching(Optional<String> filter);
 
 }

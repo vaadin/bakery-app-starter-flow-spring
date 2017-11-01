@@ -18,7 +18,7 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 
 	private CrudService<T> crudService;
 
-	private EntityView<T> view;
+	protected EntityView<T> view;
 
 	private String entityName;
 
@@ -44,8 +44,9 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 
 		try {
 			beforeSave();
+			boolean isNew = getEntity().isNew();
 			if (executeJPAOperation(() -> saveEntity())) {
-				onSaveSuccess();
+				onSaveSuccess(isNew);
 			}
 		} catch (ValidationException e) {
 			showValidationError();
@@ -64,7 +65,7 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 		writeEntity();
 	}
 
-	protected void onSaveSuccess() {
+	protected void onSaveSuccess(boolean isNew) {
 		close();
 	}
 

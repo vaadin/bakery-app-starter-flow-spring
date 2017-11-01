@@ -3,9 +3,8 @@
  */
 package com.vaadin.starter.bakery.ui.view;
 
-import java.util.Optional;
-
 import com.vaadin.data.ValidationException;
+import com.vaadin.data.provider.DataProvider;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.router.HasUrlParameter;
 import com.vaadin.router.OptionalParameter;
@@ -17,25 +16,28 @@ import com.vaadin.starter.bakery.ui.components.ItemsView;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.event.CloseDialogEvent;
 import com.vaadin.starter.bakery.ui.event.DeleteEvent;
-import com.vaadin.starter.bakery.ui.event.EditEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
 import com.vaadin.starter.bakery.ui.messages.Message;
 import com.vaadin.starter.bakery.ui.presenter.DefaultEntityPresenter;
 import com.vaadin.starter.bakery.ui.presenter.EntityView;
+import com.vaadin.ui.grid.Grid;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 public abstract class PolymerEntityView<E extends AbstractEntity, T extends TemplateModel> extends PolymerTemplate<T>
-implements HasLogger, EntityView<E>, HasUrlParameter<Long> {
+		implements HasLogger, EntityView<E>, HasUrlParameter<Long> {
 
 	protected void setupEventListeners() {
-		addListener(EditEvent.class, e -> navigateToEntity(e.getId()));
+		getGrid().addSelectionListener(e -> {
+			e.getFirstSelectedItem().ifPresent(entity -> navigateToEntity(entity.getId().toString()));
+			getGrid().deselectAll();
+		});
 		addListener(CloseDialogEvent.class, e -> getPresenter().cancel());
 		getEditor().addListener(CancelEvent.class, e -> getPresenter().cancel());
 		getEditor().addListener(SaveEvent.class, e -> getPresenter().save());
 		getEditor().addListener(DeleteEvent.class, e -> getPresenter().delete());
 		getConfirmationDialog().addDecisionListener(getPresenter()::confirmationDecisionReceived);
 		getItemsView().addActionClickListener(e -> getPresenter().createNew());
-		getItemsView().addFilterChangeListener(f -> getPresenter().filter(Optional.ofNullable(f)));
+		getItemsView().addFilterChangeListener(f -> getPresenter().filter(f));
 	}
 
 	public abstract ConfirmationDialog getConfirmationDialog();
@@ -47,6 +49,13 @@ implements HasLogger, EntityView<E>, HasUrlParameter<Long> {
 	protected abstract EntityEditor<E> getEditor();
 
 	protected abstract ItemsView getItemsView();
+
+	protected abstract Grid<E> getGrid();
+
+	@Override
+	public void setDataProvider(DataProvider<E, Void> dataProvider) {
+		getGrid().setDataProvider(dataProvider);
+	}
 
 	protected void navigateToEntity(String id) {
 		final String location = getBasePage() + (id == null || id.isEmpty() ? "" : "/" + id);

@@ -3,36 +3,44 @@
  */
 package com.vaadin.starter.bakery.ui.presenter;
 
-import java.util.Optional;
-
+import com.vaadin.data.provider.CallbackDataProvider;
+import com.vaadin.data.provider.ConfigurableFilterDataProvider;
+import com.vaadin.data.provider.DataProvider;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
 import com.vaadin.starter.bakery.backend.service.FilterableCrudService;
 
 public class DefaultEntityPresenter<T extends AbstractEntity> extends EntityPresenter<T> {
 
-	private FilterableCrudService<T> crudService;
-	private EntityView<T> view;
+	private final ConfigurableFilterDataProvider<T, Void, String> filteredDataProvider;
 
 	public DefaultEntityPresenter(FilterableCrudService<T> crudService, EntityView<T> view, String entityName) {
 		super(crudService, view, entityName);
-		this.crudService = crudService;
-		this.view = view;
-		filter(Optional.empty());
+
+		DataProvider<T, String> dataProvider = new CallbackDataProvider<>(
+				query -> crudService.findAnyMatching(query.getFilter()).stream(),
+				query -> crudService.findAnyMatching(query.getFilter()).size());
+
+		filteredDataProvider = dataProvider.withConfigurableFilter();
+		view.setDataProvider(filteredDataProvider);
 	}
 
-	public void filter(Optional<String> filter) {
-		view.setItems(crudService.findAnyMatching(filter));
+	public void filter(String filter) {
+		filteredDataProvider.setFilter(filter);
 	}
 
 	@Override
-	protected void onSaveSuccess() {
-		filter(Optional.empty());
-		super.onSaveSuccess();
+	protected void onSaveSuccess(boolean isNew) {
+		if (isNew) {
+			filteredDataProvider.refreshAll();
+		} else {
+			filteredDataProvider.refreshItem(getEntity());
+		}
+		super.onSaveSuccess(isNew);
 	}
 
 	@Override
 	protected void onDeleteSuccess() {
-		filter(Optional.empty());
+		filteredDataProvider.refreshAll();
 		super.onDeleteSuccess();
 	}
 

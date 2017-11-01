@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.vaadin.data.provider.DataProvider;
 import com.vaadin.flow.model.Convert;
 import com.vaadin.flow.model.Include;
 import com.vaadin.router.HasUrlParameter;
@@ -21,6 +22,7 @@ import com.vaadin.starter.bakery.ui.converters.LocalDateTimeConverter;
 import com.vaadin.starter.bakery.ui.converters.LocalTimeConverter;
 import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
 import com.vaadin.starter.bakery.ui.messages.Message;
+import com.vaadin.ui.grid.Grid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -141,11 +143,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		}
 	}
 
-	@Override
-	public void setItems(List<Order> orders) {
-		setOrders(orders, searchBar.getShowPrevious());
-	}
-
 	private void setOrders(List<Order> orders, boolean showPrevious) {
 		getModel().setOrders(orders);
 		getElement().setPropertyJson("displayedHeaders", computeEntriesWithHeader(orders, showPrevious));
@@ -186,6 +183,10 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		orderEdit.close();
 		getModel().setEditing(false);
 		getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT));
+	}
+
+	@Override
+	public void setDataProvider(DataProvider<Order, Void> dataProvider) {
 	}
 
 	@Override
@@ -238,8 +239,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		}
 
 		@Override
-		protected void onSaveSuccess() {
-			super.onSaveSuccess();
+		protected void onSaveSuccess(boolean isNew) {
+			super.onSaveSuccess(isNew);
 
 			// refresh the orders list (to be able to see the changes from the just saved order, if any)
 			filterChanged(searchBar.getFilter(), searchBar.getShowPrevious());
