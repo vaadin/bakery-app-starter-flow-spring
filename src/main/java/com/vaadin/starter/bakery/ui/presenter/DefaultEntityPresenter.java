@@ -29,13 +29,13 @@ public class DefaultEntityPresenter<T extends AbstractEntity> extends EntityPres
 	}
 
 	@Override
-	protected void onSaveSuccess() {
+	protected void onSaveSuccess(boolean isNew) {
 		if (isNew) {
 			filteredDataProvider.refreshAll();
 		} else {
 			filteredDataProvider.refreshItem(getEntity());
 		}
-		super.onSaveSuccess();
+		super.onSaveSuccess(isNew);
 	}
 
 	@Override

@@ -239,8 +239,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implem
 		}
 
 		@Override
-		protected void onSaveSuccess() {
-			super.onSaveSuccess();
+		protected void onSaveSuccess(boolean isNew) {
+			super.onSaveSuccess(isNew);
 
 			// refresh the orders list (to be able to see the changes from the just saved order, if any)
 			filterChanged(searchBar.getFilter(), searchBar.getShowPrevious());

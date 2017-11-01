@@ -26,8 +26,6 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 
 	private Runnable operationWaitingConfirmation;
 
-	protected boolean isNew = false;
-
 	public EntityPresenter(CrudService<T> crudService, EntityView<T> view, String entityName) {
 		this.crudService = crudService;
 		this.view = view;
@@ -46,8 +44,9 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 
 		try {
 			beforeSave();
+			boolean isNew = getEntity().isNew();
 			if (executeJPAOperation(() -> saveEntity())) {
-				onSaveSuccess();
+				onSaveSuccess(isNew);
 			}
 		} catch (ValidationException e) {
 			showValidationError();
@@ -66,7 +65,7 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 		writeEntity();
 	}
 
-	protected void onSaveSuccess() {
+	protected void onSaveSuccess(boolean isNew) {
 		close();
 	}
 
@@ -125,7 +124,6 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 	public void loadEntity(Long id, boolean edit) {
 		boolean loaded = executeJPAOperation(() -> {
 			this.entity = crudService.load(id);
-			this.isNew = false;
 			openDialog(entity, edit);
 		});
 		if (!loaded) {
@@ -139,7 +137,6 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 
 	public void createNew() {
 		this.entity = crudService.createNew();
-		this.isNew = true;
 		openDialog(entity, true);
 	}
 
