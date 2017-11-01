@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery.ui;
+package com.vaadin.starter.bakery.ui.view;
 
 import com.vaadin.ui.common.HasElement;
 

@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.vaadin.starter.bakery.ui.view;
+package com.vaadin.starter.bakery.ui.view.admin;
 
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.provider.DataProvider;
@@ -17,9 +17,8 @@ import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.event.CloseDialogEvent;
 import com.vaadin.starter.bakery.ui.event.DeleteEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
-import com.vaadin.starter.bakery.ui.messages.Message;
-import com.vaadin.starter.bakery.ui.presenter.DefaultEntityPresenter;
-import com.vaadin.starter.bakery.ui.presenter.EntityView;
+import com.vaadin.starter.bakery.ui.utils.messages.Message;
+import com.vaadin.starter.bakery.ui.view.EntityView;
 import com.vaadin.ui.grid.Grid;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 

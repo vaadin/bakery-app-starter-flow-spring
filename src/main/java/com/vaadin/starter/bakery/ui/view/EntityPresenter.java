@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery.ui.presenter;
+package com.vaadin.starter.bakery.ui.view;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolationException;
@@ -12,7 +12,7 @@ import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
 import com.vaadin.starter.bakery.backend.service.CrudService;
 import com.vaadin.starter.bakery.backend.service.UserFriendlyDataException;
 import com.vaadin.starter.bakery.ui.event.DecisionEvent;
-import com.vaadin.starter.bakery.ui.messages.Message;
+import com.vaadin.starter.bakery.ui.utils.messages.Message;
 
 public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 

@@ -3,7 +3,6 @@ package com.vaadin.starter.bakery.ui.components;
 import java.util.function.Consumer;
 
 import com.vaadin.flow.model.TemplateModel;
-import com.vaadin.starter.bakery.ui.BakerySearch;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
 import com.vaadin.ui.common.HasClickListeners;

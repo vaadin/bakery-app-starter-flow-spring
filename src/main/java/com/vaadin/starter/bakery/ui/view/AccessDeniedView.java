@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery.ui;
+package com.vaadin.starter.bakery.ui.view;
 
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.router.ErrorParameter;
@@ -6,6 +6,7 @@ import com.vaadin.router.HasErrorParameter;
 import com.vaadin.router.Route;
 import com.vaadin.router.PageTitle;
 import com.vaadin.router.event.BeforeNavigationEvent;
+import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.exceptions.AccessDeniedException;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.ui.Tag;

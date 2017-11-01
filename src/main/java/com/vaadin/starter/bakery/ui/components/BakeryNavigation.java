@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery.ui;
+package com.vaadin.starter.bakery.ui.components;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +9,8 @@ import com.vaadin.starter.bakery.app.BeanLocator;
 import com.vaadin.starter.bakery.app.security.SecurityUtils;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.UserService;
+import com.vaadin.starter.bakery.ui.view.admin.ProductsView;
+import com.vaadin.starter.bakery.ui.view.admin.UsersView;
 import com.vaadin.starter.bakery.ui.entities.PageInfo;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.ui.History;

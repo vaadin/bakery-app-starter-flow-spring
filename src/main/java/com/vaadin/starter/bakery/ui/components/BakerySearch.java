@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery.ui;
+package com.vaadin.starter.bakery.ui.components;
 
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.ui.Tag;

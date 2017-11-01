@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery.ui.converters.binder;
+package com.vaadin.starter.bakery.ui.utils.converters.binder;
 
 import com.vaadin.data.Converter;
 import com.vaadin.data.Result;

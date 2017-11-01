@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery.ui;
+package com.vaadin.starter.bakery.ui.view.dashboard;
 
 import java.time.Year;
 import java.util.ArrayList;
@@ -11,10 +11,11 @@ import com.vaadin.flow.model.Convert;
 import com.vaadin.flow.model.Include;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.router.PageTitle;
-import com.vaadin.starter.bakery.ui.components.storefront.OrderStateConverter;
+import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.components.storefront.converter.StorefrontLocalDateConverter;
-import com.vaadin.starter.bakery.ui.converters.LocalTimeConverter;
-import com.vaadin.starter.bakery.ui.converters.LongToStringConverter;
+import com.vaadin.starter.bakery.ui.utils.converters.LocalTimeConverter;
+import com.vaadin.starter.bakery.ui.utils.converters.LongToStringConverter;
+import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.event.AttachEvent;
 import com.vaadin.ui.common.ClientDelegate;

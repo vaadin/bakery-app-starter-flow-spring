@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery.ui.converters;
+package com.vaadin.starter.bakery.ui.utils.converters;
 
 import static com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil.convertIfNotNull;
 

@@ -1,9 +1,8 @@
-package com.vaadin.starter.bakery.ui.presenter;
+package com.vaadin.starter.bakery.ui.view;
 
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.provider.DataProvider;
-import com.vaadin.starter.bakery.ui.HasNotifications;
-import com.vaadin.starter.bakery.ui.messages.Message;
+import com.vaadin.starter.bakery.ui.utils.messages.Message;
 
 /**
  * A master / detail view for entities of the type <code>T</code>. The view

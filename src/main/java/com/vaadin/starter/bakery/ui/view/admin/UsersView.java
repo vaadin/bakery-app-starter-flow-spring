@@ -1,8 +1,9 @@
-package com.vaadin.starter.bakery.ui;
+package com.vaadin.starter.bakery.ui.view.admin;
 
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_USERS;
 import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
+import com.vaadin.starter.bakery.ui.BakeryApp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,10 +17,7 @@ import com.vaadin.starter.bakery.backend.service.UserService;
 import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
 import com.vaadin.starter.bakery.ui.components.ItemsView;
 import com.vaadin.starter.bakery.ui.components.UserEdit;
-import com.vaadin.starter.bakery.ui.presenter.DefaultEntityPresenter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
-import com.vaadin.starter.bakery.ui.view.EntityEditor;
-import com.vaadin.starter.bakery.ui.view.PolymerEntityView;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.grid.Grid;

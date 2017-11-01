@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery.ui.components.storefront;
+package com.vaadin.starter.bakery.ui.utils.converters;
 
 import java.util.Arrays;
 import java.util.Map;

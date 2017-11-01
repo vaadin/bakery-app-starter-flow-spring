@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery.ui.view;
+package com.vaadin.starter.bakery.ui.view.admin;
 
 import com.vaadin.data.ValidationException;
 import com.vaadin.ui.event.ComponentEventNotifier;

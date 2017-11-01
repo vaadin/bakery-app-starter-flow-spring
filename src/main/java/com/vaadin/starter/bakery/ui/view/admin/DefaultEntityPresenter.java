@@ -1,13 +1,15 @@
 /**
  *
  */
-package com.vaadin.starter.bakery.ui.presenter;
+package com.vaadin.starter.bakery.ui.view.admin;
 
 import com.vaadin.data.provider.CallbackDataProvider;
 import com.vaadin.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
 import com.vaadin.starter.bakery.backend.service.FilterableCrudService;
+import com.vaadin.starter.bakery.ui.view.EntityPresenter;
+import com.vaadin.starter.bakery.ui.view.EntityView;
 
 public class DefaultEntityPresenter<T extends AbstractEntity> extends EntityPresenter<T> {
 

@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery.ui.converters;
+package com.vaadin.starter.bakery.ui.utils.converters;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;

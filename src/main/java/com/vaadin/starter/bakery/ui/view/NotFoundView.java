@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery.ui;
+package com.vaadin.starter.bakery.ui.view;
 
 import com.vaadin.flow.dom.ElementFactory;
 import com.vaadin.router.NavigationHandler;
@@ -6,6 +6,7 @@ import com.vaadin.router.PageTitle;
 import com.vaadin.router.Route;
 import com.vaadin.router.RouterLink;
 import com.vaadin.router.event.NavigationEvent;
+import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Composite;

@@ -1,10 +1,11 @@
-package com.vaadin.starter.bakery.ui;
+package com.vaadin.starter.bakery.ui.view.login;
 
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.router.PageTitle;
 import com.vaadin.router.Route;
 import com.vaadin.router.event.AfterNavigationEvent;
 import com.vaadin.router.event.AfterNavigationObserver;
+import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
@@ -15,11 +16,11 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 @PageTitle("###Bakery###")
 public class LoginView extends PolymerTemplate<LoginView.Model> implements AfterNavigationObserver {
 
-@Override
-public void afterNavigation(AfterNavigationEvent event) {
-	boolean error = event.getLocation().getQueryParameters().getParameters().containsKey("error");
-	getModel().setError(error);
-}
+	@Override
+	public void afterNavigation(AfterNavigationEvent event) {
+		boolean error = event.getLocation().getQueryParameters().getParameters().containsKey("error");
+		getModel().setError(error);
+	}
 
 	public interface Model extends TemplateModel {
 		void setError(boolean error);

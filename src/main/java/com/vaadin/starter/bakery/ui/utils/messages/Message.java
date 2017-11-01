@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery.ui.messages;
+package com.vaadin.starter.bakery.ui.utils.messages;
 
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
