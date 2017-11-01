@@ -1,1 +1,1 @@
-com.vaadin.starter.bakery.CustomVaadinServiceInitListener
+com.vaadin.starter.bakery.app.CustomVaadinServiceInitListener

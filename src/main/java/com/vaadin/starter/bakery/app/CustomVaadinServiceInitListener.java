@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery;
+package com.vaadin.starter.bakery.app;
 
 import com.vaadin.server.ServiceInitEvent;
 import com.vaadin.server.VaadinServiceInitListener;

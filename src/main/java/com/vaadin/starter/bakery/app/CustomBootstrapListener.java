@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery;
+package com.vaadin.starter.bakery.app;
 
 import com.vaadin.server.BootstrapListener;
 import com.vaadin.server.BootstrapPageResponse;
