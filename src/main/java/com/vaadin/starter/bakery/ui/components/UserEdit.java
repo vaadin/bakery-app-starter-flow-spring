@@ -28,7 +28,6 @@ import com.vaadin.ui.textfield.TextField;
 public class UserEdit extends PolymerTemplate<UserEdit.Model> implements EntityEditor<User> {
 
 	public interface Model extends TemplateModel {
-		void setAvatar(String avatar);
 
 		void setUserRole(String userRole);
 	}
@@ -90,7 +89,6 @@ public class UserEdit extends PolymerTemplate<UserEdit.Model> implements EntityE
 	public void read(User user) {
 		this.user = user;
 		binder.readBean(user);
-		getModel().setAvatar(user.getPhotoUrl());
 		getModel().setUserRole(user.getRole());
 		isDirty = false;
 		editForm.showEditor(user.isNew());
