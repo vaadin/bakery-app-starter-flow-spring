@@ -26,7 +26,7 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> {
 	private boolean loggedIn;
 
 	public interface Model extends TemplateModel {
-		@Include({ "firstName", "email", "photoUrl" })
+		@Include({ "firstName", "photoUrl" })
 		void setUser(User user);
 
 		void setPages(List<PageInfo> pages);
