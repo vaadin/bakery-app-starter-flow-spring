@@ -2,9 +2,8 @@ package com.vaadin.starter.bakery.ui.entities;
 
 public class PageInfo {
 	private final String link;
-	private String icon;
-	private String title;
-
+	private final String icon;
+	private final String title;
 
 	public PageInfo(String link, String icon, String title) {
 		this.link = link;
@@ -20,15 +19,8 @@ public class PageInfo {
 		return icon;
 	}
 
-	public void setIcon(String icon) {
-		this.icon = icon;
-	}
-
 	public String getTitle() {
 		return title;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
 }
