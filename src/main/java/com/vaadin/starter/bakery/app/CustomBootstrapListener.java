@@ -7,6 +7,12 @@ import org.jsoup.nodes.Element;
 public class CustomBootstrapListener implements BootstrapListener {
 	public void modifyBootstrapPage(BootstrapPageResponse response) {
 		final Element head = response.getDocument().head();
+		if ("/login".equals(response.getRequest().getPathInfo())) {
+			// Force login page to use Shady DOM to avoid problems with browsers and
+			// password managers not supporting shadow DOM
+			head.prepend(
+					"<script type='text/javascript'>window.customElements.forcePolyfill=true;window.ShadyDOM = {force:true};</script>");
+		}
 		addFavIconTags(head);
 		injectInlineCustomStyles(head);
 	}
