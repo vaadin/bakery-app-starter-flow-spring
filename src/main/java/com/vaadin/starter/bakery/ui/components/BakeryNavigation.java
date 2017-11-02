@@ -9,10 +9,10 @@ import com.vaadin.starter.bakery.app.BeanLocator;
 import com.vaadin.starter.bakery.app.security.SecurityUtils;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.UserService;
-import com.vaadin.starter.bakery.ui.view.admin.ProductsView;
-import com.vaadin.starter.bakery.ui.view.admin.UsersView;
 import com.vaadin.starter.bakery.ui.entities.PageInfo;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
+import com.vaadin.starter.bakery.ui.view.admin.ProductsView;
+import com.vaadin.starter.bakery.ui.view.admin.UsersView;
 import com.vaadin.ui.History;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.UI;
@@ -50,11 +50,6 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> {
 		} else if (!loggedIn) {
 			getModel().setUser(null);
 		}
-		setVisible(loggedIn);
-	}
-
-	private void setVisible(boolean isVisible) {
-		getElement().setAttribute("hidden", !isVisible);
 	}
 
 	private void setupNavigationButtons() {

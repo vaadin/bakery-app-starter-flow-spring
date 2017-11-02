@@ -5,14 +5,13 @@ import com.vaadin.router.PageTitle;
 import com.vaadin.router.Route;
 import com.vaadin.router.event.AfterNavigationEvent;
 import com.vaadin.router.event.AfterNavigationObserver;
-import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 @Tag("bakery-login")
 @HtmlImport("src/login/bakery-login.html")
-@Route(value = "login", layout = BakeryApp.class)
+@Route(value = "login")
 @PageTitle("###Bakery###")
 public class LoginView extends PolymerTemplate<LoginView.Model> implements AfterNavigationObserver {
 
