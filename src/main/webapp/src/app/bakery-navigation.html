@@ -68,38 +68,6 @@
         color: var(--valo-body-text-color);
       }
 
-      .user-image {
-        z-index: 1;
-        top: 50%;
-        transition: left .1s ease-in-out;
-      }
-
-      .user-image:not(.mobile-user-image) {
-        position: absolute;
-        transform: translateY(-50%);
-        left: -32px;
-      }
-
-      .user-button[popup-menu-opened] .user-image {
-        left: -286px;
-      }
-
-      .user-image.mobile-user-image {
-        position: fixed;
-        top: var(--valo-space-m);
-        right: var(--valo-space-m);
-      }
-
-      .user-button {
-        color: var(--valo-secondary-text-color);
-        position: relative;
-        margin-left: 32px;
-      }
-
-      [hidden] {
-        display: none;
-      }
-
       @media (min-width: 600px) {
         .toolbar {
           padding: 0 var(--valo-space-m);
@@ -110,12 +78,19 @@
         }
 
         .branding {
-          max-width: 80px;
           display: block;
+        }
+        
+        .tabsContainer {
+          display: flex;
+          flex: 1;
+          justify-content: center;
+          height: 100%;
         }
 
         .navigation-tabs {
-          width: initial;
+          width: inherit;
+          
         }
       }
 
@@ -139,20 +114,27 @@
       <div class="branding">
         ###Bakery###
       </div>
-
-      <paper-tabs selected="[[page]]" attr-for-selected="page-id" on-transitionend="_onNavAnimationEnd"
-                  class="navigation-tabs" align-bottom="[[_desktopView]]">
-        <template is="dom-repeat" items="[[pages]]">
-          <paper-tab page-id$="[[item.link]]">
+      <div class="tabsContainer">
+        <paper-tabs selected="[[page]]" attr-for-selected="page-id" on-transitionend="_onNavAnimationEnd"
+                    class="navigation-tabs" align-bottom="[[_desktopView]]">
+          <template is="dom-repeat" items="[[pages]]">
+            <paper-tab page-id$="[[item.link]]">
+              <div class="navigation-label">
+                <iron-icon icon="valo:[[item.icon]]"></iron-icon>
+                <span>[[item.title]]</span>
+              </div>
+            </paper-tab>
+          </template>
+          <paper-tab on-click="logout" >
             <div class="navigation-label">
-              <iron-icon icon="valo:[[item.icon]]"></iron-icon>
-              <span>[[item.title]]</span>
+              <iron-icon icon="valo:arrow-right"></iron-icon>
+              <span>logout</span>
             </div>
           </paper-tab>
-        </template>
-      </paper-tabs>
-      <user-avatar src="[[user.photoUrl]]" alt="[[user.firstName]]" class="user-image mobile-user-image"></user-avatar>
-      <vaadin-button theme="tertiary menu" on-click="_logout">Log out</vaadin-button>
+        </paper-tabs>
+      </div>
+      
+    </div>
   </template>
 
   <script>
@@ -168,10 +150,6 @@
             type: String
           }
         };
-      }
-
-      _logout() {
-        this.$server.logout();
       }
 
       // Navigation should be implemented with plain <a router-link href="..."></a> elements.

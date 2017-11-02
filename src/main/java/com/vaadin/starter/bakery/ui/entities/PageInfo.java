@@ -1,13 +1,10 @@
 package com.vaadin.starter.bakery.ui.entities;
 
 public class PageInfo {
-	private String link;
+	private final String link;
 	private String icon;
 	private String title;
 
-	public PageInfo() {
-
-	}
 
 	public PageInfo(String link, String icon, String title) {
 		this.link = link;
@@ -17,10 +14,6 @@ public class PageInfo {
 
 	public String getLink() {
 		return link;
-	}
-
-	public void setLink(String link) {
-		this.link = link;
 	}
 
 	public String getIcon() {
