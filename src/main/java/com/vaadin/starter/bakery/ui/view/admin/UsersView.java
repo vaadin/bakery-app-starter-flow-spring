@@ -3,7 +3,6 @@ package com.vaadin.starter.bakery.ui.view.admin;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_USERS;
 import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
-import com.vaadin.starter.bakery.ui.BakeryApp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,7 +13,7 @@ import com.vaadin.router.Route;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.UserService;
-import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
+import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.components.ItemsView;
 import com.vaadin.starter.bakery.ui.components.UserEdit;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
@@ -36,9 +35,6 @@ public class UsersView extends PolymerEntityView<User, TemplateModel> {
 	private UserEdit editor;
 
 	private Grid<User> grid = new Grid<>();
-
-	@Id("user-confirmation-dialog")
-	private ConfirmationDialog confirmationDialog;
 
 	private DefaultEntityPresenter<User> presenter;
 
@@ -73,11 +69,6 @@ public class UsersView extends PolymerEntityView<User, TemplateModel> {
 	public void closeDialog() {
 		editor.clear();
 		super.closeDialog();
-	}
-
-	@Override
-	public ConfirmationDialog getConfirmationDialog() {
-		return confirmationDialog;
 	}
 
 	@Override

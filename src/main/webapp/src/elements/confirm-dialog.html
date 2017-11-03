@@ -55,9 +55,9 @@
       <p id="caption">[[caption]]</p>
       <p class="flex1" id="message">[[message]]</p>
       <div id="buttons" class="flex">
-        <vaadin-button id="confirm-dialog-ok" theme="tertiary danger">[[okText]]</vaadin-button>
+        <vaadin-button id="ok" theme="tertiary danger">[[okText]]</vaadin-button>
         <div class="flex1"></div>
-        <vaadin-button id="confirm-dialog-cancel" theme="tertiary" class="right">[[cancelText]]</vaadin-button>
+        <vaadin-button id="cancel" theme="tertiary" class="right">[[cancelText]]</vaadin-button>
       </div>
     </div>
   </template>
@@ -67,26 +67,13 @@
       static get is() {
         return 'confirm-dialog';
       }
-
       static get properties() {
         return {
-          caption: {
-            type: String,
-            value: 'Confirmation needed'
-          },
-          message: {
-            type: String,
-            value: 'Do you want to continue?'
-          },
-          okText: {
-            type: String,
-            value: 'OK'
-          },
-          cancelText: {
-            type: String,
-            value: 'Cancel'
+          opened: {
+            type: Boolean,
+            value: true
           }
-        };
+        }
       }
     }
 

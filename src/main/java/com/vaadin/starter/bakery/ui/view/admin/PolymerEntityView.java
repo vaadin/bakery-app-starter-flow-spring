@@ -11,13 +11,11 @@ import com.vaadin.router.OptionalParameter;
 import com.vaadin.router.event.BeforeNavigationEvent;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
-import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
 import com.vaadin.starter.bakery.ui.components.ItemsView;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.event.CloseDialogEvent;
 import com.vaadin.starter.bakery.ui.event.DeleteEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
-import com.vaadin.starter.bakery.ui.utils.messages.Message;
 import com.vaadin.starter.bakery.ui.view.EntityView;
 import com.vaadin.ui.grid.Grid;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
@@ -34,12 +32,9 @@ public abstract class PolymerEntityView<E extends AbstractEntity, T extends Temp
 		getEditor().addListener(CancelEvent.class, e -> getPresenter().cancel());
 		getEditor().addListener(SaveEvent.class, e -> getPresenter().save());
 		getEditor().addListener(DeleteEvent.class, e -> getPresenter().delete());
-		getConfirmationDialog().addDecisionListener(getPresenter()::confirmationDecisionReceived);
 		getItemsView().addActionClickListener(e -> getPresenter().createNew());
 		getItemsView().addFilterChangeListener(f -> getPresenter().filter(f));
 	}
-
-	public abstract ConfirmationDialog getConfirmationDialog();
 
 	protected abstract DefaultEntityPresenter<E> getPresenter();
 
@@ -90,8 +85,4 @@ public abstract class PolymerEntityView<E extends AbstractEntity, T extends Temp
 		getEditor().write(entity);
 	}
 
-	@Override
-	public void showConfirmationRequest(Message message) {
-		getConfirmationDialog().show(message);
-	}
 }

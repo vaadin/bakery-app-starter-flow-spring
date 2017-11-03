@@ -3,8 +3,6 @@ package com.vaadin.starter.bakery.ui.view.admin;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_PRODUCTS;
 import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
-import com.vaadin.starter.bakery.ui.BakeryApp;
-import com.vaadin.ui.grid.Grid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 
@@ -14,13 +12,14 @@ import com.vaadin.router.Route;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.service.ProductService;
-import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
+import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.components.ItemsView;
 import com.vaadin.starter.bakery.ui.components.ProductEdit;
-import com.vaadin.starter.bakery.ui.utils.converters.CurrencyFormatter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
+import com.vaadin.starter.bakery.ui.utils.converters.CurrencyFormatter;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HtmlImport;
+import com.vaadin.ui.grid.Grid;
 import com.vaadin.ui.polymertemplate.Id;
 
 @Tag("bakery-products")
@@ -41,9 +40,6 @@ public class ProductsView extends PolymerEntityView<Product, TemplateModel> {
 	public Grid<Product> getGrid() {
 		return grid;
 	}
-
-	@Id("product-confirmation-dialog")
-	private ConfirmationDialog confirmationDialog;
 
 	private DefaultEntityPresenter<Product> presenter;
 
@@ -67,11 +63,6 @@ public class ProductsView extends PolymerEntityView<Product, TemplateModel> {
 		grid.addColumn("Unit Price", p -> currencyFormatter.toPresentation(p.getPrice()));
 
 		addToSlot(this, grid, "items-grid");
-	}
-
-	@Override
-	public ConfirmationDialog getConfirmationDialog() {
-		return confirmationDialog;
 	}
 
 	@Override

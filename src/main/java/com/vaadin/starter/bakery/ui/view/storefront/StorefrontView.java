@@ -7,42 +7,40 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.vaadin.data.provider.DataProvider;
-import com.vaadin.flow.model.Convert;
-import com.vaadin.flow.model.Include;
-import com.vaadin.router.HasUrlParameter;
-import com.vaadin.router.OptionalParameter;
-import com.vaadin.router.QueryParameters;
-import com.vaadin.router.event.BeforeNavigationEvent;
-import com.vaadin.starter.bakery.backend.data.entity.Order;
-import com.vaadin.starter.bakery.ui.BakeryApp;
-import com.vaadin.starter.bakery.ui.components.BakerySearch;
-import com.vaadin.starter.bakery.ui.utils.converters.CurrencyFormatter;
-import com.vaadin.starter.bakery.ui.utils.converters.LocalDateTimeConverter;
-import com.vaadin.starter.bakery.ui.utils.converters.LocalTimeConverter;
-import com.vaadin.starter.bakery.ui.utils.converters.LongToStringConverter;
-import com.vaadin.starter.bakery.ui.utils.messages.Message;
-import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 
 import com.vaadin.data.ValidationException;
+import com.vaadin.data.provider.DataProvider;
+import com.vaadin.flow.model.Convert;
+import com.vaadin.flow.model.Include;
 import com.vaadin.flow.model.TemplateModel;
+import com.vaadin.router.HasUrlParameter;
+import com.vaadin.router.OptionalParameter;
 import com.vaadin.router.PageTitle;
+import com.vaadin.router.QueryParameters;
 import com.vaadin.router.Route;
+import com.vaadin.router.event.BeforeNavigationEvent;
 import com.vaadin.starter.bakery.app.HasLogger;
+import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.backend.service.ProductService;
 import com.vaadin.starter.bakery.backend.service.UserService;
-import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
+import com.vaadin.starter.bakery.ui.BakeryApp;
+import com.vaadin.starter.bakery.ui.components.BakerySearch;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
+import com.vaadin.starter.bakery.ui.utils.BakeryConst;
+import com.vaadin.starter.bakery.ui.utils.converters.CurrencyFormatter;
+import com.vaadin.starter.bakery.ui.utils.converters.LocalDateTimeConverter;
+import com.vaadin.starter.bakery.ui.utils.converters.LocalTimeConverter;
+import com.vaadin.starter.bakery.ui.utils.converters.LongToStringConverter;
+import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
+import com.vaadin.starter.bakery.ui.view.EntityPresenter;
 import com.vaadin.starter.bakery.ui.view.EntityView;
 import com.vaadin.starter.bakery.ui.view.storefront.converter.StorefrontLocalDateConverter;
-import com.vaadin.starter.bakery.ui.view.EntityPresenter;
-import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.ClientDelegate;
@@ -54,13 +52,14 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 @HtmlImport("src/storefront/bakery-storefront.html")
 @Route(value = BakeryConst.PAGE_STOREFRONT, layout = BakeryApp.class)
 @PageTitle(BakeryConst.TITLE_STOREFRONT)
-public class StorefrontView extends PolymerTemplate<StorefrontView.Model> implements HasLogger, HasUrlParameter<Long>,
-EntityView<Order> {
+public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
+		implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 
 	public interface Model extends TemplateModel {
-		@Include({ "id", "dueDate.day", "dueDate.weekday", "dueDate.date", "dueTime", "state", "pickupLocation.name", "customer.fullName",
-			"customer.phoneNumber", "customer.details", "items.product.name", "items.comment", "items.quantity",
-			"items.product.price", "history.message", "history.createdBy.firstName", "history.timestamp", "history.newState", "totalPrice" })
+		@Include({ "id", "dueDate.day", "dueDate.weekday", "dueDate.date", "dueTime", "state", "pickupLocation.name",
+				"customer.fullName", "customer.phoneNumber", "customer.details", "items.product.name", "items.comment",
+				"items.quantity", "items.product.price", "history.message", "history.createdBy.firstName",
+				"history.timestamp", "history.newState", "totalPrice" })
 		@Convert(value = LongToStringConverter.class, path = "id")
 		@Convert(value = StorefrontLocalDateConverter.class, path = "dueDate")
 		@Convert(value = LocalTimeConverter.class, path = "dueTime")
@@ -78,9 +77,6 @@ EntityView<Order> {
 
 	@Id("search")
 	private BakerySearch searchBar;
-
-	@Id("confirmation-dialog")
-	private ConfirmationDialog confirmationDialog;
 
 	private final ViewSelector viewSelector = new ViewSelector();
 	private final OrderEdit orderEdit = new OrderEdit();
@@ -101,7 +97,7 @@ EntityView<Order> {
 		this.orderService = orderService;
 		this.userService = userService;
 		addToSlot(this, viewSelector, "view-selector-slot");
-		this.presenter = new Presenter();
+		presenter = new Presenter();
 
 		searchBar.setActionText("New order");
 		searchBar.setCheckboxText("Show past orders");
@@ -110,7 +106,6 @@ EntityView<Order> {
 		searchBar.addActionClickListener(e -> edit(null));
 		orderDetail.addListener(SaveEvent.class, e -> presenter.save());
 		orderEdit.addListener(CancelEvent.class, e -> presenter.cancel());
-		confirmationDialog.addDecisionListener(presenter::confirmationDecisionReceived);
 		setOrders(ordersProvider.getOriginalOrdersList(), false);
 
 		getModel().setEditing(false);
@@ -126,8 +121,8 @@ EntityView<Order> {
 		if (id != null && !id.isEmpty()) {
 			Map<String, String> parameters = new HashMap<>();
 			parameters.put("edit", "");
-			getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT + "/" + id,
-					QueryParameters.simple(parameters)));
+			getUI().ifPresent(
+					ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT + "/" + id, QueryParameters.simple(parameters)));
 			return;
 		}
 		presenter.createNew();
@@ -198,11 +193,6 @@ EntityView<Order> {
 		}
 	}
 
-	@Override
-	public void showConfirmationRequest(Message message) {
-		confirmationDialog.show(message);
-	}
-
 	class Presenter extends EntityPresenter<Order> {
 
 		public Presenter() {
@@ -226,7 +216,8 @@ EntityView<Order> {
 		}
 
 		void filterChanged(String filter, boolean showPrevious) {
-			// the hardcoded limit of 200 is here until lazy loading is implemented (see BFF-120)
+			// the hardcoded limit of 200 is here until lazy loading is implemented (see
+			// BFF-120)
 			PageRequest pr = new PageRequest(0, 200, Direction.ASC, "dueDate", "dueTime", "id");
 			setOrders(ordersProvider.getOrdersList(filter, showPrevious, pr).getOrders(), showPrevious);
 		}
@@ -240,7 +231,8 @@ EntityView<Order> {
 		protected void onSaveSuccess(boolean isNew) {
 			super.onSaveSuccess(isNew);
 
-			// refresh the orders list (to be able to see the changes from the just saved order, if any)
+			// refresh the orders list (to be able to see the changes from the just saved
+			// order, if any)
 			filterChanged(searchBar.getFilter(), searchBar.getShowPrevious());
 		}
 
