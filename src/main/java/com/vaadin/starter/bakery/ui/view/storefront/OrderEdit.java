@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery.ui.components.storefront;
+package com.vaadin.starter.bakery.ui.view.storefront;
 
 import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
