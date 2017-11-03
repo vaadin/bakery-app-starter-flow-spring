@@ -44,40 +44,43 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		// Not using Spring CSRF here to be able to use plain HTML for the login page
 		http.csrf().disable()
-				.requestCache().requestCache(new CustomRequestCache())
-				.and().authorizeRequests()
-					.requestMatchers(this::isFrameworkInternalRequest).permitAll()
-					.anyRequest().hasAnyAuthority(Role.getAllRoles())
-				.and().formLogin()
-					.loginPage(ApplicationConfiguration.LOGIN_URL).permitAll()
-					.loginProcessingUrl(ApplicationConfiguration.LOGIN_PROCESSING_URL)
-					.failureUrl(ApplicationConfiguration.LOGIN_FAILURE_URL)
-					.successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
-				.and().logout()
-					.logoutSuccessUrl(ApplicationConfiguration.LOGOUT_URL);
+		.requestCache().requestCache(new CustomRequestCache())
+		.and().authorizeRequests()
+		.requestMatchers(this::isFrameworkInternalRequest).permitAll()
+		.anyRequest().hasAnyAuthority(Role.getAllRoles())
+		.and().formLogin()
+		.loginPage(ApplicationConfiguration.LOGIN_URL).permitAll()
+		.loginProcessingUrl(ApplicationConfiguration.LOGIN_PROCESSING_URL)
+		.failureUrl(ApplicationConfiguration.LOGIN_FAILURE_URL)
+		.successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
+		.and().logout()
+		.logoutSuccessUrl(ApplicationConfiguration.LOGOUT_URL);
 	}
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring()
-				.antMatchers(
-						// Vaadin Flow static resources
-						"/VAADIN/**",
+		.antMatchers(
+				// Vaadin Flow static resources
+				"/VAADIN/**",
 
-						// the standard favicon URI
-						"/favicon.ico",
+				// the standard favicon URI
+				"/favicon.ico",
 
-						// development-mode static resources
-						"/bower_components/**",
-						"/icons/**",
-						"/images/**",
-						"/src/**",
-						"/manifest.json",
+				// development-mode static resources
+				"/bower_components/**",
+				"/icons/**",
+				"/images/**",
+				"/src/**",
+				"/manifest.json",
 
-						// production-mode static resources
-						"/build/**",
-						"/frontend-es5/**",
-						"/frontend-es6/**");
+				// development-mode webjars
+				"/webjars/**",
+
+				// production-mode static resources
+				"/build/**",
+				"/frontend-es5/**",
+				"/frontend-es6/**");
 	}
 
 	private boolean isFrameworkInternalRequest(HttpServletRequest request) {
