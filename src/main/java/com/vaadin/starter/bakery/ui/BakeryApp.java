@@ -4,7 +4,6 @@ import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.router.RouterLayout;
 import com.vaadin.router.event.BeforeNavigationEvent;
 import com.vaadin.router.event.BeforeNavigationObserver;
-import com.vaadin.spring.annotation.VaadinSessionScope;
 import com.vaadin.starter.bakery.app.security.SecurityUtils;
 import com.vaadin.starter.bakery.ui.components.BakeryNavigation;
 import com.vaadin.starter.bakery.ui.exceptions.AccessDeniedException;
@@ -16,7 +15,6 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 @Tag("bakery-app")
 @HtmlImport("src/app/bakery-app.html")
-@VaadinSessionScope
 public class BakeryApp extends PolymerTemplate<BakeryApp.Model> implements RouterLayout, BeforeNavigationObserver {
 
 	@Id("navigation")
