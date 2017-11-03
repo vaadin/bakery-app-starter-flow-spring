@@ -3,11 +3,12 @@ package com.vaadin.starter.bakery.ui;
 import com.vaadin.router.Route;
 import com.vaadin.router.event.AfterNavigationEvent;
 import com.vaadin.router.event.AfterNavigationObserver;
+import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.ui.History;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.html.Div;
 
-@Route(value = "logout", layout = BakeryApp.class)
+@Route(value = BakeryConst.PAGE_LOGOUT, layout = BakeryApp.class)
 public class LogoutHandler extends Div implements AfterNavigationObserver {
 
 	@Override
