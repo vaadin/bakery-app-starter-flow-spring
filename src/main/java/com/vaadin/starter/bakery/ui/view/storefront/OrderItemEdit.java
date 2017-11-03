@@ -1,11 +1,10 @@
-package com.vaadin.starter.bakery.ui.components.storefront;
+package com.vaadin.starter.bakery.ui.view.storefront;
 
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
-import com.vaadin.starter.bakery.ui.components.AmountField;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
