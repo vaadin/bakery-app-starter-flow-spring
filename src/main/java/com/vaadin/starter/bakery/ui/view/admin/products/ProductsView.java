@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery.ui.view.admin;
+package com.vaadin.starter.bakery.ui.view.admin.products;
 
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_PRODUCTS;
 import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
@@ -15,9 +15,11 @@ import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.service.ProductService;
 import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
-import com.vaadin.starter.bakery.ui.components.ItemsView;
-import com.vaadin.starter.bakery.ui.components.ProductEdit;
 import com.vaadin.starter.bakery.ui.utils.converters.CurrencyFormatter;
+import com.vaadin.starter.bakery.ui.view.admin.DefaultEntityPresenter;
+import com.vaadin.starter.bakery.ui.view.admin.EntityEditor;
+import com.vaadin.starter.bakery.ui.view.admin.ItemsView;
+import com.vaadin.starter.bakery.ui.view.admin.PolymerEntityView;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HtmlImport;
