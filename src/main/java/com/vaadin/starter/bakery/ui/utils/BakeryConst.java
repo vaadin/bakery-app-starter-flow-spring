@@ -8,6 +8,8 @@ public class BakeryConst {
 	public static final String PAGE_USERS = "users";
 	public static final String PAGE_PRODUCTS = "products";
 	public static final String PAGE_NOTFOUND = "404";
+	public static final String PAGE_LOGOUT = "logout";
+
 	public static final String ACCESS_DENIED = "access-denied";
 	public static final String PAGE_DEFAULT = PAGE_STOREFRONT;
 
@@ -17,11 +19,6 @@ public class BakeryConst {
 	public static final String TITLE_PRODUCTS = "Products";
 	public static final String TITLE_NOT_FOUND = "Page was not found";
 	public static final String TITLE_ACCESS_DENIED = "Access denied";
-
-	public static final String ICON_STOREFRONT = "edit";
-	public static final String ICON_DASHBOARD = "clock";
-	public static final String ICON_USERS = "user";
-	public static final String ICON_PRODUCTS = "calendar";
 
 	public static final String CONFIRM_CAPTION_CANCEL = "Unsaved changes";
 	public static final String CONFIRM_MESSAGE_CANCEL_PRODUCT = "There are unsaved changes to the Product. Are you sure to cancel the editing.";

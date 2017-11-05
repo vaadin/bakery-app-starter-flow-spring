@@ -35,6 +35,6 @@ public class BakeryApp extends PolymerTemplate<BakeryApp.Model> implements Route
 		} else {
 			getModel().setPage(path);
 		}
-		navigation.updateUser();
+		navigation.updateNavigationBar();
 	}
 }
