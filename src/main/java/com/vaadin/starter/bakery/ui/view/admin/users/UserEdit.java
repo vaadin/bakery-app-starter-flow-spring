@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery.ui.components;
+package com.vaadin.starter.bakery.ui.view.admin.users;
 
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.provider.ListDataProvider;
@@ -13,6 +13,7 @@ import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.event.DeleteEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
+import com.vaadin.starter.bakery.ui.view.admin.EditForm;
 import com.vaadin.starter.bakery.ui.view.admin.EntityEditor;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.combobox.ComboBox;

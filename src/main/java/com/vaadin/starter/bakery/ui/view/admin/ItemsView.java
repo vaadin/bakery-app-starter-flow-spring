@@ -1,8 +1,9 @@
-package com.vaadin.starter.bakery.ui.components;
+package com.vaadin.starter.bakery.ui.view.admin;
 
 import java.util.function.Consumer;
 
 import com.vaadin.flow.model.TemplateModel;
+import com.vaadin.starter.bakery.ui.components.BakerySearch;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
 import com.vaadin.ui.common.HasClickListeners;

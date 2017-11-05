@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery.ui.components;
+package com.vaadin.starter.bakery.ui.view.admin.products;
 
 import static com.vaadin.starter.bakery.ui.utils.FormattingUtils.DECIMAL_ZERO;
 
@@ -15,11 +15,12 @@ import com.vaadin.data.ValueContext;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.ui.utils.converters.binder.BinderConverter;
+import com.vaadin.starter.bakery.ui.view.admin.EditForm;
+import com.vaadin.starter.bakery.ui.view.admin.EntityEditor;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.event.DeleteEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
-import com.vaadin.starter.bakery.ui.view.admin.EntityEditor;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.html.Span;
