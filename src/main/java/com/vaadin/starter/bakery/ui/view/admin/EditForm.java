@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.vaadin.starter.bakery.ui.components;
+package com.vaadin.starter.bakery.ui.view.admin;
 
 import com.vaadin.data.Binder;
 import com.vaadin.flow.model.TemplateModel;

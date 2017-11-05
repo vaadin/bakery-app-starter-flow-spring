@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery.ui.components.viewselector;
+package com.vaadin.starter.bakery.ui.view.storefront;
 
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.ui.Component;
