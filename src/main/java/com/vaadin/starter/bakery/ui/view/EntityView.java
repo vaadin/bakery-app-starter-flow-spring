@@ -2,6 +2,7 @@ package com.vaadin.starter.bakery.ui.view;
 
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.provider.DataProvider;
+import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
 import com.vaadin.starter.bakery.ui.utils.messages.Message;
 
 /**
@@ -40,10 +41,15 @@ public interface EntityView<T> extends HasNotifications {
 	/**
 	 * Shows a confirmation request dialog with the given message.
 	 *
-	 * @param message the message with a request to ask a confirmation for
-	 *                (see {@link Message}
+	 * @param message
+	 *            the message with a request to ask a confirmation for (see
+	 *            {@link Message}
+	 * @param onOk
+	 *            command to execute if the user presses 'ok' in the dialog
 	 */
-	void showConfirmationRequest(Message message);
+	default void showConfirmationRequest(Message message, Runnable onOk) {
+		ConfirmationDialog.show(message, onOk);
+	}
 
 	/**
 	 * Shows an error notification with a given text.

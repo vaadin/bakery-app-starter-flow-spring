@@ -11,7 +11,6 @@ import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
 import com.vaadin.starter.bakery.backend.service.CrudService;
 import com.vaadin.starter.bakery.backend.service.UserFriendlyDataException;
-import com.vaadin.starter.bakery.ui.event.DecisionEvent;
 import com.vaadin.starter.bakery.ui.utils.messages.Message;
 
 public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
@@ -23,8 +22,6 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 	private String entityName;
 
 	private T entity;
-
-	private Runnable operationWaitingConfirmation;
 
 	public EntityPresenter(CrudService<T> crudService, EntityView<T> view, String entityName) {
 		this.crudService = crudService;
@@ -107,15 +104,9 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 		confirmIfNecessaryAndExecute(view.isDirty(), Message.UNSAVED_CHANGES.createMessage(entityName), this::close);
 	}
 
-	public void confirmationDecisionReceived(DecisionEvent event) {
-		event.ifConfirmed(this.operationWaitingConfirmation);
-		this.operationWaitingConfirmation = null;
-	}
-
 	protected void confirmIfNecessaryAndExecute(boolean needsConfirmation, Message message, Runnable operation) {
 		if (needsConfirmation) {
-			this.operationWaitingConfirmation = operation;
-			view.showConfirmationRequest(message);
+			view.showConfirmationRequest(message, operation);
 		} else {
 			operation.run();
 		}

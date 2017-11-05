@@ -22,8 +22,4 @@ public class ProductsViewElement extends TestBenchElement implements HasApp, Has
 	public ProductEditElement getProductEdit() {
 		return $(ProductEditElement.class).first();
 	}
-
-	public ConfirmationDialogElement getConfirmDialog() {
-		return $(ConfirmationDialogElement.class).id("product-confirmation-dialog");
-	}
 }
