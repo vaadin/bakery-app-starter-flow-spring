@@ -17,7 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 
-import com.vaadin.starter.bakery.app.ApplicationConfiguration;
 import com.vaadin.starter.bakery.backend.data.Role;
 
 @EnableWebSecurity
