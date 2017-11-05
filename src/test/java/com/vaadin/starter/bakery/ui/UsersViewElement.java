@@ -24,6 +24,6 @@ public class UsersViewElement extends TestBenchElement implements HasGrid {
 	}
 
 	public ConfirmationDialogElement getConfirmDialog() {
-		return $(ConfirmationDialogElement.class).first();
+		return $(ConfirmationDialogElement.class).onPage().first();
 	}
 }
