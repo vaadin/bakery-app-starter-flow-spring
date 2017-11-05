@@ -12,6 +12,6 @@ public class ConfirmationDialogElement extends TestBenchElement {
 	}
 
 	public ButtonElement getOkButton() {
-		return $(ButtonElement.class).id("confirm-dialog-ok");
+		return $(ButtonElement.class).id("ok");
 	}
 }

@@ -1,13 +1,11 @@
 package com.vaadin.starter.bakery.ui.components;
 
 import com.vaadin.flow.model.TemplateModel;
-import com.vaadin.shared.Registration;
-import com.vaadin.starter.bakery.ui.event.DecisionEvent;
 import com.vaadin.starter.bakery.ui.utils.messages.Message;
 import com.vaadin.ui.Tag;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.button.Button;
 import com.vaadin.ui.common.HtmlImport;
-import com.vaadin.ui.event.ComponentEventListener;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
@@ -24,36 +22,38 @@ public class ConfirmationDialog extends PolymerTemplate<ConfirmationDialog.Model
 		void setOkText(String okText);
 
 		void setCancelText(String cancelText);
-
-		void setOpened(Boolean opened);
 	}
 
-	@Id("confirm-dialog-ok")
+	@Id("ok")
 	private Button okButton;
 
-	@Id("confirm-dialog-cancel")
+	@Id("cancel")
 	private Button cancelButton;
 
 	public ConfirmationDialog() {
-		okButton.addClickListener(e -> fireEvent(new DecisionEvent(this, true)));
-		okButton.addClickListener(e -> getModel().setOpened(false));
-		cancelButton.addClickListener(e -> fireEvent(new DecisionEvent(this, false)));
-		cancelButton.addClickListener(e -> getModel().setOpened(false));
+		okButton.addClickListener(e -> close());
+		cancelButton.addClickListener(e -> close());
 	}
 
-	public void show(Message message) {
-		show(message.getCaption(), message.getMessage(), message.getOkText(), message.getCancelText());
+	public void close() {
+		getUI().ifPresent(ui -> ui.remove(this));
 	}
 
-	public void show(String caption, String message, String okText, String cancelText) {
-		getModel().setCaption(caption);
-		getModel().setMessage(message);
-		getModel().setOkText(okText);
-		getModel().setCancelText(cancelText);
-		getModel().setOpened(true);
+	public static ConfirmationDialog show(Message message, Runnable onOk) {
+		return show(UI.getCurrent(), message.getCaption(), message.getMessage(), message.getOkText(),
+				message.getCancelText(), onOk);
 	}
 
-	public Registration addDecisionListener(ComponentEventListener<DecisionEvent> listener) {
-		return addListener(DecisionEvent.class, listener);
+	public static ConfirmationDialog show(UI ui, String caption, String message, String okText, String cancelText,
+			Runnable onOk) {
+		ConfirmationDialog dialog = new ConfirmationDialog();
+		dialog.getModel().setCaption(caption);
+		dialog.getModel().setMessage(message);
+		dialog.getModel().setOkText(okText);
+		dialog.getModel().setCancelText(cancelText);
+		dialog.okButton.addClickListener(e -> onOk.run());
+		ui.add(dialog);
+		return dialog;
 	}
+
 }
