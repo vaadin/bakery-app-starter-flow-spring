@@ -1,8 +1,9 @@
-package com.vaadin.starter.bakery.ui;
+package com.vaadin.starter.bakery.ui.view;
 
 import com.vaadin.router.Route;
 import com.vaadin.router.event.BeforeNavigationEvent;
 import com.vaadin.router.event.BeforeNavigationObserver;
+import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.view.storefront.StorefrontView;
 import com.vaadin.ui.html.Div;
 
