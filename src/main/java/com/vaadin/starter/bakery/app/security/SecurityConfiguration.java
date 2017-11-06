@@ -27,7 +27,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	private static final String LOGIN_PROCESSING_URL = "/login";
 	private static final String LOGIN_FAILURE_URL = "/login?error";
 	private static final String LOGIN_URL = "/login";
-	public static final String LOGOUT_SUCCESS_URL = "/" + BakeryConst.PAGE_STOREFRONT;
+	private static final String LOGOUT_SUCCESS_URL = "/" + BakeryConst.PAGE_STOREFRONT;
 
 	private final UserDetailsService userDetailsService;
 
