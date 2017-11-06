@@ -45,7 +45,7 @@
         height: 100%;
       }
 
-      .navigation-label {
+      .navigation-label, .navigation-label a {
         /* These mixins (from iron-flex-layout) center the link text. */
         @apply --layout-vertical;
         @apply --layout-center-center;
@@ -123,6 +123,12 @@
               </div>
             </paper-tab>
           </template>
+          <paper-tab link>
+            <div class="navigation-label">
+              <iron-icon icon="valo:arrow-right"></iron-icon>
+              <a href="logout"><span>Logout</span></a>
+            </div>
+          </paper-tab>
         </paper-tabs>
       </div>
 
@@ -154,7 +160,7 @@
           this._debouncer,
           Polymer.Async.timeOut.after(30),
           () => {
-            if (this.page !== pageId) {
+            if (pageId && this.page !== pageId) {
               this.$server.navigateTo(pageId);
             }
           }

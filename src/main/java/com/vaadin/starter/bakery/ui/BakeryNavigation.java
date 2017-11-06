@@ -10,6 +10,7 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.view.admin.products.ProductsView;
 import com.vaadin.starter.bakery.ui.view.admin.users.UsersView;
 import com.vaadin.ui.Tag;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.common.ClientDelegate;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
@@ -22,7 +23,6 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> {
 	private static final String ICON_DASHBOARD = "clock";
 	private static final String ICON_USERS = "user";
 	private static final String ICON_PRODUCTS = "calendar";
-	private static final String ICON_LOGOUT = "arrow-right";
 
 	private boolean pagesAdded;
 
@@ -49,12 +49,11 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> {
 		if (SecurityUtils.isAccessGranted(ProductsView.class)) {
 			pages.add(new PageInfo(BakeryConst.PAGE_PRODUCTS, ICON_PRODUCTS, BakeryConst.TITLE_PRODUCTS));
 		}
-		pages.add(new PageInfo(BakeryConst.PAGE_LOGOUT, ICON_LOGOUT, "Logout"));
 		getModel().setPages(pages);
 	}
 
 	@ClientDelegate
 	private void navigateTo(String href) {
-		getUI().ifPresent(ui -> ui.navigateTo(href));
+		UI.getCurrent().navigateTo(href);
 	}
 }
