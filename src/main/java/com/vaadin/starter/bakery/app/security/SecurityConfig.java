@@ -18,6 +18,7 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 
 import com.vaadin.starter.bakery.backend.data.Role;
+import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
 @EnableWebSecurity
 @Configuration
@@ -25,8 +26,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	public static final String LOGIN_PROCESSING_URL = "/login";
 	public static final String LOGIN_FAILURE_URL = "/login?error";
-	public static final String LOGOUT_URL = "/login?logout";
 	public static final String LOGIN_URL = "/login";
+	public static final String LOGOUT_SUCCESS_URL = "/" + BakeryConst.PAGE_STOREFRONT;
 
 	private final UserDetailsService userDetailsService;
 
@@ -58,12 +59,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					.requestMatchers(this::isFrameworkInternalRequest).permitAll()
 					.anyRequest().hasAnyAuthority(Role.getAllRoles())
 				.and().formLogin()
-					.loginPage(SecurityConfig.LOGIN_URL).permitAll()
-					.loginProcessingUrl(SecurityConfig.LOGIN_PROCESSING_URL)
-					.failureUrl(SecurityConfig.LOGIN_FAILURE_URL)
+					.loginPage(LOGIN_URL).permitAll()
+					.loginProcessingUrl(LOGIN_PROCESSING_URL)
+					.failureUrl(LOGIN_FAILURE_URL)
 					.successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
 				.and().logout()
-					.logoutSuccessUrl(SecurityConfig.LOGOUT_URL);
+					.logoutSuccessUrl(LOGOUT_SUCCESS_URL);
 	}
 
 	@Override
