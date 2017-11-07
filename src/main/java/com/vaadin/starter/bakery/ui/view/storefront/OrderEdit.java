@@ -98,7 +98,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 
 	private final OrderStateConverter orderStateConverter = new OrderStateConverter();
 
-	private PickupLocationComboBoxDataProvider locationProvider = BeanLocator.find(PickupLocationComboBoxDataProvider.class);
+	private PickupLocationDataProvider locationProvider = BeanLocator.find(PickupLocationDataProvider.class);
 
 	private boolean hasChanges = false;
 
