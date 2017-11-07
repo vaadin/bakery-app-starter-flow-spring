@@ -3,58 +3,68 @@ package com.vaadin.starter.bakery.app.security;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.vaadin.starter.bakery.app.ApplicationConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 
 import com.vaadin.starter.bakery.backend.data.Role;
+import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
 @EnableWebSecurity
 @Configuration
-@Order(20)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+	public static final String LOGIN_PROCESSING_URL = "/login";
+	public static final String LOGIN_FAILURE_URL = "/login?error";
+	public static final String LOGIN_URL = "/login";
+	public static final String LOGOUT_SUCCESS_URL = "/" + BakeryConst.PAGE_STOREFRONT;
 
 	private final UserDetailsService userDetailsService;
 
-	private final PasswordEncoder passwordEncoder;
-
 	@Autowired
-	public SecurityConfig(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+	public SecurityConfig(UserDetailsService userDetailsService) {
 		this.userDetailsService = userDetailsService;
-		this.passwordEncoder = passwordEncoder;
+	}
+
+	/**
+	 * The password encoder to use when encrypting passwords.
+	 */
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		super.configure(auth);
-		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// Not using Spring CSRF here to be able to use plain HTML for the login page
 		http.csrf().disable()
-		.requestCache().requestCache(new CustomRequestCache())
-		.and().authorizeRequests()
-		.requestMatchers(this::isFrameworkInternalRequest).permitAll()
-		.anyRequest().hasAnyAuthority(Role.getAllRoles())
-		.and().formLogin()
-		.loginPage(ApplicationConfiguration.LOGIN_URL).permitAll()
-		.loginProcessingUrl(ApplicationConfiguration.LOGIN_PROCESSING_URL)
-		.failureUrl(ApplicationConfiguration.LOGIN_FAILURE_URL)
-		.successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
-		.and().logout()
-		.logoutSuccessUrl(ApplicationConfiguration.LOGOUT_URL);
+				.requestCache().requestCache(new CustomRequestCache())
+				.and().authorizeRequests()
+					.requestMatchers(this::isFrameworkInternalRequest).permitAll()
+					.anyRequest().hasAnyAuthority(Role.getAllRoles())
+				.and().formLogin()
+					.loginPage(LOGIN_URL).permitAll()
+					.loginProcessingUrl(LOGIN_PROCESSING_URL)
+					.failureUrl(LOGIN_FAILURE_URL)
+					.successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
+				.and().logout()
+					.logoutSuccessUrl(LOGOUT_SUCCESS_URL);
 	}
 
 	@Override
