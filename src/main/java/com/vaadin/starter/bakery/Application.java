@@ -1,6 +1,6 @@
 package com.vaadin.starter.bakery;
 
-import com.vaadin.starter.bakery.app.security.SecurityConfig;
+import com.vaadin.starter.bakery.app.security.SecurityConfiguration;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.repositories.UserRepository;
 import com.vaadin.starter.bakery.backend.service.UserService;
@@ -24,7 +24,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  * class })
  */
 @SpringBootApplication(scanBasePackageClasses = { BakeryApp.class, Application.class, UserService.class,
-		SecurityConfig.class })
+		SecurityConfiguration.class })
 @EnableJpaRepositories(basePackageClasses = { UserRepository.class})
 @EntityScan(basePackageClasses={User.class, LocalDateJpaConverter.class})
 public class Application extends SpringBootServletInitializer {

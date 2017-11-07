@@ -21,7 +21,7 @@ import com.vaadin.starter.bakery.backend.data.Role;
 
 @EnableWebSecurity
 @Configuration
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	public static final String LOGIN_PROCESSING_URL = "/login";
 	public static final String LOGIN_FAILURE_URL = "/login?error";
@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private final UserDetailsService userDetailsService;
 
 	@Autowired
-	public SecurityConfig(UserDetailsService userDetailsService) {
+	public SecurityConfiguration(UserDetailsService userDetailsService) {
 		this.userDetailsService = userDetailsService;
 	}
 
