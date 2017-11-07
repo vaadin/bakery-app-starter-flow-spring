@@ -8,9 +8,7 @@ public enum OrderState {
 	 *
 	 * @return a human friendly version of the identifier
 	 */
-	//TODO should return
-	//SharedUtil.upperCaseUnderscoreToHumanFriendly(name()
 	public String getDisplayName() {
-		return name().toLowerCase();
+		return StringUtil.upperCaseUnderscoreToHumanFriendly(name());
 	}
 }
