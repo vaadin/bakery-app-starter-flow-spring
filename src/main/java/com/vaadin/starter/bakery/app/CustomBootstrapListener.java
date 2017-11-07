@@ -11,7 +11,11 @@ public class CustomBootstrapListener implements BootstrapListener {
 			// Force login page to use Shady DOM to avoid problems with browsers and
 			// password managers not supporting shadow DOM
 			head.prepend(
-					"<script type='text/javascript'>window.customElements.forcePolyfill=true;window.ShadyDOM = {force:true};</script>");
+					"<script type='text/javascript'>" +
+							"window.customElements=window.customElements||{};" +
+							"window.customElements.forcePolyfill=true;" +
+							"window.ShadyDOM={force:true};" +
+					"</script>");
 		}
 		addFavIconTags(head);
 		injectInlineCustomStyles(head);
