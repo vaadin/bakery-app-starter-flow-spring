@@ -45,13 +45,16 @@
         height: 100%;
       }
 
-      .navigation-label,
-      .navigation-label a {
+      .navigation-label {
         /* These mixins (from iron-flex-layout) center the link text. */
         @apply --layout-vertical;
         @apply --layout-center-center;
         color: var(--valo-secondary-text-color);
         font-family: var(--valo-font-family);
+        text-decoration: none;
+      }
+
+      .navigation-tabs a {
         text-decoration: none;
       }
 
@@ -126,12 +129,14 @@
           </template>
           <!-- The logout button is a 'normal' URL (i.e. it's not a Flow-managed in-app URL).
                It trigges a regular GET request which is handled by Spring Security. -->
-          <paper-tab link>
-            <div class="navigation-label">
-              <iron-icon icon="valo:arrow-right"></iron-icon>
-              <a href="logout"><span>Logout</span></a>
-            </div>
-          </paper-tab>
+          <a href="logout">
+            <paper-tab>
+              <div class="navigation-label">
+                <iron-icon icon="valo:arrow-right"></iron-icon>
+                <span>Logout</span>
+              </div>
+            </paper-tab>
+          </a>
         </paper-tabs>
       </div>
 

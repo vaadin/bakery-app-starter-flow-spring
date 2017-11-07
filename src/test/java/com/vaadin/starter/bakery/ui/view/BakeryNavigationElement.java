@@ -22,7 +22,7 @@ public class BakeryNavigationElement extends TestBenchElement {
 	}
 
 	public LoginViewElement logout() {
-		$(PaperTabElement.class).last().$(AnchorElement.class).first().click();
+		$(PaperTabElement.class).last().click();
 		return $(LoginViewElement.class).onPage().waitForFirst();
 	}
 
