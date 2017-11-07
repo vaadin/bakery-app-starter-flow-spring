@@ -1,5 +1,6 @@
 package com.vaadin.starter.bakery.ui.view;
 
+import com.vaadin.starter.bakery.elements.AnchorElement;
 import com.vaadin.starter.bakery.elements.PaperTabElement;
 import com.vaadin.starter.bakery.ui.UsersViewElement;
 import com.vaadin.testbench.TestBenchElement;
@@ -21,7 +22,8 @@ public class BakeryNavigationElement extends TestBenchElement {
 	}
 
 	public LoginViewElement logout() {
-		return navigateTo("logout", LoginViewElement.class);
+		$(PaperTabElement.class).last().$(AnchorElement.class).first().click();
+		return $(LoginViewElement.class).onPage().waitForFirst();
 	}
 
 	private <T extends TestBenchElement> T navigateTo(String pageId, Class<T> landingPage) {
