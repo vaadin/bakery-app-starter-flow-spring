@@ -16,8 +16,6 @@ import org.springframework.data.domain.Sort.Direction;
 
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.provider.DataProvider;
-import com.vaadin.flow.model.Convert;
-import com.vaadin.flow.model.Include;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.router.HasUrlParameter;
 import com.vaadin.router.OptionalParameter;
@@ -36,17 +34,10 @@ import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
-import com.vaadin.starter.bakery.ui.utils.converters.CurrencyFormatter;
-import com.vaadin.starter.bakery.ui.utils.converters.LocalDateTimeConverter;
-import com.vaadin.starter.bakery.ui.utils.converters.LocalTimeConverter;
-import com.vaadin.starter.bakery.ui.utils.converters.LongToStringConverter;
-import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
 import com.vaadin.starter.bakery.ui.view.EntityPresenter;
 import com.vaadin.starter.bakery.ui.view.EntityView;
-import com.vaadin.starter.bakery.ui.view.storefront.converter.StorefrontLocalDateConverter;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Tag;
-import com.vaadin.ui.common.ClientDelegate;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
@@ -59,20 +50,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 
 	public interface Model extends TemplateModel {
-		@Include({ "id", "dueDate.day", "dueDate.weekday", "dueDate.date", "dueTime", "state", "pickupLocation.name",
-				"customer.fullName", "customer.phoneNumber", "customer.details", "items.product.name", "items.comment",
-				"items.quantity", "items.product.price", "history.message", "history.createdBy.firstName",
-				"history.timestamp", "history.newState", "totalPrice" })
-		@Convert(value = LongToStringConverter.class, path = "id")
-		@Convert(value = StorefrontLocalDateConverter.class, path = "dueDate")
-		@Convert(value = LocalTimeConverter.class, path = "dueTime")
-		@Convert(value = OrderStateConverter.class, path = "state")
-		@Convert(value = CurrencyFormatter.class, path = "items.product.price")
-		@Convert(value = LocalDateTimeConverter.class, path = "history.timestamp")
-		@Convert(value = OrderStateConverter.class, path = "history.newState")
-		@Convert(value = CurrencyFormatter.class, path = "totalPrice")
-		void setSelectedItem(Order order);
-
 		void setEditing(boolean editing);
 	}
 
@@ -104,6 +81,9 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		addToSlot(this, viewSelector, "view-selector-slot");
 		presenter = new Presenter();
 
+		// required for the `isDesktopView()` method
+		getElement().synchronizeProperty("desktopView", "desktop-view-changed");
+
 		searchBar.setActionText("New order");
 		searchBar.setCheckboxText("Show past orders");
 		searchBar.setPlaceHolder("Search");
@@ -126,28 +106,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 
 		presenter.filterChanged("", false);
 		getModel().setEditing(false);
-	}
-
-	@ClientDelegate
-	private void addComment(String orderId, String message) {
-		presenter.addComment(Long.parseLong(orderId), message);
-	}
-
-	@ClientDelegate
-	private void edit(String id) {
-		if (id != null && !id.isEmpty()) {
-			Map<String, String> parameters = new HashMap<>();
-			parameters.put("edit", "");
-			getUI().ifPresent(
-					ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT + "/" + id, QueryParameters.simple(parameters)));
-			return;
-		}
-		presenter.createNew();
-	}
-
-	@ClientDelegate
-	private void unselectOrder() {
-		getModel().setSelectedItem(null);
 	}
 
 	@Override
@@ -215,6 +173,10 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		}
 	}
 
+	private boolean isDesktopView() {
+		return getElement().getProperty("desktopView", true);
+	}
+
 	private void resizeGrid() {
 		grid.getElement().callFunction("notifyResize");
 	}
@@ -244,7 +206,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 				showOrderEdit();
 			});
 			orderDetail.addCommentListener(e -> {
-				details(orderService.findOrder(e.getOrderId()), false);
+				presenter.addComment(e.getOrderId(), e.getMessage());
 			});
 		}
 
@@ -275,22 +237,37 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 			super.openDialog(entity, edit);
 		}
 
-		public void addComment(Long id, String comment) {
+		private void addComment(Long id, String comment) {
 			executeJPAOperation(() -> {
-				Order updated = orderService.addComment(id, comment);
-				getModel().setSelectedItem(updated);
+				orderService.addComment(id, comment);
+				loadEntity(id, false);
 			});
+		}
+
+		private void edit(String id) {
+			if (id != null && !id.isEmpty()) {
+				Map<String, String> parameters = new HashMap<>();
+				parameters.put("edit", "");
+				getUI().ifPresent(
+						ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT + "/" + id, QueryParameters.simple(parameters)));
+				return;
+			}
+			createNew();
 		}
 
 		// StorefrontItemDetailWrapper presenter methods
 		private void onOrderCardOpened(StorefrontItemDetailWrapper orderCard) {
-			getModel().setSelectedItem(orderCard.getOrder());
-			orderCard.setSelected(true);
+			if (isDesktopView()) {
+				orderCard.setSelected(true);
+				resizeGrid();
+			} else {
+				loadEntity(orderCard.getOrder().getId(), false);
+			}
 		}
 
 		private void onOrderCardClosed(StorefrontItemDetailWrapper orderCard) {
-			getModel().setSelectedItem(null);
 			orderCard.setSelected(false);
+			resizeGrid();
 		}
 
 		private void onOrderCardEdit(StorefrontItemDetailWrapper orderCard) {

@@ -1,10 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/polymer/lib/utils/debounce.html">
-<link rel="import" href="../../bower_components/polymer/lib/utils/flush.html">
 <link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
 
 <link rel="import" href="../app/bakery-search.html">
-<link rel="import" href="order-detail-mobile-dialog.html">
 
 <link rel="import" href="../elements/item-detail-dialog.html">
 <link rel="import" href="../elements/utils-mixin.html">
@@ -74,13 +71,8 @@ Added dynamically
     <bakery-search id="search" show-checkbox></bakery-search>
 
     <div class="grid-wrapper">
-
       <slot name="grid"></slot>
 
-      <template is="dom-if" if="[[!desktopView]]" restamp>
-        <order-detail-mobile-dialog selected-item="[[selectedItem]]" on-close="_unselectItem" on-edit="_onEdit" on-comment-added="_onCommentAdded">
-        </order-detail-mobile-dialog>
-      </template>
       <item-detail-dialog desktop-view$=[[desktopView]] opened=[[editing]]>
         <slot name="view-selector-slot" on-slotchange="_updateViewSelectorSlot"></slot>
       </item-detail-dialog>
@@ -97,6 +89,7 @@ Added dynamically
         return {
           desktopView: {
             type: Boolean,
+            notify: true,
             observer: '_updateDesktopViewOnViewSelectorChildren'
           },
           editing: {
@@ -104,61 +97,14 @@ Added dynamically
           },
           touchScrolling: {
             type: Boolean,
-            computed: '_enableTouchScrolling(desktopView, selectedItem, _editableItem)',
+            computed: '_enableTouchScrolling(editing)',
             reflectToAttribute: true
-          },
-          selectedItem: {
-            type: Object,
-            observer: '_selectedItemChanged'
-          },
-          _editableItem: Object
+          }
         };
       }
 
-      _resizeList() {
-        this.$.list.notifyResize();
-      }
-
-      _onEdit(e) {
-        e.preventDefault();
-        this.$server.edit(e.detail.id);
-      }
-
-      _onCommentAdded(e) {
-        this.$server.addComment(e.detail.orderId, e.detail.message);
-        this._notifyResize();
-      }
-
-      _isSelected(order) {
-        return order && order.selected;
-      }
-
-      _selectedItemChanged() {
-        this._notifyResize();
-      }
-
-      _unselectItem() {
-        this.$server.unselectOrder();
-      }
-
-      _notifyResize() {
-        const grid = this.querySelector('vaadin-grid');
-        if (!grid) {
-          return;
-        }
-
-        // list needs to be resized both before and after rendering the list.
-        // Without double resize, elements will be rendered on top of each others.
-        grid.notifyResize();
-        this.dispatchEvent(new CustomEvent('notify-resize'));
-        Polymer.RenderStatus.afterNextRender(this, () => {
-          grid.notifyResize();
-          this.dispatchEvent(new CustomEvent('notify-resize'));
-        });
-      }
-
-      _enableTouchScrolling(desktopView, selectedItem, _editableItem) {
-        return desktopView ? !_editableItem : !selectedItem && !_editableItem;
+      _enableTouchScrolling(editing) {
+        return !editing;
       }
 
       _updateViewSelectorSlot() {
