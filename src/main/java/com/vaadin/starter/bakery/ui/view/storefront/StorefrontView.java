@@ -79,7 +79,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	private BakerySearch searchBar;
 
 	private final ViewSelector viewSelector = new ViewSelector();
-	private final OrderEdit orderEdit = new OrderEdit();
+	private final OrderEdit orderEdit;
 	private final OrderDetail orderDetail = new OrderDetail();
 
 	private Presenter presenter;
@@ -91,11 +91,12 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 
 	@Autowired
 	public StorefrontView(OrdersDataProvider ordersProvider, ProductService productService, OrderService orderService,
-			UserService userService) {
+			UserService userService, OrderEdit orderEdit) {
 		this.productService = productService;
 		this.ordersProvider = ordersProvider;
 		this.orderService = orderService;
 		this.userService = userService;
+		this.orderEdit = orderEdit;
 		addToSlot(this, viewSelector, "view-selector-slot");
 		presenter = new Presenter();
 

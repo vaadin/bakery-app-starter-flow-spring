@@ -4,9 +4,9 @@ import com.vaadin.server.ServiceInitEvent;
 import com.vaadin.server.VaadinServiceInitListener;
 import com.vaadin.shared.ui.Dependency;
 import com.vaadin.shared.ui.LoadMode;
-import org.springframework.stereotype.Component;
+import com.vaadin.spring.annotation.SpringComponent;
 
-@Component
+@SpringComponent
 public class CustomVaadinServiceInitListener implements VaadinServiceInitListener {
 
     @Override
