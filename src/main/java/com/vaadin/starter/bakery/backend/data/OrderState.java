@@ -1,5 +1,9 @@
 package com.vaadin.starter.bakery.backend.data;
 
+import java.util.Locale;
+
+import com.vaadin.shared.util.SharedUtil;
+
 public enum OrderState {
 	NEW, CONFIRMED, READY, DELIVERED, PROBLEM, CANCELLED;
 
@@ -8,9 +12,7 @@ public enum OrderState {
 	 *
 	 * @return a human friendly version of the identifier
 	 */
-	//TODO should return
-	//SharedUtil.upperCaseUnderscoreToHumanFriendly(name()
 	public String getDisplayName() {
-		return name().toLowerCase();
+		return SharedUtil.capitalize(name().toLowerCase(Locale.ENGLISH));
 	}
 }

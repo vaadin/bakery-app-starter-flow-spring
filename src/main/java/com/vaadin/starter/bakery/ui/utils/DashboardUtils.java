@@ -172,7 +172,6 @@ public class DashboardUtils {
 	}
 
 	public static OrdersCountData getNotAvailableOrdersCountData(DeliveryStats deliveryStats) {
-		// TODO: which subtitle should be here?
 		OrdersCountData ordersCountData = new OrdersCountData("Not Available", "Delivery tomorrow",
 				deliveryStats.getNotAvailableToday());
 
