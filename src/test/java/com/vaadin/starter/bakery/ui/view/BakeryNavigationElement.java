@@ -1,6 +1,5 @@
 package com.vaadin.starter.bakery.ui.view;
 
-import com.vaadin.starter.bakery.elements.AnchorElement;
 import com.vaadin.starter.bakery.elements.PaperTabElement;
 import com.vaadin.starter.bakery.ui.UsersViewElement;
 import com.vaadin.testbench.TestBenchElement;
