@@ -1,6 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="../../bower_components/vaadin-text-field/vaadin-password-field.html">
 <link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
@@ -97,8 +98,6 @@
 
       .error__icon {
         flex: 0 0 auto;
-        width: 1em;
-        height: 1em;
         fill: var(--valo-error-color);
         margin-top: 1.3em;
         margin-right: var(--valo-space-s);
@@ -165,11 +164,7 @@
           </div>
           <template is="dom-if" if="[[error]]">
             <div class="error">
-              <svg class="error__icon" viewBox="0 0 16 16">
-                <path d="M8 1c3.9 0 7 3.1 7 7s-3.1 7-7 7-7-3.1-7-7 3.1-7 7-7zM8 0c-4.4 0-8 3.6-8 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8v0z"></path>
-                <path d="M7 3h2v7h-2v-7z"></path>
-                <path d="M7 11h2v2h-2v-2z"></path>
-              </svg>
+              <iron-icon icon="valo:error" class="error__icon"></iron-icon>
               <p class="error__text">
                 The username and password you entered do not match our records. Please double-check and try again.
               </p>
