@@ -4,8 +4,8 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
 public class Message {
 
-	public static final MessageSupplier UNSAVED_CHANGES = createMessage("Unsaved Changes", "Yes", "Back",
-			"There are unsaved modifications to the %s. Are you sure to cancel the edition?");
+	public static final MessageSupplier UNSAVED_CHANGES = createMessage("Unsaved Changes", "Discard", "Continue Editing",
+			"There are unsaved modifications to the %s. Discard changes?");
 
 	public static final MessageSupplier CONFIRM_DELETE = createMessage(BakeryConst.CONFIRM_CAPTION_DELETE,
 			BakeryConst.CONFIRM_OKBUTTON_DELETE, BakeryConst.CONFIRM_CANCELBUTTON_DELETE,
