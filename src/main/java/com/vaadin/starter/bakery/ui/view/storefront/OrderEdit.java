@@ -9,6 +9,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.IntStream;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.provider.DataProvider;
@@ -16,7 +19,7 @@ import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.data.provider.Query;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.shared.Registration;
-import com.vaadin.starter.bakery.app.BeanLocator;
+import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
@@ -39,6 +42,8 @@ import com.vaadin.ui.textfield.TextField;
 
 @Tag("order-edit")
 @HtmlImport("src/storefront/order-edit.html")
+@SpringComponent
+@Scope("prototype")
 public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 
 	public interface Model extends TemplateModel {
@@ -98,11 +103,13 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 
 	private final OrderStateConverter orderStateConverter = new OrderStateConverter();
 
-	private PickupLocationDataProvider locationProvider = BeanLocator.find(PickupLocationDataProvider.class);
+	private final PickupLocationDataProvider locationProvider;
 
 	private boolean hasChanges = false;
 
-	public OrderEdit() {
+	@Autowired
+	public OrderEdit(PickupLocationDataProvider locationProvider) {
+		this.locationProvider = locationProvider;
 		addToSlot(this, items, "order-items-edit");
 
 		cancel.addClickListener(e -> fireEvent(new CancelEvent(this, false)));
