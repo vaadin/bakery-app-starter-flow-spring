@@ -1,15 +1,17 @@
 package com.vaadin.starter.bakery.ui.utils.messages;
 
-import com.vaadin.starter.bakery.ui.utils.BakeryConst;
-
 public class Message {
+
+	public static final String CONFIRM_CAPTION_DELETE = "Confirm Delete";
+	public static final String CONFIRM_MESSAGE_DELETE = "Are you sure you want to delete the selected Item? This action cannot be undone.";
+	public static final String BUTTON_CAPTION_DELETE = "Delete";
+	public static final String BUTTON_CAPTION_CANCEL = "Cancel";
 
 	public static final MessageSupplier UNSAVED_CHANGES = createMessage("Unsaved Changes", "Discard", "Continue Editing",
 			"There are unsaved modifications to the %s. Discard changes?");
 
-	public static final MessageSupplier CONFIRM_DELETE = createMessage(BakeryConst.CONFIRM_CAPTION_DELETE,
-			BakeryConst.CONFIRM_OKBUTTON_DELETE, BakeryConst.CONFIRM_CANCELBUTTON_DELETE,
-			BakeryConst.CONFIRM_MESSAGE_DELETE);
+	public static final MessageSupplier CONFIRM_DELETE = createMessage(CONFIRM_CAPTION_DELETE, BUTTON_CAPTION_DELETE,
+			BUTTON_CAPTION_CANCEL, CONFIRM_MESSAGE_DELETE);
 
 	private final String caption;
 	private final String okText;
