@@ -2,8 +2,6 @@ package com.vaadin.starter.bakery.ui.utils;
 
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.ui.entities.StorefrontItemHeader;
-import elemental.json.JsonObject;
-import elemental.json.impl.JreJsonFactory;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -16,12 +14,10 @@ import java.util.function.BiFunction;
 
 public class StorefrontItemHeaderGenerator {
 
-	private static final JreJsonFactory JSON_FACTORY;
 	private static final DateTimeFormatter HEADER_DATE_TIME_FORMATTER;
 	private static final List<BiFunction<LocalDate, Boolean, Optional<StorefrontItemHeader>>> HEADER_FUNCTIONS;
 
 	static {
-		JSON_FACTORY = new JreJsonFactory();
 		HEADER_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("EEE, MMM d");
 		HEADER_FUNCTIONS = Arrays.asList(
 				(date, showPrevious) -> headerIfRecent(date),
@@ -32,8 +28,8 @@ public class StorefrontItemHeaderGenerator {
 				(date, showPrevious) -> headerIfUpcoming(date));
 	}
 
-	public static JsonObject computeEntriesWithHeader(List<Order> orders, boolean showPrevious) {
-		Map<String, StorefrontItemHeader> result = new HashMap<>(HEADER_FUNCTIONS.size());
+	public static Map<Long, StorefrontItemHeader> computeEntriesWithHeader(List<Order> orders, boolean showPrevious) {
+		Map<Long, StorefrontItemHeader> result = new HashMap<>(HEADER_FUNCTIONS.size());
 		boolean[] usedGroups = new boolean[HEADER_FUNCTIONS.size()];
 		ordersLoop: for (Order order : orders) {
 			for (int i = 0; i < HEADER_FUNCTIONS.size(); i++) {
@@ -41,7 +37,7 @@ public class StorefrontItemHeaderGenerator {
 						= HEADER_FUNCTIONS.get(i).apply(order.getDueDate(), showPrevious);
 				if (!usedGroups[i] && header.isPresent()) {
 					usedGroups[i] = true;
-					result.put(order.getId().toString(), header.get());
+					result.put(order.getId(), header.get());
 					if (i == usedGroups.length - 1) {
 						break ordersLoop;
 					}
@@ -50,17 +46,6 @@ public class StorefrontItemHeaderGenerator {
 			}
 		}
 
-		return toJsonObject(result);
-	}
-
-	private static JsonObject toJsonObject(Map<String, StorefrontItemHeader> map) {
-		JsonObject result = JSON_FACTORY.createObject();
-		map.forEach((k, v) -> {
-			JsonObject value = JSON_FACTORY.createObject();
-			value.put("main", v.getMain());
-			value.put("secondary", v.getSecondary());
-			result.put(k, value);
-		});
 		return result;
 	}
 

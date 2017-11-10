@@ -5,6 +5,7 @@ import com.vaadin.flow.model.Include;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
+import com.vaadin.starter.bakery.ui.entities.StorefrontItemHeader;
 import com.vaadin.starter.bakery.ui.utils.converters.CurrencyFormatter;
 import com.vaadin.starter.bakery.ui.utils.converters.LocalDateTimeConverter;
 import com.vaadin.starter.bakery.ui.utils.converters.LocalTimeConverter;
@@ -39,7 +40,7 @@ public class StorefrontItemDetailWrapper extends PolymerTemplate<StorefrontItemD
 		void setOrder(Order order);
 		void setSelected(boolean selected);
 
-		void setHeader(String header);
+		void setHeader(StorefrontItemHeader header);
 		void setDisplayHeader(boolean displayHeader);
 	}
 
@@ -54,6 +55,14 @@ public class StorefrontItemDetailWrapper extends PolymerTemplate<StorefrontItemD
 
 	public void setSelected(boolean selected) {
 		getModel().setSelected(selected);
+	}
+
+	public void setDisplayHeader(boolean displayHeader) {
+		getModel().setDisplayHeader(displayHeader);
+	}
+
+	public void setHeader(StorefrontItemHeader header) {
+		getModel().setHeader(header);
 	}
 
 	@DomEvent("opened")

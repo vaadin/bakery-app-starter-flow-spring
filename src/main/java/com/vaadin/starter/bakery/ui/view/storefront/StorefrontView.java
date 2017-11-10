@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.vaadin.starter.bakery.ui.entities.StorefrontItemHeader;
 import com.vaadin.ui.grid.Grid;
 import com.vaadin.ui.renderers.ComponentRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +80,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	private BakerySearch searchBar;
 
 	private final Grid<Order> grid;
+	private Map<Long, StorefrontItemHeader> ordersWithHeaders;
+
 	private final ViewSelector viewSelector = new ViewSelector();
 	private final OrderEdit orderEdit;
 	private final OrderDetail orderDetail = new OrderDetail();
@@ -115,6 +118,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		grid.addColumn("Order", new ComponentRenderer<>(order -> {
 			StorefrontItemDetailWrapper orderCard = new StorefrontItemDetailWrapper();
 			orderCard.setOrder(order);
+			orderCard.setDisplayHeader(ordersWithHeaders.containsKey(order.getId()));
+			orderCard.setHeader(ordersWithHeaders.get(order.getId()));
 			orderCard.addOpenedListener(e -> {
 				orderCard.setSelected(true);
 				getModel().setSelectedItem(order);
@@ -169,8 +174,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	}
 
 	private void setOrders(List<Order> orders, boolean showPrevious) {
+		ordersWithHeaders = computeEntriesWithHeader(orders, showPrevious);
 		grid.setItems(orders);
-		getElement().setPropertyJson("displayedHeaders", computeEntriesWithHeader(orders, showPrevious));
 	}
 
 	private void selectComponent(Component component) {

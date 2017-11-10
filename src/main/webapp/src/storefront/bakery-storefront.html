@@ -10,7 +10,7 @@
 <link rel="import" href="../elements/utils-mixin.html">
 <link rel="import" href="../elements/viewselector/view-selector.html">
 
-<!-- 
+<!--
 Added dynamically
  -->
 <link rel="import" href="order-edit.html">
@@ -100,25 +100,8 @@ Added dynamically
             type: Object,
             observer: '_selectedItemChanged'
           },
-          _editableItem: Object,
-          displayedHeaders: {
-            type: Object
-          }
+          _editableItem: Object
         };
-      }
-
-      /*
-       * Setting headers for each storefront-item-detail-wrapper based on their date.
-       */
-      _getHeader(id) {
-        return this.displayedHeaders[id];
-      }
-
-      /*
-       * Check from displayedHeaders if header should be displayed in this order element.
-       */
-      _displayHeader(orderID) {
-        return orderID && this.displayedHeaders[orderID];
       }
 
       _resizeList() {
