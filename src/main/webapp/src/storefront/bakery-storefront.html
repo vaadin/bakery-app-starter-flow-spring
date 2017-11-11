@@ -8,11 +8,22 @@
 
 <link rel="import" href="../elements/item-detail-dialog.html">
 <link rel="import" href="../elements/utils-mixin.html">
-<link rel="import" href="../elements/viewselector/view-selector.html">
 
 <!--
 Added dynamically
  -->
+<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-column.html">
+
+<!-- Ensure the flow-component-renderer component gets bundled:
+      - at build time this this resolves to webapp/flow-component-renderer.html
+        (which is copied there from flow-server.jar by Maven)
+      - at run time this resolves to /flow-component-renderer.html
+        (which is provided by flow-server.jar)-->
+<link rel="import" href="../../flow-component-renderer.html">
+
+<link rel="import" href="storefront-item-detail-wrapper.html">
+<link rel="import" href="../elements/viewselector/view-selector.html">
 <link rel="import" href="order-edit.html">
 <link rel="import" href="order-detail.html">
 
