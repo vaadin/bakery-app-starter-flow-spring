@@ -6,6 +6,39 @@
 <link rel="import" href="dashboard-column-chart.html">
 <link rel="import" href="dashboard-yearly-sales.html">
 <link rel="import" href="dashboard-pie-chart.html">
+<link rel="import" href="dashboard-orders-list.html">
+<link rel="import" href="dashboard-counter-label.html">
+
+<dom-module id="dashboard-chart-styles" theme-for="vaadin-chart">
+  <template>
+    <style include="vaadin-charts-default-theme">
+    :host(.counter),
+    :host(.counter) #chart {
+      height: 120px;
+    }
+
+    :host(.counter) .highcharts-color-0 {
+      fill: #55bf3b;
+      stroke: #55bf3b;
+    }
+
+    :host(.counter) .highcharts-pane {
+      fill: rgba(23, 68, 128, 0.1);
+      stroke-width: 0;
+    }
+
+    :host(.counter) .highcharts-background {
+      fill: transparent;
+    }
+
+    :host(.counter) .highcharts-minor-grid-line,
+    :host(.counter) .highcharts-grid-line {
+      stroke: none;
+    }
+
+    </style>
+  </template>
+</dom-module>
 
 <dom-module id="bakery-dashboard">
   <template>
@@ -57,10 +90,10 @@
 
     <vaadin-board>
       <vaadin-board-row>
-        <dashboard-orders-counter data="[[todayOrdersCount]]" count-color="#55BF3B" display-chart="true"></dashboard-orders-counter>
-        <dashboard-orders-counter data="[[notAvailableOrdersCount]]" count-color="#ff473a"></dashboard-orders-counter>
-        <dashboard-orders-counter data="[[newOrdersCount]]" count-color="#1877f3"></dashboard-orders-counter>
-        <dashboard-orders-counter data="[[tomorrowOrdersCount]]" count-color="rgba(45, 71, 105, 0.7)"></dashboard-orders-counter>
+        <dashboard-orders-counter data="[[todayOrdersCount]]"></dashboard-orders-counter>
+        <dashboard-counter-label label-data="[[notAvailableOrdersCount]]" class="red"></dashboard-counter-label>
+        <dashboard-counter-label label-data="[[newOrdersCount]]" class="blue"></dashboard-counter-label>
+        <dashboard-counter-label label-data="[[tomorrowOrdersCount]]" class="gray"></dashboard-counter-label>
       </vaadin-board-row>
       <vaadin-board-row>
         <dashboard-column-chart data="[[deliveriesThisMonth]]"></dashboard-column-chart>
