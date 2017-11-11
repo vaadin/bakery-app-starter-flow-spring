@@ -81,11 +81,9 @@
           <storefront-item item="[[order]]" on-click="_open"></storefront-item>
         </template>
 
-        <template is="dom-if" if="[[desktopView]]" restamp>
-          <item-detail-inline opened="[[_showDetailsDesktop(selected, desktopView)]]">
-            <order-detail item="[[order]]" desktop-view="[[desktopView]]"></order-detail>
-          </item-detail-inline>
-        </template>
+        <item-detail-inline opened="[[_showDetailsDesktop(selected, desktopView)]]" hidden$="[[!desktopView]]">
+          <order-detail item="[[order]]" desktop-view="[[desktopView]]"></order-detail>
+        </item-detail-inline>
       </div>
     </div>
 
