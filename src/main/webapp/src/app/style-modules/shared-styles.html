@@ -127,6 +127,10 @@
         background: transparent;
       }
 
+      :host([theme~="storefront-grid"]) [part~="header-cell"] {
+        display: none;
+      }
+
       :host([theme~="storefront-grid"]) [part~="cell"]:not(:empty):not([details-cell]) {
         padding: 0;
       }
@@ -165,7 +169,8 @@
     <style>
       *,
       *::before,
-      *::after {
+      *::after,
+      ::slotted(*) {
         box-sizing: border-box;
       }
 
