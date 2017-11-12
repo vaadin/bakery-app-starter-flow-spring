@@ -36,7 +36,6 @@ import com.vaadin.starter.bakery.ui.event.SaveEvent;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.view.EntityPresenter;
 import com.vaadin.starter.bakery.ui.view.EntityView;
-import com.vaadin.ui.Component;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.polymertemplate.Id;
@@ -59,9 +58,11 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	private final Grid<Order> grid;
 	private Map<Long, StorefrontItemHeader> ordersWithHeaders;
 
-	private final ViewSelector viewSelector = new ViewSelector();
-	private final OrderEdit orderEdit;
-	private final OrderDetail orderDetail = new OrderDetail();
+	@Id("order-edit")
+	private OrderEdit orderEdit;
+
+	@Id("order-detail")
+	private OrderDetail orderDetail;
 
 	private Presenter presenter;
 
@@ -72,13 +73,12 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 
 	@Autowired
 	public StorefrontView(OrdersDataProvider ordersProvider, ProductService productService, OrderService orderService,
-			UserService userService, OrderEdit orderEdit) {
+			UserService userService) {
 		this.productService = productService;
 		this.ordersProvider = ordersProvider;
 		this.orderService = orderService;
 		this.userService = userService;
-		this.orderEdit = orderEdit;
-		addToSlot(this, viewSelector, "view-selector-slot");
+
 		presenter = new Presenter();
 
 		// required for the `isDesktopView()` method
@@ -121,23 +121,14 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		grid.setItems(orders);
 	}
 
-	private void selectComponent(Component component) {
-		// This is a workaround for a Safari 11 issue.
-		// If the orderEdit is injected in the ViewSelector
-		// on the constructor,
-		// Safari fails to set the styles correctly.
-		if (component.getElement().getParent() == null) {
-			viewSelector.add(component);
-		}
-		viewSelector.select(component);
-	}
-
 	private void showOrderEdit() {
-		selectComponent(orderEdit);
+		orderDetail.getElement().setAttribute("hidden", "");
+		orderEdit.getElement().removeAttribute("hidden");
 	}
 
 	private void details(Order order, boolean isReview) {
-		selectComponent(orderDetail);
+		orderDetail.getElement().removeAttribute("hidden");
+		orderEdit.getElement().setAttribute("hidden", "");
 		orderDetail.display(order, isReview);
 	}
 
