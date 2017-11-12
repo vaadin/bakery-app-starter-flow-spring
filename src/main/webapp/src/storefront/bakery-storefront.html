@@ -78,10 +78,10 @@ Added dynamically
       <slot name="grid"></slot>
 
       <template is="dom-if" if="[[!desktopView]]" restamp>
-        <order-detail-mobile-dialog selected-item="[[selectedItem]]" on-close="_unselectItem" on-edit="_onEdit">
+        <order-detail-mobile-dialog selected-item="[[selectedItem]]" on-close="_unselectItem" on-edit="_onEdit" on-comment-added="_onCommentAdded">
         </order-detail-mobile-dialog>
       </template>
-      <item-detail-dialog desktop-view$=[[desktopView]] opened=[[editing]] on-comment-added="_onCommentAdded">
+      <item-detail-dialog desktop-view$=[[desktopView]] opened=[[editing]]>
         <slot name="view-selector-slot" on-slotchange="_updateViewSelectorSlot"></slot>
       </item-detail-dialog>
     </div>

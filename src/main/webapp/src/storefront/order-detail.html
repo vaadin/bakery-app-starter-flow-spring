@@ -179,9 +179,9 @@
           </vaadin-form-item>
 
           <vaadin-form-item id="order-detail-comment" hidden="[[review]]">
-            <vaadin-text-field id="comment-field" placeholder="Add comment" class="full-width">
+            <vaadin-text-field id="comment-field" placeholder="Add comment" class="full-width" on-keydown="_onCommentKeydown">
               <div slot="suffix" class="comment-suffix">
-                <vaadin-button id="send-comment" theme="tertiary" on-click="_sendComment" on-keydown="_onCommentKeydown">Send</vaadin-button>
+                <vaadin-button id="send-comment" theme="tertiary" on-click="_sendComment">Send</vaadin-button>
               </div>
             </vaadin-text-field>
           </vaadin-form-item>
@@ -255,12 +255,11 @@
           message: _comment
         };
         this.dispatchEvent(new CustomEvent('comment-added', {bubbles: true, composed: true, detail: detail}));
-        this.$['comment-field'].value = '';
       }
 
       _onCommentKeydown(event) {
         if (event.key === 'Enter') {
-          this._sendComment();
+          this.$['send-comment'].click();
         }
       }
 

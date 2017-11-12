@@ -77,12 +77,9 @@
       </template>
 
       <div id="wrapper">
-        <template is="dom-if" if="[[!_showDetailsDesktop(selected, desktopView)]]">
-          <storefront-item item="[[order]]" on-click="_open"></storefront-item>
-        </template>
-
+        <storefront-item id="storefront-item" hidden$="[[_showDetailsDesktop(selected, desktopView)]]" on-click="_open"></storefront-item>
         <item-detail-inline opened="[[_showDetailsDesktop(selected, desktopView)]]" hidden$="[[!desktopView]]">
-          <order-detail item="[[order]]" desktop-view="[[desktopView]]"></order-detail>
+          <order-detail id="order-detail" desktop-view="[[desktopView]]"></order-detail>
         </item-detail-inline>
       </div>
     </div>
@@ -97,12 +94,10 @@
 
       static get properties() {
         return {
-          order: {
-            type: Object
-          },
           selected: {
             type: Boolean,
-            value: false
+            value: false,
+            reflectToAttribute: true
           },
           desktopView: {
             type: Boolean
@@ -126,10 +121,6 @@
 
       _showDetailsDesktop(selected, desktopView) {
         return selected && desktopView;
-      }
-
-      _showDetailsMobile(selected, desktopView) {
-        return selected && !desktopView;
       }
     }
 

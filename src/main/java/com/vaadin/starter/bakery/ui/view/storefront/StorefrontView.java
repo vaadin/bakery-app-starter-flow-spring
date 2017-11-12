@@ -107,10 +107,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		searchBar.setActionText("New order");
 		searchBar.setCheckboxText("Show past orders");
 		searchBar.setPlaceHolder("Search");
-		searchBar.addFilterChangeListener(presenter::filterChanged);
-		searchBar.addActionClickListener(e -> edit(null));
-		orderDetail.addListener(SaveEvent.class, e -> presenter.save());
-		orderEdit.addListener(CancelEvent.class, e -> presenter.cancel());
 
 		grid = new Grid<>();
 		grid.getElement().setAttribute("theme", "storefront-grid");
@@ -120,21 +116,10 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 			orderCard.setOrder(order);
 			orderCard.setDisplayHeader(ordersWithHeaders.containsKey(order.getId()));
 			orderCard.setHeader(ordersWithHeaders.get(order.getId()));
-			orderCard.addOpenedListener(e -> {
-				orderCard.setSelected(true);
-				getModel().setSelectedItem(order);
-			});
-			orderCard.addClosedListener(e -> {
-				orderCard.setSelected(false);
-				getModel().setSelectedItem(null);
-			});
-			orderCard.addEditListener(e -> {
-				edit(order.getId().toString());
-			});
-			orderCard.addCommentAddedListener(e -> {
-				addComment(e.getOrderId(), e.getMessage());
-				StorefrontView.this.getElement().callFunction("_notifyResize");
-			});
+			orderCard.addOpenedListener(e -> presenter.onOrderCardOpened(orderCard));
+			orderCard.addClosedListener(e -> presenter.onOrderCardClosed(orderCard));
+			orderCard.addEditListener(e -> presenter.onOrderCardEdit(orderCard));
+			orderCard.addCommentListener(e -> presenter.onOrderCardAddComment(orderCard, e.getMessage()));
 			return orderCard;
 		}));
 		addToSlot(this, grid, "grid");
@@ -230,10 +215,18 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		}
 	}
 
+	private void resizeGrid() {
+		grid.getElement().callFunction("notifyResize");
+	}
+
 	class Presenter extends EntityPresenter<Order> {
 
 		public Presenter() {
 			super(orderService, StorefrontView.this, "Order");
+			searchBar.addFilterChangeListener(this::filterChanged);
+			searchBar.addActionClickListener(e -> edit(null));
+
+			orderEdit.addListener(CancelEvent.class, e -> cancel());
 			orderEdit.addReviewListener(e -> {
 				try {
 					writeEntity();
@@ -242,6 +235,9 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 					showValidationError();
 				}
 			});
+
+			orderDetail.addListener(SaveEvent.class, e -> save());
+			orderDetail.addCancelListener(e -> closeDialog());
 			orderDetail.addBackListener(e -> showOrderEdit());
 			orderDetail.addEditListener(e -> {
 				orderEdit.read(getEntity());
@@ -280,11 +276,35 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		}
 
 		public void addComment(Long id, String comment) {
-			if (executeJPAOperation(() -> setEntity(orderService.addComment(id, comment)))) {
-				// TODO: Update order in model when Grid API will allow (BFF-361)
-			}
+			executeJPAOperation(() -> {
+				Order updated = orderService.addComment(id, comment);
+				getModel().setSelectedItem(updated);
+			});
 		}
 
+		// StorefrontItemDetailWrapper presenter methods
+		private void onOrderCardOpened(StorefrontItemDetailWrapper orderCard) {
+			getModel().setSelectedItem(orderCard.getOrder());
+			orderCard.setSelected(true);
+		}
+
+		private void onOrderCardClosed(StorefrontItemDetailWrapper orderCard) {
+			getModel().setSelectedItem(null);
+			orderCard.setSelected(false);
+		}
+
+		private void onOrderCardEdit(StorefrontItemDetailWrapper orderCard) {
+			onOrderCardClosed(orderCard);
+			edit(orderCard.getOrder().getId().toString());
+		}
+
+		private void onOrderCardAddComment(StorefrontItemDetailWrapper orderCard, String message) {
+			executeJPAOperation(() -> {
+				Order updated = orderService.addComment(orderCard.getOrder().getId(), message);
+				orderCard.setOrder(updated);
+				resizeGrid();
+			});
+		}
 	}
 
 }
