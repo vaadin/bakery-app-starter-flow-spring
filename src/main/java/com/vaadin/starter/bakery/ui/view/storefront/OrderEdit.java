@@ -4,7 +4,6 @@ import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.IntStream;
@@ -24,6 +23,7 @@ import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.User;
+import com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.starter.bakery.ui.utils.converters.LocalTimeConverter;
@@ -65,7 +65,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 	private H2 title;
 
 	@Id("order-edit-status")
-	private ComboBox<String> status;
+	private ComboBox<OrderState> status;
 
 	@Id("due-date")
 	private DatePicker date;
@@ -115,11 +115,9 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 		cancel.addClickListener(e -> fireEvent(new CancelEvent(this, false)));
 		review.addClickListener(e -> fireEvent(new ReviewEvent()));
 
-		ListDataProvider<String> stateProvider = DataProvider
-				.fromStream(Arrays.stream(OrderState.values()).map(orderStateConverter::toPresentation));
-		status.setDataProvider(stateProvider);
+		status.setDataProvider(DataProvider.ofItems(OrderState.values()));
 		status.addValueChangeListener(e -> {
-			getModel().setStatus(e.getValue());
+			getModel().setStatus(DataProviderUtil.toString(e.getValue()));
 			setHasChanges(true);
 		});
 
@@ -185,7 +183,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 		Query<String, String> locationQuery = new Query<>(0, 1, Collections.emptyList(), null,
 				pickupLocation.getValue());
 		locationProvider.findLocations(locationQuery).stream().findFirst().ifPresent(p -> order.setPickupLocation(p));
-		order.changeState(currentUser, orderStateConverter.toModel(status.getValue()));
+		order.changeState(currentUser, status.getValue());
 
 		binder.writeBean(order);
 	}

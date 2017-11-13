@@ -13,4 +13,13 @@ public class DataProviderUtil {
 		return source != null ? converter.apply(source) : nullValueSupplier.get();
 	}
 
+	/**
+	 *
+	 * @param object
+	 *            object to be transformed
+	 * @return {@link Object#toString()} if object is not null. NUll otherwise.
+	 */
+	public static String toString(Object object) {
+		return object != null ? object.toString() : null;
+	}
 }
