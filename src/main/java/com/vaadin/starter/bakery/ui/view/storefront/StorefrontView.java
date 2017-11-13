@@ -96,8 +96,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 			orderCard.setOrder(order);
 			orderCard.setDisplayHeader(ordersWithHeaders.containsKey(order.getId()));
 			orderCard.setHeader(ordersWithHeaders.get(order.getId()));
-			orderCard.addOpenedListener(e -> presenter.onOrderCardOpened(orderCard));
-			orderCard.addClosedListener(e -> presenter.onOrderCardClosed(orderCard));
+			orderCard.addExpandedListener(e -> presenter.onOrderCardExpanded(orderCard));
+			orderCard.addCollapsedListener(e -> presenter.onOrderCardCollapsed(orderCard));
 			orderCard.addEditListener(e -> presenter.onOrderCardEdit(orderCard));
 			orderCard.addCommentListener(e -> presenter.onOrderCardAddComment(orderCard, e.getMessage()));
 			return orderCard;
@@ -256,7 +256,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		}
 
 		// StorefrontItemDetailWrapper presenter methods
-		private void onOrderCardOpened(StorefrontItemDetailWrapper orderCard) {
+		private void onOrderCardExpanded(StorefrontItemDetailWrapper orderCard) {
 			if (isDesktopView()) {
 				orderCard.setSelected(true);
 				resizeGrid();
@@ -265,13 +265,13 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 			}
 		}
 
-		private void onOrderCardClosed(StorefrontItemDetailWrapper orderCard) {
+		private void onOrderCardCollapsed(StorefrontItemDetailWrapper orderCard) {
 			orderCard.setSelected(false);
 			resizeGrid();
 		}
 
 		private void onOrderCardEdit(StorefrontItemDetailWrapper orderCard) {
-			onOrderCardClosed(orderCard);
+			onOrderCardCollapsed(orderCard);
 			edit(orderCard.getOrder().getId().toString());
 		}
 

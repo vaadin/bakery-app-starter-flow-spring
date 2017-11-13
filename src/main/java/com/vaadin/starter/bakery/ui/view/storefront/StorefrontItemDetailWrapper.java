@@ -36,7 +36,7 @@ public class StorefrontItemDetailWrapper extends PolymerTemplate<StorefrontItemD
 
 	public StorefrontItemDetailWrapper() {
 		orderDetail.addCancelListener(
-				e -> this.fireEvent(new ClosedEvent(this, false)));
+				e -> this.fireEvent(new CollapsedEvent(this, false)));
 		getModel().setDisplayHeader(false);
 		setSelected(false);
 	}
@@ -67,26 +67,26 @@ public class StorefrontItemDetailWrapper extends PolymerTemplate<StorefrontItemD
 		getModel().setHeader(header);
 	}
 
-	@DomEvent("opened")
-	public static class OpenedEvent extends ComponentEvent<StorefrontItemDetailWrapper> {
-		public OpenedEvent(StorefrontItemDetailWrapper source, boolean fromClient) {
+	@DomEvent("expanded")
+	public static class ExpandedEvent extends ComponentEvent<StorefrontItemDetailWrapper> {
+		public ExpandedEvent(StorefrontItemDetailWrapper source, boolean fromClient) {
 			super(source, fromClient);
 		}
 	}
 
-	public Registration addOpenedListener(ComponentEventListener<OpenedEvent> listener) {
-		return addListener(OpenedEvent.class, listener);
+	public Registration addExpandedListener(ComponentEventListener<ExpandedEvent> listener) {
+		return addListener(ExpandedEvent.class, listener);
 	}
 
-	@DomEvent("closed")
-	public static class ClosedEvent extends ComponentEvent<StorefrontItemDetailWrapper> {
-		public ClosedEvent(StorefrontItemDetailWrapper source, boolean fromClient) {
+	@DomEvent("collapsed")
+	public static class CollapsedEvent extends ComponentEvent<StorefrontItemDetailWrapper> {
+		public CollapsedEvent(StorefrontItemDetailWrapper source, boolean fromClient) {
 			super(source, fromClient);
 		}
 	}
 
-	public Registration addClosedListener(ComponentEventListener<ClosedEvent> listener) {
-		return addListener(ClosedEvent.class, listener);
+	public Registration addCollapsedListener(ComponentEventListener<CollapsedEvent> listener) {
+		return addListener(CollapsedEvent.class, listener);
 	}
 
 	public Registration addEditListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {

@@ -77,8 +77,8 @@
       </template>
 
       <div id="wrapper">
-        <storefront-item id="storefront-item" hidden$="[[_showDetailsDesktop(selected, desktopView)]]" on-click="_open"></storefront-item>
-        <item-detail-inline opened="[[_showDetailsDesktop(selected, desktopView)]]" hidden$="[[!desktopView]]">
+        <storefront-item id="storefront-item" hidden$="[[_showDetailsDesktop(selected, desktopView)]]" on-click="_onClicked"></storefront-item>
+        <item-detail-inline opened="[[_showDetailsDesktop(selected, desktopView)]]" hidden$="[[!desktopView]]" on-closed="_onClosed">
           <order-detail id="order-detail" desktop-view="[[desktopView]]"></order-detail>
         </item-detail-inline>
       </div>
@@ -115,8 +115,16 @@
         return desktop ? 'm-text' : 's-text';
       }
 
-      _open(e) {
-        this.dispatchEvent(new CustomEvent('opened', {bubbles: true, composed: true}));
+      _onClicked() {
+        if (!this.selected) {
+          this.dispatchEvent(new CustomEvent('expanded', {bubbles: true, composed: true}));
+        }
+      }
+
+      _onClosed() {
+        if (this.selected) {
+          this.dispatchEvent(new CustomEvent('collapsed', {bubbles: true, composed: true}));
+        }
       }
 
       _showDetailsDesktop(selected, desktopView) {
