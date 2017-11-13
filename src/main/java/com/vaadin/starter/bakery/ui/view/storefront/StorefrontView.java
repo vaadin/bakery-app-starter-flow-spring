@@ -53,13 +53,13 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 @Route(value = BakeryConst.PAGE_STOREFRONT, layout = BakeryApp.class)
 @PageTitle(BakeryConst.TITLE_STOREFRONT)
 public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
-		implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
+implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 
 	public interface Model extends TemplateModel {
 		@Include({ "id", "dueDate.day", "dueDate.weekday", "dueDate.date", "dueTime", "state", "pickupLocation.name",
-				"customer.fullName", "customer.phoneNumber", "customer.details", "items.product.name", "items.comment",
-				"items.quantity", "items.product.price", "history.message", "history.createdBy.firstName",
-				"history.timestamp", "history.newState", "totalPrice" })
+			"customer.fullName", "customer.phoneNumber", "customer.details", "items.product.name", "items.comment",
+			"items.quantity", "items.product.price", "history.message", "history.createdBy.firstName",
+			"history.timestamp", "history.newState", "totalPrice" })
 		@Convert(value = LongToStringConverter.class, path = "id")
 		@Convert(value = StorefrontLocalDateConverter.class, path = "dueDate")
 		@Convert(value = LocalTimeConverter.class, path = "dueTime")
@@ -107,6 +107,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		searchBar.addActionClickListener(e -> edit(null));
 		orderDetail.addListener(SaveEvent.class, e -> presenter.save());
 		orderEdit.addListener(CancelEvent.class, e -> presenter.cancel());
+		orderDetail.addListener(CancelEvent.class, e -> presenter.cancel());
 		setOrders(ordersProvider.getOriginalOrdersList(), false);
 
 		getModel().setEditing(false);
