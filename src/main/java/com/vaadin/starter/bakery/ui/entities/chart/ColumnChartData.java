@@ -8,7 +8,6 @@ public class ColumnChartData {
 	private String seriesName;
 	private List<String> categories;
 	private List<Integer> values;
-	private Integer columnHighlighted;
 
 	public String getTitle() {
 		return title;
@@ -30,12 +29,11 @@ public class ColumnChartData {
 
 	}
 
-	public ColumnChartData(String title, String seriesName, List<Integer> values, List<String> categories, Integer columnHighlighted) {
+	public ColumnChartData(String title, String seriesName, List<Integer> values, List<String> categories) {
 		this.title = title;
 		this.seriesName = seriesName;
 		this.values = values;
 		this.categories = categories;
-		this.columnHighlighted = columnHighlighted;
 	}
 
 	@Override
@@ -57,13 +55,5 @@ public class ColumnChartData {
 
 	public void setSeriesName(String seriesName) {
 		this.seriesName = seriesName;
-	}
-
-	public Integer getColumnHighlighted() {
-		return columnHighlighted;
-	}
-
-	public void setColumnHighlighted(Integer columnHighlighted) {
-		this.columnHighlighted = columnHighlighted;
 	}
 }
