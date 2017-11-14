@@ -21,6 +21,7 @@ gulp.task('lint:js', function() {
 gulp.task('lint:html', function() {
   return gulp.src([
     '../src/main/webapp/*.html',
+    '!../src/main/webapp/flow-component-renderer.html',
     '../src/main/webapp/src/**/*.html',
     '../src/main/webapp/test/**/*.html'
   ])
@@ -36,6 +37,7 @@ gulp.task('lint:html', function() {
 gulp.task('lint:css', function() {
   return gulp.src([
     '../src/main/webapp/*.html',
+    '!../src/main/webapp/flow-component-renderer.html',
     '../src/main/webapp/src/**/*.html',
     '../src/main/webapp/test/**/*.html'
   ])

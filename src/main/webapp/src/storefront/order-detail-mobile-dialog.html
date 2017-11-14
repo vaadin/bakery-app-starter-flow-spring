@@ -3,7 +3,7 @@
 
 <dom-module id="order-detail-mobile-dialog">
   <template>
-    <item-detail-dialog opened="[[selectedItem]]">
+    <item-detail-dialog opened="[[_getOpened(selectedItem.id)]]">
       <order-detail item="[[selectedItem]]" desktop-view="false"></order-detail>
     </item-detail-dialog>
   </template>
@@ -18,6 +18,13 @@
         return {
           selectedItem: Object
         };
+      }
+
+      // The initial value of the 'selectedItem' property (set by Flow) is an object
+      // with all properties of an order, but null values. That's why a it's not enough
+      // to bind op
+      _getOpened(itemId) {
+        return !!itemId;
       }
     }
 

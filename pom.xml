@@ -20,7 +20,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Dependencies -->
-        <vaadin.version>10.0.0-alpha5</vaadin.version>
+        <vaadin.version>10.0-SNAPSHOT</vaadin.version>
 
         <spring-boot.version>1.5.4.RELEASE</spring-boot.version>
         <failOnMissingWebXml>false</failOnMissingWebXml>
@@ -126,6 +126,7 @@
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>flow-spring-addon</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
         <!-- End of Vaadin -->
         <!-- Spring -->
@@ -231,7 +232,7 @@
             </plugins>
         </pluginManagement>
         <plugins>
-            <!-- (1): Configures the cleanup process for JS dependencies 
+            <!-- (1): Configures the cleanup process for JS dependencies
                 and build -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -243,6 +244,12 @@
                         </fileset>
                         <fileset>
                             <directory>${frontend.directory}/bower_components</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>${frontend.directory}</directory>
+                            <includes>
+                                <include>flow-component-renderer.html</include>
+                            </includes>
                         </fileset>
                     </filesets>
                 </configuration>
@@ -305,6 +312,58 @@
 
             <build>
                 <plugins>
+                    <!-- unpack the flow-component-renderer.html component definition so that
+                         it can be included into the production frontend build -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <version>3.0.0</version>
+                        <executions>
+                            <execution>
+                                <id>unpack-flow-component-renderer-html</id>
+                                <phase>process-sources</phase>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>com.vaadin</groupId>
+                                            <artifactId>flow-server</artifactId>
+                                            <version>1.0-SNAPSHOT</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>
+                                            <includes>META-INF/resources/flow-component-renderer.html</includes>
+                                            <outputDirectory>${project.build.directory}</outputDirectory>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-flow-component-renderer-html</id>
+                                <phase>process-sources</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${frontend.directory}</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${project.build.directory}/META-INF/resources</directory>
+                                            <includes>flow-component-renderer.html</includes>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
                     <!-- (5): Copies the files compiled by polymer-build to a directory from where they can be
                               served when in production mode (root of the WAR) -->
                     <plugin>

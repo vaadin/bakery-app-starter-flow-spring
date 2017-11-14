@@ -59,7 +59,12 @@ public class OrderDetail extends PolymerTemplate<OrderDetail.Model> {
 
 	public OrderDetail() {
 		sendComment.addClickListener(e -> {
-			fireEvent(new CommentEvent(order.getId(), commentField.getValue()));
+			String message = commentField.getValue();
+			message = message == null ? "" : message.trim();
+			if (!message.isEmpty()) {
+				commentField.clear();
+				fireEvent(new CommentEvent(order.getId(), message));
+			}
 		});
 		save.addClickListener(e -> fireEvent(new SaveEvent(this, false)));
 		cancel.addClickListener(e -> fireEvent(new CancelEvent(this, false)));
