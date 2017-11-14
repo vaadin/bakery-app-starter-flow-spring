@@ -27,13 +27,43 @@
       stroke-width: 0;
     }
 
-    :host(.counter) .highcharts-background {
+    :host(.counter) .highcharts-background,
+    :host(.yearly-sales) .highcharts-background {
       fill: transparent;
     }
 
     :host(.counter) .highcharts-minor-grid-line,
     :host(.counter) .highcharts-grid-line {
       stroke: none;
+    }
+
+    :host(.yearly-sales) .highcharts-title {
+      fill: rgba(42, 71, 110, 0.6);
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    :host(.yearly-sales) .highcharts-color-0 {
+      stroke: #18ddf2;
+      fill: #18ddf2;
+    }
+
+    :host(.yearly-sales) .highcharts-color-1 {
+      stroke: #1877f3;
+      fill: #1877f3;
+    }
+
+    :host(.yearly-sales) .highcharts-color-2 {
+      stroke: #1bca66;
+      fill: #1bca66;
+    }
+
+    :host(.yearly-sales) .highcharts-grid-line {
+      stroke: rgba(23, 68, 128, 0.1);
+    }
+
+    :host(.yearly-sales) .highcharts-area {
+      fill-opacity: 0.1;
     }
 
     :host(.product-split-donut) .highcharts-title {

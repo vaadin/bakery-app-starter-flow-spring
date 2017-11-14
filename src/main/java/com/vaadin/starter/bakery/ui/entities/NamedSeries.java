@@ -3,16 +3,16 @@ package com.vaadin.starter.bakery.ui.entities;
 import java.util.List;
 
 public class NamedSeries {
-    private List<String> series;
+    private List<Double> series;
     private String title;
 
     public NamedSeries() {}
 
-    public List<String> getSeries() {
+    public List<Double> getSeries() {
         return series;
     }
 
-    public void setSeries(List<String> series) {
+    public void setSeries(List<Double> series) {
         this.series = series;
     }
 
