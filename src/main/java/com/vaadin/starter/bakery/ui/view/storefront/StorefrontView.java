@@ -199,7 +199,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 			});
 
 			orderDetail.addListener(SaveEvent.class, e -> save());
-			orderDetail.addCancelListener(e -> closeDialog());
+			orderDetail.addCancelListener(e -> cancel());
 			orderDetail.addBackListener(e -> showOrderEdit());
 			orderDetail.addEditListener(e -> {
 				orderEdit.read(getEntity());
