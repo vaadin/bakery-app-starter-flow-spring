@@ -134,7 +134,8 @@
       }
 
       _onStatusChange() {
-        this.$['order-edit-status'].$.input.setAttribute('status', this.status);
+        const status = this.status ? this.status.toLowerCase() : this.status;
+        this.$['order-edit-status'].$.input.setAttribute('status', status);
       }
 
       _computeResponsiveSteps(desktopView, desktopColumns, mobileColumns) {
