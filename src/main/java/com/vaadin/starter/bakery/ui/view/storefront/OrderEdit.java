@@ -125,8 +125,8 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 		ListDataProvider<String> timeDataProvider = DataProvider.fromStream(
 				IntStream.rangeClosed(8, 16).mapToObj(i -> localTimeConverter.toPresentation(LocalTime.of(i, 0))));
 		time.setDataProvider(timeDataProvider);
-		time.addValueChangeListener(e -> setHasChanges(true));
 
+		binder.forField(time).withConverter(localTimeConverter).bind("dueTime");
 		pickupLocation.setDataProvider(locationProvider);
 		pickupLocation.addValueChangeListener(e -> setHasChanges(true));
 		pickupLocation.setRequired(true);
@@ -173,7 +173,6 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 	}
 
 	public void write(Order order) throws ValidationException {
-		order.setDueTime(localTimeConverter.toModel(time.getValue()));
 		Query<String, String> locationQuery = new Query<>(0, 1, Collections.emptyList(), null,
 				pickupLocation.getValue());
 		locationProvider.findLocations(locationQuery).stream().findFirst().ifPresent(p -> order.setPickupLocation(p));
@@ -185,7 +184,6 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 	public void read(Order order) {
 		binder.readBean(order);
 		title.setText(String.format("%s Order", order.isNew() ? "New" : "Edit"));
-		getModel().setTime(localTimeConverter.toPresentation(order.getDueTime()));
 
 		if (order.getState() != null) {
 			String status = orderStateConverter.toPresentation(order.getState());
