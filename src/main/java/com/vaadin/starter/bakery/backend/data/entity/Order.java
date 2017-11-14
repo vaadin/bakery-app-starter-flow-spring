@@ -10,6 +10,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
@@ -37,7 +38,7 @@ public class Order extends AbstractEntity {
 	@NotNull
 	private LocalTime dueTime;
 	@NotNull
-	@OneToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@Fetch(FetchMode.JOIN)
 	private PickupLocation pickupLocation;
 	@NotNull
