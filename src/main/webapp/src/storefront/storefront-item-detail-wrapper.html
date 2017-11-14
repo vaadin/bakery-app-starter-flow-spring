@@ -1,4 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="storefront-item.html">
 <link rel="import" href="order-detail.html">
 <link rel="import" href="../elements/item-detail-inline.html">
@@ -8,10 +9,16 @@
     <style include="shared-styles">
       :host {
         display: block;
-        width: 100%;
       }
 
-      :host([selected]) {
+      .content {
+        display: block;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      [selected].content {
         padding: 0;
       }
 
@@ -38,14 +45,15 @@
       }
 
       @media (min-width: 600px) {
+        .content {
+          max-width: calc(964px + var(--valo-space-m)) !important; /* Allow selected order to be 16px wider */
+          padding: 0 var(--valo-space-s);
+        }
+
         #wrapper {
           margin: 0 0 var(--valo-space-s);
           border-radius: var(--valo-border-radius);
           border-bottom: none;
-        }
-
-        :host {
-          padding: 0 var(--valo-space-s);
         }
 
         .group-heading {
@@ -58,23 +66,25 @@
       }
     </style>
 
-    <template is="dom-if" if="[[displayHeader]]">
-      <div class="group-heading" opened$="[[_showDetailsDesktop(selected, desktopView)]]">
-        <span class="main" theme$="[[_getMainFontSize(desktopView)]]">[[header.main]]</span>
-        <span class="secondary" theme$="[[_getSecondaryFontSize(desktopView)]]">[[header.secondary]]</span>
-      </div>
-    </template>
+    <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
 
-    <div id="wrapper">
-      <template is="dom-if" if="[[!_showDetailsDesktop(selected, desktopView)]]">
-        <storefront-item item="[[order]]" on-click="_open"></storefront-item>
+    <div class="content" selected$="[[selected]]">
+      <template is="dom-if" if="[[displayHeader]]">
+        <div class="group-heading" opened$="[[_showDetailsDesktop(selected, desktopView)]]">
+          <span class="main" theme$="[[_getMainFontSize(desktopView)]]">[[header.main]]</span>
+          <span class="secondary" theme$="[[_getSecondaryFontSize(desktopView)]]">[[header.secondary]]</span>
+        </div>
       </template>
 
-      <template is="dom-if" if="[[desktopView]]" restamp>
-        <item-detail-inline opened="[[_showDetailsDesktop(selected, desktopView)]]">
+      <div id="wrapper">
+        <template is="dom-if" if="[[!_showDetailsDesktop(selected, desktopView)]]">
+          <storefront-item item="[[order]]" on-click="_open"></storefront-item>
+        </template>
+
+        <item-detail-inline opened="[[_showDetailsDesktop(selected, desktopView)]]" hidden$="[[!desktopView]]">
           <order-detail item="[[order]]" desktop-view="[[desktopView]]"></order-detail>
         </item-detail-inline>
-      </template>
+      </div>
     </div>
 
   </template>
@@ -92,12 +102,13 @@
           },
           selected: {
             type: Boolean,
-            value: false,
-            reflectToAttribute: true
+            value: false
           },
           desktopView: {
             type: Boolean
-          }
+          },
+          displayHeader: Boolean,
+          header: Object
         };
       }
 

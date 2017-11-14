@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.vaadin.starter.bakery.ui.entities.StorefrontItemHeader;
+import com.vaadin.ui.grid.Grid;
+import com.vaadin.ui.renderers.ComponentRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -68,15 +71,16 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		@Convert(value = LocalDateTimeConverter.class, path = "history.timestamp")
 		@Convert(value = OrderStateConverter.class, path = "history.newState")
 		@Convert(value = CurrencyFormatter.class, path = "totalPrice")
-		void setOrders(List<Order> orders);
-
-		List<Order> getOrders();
+		void setSelectedItem(Order order);
 
 		void setEditing(boolean editing);
 	}
 
 	@Id("search")
 	private BakerySearch searchBar;
+
+	private final Grid<Order> grid;
+	private Map<Long, StorefrontItemHeader> ordersWithHeaders;
 
 	private final ViewSelector viewSelector = new ViewSelector();
 	private final OrderEdit orderEdit;
@@ -107,8 +111,35 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		searchBar.addActionClickListener(e -> edit(null));
 		orderDetail.addListener(SaveEvent.class, e -> presenter.save());
 		orderEdit.addListener(CancelEvent.class, e -> presenter.cancel());
-		setOrders(ordersProvider.getOriginalOrdersList(), false);
 
+		grid = new Grid<>();
+		grid.getElement().setAttribute("theme", "storefront-grid");
+		grid.setSelectionMode(Grid.SelectionMode.NONE);
+		grid.addColumn("Order", new ComponentRenderer<>(order -> {
+			StorefrontItemDetailWrapper orderCard = new StorefrontItemDetailWrapper();
+			orderCard.setOrder(order);
+			orderCard.setDisplayHeader(ordersWithHeaders.containsKey(order.getId()));
+			orderCard.setHeader(ordersWithHeaders.get(order.getId()));
+			orderCard.addOpenedListener(e -> {
+				orderCard.setSelected(true);
+				getModel().setSelectedItem(order);
+			});
+			orderCard.addClosedListener(e -> {
+				orderCard.setSelected(false);
+				getModel().setSelectedItem(null);
+			});
+			orderCard.addEditListener(e -> {
+				edit(order.getId().toString());
+			});
+			orderCard.addCommentAddedListener(e -> {
+				addComment(e.getOrderId(), e.getMessage());
+				StorefrontView.this.getElement().callFunction("_notifyResize");
+			});
+			return orderCard;
+		}));
+		addToSlot(this, grid, "grid");
+
+		presenter.filterChanged("", false);
 		getModel().setEditing(false);
 	}
 
@@ -129,6 +160,11 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		presenter.createNew();
 	}
 
+	@ClientDelegate
+	private void unselectOrder() {
+		getModel().setSelectedItem(null);
+	}
+
 	@Override
 	public void setParameter(BeforeNavigationEvent event, @OptionalParameter Long orderId) {
 		if (orderId != null) {
@@ -138,8 +174,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	}
 
 	private void setOrders(List<Order> orders, boolean showPrevious) {
-		getModel().setOrders(orders);
-		getElement().setPropertyJson("displayedHeaders", computeEntriesWithHeader(orders, showPrevious));
+		ordersWithHeaders = computeEntriesWithHeader(orders, showPrevious);
+		grid.setItems(orders);
 	}
 
 	private void selectComponent(Component component) {
@@ -217,9 +253,9 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		}
 
 		void filterChanged(String filter, boolean showPrevious) {
-			// the hardcoded limit of 200 is here until lazy loading is implemented (see
+			// the hardcoded limit of 15 is here until lazy loading is implemented (see
 			// BFF-120)
-			PageRequest pr = new PageRequest(0, 200, Direction.ASC, "dueDate", "dueTime", "id");
+			PageRequest pr = new PageRequest(0, 15, Direction.ASC, "dueDate", "dueTime", "id");
 			setOrders(ordersProvider.getOrdersList(filter, showPrevious, pr).getOrders(), showPrevious);
 		}
 
