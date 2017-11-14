@@ -37,7 +37,19 @@
       stroke: none;
     }
 
-    :host(.yearly-sales) .highcharts-title {
+    :host(.column-chart) .highcharts-point.highcharts-color-0 {
+      stroke: rgba(34, 70, 117, 0.5);
+      fill: rgba(34, 70, 117, 0.5);
+    }
+
+    :host(.column-chart) .highcharts-xaxis .highcharts-axis-line {
+      stroke: none;
+      fill: none;
+    }
+
+    :host(.column-chart) .highcharts-title,
+    :host(.yearly-sales) .highcharts-title,
+    :host(.product-split-donut) .highcharts-title {
       fill: rgba(42, 71, 110, 0.6);
       font-size: 16px;
       font-weight: bold;
@@ -66,12 +78,6 @@
       fill-opacity: 0.1;
     }
 
-    :host(.product-split-donut) .highcharts-title {
-      fill: rgba(42, 71, 110, 0.6);
-      font-size: 16px;
-      font-weight: bold;
-    }
-
     :host(.product-split-donut) .highcharts-data-label text {
       font-size: 12px;
       font-weight: bold;
@@ -82,7 +88,6 @@
     :host(.product-split-donut) .highcharts-axis-line {
       stroke: none;
     }
-
     </style>
   </template>
 </dom-module>
@@ -105,13 +110,6 @@
           box-shadow: 0 2px 5px 0 rgba(23, 68, 128, 0.1);
           height: calc(40vh - 64px) !important;
           min-height: 355px;
-        }
-      }
-
-      vaadin-board vaadin-board-row:nth-child(2) > * {
-        --column-chart-height: {
-          height: calc(20vh - 64px) !important;
-          min-height: 150px;
         }
       }
 

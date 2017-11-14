@@ -124,12 +124,12 @@ public class DashboardUtils {
 
 	public static ColumnChartData getDeliveriesThisYearChartData(List<Number> deliveriesThisYear) {
 		return new ColumnChartData(getDeliveriesThisYearTitle(), "per Month",
-				convertNumbersToIntegers(deliveriesThisYear), getDeliveriesThisYearCategories(), MonthDay.now().getMonthValue() - 1);
+				convertNumbersToIntegers(deliveriesThisYear), getDeliveriesThisYearCategories());
 	}
 
 	public static ColumnChartData getDeliveriesThisMonthChartData(List<Number> deliveriesThisMonth) {
 		return new ColumnChartData(getDeliveriesThisMonthTitle(), "per Day",
-				convertNumbersToIntegers(deliveriesThisMonth), getDeliveriesThisMonthCategories(deliveriesThisMonth), MonthDay.now().getDayOfMonth() - 1);
+				convertNumbersToIntegers(deliveriesThisMonth), getDeliveriesThisMonthCategories(deliveriesThisMonth));
 	}
 
 	public static ProductDeliveriesChartData getDeliveriesPerProductPieChartData(

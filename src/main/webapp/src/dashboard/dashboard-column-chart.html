@@ -1,9 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/vaadin-charts/data-series.html">
-<link rel="import" href="../../bower_components/vaadin-charts/vaadin-column-chart.html">
+<link rel="import" href="../../bower_components/vaadin-charts/vaadin-chart.html">
 
 <dom-module id="dashboard-column-chart">
-
 	<template>
 		<style>
 
@@ -11,49 +9,15 @@
 				box-shadow: 0 2px 5px 0 rgba(23, 68, 128, 0.1);
 				border-radius: 4px;
 				@apply --margin-style;
-				@apply --column-chart-height;
+				height: calc(20vh - 64px) !important;
+				min-height: 150px;
 			}
 
 		</style>
 		<div class="wrapper">
-			<vaadin-column-chart>
-				<chart border-radius="4" background-color="rgb(255, 255, 255)"></chart>
-				<chart-title>
-					<chart-style>
-						<color>rgba(42, 71, 110, 0.6)</color>
-						<font-size>16px</font-size>
-						<font-weight>bold</font-weight>
-					</chart-style>
-					<text>[[data.title]]</text>
-				</chart-title>
-				<x-axis tick-interval="1">
-					<categories>[[data.categories]]</categories>
-				</x-axis>
-				<y-axis>
-					<chart-title enabled="false"></chart-title>
-				</y-axis>
-				<legend enabled="false"></legend>
-				<data-series>
-					<name>[[data.seriesName]]</name>
-					<color-by-point>false</color-by-point>
-					<data>
-						<template is="dom-repeat" items="[[data.values]]">
-							<point>
-								<template is="dom-if" if="[[_shouldBeHighlighted(index)]]">
-									<color>rgba(24, 119, 242, 0.5)</color>
-								</template>
-								<template is="dom-if" if="[[!_shouldBeHighlighted(index)]]">
-									<color>rgba(34, 70, 117, 0.5)</color>
-								</template>
-								<y>[[item]]</y>
-							</point>
-						</template>
-					</data>
-				</data-series>
-				<exporting>
-					<enabled>false</enabled>
-				</exporting>
-			</vaadin-column-chart>
+			<vaadin-chart id="columnchart" class="column-chart" title="[[data.title]]">
+					<vaadin-chart-series values="[[data.values]]"></vaadin-chart-series>
+			</vaadin-chart>
 		</div>
 	</template>
 
@@ -63,9 +27,51 @@
         return 'dashboard-column-chart';
       }
 
-      _shouldBeHighlighted(index) {
-        return index === this.data.columnHighlighted;
-      }
+			static get observers() {
+				return [
+					'_onCategoriesChanged(data.categories)'
+				];
+			}
+
+			connectedCallback() {
+				super.connectedCallback();
+				this.$.columnchart.update({
+		      chart: {
+		        borderRadius: 4,
+		        type: 'column'
+		      },
+		      xAxis: {
+		        tickInterval: 1,
+						minorTickLength: 0,
+						tickLength: 0
+		      },
+		      yAxis: {
+		        title: {
+		          enabled: false
+		        }
+		      },
+		      exporting: {
+		        enabled: false
+		      },
+		      legend: {
+		        enabled: false
+		      },
+		      series: [{
+		        colorByPoint: false,
+		        colorIndex: 1
+		      }],
+					plotOptions: {
+						pointWidth: 20
+					}
+		    });
+			}
+			_onCategoriesChanged(categories) {
+				this.$.columnchart.update({
+					xAxis: {
+						categories: categories
+					}
+				});
+			}
     }
 
     window.customElements.define(DashboardColumnChart.is, DashboardColumnChart);
