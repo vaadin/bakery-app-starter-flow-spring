@@ -3,7 +3,6 @@ package com.vaadin.starter.bakery.ui.view;
 import com.vaadin.starter.bakery.elements.GridElement;
 import com.vaadin.starter.bakery.ui.components.storefront.OrderEditElement;
 import com.vaadin.starter.bakery.ui.components.storefront.StoreFrontItemDetailWrapperElement;
-import com.vaadin.starter.bakery.ui.components.storefront.ViewSelectorElement;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elementsbase.Element;
 
@@ -22,11 +21,7 @@ public class StoreFrontViewElement extends TestBenchElement implements HasApp, H
 		return getGrid().$(StoreFrontItemDetailWrapperElement.class).all().get(0);
 	}
 
-	private ViewSelectorElement getOrderDialog() {
-		return $(ViewSelectorElement.class).first();
-	}
-
 	public OrderEditElement getOrderEdit() {
-		return getOrderDialog().$(OrderEditElement.class).waitForFirst();
+		return $(OrderEditElement.class).waitForFirst();
 	}
 }
