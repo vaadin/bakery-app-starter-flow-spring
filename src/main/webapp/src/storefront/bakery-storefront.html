@@ -20,7 +20,6 @@ Added dynamically
 <link rel="import" href="../../flow-component-renderer.html">
 
 <link rel="import" href="storefront-item-detail-wrapper.html">
-<link rel="import" href="../elements/viewselector/view-selector.html">
 <link rel="import" href="order-edit.html">
 <link rel="import" href="order-detail.html">
 
@@ -73,8 +72,9 @@ Added dynamically
     <div class="grid-wrapper">
       <slot name="grid"></slot>
 
-      <item-detail-dialog desktop-view$=[[desktopView]] opened=[[editing]]>
-        <slot name="view-selector-slot" on-slotchange="_updateViewSelectorSlot"></slot>
+      <item-detail-dialog desktop-view$="[[desktopView]]" opened="[[editing]]">
+        <order-detail id="order-detail" desktop-view="[[desktopView]]"></order-detail>
+        <order-edit id="order-edit" desktop-view="[[desktopView]]"></order-edit>
       </item-detail-dialog>
     </div>
   </template>
@@ -89,8 +89,7 @@ Added dynamically
         return {
           desktopView: {
             type: Boolean,
-            notify: true,
-            observer: '_updateDesktopViewOnViewSelectorChildren'
+            notify: true
           },
           editing: {
             type: Boolean
@@ -105,18 +104,6 @@ Added dynamically
 
       _enableTouchScrolling(editing) {
         return !editing;
-      }
-
-      _updateViewSelectorSlot() {
-        this.$.viewSelector = this.querySelector('view-selector');
-        this.$.viewSelector.addEventListener('children-list-changed', this._updateDesktopViewOnViewSelectorChildren.bind(this));
-        this._updateDesktopViewOnViewSelectorChildren();
-      }
-
-      _updateDesktopViewOnViewSelectorChildren() {
-        if (this.$.viewSelector) {
-          this.$.viewSelector.forEachChild(child => child.desktopView = this.desktopView);
-        }
       }
     }
 
