@@ -5,8 +5,6 @@ import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.function.Consumer;
@@ -17,17 +15,15 @@ import java.util.stream.IntStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 
-import com.google.gwt.aria.client.State;
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.provider.DataProvider;
-import com.vaadin.data.provider.ListDataProvider;
-import com.vaadin.data.provider.Query;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
+import com.vaadin.starter.bakery.backend.data.entity.PickupLocation;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil;
@@ -38,8 +34,8 @@ import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
 import com.vaadin.ui.combobox.ComboBox;
-import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.common.HasValue.ValueChangeListener;
+import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.datepicker.DatePicker;
 import com.vaadin.ui.event.ComponentEvent;
 import com.vaadin.ui.event.ComponentEventListener;
@@ -82,7 +78,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 	private ComboBox<LocalTime> time;
 
 	@Id("pickup-location")
-	private ComboBox<String> pickupLocation;
+	private ComboBox<PickupLocation> pickupLocation;
 
 	@Id("customer-name")
 	private TextField customerName;
@@ -109,13 +105,10 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 
 	private final OrderStateConverter orderStateConverter = new OrderStateConverter();
 
-	private final PickupLocationDataProvider locationProvider;
-
 	private boolean hasChanges = false;
 
 	@Autowired
 	public OrderEdit(PickupLocationDataProvider locationProvider) {
-		this.locationProvider = locationProvider;
 		addToSlot(this, items, "order-items-edit");
 
 		cancel.addClickListener(e -> fireEvent(new CancelEvent(this, false)));
@@ -136,7 +129,8 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 		time.addValueChangeListener(createValueChangeListener(getModel()::setTime, localTimeConverter::toPresentation));
 
 		pickupLocation.setDataProvider(locationProvider);
-		pickupLocation.addValueChangeListener(e -> setHasChanges(true));
+		pickupLocation.addValueChangeListener(
+				createValueChangeListener(getModel()::setPickupLocation, DataProviderUtil::toString));
 		pickupLocation.setRequired(true);
 
 		customerName.setRequired(true);
@@ -194,9 +188,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 
 	public void write(Order order) throws ValidationException {
 		order.setDueTime(time.getValue());
-		Query<String, String> locationQuery = new Query<>(0, 1, Collections.emptyList(), null,
-				pickupLocation.getValue());
-		locationProvider.findLocations(locationQuery).stream().findFirst().ifPresent(p -> order.setPickupLocation(p));
+		order.setPickupLocation(pickupLocation.getValue());
 		order.changeState(currentUser, status.getValue());
 
 		binder.writeBean(order);
