@@ -93,8 +93,6 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 
 	private OrderItemsEdit items = new OrderItemsEdit();
 
-	private boolean initialHasChanges;
-
 	private User currentUser;
 
 	private BeanValidationBinder<Order> binder = new BeanValidationBinder<>(Order.class);
@@ -118,8 +116,8 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 		status.setDataProvider(DataProvider.ofItems(OrderState.values()));
 		status.addValueChangeListener(e -> {
 			getModel().setStatus(DataProviderUtil.toString(e.getValue()));
-			setHasChanges(true);
 		});
+		binder.forField(status).bind("state");
 
 		date.setValue(LocalDate.now());
 		binder.forField(date).bind("dueDate");
@@ -148,17 +146,13 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 		binder.addValueChangeListener(e -> review.setDisabled(!hasChanges()));
 	}
 
-	public void setInitialHasChanges(boolean initialHasChanges) {
-		this.initialHasChanges = initialHasChanges;
-	}
-
 	private void setHasChanges(boolean hasChanges) {
 		this.hasChanges = hasChanges;
 		review.setDisabled(!hasChanges());
 	}
 
 	public boolean hasChanges() {
-		return initialHasChanges || binder.hasChanges() || items.hasChanges() || hasChanges;
+		return binder.hasChanges() || items.hasChanges() || hasChanges;
 	}
 
 	private void updateDesktopViewOnItemsEdit() {
@@ -190,7 +184,6 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 
 	public void read(Order order) {
 		binder.readBean(order);
-		initialHasChanges = false;
 		title.setText(String.format("%s Order", order.isNew() ? "New" : "Edit"));
 		getModel().setTime(localTimeConverter.toPresentation(order.getDueTime()));
 
