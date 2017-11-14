@@ -25,25 +25,14 @@
     "paper-menu-button": "^2.0.0",
     "paper-toast": "^2.0.0",
     "web-animations-js": "^2.2.5",
-    "vaadin": "vaadin/vaadin#2.0.0-alpha1",
-    "vaadin-checkbox": "vaadin/vaadin-checkbox#1.0.0",
-    "vaadin-combo-box": "vaadin/vaadin-combo-box#3.0.0",
-    "vaadin-date-picker": "vaadin/vaadin-date-picker#2.0.6",
-    "vaadin-grid": "vaadin/vaadin-grid#4.0.0-alpha5",
-    "vaadin-text-field": "vaadin/vaadin-text-field#1.1.0",
-    "vaadin-valo-theme": "vaadin/vaadin-valo-theme#2.0.0-alpha3"
+    "vaadin": "vaadin/vaadin#10.0.0-alpha5",
+    "vaadin-grid": "vaadin/vaadin-grid#4.1.0-alpha3"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0"
   },
   "private": true,
   "resolutions": {
-    "iron-ajax": "^2.0.0",
-    "vaadin-checkbox": "1.0.0",
-    "vaadin-text-field": "1.1.0",
-    "vaadin-date-picker": "2.0.6",
-    "vaadin-valo-theme": "2.0.0-alpha3",
-    "vaadin-combo-box": "3.0.0",
-    "vaadin-grid": "4.0.0-alpha5"
+    "vaadin-grid": "4.1.0-alpha3"
   }
 }
