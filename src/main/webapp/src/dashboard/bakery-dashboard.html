@@ -47,7 +47,7 @@
         };
       }
 
-      .grid-wrapper ::slotted([slot="grid"]) {
+      #orders-grid {
         height: 100%;
         @apply --margin-style;
         @apply --fourth-row-style;
@@ -72,7 +72,7 @@
       <vaadin-board-row>
         <dashboard-pie-chart data="[[productDeliveriesThisMonth]]"></dashboard-pie-chart>
         <div class="grid-wrapper">
-          <slot name="grid"></slot>
+          <vaadin-grid id="orders-grid" theme="no-header"></vaadin-grid>
         </div>
       </vaadin-board-row>
     </vaadin-board>

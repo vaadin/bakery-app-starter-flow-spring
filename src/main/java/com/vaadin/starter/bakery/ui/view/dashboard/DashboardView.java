@@ -17,6 +17,7 @@ import com.vaadin.ui.Tag;
 import com.vaadin.ui.event.AttachEvent;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.grid.Grid;
+import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import com.vaadin.ui.renderers.ComponentRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,21 +47,19 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 
 	private final OrdersDataProvider ordersProvider;
 
-	private Grid<Order> grid = new Grid<>();
+	@Id("orders-grid")
+	private Grid<Order> grid;
 
 	@Autowired
 	public DashboardView(OrdersDataProvider ordersProvider) {
 		this.ordersProvider = ordersProvider;
 
-		grid.getElement().setAttribute("theme", "no-header");
 		grid.addColumn("Order", new ComponentRenderer<>(order -> {
 			StorefrontItem item = new StorefrontItem();
 			item.setOrder(order);
 			return item;
 		}));
 		grid.addSelectionListener(this::onOrdersGridSelectionChanged);
-
-		addToSlot(this, grid, "grid");
 	}
 
 	@Override
