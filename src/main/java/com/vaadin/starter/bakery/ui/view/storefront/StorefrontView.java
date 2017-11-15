@@ -89,7 +89,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		searchBar.setCheckboxText("Show past orders");
 		searchBar.setPlaceHolder("Search");
 
-		grid.getElement().setAttribute("theme", "storefront-grid");
+		grid.getElement().setAttribute("theme", "no-header storefront-grid");
 		grid.setSelectionMode(Grid.SelectionMode.NONE);
 		grid.addColumn("Order", new ComponentRenderer<>(order -> {
 			StorefrontItemDetailWrapper orderCard = new StorefrontItemDetailWrapper();
