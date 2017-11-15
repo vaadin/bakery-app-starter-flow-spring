@@ -77,6 +77,10 @@
         flex: 1;
         justify-content: center;
         height: 100%;
+
+        /* 964px is the width of the storefront grid */
+        max-width: 964px;
+        margin-right: auto;
       }
 
       @media (min-width: 600px) {
@@ -103,7 +107,14 @@
         }
       }
 
-      @media (min-width: 920px) {
+      @media (min-width: 981px) {
+        .branding {
+          flex: 1;
+
+          /* 964px is the width of the storefront grid */
+          max-width: calc((100% - 964px - var(--valo-space-m)) / 2);
+        }
+
         .navigation-label {
           padding: 0 var(--valo-space-l);
         }
