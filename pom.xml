@@ -461,7 +461,7 @@
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <configuration>
-                            <jvmArguments>-Dvaadin.frontend.url.dev=context:// -Dvaadin.polyfillBase=frontend://bower_components/webcomponentsjs/</jvmArguments>
+                            <jvmArguments>-Dvaadin.frontend.url.dev=context://</jvmArguments>
                         </configuration>
                     </plugin>
                 </plugins>

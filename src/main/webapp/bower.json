@@ -25,6 +25,8 @@
   },
   "private": true,
   "resolutions": {
-    "vaadin-grid": "4.1.0-alpha3"
+    "vaadin-grid": "4.1.0-alpha3",
+    "vaadin-charts": "6.0.0-alpha2",
+    "highcharts": "^5.0.0"
   }
 }
