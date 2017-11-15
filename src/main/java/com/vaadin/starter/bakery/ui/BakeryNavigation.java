@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.vaadin.flow.model.TemplateModel;
+import com.vaadin.router.event.AfterNavigationEvent;
+import com.vaadin.router.event.AfterNavigationObserver;
 import com.vaadin.starter.bakery.app.security.SecurityUtils;
 import com.vaadin.starter.bakery.ui.entities.PageInfo;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
@@ -13,28 +15,34 @@ import com.vaadin.ui.Tag;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.common.ClientDelegate;
 import com.vaadin.ui.common.HtmlImport;
+import com.vaadin.ui.event.AttachEvent;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 @Tag("bakery-navigation")
 @HtmlImport("src/app/bakery-navigation.html")
-public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> {
+public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> implements AfterNavigationObserver {
 
 	private static final String ICON_STOREFRONT = "edit";
 	private static final String ICON_DASHBOARD = "clock";
 	private static final String ICON_USERS = "user";
 	private static final String ICON_PRODUCTS = "calendar";
 
-	private boolean pagesAdded;
-
 	public interface Model extends TemplateModel {
+		void setPage(String page);
 		void setPages(List<PageInfo> pages);
 	}
 
-	public void updateNavigationBar() {
-		if (!pagesAdded && SecurityUtils.isUserLoggedIn()) {
+	@Override
+	protected void onAttach(AttachEvent attachEvent) {
+		super.onAttach(attachEvent);
+		if (SecurityUtils.isUserLoggedIn()) {
 			setupNavigationButtons();
-			pagesAdded = true;
 		}
+	}
+
+	@Override
+	public void afterNavigation(AfterNavigationEvent event) {
+		getModel().setPage(event.getLocation().getFirstSegment());
 	}
 
 	private void setupNavigationButtons() {

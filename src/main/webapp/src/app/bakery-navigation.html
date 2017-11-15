@@ -163,8 +163,11 @@
 
       static get properties() {
         return {
-          page: {
-            type: String
+          page: String, // server-side
+          pages: Array, // server-side
+          _desktopView: {
+            type: Boolean,
+            value: true
           }
         };
       }

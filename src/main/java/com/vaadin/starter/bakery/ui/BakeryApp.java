@@ -9,19 +9,11 @@ import com.vaadin.starter.bakery.ui.exceptions.AccessDeniedException;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HtmlImport;
-import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 @Tag("bakery-app")
 @HtmlImport("src/app/bakery-app.html")
-public class BakeryApp extends PolymerTemplate<BakeryApp.Model> implements RouterLayout, BeforeNavigationObserver {
-
-	@Id("navigation")
-	private BakeryNavigation navigation;
-
-	public interface Model extends TemplateModel {
-		void setPage(String page);
-	}
+public class BakeryApp extends PolymerTemplate<TemplateModel> implements RouterLayout, BeforeNavigationObserver {
 
 	@Override
 	public void beforeNavigation(BeforeNavigationEvent event) {
@@ -29,12 +21,8 @@ public class BakeryApp extends PolymerTemplate<BakeryApp.Model> implements Route
 			event.rerouteToError(AccessDeniedException.class);
 			return;
 		}
-		String path = event.getLocation().getFirstSegment();
-		if (path.isEmpty()) {
+		if (event.getLocation().getFirstSegment().isEmpty()) {
 			event.rerouteTo(BakeryConst.PAGE_DEFAULT);
-		} else {
-			getModel().setPage(path);
 		}
-		navigation.updateNavigationBar();
 	}
 }
