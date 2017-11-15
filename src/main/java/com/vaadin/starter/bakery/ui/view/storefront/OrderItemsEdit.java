@@ -1,6 +1,5 @@
 package com.vaadin.starter.bakery.ui.view.storefront;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,11 +21,15 @@ public class OrderItemsEdit extends Div implements HasValue<OrderItemsEdit, List
 
 	private List<Registration> registrations = new LinkedList<>();
 
-	private ProductSource productSource;
+	private ProductDataProvider productDataProvider;
 
 	private int totalPrice = 0;
 
 	private boolean hasChanges = false;
+
+	public OrderItemsEdit(ProductDataProvider productDataProvider) {
+		this.productDataProvider = productDataProvider;
+	}
 
 	public void reset() {
 		registrations.forEach(Registration::remove);
@@ -37,10 +40,6 @@ public class OrderItemsEdit extends Div implements HasValue<OrderItemsEdit, List
 		getElement().removeAllChildren();
 		this.totalPrice = 0;
 		this.hasChanges = false;
-	}
-
-	void setProducts(Collection<Product> products) {
-		this.productSource = new ProductSource(products);
 	}
 
 	@Override
@@ -57,7 +56,7 @@ public class OrderItemsEdit extends Div implements HasValue<OrderItemsEdit, List
 	}
 
 	private OrderItemEdit createEditor(OrderItem value) {
-		OrderItemEdit editor = new OrderItemEdit(productSource);
+		OrderItemEdit editor = new OrderItemEdit(productDataProvider);
 		editors.add(editor);
 		getElement().appendChild(editor.getElement());
 		Registration priceChangeRegistration = addRegistration(editor

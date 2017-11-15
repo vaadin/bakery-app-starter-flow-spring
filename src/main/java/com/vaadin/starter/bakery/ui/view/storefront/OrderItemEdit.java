@@ -6,6 +6,7 @@ import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
+import com.vaadin.starter.bakery.ui.view.workaround.ComboboxBinderWrapper;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
 import com.vaadin.ui.combobox.ComboBox;
@@ -20,14 +21,10 @@ import com.vaadin.ui.textfield.TextField;
 
 @Tag("order-item-edit")
 @HtmlImport("src/storefront/order-item-edit.html")
-public class OrderItemEdit extends PolymerTemplate<OrderItemEdit.Model> implements HasValue<OrderItemEdit, OrderItem> {
-
-	public interface Model extends TemplateModel {
-		void setProduct(String product);
-	}
+public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements HasValue<OrderItemEdit, OrderItem> {
 
 	@Id("products")
-	private ComboBox<String> products;
+	private ComboBox<Product> products;
 
 	@Id("order-item-edit-delete")
 	private Button delete;
@@ -43,17 +40,16 @@ public class OrderItemEdit extends PolymerTemplate<OrderItemEdit.Model> implemen
 
 	private OrderItem orderItem;
 
-	private ProductSource productSource;
-
 	private int totalPrice;
 
 	private BeanValidationBinder<OrderItem> binder = new BeanValidationBinder<>(OrderItem.class);
 
-	public OrderItemEdit(ProductSource productSource) {
-		this.productSource = productSource;
+
+	public OrderItemEdit(ProductDataProvider productSource) {
 		this.amount.setDisabled(true);
-		productSource.setupBeanComboBox(products);
-		products.addValueChangeListener(e -> {
+		ComboboxBinderWrapper<Product> productsWrapper = new ComboboxBinderWrapper<>(products);
+		products.setDataProvider(productSource);
+		productsWrapper.addValueChangeListener(e -> {
 			if (this.amount.getValue() == null) {
 				this.amount.setDisabled(false);
 				this.amount.setValue(1);
@@ -61,10 +57,7 @@ public class OrderItemEdit extends PolymerTemplate<OrderItemEdit.Model> implemen
 			if (this.comment.isDisabled()) {
 				this.comment.setDisabled(false);
 			}
-			Product newProductValue = productSource.getProductByName(products.getValue());
-
-			fireEvent(new ProductChangeEvent(newProductValue));
-			orderItem.setProduct(newProductValue);
+			fireEvent(new ProductChangeEvent(e.getValue()));
 			this.setPrice();
 		});
 
@@ -73,6 +66,7 @@ public class OrderItemEdit extends PolymerTemplate<OrderItemEdit.Model> implemen
 
 		binder.forField(amount).bind("quantity");
 		binder.forField(comment).bind("comment");
+		binder.forField(productsWrapper).bind("product");
 
 		delete.addClickListener(e -> fireEvent(new DeleteEvent(totalPrice)));
 		this.setPrice();
@@ -81,7 +75,7 @@ public class OrderItemEdit extends PolymerTemplate<OrderItemEdit.Model> implemen
 	private void setPrice() {
 		int oldValue = totalPrice;
 		Integer selectedAmount = amount.getValue();
-		Product product = productSource.getProductByName(products.getValue());
+		Product product = products.getValue();
 		totalPrice = 0;
 		if (selectedAmount != null && product != null) {
 			totalPrice = selectedAmount * product.getPrice();
@@ -105,10 +99,6 @@ public class OrderItemEdit extends PolymerTemplate<OrderItemEdit.Model> implemen
 		this.orderItem = value;
 		binder.setBean(value);
 		boolean noProductSelected = value == null || value.getProduct() == null;
-		if (!noProductSelected) {
-			getModel().setProduct(value.getProduct().getName());
-			products.setValue(value.getProduct().getName());
-		}
 		amount.setDisabled(noProductSelected);
 		comment.setDisabled(noProductSelected);
 		this.setPrice();

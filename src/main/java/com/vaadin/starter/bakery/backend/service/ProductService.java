@@ -23,11 +23,15 @@ public class ProductService implements FilterableCrudService<Product> {
 	}
 
 	public List<Product> findAnyMatching(Optional<String> filter) {
+		return findAnyMatching(filter, null);
+	}
+
+	public List<Product> findAnyMatching(Optional<String> filter, Pageable pageable) {
 		if (filter.isPresent()) {
 			String repositoryFilter = "%" + filter.get() + "%";
-			return productRepository.findByNameLikeIgnoreCase(repositoryFilter, null).getContent();
+			return productRepository.findByNameLikeIgnoreCase(repositoryFilter, pageable).getContent();
 		} else {
-			return find(null).getContent();
+			return find(pageable).getContent();
 		}
 	}
 
@@ -39,7 +43,6 @@ public class ProductService implements FilterableCrudService<Product> {
 			return count();
 		}
 	}
-
 
 	public Page<Product> find(Pageable pageable) {
 		return productRepository.findBy(pageable);
