@@ -78,7 +78,7 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 	}
 
 	private void populateOrdersCount() {
-		getModel().setOrdersCount((int) ordersProvider.countAnyMatchingAfterDueDate());
+		getModel().setOrdersCount((int) ordersProvider.countAnyMatchingAfterDueDate(false));
 	}
 
 	@EventHandler

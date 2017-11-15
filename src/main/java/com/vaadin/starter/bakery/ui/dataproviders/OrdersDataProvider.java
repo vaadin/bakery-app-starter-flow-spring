@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.vaadin.starter.bakery.backend.data.entity.Order;
+import com.vaadin.starter.bakery.ui.utils.OrderFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,8 +31,17 @@ public class OrdersDataProvider {
 		return new PageInfo(fetchFromBackEnd(filter, showPrevious, pageable).getContent(), pageable.getPageNumber());
 	}
 
-	public long countAnyMatchingAfterDueDate() {
-		return getOrderService().countAnyMatchingAfterDueDate(Optional.empty(), getFilterDate(false));
+	public long countAnyMatchingAfterDueDate(boolean countPrevious) {
+		return getOrderService().countAnyMatchingAfterDueDate(Optional.empty(), getFilterDate(countPrevious));
+	}
+
+	public long countAnyMatchingAfterDueDate(Optional<OrderFilter> filter) {
+		if (filter.isPresent()) {
+			OrderFilter queryFilter = filter.get();
+			return getOrderService().countAnyMatchingAfterDueDate(Optional.of(queryFilter.getFilter()),
+					getFilterDate(queryFilter.isShowPrevious()));
+		}
+		return countAnyMatchingAfterDueDate(false);
 	}
 
 	public List<Order> getOriginalOrdersList() {
@@ -42,9 +52,16 @@ public class OrdersDataProvider {
 		return orderService.getDashboardData(MonthDay.now().getMonthValue(), Year.now().getValue());
 	}
 
-	protected Page<Order> fetchFromBackEnd(String filter, boolean showPrevious, Pageable pageable) {
-		return getOrderService().findAnyMatchingAfterDueDate(Optional.ofNullable(filter), getFilterDate(showPrevious),
-				pageable);
+	public Page<Order> fetchFromBackEnd(Optional<OrderFilter> filter, Pageable pageable) {
+		if (filter.isPresent()) {
+			return fetchFromBackEnd(filter.get().getFilter(), filter.get().isShowPrevious(), pageable);
+		}
+		return fetchFromBackEnd("", false, pageable);
+	}
+
+	public Page<Order> fetchFromBackEnd(String filter, boolean showPrevious, Pageable pageable) {
+		return getOrderService()
+				.findAnyMatchingAfterDueDate(Optional.ofNullable(filter), getFilterDate(showPrevious), pageable);
 	}
 
 	private Optional<LocalDate> getFilterDate(boolean showPrevious) {

@@ -48,10 +48,6 @@ public class BakerySearch extends PolymerTemplate<BakerySearch.Model> {
 		return textField.getValue();
 	}
 
-	public boolean getShowPrevious() {
-		return getModel().getCheckboxChecked();
-	}
-
 	public void setPlaceHolder(String placeHolder) {
 		textField.setPlaceholder(placeHolder);
 	}
@@ -65,7 +61,7 @@ public class BakerySearch extends PolymerTemplate<BakerySearch.Model> {
 	}
 
 	public void addFilterChangeListener(BiConsumer<String, Boolean> consumer) {
-		textField.addValueChangeListener(
+		getElement().addEventListener("filterChanged",
 				e -> consumer.accept(textField.getValue(), getModel().getCheckboxChecked()));
 		getElement().addPropertyChangeListener("checkboxChecked",
 				e -> consumer.accept(textField.getValue(), getModel().getCheckboxChecked()));

@@ -46,7 +46,7 @@ public abstract class PolymerEntityView<E extends AbstractEntity, T extends Temp
 	protected abstract Grid<E> getGrid();
 
 	@Override
-	public void setDataProvider(DataProvider<E, Void> dataProvider) {
+	public void setDataProvider(DataProvider<E, ?> dataProvider) {
 		getGrid().setDataProvider(dataProvider);
 	}
 

@@ -38,6 +38,7 @@ public class StorefrontItemHeaderGenerator {
 				if (!usedGroups[i] && header.isPresent()) {
 					usedGroups[i] = true;
 					result.put(order.getId(), header.get());
+					order.setHeader(header.get());
 					if (i == usedGroups.length - 1) {
 						break ordersLoop;
 					}
