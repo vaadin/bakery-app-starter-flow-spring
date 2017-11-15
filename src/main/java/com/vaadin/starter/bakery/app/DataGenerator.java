@@ -283,8 +283,8 @@ public class DataGenerator implements HasLogger {
 	}
 
 	private void createPickupLocations(PickupLocationRepository pickupRepo) {
-		pickupLocations.add(createPickupLocation("Store"));
-		pickupLocations.add(createPickupLocation("Bakery"));
+		pickupLocations.add(pickupRepo.save(createPickupLocation("Store")));
+		pickupLocations.add(pickupRepo.save(createPickupLocation("Bakery")));
 	}
 
 	private PickupLocation createPickupLocation(String name) {

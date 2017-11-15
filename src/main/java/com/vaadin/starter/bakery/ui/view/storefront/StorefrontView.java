@@ -7,14 +7,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.vaadin.starter.bakery.ui.entities.StorefrontItemHeader;
+import com.vaadin.ui.grid.Grid;
+import com.vaadin.ui.renderers.ComponentRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.provider.DataProvider;
-import com.vaadin.flow.model.Convert;
-import com.vaadin.flow.model.Include;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.router.HasUrlParameter;
 import com.vaadin.router.OptionalParameter;
@@ -33,17 +34,9 @@ import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
-import com.vaadin.starter.bakery.ui.utils.converters.CurrencyFormatter;
-import com.vaadin.starter.bakery.ui.utils.converters.LocalDateTimeConverter;
-import com.vaadin.starter.bakery.ui.utils.converters.LocalTimeConverter;
-import com.vaadin.starter.bakery.ui.utils.converters.LongToStringConverter;
-import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
 import com.vaadin.starter.bakery.ui.view.EntityPresenter;
 import com.vaadin.starter.bakery.ui.view.EntityView;
-import com.vaadin.starter.bakery.ui.view.storefront.converter.StorefrontLocalDateConverter;
-import com.vaadin.ui.Component;
 import com.vaadin.ui.Tag;
-import com.vaadin.ui.common.ClientDelegate;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
@@ -56,31 +49,20 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 
 	public interface Model extends TemplateModel {
-		@Include({ "id", "dueDate.day", "dueDate.weekday", "dueDate.date", "dueTime", "state", "pickupLocation.name",
-				"customer.fullName", "customer.phoneNumber", "customer.details", "items.product.name", "items.comment",
-				"items.quantity", "items.product.price", "history.message", "history.createdBy.firstName",
-				"history.timestamp", "history.newState", "totalPrice" })
-		@Convert(value = LongToStringConverter.class, path = "id")
-		@Convert(value = StorefrontLocalDateConverter.class, path = "dueDate")
-		@Convert(value = LocalTimeConverter.class, path = "dueTime")
-		@Convert(value = OrderStateConverter.class, path = "state")
-		@Convert(value = CurrencyFormatter.class, path = "items.product.price")
-		@Convert(value = LocalDateTimeConverter.class, path = "history.timestamp")
-		@Convert(value = OrderStateConverter.class, path = "history.newState")
-		@Convert(value = CurrencyFormatter.class, path = "totalPrice")
-		void setOrders(List<Order> orders);
-
-		List<Order> getOrders();
-
 		void setEditing(boolean editing);
 	}
 
 	@Id("search")
 	private BakerySearch searchBar;
 
-	private final ViewSelector viewSelector = new ViewSelector();
-	private final OrderEdit orderEdit;
-	private final OrderDetail orderDetail = new OrderDetail();
+	private final Grid<Order> grid;
+	private Map<Long, StorefrontItemHeader> ordersWithHeaders;
+
+	@Id("order-edit")
+	private OrderEdit orderEdit;
+
+	@Id("order-detail")
+	private OrderDetail orderDetail;
 
 	private Presenter presenter;
 
@@ -91,42 +73,39 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 
 	@Autowired
 	public StorefrontView(OrdersDataProvider ordersProvider, ProductService productService, OrderService orderService,
-			UserService userService, OrderEdit orderEdit) {
+			UserService userService) {
 		this.productService = productService;
 		this.ordersProvider = ordersProvider;
 		this.orderService = orderService;
 		this.userService = userService;
-		this.orderEdit = orderEdit;
-		addToSlot(this, viewSelector, "view-selector-slot");
+
 		presenter = new Presenter();
+
+		// required for the `isDesktopView()` method
+		getElement().synchronizeProperty("desktopView", "desktop-view-changed");
 
 		searchBar.setActionText("New order");
 		searchBar.setCheckboxText("Show past orders");
 		searchBar.setPlaceHolder("Search");
-		searchBar.addFilterChangeListener(presenter::filterChanged);
-		searchBar.addActionClickListener(e -> edit(null));
-		orderDetail.addListener(SaveEvent.class, e -> presenter.save());
-		orderEdit.addListener(CancelEvent.class, e -> presenter.cancel());
-		setOrders(ordersProvider.getOriginalOrdersList(), false);
 
+		grid = new Grid<>();
+		grid.getElement().setAttribute("theme", "storefront-grid");
+		grid.setSelectionMode(Grid.SelectionMode.NONE);
+		grid.addColumn("Order", new ComponentRenderer<>(order -> {
+			StorefrontItemDetailWrapper orderCard = new StorefrontItemDetailWrapper();
+			orderCard.setOrder(order);
+			orderCard.setDisplayHeader(ordersWithHeaders.containsKey(order.getId()));
+			orderCard.setHeader(ordersWithHeaders.get(order.getId()));
+			orderCard.addExpandedListener(e -> presenter.onOrderCardExpanded(orderCard));
+			orderCard.addCollapsedListener(e -> presenter.onOrderCardCollapsed(orderCard));
+			orderCard.addEditListener(e -> presenter.onOrderCardEdit(orderCard));
+			orderCard.addCommentListener(e -> presenter.onOrderCardAddComment(orderCard, e.getMessage()));
+			return orderCard;
+		}));
+		addToSlot(this, grid, "grid");
+
+		presenter.filterChanged("", false);
 		getModel().setEditing(false);
-	}
-
-	@ClientDelegate
-	private void addComment(String orderId, String message) {
-		presenter.addComment(Long.parseLong(orderId), message);
-	}
-
-	@ClientDelegate
-	private void edit(String id) {
-		if (id != null && !id.isEmpty()) {
-			Map<String, String> parameters = new HashMap<>();
-			parameters.put("edit", "");
-			getUI().ifPresent(
-					ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT + "/" + id, QueryParameters.simple(parameters)));
-			return;
-		}
-		presenter.createNew();
 	}
 
 	@Override
@@ -138,27 +117,18 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	}
 
 	private void setOrders(List<Order> orders, boolean showPrevious) {
-		getModel().setOrders(orders);
-		getElement().setPropertyJson("displayedHeaders", computeEntriesWithHeader(orders, showPrevious));
-	}
-
-	private void selectComponent(Component component) {
-		// This is a workaround for a Safari 11 issue.
-		// If the orderEdit is injected in the ViewSelector
-		// on the constructor,
-		// Safari fails to set the styles correctly.
-		if (component.getElement().getParent() == null) {
-			viewSelector.add(component);
-		}
-		viewSelector.select(component);
+		ordersWithHeaders = computeEntriesWithHeader(orders, showPrevious);
+		grid.setItems(orders);
 	}
 
 	private void showOrderEdit() {
-		selectComponent(orderEdit);
+		orderDetail.getElement().setAttribute("hidden", "");
+		orderEdit.getElement().removeAttribute("hidden");
 	}
 
 	private void details(Order order, boolean isReview) {
-		selectComponent(orderDetail);
+		orderDetail.getElement().removeAttribute("hidden");
+		orderEdit.getElement().setAttribute("hidden", "");
 		orderDetail.display(order, isReview);
 	}
 
@@ -194,10 +164,22 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		}
 	}
 
+	private boolean isDesktopView() {
+		return getElement().getProperty("desktopView", true);
+	}
+
+	private void resizeGrid() {
+		grid.getElement().callFunction("notifyResize");
+	}
+
 	class Presenter extends EntityPresenter<Order> {
 
 		public Presenter() {
 			super(orderService, StorefrontView.this, "Order");
+			searchBar.addFilterChangeListener(this::filterChanged);
+			searchBar.addActionClickListener(e -> edit(null));
+
+			orderEdit.addListener(CancelEvent.class, e -> cancel());
 			orderEdit.addReviewListener(e -> {
 				try {
 					writeEntity();
@@ -206,20 +188,23 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 					showValidationError();
 				}
 			});
+
+			orderDetail.addListener(SaveEvent.class, e -> save());
+			orderDetail.addCancelListener(e -> cancel());
 			orderDetail.addBackListener(e -> showOrderEdit());
 			orderDetail.addEditListener(e -> {
 				orderEdit.read(getEntity());
 				showOrderEdit();
 			});
 			orderDetail.addCommentListener(e -> {
-				details(orderService.findOrder(e.getOrderId()), false);
+				presenter.addComment(e.getOrderId(), e.getMessage());
 			});
 		}
 
 		void filterChanged(String filter, boolean showPrevious) {
-			// the hardcoded limit of 200 is here until lazy loading is implemented (see
+			// the hardcoded limit of 15 is here until lazy loading is implemented (see
 			// BFF-120)
-			PageRequest pr = new PageRequest(0, 200, Direction.ASC, "dueDate", "dueTime", "id");
+			PageRequest pr = new PageRequest(0, 15, Direction.ASC, "dueDate", "dueTime", "id");
 			setOrders(ordersProvider.getOrdersList(filter, showPrevious, pr).getOrders(), showPrevious);
 		}
 
@@ -243,12 +228,51 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 			super.openDialog(entity, edit);
 		}
 
-		public void addComment(Long id, String comment) {
-			if (executeJPAOperation(() -> setEntity(orderService.addComment(id, comment)))) {
-				// TODO: Update order in model when Grid API will allow (BFF-361)
+		private void addComment(Long id, String comment) {
+			executeJPAOperation(() -> {
+				orderService.addComment(id, comment);
+				loadEntity(id, false);
+			});
+		}
+
+		private void edit(String id) {
+			if (id != null && !id.isEmpty()) {
+				Map<String, String> parameters = new HashMap<>();
+				parameters.put("edit", "");
+				getUI().ifPresent(
+						ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT + "/" + id, QueryParameters.simple(parameters)));
+				return;
+			}
+			createNew();
+		}
+
+		// StorefrontItemDetailWrapper presenter methods
+		private void onOrderCardExpanded(StorefrontItemDetailWrapper orderCard) {
+			if (isDesktopView()) {
+				orderCard.setSelected(true);
+				resizeGrid();
+			} else {
+				loadEntity(orderCard.getOrder().getId(), false);
 			}
 		}
 
+		private void onOrderCardCollapsed(StorefrontItemDetailWrapper orderCard) {
+			orderCard.setSelected(false);
+			resizeGrid();
+		}
+
+		private void onOrderCardEdit(StorefrontItemDetailWrapper orderCard) {
+			onOrderCardCollapsed(orderCard);
+			edit(orderCard.getOrder().getId().toString());
+		}
+
+		private void onOrderCardAddComment(StorefrontItemDetailWrapper orderCard, String message) {
+			executeJPAOperation(() -> {
+				Order updated = orderService.addComment(orderCard.getOrder().getId(), message);
+				orderCard.setOrder(updated);
+				resizeGrid();
+			});
+		}
 	}
 
 }

@@ -17,6 +17,11 @@ public class CustomBootstrapListener implements BootstrapListener {
 							"window.ShadyDOM={force:true};" +
 					"</script>");
 		}
+
+		// manifest needs to be prepended before scripts or it won't be loaded
+		head.prepend("<meta name=\"theme-color\" content=\"#227aef\">");
+		head.prepend("<link rel=\"manifest\" href=\"/manifest.json\">");
+
 		addFavIconTags(head);
 		injectInlineCustomStyles(head);
 	}
@@ -25,6 +30,7 @@ public class CustomBootstrapListener implements BootstrapListener {
 		head.append("<link rel=\"shortcut icon\" href=\"icons/favicon.ico\">");
 		head.append("<link rel=\"icon\" sizes=\"192x192\" href=\"icons/icon-192.png\">");
 		head.append("<link rel=\"icon\" sizes=\"96x96\" href=\"icons/icon-96.png\">");
+		head.append("<link rel=\"apple-touch-icon\" sizes=\"512x512\" href=\"icons/icon-512.png\">");
 		head.append("<link rel=\"apple-touch-icon\" sizes=\"192x192\" href=\"icons/icon-192.png\">");
 		head.append("<link rel=\"apple-touch-icon\" sizes=\"96x96\" href=\"icons/icon-96.png\">");
 	}
