@@ -104,7 +104,8 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 		review.addClickListener(e -> fireEvent(new ReviewEvent()));
 
 		status.setDataProvider(DataProvider.ofItems(OrderState.values()));
-		status.addValueChangeListener(e -> DataProviderUtil.convertIfNotNull(e.getValue(), OrderState::name));
+		status.addValueChangeListener(
+				e -> getModel().setStatus(DataProviderUtil.convertIfNotNull(e.getValue(), OrderState::name)));
 		binder.forField(new ComboboxBinderWrapper<>(status)).bind("state");
 		date.setValue(LocalDate.now());
 
