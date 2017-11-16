@@ -83,6 +83,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				"/images/**",
 				"/src/**",
 				"/manifest.json",
+				"/app.js",
+				"/sw.js",
+				"/offline-page.html",
 
 				// development-mode webjars
 				"/webjars/**",
