@@ -28,8 +28,7 @@ public class StorefrontItemHeaderGenerator {
 				(date, showPrevious) -> headerIfUpcoming(date));
 	}
 
-	public static Map<Long, StorefrontItemHeader> computeEntriesWithHeader(List<Order> orders, boolean showPrevious) {
-		Map<Long, StorefrontItemHeader> result = new HashMap<>(HEADER_FUNCTIONS.size());
+	public static void computeEntriesWithHeader(List<Order> orders, boolean showPrevious) {
 		boolean[] usedGroups = new boolean[HEADER_FUNCTIONS.size()];
 		ordersLoop: for (Order order : orders) {
 			for (int i = 0; i < HEADER_FUNCTIONS.size(); i++) {
@@ -37,7 +36,6 @@ public class StorefrontItemHeaderGenerator {
 						= HEADER_FUNCTIONS.get(i).apply(order.getDueDate(), showPrevious);
 				if (!usedGroups[i] && header.isPresent()) {
 					usedGroups[i] = true;
-					result.put(order.getId(), header.get());
 					order.setHeader(header.get());
 					if (i == usedGroups.length - 1) {
 						break ordersLoop;
@@ -46,8 +44,6 @@ public class StorefrontItemHeaderGenerator {
 				}
 			}
 		}
-
-		return result;
 	}
 
 	private static Optional<StorefrontItemHeader> headerIfRecent(LocalDate date) {

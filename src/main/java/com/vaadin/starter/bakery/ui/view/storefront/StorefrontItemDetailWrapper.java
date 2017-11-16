@@ -45,6 +45,11 @@ public class StorefrontItemDetailWrapper extends PolymerTemplate<StorefrontItemD
 		this.order = order;
 		storefrontItem.setOrder(order);
 		orderDetail.display(order, false);
+
+		if (order.getHeader() != null) {
+			setDisplayHeader(true);
+			setHeader(order.getHeader());
+		}
 	}
 
 	public Order getOrder() {

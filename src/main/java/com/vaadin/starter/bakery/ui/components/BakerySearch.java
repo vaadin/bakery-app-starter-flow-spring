@@ -5,12 +5,13 @@ import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
 import com.vaadin.ui.common.HasClickListeners;
 import com.vaadin.ui.common.HtmlImport;
+import com.vaadin.ui.event.ComponentEvent;
 import com.vaadin.ui.event.ComponentEventListener;
+import com.vaadin.ui.event.DomEvent;
+import com.vaadin.ui.event.PropertyChangeListener;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import com.vaadin.ui.textfield.TextField;
-
-import java.util.function.BiConsumer;
 
 @Tag("bakery-search")
 @HtmlImport("src/app/bakery-search.html")
@@ -48,6 +49,10 @@ public class BakerySearch extends PolymerTemplate<BakerySearch.Model> {
 		return textField.getValue();
 	}
 
+	public boolean isCheckboxChecked() {
+		return getModel().getCheckboxChecked();
+	}
+
 	public void setPlaceHolder(String placeHolder) {
 		textField.setPlaceholder(placeHolder);
 	}
@@ -60,11 +65,19 @@ public class BakerySearch extends PolymerTemplate<BakerySearch.Model> {
 		getModel().setCheckboxText(checkboxText);
 	}
 
-	public void addFilterChangeListener(BiConsumer<String, Boolean> consumer) {
-		getElement().addEventListener("filterChanged",
-				e -> consumer.accept(textField.getValue(), getModel().getCheckboxChecked()));
-		getElement().addPropertyChangeListener("checkboxChecked",
-				e -> consumer.accept(textField.getValue(), getModel().getCheckboxChecked()));
+	@DomEvent("filter-changed")
+	public static class FilterChanged extends ComponentEvent<BakerySearch> {
+		public FilterChanged(BakerySearch source, boolean fromClient) {
+			super(source, fromClient);
+		}
+	}
+
+	public void addFilterChangeListener(ComponentEventListener<FilterChanged> listener) {
+		addListener(FilterChanged.class, listener);
+	}
+
+	public void addCheckboxValueChangeListener(PropertyChangeListener listener) {
+		getElement().addPropertyChangeListener("checkboxChecked", listener);
 	}
 
 	public void addActionClickListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {

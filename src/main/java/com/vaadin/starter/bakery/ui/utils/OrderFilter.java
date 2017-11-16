@@ -29,4 +29,7 @@ public class OrderFilter implements Serializable {
 		this.showPrevious = showPrevious;
 	}
 
+	public static OrderFilter getEmptyFilter() {
+		return new OrderFilter("", false);
+	}
 }

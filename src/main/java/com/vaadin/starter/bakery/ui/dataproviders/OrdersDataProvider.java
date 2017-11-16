@@ -35,13 +35,9 @@ public class OrdersDataProvider {
 		return getOrderService().countAnyMatchingAfterDueDate(Optional.empty(), getFilterDate(countPrevious));
 	}
 
-	public long countAnyMatchingAfterDueDate(Optional<OrderFilter> filter) {
-		if (filter.isPresent()) {
-			OrderFilter queryFilter = filter.get();
-			return getOrderService().countAnyMatchingAfterDueDate(Optional.of(queryFilter.getFilter()),
-					getFilterDate(queryFilter.isShowPrevious()));
-		}
-		return countAnyMatchingAfterDueDate(false);
+	public long countAnyMatchingAfterDueDate(OrderFilter filter) {
+		return getOrderService()
+				.countAnyMatchingAfterDueDate(Optional.of(filter.getFilter()), getFilterDate(filter.isShowPrevious()));
 	}
 
 	public List<Order> getOriginalOrdersList() {
@@ -52,11 +48,8 @@ public class OrdersDataProvider {
 		return orderService.getDashboardData(MonthDay.now().getMonthValue(), Year.now().getValue());
 	}
 
-	public Page<Order> fetchFromBackEnd(Optional<OrderFilter> filter, Pageable pageable) {
-		if (filter.isPresent()) {
-			return fetchFromBackEnd(filter.get().getFilter(), filter.get().isShowPrevious(), pageable);
-		}
-		return fetchFromBackEnd("", false, pageable);
+	public Page<Order> fetchFromBackEnd(OrderFilter filter, Pageable pageable) {
+		return fetchFromBackEnd(filter.getFilter(), filter.isShowPrevious(), pageable);
 	}
 
 	public Page<Order> fetchFromBackEnd(String filter, boolean showPrevious, Pageable pageable) {

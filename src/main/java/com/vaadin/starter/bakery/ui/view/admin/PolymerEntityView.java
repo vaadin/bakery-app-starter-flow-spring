@@ -32,7 +32,7 @@ public abstract class PolymerEntityView<E extends AbstractEntity, T extends Temp
 		getEditor().addListener(SaveEvent.class, e -> getPresenter().save());
 		getEditor().addListener(DeleteEvent.class, e -> getPresenter().delete());
 		getItemsView().addActionClickListener(e -> getPresenter().createNew());
-		getItemsView().addFilterChangeListener(f -> getPresenter().filter(f));
+		getItemsView().addFilterChangeListener(e -> getPresenter().filter(getItemsView().getFilter()));
 	}
 
 	protected abstract DefaultEntityPresenter<E> getPresenter();

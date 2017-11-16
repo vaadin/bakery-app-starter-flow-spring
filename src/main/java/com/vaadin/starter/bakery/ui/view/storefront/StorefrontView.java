@@ -93,8 +93,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		grid.addColumn("Order", new ComponentRenderer<>(order -> {
 			StorefrontItemDetailWrapper orderCard = new StorefrontItemDetailWrapper();
 			orderCard.setOrder(order);
-			orderCard.setDisplayHeader(order.getHeader() != null);
-			orderCard.setHeader(order.getHeader());
 			orderCard.addExpandedListener(e -> presenter.onOrderCardExpanded(orderCard));
 			orderCard.addCollapsedListener(e -> presenter.onOrderCardCollapsed(orderCard));
 			orderCard.addEditListener(e -> presenter.onOrderCardEdit(orderCard));
@@ -173,7 +171,9 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 
 		public OrderEntityPresenter() {
 			super(orderService, StorefrontView.this, "Order");
-			searchBar.addFilterChangeListener(this::filterChanged);
+			searchBar.addFilterChangeListener(e -> filterChanged(searchBar.getFilter(), searchBar.isCheckboxChecked()));
+			searchBar.addCheckboxValueChangeListener(
+					e -> filterChanged(searchBar.getFilter(), searchBar.isCheckboxChecked()));
 			searchBar.addActionClickListener(e -> edit(null));
 
 			orderEdit.addListener(CancelEvent.class, e -> cancel());
@@ -200,9 +200,9 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 			dataProvider = new FilterablePageableDataProvider<Order, OrderFilter>() {
 				@Override
 				protected Page<Order> fetchFromBackEnd(Query<Order, OrderFilter> query, Pageable pageable) {
-					Page<Order> page = ordersProvider.fetchFromBackEnd(query.getFilter(), pageable);
-					boolean showPrevious = (query.getFilter().isPresent()) ? query.getFilter().get().isShowPrevious() : false;
-					computeEntriesWithHeader(page.getContent(), showPrevious);
+					OrderFilter filter = query.getFilter().orElse(OrderFilter.getEmptyFilter());
+					Page<Order> page = ordersProvider.fetchFromBackEnd(filter, pageable);
+					computeEntriesWithHeader(page.getContent(), filter.isShowPrevious());
 					return page;
 				}
 
@@ -213,7 +213,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 
 				@Override
 				protected int sizeInBackEnd(Query<Order, OrderFilter> query) {
-					return (int) ordersProvider.countAnyMatchingAfterDueDate(query.getFilter());
+					return (int) ordersProvider
+							.countAnyMatchingAfterDueDate(query.getFilter().orElse(OrderFilter.getEmptyFilter()));
 				}
 			};
 			setDataProvider(dataProvider);
