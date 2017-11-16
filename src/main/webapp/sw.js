@@ -15,32 +15,32 @@ function updateCache() {
     });
 }
 
-self.addEventListener('install', function (event){
+self.addEventListener('install', function(event) {
   event.waitUntil(updateCache());
 });
 
-var doesRequestAcceptHtml = function (request){
+var doesRequestAcceptHtml = function(request) {
   return request.headers.get('Accept')
     .split(',')
-    .some(function (type){
+    .some(function(type) {
       return type === 'text/html';
     });
 };
 
-self.addEventListener('fetch', function (event){
+self.addEventListener('fetch', function(event) {
   var request = event.request;
   if (doesRequestAcceptHtml(request)) {
     // HTML pages fallback to offline page
     event.respondWith(
       fetch(request)
-        .catch(function (){
+        .catch(function() {
           return caches.match('offline-page.html');
         })
     );
   } else {
     event.respondWith(
       caches.match(request)
-        .then(function (response){
+        .then(function(response) {
           return response || fetch(request);
         })
     );
