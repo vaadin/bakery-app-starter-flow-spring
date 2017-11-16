@@ -24,10 +24,10 @@ import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.PickupLocation;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.User;
+import com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.starter.bakery.ui.utils.converters.LocalTimeConverter;
-import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
 import com.vaadin.starter.bakery.ui.view.workaround.ComboboxBinderWrapper;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
@@ -95,8 +95,6 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 
 	private final LocalTimeConverter localTimeConverter = new LocalTimeConverter();
 
-	private final OrderStateConverter orderStateConverter = new OrderStateConverter();
-
 	private boolean hasChanges = false;
 
 	@Autowired
@@ -108,8 +106,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 		review.addClickListener(e -> fireEvent(new ReviewEvent()));
 
 		status.setDataProvider(DataProvider.ofItems(OrderState.values()));
-		// status.addValueChangeListener(createValueChangeListener(getModel()::setStatus,
-		// DataProviderUtil::toString));
+		status.addValueChangeListener(e -> DataProviderUtil.convertIfNotNull(e.getValue(), OrderState::name));
 		binder.forField(new ComboboxBinderWrapper<>(status)).bind("state");
 		date.setValue(LocalDate.now());
 
@@ -177,8 +174,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 		title.setText(String.format("%s Order", order.isNew() ? "New" : "Edit"));
 
 		if (order.getState() != null) {
-			String status = orderStateConverter.toPresentation(order.getState());
-			getModel().setStatus(status);
+			getModel().setStatus(order.getState().name());
 		}
 
 		hasChanges = false;
