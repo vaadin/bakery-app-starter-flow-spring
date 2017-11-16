@@ -95,8 +95,6 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 
 	private final LocalTimeConverter localTimeConverter = new LocalTimeConverter();
 
-	private boolean hasChanges = false;
-
 	@Autowired
 	public OrderEdit(PickupLocationDataProvider locationProvider, ProductDataProvider productDataProvider) {
 		items = new OrderItemsEdit(productDataProvider);
@@ -144,7 +142,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 	}
 
 	public boolean hasChanges() {
-		return binder.hasChanges() || items.hasChanges() || hasChanges;
+		return binder.hasChanges() || items.hasChanges();
 	}
 
 	private void updateDesktopViewOnItemsEdit() {
@@ -158,7 +156,6 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 	public void close() {
 		items.reset();
 		setTotalPrice(0);
-		hasChanges = false;
 	}
 
 	public void write(Order order) throws ValidationException {
@@ -177,7 +174,6 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 			getModel().setStatus(order.getState().name());
 		}
 
-		hasChanges = false;
 		review.setDisabled(true);
 		updateDesktopViewOnItemsEdit();
 	}

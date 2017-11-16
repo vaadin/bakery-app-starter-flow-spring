@@ -124,7 +124,6 @@ public class OrderItemsEdit extends Div implements HasValue<OrderItemsEdit, List
 
 	private void createEmptyElement() {
 		empty = createEditor(null);
-		getElement().appendChild(empty.getElement());
 	}
 
 	public Registration addPriceChangeListener(ComponentEventListener<PriceChangeEvent> listener) {
