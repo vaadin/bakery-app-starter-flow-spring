@@ -6,6 +6,7 @@ function updateCache() {
         .then(function (cache) {
             return cache.addAll([
                 'offline-page.html',
+                'manifest.json',
                 'images/login-banner.jpg',
                 'icons/icon-96.png',
                 'icons/icon-192.png',
