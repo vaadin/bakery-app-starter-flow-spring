@@ -2,78 +2,78 @@
 <link rel="import" href="../../bower_components/vaadin-charts/vaadin-chart.html">
 
 <dom-module id="dashboard-column-chart">
-	<template>
-		<style>
+    <template>
+        <style>
 
-			.wrapper {
-				box-shadow: 0 2px 5px 0 rgba(23, 68, 128, 0.1);
-				border-radius: 4px;
-				@apply --margin-style;
-				height: calc(20vh - 64px) !important;
-				min-height: 150px;
-			}
+          .wrapper {
+              box-shadow: 0 2px 5px 0 rgba(23, 68, 128, 0.1);
+              border-radius: 4px;
+              @apply --margin-style;
+              height: calc(20vh - 64px) !important;
+              min-height: 150px;
+          }
 
-		</style>
-		<div class="wrapper">
-			<vaadin-chart id="columnchart" class="column-chart" title="[[data.title]]">
-					<vaadin-chart-series values="[[data.values]]"></vaadin-chart-series>
-			</vaadin-chart>
-		</div>
-	</template>
+        </style>
+        <div class="wrapper">
+            <vaadin-chart id="columnchart" class="column-chart" title="[[data.title]]">
+                <vaadin-chart-series values="[[data.values]]"></vaadin-chart-series>
+            </vaadin-chart>
+        </div>
+    </template>
 
-	<script>
+    <script>
     class DashboardColumnChart extends Polymer.Element {
       static get is() {
         return 'dashboard-column-chart';
       }
 
-			static get observers() {
-				return [
-					'_onCategoriesChanged(data.categories)'
-				];
-			}
+      static get observers() {
+        return [
+          '_onCategoriesChanged(data.categories)'
+        ];
+      }
 
-			connectedCallback() {
-				super.connectedCallback();
-				this.$.columnchart.update({
-		      chart: {
-		        borderRadius: 4,
-		        type: 'column'
-		      },
-		      xAxis: {
-		        tickInterval: 1,
-						minorTickLength: 0,
-						tickLength: 0
-		      },
-		      yAxis: {
-		        title: {
-		          enabled: false
-		        }
-		      },
-		      exporting: {
-		        enabled: false
-		      },
-		      legend: {
-		        enabled: false
-		      },
-		      series: [{
-		        colorByPoint: false,
-		        colorIndex: 1
-		      }],
-					plotOptions: {
-						pointWidth: 20
-					}
-		    });
-			}
-			_onCategoriesChanged(categories) {
-				this.$.columnchart.update({
-					xAxis: {
-						categories: categories
-					}
-				});
-			}
+      connectedCallback() {
+        super.connectedCallback();
+        this.$.columnchart.update({
+          chart: {
+            borderRadius: 4,
+            type: 'column'
+          },
+          xAxis: {
+            tickInterval: 1,
+            minorTickLength: 0,
+            tickLength: 0
+          },
+          yAxis: {
+            title: {
+              enabled: false
+            }
+          },
+          exporting: {
+            enabled: false
+          },
+          legend: {
+            enabled: false
+          },
+          series: [{
+            colorByPoint: false,
+            colorIndex: 1
+          }],
+          plotOptions: {
+            pointWidth: 20
+          }
+        });
+      }
+      _onCategoriesChanged(categories) {
+        this.$.columnchart.update({
+          xAxis: {
+            categories: categories
+          }
+        });
+      }
     }
 
     window.customElements.define(DashboardColumnChart.is, DashboardColumnChart);
-	</script>
+    </script>
 </dom-module>
