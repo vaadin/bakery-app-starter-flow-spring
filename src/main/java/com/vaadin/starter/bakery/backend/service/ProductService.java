@@ -65,7 +65,7 @@ public class ProductService implements FilterableCrudService<Product> {
 			return FilterableCrudService.super.save(entity);
 		} catch (DataIntegrityViolationException e) {
 			throw new UserFriendlyDataException(
-					"The is already a product with that name. Please select an unique name for the product.");
+					"There is already a product with that name. Please select a unique name for the product.");
 		}
 
 	}
