@@ -8,7 +8,6 @@ import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.event.ComponentEvent;
 import com.vaadin.ui.event.ComponentEventListener;
 import com.vaadin.ui.event.DomEvent;
-import com.vaadin.ui.event.PropertyChangeListener;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import com.vaadin.ui.textfield.TextField;
@@ -43,6 +42,8 @@ public class BakerySearch extends PolymerTemplate<BakerySearch.Model> {
 			}
 			getModel().setCheckboxChecked(false);
 		});
+
+		getElement().addPropertyChangeListener("checkboxChecked", e -> fireEvent(new FilterChanged(this, false)));
 	}
 
 	public String getFilter() {
@@ -74,10 +75,6 @@ public class BakerySearch extends PolymerTemplate<BakerySearch.Model> {
 
 	public void addFilterChangeListener(ComponentEventListener<FilterChanged> listener) {
 		addListener(FilterChanged.class, listener);
-	}
-
-	public void addCheckboxValueChangeListener(PropertyChangeListener listener) {
-		getElement().addPropertyChangeListener("checkboxChecked", listener);
 	}
 
 	public void addActionClickListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {

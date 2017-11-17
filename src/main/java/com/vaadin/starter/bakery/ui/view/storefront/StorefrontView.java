@@ -178,8 +178,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		public OrderEntityPresenter() {
 			super(orderService, StorefrontView.this, "Order");
 			searchBar.addFilterChangeListener(e -> filterChanged(searchBar.getFilter(), searchBar.isCheckboxChecked()));
-			searchBar.addCheckboxValueChangeListener(
-					e -> filterChanged(searchBar.getFilter(), searchBar.isCheckboxChecked()));
 			searchBar.addActionClickListener(e -> edit(null));
 
 			orderEdit.addListener(CancelEvent.class, e -> cancel());
