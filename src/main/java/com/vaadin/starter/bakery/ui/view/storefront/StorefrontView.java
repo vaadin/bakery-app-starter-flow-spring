@@ -62,7 +62,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	private BakerySearch searchBar;
 
 	private final Grid<Order> grid = new Grid<>();
-	private StorefrontItemHeaderGenerator headers;
 
 	@Id("order-edit")
 	private OrderEdit orderEdit;
@@ -85,8 +84,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		this.orderService = orderService;
 		this.userService = userService;
 
-		headers = new StorefrontItemHeaderGenerator(ordersProvider);
-
 		// required for the `isDesktopView()` method
 		getElement().synchronizeProperty("desktopView", "desktop-view-changed");
 
@@ -99,7 +96,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		grid.addColumn("Order", new ComponentRenderer<>(order -> {
 			StorefrontItemDetailWrapper orderCard = new StorefrontItemDetailWrapper();
 			orderCard.setOrder(order);
-			orderCard.setHeader(headers.get(order.getId()));
+			orderCard.setHeader(presenter.getHeaderByOrderId(order.getId()));
 			orderCard.addExpandedListener(e -> presenter.onOrderCardExpanded(orderCard));
 			orderCard.addCollapsedListener(e -> presenter.onOrderCardCollapsed(orderCard));
 			orderCard.addEditListener(e -> presenter.onOrderCardEdit(orderCard));
@@ -175,6 +172,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	class OrderEntityPresenter extends EntityPresenter<Order> {
 
 		private FilterablePageableDataProvider<Order, OrderFilter> dataProvider;
+		private StorefrontItemHeaderGenerator headers;
 
 		public OrderEntityPresenter() {
 			super(orderService, StorefrontView.this, "Order");
@@ -221,8 +219,13 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 							.countAnyMatchingAfterDueDate(query.getFilter().orElse(OrderFilter.getEmptyFilter()));
 				}
 			};
+			headers = new StorefrontItemHeaderGenerator(ordersProvider);
 			headers.updateHeaders("", false);
 			setDataProvider(dataProvider);
+		}
+
+		public StorefrontItemHeader getHeaderByOrderId(Long id) {
+			return headers.get(id);
 		}
 
 		void filterChanged(String filter, boolean showPrevious) {
