@@ -26,13 +26,17 @@
     "paper-toast": "^2.0.0",
     "web-animations-js": "^2.2.5",
     "vaadin": "vaadin/vaadin#10.0.0-alpha5",
-    "vaadin-grid": "vaadin/vaadin-grid#4.1.0-alpha3"
+    "vaadin-grid": "vaadin/vaadin-grid#4.1.0-alpha3",
+    "vaadin-text-field": "vaadin/vaadin-text-field#stats",
+    "vaadin-button": "vaadin/vaadin-button#stats"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0"
   },
   "private": true,
   "resolutions": {
-    "vaadin-grid": "4.1.0-alpha3"
+    "vaadin-grid": "4.1.0-alpha3",
+    "vaadin-text-field": "stats",
+    "vaadin-button": "stats"
   }
 }
