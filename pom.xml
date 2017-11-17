@@ -53,14 +53,6 @@
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
-            <id>repo-vaadin-com-snapshots</id>
-            <url>https://repo.vaadin.com/nexus/content/repositories/website-snapshots/</url>
-        </repository>
-
-        <repository>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
             <id>vaadin-snapshots</id>
             <url>https://oss.sonatype.org/content/repositories/vaadin-snapshots</url>
         </repository>
