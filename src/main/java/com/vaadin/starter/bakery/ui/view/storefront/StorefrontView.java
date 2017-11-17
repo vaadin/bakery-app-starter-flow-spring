@@ -1,8 +1,8 @@
 package com.vaadin.starter.bakery.ui.view.storefront;
 
-import static com.vaadin.starter.bakery.ui.utils.StorefrontItemHeaderGenerator.computeEntriesWithHeader;
 import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +10,9 @@ import java.util.Map;
 import com.vaadin.data.provider.Query;
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.data.provider.QuerySortOrderBuilder;
+import com.vaadin.starter.bakery.ui.entities.StorefrontItemHeader;
 import com.vaadin.starter.bakery.ui.utils.OrderFilter;
+import com.vaadin.starter.bakery.ui.utils.StorefrontItemHeaderGenerator;
 import com.vaadin.ui.grid.Grid;
 import com.vaadin.ui.renderers.ComponentRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +44,7 @@ import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.vaadin.artur.spring.dataprovider.FilterablePageableDataProvider;
 
 @Tag("bakery-storefront")
@@ -59,6 +62,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	private BakerySearch searchBar;
 
 	private final Grid<Order> grid = new Grid<>();
+	private Map<Long, StorefrontItemHeader> ordersWithHeaders = new HashMap<>();
 
 	@Id("order-edit")
 	private OrderEdit orderEdit;
@@ -93,6 +97,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		grid.addColumn("Order", new ComponentRenderer<>(order -> {
 			StorefrontItemDetailWrapper orderCard = new StorefrontItemDetailWrapper();
 			orderCard.setOrder(order);
+			orderCard.setHeader(ordersWithHeaders.get(order.getId()));
 			orderCard.addExpandedListener(e -> presenter.onOrderCardExpanded(orderCard));
 			orderCard.addCollapsedListener(e -> presenter.onOrderCardCollapsed(orderCard));
 			orderCard.addEditListener(e -> presenter.onOrderCardEdit(orderCard));
@@ -168,6 +173,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	class OrderEntityPresenter extends EntityPresenter<Order> {
 
 		private FilterablePageableDataProvider<Order, OrderFilter> dataProvider;
+		final private Sort defaultSort = new Sort(Sort.Direction.ASC, "dueDate", "dueTime", "id");
 
 		public OrderEntityPresenter() {
 			super(orderService, StorefrontView.this, "Order");
@@ -202,7 +208,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 				protected Page<Order> fetchFromBackEnd(Query<Order, OrderFilter> query, Pageable pageable) {
 					OrderFilter filter = query.getFilter().orElse(OrderFilter.getEmptyFilter());
 					Page<Order> page = ordersProvider.fetchFromBackEnd(filter, pageable);
-					computeEntriesWithHeader(page.getContent(), filter.isShowPrevious());
 					return page;
 				}
 
@@ -217,10 +222,53 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 							.countAnyMatchingAfterDueDate(query.getFilter().orElse(OrderFilter.getEmptyFilter()));
 				}
 			};
+			updateHeaders("", false);
 			setDataProvider(dataProvider);
 		}
 
+		void updateHeaders(String filter, boolean showPrevious) {
+			ordersWithHeaders.clear();
+
+			if (showPrevious) {
+				LocalDate date = LocalDate.now().minusDays(2);
+				Long id = ordersProvider.findFirstOrderAfterDueDate(filter, date, defaultSort);
+				if (id != null) {
+					ordersWithHeaders.put(id, StorefrontItemHeaderGenerator.getYesterdayHeader());
+				}
+
+				date = date.minusDays(date.getDayOfWeek().getValue());
+				id = ordersProvider.findFirstOrderAfterDueDate(filter, date, defaultSort);
+				if (id != null) {
+					ordersWithHeaders.put(id, StorefrontItemHeaderGenerator.getThisWeekBeforeYesterdayHeader());
+				}
+
+				id = ordersProvider.findFirstOrderAfterDueDate(filter, null, defaultSort);
+				if (id != null) {
+					ordersWithHeaders.put(id, StorefrontItemHeaderGenerator.getRecentHeader());
+				}
+			}
+
+			LocalDate date = LocalDate.now().minusDays(1);
+			Long id = ordersProvider.findFirstOrderAfterDueDate(filter, date, defaultSort);
+			if (id != null) {
+				ordersWithHeaders.put(id, StorefrontItemHeaderGenerator.getTodayHeader());
+			}
+
+			date = LocalDate.now();
+			id = ordersProvider.findFirstOrderAfterDueDate(filter, date, defaultSort);
+			if (id != null) {
+				ordersWithHeaders.put(id, StorefrontItemHeaderGenerator.getThisWeekStartingTomorrow(showPrevious));
+			}
+
+			date = date.minusDays(date.getDayOfWeek().getValue()).plusWeeks(1);
+			id = ordersProvider.findFirstOrderAfterDueDate(filter, date, defaultSort);
+			if (id != null) {
+				ordersWithHeaders.put(id, StorefrontItemHeaderGenerator.getUpcomingHeader());
+			}
+		}
+
 		void filterChanged(String filter, boolean showPrevious) {
+			updateHeaders(filter, showPrevious);
 			dataProvider.setFilter(new OrderFilter(filter, showPrevious));
 		}
 
@@ -257,8 +305,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 			if (id != null && !id.isEmpty()) {
 				Map<String, String> parameters = new HashMap<>();
 				parameters.put("edit", "");
-				getUI().ifPresent(
-						ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT + "/" + id, QueryParameters.simple(parameters)));
+				getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT + "/" + id,
+						QueryParameters.simple(parameters)));
 				return;
 			}
 			createNew();

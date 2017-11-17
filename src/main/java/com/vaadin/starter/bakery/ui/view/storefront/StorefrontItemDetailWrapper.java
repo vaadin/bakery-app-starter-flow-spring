@@ -45,11 +45,6 @@ public class StorefrontItemDetailWrapper extends PolymerTemplate<StorefrontItemD
 		this.order = order;
 		storefrontItem.setOrder(order);
 		orderDetail.display(order, false);
-
-		if (order.getHeader() != null) {
-			setDisplayHeader(true);
-			setHeader(order.getHeader());
-		}
 	}
 
 	public Order getOrder() {
@@ -64,12 +59,13 @@ public class StorefrontItemDetailWrapper extends PolymerTemplate<StorefrontItemD
 		return getModel().getSelected();
 	}
 
-	public void setDisplayHeader(boolean displayHeader) {
-		getModel().setDisplayHeader(displayHeader);
-	}
-
 	public void setHeader(StorefrontItemHeader header) {
+		if (header == null) {
+			getModel().setDisplayHeader(false);
+			return;
+		}
 		getModel().setHeader(header);
+		getModel().setDisplayHeader(true);
 	}
 
 	@DomEvent("expanded")

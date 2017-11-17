@@ -16,11 +16,9 @@ import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderColumn;
-import javax.persistence.Transient;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import com.vaadin.starter.bakery.ui.entities.StorefrontItemHeader;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -64,17 +62,6 @@ public class Order extends AbstractEntity {
 	@OrderColumn(name = "id")
 	@BatchSize(size = 1000)
 	private List<HistoryItem> history;
-
-	public StorefrontItemHeader getHeader() {
-		return header;
-	}
-
-	public void setHeader(StorefrontItemHeader header) {
-		this.header = header;
-	}
-
-	@Transient
-	private StorefrontItemHeader header;
 
 	public Order(User createdBy) {
 		this.state = OrderState.NEW;
