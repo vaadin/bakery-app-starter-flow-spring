@@ -1,11 +1,11 @@
-package com.vaadin.starter.bakery.ui.view.workaround;
+package com.vaadin.starter.bakery.ui.view.wrapper;
 
 import com.vaadin.shared.Registration;
 import com.vaadin.ui.combobox.ComboBox;
 import com.vaadin.ui.common.HasValue;
 
 /**
- * Implements a workaround for https://github.com/vaadin/flow/issues/2930.
+ * Wrapper for combobox to allow initial values to be set via binder.
  *
  */
 public class ComboboxBinderWrapper<T> implements HasValue<ComboBox<T>, T> {
