@@ -62,7 +62,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	private BakerySearch searchBar;
 
 	private final Grid<Order> grid = new Grid<>();
-	private Map<Long, StorefrontItemHeader> ordersWithHeaders = new HashMap<>();
+	private StorefrontItemHeaderGenerator headers;
 
 	@Id("order-edit")
 	private OrderEdit orderEdit;
@@ -85,6 +85,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		this.orderService = orderService;
 		this.userService = userService;
 
+		headers = new StorefrontItemHeaderGenerator(ordersProvider);
+
 		// required for the `isDesktopView()` method
 		getElement().synchronizeProperty("desktopView", "desktop-view-changed");
 
@@ -97,7 +99,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		grid.addColumn("Order", new ComponentRenderer<>(order -> {
 			StorefrontItemDetailWrapper orderCard = new StorefrontItemDetailWrapper();
 			orderCard.setOrder(order);
-			orderCard.setHeader(ordersWithHeaders.get(order.getId()));
+			orderCard.setHeader(headers.get(order.getId()));
 			orderCard.addExpandedListener(e -> presenter.onOrderCardExpanded(orderCard));
 			orderCard.addCollapsedListener(e -> presenter.onOrderCardCollapsed(orderCard));
 			orderCard.addEditListener(e -> presenter.onOrderCardEdit(orderCard));
@@ -173,7 +175,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	class OrderEntityPresenter extends EntityPresenter<Order> {
 
 		private FilterablePageableDataProvider<Order, OrderFilter> dataProvider;
-		final private Sort defaultSort = new Sort(Sort.Direction.ASC, "dueDate", "dueTime", "id");
 
 		public OrderEntityPresenter() {
 			super(orderService, StorefrontView.this, "Order");
@@ -220,53 +221,12 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 							.countAnyMatchingAfterDueDate(query.getFilter().orElse(OrderFilter.getEmptyFilter()));
 				}
 			};
-			updateHeaders("", false);
+			headers.updateHeaders("", false);
 			setDataProvider(dataProvider);
 		}
 
-		void updateHeaders(String filter, boolean showPrevious) {
-			ordersWithHeaders.clear();
-
-			if (showPrevious) {
-				LocalDate date = LocalDate.now().minusDays(2);
-				Long id = ordersProvider.findFirstOrderAfterDueDate(filter, date, defaultSort);
-				if (id != null) {
-					ordersWithHeaders.put(id, StorefrontItemHeaderGenerator.getYesterdayHeader());
-				}
-
-				date = date.minusDays(date.getDayOfWeek().getValue());
-				id = ordersProvider.findFirstOrderAfterDueDate(filter, date, defaultSort);
-				if (id != null) {
-					ordersWithHeaders.put(id, StorefrontItemHeaderGenerator.getThisWeekBeforeYesterdayHeader());
-				}
-
-				id = ordersProvider.findFirstOrderAfterDueDate(filter, null, defaultSort);
-				if (id != null) {
-					ordersWithHeaders.put(id, StorefrontItemHeaderGenerator.getRecentHeader());
-				}
-			}
-
-			LocalDate date = LocalDate.now().minusDays(1);
-			Long id = ordersProvider.findFirstOrderAfterDueDate(filter, date, defaultSort);
-			if (id != null) {
-				ordersWithHeaders.put(id, StorefrontItemHeaderGenerator.getTodayHeader());
-			}
-
-			date = LocalDate.now();
-			id = ordersProvider.findFirstOrderAfterDueDate(filter, date, defaultSort);
-			if (id != null) {
-				ordersWithHeaders.put(id, StorefrontItemHeaderGenerator.getThisWeekStartingTomorrow(showPrevious));
-			}
-
-			date = date.minusDays(date.getDayOfWeek().getValue()).plusWeeks(1);
-			id = ordersProvider.findFirstOrderAfterDueDate(filter, date, defaultSort);
-			if (id != null) {
-				ordersWithHeaders.put(id, StorefrontItemHeaderGenerator.getUpcomingHeader());
-			}
-		}
-
 		void filterChanged(String filter, boolean showPrevious) {
-			updateHeaders(filter, showPrevious);
+			headers.updateHeaders(filter, showPrevious);
 			dataProvider.setFilter(new OrderFilter(filter, showPrevious));
 		}
 
