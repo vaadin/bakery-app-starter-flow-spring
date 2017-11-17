@@ -50,22 +50,6 @@
         </repository>
 
         <repository>
-            <id>flow-internal-snapshots</id>
-            <url>https://repo.vaadin.com/nexus/content/repositories/flow-snapshots/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-
-        <repository>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <id>repo-vaadin-com-snapshots</id>
-            <url>https://repo.vaadin.com/nexus/content/repositories/website-snapshots/</url>
-        </repository>
-
-        <repository>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
