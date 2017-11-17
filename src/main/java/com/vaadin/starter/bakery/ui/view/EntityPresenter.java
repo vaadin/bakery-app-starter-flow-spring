@@ -85,7 +85,6 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 			// Commit failed because of validation errors
 			showError(e, "The operation can not be executed as there are references to entity in the database", true);
 		} catch (OptimisticLockingFailureException e) {
-			// Somebody else probably edited the data at the same time
 			showError(e, "Somebody else might have updated the data. Please refresh and try again.", true);
 		} catch (EntityNotFoundException e) {
 			showError(e, String.format("The selected %s was not found.", entityName), false);

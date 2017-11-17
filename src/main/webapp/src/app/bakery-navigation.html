@@ -169,10 +169,6 @@
         };
       }
 
-      // Navigation should be implemented with plain <a router-link href="..."></a> elements.
-      // However, when done that way it causes the paper-ripple animation on the navigation paper-tabs to be laggy
-      // (see https://github.com/Polymer/paper-ripple/issues/10 for details).
-      // Hence this workaround: wait for the paper-ripple animation to finish, and then trigger navigation manually.
       _onNavAnimationEnd(event) {
         const pageId = event.target.getAttribute('page-id');
         this._debouncer = Polymer.Debouncer.debounce(
