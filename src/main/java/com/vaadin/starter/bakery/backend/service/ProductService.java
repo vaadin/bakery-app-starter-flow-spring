@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -57,4 +58,16 @@ public class ProductService implements FilterableCrudService<Product> {
 	public Product createNew() {
 		return new Product();
 	}
+
+	@Override
+	public Product save(Product entity) {
+		try {
+			return FilterableCrudService.super.save(entity);
+		} catch (DataIntegrityViolationException e) {
+			throw new UserFriendlyDataException(
+					"The is already a product with that name. Please select an unique name for the product.");
+		}
+
+	}
+
 }

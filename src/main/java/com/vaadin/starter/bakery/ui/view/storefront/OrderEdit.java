@@ -1,5 +1,6 @@
 package com.vaadin.starter.bakery.ui.view.storefront;
 
+import static com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil.createItemLabelGenerator;
 import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
 import java.time.LocalDate;
@@ -103,6 +104,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 		cancel.addClickListener(e -> fireEvent(new CancelEvent(this, false)));
 		review.addClickListener(e -> fireEvent(new ReviewEvent()));
 
+		status.setItemLabelGenerator(createItemLabelGenerator(OrderState::getDisplayName));
 		status.setDataProvider(DataProvider.ofItems(OrderState.values()));
 		status.addValueChangeListener(
 				e -> getModel().setStatus(DataProviderUtil.convertIfNotNull(e.getValue(), OrderState::name)));
@@ -119,6 +121,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 		});
 		binder.forField(new ComboboxBinderWrapper<>(time)).bind("dueTime");
 
+		pickupLocation.setItemLabelGenerator(createItemLabelGenerator(PickupLocation::getName));
 		pickupLocation.setDataProvider(locationProvider);
 		pickupLocation.setRequired(true);
 		binder.forField(new ComboboxBinderWrapper<>(pickupLocation)).bind("pickupLocation");

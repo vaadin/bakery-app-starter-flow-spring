@@ -12,7 +12,7 @@ public enum OrderState {
 	 *
 	 * @return a human friendly version of the identifier
 	 */
-	public String toString() {
+	public String getDisplayName() {
 		return SharedUtil.capitalize(name().toLowerCase(Locale.ENGLISH));
 	}
 }

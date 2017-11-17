@@ -14,10 +14,6 @@ public class PickupLocation extends AbstractEntity {
 	@Column(unique = true)
 	private String name;
 
-	public PickupLocation() {
-		// Empty constructor is needed by Spring Data / JPA
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -25,10 +21,4 @@ public class PickupLocation extends AbstractEntity {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	@Override
-	public String toString() {
-		return name;
-	}
-
 }
