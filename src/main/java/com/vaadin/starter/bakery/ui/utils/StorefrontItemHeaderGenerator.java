@@ -24,28 +24,28 @@ public class StorefrontItemHeaderGenerator {
 		sort = new Sort(Sort.Direction.ASC, orderSortFields);
 	}
 
-	public StorefrontItemHeader getRecentHeader() {
+	private StorefrontItemHeader getRecentHeader() {
 		return new StorefrontItemHeader("Recent", "Before this week");
 	}
 
-	public StorefrontItemHeader getYesterdayHeader() {
+	private StorefrontItemHeader getYesterdayHeader() {
 		LocalDate yesterday = LocalDate.now().minusDays(1);
 		return new StorefrontItemHeader("Yesterday", secondaryHeaderFor(yesterday));
 	}
 
-	public StorefrontItemHeader getTodayHeader() {
+	private StorefrontItemHeader getTodayHeader() {
 		LocalDate today = LocalDate.now();
 		return new StorefrontItemHeader("Today", secondaryHeaderFor(today));
 	}
 
-	public StorefrontItemHeader getThisWeekBeforeYesterdayHeader() {
+	private StorefrontItemHeader getThisWeekBeforeYesterdayHeader() {
 		LocalDate today = LocalDate.now();
 		LocalDate yesterday = today.minusDays(1);
 		LocalDate thisWeekStart = today.minusDays(today.getDayOfWeek().getValue() - 1);
 		return new StorefrontItemHeader("This week before yesterday", secondaryHeaderFor(thisWeekStart, yesterday));
 	}
 
-	public StorefrontItemHeader getThisWeekStartingTomorrow(boolean showPrevious) {
+	private StorefrontItemHeader getThisWeekStartingTomorrow(boolean showPrevious) {
 		LocalDate today = LocalDate.now();
 		LocalDate tomorrow = today.plusDays(1);
 		LocalDate nextWeekStart = today.minusDays(today.getDayOfWeek().getValue()).plusWeeks(1);
@@ -53,7 +53,7 @@ public class StorefrontItemHeaderGenerator {
 				secondaryHeaderFor(tomorrow, nextWeekStart));
 	}
 
-	public StorefrontItemHeader getUpcomingHeader() {
+	private StorefrontItemHeader getUpcomingHeader() {
 		return new StorefrontItemHeader("Upcoming", "After this week");
 	}
 

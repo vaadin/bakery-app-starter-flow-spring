@@ -2,7 +2,6 @@ package com.vaadin.starter.bakery.ui.view.storefront;
 
 import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +43,6 @@ import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.vaadin.artur.spring.dataprovider.FilterablePageableDataProvider;
 
 @Tag("bakery-storefront")
@@ -172,7 +170,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	class OrderEntityPresenter extends EntityPresenter<Order> {
 
 		private FilterablePageableDataProvider<Order, OrderFilter> dataProvider;
-		private StorefrontItemHeaderGenerator headers;
+		private StorefrontItemHeaderGenerator headersGenerator;
 		private final String[] orderSortFields = {"dueDate", "dueTime", "id"};
 
 		public OrderEntityPresenter() {
@@ -206,8 +204,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 				@Override
 				protected Page<Order> fetchFromBackEnd(Query<Order, OrderFilter> query, Pageable pageable) {
 					OrderFilter filter = query.getFilter().orElse(OrderFilter.getEmptyFilter());
-					Page<Order> page = ordersProvider.fetchFromBackEnd(filter, pageable);
-					return page;
+					return ordersProvider.fetchFromBackEnd(filter, pageable);
 				}
 
 				@Override
@@ -221,8 +218,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 							.countAnyMatchingAfterDueDate(query.getFilter().orElse(OrderFilter.getEmptyFilter()));
 				}
 			};
-			headers = new StorefrontItemHeaderGenerator(ordersProvider, orderSortFields);
-			headers.updateHeaders("", false);
+			headersGenerator = new StorefrontItemHeaderGenerator(ordersProvider, orderSortFields);
+			headersGenerator.updateHeaders("", false);
 			setDataProvider(dataProvider);
 		}
 
@@ -235,11 +232,11 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		}
 
 		public StorefrontItemHeader getHeaderByOrderId(Long id) {
-			return headers.get(id);
+			return headersGenerator.get(id);
 		}
 
 		void filterChanged(String filter, boolean showPrevious) {
-			headers.updateHeaders(filter, showPrevious);
+			headersGenerator.updateHeaders(filter, showPrevious);
 			dataProvider.setFilter(new OrderFilter(filter, showPrevious));
 		}
 
