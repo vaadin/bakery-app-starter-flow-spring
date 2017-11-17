@@ -173,6 +173,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 
 		private FilterablePageableDataProvider<Order, OrderFilter> dataProvider;
 		private StorefrontItemHeaderGenerator headers;
+		private final String[] orderSortFields = {"dueDate", "dueTime", "id"};
 
 		public OrderEntityPresenter() {
 			super(orderService, StorefrontView.this, "Order");
@@ -200,6 +201,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 				presenter.addComment(e.getOrderId(), e.getMessage());
 			});
 
+			final List<QuerySortOrder> querySortOrders = initQuerySortOrders();
 			dataProvider = new FilterablePageableDataProvider<Order, OrderFilter>() {
 				@Override
 				protected Page<Order> fetchFromBackEnd(Query<Order, OrderFilter> query, Pageable pageable) {
@@ -210,7 +212,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 
 				@Override
 				protected List<QuerySortOrder> getDefaultSortOrders() {
-					return new QuerySortOrderBuilder().thenAsc("dueDate").thenAsc("dueTime").thenAsc("id").build();
+					return querySortOrders;
 				}
 
 				@Override
@@ -219,9 +221,17 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 							.countAnyMatchingAfterDueDate(query.getFilter().orElse(OrderFilter.getEmptyFilter()));
 				}
 			};
-			headers = new StorefrontItemHeaderGenerator(ordersProvider);
+			headers = new StorefrontItemHeaderGenerator(ordersProvider, orderSortFields);
 			headers.updateHeaders("", false);
 			setDataProvider(dataProvider);
+		}
+
+		private List<QuerySortOrder> initQuerySortOrders() {
+			QuerySortOrderBuilder builder = new QuerySortOrderBuilder();
+			for (String field : orderSortFields) {
+				builder.thenAsc(field);
+			}
+			return builder.build();
 		}
 
 		public StorefrontItemHeader getHeaderByOrderId(Long id) {

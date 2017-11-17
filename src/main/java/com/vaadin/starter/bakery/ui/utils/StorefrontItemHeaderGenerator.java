@@ -16,10 +16,12 @@ public class StorefrontItemHeaderGenerator {
 	private final OrdersDataProvider ordersProvider;
 	private final Map<Long, StorefrontItemHeader> ordersWithHeaders = new HashMap<>();
 
-	private Sort sort = new Sort(Sort.Direction.ASC, "dueDate", "dueTime", "id");
+	private Sort sort;
 
-	public StorefrontItemHeaderGenerator(OrdersDataProvider ordersProvider) {
+	public StorefrontItemHeaderGenerator(OrdersDataProvider ordersProvider, String[] orderSortFields) {
 		this.ordersProvider = ordersProvider;
+
+		sort = new Sort(Sort.Direction.ASC, orderSortFields);
 	}
 
 	public StorefrontItemHeader getRecentHeader() {
