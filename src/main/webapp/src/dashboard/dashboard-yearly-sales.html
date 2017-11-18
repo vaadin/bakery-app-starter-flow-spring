@@ -15,9 +15,6 @@
     </style>
     <div class="wrapper">
       <vaadin-chart id="areachart" title="[[title]]" class="yearly-sales">
-        <template is="dom-repeat" items="[[series]]">
-          <vaadin-chart-series values="[[item.series]]"></vaadin-chart-series>
-        </template>
       </vaadin-chart>
     </div>
   </template>
@@ -31,7 +28,8 @@
       static get properties() {
         return {
           series: {
-            type: Object
+            type: Object,
+            observer: '_onSeriesChanged'
           },
           title: {
             type: Object,
@@ -57,10 +55,21 @@
             title: {
               enabled: false
             }
-          },
-          exporting: {
-            enabled: false
-          },
+          }
+        });
+      }
+
+      _onSeriesChanged(newSeries, oldSeries) {
+        Polymer.RenderStatus.beforeNextRender(this, () => {
+          var conf = this.$.areachart.configuration;
+          if (newSeries && !oldSeries) {
+            newSeries.forEach((element) => {
+              conf.addSeries({
+                name: element.title,
+                data: element.series
+              });
+            });
+          }
         });
       }
     }
