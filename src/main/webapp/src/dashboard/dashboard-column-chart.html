@@ -29,7 +29,8 @@
 
       static get observers() {
         return [
-          '_onCategoriesChanged(data.categories)'
+          '_onCategoriesChanged(data.categories)',
+          '_onSeriesNameChanged(data.seriesName)'
         ];
       }
 
@@ -50,26 +51,31 @@
               enabled: false
             }
           },
-          exporting: {
-            enabled: false
-          },
           legend: {
             enabled: false
           },
           series: [{
-            colorByPoint: false,
-            colorIndex: 1
+            colorByPoint: false
           }],
           plotOptions: {
             pointWidth: 20
           }
         });
       }
+
       _onCategoriesChanged(categories) {
         this.$.columnchart.update({
           xAxis: {
             categories: categories
           }
+        });
+      }
+
+      _onSeriesNameChanged(seriesName) {
+        this.$.columnchart.update({
+          series: [{
+            name: seriesName
+          }]
         });
       }
     }
