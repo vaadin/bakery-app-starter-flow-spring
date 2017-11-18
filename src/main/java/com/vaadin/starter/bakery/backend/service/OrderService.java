@@ -104,7 +104,7 @@ public class OrderService implements CrudService<Order> {
 	private static Set<OrderState> matchingStates(String filter) {
 		return filter.isEmpty() ? Collections.emptySet()
 				: Arrays.stream(OrderState.values())
-				.filter(e -> e.getDisplayName().toLowerCase().contains(filter.toLowerCase())).collect(toSet());
+						.filter(e -> e.toString().toLowerCase().contains(filter.toLowerCase())).collect(toSet());
 	}
 
 	public long countAnyMatchingAfterDueDate(Optional<String> optionalFilter, Optional<LocalDate> optionalFilterDate) {
