@@ -1,12 +1,14 @@
 package com.vaadin.starter.bakery.ui.view.storefront;
 
+import static com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil.createItemLabelGenerator;
 import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,19 +17,19 @@ import org.springframework.context.annotation.Scope;
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.provider.DataProvider;
-import com.vaadin.data.provider.ListDataProvider;
-import com.vaadin.data.provider.Query;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
+import com.vaadin.starter.bakery.backend.data.entity.PickupLocation;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.User;
+import com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.starter.bakery.ui.utils.converters.LocalTimeConverter;
-import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
+import com.vaadin.starter.bakery.ui.view.wrapper.ComboboxBinderWrapper;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
 import com.vaadin.ui.combobox.ComboBox;
@@ -54,27 +56,22 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 
 		void setStatus(String status);
 
-		void setStatusValue(String statusValue);
-
-		void setTime(String order);
-
-		void setPickupLocation(String pickupLocation);
 	}
 
 	@Id("order-edit-title")
 	private H2 title;
 
 	@Id("order-edit-status")
-	private ComboBox<String> status;
+	private ComboBox<OrderState> status;
 
 	@Id("due-date")
 	private DatePicker date;
 
 	@Id("due-time")
-	private ComboBox<String> time;
+	private ComboBox<LocalTime> time;
 
 	@Id("pickup-location")
-	private ComboBox<String> pickupLocation;
+	private ComboBox<PickupLocation> pickupLocation;
 
 	@Id("customer-name")
 	private TextField customerName;
@@ -91,9 +88,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 	@Id("review")
 	private Button review;
 
-	private OrderItemsEdit items = new OrderItemsEdit();
-
-	private boolean initialHasChanges;
+	private OrderItemsEdit items;
 
 	private User currentUser;
 
@@ -101,39 +96,35 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 
 	private final LocalTimeConverter localTimeConverter = new LocalTimeConverter();
 
-	private final OrderStateConverter orderStateConverter = new OrderStateConverter();
-
-	private final PickupLocationDataProvider locationProvider;
-
-	private boolean hasChanges = false;
-
 	@Autowired
-	public OrderEdit(PickupLocationDataProvider locationProvider) {
-		this.locationProvider = locationProvider;
+	public OrderEdit(PickupLocationDataProvider locationProvider, ProductDataProvider productDataProvider) {
+		items = new OrderItemsEdit(productDataProvider);
 		addToSlot(this, items, "order-items-edit");
 
 		cancel.addClickListener(e -> fireEvent(new CancelEvent(this, false)));
 		review.addClickListener(e -> fireEvent(new ReviewEvent()));
 
-		ListDataProvider<String> stateProvider = DataProvider
-				.fromStream(Arrays.stream(OrderState.values()).map(orderStateConverter::toPresentation));
-		status.setDataProvider(stateProvider);
-		status.addValueChangeListener(e -> {
-			getModel().setStatus(e.getValue());
-			setHasChanges(true);
-		});
-
+		status.setItemLabelGenerator(createItemLabelGenerator(OrderState::getDisplayName));
+		status.setDataProvider(DataProvider.ofItems(OrderState.values()));
+		status.addValueChangeListener(
+				e -> getModel().setStatus(DataProviderUtil.convertIfNotNull(e.getValue(), OrderState::name)));
+		binder.forField(new ComboboxBinderWrapper<>(status)).bind("state");
 		date.setValue(LocalDate.now());
-		binder.forField(date).bind("dueDate");
 
-		ListDataProvider<String> timeDataProvider = DataProvider.fromStream(
-				IntStream.rangeClosed(8, 16).mapToObj(i -> localTimeConverter.toPresentation(LocalTime.of(i, 0))));
-		time.setDataProvider(timeDataProvider);
-		time.addValueChangeListener(e -> setHasChanges(true));
+		SortedSet<LocalTime> timeValues = IntStream.rangeClosed(8, 16).mapToObj(i -> LocalTime.of(i, 0))
+				.collect(Collectors.toCollection(TreeSet::new));
+		time.setItems(timeValues);
+		time.setItemLabelGenerator(localTimeConverter::toPresentation);
+		time.addCustomValueSetListener(e -> {
+			timeValues.add(localTimeConverter.toModel(e.getDetail()));
+			time.setItems(timeValues);
+		});
+		binder.forField(new ComboboxBinderWrapper<>(time)).bind("dueTime");
 
+		pickupLocation.setItemLabelGenerator(createItemLabelGenerator(PickupLocation::getName));
 		pickupLocation.setDataProvider(locationProvider);
-		pickupLocation.addValueChangeListener(e -> setHasChanges(true));
 		pickupLocation.setRequired(true);
+		binder.forField(new ComboboxBinderWrapper<>(pickupLocation)).bind("pickupLocation");
 
 		customerName.setRequired(true);
 		binder.forField(customerName).bind("customer.fullName");
@@ -147,20 +138,15 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 
 		items.addListener(OrderItemsEdit.ValueChangeEvent.class, e -> review.setDisabled(!hasChanges()));
 		items.addListener(OrderItemsEdit.NewEditorEvent.class, e -> updateDesktopViewOnItemsEdit());
-		binder.addValueChangeListener(e -> review.setDisabled(!hasChanges()));
-	}
-
-	public void setInitialHasChanges(boolean initialHasChanges) {
-		this.initialHasChanges = initialHasChanges;
-	}
-
-	private void setHasChanges(boolean hasChanges) {
-		this.hasChanges = hasChanges;
-		review.setDisabled(!hasChanges());
+		binder.addValueChangeListener(e -> {
+			if (e.getOldValue() != null) {
+				review.setDisabled(!hasChanges());
+			}
+		});
 	}
 
 	public boolean hasChanges() {
-		return initialHasChanges || binder.hasChanges() || items.hasChanges() || hasChanges;
+		return binder.hasChanges() || items.hasChanges();
 	}
 
 	private void updateDesktopViewOnItemsEdit() {
@@ -169,42 +155,29 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 
 	public void init(User currentUser, Collection<Product> availableProducts) {
 		this.currentUser = currentUser;
-		items.setProducts(availableProducts);
 	}
 
 	public void close() {
 		items.reset();
-		getModel().setTime("");
-		getModel().setStatusValue("");
-		getModel().setPickupLocation("");
 		setTotalPrice(0);
 	}
 
 	public void write(Order order) throws ValidationException {
-		order.setDueTime(localTimeConverter.toModel(time.getValue()));
-		Query<String, String> locationQuery = new Query<>(0, 1, Collections.emptyList(), null,
-				pickupLocation.getValue());
-		locationProvider.findLocations(locationQuery).stream().findFirst().ifPresent(p -> order.setPickupLocation(p));
-		order.changeState(currentUser, orderStateConverter.toModel(status.getValue()));
+		order.setDueTime(time.getValue());
+		order.setPickupLocation(pickupLocation.getValue());
+		order.changeState(currentUser, status.getValue());
 
 		binder.writeBean(order);
 	}
 
 	public void read(Order order) {
 		binder.readBean(order);
-		initialHasChanges = false;
 		title.setText(String.format("%s Order", order.isNew() ? "New" : "Edit"));
-		getModel().setTime(localTimeConverter.toPresentation(order.getDueTime()));
 
 		if (order.getState() != null) {
-			String status = orderStateConverter.toPresentation(order.getState());
-			getModel().setStatusValue(status);
-			getModel().setStatus(status);
+			getModel().setStatus(order.getState().name());
 		}
 
-		if (order.getPickupLocation() != null) {
-			getModel().setPickupLocation(order.getPickupLocation().getName());
-		}
 		review.setDisabled(true);
 		updateDesktopViewOnItemsEdit();
 	}

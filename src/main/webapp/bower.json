@@ -19,7 +19,9 @@
     "vaadin": "vaadin/vaadin#10.0.0-alpha5",
     "vaadin-grid": "vaadin/vaadin-grid#4.1.0-alpha3",
     "vaadin-charts": "vaadin/vaadin-charts#6.0.0-alpha2",
-    "vaadin-board": "vaadin/vaadin-board#1.1.0-beta1"
+    "vaadin-board": "vaadin/vaadin-board#1.1.0-beta1",
+    "vaadin-text-field": "vaadin/vaadin-text-field#stats",
+    "vaadin-button": "vaadin/vaadin-button#stats"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0"
@@ -29,6 +31,8 @@
     "vaadin-grid": "4.1.0-alpha3",
     "vaadin-charts": "6.0.0-alpha2",
     "highcharts": "^5.0.0",
-    "vaadin-board": "1.1.0-beta1"
+    "vaadin-board": "1.1.0-beta1",
+    "vaadin-text-field": "stats",
+    "vaadin-button": "stats"
   }
 }

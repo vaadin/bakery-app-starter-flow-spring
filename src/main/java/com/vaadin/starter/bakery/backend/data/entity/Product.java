@@ -1,5 +1,6 @@
 package com.vaadin.starter.bakery.backend.data.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
@@ -11,6 +12,7 @@ public class Product extends AbstractEntity {
 
 	@Size(max = 255, message = "The maximum length of a product name is 255 characters")
 	@NotBlank(message = "Name is required")
+	@Column(unique = true)
 	private String name;
 
 	// Real price * 100 as an int to avoid rounding errors
@@ -33,4 +35,8 @@ public class Product extends AbstractEntity {
 		this.price = price;
 	}
 
+	@Override
+	public String toString() {
+		return name;
+	}
 }
