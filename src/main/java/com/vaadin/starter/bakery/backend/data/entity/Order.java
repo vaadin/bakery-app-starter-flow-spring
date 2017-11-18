@@ -159,7 +159,7 @@ public class Order extends AbstractEntity {
 		boolean createHistory = this.state != state && this.state != null && state != null;
 		this.state = state;
 		if (createHistory) {
-			addHistoryItem(user, "Order " + state.getDisplayName());
+			addHistoryItem(user, "Order " + state);
 		}
 	}
 
