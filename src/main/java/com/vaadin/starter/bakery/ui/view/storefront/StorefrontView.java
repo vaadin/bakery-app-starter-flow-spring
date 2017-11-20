@@ -3,12 +3,9 @@ package com.vaadin.starter.bakery.ui.view.storefront;
 import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import com.vaadin.data.provider.Query;
-import com.vaadin.data.provider.QuerySortOrder;
-import com.vaadin.data.provider.QuerySortOrderBuilder;
+import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider;
 import com.vaadin.starter.bakery.ui.entities.StorefrontItemHeader;
 import com.vaadin.starter.bakery.ui.utils.OrderFilter;
 import com.vaadin.starter.bakery.ui.utils.StorefrontItemHeaderGenerator;
@@ -41,8 +38,7 @@ import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.vaadin.artur.spring.dataprovider.FilterablePageableDataProvider;
 
 @Tag("bakery-storefront")
@@ -171,7 +167,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 
 		private FilterablePageableDataProvider<Order, OrderFilter> dataProvider;
 		private StorefrontItemHeaderGenerator headersGenerator;
-		private final String[] orderSortFields = {"dueDate", "dueTime", "id"};
+			private final String[] orderSortFields = {"dueDate", "dueTime", "id"};
 
 		public OrderEntityPresenter() {
 			super(orderService, StorefrontView.this, "Order");
@@ -199,36 +195,10 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 				presenter.addComment(e.getOrderId(), e.getMessage());
 			});
 
-			final List<QuerySortOrder> querySortOrders = initQuerySortOrders();
-			dataProvider = new FilterablePageableDataProvider<Order, OrderFilter>() {
-				@Override
-				protected Page<Order> fetchFromBackEnd(Query<Order, OrderFilter> query, Pageable pageable) {
-					OrderFilter filter = query.getFilter().orElse(OrderFilter.getEmptyFilter());
-					return ordersProvider.fetchFromBackEnd(filter, pageable);
-				}
-
-				@Override
-				protected List<QuerySortOrder> getDefaultSortOrders() {
-					return querySortOrders;
-				}
-
-				@Override
-				protected int sizeInBackEnd(Query<Order, OrderFilter> query) {
-					return (int) ordersProvider
-							.countAnyMatchingAfterDueDate(query.getFilter().orElse(OrderFilter.getEmptyFilter()));
-				}
-			};
+			dataProvider = new OrdersGridDataProvider(ordersProvider, Sort.Direction.ASC, orderSortFields);
 			headersGenerator = new StorefrontItemHeaderGenerator(ordersProvider, orderSortFields);
 			headersGenerator.updateHeaders("", false);
 			setDataProvider(dataProvider);
-		}
-
-		private List<QuerySortOrder> initQuerySortOrders() {
-			QuerySortOrderBuilder builder = new QuerySortOrderBuilder();
-			for (String field : orderSortFields) {
-				builder.thenAsc(field);
-			}
-			return builder.build();
 		}
 
 		public StorefrontItemHeader getHeaderByOrderId(Long id) {

@@ -12,6 +12,7 @@ import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.router.PageTitle;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.ui.BakeryApp;
+import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider;
 import com.vaadin.starter.bakery.ui.view.storefront.StorefrontItem;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.event.AttachEvent;
@@ -21,7 +22,6 @@ import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import com.vaadin.ui.renderers.ComponentRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 
 import com.vaadin.router.Route;
 import com.vaadin.starter.bakery.backend.data.DashboardData;
@@ -36,8 +36,6 @@ import com.vaadin.starter.bakery.ui.utils.DashboardUtils;
 import com.vaadin.starter.bakery.ui.utils.DashboardUtils.OrdersCountData;
 import com.vaadin.starter.bakery.ui.utils.DashboardUtils.OrdersCountDataWithChart;
 import org.springframework.data.domain.Sort;
-
-import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
 @Tag("bakery-dashboard")
 @HtmlImport("src/dashboard/bakery-dashboard.html")
@@ -64,8 +62,8 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 
 	@Override
 	protected void onAttach(AttachEvent attachEvent) {
-		PageRequest pr = new PageRequest(0, 15, Sort.Direction.ASC, "dueDate", "dueTime", "id");
-		grid.setItems(ordersProvider.getOrdersList("", false, pr).getOrders());
+		grid.setDataProvider(new OrdersGridDataProvider(ordersProvider,
+				Sort.Direction.ASC, "dueDate", "dueTime", "id"));
 
 		DashboardData data = ordersProvider.getDashboardData();
 		populateYearlySalesChart(data);
