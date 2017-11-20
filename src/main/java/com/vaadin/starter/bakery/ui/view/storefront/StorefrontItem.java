@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -13,6 +14,7 @@ import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.ui.utils.DateTimeUtils;
 import com.vaadin.starter.bakery.ui.utils.converters.LocalTimeConverter;
+import com.vaadin.starter.bakery.ui.utils.converters.LongToStringConverter;
 import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Tag;
@@ -27,12 +29,24 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 @HtmlImport("src/storefront/storefront-item.html")
 public class StorefrontItem extends PolymerTemplate<StorefrontItem.Model> {
 
+	/**
+	 * 3 letter day of the week + day number. E.g: Mon 20
+	 */
 	private static final DateTimeFormatter SHORT_DAY_FORMATTER = DateTimeFormatter.ofPattern("E d");
+
+	/**
+	 * Full day name. E.g: Monday.
+	 */
 	private static final DateTimeFormatter FULL_DAY_FORMATTER = DateTimeFormatter.ofPattern("EEEE");
+
+	/**
+	 * 3 letter month name + day number E.g: Nov 20
+	 */
 	private static final DateTimeFormatter MONTH_AND_DAY_FORMATTER = DateTimeFormatter.ofPattern("MMM d");
 
 	public interface Model extends TemplateModel {
-		@Include({ "customer.fullName", "items.product.name", "items.quantity" })
+		@Include({ "id", "state", "customer.fullName", "items.product.name", "items.quantity" })
+		@Convert(value = LongToStringConverter.class, path = "id")
 		@Convert(value = OrderStateConverter.class, path = "state")
 		void setItem(Order order);
 	}
@@ -43,9 +57,12 @@ public class StorefrontItem extends PolymerTemplate<StorefrontItem.Model> {
 	public void setOrder(Order order) {
 		getModel().setItem(order);
 		timePlace.removeAll();
-		TimePeriod.get(order.getDueDate()).createComponents(order, timePlace::add);
+		DataGeneratorForTimePeriod.get(order.getDueDate()).createComponents(order, timePlace::add);
 	}
 
+	/**
+	 * Creates a html component using data from the order.
+	 */
 	enum ItemComponentCreator implements Function<Order, Component> {
 		MONTH(o -> createHeader("month", MONTH_AND_DAY_FORMATTER.format(o.getDueDate()))),
 
@@ -59,15 +76,15 @@ public class StorefrontItem extends PolymerTemplate<StorefrontItem.Model> {
 
 		SECONDARY_TIME(o -> createTimeComponent("secondary-time", LocalTimeConverter.formatter.format(o.getDueTime())));
 
-		private final Function<Order, Component> function;
+		private final Function<Order, Component> componentTextGenerator;
 
-		private ItemComponentCreator(Function<Order, Component> function) {
-			this.function = function;
+		private ItemComponentCreator(Function<Order, Component> componentTextGenerator) {
+			this.componentTextGenerator = componentTextGenerator;
 		}
 
 		@Override
 		public Component apply(Order t) {
-			return function.apply(t);
+			return componentTextGenerator.apply(t);
 		}
 
 		static Component fillComponent(HtmlContainer c, String id, String text) {
@@ -85,7 +102,10 @@ public class StorefrontItem extends PolymerTemplate<StorefrontItem.Model> {
 		}
 	}
 
-	enum TimePeriod {
+	/**
+	 * Displays data depending on the time period of the order's due date.
+	 */
+	enum DataGeneratorForTimePeriod {
 		YESTERDAY_OR_TODAY(ItemComponentCreator.TIME, ItemComponentCreator.PLACE),
 
 		THIS_WEEK(ItemComponentCreator.SHORT_DAY, ItemComponentCreator.SECONDARY_TIME, ItemComponentCreator.PLACE),
@@ -95,16 +115,16 @@ public class StorefrontItem extends PolymerTemplate<StorefrontItem.Model> {
 		private final List<Function<Order, Component>> componentCreators;
 
 		@SafeVarargs
-		private TimePeriod(Function<Order, Component>... componentCreators) {
+		private DataGeneratorForTimePeriod(Function<Order, Component>... componentCreators) {
 			this.componentCreators = Arrays.asList(componentCreators);
 		}
 
-		static TimePeriod get(LocalDate date) {
+		static DataGeneratorForTimePeriod get(LocalDate date) {
 			LocalDate now = LocalDate.now();
 			if (date.equals(now) || date.equals(now.minusDays(1))) {
 				return YESTERDAY_OR_TODAY;
 			} else if (DateTimeUtils.isSameWeek(now, date)) {
-				return TimePeriod.THIS_WEEK;
+				return DataGeneratorForTimePeriod.THIS_WEEK;
 			} else {
 				return OTHER_DATES;
 			}
