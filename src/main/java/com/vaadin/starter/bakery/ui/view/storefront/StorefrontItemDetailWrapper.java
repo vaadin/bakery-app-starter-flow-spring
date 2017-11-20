@@ -59,12 +59,13 @@ public class StorefrontItemDetailWrapper extends PolymerTemplate<StorefrontItemD
 		return getModel().getSelected();
 	}
 
-	public void setDisplayHeader(boolean displayHeader) {
-		getModel().setDisplayHeader(displayHeader);
-	}
-
 	public void setHeader(StorefrontItemHeader header) {
+		if (header == null) {
+			getModel().setDisplayHeader(false);
+			return;
+		}
 		getModel().setHeader(header);
+		getModel().setDisplayHeader(true);
 	}
 
 	@DomEvent("expanded")

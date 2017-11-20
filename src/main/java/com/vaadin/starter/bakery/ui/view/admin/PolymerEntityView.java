@@ -32,7 +32,7 @@ public abstract class PolymerEntityView<E extends AbstractEntity, T extends Temp
 		getEditor().addListener(SaveEvent.class, e -> getPresenter().save());
 		getEditor().addListener(DeleteEvent.class, e -> getPresenter().delete());
 		getItemsView().addActionClickListener(e -> getPresenter().createNew());
-		getItemsView().addFilterChangeListener(f -> getPresenter().filter(f));
+		getItemsView().addFilterChangeListener(e -> getPresenter().filter(getItemsView().getFilter()));
 	}
 
 	protected abstract DefaultEntityPresenter<E> getPresenter();
@@ -46,7 +46,7 @@ public abstract class PolymerEntityView<E extends AbstractEntity, T extends Temp
 	protected abstract Grid<E> getGrid();
 
 	@Override
-	public void setDataProvider(DataProvider<E, Void> dataProvider) {
+	public void setDataProvider(DataProvider<E, ?> dataProvider) {
 		getGrid().setDataProvider(dataProvider);
 	}
 
