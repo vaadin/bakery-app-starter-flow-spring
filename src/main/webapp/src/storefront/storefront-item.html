@@ -91,40 +91,7 @@
 
     <div id="info-wrapper" class="flex">
       <storefront-item-badge id="storefront-item-status" status="[[item.state]]"></storefront-item-badge>
-
-      <div id="time-place">
-        <template is="dom-if" if="[[_isRecent(item.dueDate.date)]]">
-          <h3 id="month">[[_getMonth(item.dueDate.date)]]</h3>
-          <div id="full-day">[[_getFullDay(item.dueDate.date)]]</div>
-        </template>
-
-        <template is="dom-if" if="[[_isYesterday(item.dueDate.date)]]">
-          <h3 id="time">[[item.dueTime]]</h3>
-          <div id="place">[[item.pickupLocation.name]]</div>
-        </template>
-
-        <template is="dom-if" if="[[_isToday(item.dueDate.date)]]">
-          <h3 id="time">[[item.dueTime]]</h3>
-          <div id="place">[[item.pickupLocation.name]]</div>
-        </template>
-
-        <template is="dom-if" if="[[_isThisWeekBeforeYesterday(item.dueDate.date)]]">
-          <h3 id="short-day">[[_getShortDay(item.dueDate.date)]]</h3>
-          <div id="secondary-time">[[item.dueTime]]</div>
-          <div id="place">[[item.pickupLocation.name]]</div>
-        </template>
-
-        <template is="dom-if" if="[[_isThisWeekStartingTomorrow(item.dueDate.date)]]">
-          <h3 id="short-day">[[_getShortDay(item.dueDate.date)]]</h3>
-          <div id="secondary-time">[[item.dueTime]]</div>
-          <div id="place">[[item.pickupLocation.name]]</div>
-        </template>
-
-        <template is="dom-if" if="[[_isUpcoming(item.dueDate.date)]]">
-          <h3 id="month">[[_getMonth(item.dueDate.date)]]</h3>
-          <div id="full-day">[[_getFullDay(item.dueDate.date)]]</div>
-        </template>
-      </div>
+      <div id="time-place"></div>
     </div>
 
     <div id="name-items">
