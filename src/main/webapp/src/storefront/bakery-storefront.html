@@ -43,7 +43,7 @@ Added dynamically
         position: relative;
       }
 
-      .grid-wrapper ::slotted([slot="grid"]) {
+      #storefront-grid {
         flex: 1;
         height: 100%;
         width: 100%;
@@ -58,7 +58,7 @@ Added dynamically
           padding: 0 !important;
         }
 
-        .grid-wrapper ::slotted([slot="grid"]) {
+        #storefront-grid {
           padding: var(--valo-space-s) 0;
           margin: 0 auto;
         }
@@ -70,7 +70,7 @@ Added dynamically
     <bakery-search id="search" show-checkbox></bakery-search>
 
     <div class="grid-wrapper">
-      <slot name="grid"></slot>
+      <vaadin-grid id="storefront-grid" theme="no-header storefront-grid"></vaadin-grid>
 
       <item-detail-dialog desktop-view$="[[desktopView]]" opened="[[editing]]">
         <order-detail id="order-detail" desktop-view="[[desktopView]]"></order-detail>

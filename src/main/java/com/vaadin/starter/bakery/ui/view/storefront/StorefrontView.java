@@ -1,7 +1,5 @@
 package com.vaadin.starter.bakery.ui.view.storefront;
 
-import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,7 +53,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	@Id("search")
 	private BakerySearch searchBar;
 
-	private final Grid<Order> grid = new Grid<>();
+	@Id("storefront-grid")
+	private Grid<Order> grid;
 
 	@Id("order-edit")
 	private OrderEdit orderEdit;
@@ -85,7 +84,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		searchBar.setCheckboxText("Show past orders");
 		searchBar.setPlaceHolder("Search");
 
-		grid.getElement().setAttribute("theme", "no-header storefront-grid");
 		grid.setSelectionMode(Grid.SelectionMode.NONE);
 		grid.addColumn("Order", new ComponentRenderer<>(order -> {
 			StorefrontItemDetailWrapper orderCard = new StorefrontItemDetailWrapper();
@@ -97,7 +95,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 			orderCard.addCommentListener(e -> presenter.onOrderCardAddComment(orderCard, e.getMessage()));
 			return orderCard;
 		}));
-		addToSlot(this, grid, "grid");
 
 		getModel().setEditing(false);
 		presenter = new OrderEntityPresenter();
