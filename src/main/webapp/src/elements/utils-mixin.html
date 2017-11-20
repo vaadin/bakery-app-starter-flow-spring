@@ -4,51 +4,6 @@
 
   <script>
     /**
-     * Adds a bunch of utility date manipulation methods.
-     */
-    window.LocaleUtilsMixin = subclass => class extends subclass {
-      _isYesterday(date) {
-        return moment().subtract(1, 'days').startOf('day').isSame(new Date(date), 'day');
-      }
-
-      _isToday(date) {
-        return moment().isSame(new Date(date), 'day');
-      }
-
-      _isThisWeekBeforeYesterday(date) {
-        // Is this week until the day before yesterday (excluded)
-        return (moment(new Date(date)).isAfter(moment().startOf('week')) &&
-                moment(new Date(date)).isBefore(moment().subtract(1, 'days').startOf('day')));
-      }
-
-      _isThisWeekStartingTomorrow(date) {
-        // Is this week starting tomorrow
-        return (moment().isBefore(moment(new Date(date)), 'day') &&
-                moment(new Date(date)).isBefore(moment().endOf('week').add(1, 'day')));
-      }
-
-      _isRecent(date) {
-        return moment(new Date(date)).isBefore(moment().startOf('week').add(1, 'day'));
-      }
-
-      _isUpcoming(date) {
-        return moment(new Date(date)).isAfter(moment().endOf('week').add(1, 'day'));
-      }
-
-      _getShortDay(date) {
-        return moment(new Date(date)).format('ddd D');
-      }
-
-      _getFullDay(date) {
-        return moment(new Date(date)).format('dddd');
-      }
-
-      _getMonth(date) {
-        return moment(new Date(date)).format('MMM D');
-      }
-    };
-
-    /**
      * Adds the scroll-shadow attribute if there is a `#main` element with scrollsize
      * larger than its height, and there is hidden content at the bottom.
      */

@@ -77,7 +77,7 @@ public class StorefrontItem extends PolymerTemplate<StorefrontItem.Model> {
 
 		private final Function<Order, Component> componentTextGenerator;
 
-		private ItemComponentCreator(Function<Order, Component> componentTextGenerator) {
+		ItemComponentCreator(Function<Order, Component> componentTextGenerator) {
 			this.componentTextGenerator = componentTextGenerator;
 		}
 
@@ -113,8 +113,7 @@ public class StorefrontItem extends PolymerTemplate<StorefrontItem.Model> {
 
 		private final List<Function<Order, Component>> componentCreators;
 
-		@SafeVarargs
-		private DataGeneratorForTimePeriod(Function<Order, Component>... componentCreators) {
+		DataGeneratorForTimePeriod(ItemComponentCreator... componentCreators) {
 			this.componentCreators = Arrays.asList(componentCreators);
 		}
 
