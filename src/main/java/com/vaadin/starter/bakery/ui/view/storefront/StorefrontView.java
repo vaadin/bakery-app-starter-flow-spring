@@ -167,7 +167,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 
 		private FilterablePageableDataProvider<Order, OrderFilter> dataProvider;
 		private StorefrontItemHeaderGenerator headersGenerator;
-			private final String[] orderSortFields = {"dueDate", "dueTime", "id"};
+		private final String[] orderSortFields = {"dueDate", "dueTime", "id"};
 
 		public OrderEntityPresenter() {
 			super(orderService, StorefrontView.this, "Order");

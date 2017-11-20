@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import com.vaadin.starter.bakery.backend.data.DashboardData;
 import com.vaadin.starter.bakery.backend.service.OrderService;
-import com.vaadin.starter.bakery.ui.utils.DashboardUtils.PageInfo;
 
 @Service
 public class OrdersDataProvider {
@@ -27,14 +26,6 @@ public class OrdersDataProvider {
 	@Autowired
 	public OrdersDataProvider(OrderService orderService) {
 		this.orderService = orderService;
-	}
-
-	public PageInfo getOrdersList(String filter, boolean showPrevious, Pageable pageable) {
-		return new PageInfo(fetchFromBackEnd(filter, showPrevious, pageable).getContent(), pageable.getPageNumber());
-	}
-
-	public long countAnyMatchingAfterDueDate(boolean countPrevious) {
-		return getOrderService().countAnyMatchingAfterDueDate(Optional.empty(), getFilterDate(countPrevious));
 	}
 
 	public long countAnyMatchingAfterDueDate(OrderFilter filter) {
