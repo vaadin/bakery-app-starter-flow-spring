@@ -23,7 +23,7 @@ public interface EntityView<T> extends HasNotifications {
 	 *
 	 * @param dataProvider provides entities for grid
 	 */
-	void setDataProvider(DataProvider<T, Void> dataProvider);
+	void setDataProvider(DataProvider<T, ?> dataProvider);
 
 	/**
 	 * Opens a dialog showing details of a single entity.

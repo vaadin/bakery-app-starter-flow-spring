@@ -28,13 +28,4 @@ public class UserEditElement extends TestBenchElement {
 	public EditFormElement getEditForm() {
 		return $(EditFormElement.class).id("user-edit-form");
 	}
-
-	// @Id("role")
-	// public ComboBoxElement<String> getRoleField() {
-	// }
-	//
-	// @Id("user-edit-form")
-	// public EditFormElement getEditForm() {
-	// }
-
 }

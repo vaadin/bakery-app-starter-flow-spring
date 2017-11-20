@@ -1,7 +1,5 @@
 package com.vaadin.starter.bakery.ui.view.admin;
 
-import java.util.function.Consumer;
-
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.starter.bakery.ui.components.BakerySearch;
 import com.vaadin.ui.Tag;
@@ -29,8 +27,8 @@ public class ItemsView extends PolymerTemplate<ItemsView.Model> {
 		getElement().appendChild(searchBar.getElement());
 	}
 
-	public void addFilterChangeListener(Consumer<String> consumer) {
-		searchBar.addFilterChangeListener((filter, showPrevious) -> consumer.accept(filter));
+	public void addFilterChangeListener(ComponentEventListener<BakerySearch.FilterChanged> listener) {
+		searchBar.addFilterChangeListener(listener);
 	}
 
 	public void addActionClickListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {

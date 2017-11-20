@@ -1,19 +1,17 @@
 package com.vaadin.starter.bakery.ui.view.storefront;
 
-import static com.vaadin.starter.bakery.ui.utils.StorefrontItemHeaderGenerator.computeEntriesWithHeader;
 import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider;
 import com.vaadin.starter.bakery.ui.entities.StorefrontItemHeader;
+import com.vaadin.starter.bakery.ui.utils.OrderFilter;
+import com.vaadin.starter.bakery.ui.utils.StorefrontItemHeaderGenerator;
 import com.vaadin.ui.grid.Grid;
 import com.vaadin.ui.renderers.ComponentRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
-
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.flow.model.TemplateModel;
@@ -40,6 +38,8 @@ import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
+import org.springframework.data.domain.Sort;
+import org.vaadin.artur.spring.dataprovider.FilterablePageableDataProvider;
 
 @Tag("bakery-storefront")
 @HtmlImport("src/storefront/bakery-storefront.html")
@@ -55,8 +55,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	@Id("search")
 	private BakerySearch searchBar;
 
-	private final Grid<Order> grid;
-	private Map<Long, StorefrontItemHeader> ordersWithHeaders;
+	private final Grid<Order> grid = new Grid<>();
 
 	@Id("order-edit")
 	private OrderEdit orderEdit;
@@ -64,7 +63,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	@Id("order-detail")
 	private OrderDetail orderDetail;
 
-	private Presenter presenter;
+	private OrderEntityPresenter presenter;
 
 	private OrdersDataProvider ordersProvider;
 	private OrderService orderService;
@@ -79,8 +78,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		this.orderService = orderService;
 		this.userService = userService;
 
-		presenter = new Presenter();
-
 		// required for the `isDesktopView()` method
 		getElement().synchronizeProperty("desktopView", "desktop-view-changed");
 
@@ -88,14 +85,12 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		searchBar.setCheckboxText("Show past orders");
 		searchBar.setPlaceHolder("Search");
 
-		grid = new Grid<>();
-		grid.getElement().setAttribute("theme", "storefront-grid");
+		grid.getElement().setAttribute("theme", "no-header storefront-grid");
 		grid.setSelectionMode(Grid.SelectionMode.NONE);
 		grid.addColumn("Order", new ComponentRenderer<>(order -> {
 			StorefrontItemDetailWrapper orderCard = new StorefrontItemDetailWrapper();
 			orderCard.setOrder(order);
-			orderCard.setDisplayHeader(ordersWithHeaders.containsKey(order.getId()));
-			orderCard.setHeader(ordersWithHeaders.get(order.getId()));
+			orderCard.setHeader(presenter.getHeaderByOrderId(order.getId()));
 			orderCard.addExpandedListener(e -> presenter.onOrderCardExpanded(orderCard));
 			orderCard.addCollapsedListener(e -> presenter.onOrderCardCollapsed(orderCard));
 			orderCard.addEditListener(e -> presenter.onOrderCardEdit(orderCard));
@@ -104,8 +99,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		}));
 		addToSlot(this, grid, "grid");
 
-		presenter.filterChanged("", false);
 		getModel().setEditing(false);
+		presenter = new OrderEntityPresenter();
 	}
 
 	@Override
@@ -114,11 +109,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 			boolean editView = event.getLocation().getQueryParameters().getParameters().containsKey("edit");
 			presenter.loadEntity(orderId, editView);
 		}
-	}
-
-	private void setOrders(List<Order> orders, boolean showPrevious) {
-		ordersWithHeaders = computeEntriesWithHeader(orders, showPrevious);
-		grid.setItems(orders);
 	}
 
 	private void showOrderEdit() {
@@ -150,7 +140,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	}
 
 	@Override
-	public void setDataProvider(DataProvider<Order, Void> dataProvider) {
+	public void setDataProvider(DataProvider<Order, ?> dataProvider) {
+		grid.setDataProvider(dataProvider);
 	}
 
 	@Override
@@ -172,11 +163,15 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		grid.getElement().callFunction("notifyResize");
 	}
 
-	class Presenter extends EntityPresenter<Order> {
+	class OrderEntityPresenter extends EntityPresenter<Order> {
 
-		public Presenter() {
+		private FilterablePageableDataProvider<Order, OrderFilter> dataProvider;
+		private StorefrontItemHeaderGenerator headersGenerator;
+		private final String[] orderSortFields = {"dueDate", "dueTime", "id"};
+
+		public OrderEntityPresenter() {
 			super(orderService, StorefrontView.this, "Order");
-			searchBar.addFilterChangeListener(this::filterChanged);
+			searchBar.addFilterChangeListener(e -> filterChanged(searchBar.getFilter(), searchBar.isCheckboxChecked()));
 			searchBar.addActionClickListener(e -> edit(null));
 
 			orderEdit.addListener(CancelEvent.class, e -> cancel());
@@ -199,13 +194,20 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 			orderDetail.addCommentListener(e -> {
 				presenter.addComment(e.getOrderId(), e.getMessage());
 			});
+
+			dataProvider = new OrdersGridDataProvider(ordersProvider, Sort.Direction.ASC, orderSortFields);
+			headersGenerator = new StorefrontItemHeaderGenerator(ordersProvider, orderSortFields);
+			headersGenerator.updateHeaders("", false);
+			setDataProvider(dataProvider);
+		}
+
+		public StorefrontItemHeader getHeaderByOrderId(Long id) {
+			return headersGenerator.get(id);
 		}
 
 		void filterChanged(String filter, boolean showPrevious) {
-			// the hardcoded limit of 15 is here until lazy loading is implemented (see
-			// BFF-120)
-			PageRequest pr = new PageRequest(0, 15, Direction.ASC, "dueDate", "dueTime", "id");
-			setOrders(ordersProvider.getOrdersList(filter, showPrevious, pr).getOrders(), showPrevious);
+			headersGenerator.updateHeaders(filter, showPrevious);
+			dataProvider.setFilter(new OrderFilter(filter, showPrevious));
 		}
 
 		@Override
@@ -215,11 +217,13 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 
 		@Override
 		protected void onSaveSuccess(boolean isNew) {
-			super.onSaveSuccess(isNew);
+			if (isNew) {
+				dataProvider.refreshAll();
+			} else {
+				dataProvider.refreshItem(getEntity());
+			}
 
-			// refresh the orders list (to be able to see the changes from the just saved
-			// order, if any)
-			filterChanged(searchBar.getFilter(), searchBar.getShowPrevious());
+			super.onSaveSuccess(isNew);
 		}
 
 		@Override
@@ -239,8 +243,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 			if (id != null && !id.isEmpty()) {
 				Map<String, String> parameters = new HashMap<>();
 				parameters.put("edit", "");
-				getUI().ifPresent(
-						ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT + "/" + id, QueryParameters.simple(parameters)));
+				getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT + "/" + id,
+						QueryParameters.simple(parameters)));
 				return;
 			}
 			createNew();

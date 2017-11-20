@@ -28,13 +28,6 @@ public class StorefrontViewIT extends AbstractIT {
 
 		firstOrder.click();
 		Assert.assertTrue(firstOrder.isOrderSelected());
-
-		// 		Cancel button doesn't work sometimes; uncomment after BFF-339 fixed
-		//		ButtonElement collapseOrderDetails = firstOrder.getDetail().getCancelButton();
-		//		collapseOrderDetails.scrollIntoView();
-		//		collapseOrderDetails.click();
-		//		Assert.assertFalse(firstOrder.isOrderSelected());
-
 	}
 
 	@Ignore("until the issue BFF-339 is fixed")

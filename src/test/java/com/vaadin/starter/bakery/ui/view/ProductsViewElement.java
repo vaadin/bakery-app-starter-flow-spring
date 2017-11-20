@@ -1,7 +1,6 @@
 package com.vaadin.starter.bakery.ui.view;
 
 import com.vaadin.starter.bakery.elements.GridElement;
-import com.vaadin.starter.bakery.ui.ConfirmationDialogElement;
 import com.vaadin.starter.bakery.ui.components.ItemsViewElement;
 import com.vaadin.starter.bakery.ui.components.ProductEditElement;
 import com.vaadin.testbench.TestBenchElement;

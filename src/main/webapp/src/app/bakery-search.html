@@ -90,7 +90,7 @@
     <iron-media-query query="(min-width: 600px)" query-matches="{{_desktopView}}"></iron-media-query>
 
     <div class="row">
-      <vaadin-text-field id="field" class="field" placeholder="[[fieldPlaceholder]]" value="{{fieldValue}}" focused="{{_fieldFocused}}">
+      <vaadin-text-field id="field" class="field" placeholder="[[fieldPlaceholder]]" value="{{fieldValue}}" focused="{{_fieldFocused}}" on-value-changed="_filterChanged">
         <iron-icon icon="[[fieldIcon]]" slot="prefix"></iron-icon>
       </vaadin-text-field>
       <vaadin-checkbox class="checkbox" checked="{{checkboxChecked}}" focused="{{_checkboxFocused}}" hidden$="[[!_desktopView]]">[[checkboxText]]</vaadin-checkbox>
@@ -192,6 +192,14 @@
             }
           }
         );
+      }
+
+      _filterChanged() {
+        this._filtersChangeDebouncer = Polymer.Debouncer.debounce(
+          this._filtersChangeDebouncer,
+          Polymer.Async.timeOut.after(300),
+          () => this.dispatchEvent(new CustomEvent('filter-changed', {bubbles: true, composed: true})) );
+        Polymer.enqueueDebouncer(this._filtersChangeDebouncer);
       }
     }
 

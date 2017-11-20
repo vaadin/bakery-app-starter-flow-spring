@@ -6,7 +6,6 @@ public class ShadyButtonElement extends ButtonElement {
 
 	@Override
 	public void click() {
-		// Workaround for https://github.com/webcomponents/shadydom/issues/141
 		callFunction("click");
 	}
 }

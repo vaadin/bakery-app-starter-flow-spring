@@ -21,7 +21,6 @@ public class CurrencyFormatter implements ModelConverter<Integer, String> {
 
 	@Override
 	public Integer toModel(String presentationValue) {
-		// Not implemented
 		throw new UnsupportedOperationException();
 	}
 }

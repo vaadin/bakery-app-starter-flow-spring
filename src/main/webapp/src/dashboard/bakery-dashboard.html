@@ -114,7 +114,7 @@
       }
 
       dashboard-pie-chart,
-      dashboard-orders-list {
+      .grid-wrapper {
         --fourth-row-style: {
           border-radius: 4px;
           box-shadow: 0 2px 5px 0 rgba(23, 68, 128, 0.1);
@@ -135,6 +135,12 @@
         };
       }
 
+      #orders-grid {
+        height: 100%;
+        @apply --margin-style;
+        @apply --fourth-row-style;
+      }
+
     </style>
 
     <vaadin-board>
@@ -153,7 +159,9 @@
       </vaadin-board-row>
       <vaadin-board-row>
         <dashboard-pie-chart data="[[productDeliveriesThisMonth]]"></dashboard-pie-chart>
-        <dashboard-orders-list id="ordersList" orders-count="[[ordersCount]]" on-page-request="loadOrdersPage" active-item="{{activeItem}}"></dashboard-orders-list>
+        <div class="grid-wrapper">
+          <vaadin-grid id="orders-grid" theme="no-header"></vaadin-grid>
+        </div>
       </vaadin-board-row>
     </vaadin-board>
   </template>
@@ -162,27 +170,6 @@
     class BakeryDashboard extends Polymer.Element {
       static get is() {
         return 'bakery-dashboard';
-      }
-
-      static get properties() {
-        return {
-          activeItem: {
-            observer: '_activeItemChanged'
-          },
-          pageInfo: {
-            value: {}
-          }
-        };
-      }
-
-      _activeItemChanged(item) {
-        if (item) {
-          this.$server.navigateToOrderDetails(item.id);
-        }
-      }
-
-      loadPage() {
-        this.$.ordersList.loadPage(this.pageInfo);
       }
     }
 

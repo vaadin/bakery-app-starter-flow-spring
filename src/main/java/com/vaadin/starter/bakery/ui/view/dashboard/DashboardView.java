@@ -7,24 +7,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.vaadin.flow.model.Convert;
-import com.vaadin.flow.model.Include;
+import com.vaadin.data.selection.SelectionEvent;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.router.PageTitle;
+import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.ui.BakeryApp;
-import com.vaadin.starter.bakery.ui.utils.converters.LocalTimeConverter;
-import com.vaadin.starter.bakery.ui.utils.converters.LongToStringConverter;
-import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
-import com.vaadin.starter.bakery.ui.view.storefront.converter.StorefrontLocalDateConverter;
+import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider;
+import com.vaadin.starter.bakery.ui.view.storefront.StorefrontItem;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.event.AttachEvent;
-import com.vaadin.ui.common.ClientDelegate;
 import com.vaadin.ui.common.HtmlImport;
-import com.vaadin.ui.event.EventData;
-import com.vaadin.ui.polymertemplate.EventHandler;
+import com.vaadin.ui.grid.Grid;
+import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
+import com.vaadin.ui.renderers.ComponentRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 
 import com.vaadin.router.Route;
 import com.vaadin.starter.bakery.backend.data.DashboardData;
@@ -38,7 +35,7 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.utils.DashboardUtils;
 import com.vaadin.starter.bakery.ui.utils.DashboardUtils.OrdersCountData;
 import com.vaadin.starter.bakery.ui.utils.DashboardUtils.OrdersCountDataWithChart;
-import com.vaadin.starter.bakery.ui.utils.DashboardUtils.PageInfo;
+import org.springframework.data.domain.Sort;
 
 @Tag("bakery-dashboard")
 @HtmlImport("src/dashboard/bakery-dashboard.html")
@@ -48,14 +45,26 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 
 	private final OrdersDataProvider ordersProvider;
 
+	@Id("orders-grid")
+	private Grid<Order> grid;
+
 	@Autowired
 	public DashboardView(OrdersDataProvider ordersProvider) {
 		this.ordersProvider = ordersProvider;
+
+		grid.addColumn("Order", new ComponentRenderer<>(order -> {
+			StorefrontItem item = new StorefrontItem();
+			item.setOrder(order);
+			return item;
+		}));
+		grid.addSelectionListener(this::onOrdersGridSelectionChanged);
 	}
 
 	@Override
 	protected void onAttach(AttachEvent attachEvent) {
-		populateOrdersCount();
+		grid.setDataProvider(new OrdersGridDataProvider(ordersProvider,
+				Sort.Direction.ASC, "dueDate", "dueTime", "id"));
+
 		DashboardData data = ordersProvider.getDashboardData();
 		populateYearlySalesChart(data);
 		populateDeliveriesCharts(data);
@@ -77,21 +86,11 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 		getModel().setProductDeliveriesThisMonth(DashboardUtils.getDeliveriesPerProductPieChartData(productDeliveries));
 	}
 
-	private void populateOrdersCount() {
-		getModel().setOrdersCount((int) ordersProvider.countAnyMatchingAfterDueDate());
-	}
-
-	@EventHandler
-	private void loadOrdersPage(@EventData("event.detail.page") int page,
-			@EventData("event.detail.pageSize") int pageSize) {
-		PageInfo pageInfo = ordersProvider.getOrdersList(null, false, new PageRequest(page, pageSize));
-		getModel().setPageInfo(pageInfo);
-		getElement().callFunction("loadPage");
-	}
-
-	@ClientDelegate
-	private void navigateToOrderDetails(String orderId) {
-		getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT + "/" + orderId));
+	private void onOrdersGridSelectionChanged(SelectionEvent<Order> e) {
+		e.getFirstSelectedItem().ifPresent(order -> {
+			getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT + "/" + order.getId()));
+			grid.deselect(order);
+		});
 	}
 
 	private void populateDeliveriesCharts(DashboardData data) {
@@ -123,17 +122,6 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 	}
 
 	public interface Model extends TemplateModel {
-		@Include({ "orders.id", "orders.dueDate.day", "orders.dueDate.weekday", "orders.dueDate.date", "orders.dueTime",
-				"orders.items.product.name", "orders.items.quantity",
-				"orders.state", "orders.pickupLocation.name", "orders.customer.fullName", "orders.customer.details", "pageNumber" })
-		@Convert(value = LongToStringConverter.class, path = "orders.id")
-		@Convert(value = StorefrontLocalDateConverter.class, path = "orders.dueDate")
-		@Convert(value = LocalTimeConverter.class, path = "orders.dueTime")
-		@Convert(value = OrderStateConverter.class, path = "orders.state")
-		void setPageInfo(PageInfo pageInfo);
-
-		void setOrdersCount(Integer ordersCount);
-
 		void setTomorrowOrdersCount(OrdersCountData ordersTomorrow);
 
 		void setNewOrdersCount(OrdersCountData ordersNew);

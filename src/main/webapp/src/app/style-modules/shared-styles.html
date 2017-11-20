@@ -122,13 +122,14 @@
         border-bottom: 1px solid var(--valo-shade-5pct);
       }
 
+      /* hides the grid header (for the storefront and the dashboard views) */
+      :host([theme~="no-header"]) [part~="header-cell"] {
+        display: none;
+      }
+
       /* a special grid theme for the bakery storefront view */
       :host([theme~="storefront-grid"]) {
         background: transparent;
-      }
-
-      :host([theme~="storefront-grid"]) [part~="header-cell"] {
-        display: none;
       }
 
       :host([theme~="storefront-grid"]) [part~="cell"]:not(:empty):not([details-cell]) {
