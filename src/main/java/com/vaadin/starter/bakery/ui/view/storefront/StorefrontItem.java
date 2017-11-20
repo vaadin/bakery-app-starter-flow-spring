@@ -2,16 +2,19 @@ package com.vaadin.starter.bakery.ui.view.storefront;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalField;
+import java.time.temporal.WeekFields;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.Locale;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import com.vaadin.flow.model.Convert;
 import com.vaadin.flow.model.Include;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
-import com.vaadin.starter.bakery.ui.utils.DateTimeUtils;
 import com.vaadin.starter.bakery.ui.utils.converters.LocalTimeConverter;
 import com.vaadin.starter.bakery.ui.utils.converters.LongToStringConverter;
 import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
@@ -27,6 +30,11 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 @Tag("storefront-item")
 @HtmlImport("src/storefront/storefront-item.html")
 public class StorefrontItem extends PolymerTemplate<StorefrontItem.Model> {
+
+	/**
+	 * For getting the week of the year from the localdate.
+	 */
+	private static final TemporalField WEEK_OF_YEAR_FIELD = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
 
 	/**
 	 * 3 letter day of the week + day number. E.g: Mon 20
@@ -56,80 +64,46 @@ public class StorefrontItem extends PolymerTemplate<StorefrontItem.Model> {
 	public void setOrder(Order order) {
 		getModel().setItem(order);
 		timePlace.removeAll();
-		DataGeneratorForTimePeriod.get(order.getDueDate()).createComponents(order, timePlace::add);
+		createComponents(order).forEach(timePlace::add);
 	}
 
-	/**
-	 * Creates a html component using data from the order.
-	 */
-	enum ItemComponentCreator implements Function<Order, Component> {
-		MONTH(o -> createHeader("month", MONTH_AND_DAY_FORMATTER.format(o.getDueDate()))),
+	private List<Component> createComponents(Order order) {
+		LocalDate now = LocalDate.now();
+		LocalDate date = order.getDueDate();
+		List<Component> result = new ArrayList<>(3);
 
-		TIME(o -> createHeader("time", LocalTimeConverter.formatter.format(o.getDueTime()))),
+		Function<Order, Component> PLACE = o -> createTimeComponent("place", o.getPickupLocation().getName());
 
-		SHORT_DAY(o -> createHeader("short-day", SHORT_DAY_FORMATTER.format(o.getDueDate()))),
-
-		FULL_DAY(o -> createTimeComponent("full-day", FULL_DAY_FORMATTER.format(o.getDueDate()))),
-
-		PLACE(o -> createTimeComponent("place", o.getPickupLocation().getName())),
-
-		SECONDARY_TIME(o -> createTimeComponent("secondary-time", LocalTimeConverter.formatter.format(o.getDueTime())));
-
-		private final Function<Order, Component> componentTextGenerator;
-
-		ItemComponentCreator(Function<Order, Component> componentTextGenerator) {
-			this.componentTextGenerator = componentTextGenerator;
+		if (date.equals(now) || date.equals(now.minusDays(1))) {
+			// Today or yesterday
+			result.add(createHeader("time", LocalTimeConverter.formatter.format(order.getDueTime())));
+			result.add(PLACE.apply(order));
+		} else if (now.get(WEEK_OF_YEAR_FIELD) == date.get(WEEK_OF_YEAR_FIELD)) {
+			// This week
+			result.add(createHeader("short-day", SHORT_DAY_FORMATTER.format(order.getDueDate())));
+			result.add(createTimeComponent("secondary-time", LocalTimeConverter.formatter.format(order.getDueTime())));
+			result.add(PLACE.apply(order));
+		} else {
+			// Other dates
+			result.add(createHeader("month", MONTH_AND_DAY_FORMATTER.format(order.getDueDate())));
+			result.add(createTimeComponent("full-day", FULL_DAY_FORMATTER.format(order.getDueDate())));
 		}
 
-		@Override
-		public Component apply(Order t) {
-			return componentTextGenerator.apply(t);
-		}
-
-		static Component fillComponent(HtmlContainer c, String id, String text) {
-			c.setId(id);
-			c.setText(text);
-			return c;
-		}
-
-		static Component createTimeComponent(String id, String text) {
-			return fillComponent(new Div(), id, text);
-		}
-
-		static Component createHeader(String id, String text) {
-			return fillComponent(new H3(), id, text);
-		}
+		return result;
 	}
 
-	/**
-	 * Displays data depending on the time period of the order's due date.
-	 */
-	enum DataGeneratorForTimePeriod {
-		YESTERDAY_OR_TODAY(ItemComponentCreator.TIME, ItemComponentCreator.PLACE),
-
-		THIS_WEEK(ItemComponentCreator.SHORT_DAY, ItemComponentCreator.SECONDARY_TIME, ItemComponentCreator.PLACE),
-
-		OTHER_DATES(ItemComponentCreator.MONTH, ItemComponentCreator.FULL_DAY);
-
-		private final List<Function<Order, Component>> componentCreators;
-
-		DataGeneratorForTimePeriod(ItemComponentCreator... componentCreators) {
-			this.componentCreators = Arrays.asList(componentCreators);
-		}
-
-		static DataGeneratorForTimePeriod get(LocalDate date) {
-			LocalDate now = LocalDate.now();
-			if (date.equals(now) || date.equals(now.minusDays(1))) {
-				return YESTERDAY_OR_TODAY;
-			} else if (DateTimeUtils.isSameWeek(now, date)) {
-				return DataGeneratorForTimePeriod.THIS_WEEK;
-			} else {
-				return OTHER_DATES;
-			}
-		}
-
-		void createComponents(Order order, Consumer<Component> consumer) {
-			componentCreators.forEach(c -> consumer.accept(c.apply(order)));
-		}
+	private Component fillComponent(HtmlContainer c, String id, String text) {
+		c.setId(id);
+		c.setText(text);
+		return c;
 	}
+
+	private Component createTimeComponent(String id, String text) {
+		return fillComponent(new Div(), id, text);
+	}
+
+	private Component createHeader(String id, String text) {
+		return fillComponent(new H3(), id, text);
+	}
+
 }
