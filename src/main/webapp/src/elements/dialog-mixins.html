@@ -56,7 +56,6 @@
         super.ready();
         this._clickListener = this._onBodyClick.bind(this);
         this._keydownListener = this._onBodyKeydown.bind(this);
-        this._closeListener = this.close.bind(this);
         this._popstateListener = e => {
           e.preventDefault();
           this.close(e);

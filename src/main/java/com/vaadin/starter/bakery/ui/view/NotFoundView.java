@@ -20,9 +20,6 @@ import javax.servlet.http.HttpServletResponse;
 public class NotFoundView extends RouteNotFoundError {
 
 	public NotFoundView() {
-		// This should be simply `new RouterLink("Go to the front page.", StorefrontView.class)`
-		// but due to the Flow issue https://github.com/vaadin/flow/issues/1476, there needs to be a workaround.
-		// The workaround can be removed after upgrading to the official flow-spring plugin (see BFF-335)
 		RouterLink link = Component.from(
 				ElementFactory.createRouterLink("", "Go to the front page."),
 				RouterLink.class);

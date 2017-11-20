@@ -15,9 +15,6 @@ public class StoreFrontViewElement extends TestBenchElement implements HasApp, H
 	}
 
 	public StoreFrontItemDetailWrapperElement getFirstOrderDetailWrapper() {
-		// vaadin-grid does not yet have a public API to get the currently displayed items
-		// (see https://github.com/vaadin/vaadin-grid/issues/1054)
-		// Using a hack here until there is a better API - BFF-359.
 		return getGrid().$(StoreFrontItemDetailWrapperElement.class).all().get(0);
 	}
 

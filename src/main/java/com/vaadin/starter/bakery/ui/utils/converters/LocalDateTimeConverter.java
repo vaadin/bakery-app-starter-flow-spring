@@ -20,7 +20,6 @@ public class LocalDateTimeConverter implements ModelConverter<LocalDateTime, Str
 
 	@Override
 	public LocalDateTime toModel(String presentationValue) {
-		// Not implemented
 		throw new UnsupportedOperationException();
 	}
 }

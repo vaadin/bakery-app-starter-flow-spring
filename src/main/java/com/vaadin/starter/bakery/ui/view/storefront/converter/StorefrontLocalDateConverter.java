@@ -27,7 +27,6 @@ public class StorefrontLocalDateConverter implements ModelConverter<LocalDate, S
 
 	@Override
 	public LocalDate toModel(StorefrontDate presentationValue) {
-		// Not implemented.
 		throw new UnsupportedOperationException();
 	}
 
