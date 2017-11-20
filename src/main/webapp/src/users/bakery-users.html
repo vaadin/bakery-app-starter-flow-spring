@@ -24,7 +24,7 @@
     <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
 
     <items-view id="bakery-users-items-view" desktop-view=[[desktopView]]>
-      <slot name="items-grid" slot="grid"></slot>
+      <vaadin-grid id="users-grid" slot="grid" theme="borderless"></vaadin-grid>
       <slot name="user-editor" slot="editor"></slot>
     </items-view>
   </template>

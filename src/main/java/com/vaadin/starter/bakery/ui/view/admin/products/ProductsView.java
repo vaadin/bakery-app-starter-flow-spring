@@ -36,7 +36,8 @@ public class ProductsView extends PolymerEntityView<Product, TemplateModel> {
 
 	private ProductEdit editor;
 
-	private Grid<Product> grid = new Grid<>();
+	@Id("products-grid")
+	private Grid<Product> grid;
 
 	@Override
 	public Grid<Product> getGrid() {
@@ -59,12 +60,9 @@ public class ProductsView extends PolymerEntityView<Product, TemplateModel> {
 
 	private void setupGrid() {
 		grid.setId("grid");
-		grid.getElement().setAttribute("theme", "borderless");
 
 		grid.addColumn("Product Name", Product::getName).setFlexGrow(10);
 		grid.addColumn("Unit Price", p -> currencyFormatter.toPresentation(p.getPrice()));
-
-		addToSlot(this, grid, "items-grid");
 	}
 
 	@Override

@@ -36,7 +36,8 @@ public class UsersView extends PolymerEntityView<User, TemplateModel> {
 
 	private UserEdit editor;
 
-	private Grid<User> grid = new Grid<>();
+	@Id("users-grid")
+	private Grid<User> grid;
 
 	private DefaultEntityPresenter<User> presenter;
 
@@ -53,13 +54,10 @@ public class UsersView extends PolymerEntityView<User, TemplateModel> {
 
 	private void setupGrid() {
 		grid.setId("grid");
-		grid.getElement().setAttribute("theme", "borderless");
 
 		grid.addColumn("Email", User::getEmail).setWidth("270px").setFlexGrow(5);
 		grid.addColumn("Name", u -> u.getFirstName() + " " + u.getLastName()).setWidth("200px").setFlexGrow(5);
-		grid.addColumn("Role", User::getRole);
-
-		addToSlot(this, grid, "items-grid");
+		grid.addColumn("Role", User::getRole).setWidth("150px");
 	}
 
 	@Override
