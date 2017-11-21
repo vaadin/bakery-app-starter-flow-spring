@@ -53,10 +53,8 @@ public class UsersView extends PolymerEntityView<User, TemplateModel> {
 	}
 
 	private void setupGrid() {
-		grid.setId("grid");
-
-		final Grid.Column emailColumn = grid.addColumn("Email", User::getEmail).setWidth("270px").setFlexGrow(5);
-		final Grid.Column userColumn = grid.addColumn("Name", u -> u.getFirstName() + " " + u.getLastName()).setWidth("200px").setFlexGrow(5);
+		final Grid.Column<User> emailColumn = grid.addColumn("Email", User::getEmail).setWidth("270px").setFlexGrow(5);
+		final Grid.Column<User> userColumn = grid.addColumn("Name", u -> u.getFirstName() + " " + u.getLastName()).setWidth("200px").setFlexGrow(5);
 		grid.addColumn("Role", User::getRole).setWidth("150px");
 
 		grid.getElement().addEventListener("animationend", e -> {

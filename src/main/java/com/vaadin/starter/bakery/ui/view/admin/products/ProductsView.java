@@ -59,9 +59,7 @@ public class ProductsView extends PolymerEntityView<Product, TemplateModel> {
 	}
 
 	private void setupGrid() {
-		grid.setId("grid");
-
-		final Grid.Column productNameColumn = grid.addColumn("Product Name", Product::getName).setFlexGrow(10);
+		final Grid.Column<Product> productNameColumn = grid.addColumn("Product Name", Product::getName).setFlexGrow(10);
 		grid.addColumn("Unit Price", p -> currencyFormatter.toPresentation(p.getPrice()));
 
 		grid.getElement().addEventListener("animationend", e -> productNameColumn.setFlexGrow(10));
