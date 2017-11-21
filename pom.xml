@@ -319,7 +319,6 @@
                                         <artifactItem>
                                             <groupId>com.vaadin</groupId>
                                             <artifactId>flow-server</artifactId>
-                                            <version>1.0-SNAPSHOT</version>
                                             <type>jar</type>
                                             <overWrite>true</overWrite>
                                             <includes>META-INF/resources/flow-component-renderer.html</includes>
