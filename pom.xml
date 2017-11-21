@@ -22,7 +22,7 @@
         <!-- Dependencies -->
         <vaadin.version>10.0.0-alpha6</vaadin.version>
 
-        <spring-boot.version>1.5.4.RELEASE</spring-boot.version>
+        <spring-boot.version>1.5.8.RELEASE</spring-boot.version>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Overrides the old version specified by the Spring Boot parent -->
         <selenium.version>3.6.0</selenium.version>
@@ -31,9 +31,7 @@
 
         <!-- Plugins -->
         <frontend.maven.plugin.version>1.6</frontend.maven.plugin.version>
-        <driver.binary.downloader.maven.plugin.version>1.0.11</driver.binary.downloader.maven.plugin.version>
-        <maven.failsafe.plugin.version>2.19.1</maven.failsafe.plugin.version>
-        <maven.war.plugin.version>3.0.0</maven.war.plugin.version>
+        <maven.war.plugin.version>3.1.0</maven.war.plugin.version>
         <maven.resources.plugin.version>3.0.2</maven.resources.plugin.version>
         <maven.clean.plugin.version>3.0.0</maven.clean.plugin.version>
 
@@ -42,7 +40,6 @@
         <yarn.version>v0.27.5</yarn.version>
         <buildtools.directory>build-tools</buildtools.directory>
         <frontend.directory>src/main/webapp</frontend.directory>
-        <vaadin.frontend.path>VAADIN/static/frontend</vaadin.frontend.path>
     </properties>
 
     <repositories>
@@ -245,6 +242,10 @@
                     </filesets>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
         </plugins>
     </build>
 
@@ -365,16 +366,9 @@
                                     <directory>${frontend.directory}/build</directory>
                                 </resource>
                             </webResources>
-                            <warSourceExcludes>**/build/</warSourceExcludes>
+                            <warSourceExcludes>**/build/,**/bower.json,**/package.json,.bowerrc,src/**,bower_components/**,images/**</warSourceExcludes>
                         </configuration>
                     </plugin>
-
-                    <!-- When running the app locally with spring-boot:run the build output is not copied anywhere and
-                         stays in the ${frontend.directory}/build directory (accessible via context://build/frontend-es5
-                         and context://build/frontend-es6).
-
-                         That's not where Flow expects to find it by default (context://frontend-es5 and context://frontend-es6)
-                         hence the custom system properties are necessary for spring-boot:run -->
                     <plugin>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
@@ -413,14 +407,6 @@
                                     </excludes>
                                 </resource>
                             </webResources>
-                        </configuration>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-maven-plugin</artifactId>
-                        <configuration>
-                            <jvmArguments>-Dvaadin.frontend.url.dev=context:// -Dvaadin.disable.webjars=true -Dvaadin.polyfillBase=frontend://bower_components/webcomponentsjs/</jvmArguments>
                         </configuration>
                     </plugin>
                 </plugins>
