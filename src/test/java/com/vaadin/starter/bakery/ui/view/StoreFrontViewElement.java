@@ -11,7 +11,7 @@ public class StoreFrontViewElement extends TestBenchElement implements HasApp, H
 
 	@Override
 	public GridElement getGrid() {
-		return $(GridElement.class).onPage().first();
+		return $(GridElement.class).waitForFirst();
 	}
 
 	public StoreFrontItemDetailWrapperElement getFirstOrderDetailWrapper() {

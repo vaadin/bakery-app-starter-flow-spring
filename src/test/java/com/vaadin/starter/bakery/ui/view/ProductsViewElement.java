@@ -11,7 +11,7 @@ public class ProductsViewElement extends TestBenchElement implements HasApp, Has
 
 	@Override
 	public GridElement getGrid() {
-		return $(GridElement.class).id("grid");
+		return $(GridElement.class).id("products-grid");
 	}
 
 	public ItemsViewElement getItemsView() {

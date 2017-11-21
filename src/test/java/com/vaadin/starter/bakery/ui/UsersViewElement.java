@@ -12,7 +12,7 @@ public class UsersViewElement extends TestBenchElement implements HasGrid {
 
 	@Override
 	public GridElement getGrid() {
-		return $(GridElement.class).id("grid");
+		return $(GridElement.class).id("users-grid");
 	}
 
 	public ItemsViewElement getItemsView() {
