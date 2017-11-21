@@ -1,5 +1,6 @@
 package com.vaadin.starter.bakery.ui.view.admin.products;
 
+import static com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil.convertIfNotNull;
 import static com.vaadin.starter.bakery.ui.utils.FormattingUtils.DECIMAL_ZERO;
 
 import java.math.BigDecimal;
@@ -15,7 +16,6 @@ import com.vaadin.data.ValidationException;
 import com.vaadin.data.ValueContext;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
-import com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.event.DeleteEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
@@ -96,7 +96,7 @@ public class ProductEdit extends PolymerTemplate<TemplateModel> implements Entit
 
 		@Override
 		public String convertToPresentation(Integer modelValue, ValueContext valueContext) {
-			return DataProviderUtil.convertIfNotNull(modelValue, i -> df.format(BigDecimal.valueOf(i, 2)));
+			return convertIfNotNull(modelValue, i -> df.format(BigDecimal.valueOf(i, 2)));
 		}
 	}
 }
