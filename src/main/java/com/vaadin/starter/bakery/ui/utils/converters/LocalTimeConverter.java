@@ -1,9 +1,6 @@
 package com.vaadin.starter.bakery.ui.utils.converters;
 
-import com.vaadin.data.Result;
-import com.vaadin.data.ValueContext;
-import com.vaadin.flow.model.ModelConverter;
-import com.vaadin.starter.bakery.ui.utils.converters.binder.BinderConverter;
+import static com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil.convertIfNotNull;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -13,9 +10,12 @@ import java.time.format.SignStyle;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil.convertIfNotNull;
+import com.vaadin.data.Converter;
+import com.vaadin.data.Result;
+import com.vaadin.data.ValueContext;
+import com.vaadin.flow.model.ModelConverter;
 
-public class LocalTimeConverter implements ModelConverter<LocalTime, String>, BinderConverter<String, LocalTime> {
+public class LocalTimeConverter implements ModelConverter<LocalTime, String>, Converter<String, LocalTime> {
 
 	public static final DateTimeFormatter formatter;
 
@@ -41,18 +41,17 @@ public class LocalTimeConverter implements ModelConverter<LocalTime, String>, Bi
 	}
 
 	@Override
-	public Result<LocalTime> convertToModelIfNotNull(String presentationValue, ValueContext valueContext) {
+	public Result<LocalTime> convertToModel(String value, ValueContext context) {
 		try {
-			return Result.ok(toModel(presentationValue));
+			return Result.ok(toModel(value));
 		} catch (DateTimeParseException e) {
 			return Result.error("Invalid time");
 		}
-
 	}
 
 	@Override
-	public String convertToPresentationIfNotNull(LocalTime arg0, ValueContext arg1) {
-		return toPresentation(arg0);
+	public String convertToPresentation(LocalTime value, ValueContext context) {
+		return toPresentation(value);
 	}
 
 }
