@@ -61,7 +61,7 @@
             <id>vaadin-addons</id>
             <url>http://maven.vaadin.com/vaadin-addons</url>
         </repository>
-        
+
     </repositories>
 
     <dependencyManagement>
@@ -113,11 +113,52 @@
             <version>1.0.0.alpha7</version>
         </dependency>
         <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-charts-flow-webjar</artifactId>
+            <version>6.0.0-alpha2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-board-flow</artifactId>
+            <version>1.1.0-beta1</version>
+        </dependency>
+        <dependency>
             <groupId>org.vaadin.artur</groupId>
             <artifactId>spring-data-provider</artifactId>
             <version>2.0.0-alpha1</version>
         </dependency>
         <!-- End of Vaadin -->
+        <!-- Iron and paper elements -->
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>github-com-PolymerElements-iron-form</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>github-com-polymerelements-paper-tabs</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>github-com-polymerelements-paper-styles</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>github-com-polymerelements-paper-ripple</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>paper-toast</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>moment</artifactId>
+            <version>2.18.1</version>
+        </dependency>
         <!-- Spring -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -289,7 +330,6 @@
                 <yarn.build.goal>run build</yarn.build.goal>
             </properties>
 
-
             <!-- (4): Makes the package run in production mode when deployed, without the need of setting extra
                       properties on the server -->
             <dependencies>
@@ -301,6 +341,24 @@
 
             <build>
                 <plugins>
+                    <!-- (2): Configures the frontend plugin to compile the web components source -->
+                    <plugin>
+                        <groupId>com.github.eirslett</groupId>
+                        <artifactId>frontend-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>install-node-and-yarn</id>
+                                <goals>
+                                    <goal>install-node-and-yarn</goal>
+                                    <goal>yarn</goal> <!-- runs 'install' by default -->
+                                </goals>
+                                <configuration>
+                                    <arguments>${yarn.build.goal}</arguments>
+                                    <workingDirectory>${buildtools.directory}</workingDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
                     <!-- unpack the flow-component-renderer.html component definition so that
                          it can be included into the production frontend build -->
                     <plugin>
@@ -391,81 +449,15 @@
                     <name>!vaadin.productionMode</name>
                 </property>
             </activation>
-    
-            <properties>
-                <yarn.build.goal>run skip-build</yarn.build.goal>
-            </properties>
+
             <build>
                 <plugins>
-                    <!-- (7): Adds the files from src/main/frontend directly 
-                        into the WAR when in development mode -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-war-plugin</artifactId>
-                        <configuration>
-                            <webResources>
-                                <resource>
-                                    <directory>${frontend.directory}</directory>
-                                    <excludes>
-                                        <exclude>build/**</exclude>
-                                    </excludes>
-                                </resource>
-                            </webResources>
-                        </configuration>
-                    </plugin>
-
                     <plugin>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <configuration>
-                            <jvmArguments>-Dvaadin.frontend.url.dev=context:// -Dvaadin.disable.webjars=true -Dvaadin.polyfillBase=frontend://bower_components/webcomponentsjs/</jvmArguments>
+                            <jvmArguments>-Dvaadin.frontend.url.dev=context://</jvmArguments>
                         </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <!-- When running mvn with `-DskipFrontendBuild`, all frontend-related build steps are skipped:
-             - yarn install
-             - bower install
-             - polymer build
-
-             This is handy when the app is restarted without any changes to frontend resources. -->
-        <profile>
-            <id>frontend-build</id>
-            <activation>
-                <property>
-                    <name>!skipFrontendBuild</name>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <!-- (2): Configures the frontend plugin to compile the web components source -->
-                    <plugin>
-                        <groupId>com.github.eirslett</groupId>
-                        <artifactId>frontend-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>install-node-and-yarn</id>
-                                <goals>
-                                    <goal>install-node-and-yarn</goal>
-                                    <goal>yarn</goal> <!-- runs 'install' by default -->
-                                </goals>
-                                <configuration>
-                                    <workingDirectory>${buildtools.directory}</workingDirectory>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>run-polymer-build</id>
-                                <goals>
-                                    <goal>yarn</goal>
-                                </goals>
-                                <configuration>
-                                    <workingDirectory>${buildtools.directory}</workingDirectory>
-                                    <arguments>${yarn.build.goal}</arguments>
-                                </configuration>
-                            </execution>
-                        </executions>
                     </plugin>
                 </plugins>
             </build>

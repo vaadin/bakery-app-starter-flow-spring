@@ -1,6 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/vaadin-charts/data-series.html">
-<link rel="import" href="../../bower_components/vaadin-charts/vaadin-areaspline-chart.html">
+<link rel="import" href="../../bower_components/vaadin-charts/vaadin-chart.html">
 
 <dom-module id="dashboard-yearly-sales">
   <template>
@@ -15,63 +14,8 @@
       }
     </style>
     <div class="wrapper">
-      <vaadin-areaspline-chart id="saleschart">
-        <chart-title>
-          <text>[[title]]</text>
-          <chart-style>
-            <color>rgba(42, 71, 110, 0.6)</color>
-            <font-size>16px</font-size>
-            <font-weight>bold</font-weight>
-          </chart-style>
-        </chart-title>
-
-        <colors>["#18ddf2","#1877f3","#1bca66"]</colors>
-
-        <template is="dom-repeat" items="[[series]]">
-          <data-series>
-            <name>[[item.title]]</name>
-            <data>
-              [[item.series]]
-            </data>
-          </data-series>
-        </template>
-
-        <chart>
-          <background-color>rgba(0,0,0,0)</background-color>
-        </chart>
-
-        <exporting>
-          <enabled>false</enabled>
-        </exporting>
-
-        <y-axis>
-          <title>
-            <text></text>
-          </title>
-          <grid-line-color>rgba(23, 68, 128, 0.1)</grid-line-color>
-        </y-axis>
-
-        <x-axis>
-          <categories>Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec</categories>
-          <labels>
-            <enabled>
-              false
-            </enabled>
-          </labels>
-        </x-axis>
-
-        <plot-options>
-          <areaspline fill-opacity="0.1">
-          </areaspline>
-        </plot-options>
-
-        <legend>
-          <background-color>transparent</background-color>
-          <symbol-radius>6</symbol-radius>
-          <symbol-height>12</symbol-height>
-          <symbol-width>12</symbol-width>
-        </legend>
-      </vaadin-areaspline-chart>
+      <vaadin-chart id="areachart" title="[[title]]" class="yearly-sales">
+      </vaadin-chart>
     </div>
   </template>
 
@@ -83,15 +27,50 @@
 
       static get properties() {
         return {
-          'series': {
-            type: Object
+          series: {
+            type: Object,
+            observer: '_onSeriesChanged'
           },
-          'title': {
-            type: String,
-            value: '-',
-            notify: true
+          title: {
+            type: Object,
+            value: function() {
+              return '';
+            }
           }
         };
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        this.$.areachart.update({
+          chart: {
+            borderRadius: 4,
+            type: 'areaspline'
+          },
+          xAxis: {
+            visible: false,
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+          },
+          yAxis: {
+            title: {
+              enabled: false
+            }
+          }
+        });
+      }
+
+      _onSeriesChanged(newSeries, oldSeries) {
+        Polymer.RenderStatus.beforeNextRender(this, () => {
+          var conf = this.$.areachart.configuration;
+          if (newSeries && !oldSeries) {
+            newSeries.forEach((element) => {
+              conf.addSeries({
+                name: element.title,
+                data: element.series
+              });
+            });
+          }
+        });
       }
     }
 
