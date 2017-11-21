@@ -26,7 +26,6 @@ import com.vaadin.starter.bakery.backend.service.ProductService;
 import com.vaadin.starter.bakery.backend.service.UserService;
 import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.components.BakerySearch;
-import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
@@ -64,16 +63,14 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 
 	private OrderEntityPresenter presenter;
 
-	private OrdersDataProvider ordersProvider;
 	private OrderService orderService;
 	private ProductService productService;
 	private UserService userService;
 
 	@Autowired
-	public StorefrontView(OrdersDataProvider ordersProvider, ProductService productService, OrderService orderService,
+	public StorefrontView(ProductService productService, OrderService orderService,
 			UserService userService) {
 		this.productService = productService;
-		this.ordersProvider = ordersProvider;
 		this.orderService = orderService;
 		this.userService = userService;
 
@@ -192,8 +189,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 				presenter.addComment(e.getOrderId(), e.getMessage());
 			});
 
-			dataProvider = new OrdersGridDataProvider(ordersProvider, Sort.Direction.ASC, orderSortFields);
-			headersGenerator = new StorefrontItemHeaderGenerator(ordersProvider, orderSortFields);
+			dataProvider = new OrdersGridDataProvider(orderService, Sort.Direction.ASC, orderSortFields);
+			headersGenerator = new StorefrontItemHeaderGenerator(orderService, orderSortFields);
 			headersGenerator.updateHeaders("", false);
 			setDataProvider(dataProvider);
 		}

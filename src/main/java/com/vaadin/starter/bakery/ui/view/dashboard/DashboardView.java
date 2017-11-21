@@ -1,18 +1,24 @@
 package com.vaadin.starter.bakery.ui.view.dashboard;
 
+import java.time.LocalDate;
+import java.time.MonthDay;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.vaadin.data.provider.Query;
 import com.vaadin.data.selection.SelectionEvent;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.router.PageTitle;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
+import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider;
+import com.vaadin.starter.bakery.ui.utils.OrderFilter;
 import com.vaadin.starter.bakery.ui.view.storefront.StorefrontItem;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.event.AttachEvent;
@@ -27,7 +33,6 @@ import com.vaadin.router.Route;
 import com.vaadin.starter.bakery.backend.data.DashboardData;
 import com.vaadin.starter.bakery.backend.data.DeliveryStats;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
-import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.starter.bakery.ui.entities.NamedSeries;
 import com.vaadin.starter.bakery.ui.entities.chart.ColumnChartData;
 import com.vaadin.starter.bakery.ui.entities.chart.ProductDeliveriesChartData;
@@ -43,14 +48,14 @@ import org.springframework.data.domain.Sort;
 @PageTitle(BakeryConst.TITLE_DASHBOARD)
 public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 
-	private final OrdersDataProvider ordersProvider;
+	private final OrderService orderService;
 
 	@Id("orders-grid")
 	private Grid<Order> grid;
 
 	@Autowired
-	public DashboardView(OrdersDataProvider ordersProvider) {
-		this.ordersProvider = ordersProvider;
+	public DashboardView(OrderService orderService) {
+		this.orderService = orderService;
 
 		grid.addColumn("Order", new ComponentRenderer<>(order -> {
 			StorefrontItem item = new StorefrontItem();
@@ -62,10 +67,10 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 
 	@Override
 	protected void onAttach(AttachEvent attachEvent) {
-		grid.setDataProvider(new OrdersGridDataProvider(ordersProvider,
+		grid.setDataProvider(new OrdersGridDataProvider(orderService,
 				Sort.Direction.ASC, "dueDate", "dueTime", "id"));
 
-		DashboardData data = ordersProvider.getDashboardData();
+		DashboardData data = orderService.getDashboardData(MonthDay.now().getMonthValue(), Year.now().getValue());
 		populateYearlySalesChart(data);
 		populateDeliveriesCharts(data);
 		populateOrdersCounts(data.getDeliveryStats());
@@ -73,7 +78,9 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 	}
 
 	private void populateOrdersCounts(DeliveryStats deliveryStats) {
-		List<com.vaadin.starter.bakery.backend.data.entity.Order> orders = ordersProvider.getOriginalOrdersList();
+		List<Order> orders = orderService
+				.findAnyMatchingAfterDueDate(Optional.empty(), Optional.of(LocalDate.now().minusDays(1)), null)
+				.getContent();
 
 		getModel().setTodayOrdersCount(DashboardUtils.getTodaysOrdersCountData(deliveryStats, orders.iterator()));
 		getModel().setNotAvailableOrdersCount(DashboardUtils.getNotAvailableOrdersCountData(deliveryStats));

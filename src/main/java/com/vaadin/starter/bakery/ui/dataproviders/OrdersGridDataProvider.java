@@ -4,21 +4,24 @@ import com.vaadin.data.provider.Query;
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.data.provider.QuerySortOrderBuilder;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
+import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.ui.utils.OrderFilter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.vaadin.artur.spring.dataprovider.FilterablePageableDataProvider;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public class OrdersGridDataProvider extends FilterablePageableDataProvider<Order, OrderFilter> {
 
-	private final OrdersDataProvider ordersProvider;
+	private final OrderService orderService;
 	private final List<QuerySortOrder> defaultSortOrders;
 
-	public OrdersGridDataProvider(OrdersDataProvider ordersProvider, Sort.Direction direction, String... properties) {
-		this.ordersProvider = ordersProvider;
+	public OrdersGridDataProvider(OrderService orderService, Sort.Direction direction, String... properties) {
+		this.orderService = orderService;
 		this.defaultSortOrders = makeSortOrders(direction, properties);
 	}
 
@@ -37,7 +40,9 @@ public class OrdersGridDataProvider extends FilterablePageableDataProvider<Order
 	@Override
 	protected Page<Order> fetchFromBackEnd(Query<Order, OrderFilter> query, Pageable pageable) {
 		OrderFilter filter = query.getFilter().orElse(OrderFilter.getEmptyFilter());
-		return ordersProvider.fetchFromBackEnd(filter, pageable);
+		return orderService
+				.findAnyMatchingAfterDueDate(Optional.of(filter.getFilter()), getFilterDate(filter.isShowPrevious()),
+						pageable);
 	}
 
 	@Override
@@ -47,7 +52,16 @@ public class OrdersGridDataProvider extends FilterablePageableDataProvider<Order
 
 	@Override
 	protected int sizeInBackEnd(Query<Order, OrderFilter> query) {
-		return (int) ordersProvider
-				.countAnyMatchingAfterDueDate(query.getFilter().orElse(OrderFilter.getEmptyFilter()));
+		OrderFilter filter = query.getFilter().orElse(OrderFilter.getEmptyFilter());
+		return (int) orderService
+				.countAnyMatchingAfterDueDate(Optional.of(filter.getFilter()), getFilterDate(filter.isShowPrevious()));
+	}
+
+	private Optional<LocalDate> getFilterDate(boolean showPrevious) {
+		if (showPrevious) {
+			return Optional.empty();
+		}
+
+		return Optional.of(LocalDate.now().minusDays(1));
 	}
 }

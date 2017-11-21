@@ -1,25 +1,29 @@
 package com.vaadin.starter.bakery.ui.utils;
 
-import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
+import com.vaadin.starter.bakery.backend.data.entity.Order;
+import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.ui.entities.StorefrontItemHeader;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class StorefrontItemHeaderGenerator {
 
 	private final DateTimeFormatter HEADER_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("EEE, MMM d");
 
-	private final OrdersDataProvider ordersProvider;
+	private final OrderService orderService;
 	private final Map<Long, StorefrontItemHeader> ordersWithHeaders = new HashMap<>();
 
 	private Sort sort;
 
-	public StorefrontItemHeaderGenerator(OrdersDataProvider ordersProvider, String[] orderSortFields) {
-		this.ordersProvider = ordersProvider;
+	public StorefrontItemHeaderGenerator(OrderService orderService, String[] orderSortFields) {
+		this.orderService = orderService;
 
 		sort = new Sort(Sort.Direction.ASC, orderSortFields);
 	}
@@ -70,41 +74,52 @@ public class StorefrontItemHeaderGenerator {
 
 		if (showPrevious) {
 			LocalDate date = LocalDate.now().minusDays(2);
-			Long id = ordersProvider.findFirstOrderAfterDueDate(filter, date, sort);
+			Long id = findFirstOrderAfterDueDate(filter, date, sort);
 			if (id != null) {
 				ordersWithHeaders.put(id, getYesterdayHeader());
 			}
 
 			date = date.minusDays(date.getDayOfWeek().getValue());
-			id = ordersProvider.findFirstOrderAfterDueDate(filter, date, sort);
+			id = findFirstOrderAfterDueDate(filter, date, sort);
 			if (id != null) {
 				ordersWithHeaders.put(id, getThisWeekBeforeYesterdayHeader());
 			}
 
-			id = ordersProvider.findFirstOrderAfterDueDate(filter, null, sort);
+			id = findFirstOrderAfterDueDate(filter, null, sort);
 			if (id != null) {
 				ordersWithHeaders.put(id, getRecentHeader());
 			}
 		}
 
 		LocalDate date = LocalDate.now().minusDays(1);
-		Long id = ordersProvider.findFirstOrderAfterDueDate(filter, date, sort);
+		Long id = findFirstOrderAfterDueDate(filter, date, sort);
 		if (id != null) {
 			ordersWithHeaders.put(id, getTodayHeader());
 		}
 
 		date = LocalDate.now();
-		id = ordersProvider.findFirstOrderAfterDueDate(filter, date, sort);
+		id = findFirstOrderAfterDueDate(filter, date, sort);
 		if (id != null) {
 			ordersWithHeaders.put(id, getThisWeekStartingTomorrow(showPrevious));
 		}
 
 		date = date.minusDays(date.getDayOfWeek().getValue()).plusWeeks(1);
-		id = ordersProvider.findFirstOrderAfterDueDate(filter, date, sort);
+		id = findFirstOrderAfterDueDate(filter, date, sort);
 		if (id != null) {
 			ordersWithHeaders.put(id, getUpcomingHeader());
 		}
 	}
+
+	public Long findFirstOrderAfterDueDate(String filter, LocalDate date, Sort sort) {
+		Page<Order> page = orderService
+				.findAnyMatchingAfterDueDate(Optional.ofNullable(filter), Optional.ofNullable(date),
+						new PageRequest(0, 1, sort));
+		if (page.getContent().isEmpty()) {
+			return null;
+		}
+		return page.getContent().get(0).getId();
+	}
+
 
 	public StorefrontItemHeader get(Long id) {
 		return ordersWithHeaders.get(id);
