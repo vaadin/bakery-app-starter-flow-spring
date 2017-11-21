@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.vaadin.data.provider.Query;
 import com.vaadin.data.selection.SelectionEvent;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.router.PageTitle;
@@ -18,10 +17,8 @@ import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider;
-import com.vaadin.starter.bakery.ui.utils.OrderFilter;
 import com.vaadin.starter.bakery.ui.view.storefront.StorefrontItem;
 import com.vaadin.ui.Tag;
-import com.vaadin.ui.event.AttachEvent;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.grid.Grid;
 import com.vaadin.ui.polymertemplate.Id;
@@ -63,10 +60,7 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 			return item;
 		}));
 		grid.addSelectionListener(this::onOrdersGridSelectionChanged);
-	}
 
-	@Override
-	protected void onAttach(AttachEvent attachEvent) {
 		grid.setDataProvider(new OrdersGridDataProvider(orderService,
 				Sort.Direction.ASC, "dueDate", "dueTime", "id"));
 
