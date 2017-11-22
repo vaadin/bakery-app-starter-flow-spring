@@ -1,7 +1,5 @@
 package com.vaadin.starter.bakery.ui.utils;
 
-import com.vaadin.starter.bakery.ui.utils.DashboardUtils.OrdersCountData;
-
 public class OrdersCountDataWithChart extends OrdersCountData {
 
 	private Integer overall;
