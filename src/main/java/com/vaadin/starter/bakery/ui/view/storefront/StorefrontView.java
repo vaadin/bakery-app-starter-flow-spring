@@ -2,6 +2,7 @@ package com.vaadin.starter.bakery.ui.view.storefront;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Collections;
 
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider;
 import com.vaadin.starter.bakery.ui.entities.StorefrontItemHeader;
@@ -164,7 +165,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		public OrderEntityPresenter() {
 			super(orderService, StorefrontView.this, "Order");
 			searchBar.addFilterChangeListener(e -> filterChanged(searchBar.getFilter(), searchBar.isCheckboxChecked()));
-			searchBar.addActionClickListener(e -> edit(null));
+			searchBar.addActionClickListener(e -> createNew());
 
 			orderEdit.addListener(CancelEvent.class, e -> cancel());
 			orderEdit.addReviewListener(e -> {
@@ -231,14 +232,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		}
 
 		private void edit(String id) {
-			if (id != null && !id.isEmpty()) {
-				Map<String, String> parameters = new HashMap<>();
-				parameters.put("edit", "");
-				getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT + "/" + id,
-						QueryParameters.simple(parameters)));
-				return;
-			}
-			createNew();
+			getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT + "/" + id,
+					QueryParameters.simple(Collections.singletonMap("edit", ""))));
 		}
 
 		// StorefrontItemDetailWrapper presenter methods

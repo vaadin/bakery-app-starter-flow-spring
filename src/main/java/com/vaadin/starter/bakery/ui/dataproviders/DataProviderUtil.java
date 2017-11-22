@@ -16,6 +16,6 @@ public class DataProviderUtil {
 	}
 
 	public static <T> ItemLabelGenerator<T> createItemLabelGenerator(Function<T, String> converter) {
-		return item -> convertIfNotNull(item, converter);
+		return item -> convertIfNotNull(item, converter, () -> "");
 	}
 }
