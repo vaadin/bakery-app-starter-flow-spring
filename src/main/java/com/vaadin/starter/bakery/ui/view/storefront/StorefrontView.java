@@ -1,6 +1,6 @@
 package com.vaadin.starter.bakery.ui.view.storefront;
 
-import java.util.Collections;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider;
 import com.vaadin.starter.bakery.ui.entities.StorefrontItemHeader;
@@ -25,8 +25,6 @@ import com.vaadin.starter.bakery.backend.service.ProductService;
 import com.vaadin.starter.bakery.backend.service.UserService;
 import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.components.BakerySearch;
-import com.vaadin.starter.bakery.ui.event.CancelEvent;
-import com.vaadin.starter.bakery.ui.event.SaveEvent;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.view.EntityPresenter;
 import com.vaadin.starter.bakery.ui.view.EntityView;
@@ -60,19 +58,10 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 
 	private OrderEntityPresenter presenter;
 
-	private OrderService orderService;
-	private ProductService productService;
-	private UserService userService;
-	private OrdersGridDataProvider dataProvider;
-
 	@Autowired
-	public StorefrontView(ProductService productService, OrderService orderService,
-			UserService userService, OrdersGridDataProvider dataProvider) {
-		this.productService = productService;
-		this.orderService = orderService;
-		this.userService = userService;
-		this.dataProvider = dataProvider;
+	public StorefrontView(OrderEntityPresenter presenter) {
 
+		this.presenter = presenter;
 		// required for the `isDesktopView()` method
 		getElement().synchronizeProperty("desktopView", "desktop-view-changed");
 
@@ -93,7 +82,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		}));
 
 		getModel().setEditing(false);
-		presenter = new OrderEntityPresenter();
+		presenter.init(this);
 	}
 
 	@Override
@@ -104,12 +93,12 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		}
 	}
 
-	private void showOrderEdit() {
+	void showOrderEdit() {
 		orderDetail.getElement().setAttribute("hidden", "");
 		orderEdit.getElement().removeAttribute("hidden");
 	}
 
-	private void details(Order order, boolean isReview) {
+	void details(Order order, boolean isReview) {
 		orderDetail.getElement().removeAttribute("hidden");
 		orderEdit.getElement().setAttribute("hidden", "");
 		orderDetail.display(order, isReview);
@@ -148,119 +137,24 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		}
 	}
 
-	private boolean isDesktopView() {
+	boolean isDesktopView() {
 		return getElement().getProperty("desktopView", true);
 	}
 
-	private void resizeGrid() {
+	void resizeGrid() {
 		grid.getElement().callFunction("notifyResize");
 	}
 
-	class OrderEntityPresenter extends EntityPresenter<Order> {
+	public BakerySearch getSearchBar() {
+		return searchBar;
+	}
 
-		private StorefrontItemHeaderGenerator headersGenerator;
+	public OrderEdit getOrderEdit() {
+		return orderEdit;
+	}
 
-		public OrderEntityPresenter() {
-			super(orderService, StorefrontView.this, "Order");
-			searchBar.addFilterChangeListener(e -> filterChanged(searchBar.getFilter(), searchBar.isCheckboxChecked()));
-			searchBar.addActionClickListener(e -> createNew());
-
-			orderEdit.addListener(CancelEvent.class, e -> cancel());
-			orderEdit.addReviewListener(e -> {
-				try {
-					writeEntity();
-					details(getEntity(), true);
-				} catch (ValidationException ex) {
-					showValidationError();
-				}
-			});
-
-			orderDetail.addListener(SaveEvent.class, e -> save());
-			orderDetail.addCancelListener(e -> cancel());
-			orderDetail.addBackListener(e -> showOrderEdit());
-			orderDetail.addEditListener(e -> {
-				orderEdit.read(getEntity());
-				showOrderEdit();
-			});
-			orderDetail.addCommentListener(e -> {
-				presenter.addComment(e.getOrderId(), e.getMessage());
-			});
-
-			headersGenerator = new StorefrontItemHeaderGenerator(orderService);
-			headersGenerator.updateHeaders("", false);
-			setDataProvider(dataProvider);
-		}
-
-		public StorefrontItemHeader getHeaderByOrderId(Long id) {
-			return headersGenerator.get(id);
-		}
-
-		void filterChanged(String filter, boolean showPrevious) {
-			headersGenerator.updateHeaders(filter, showPrevious);
-			dataProvider.setFilter(new OrderFilter(filter, showPrevious));
-		}
-
-		@Override
-		protected void beforeSave() throws ValidationException {
-			// Entity already updated
-		}
-
-		@Override
-		protected void onSaveSuccess(boolean isNew) {
-			if (isNew) {
-				dataProvider.refreshAll();
-			} else {
-				dataProvider.refreshItem(getEntity());
-			}
-
-			super.onSaveSuccess(isNew);
-		}
-
-		@Override
-		protected void openDialog(Order entity, boolean edit) {
-			orderEdit.init(userService.getCurrentUser(), productService.getRepository().findAll());
-			super.openDialog(entity, edit);
-		}
-
-		private void addComment(Long id, String comment) {
-			executeJPAOperation(() -> {
-				orderService.addComment(id, comment);
-				loadEntity(id, false);
-			});
-		}
-
-		private void edit(String id) {
-			getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT + "/" + id,
-					QueryParameters.simple(Collections.singletonMap("edit", ""))));
-		}
-
-		// StorefrontItemDetailWrapper presenter methods
-		private void onOrderCardExpanded(StorefrontItemDetailWrapper orderCard) {
-			if (isDesktopView()) {
-				orderCard.setSelected(true);
-				resizeGrid();
-			} else {
-				loadEntity(orderCard.getOrder().getId(), false);
-			}
-		}
-
-		private void onOrderCardCollapsed(StorefrontItemDetailWrapper orderCard) {
-			orderCard.setSelected(false);
-			resizeGrid();
-		}
-
-		private void onOrderCardEdit(StorefrontItemDetailWrapper orderCard) {
-			onOrderCardCollapsed(orderCard);
-			edit(orderCard.getOrder().getId().toString());
-		}
-
-		private void onOrderCardAddComment(StorefrontItemDetailWrapper orderCard, String message) {
-			executeJPAOperation(() -> {
-				Order updated = orderService.addComment(orderCard.getOrder().getId(), message);
-				orderCard.setOrder(updated);
-				resizeGrid();
-			});
-		}
+	public OrderDetail getOrderDetail() {
+		return orderDetail;
 	}
 
 }
