@@ -1,7 +1,5 @@
 package com.vaadin.starter.bakery.ui.view.storefront;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Collections;
 
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider;

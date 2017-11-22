@@ -9,6 +9,7 @@ import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.utils.OrderFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -22,6 +23,7 @@ import java.util.Optional;
  * A singleton pageable order data provider.
  */
 @SpringComponent
+@Scope("prototype")
 public class OrdersGridDataProvider extends FilterablePageableDataProvider<Order, OrderFilter> {
 
 	private final OrderService orderService;
