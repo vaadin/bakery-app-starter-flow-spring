@@ -44,7 +44,6 @@ public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements Has
 
 	private BeanValidationBinder<OrderItem> binder = new BeanValidationBinder<>(OrderItem.class);
 
-
 	public OrderItemEdit(ProductDataProvider productSource) {
 		this.amount.setDisabled(true);
 		ComboboxBinderWrapper<Product> productsWrapper = new ComboboxBinderWrapper<>(products);
@@ -57,18 +56,18 @@ public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements Has
 			if (this.comment.isDisabled()) {
 				this.comment.setDisabled(false);
 			}
-			fireEvent(new ProductChangeEvent(e.getValue()));
+			fireEvent(new ProductChangeEvent(this, e.getValue()));
 			this.setPrice();
 		});
 
 		amount.addValueChangeListener(e -> this.setPrice());
-		comment.addValueChangeListener(e -> fireEvent(new CommentChangeEvent(e.getValue())));
+		comment.addValueChangeListener(e -> fireEvent(new CommentChangeEvent(this, e.getValue())));
 
 		binder.forField(amount).bind("quantity");
 		binder.forField(comment).bind("comment");
 		binder.forField(productsWrapper).bind("product");
 
-		delete.addClickListener(e -> fireEvent(new DeleteEvent(totalPrice)));
+		delete.addClickListener(e -> fireEvent(new DeleteEvent(this, totalPrice)));
 		this.setPrice();
 	}
 
@@ -82,7 +81,7 @@ public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements Has
 		}
 		this.price.setText(FormattingUtils.formatAsCurrency(totalPrice));
 		if (oldValue != totalPrice) {
-			fireEvent(new PriceChangeEvent(oldValue, totalPrice));
+			fireEvent(new PriceChangeEvent(this, oldValue, totalPrice));
 		}
 	}
 
@@ -125,14 +124,14 @@ public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements Has
 		return addListener(DeleteEvent.class, listener);
 	}
 
-	public class PriceChangeEvent extends ComponentEvent<OrderItemEdit> {
+	public static class PriceChangeEvent extends ComponentEvent<OrderItemEdit> {
 
 		private final int oldValue;
 
 		private final int newValue;
 
-		public PriceChangeEvent(int oldValue, int newValue) {
-			super(OrderItemEdit.this, false);
+		public PriceChangeEvent(OrderItemEdit component, int oldValue, int newValue) {
+			super(component, false);
 			this.oldValue = oldValue;
 			this.newValue = newValue;
 		}
@@ -147,12 +146,12 @@ public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements Has
 
 	}
 
-	public class ProductChangeEvent extends ComponentEvent<OrderItemEdit> {
+	public static class ProductChangeEvent extends ComponentEvent<OrderItemEdit> {
 
 		private final Product product;
 
-		ProductChangeEvent(Product product) {
-			super(OrderItemEdit.this, false);
+		ProductChangeEvent(OrderItemEdit component, Product product) {
+			super(component, false);
 			this.product = product;
 		}
 
@@ -162,12 +161,12 @@ public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements Has
 
 	}
 
-	public class CommentChangeEvent extends ComponentEvent<OrderItemEdit> {
+	public static class CommentChangeEvent extends ComponentEvent<OrderItemEdit> {
 
 		private final String comment;
 
-		CommentChangeEvent(String comment) {
-			super(OrderItemEdit.this, false);
+		CommentChangeEvent(OrderItemEdit component, String comment) {
+			super(component, false);
 			this.comment = comment;
 		}
 
@@ -177,12 +176,12 @@ public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements Has
 
 	}
 
-	public class DeleteEvent extends ComponentEvent<OrderItemEdit> {
+	public static class DeleteEvent extends ComponentEvent<OrderItemEdit> {
 
 		private final int totalPrice;
 
-		DeleteEvent(int totalPrice) {
-			super(OrderItemEdit.this, false);
+		DeleteEvent(OrderItemEdit component, int totalPrice) {
+			super(component, false);
 			this.totalPrice = totalPrice;
 		}
 
