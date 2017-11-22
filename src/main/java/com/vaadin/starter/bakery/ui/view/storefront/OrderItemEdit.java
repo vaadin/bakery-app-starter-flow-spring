@@ -6,6 +6,7 @@ import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
+import com.vaadin.starter.bakery.ui.view.storefront.event.PriceChangeEvent;
 import com.vaadin.starter.bakery.ui.view.wrapper.ComboboxBinderWrapper;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
@@ -122,28 +123,6 @@ public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements Has
 
 	public Registration addDeleteListener(ComponentEventListener<DeleteEvent> listener) {
 		return addListener(DeleteEvent.class, listener);
-	}
-
-	public static class PriceChangeEvent extends ComponentEvent<OrderItemEdit> {
-
-		private final int oldValue;
-
-		private final int newValue;
-
-		public PriceChangeEvent(OrderItemEdit component, int oldValue, int newValue) {
-			super(component, false);
-			this.oldValue = oldValue;
-			this.newValue = newValue;
-		}
-
-		public int getOldValue() {
-			return oldValue;
-		}
-
-		public int getNewValue() {
-			return newValue;
-		}
-
 	}
 
 	public static class ProductChangeEvent extends ComponentEvent<OrderItemEdit> {
