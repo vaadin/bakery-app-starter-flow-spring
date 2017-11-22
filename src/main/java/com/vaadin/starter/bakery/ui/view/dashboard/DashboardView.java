@@ -37,7 +37,6 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.utils.DashboardUtils;
 import com.vaadin.starter.bakery.ui.utils.DashboardUtils.OrdersCountData;
 import com.vaadin.starter.bakery.ui.utils.DashboardUtils.OrdersCountDataWithChart;
-import org.springframework.data.domain.Sort;
 
 @Tag("bakery-dashboard")
 @HtmlImport("src/dashboard/bakery-dashboard.html")
@@ -51,7 +50,7 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 	private Grid<Order> grid;
 
 	@Autowired
-	public DashboardView(OrderService orderService) {
+	public DashboardView(OrderService orderService, OrdersGridDataProvider orderDataProvider) {
 		this.orderService = orderService;
 
 		grid.addColumn("Order", new ComponentRenderer<>(order -> {
@@ -61,8 +60,7 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 		}));
 		grid.addSelectionListener(this::onOrdersGridSelectionChanged);
 
-		grid.setDataProvider(new OrdersGridDataProvider(orderService,
-				Sort.Direction.ASC, "dueDate", "dueTime", "id"));
+		grid.setDataProvider(orderDataProvider);
 
 		DashboardData data = orderService.getDashboardData(MonthDay.now().getMonthValue(), Year.now().getValue());
 		populateYearlySalesChart(data);

@@ -3,9 +3,12 @@ package com.vaadin.starter.bakery.ui.dataproviders;
 import com.vaadin.data.provider.Query;
 import com.vaadin.data.provider.QuerySortOrder;
 import com.vaadin.data.provider.QuerySortOrderBuilder;
+import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.service.OrderService;
+import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.utils.OrderFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -15,17 +18,22 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * A singleton pageable order data provider.
+ */
+@SpringComponent
 public class OrdersGridDataProvider extends FilterablePageableDataProvider<Order, OrderFilter> {
 
 	private final OrderService orderService;
-	private final List<QuerySortOrder> defaultSortOrders;
+	private List<QuerySortOrder> defaultSortOrders;
 
-	public OrdersGridDataProvider(OrderService orderService, Sort.Direction direction, String... properties) {
+	@Autowired
+	public OrdersGridDataProvider(OrderService orderService) {
 		this.orderService = orderService;
-		this.defaultSortOrders = makeSortOrders(direction, properties);
+		setSortOrders(BakeryConst.DEFAULT_SORT_DIRECTION, BakeryConst.ORDER_SORT_FIELDS);
 	}
 
-	private static List<QuerySortOrder> makeSortOrders(Sort.Direction direction, String[] properties) {
+	private void setSortOrders(Sort.Direction direction, String[] properties) {
 		QuerySortOrderBuilder builder = new QuerySortOrderBuilder();
 		for (String property : properties) {
 			if (direction.isAscending()) {
@@ -34,7 +42,7 @@ public class OrdersGridDataProvider extends FilterablePageableDataProvider<Order
 				builder.thenDesc(property);
 			}
 		}
-		return builder.build();
+		defaultSortOrders = builder.build();
 	}
 
 	@Override

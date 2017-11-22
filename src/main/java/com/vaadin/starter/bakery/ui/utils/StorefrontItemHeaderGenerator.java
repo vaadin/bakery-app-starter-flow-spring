@@ -22,10 +22,10 @@ public class StorefrontItemHeaderGenerator {
 
 	private Sort sort;
 
-	public StorefrontItemHeaderGenerator(OrderService orderService, String[] orderSortFields) {
+	public StorefrontItemHeaderGenerator(OrderService orderService) {
 		this.orderService = orderService;
 
-		sort = new Sort(Sort.Direction.ASC, orderSortFields);
+		sort = new Sort(BakeryConst.DEFAULT_SORT_DIRECTION, BakeryConst.ORDER_SORT_FIELDS);
 	}
 
 	private StorefrontItemHeader getRecentHeader() {

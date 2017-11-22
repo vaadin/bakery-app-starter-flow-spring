@@ -35,8 +35,6 @@ import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
-import org.springframework.data.domain.Sort;
-import org.vaadin.artur.spring.dataprovider.FilterablePageableDataProvider;
 
 @Tag("bakery-storefront")
 @HtmlImport("src/storefront/bakery-storefront.html")
@@ -66,13 +64,15 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	private OrderService orderService;
 	private ProductService productService;
 	private UserService userService;
+	private OrdersGridDataProvider dataProvider;
 
 	@Autowired
 	public StorefrontView(ProductService productService, OrderService orderService,
-			UserService userService) {
+			UserService userService, OrdersGridDataProvider dataProvider) {
 		this.productService = productService;
 		this.orderService = orderService;
 		this.userService = userService;
+		this.dataProvider = dataProvider;
 
 		// required for the `isDesktopView()` method
 		getElement().synchronizeProperty("desktopView", "desktop-view-changed");
@@ -159,9 +159,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 
 	class OrderEntityPresenter extends EntityPresenter<Order> {
 
-		private FilterablePageableDataProvider<Order, OrderFilter> dataProvider;
 		private StorefrontItemHeaderGenerator headersGenerator;
-		private final String[] orderSortFields = {"dueDate", "dueTime", "id"};
 
 		public OrderEntityPresenter() {
 			super(orderService, StorefrontView.this, "Order");
@@ -189,8 +187,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 				presenter.addComment(e.getOrderId(), e.getMessage());
 			});
 
-			dataProvider = new OrdersGridDataProvider(orderService, Sort.Direction.ASC, orderSortFields);
-			headersGenerator = new StorefrontItemHeaderGenerator(orderService, orderSortFields);
+			headersGenerator = new StorefrontItemHeaderGenerator(orderService);
 			headersGenerator.updateHeaders("", false);
 			setDataProvider(dataProvider);
 		}
