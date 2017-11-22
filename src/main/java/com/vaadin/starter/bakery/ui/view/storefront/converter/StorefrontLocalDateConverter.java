@@ -4,14 +4,16 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import com.vaadin.flow.model.ModelConverter;
+import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
 /**
  * Date converter specific for the way date is displayed in storefront.
  */
 public class StorefrontLocalDateConverter implements ModelConverter<LocalDate, StorefrontDate> {
 
-	private static final DateTimeFormatter DAY_FORMATTER = DateTimeFormatter.ofPattern("MMM d");
-	private static final DateTimeFormatter WEEKDAY_FORMATTER = DateTimeFormatter.ofPattern("EEEE");
+	private static final DateTimeFormatter DAY_FORMATTER = DateTimeFormatter.ofPattern("MMM d", BakeryConst.APP_LOCALE);
+	private static final DateTimeFormatter WEEKDAY_FORMATTER = DateTimeFormatter.ofPattern("EEEE",
+			BakeryConst.APP_LOCALE);
 
 	@Override
 	public StorefrontDate toPresentation(LocalDate modelValue) {
