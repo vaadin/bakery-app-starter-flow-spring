@@ -1,16 +1,16 @@
 package com.vaadin.starter.bakery;
 
-import com.vaadin.starter.bakery.app.security.SecurityConfiguration;
-import com.vaadin.starter.bakery.backend.data.entity.User;
-import com.vaadin.starter.bakery.backend.repositories.UserRepository;
-import com.vaadin.starter.bakery.backend.service.UserService;
-import com.vaadin.starter.bakery.backend.util.LocalDateJpaConverter;
-import com.vaadin.starter.bakery.ui.BakeryApp;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
+import com.vaadin.starter.bakery.app.security.SecurityConfiguration;
+import com.vaadin.starter.bakery.backend.data.entity.User;
+import com.vaadin.starter.bakery.backend.repositories.UserRepository;
+import com.vaadin.starter.bakery.backend.service.UserService;
+import com.vaadin.starter.bakery.ui.BakeryApp;
 
 /**
  * Spring boot web application initializer.
@@ -25,8 +25,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  */
 @SpringBootApplication(scanBasePackageClasses = { BakeryApp.class, Application.class, UserService.class,
 		SecurityConfiguration.class })
-@EnableJpaRepositories(basePackageClasses = { UserRepository.class})
-@EntityScan(basePackageClasses={User.class, LocalDateJpaConverter.class})
+@EnableJpaRepositories(basePackageClasses = { UserRepository.class })
+@EntityScan(basePackageClasses = { User.class })
 public class Application extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
