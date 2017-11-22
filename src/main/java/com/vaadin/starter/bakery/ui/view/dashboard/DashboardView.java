@@ -10,13 +10,26 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.vaadin.data.selection.SelectionEvent;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.router.PageTitle;
+import com.vaadin.router.Route;
+import com.vaadin.starter.bakery.backend.data.DashboardData;
+import com.vaadin.starter.bakery.backend.data.DeliveryStats;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
+import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider;
+import com.vaadin.starter.bakery.ui.entities.NamedSeries;
+import com.vaadin.starter.bakery.ui.entities.chart.ColumnChartData;
+import com.vaadin.starter.bakery.ui.entities.chart.ProductDeliveriesChartData;
+import com.vaadin.starter.bakery.ui.utils.BakeryConst;
+import com.vaadin.starter.bakery.ui.utils.DashboardUtils;
+import com.vaadin.starter.bakery.ui.utils.DashboardUtils.OrdersCountData;
+import com.vaadin.starter.bakery.ui.utils.OrdersCountDataWithChart;
 import com.vaadin.starter.bakery.ui.view.storefront.StorefrontItem;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HtmlImport;
@@ -24,19 +37,7 @@ import com.vaadin.ui.grid.Grid;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import com.vaadin.ui.renderers.ComponentRenderer;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import com.vaadin.router.Route;
-import com.vaadin.starter.bakery.backend.data.DashboardData;
-import com.vaadin.starter.bakery.backend.data.DeliveryStats;
-import com.vaadin.starter.bakery.backend.data.entity.Product;
-import com.vaadin.starter.bakery.ui.entities.NamedSeries;
-import com.vaadin.starter.bakery.ui.entities.chart.ColumnChartData;
-import com.vaadin.starter.bakery.ui.entities.chart.ProductDeliveriesChartData;
-import com.vaadin.starter.bakery.ui.utils.BakeryConst;
-import com.vaadin.starter.bakery.ui.utils.DashboardUtils;
-import com.vaadin.starter.bakery.ui.utils.DashboardUtils.OrdersCountData;
-import com.vaadin.starter.bakery.ui.utils.DashboardUtils.OrdersCountDataWithChart;
 
 @Tag("bakery-dashboard")
 @HtmlImport("src/dashboard/bakery-dashboard.html")
@@ -77,7 +78,7 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 		getModel().setTodayOrdersCount(DashboardUtils.getTodaysOrdersCountData(deliveryStats, orders.iterator()));
 		getModel().setNotAvailableOrdersCount(DashboardUtils.getNotAvailableOrdersCountData(deliveryStats));
 		getModel()
-				.setNewOrdersCount(DashboardUtils.getNewOrdersCountData(deliveryStats, orders.get(orders.size() - 1)));
+		.setNewOrdersCount(DashboardUtils.getNewOrdersCountData(deliveryStats, orders.get(orders.size() - 1)));
 		getModel().setTomorrowOrdersCount(DashboardUtils.getTomorrowOrdersCountData(deliveryStats, orders.iterator()));
 	}
 
