@@ -1,5 +1,7 @@
 package com.vaadin.starter.bakery.ui.utils.converters;
 
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.APP_LOCALE;
+
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 
@@ -11,7 +13,7 @@ public class CurrencyFormatter implements ModelConverter<Integer, String> {
 	@Override
 	public String toPresentation(Integer modelValue) {
 		return DataProviderUtil.convertIfNotNull(modelValue,
-				v -> NumberFormat.getCurrencyInstance().format(BigDecimal.valueOf(v, 2)));
+				v -> NumberFormat.getCurrencyInstance(APP_LOCALE).format(BigDecimal.valueOf(v, 2)));
 	}
 
 	@Override
