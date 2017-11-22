@@ -6,13 +6,13 @@ import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.function.Function;
 
 import com.vaadin.flow.model.Convert;
 import com.vaadin.flow.model.Include;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
+import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.utils.converters.LocalTimeConverter;
 import com.vaadin.starter.bakery.ui.utils.converters.LongToStringConverter;
 import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
@@ -32,22 +32,23 @@ public class StorefrontItem extends PolymerTemplate<StorefrontItem.Model> {
 	/**
 	 * For getting the week of the year from the localdate.
 	 */
-	private static final TemporalField WEEK_OF_YEAR_FIELD = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
+	static final TemporalField WEEK_OF_YEAR_FIELD = WeekFields.of(BakeryConst.APP_LOCALE).weekOfWeekBasedYear();
 
 	/**
 	 * 3 letter day of the week + day number. E.g: Mon 20
 	 */
-	private static final DateTimeFormatter SHORT_DAY_FORMATTER = DateTimeFormatter.ofPattern("E d");
+	static final DateTimeFormatter SHORT_DAY_FORMATTER = DateTimeFormatter.ofPattern("E d", BakeryConst.APP_LOCALE);
 
 	/**
 	 * Full day name. E.g: Monday.
 	 */
-	private static final DateTimeFormatter FULL_DAY_FORMATTER = DateTimeFormatter.ofPattern("EEEE");
+	static final DateTimeFormatter FULL_DAY_FORMATTER = DateTimeFormatter.ofPattern("EEEE", BakeryConst.APP_LOCALE);
 
 	/**
 	 * 3 letter month name + day number E.g: Nov 20
 	 */
-	private static final DateTimeFormatter MONTH_AND_DAY_FORMATTER = DateTimeFormatter.ofPattern("MMM d");
+	static final DateTimeFormatter MONTH_AND_DAY_FORMATTER = DateTimeFormatter.ofPattern("MMM d",
+			BakeryConst.APP_LOCALE);
 
 	public interface Model extends TemplateModel {
 		@Include({ "id", "state", "customer.fullName", "items.product.name", "items.quantity" })
