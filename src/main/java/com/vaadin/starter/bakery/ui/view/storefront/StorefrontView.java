@@ -2,43 +2,33 @@ package com.vaadin.starter.bakery.ui.view.storefront;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider;
-import com.vaadin.starter.bakery.ui.entities.StorefrontItemHeader;
-import com.vaadin.starter.bakery.ui.utils.OrderFilter;
-import com.vaadin.starter.bakery.ui.utils.StorefrontItemHeaderGenerator;
-import com.vaadin.ui.grid.Grid;
-import com.vaadin.ui.renderers.ComponentRenderer;
-import org.springframework.beans.factory.annotation.Autowired;
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.router.HasUrlParameter;
 import com.vaadin.router.OptionalParameter;
 import com.vaadin.router.PageTitle;
-import com.vaadin.router.QueryParameters;
 import com.vaadin.router.Route;
 import com.vaadin.router.event.BeforeNavigationEvent;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
-import com.vaadin.starter.bakery.backend.service.OrderService;
-import com.vaadin.starter.bakery.backend.service.ProductService;
-import com.vaadin.starter.bakery.backend.service.UserService;
 import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.components.BakerySearch;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
-import com.vaadin.starter.bakery.ui.view.EntityPresenter;
 import com.vaadin.starter.bakery.ui.view.EntityView;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HtmlImport;
+import com.vaadin.ui.grid.Grid;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
+import com.vaadin.ui.renderers.ComponentRenderer;
 
 @Tag("bakery-storefront")
 @HtmlImport("src/storefront/bakery-storefront.html")
 @Route(value = BakeryConst.PAGE_STOREFRONT, layout = BakeryApp.class)
 @PageTitle(BakeryConst.TITLE_STOREFRONT)
 public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
-		implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
+implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 
 	public interface Model extends TemplateModel {
 		void setEditing(boolean editing);
