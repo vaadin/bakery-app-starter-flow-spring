@@ -7,7 +7,6 @@ import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.ui.view.storefront.event.PriceChangeEvent;
-import com.vaadin.ui.Component;
 import com.vaadin.ui.common.HasValue;
 import com.vaadin.ui.event.ComponentEvent;
 import com.vaadin.ui.event.ComponentEventListener;
@@ -139,14 +138,7 @@ public class OrderItemsEdit extends Div implements HasValue<OrderItemsEdit, List
 	private void setHasChanges(boolean hasChanges) {
 		this.hasChanges = hasChanges;
 		if (hasChanges) {
-			fireEvent(new ValueChangeEvent(this));
-		}
-	}
-
-	public static class ValueChangeEvent extends ComponentEvent<OrderItemsEdit> {
-
-		ValueChangeEvent(OrderItemsEdit component) {
-			super(component, false);
+			fireEvent(new com.vaadin.starter.bakery.ui.view.storefront.event.ValueChangeEvent(this));
 		}
 	}
 

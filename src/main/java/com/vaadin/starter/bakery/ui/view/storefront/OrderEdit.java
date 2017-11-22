@@ -29,6 +29,7 @@ import com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.starter.bakery.ui.utils.converters.LocalTimeConverter;
+import com.vaadin.starter.bakery.ui.view.storefront.event.ValueChangeEvent;
 import com.vaadin.starter.bakery.ui.view.wrapper.ComboboxBinderWrapper;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
@@ -136,7 +137,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 		binder.forField(items).bind("items");
 		items.addPriceChangeListener(e -> setTotalPrice(e.getTotalPrice()));
 
-		items.addListener(OrderItemsEdit.ValueChangeEvent.class, e -> review.setDisabled(!hasChanges()));
+		items.addListener(ValueChangeEvent.class, e -> review.setDisabled(!hasChanges()));
 		items.addListener(OrderItemsEdit.NewEditorEvent.class, e -> updateDesktopViewOnItemsEdit());
 		binder.addValueChangeListener(e -> {
 			if (e.getOldValue() != null) {
