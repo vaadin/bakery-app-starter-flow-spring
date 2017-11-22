@@ -6,9 +6,9 @@ import java.util.List;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
+import com.vaadin.starter.bakery.ui.view.storefront.event.NewEditorEvent;
 import com.vaadin.starter.bakery.ui.view.storefront.event.PriceChangeEvent;
 import com.vaadin.ui.common.HasValue;
-import com.vaadin.ui.event.ComponentEvent;
 import com.vaadin.ui.event.ComponentEventListener;
 import com.vaadin.ui.html.Div;
 
@@ -139,13 +139,6 @@ public class OrderItemsEdit extends Div implements HasValue<OrderItemsEdit, List
 		this.hasChanges = hasChanges;
 		if (hasChanges) {
 			fireEvent(new com.vaadin.starter.bakery.ui.view.storefront.event.ValueChangeEvent(this));
-		}
-	}
-
-	public static class NewEditorEvent extends ComponentEvent<OrderItemsEdit> {
-
-		NewEditorEvent(OrderItemsEdit component) {
-			super(component, false);
 		}
 	}
 
