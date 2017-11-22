@@ -213,9 +213,7 @@ public class DashboardUtils {
 		OrdersCountData ordersCountData = new OrdersCountData("New", null, deliveryStats.getNewOrders());
 		LocalDateTime currTime = LocalDateTime.now();
 
-		Order order = lastOrder;
-
-		LocalDateTime timestamp = order.getHistory().get(0).getTimestamp();
+		LocalDateTime timestamp = lastOrder.getHistory().get(0).getTimestamp();
 
 		long value = timestamp.until(currTime, ChronoUnit.DAYS);
 		if (value > 0) {

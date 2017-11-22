@@ -1,7 +1,5 @@
 package com.vaadin.starter.bakery.ui.view.storefront;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Collections;
 
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider;
@@ -27,7 +25,6 @@ import com.vaadin.starter.bakery.backend.service.ProductService;
 import com.vaadin.starter.bakery.backend.service.UserService;
 import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.components.BakerySearch;
-import com.vaadin.starter.bakery.ui.dataproviders.OrdersDataProvider;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
@@ -37,8 +34,6 @@ import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
-import org.springframework.data.domain.Sort;
-import org.vaadin.artur.spring.dataprovider.FilterablePageableDataProvider;
 
 @Tag("bakery-storefront")
 @HtmlImport("src/storefront/bakery-storefront.html")
@@ -65,18 +60,18 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 
 	private OrderEntityPresenter presenter;
 
-	private OrdersDataProvider ordersProvider;
 	private OrderService orderService;
 	private ProductService productService;
 	private UserService userService;
+	private OrdersGridDataProvider dataProvider;
 
 	@Autowired
-	public StorefrontView(OrdersDataProvider ordersProvider, ProductService productService, OrderService orderService,
-			UserService userService) {
+	public StorefrontView(ProductService productService, OrderService orderService,
+			UserService userService, OrdersGridDataProvider dataProvider) {
 		this.productService = productService;
-		this.ordersProvider = ordersProvider;
 		this.orderService = orderService;
 		this.userService = userService;
+		this.dataProvider = dataProvider;
 
 		// required for the `isDesktopView()` method
 		getElement().synchronizeProperty("desktopView", "desktop-view-changed");
@@ -163,9 +158,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 
 	class OrderEntityPresenter extends EntityPresenter<Order> {
 
-		private FilterablePageableDataProvider<Order, OrderFilter> dataProvider;
 		private StorefrontItemHeaderGenerator headersGenerator;
-		private final String[] orderSortFields = {"dueDate", "dueTime", "id"};
 
 		public OrderEntityPresenter() {
 			super(orderService, StorefrontView.this, "Order");
@@ -193,8 +186,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 				presenter.addComment(e.getOrderId(), e.getMessage());
 			});
 
-			dataProvider = new OrdersGridDataProvider(ordersProvider, Sort.Direction.ASC, orderSortFields);
-			headersGenerator = new StorefrontItemHeaderGenerator(ordersProvider, orderSortFields);
+			headersGenerator = new StorefrontItemHeaderGenerator(orderService);
 			headersGenerator.updateHeaders("", false);
 			setDataProvider(dataProvider);
 		}

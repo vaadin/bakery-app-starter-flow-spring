@@ -1,5 +1,7 @@
 package com.vaadin.starter.bakery.ui.utils;
 
+import org.springframework.data.domain.Sort;
+
 public class BakeryConst {
 
 	public static final String PAGE_ROOT = "";
@@ -18,4 +20,7 @@ public class BakeryConst {
 	public static final String TITLE_PRODUCTS = "Products";
 	public static final String TITLE_NOT_FOUND = "Page was not found";
 	public static final String TITLE_ACCESS_DENIED = "Access denied";
+
+	public static final String[] ORDER_SORT_FIELDS = {"dueDate", "dueTime", "id"};
+	public static final Sort.Direction DEFAULT_SORT_DIRECTION = Sort.Direction.ASC;
 }
