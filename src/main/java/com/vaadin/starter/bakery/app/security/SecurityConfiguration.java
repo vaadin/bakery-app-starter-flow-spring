@@ -1,8 +1,5 @@
 package com.vaadin.starter.bakery.app.security;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +12,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
-import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
@@ -54,17 +50,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		// Not using Spring CSRF here to be able to use plain HTML for the login page
 		http.csrf().disable()
-				.requestCache().requestCache(new CustomRequestCache())
-				.and().authorizeRequests()
-					.requestMatchers(this::isFrameworkInternalRequest).permitAll()
-					.anyRequest().hasAnyAuthority(Role.getAllRoles())
-				.and().formLogin()
-					.loginPage(LOGIN_URL).permitAll()
-					.loginProcessingUrl(LOGIN_PROCESSING_URL)
-					.failureUrl(LOGIN_FAILURE_URL)
-					.successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
-				.and().logout()
-					.logoutSuccessUrl(LOGOUT_SUCCESS_URL);
+		.requestCache().requestCache(new CustomRequestCache())
+		.and().authorizeRequests()
+				.requestMatchers(SecurityUtils::isFrameworkInternalRequest).permitAll()
+		.anyRequest().hasAnyAuthority(Role.getAllRoles())
+		.and().formLogin()
+		.loginPage(LOGIN_URL).permitAll()
+		.loginProcessingUrl(LOGIN_PROCESSING_URL)
+		.failureUrl(LOGIN_FAILURE_URL)
+		.successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
+		.and().logout()
+		.logoutSuccessUrl(LOGOUT_SUCCESS_URL);
 	}
 
 	@Override
@@ -91,24 +87,5 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				"/build/**",
 				"/frontend-es5/**",
 				"/frontend-es6/**");
-	}
-
-	private boolean isFrameworkInternalRequest(HttpServletRequest request) {
-		final String FRAMEWORK_INTERNAL_REQUEST_PARAMETER = "v-r";
-		final String HEARTBEAT_PARAMETER_VALUE = "heartbeat";
-		final String UIDL_PARAMETER_VALUE = "uidl";
-		final String parameterValue = request.getParameter(FRAMEWORK_INTERNAL_REQUEST_PARAMETER);
-		return parameterValue != null
-				&& (parameterValue.equals(HEARTBEAT_PARAMETER_VALUE) || parameterValue.equals(UIDL_PARAMETER_VALUE));
-	}
-
-	class CustomRequestCache extends HttpSessionRequestCache {
-		@Override
-		public void saveRequest(HttpServletRequest request, HttpServletResponse response) {
-			if (!isFrameworkInternalRequest(request)) {
-				super.saveRequest(request, response);
-			}
-		}
-
 	}
 }
