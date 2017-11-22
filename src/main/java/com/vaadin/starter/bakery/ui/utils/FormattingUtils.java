@@ -14,9 +14,9 @@ public class FormattingUtils {
 	}
 
 	public static DecimalFormat getUiPriceFormatter() {
-		DecimalFormatSymbols sep = new DecimalFormatSymbols();
-		sep.setDecimalSeparator('.');
-		return new DecimalFormat("#" + DECIMAL_ZERO, sep);
+		DecimalFormat formatter = new DecimalFormat("#" + DECIMAL_ZERO,
+				DecimalFormatSymbols.getInstance(BakeryConst.APP_LOCALE));
+		formatter.setGroupingUsed(false);
+		return formatter;
 	}
-
 }
