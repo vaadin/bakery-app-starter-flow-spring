@@ -6,6 +6,8 @@ import java.util.List;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
+import com.vaadin.starter.bakery.ui.view.storefront.event.PriceChangeEvent;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.common.HasValue;
 import com.vaadin.ui.event.ComponentEvent;
 import com.vaadin.ui.event.ComponentEventListener;
@@ -111,7 +113,7 @@ public class OrderItemsEdit extends Div implements HasValue<OrderItemsEdit, List
 			orderItem.setProduct(product);
 			items.add(orderItem);
 			item.setValue(orderItem);
-			fireEvent(new NewEditorEvent());
+			fireEvent(new NewEditorEvent(this));
 		}
 	}
 
@@ -119,7 +121,7 @@ public class OrderItemsEdit extends Div implements HasValue<OrderItemsEdit, List
 		final int delta = newItemPrice - oldItemPrice;
 		totalPrice += delta;
 		setHasChanges(true);
-		fireEvent(new PriceChangeEvent(totalPrice));
+		fireEvent(new PriceChangeEvent(this, totalPrice));
 	}
 
 	private void createEmptyElement() {
@@ -137,36 +139,21 @@ public class OrderItemsEdit extends Div implements HasValue<OrderItemsEdit, List
 	private void setHasChanges(boolean hasChanges) {
 		this.hasChanges = hasChanges;
 		if (hasChanges) {
-			fireEvent(new ValueChangeEvent());
+			fireEvent(new ValueChangeEvent(this));
 		}
 	}
 
-	public class PriceChangeEvent extends ComponentEvent<OrderItemsEdit> {
+	public static class ValueChangeEvent extends ComponentEvent<OrderItemsEdit> {
 
-		private final Integer totalPrice;
-
-		PriceChangeEvent(Integer totalPrice) {
-			super(OrderItemsEdit.this, false);
-			this.totalPrice = totalPrice;
-		}
-
-		public Integer getTotalPrice() {
-			return totalPrice;
-		}
-
-	}
-
-	public class ValueChangeEvent extends ComponentEvent<OrderItemsEdit> {
-
-		ValueChangeEvent() {
-			super(OrderItemsEdit.this, false);
+		ValueChangeEvent(OrderItemsEdit component) {
+			super(component, false);
 		}
 	}
 
-	public class NewEditorEvent extends ComponentEvent<OrderItemsEdit> {
+	public static class NewEditorEvent extends ComponentEvent<OrderItemsEdit> {
 
-		NewEditorEvent() {
-			super(OrderItemsEdit.this, false);
+		NewEditorEvent(OrderItemsEdit component) {
+			super(component, false);
 		}
 	}
 
