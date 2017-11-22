@@ -1,6 +1,5 @@
 package com.vaadin.starter.bakery.ui.utils;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -170,34 +169,5 @@ public class DashboardUtils {
 		// option if data contain orders from the future
 		ordersCountData.setSubtitle("Last just added");
 		return ordersCountData;
-	}
-
-	public static class PageInfo implements Serializable {
-		private int pageNumber;
-		private List<Order> orders;
-
-		public PageInfo(){
-		}
-
-		public PageInfo(List<Order> orders, Integer pageNumber) {
-			this.orders = orders;
-			this.pageNumber = pageNumber;
-		}
-
-		public int getPageNumber() {
-			return pageNumber;
-		}
-
-		public void setPageNumber(int pageNumber) {
-			this.pageNumber = pageNumber;
-		}
-
-		public List<Order> getOrders() {
-			return orders;
-		}
-
-		public void setOrders(List<Order> orders) {
-			this.orders = orders;
-		}
 	}
 }
