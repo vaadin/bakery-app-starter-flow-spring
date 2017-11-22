@@ -17,11 +17,11 @@ import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.event.SaveEvent;
 import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
 import com.vaadin.starter.bakery.ui.view.storefront.converter.StorefrontLocalDateConverter;
+import com.vaadin.starter.bakery.ui.view.storefront.event.CommentEvent;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
 import com.vaadin.ui.common.HasClickListeners;
 import com.vaadin.ui.common.HtmlImport;
-import com.vaadin.ui.event.ComponentEvent;
 import com.vaadin.ui.event.ComponentEventListener;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
@@ -63,7 +63,7 @@ public class OrderDetail extends PolymerTemplate<OrderDetail.Model> {
 			message = message == null ? "" : message.trim();
 			if (!message.isEmpty()) {
 				commentField.clear();
-				fireEvent(new CommentEvent(order.getId(), message));
+				fireEvent(new CommentEvent(this, order.getId(), message));
 			}
 		});
 		save.addClickListener(e -> fireEvent(new SaveEvent(this, false)));
@@ -81,9 +81,9 @@ public class OrderDetail extends PolymerTemplate<OrderDetail.Model> {
 
 	public interface Model extends TemplateModel {
 		@Include({ "id", "dueDate.day", "dueDate.weekday", "dueDate.date", "dueTime", "state", "pickupLocation.name",
-				"customer.fullName", "customer.phoneNumber", "customer.details", "items.product.name", "items.comment",
-				"items.quantity", "items.product.price", "history.message", "history.createdBy.firstName",
-				"history.timestamp", "history.newState", "totalPrice" })
+			"customer.fullName", "customer.phoneNumber", "customer.details", "items.product.name", "items.comment",
+			"items.quantity", "items.product.price", "history.message", "history.createdBy.firstName",
+			"history.timestamp", "history.newState", "totalPrice" })
 		@Convert(value = LongToStringConverter.class, path = "id")
 		@Convert(value = StorefrontLocalDateConverter.class, path = "dueDate")
 		@Convert(value = LocalTimeConverter.class, path = "dueTime")
@@ -115,25 +115,5 @@ public class OrderDetail extends PolymerTemplate<OrderDetail.Model> {
 
 	public Registration addCancelListener(ComponentEventListener<CancelEvent> listener) {
 		return addListener(CancelEvent.class, listener);
-	}
-
-	public class CommentEvent extends ComponentEvent<OrderDetail> {
-
-		private Long orderId;
-		private String message;
-
-		private CommentEvent(Long orderId, String message) {
-			super(OrderDetail.this, false);
-			this.orderId = orderId;
-			this.message = message;
-		}
-
-		public Long getOrderId() {
-			return orderId;
-		}
-
-		public String getMessage() {
-			return message;
-		}
 	}
 }

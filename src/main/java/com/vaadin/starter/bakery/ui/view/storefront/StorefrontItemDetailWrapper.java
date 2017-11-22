@@ -5,6 +5,7 @@ import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.ui.entities.StorefrontItemHeader;
 import com.vaadin.starter.bakery.ui.view.storefront.event.CollapsedEvent;
+import com.vaadin.starter.bakery.ui.view.storefront.event.CommentEvent;
 import com.vaadin.starter.bakery.ui.view.storefront.event.ExpandedEvent;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
@@ -80,7 +81,7 @@ public class StorefrontItemDetailWrapper extends PolymerTemplate<StorefrontItemD
 		return orderDetail.addEditListener(listener);
 	}
 
-	public Registration addCommentListener(ComponentEventListener<OrderDetail.CommentEvent> listener) {
+	public Registration addCommentListener(ComponentEventListener<CommentEvent> listener) {
 		return orderDetail.addCommentListener(listener);
 	}
 }
