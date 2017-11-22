@@ -30,6 +30,7 @@ import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.starter.bakery.ui.utils.converters.LocalTimeConverter;
 import com.vaadin.starter.bakery.ui.view.storefront.event.NewEditorEvent;
+import com.vaadin.starter.bakery.ui.view.storefront.event.ReviewEvent;
 import com.vaadin.starter.bakery.ui.view.storefront.event.ValueChangeEvent;
 import com.vaadin.starter.bakery.ui.view.wrapper.ComboboxBinderWrapper;
 import com.vaadin.ui.Tag;
@@ -37,7 +38,6 @@ import com.vaadin.ui.button.Button;
 import com.vaadin.ui.combobox.ComboBox;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.datepicker.DatePicker;
-import com.vaadin.ui.event.ComponentEvent;
 import com.vaadin.ui.event.ComponentEventListener;
 import com.vaadin.ui.html.H2;
 import com.vaadin.ui.polymertemplate.Id;
@@ -104,7 +104,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 		addToSlot(this, items, "order-items-edit");
 
 		cancel.addClickListener(e -> fireEvent(new CancelEvent(this, false)));
-		review.addClickListener(e -> fireEvent(new ReviewEvent()));
+		review.addClickListener(e -> fireEvent(new ReviewEvent(this)));
 
 		status.setItemLabelGenerator(createItemLabelGenerator(OrderState::getDisplayName));
 		status.setDataProvider(DataProvider.ofItems(OrderState.values()));
@@ -190,13 +190,6 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 
 	private void setTotalPrice(int totalPrice) {
 		getModel().setTotalPrice(FormattingUtils.formatAsCurrency(totalPrice));
-	}
-
-	public class ReviewEvent extends ComponentEvent<OrderEdit> {
-
-		ReviewEvent() {
-			super(OrderEdit.this, false);
-		}
 	}
 
 }
