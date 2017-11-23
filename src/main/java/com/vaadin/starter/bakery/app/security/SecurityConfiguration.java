@@ -16,6 +16,10 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
+/**
+ * Configures spring security, requiring login to access some parts of the
+ * application.
+ */
 @EnableWebSecurity
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -46,13 +50,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
 	}
 
+	/**
+	 * Require login to access internal pages and configure login form.
+	 */
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// Not using Spring CSRF here to be able to use plain HTML for the login page
 		http.csrf().disable()
 		.requestCache().requestCache(new CustomRequestCache())
 		.and().authorizeRequests()
-				.requestMatchers(SecurityUtils::isFrameworkInternalRequest).permitAll()
+		.requestMatchers(SecurityUtils::isFrameworkInternalRequest).permitAll()
 		.anyRequest().hasAnyAuthority(Role.getAllRoles())
 		.and().formLogin()
 		.loginPage(LOGIN_URL).permitAll()
@@ -63,6 +70,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.logoutSuccessUrl(LOGOUT_SUCCESS_URL);
 	}
 
+	/**
+	 * Allows access to static resources bypassing Spring security.
+	 */
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring()

@@ -88,12 +88,26 @@ public final class SecurityUtils {
 		return isAccessGranted(secured);
 	}
 
+	/**
+	 * Checks if the user is logged in.
+	 *
+	 * @return true if the user is logged in. False otherwise.
+	 */
 	public static boolean isUserLoggedIn() {
 		SecurityContext context = SecurityContextHolder.getContext();
 		return context.getAuthentication() != null
 				&& !(context.getAuthentication() instanceof AnonymousAuthenticationToken);
 	}
 
+	/**
+	 * Tests if the request is an internal framework request. The test consists of
+	 * checking if the request parameter "v-r" is present and if its value is either
+	 * "heartbeat" or "uidl".
+	 *
+	 * @param request
+	 *            {@link HttpServletRequest}
+	 * @return true if is an internal framework request. False otherwise.
+	 */
 	static boolean isFrameworkInternalRequest(HttpServletRequest request) {
 		final String FRAMEWORK_INTERNAL_REQUEST_PARAMETER = "v-r";
 		final String HEARTBEAT_PARAMETER_VALUE = "heartbeat";
