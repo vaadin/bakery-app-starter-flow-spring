@@ -1,8 +1,12 @@
 package com.vaadin.starter.bakery.ui.utils;
 
+import java.util.Locale;
+
 import org.springframework.data.domain.Sort;
 
 public class BakeryConst {
+
+	public static final Locale APP_LOCALE = Locale.US;
 
 	public static final String PAGE_ROOT = "";
 	public static final String PAGE_STOREFRONT = "storefront";
