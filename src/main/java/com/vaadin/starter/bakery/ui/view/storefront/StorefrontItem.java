@@ -1,19 +1,20 @@
 package com.vaadin.starter.bakery.ui.view.storefront;
 
+import static com.vaadin.starter.bakery.ui.utils.FormattingUtils.HOUR_FORMATTER;
+import static com.vaadin.starter.bakery.ui.utils.FormattingUtils.MONTH_AND_DAY_FORMATTER;
+import static com.vaadin.starter.bakery.ui.utils.FormattingUtils.SHORT_DAY_FORMATTER;
+import static com.vaadin.starter.bakery.ui.utils.FormattingUtils.WEEKDAY_FULLNAME_FORMATTER;
+import static com.vaadin.starter.bakery.ui.utils.FormattingUtils.WEEK_OF_YEAR_FIELD;
+
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalField;
-import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.function.Function;
 
 import com.vaadin.flow.model.Convert;
 import com.vaadin.flow.model.Include;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
-import com.vaadin.starter.bakery.ui.utils.converters.LocalTimeConverter;
 import com.vaadin.starter.bakery.ui.utils.converters.LongToStringConverter;
 import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
 import com.vaadin.ui.Component;
@@ -28,26 +29,6 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 @Tag("storefront-item")
 @HtmlImport("src/storefront/storefront-item.html")
 public class StorefrontItem extends PolymerTemplate<StorefrontItem.Model> {
-
-	/**
-	 * For getting the week of the year from the localdate.
-	 */
-	private static final TemporalField WEEK_OF_YEAR_FIELD = WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear();
-
-	/**
-	 * 3 letter day of the week + day number. E.g: Mon 20
-	 */
-	private static final DateTimeFormatter SHORT_DAY_FORMATTER = DateTimeFormatter.ofPattern("E d");
-
-	/**
-	 * Full day name. E.g: Monday.
-	 */
-	private static final DateTimeFormatter FULL_DAY_FORMATTER = DateTimeFormatter.ofPattern("EEEE");
-
-	/**
-	 * 3 letter month name + day number E.g: Nov 20
-	 */
-	private static final DateTimeFormatter MONTH_AND_DAY_FORMATTER = DateTimeFormatter.ofPattern("MMM d");
 
 	public interface Model extends TemplateModel {
 		@Include({ "id", "state", "customer.fullName", "items.product.name", "items.quantity" })
@@ -74,17 +55,17 @@ public class StorefrontItem extends PolymerTemplate<StorefrontItem.Model> {
 
 		if (date.equals(now) || date.equals(now.minusDays(1))) {
 			// Today or yesterday
-			result.add(createHeader("time", LocalTimeConverter.formatter.format(order.getDueTime())));
+			result.add(createHeader("time", HOUR_FORMATTER.format(order.getDueTime())));
 			result.add(PLACE.apply(order));
 		} else if (now.get(WEEK_OF_YEAR_FIELD) == date.get(WEEK_OF_YEAR_FIELD)) {
 			// This week
 			result.add(createHeader("short-day", SHORT_DAY_FORMATTER.format(order.getDueDate())));
-			result.add(createTimeComponent("secondary-time", LocalTimeConverter.formatter.format(order.getDueTime())));
+			result.add(createTimeComponent("secondary-time", HOUR_FORMATTER.format(order.getDueTime())));
 			result.add(PLACE.apply(order));
 		} else {
 			// Other dates
 			result.add(createHeader("month", MONTH_AND_DAY_FORMATTER.format(order.getDueDate())));
-			result.add(createTimeComponent("full-day", FULL_DAY_FORMATTER.format(order.getDueDate())));
+			result.add(createTimeComponent("full-day", WEEKDAY_FULLNAME_FORMATTER.format(order.getDueDate())));
 		}
 
 		return result;
