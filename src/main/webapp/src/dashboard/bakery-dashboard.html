@@ -1,15 +1,17 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/vaadin-board/vaadin-board.html">
 <link rel="import" href="../../bower_components/vaadin-board/vaadin-board-row.html">
+<link rel="import" href="../app/style-modules/bakery-charts-default-theme.html">
 
 <link rel="import" href="dashboard-orders-counter.html">
 <link rel="import" href="dashboard-column-chart.html">
 <link rel="import" href="dashboard-yearly-sales.html">
 <link rel="import" href="dashboard-pie-chart.html">
+<link rel="import" href="dashboard-counter-label.html">
 
 <dom-module id="bakery-dashboard">
   <template>
-    <style include="shared-styles">
+    <style include="shared-styles bakery-charts-default-theme">
       :host {
         display: block;
         width: 100%;
@@ -25,13 +27,6 @@
           box-shadow: 0 2px 5px 0 rgba(23, 68, 128, 0.1);
           height: calc(40vh - 64px) !important;
           min-height: 355px;
-        }
-      }
-
-      vaadin-board vaadin-board-row:nth-child(2) > * {
-        --column-chart-height: {
-          height: calc(20vh - 64px) !important;
-          min-height: 150px;
         }
       }
 
@@ -57,10 +52,10 @@
 
     <vaadin-board>
       <vaadin-board-row>
-        <dashboard-orders-counter data="[[todayOrdersCount]]" count-color="#55BF3B" display-chart="true"></dashboard-orders-counter>
-        <dashboard-orders-counter data="[[notAvailableOrdersCount]]" count-color="#ff473a"></dashboard-orders-counter>
-        <dashboard-orders-counter data="[[newOrdersCount]]" count-color="#1877f3"></dashboard-orders-counter>
-        <dashboard-orders-counter data="[[tomorrowOrdersCount]]" count-color="rgba(45, 71, 105, 0.7)"></dashboard-orders-counter>
+        <dashboard-orders-counter data="[[todayOrdersCount]]"></dashboard-orders-counter>
+        <dashboard-counter-label label-data="[[notAvailableOrdersCount]]" class="red"></dashboard-counter-label>
+        <dashboard-counter-label label-data="[[newOrdersCount]]" class="blue"></dashboard-counter-label>
+        <dashboard-counter-label label-data="[[tomorrowOrdersCount]]" class="gray"></dashboard-counter-label>
       </vaadin-board-row>
       <vaadin-board-row>
         <dashboard-column-chart data="[[deliveriesThisMonth]]"></dashboard-column-chart>
