@@ -1,7 +1,9 @@
 package com.vaadin.starter.bakery.ui.view.storefront.converter;
 
+import static com.vaadin.starter.bakery.ui.utils.FormattingUtils.WEEKDAY_FULLNAME_FORMATTER;
+import static com.vaadin.starter.bakery.ui.utils.FormattingUtils.MONTH_AND_DAY_FORMATTER;
+
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 import com.vaadin.flow.model.ModelConverter;
 
@@ -10,16 +12,13 @@ import com.vaadin.flow.model.ModelConverter;
  */
 public class StorefrontLocalDateConverter implements ModelConverter<LocalDate, StorefrontDate> {
 
-	private static final DateTimeFormatter DAY_FORMATTER = DateTimeFormatter.ofPattern("MMM d");
-	private static final DateTimeFormatter WEEKDAY_FORMATTER = DateTimeFormatter.ofPattern("EEEE");
-
 	@Override
 	public StorefrontDate toPresentation(LocalDate modelValue) {
 		StorefrontDate result = null;
 		if (modelValue != null) {
 			result = new StorefrontDate();
-			result.setDay(DAY_FORMATTER.format(modelValue));
-			result.setWeekday(WEEKDAY_FORMATTER.format(modelValue));
+			result.setDay(MONTH_AND_DAY_FORMATTER.format(modelValue));
+			result.setWeekday(WEEKDAY_FULLNAME_FORMATTER.format(modelValue));
 			result.setDate(modelValue.toString());
 		}
 		return result;
