@@ -18,10 +18,10 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
 /**
  * Configures spring security, doing the following:
- * <li>Bypasses security checks for static resources,</li>
- * <li>Restricts access to the application, allowing only logged in users,</li>
- * <li>Sets up the login form,</li>
- * <li>Configures the {@link UserDetailsService}.</li>
+ * <li>Bypass security checks for static resources,</li>
+ * <li>Restrict access to the application, allowing only logged in users,</li>
+ * <li>Set up the login form,</li>
+ * <li>Configures the {@link UserDetailsServiceImpl}.</li>
 
  */
 @EnableWebSecurity
@@ -49,8 +49,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	}
 
 	/**
-	 * Registers our UserDetailsService, that searches for users in the database,
-	 * and the password encoder.
+	 * Registers our UserDetailsService and the password encoder to be used on login attempts.
 	 */
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
