@@ -5,6 +5,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -18,7 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  * security and querying rights from different beans of the UI.
  *
  */
-public class SecurityUtils {
+public final class SecurityUtils {
 
 	private SecurityUtils() {
 		// Util methods only
@@ -92,4 +94,12 @@ public class SecurityUtils {
 				&& !(context.getAuthentication() instanceof AnonymousAuthenticationToken);
 	}
 
+	static boolean isFrameworkInternalRequest(HttpServletRequest request) {
+		final String FRAMEWORK_INTERNAL_REQUEST_PARAMETER = "v-r";
+		final String HEARTBEAT_PARAMETER_VALUE = "heartbeat";
+		final String UIDL_PARAMETER_VALUE = "uidl";
+		final String parameterValue = request.getParameter(FRAMEWORK_INTERNAL_REQUEST_PARAMETER);
+		return parameterValue != null
+				&& (parameterValue.equals(HEARTBEAT_PARAMETER_VALUE) || parameterValue.equals(UIDL_PARAMETER_VALUE));
+	}
 }

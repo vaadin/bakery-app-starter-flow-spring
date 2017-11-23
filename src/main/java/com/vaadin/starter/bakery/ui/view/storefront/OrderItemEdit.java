@@ -6,13 +6,16 @@ import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
+import com.vaadin.starter.bakery.ui.view.storefront.event.CommentChangeEvent;
+import com.vaadin.starter.bakery.ui.view.storefront.event.DeleteEvent;
+import com.vaadin.starter.bakery.ui.view.storefront.event.PriceChangeEvent;
+import com.vaadin.starter.bakery.ui.view.storefront.event.ProductChangeEvent;
 import com.vaadin.starter.bakery.ui.view.wrapper.ComboboxBinderWrapper;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
 import com.vaadin.ui.combobox.ComboBox;
 import com.vaadin.ui.common.HasValue;
 import com.vaadin.ui.common.HtmlImport;
-import com.vaadin.ui.event.ComponentEvent;
 import com.vaadin.ui.event.ComponentEventListener;
 import com.vaadin.ui.html.Div;
 import com.vaadin.ui.polymertemplate.Id;
@@ -44,7 +47,6 @@ public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements Has
 
 	private BeanValidationBinder<OrderItem> binder = new BeanValidationBinder<>(OrderItem.class);
 
-
 	public OrderItemEdit(ProductDataProvider productSource) {
 		this.amount.setDisabled(true);
 		ComboboxBinderWrapper<Product> productsWrapper = new ComboboxBinderWrapper<>(products);
@@ -57,18 +59,18 @@ public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements Has
 			if (this.comment.isDisabled()) {
 				this.comment.setDisabled(false);
 			}
-			fireEvent(new ProductChangeEvent(e.getValue()));
+			fireEvent(new ProductChangeEvent(this, e.getValue()));
 			this.setPrice();
 		});
 
 		amount.addValueChangeListener(e -> this.setPrice());
-		comment.addValueChangeListener(e -> fireEvent(new CommentChangeEvent(e.getValue())));
+		comment.addValueChangeListener(e -> fireEvent(new CommentChangeEvent(this, e.getValue())));
 
 		binder.forField(amount).bind("quantity");
 		binder.forField(comment).bind("comment");
 		binder.forField(productsWrapper).bind("product");
 
-		delete.addClickListener(e -> fireEvent(new DeleteEvent(totalPrice)));
+		delete.addClickListener(e -> fireEvent(new DeleteEvent(this, totalPrice)));
 		this.setPrice();
 	}
 
@@ -82,7 +84,7 @@ public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements Has
 		}
 		this.price.setText(FormattingUtils.formatAsCurrency(totalPrice));
 		if (oldValue != totalPrice) {
-			fireEvent(new PriceChangeEvent(oldValue, totalPrice));
+			fireEvent(new PriceChangeEvent(this, oldValue, totalPrice));
 		}
 	}
 
@@ -123,72 +125,5 @@ public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements Has
 
 	public Registration addDeleteListener(ComponentEventListener<DeleteEvent> listener) {
 		return addListener(DeleteEvent.class, listener);
-	}
-
-	public class PriceChangeEvent extends ComponentEvent<OrderItemEdit> {
-
-		private final int oldValue;
-
-		private final int newValue;
-
-		public PriceChangeEvent(int oldValue, int newValue) {
-			super(OrderItemEdit.this, false);
-			this.oldValue = oldValue;
-			this.newValue = newValue;
-		}
-
-		public int getOldValue() {
-			return oldValue;
-		}
-
-		public int getNewValue() {
-			return newValue;
-		}
-
-	}
-
-	public class ProductChangeEvent extends ComponentEvent<OrderItemEdit> {
-
-		private final Product product;
-
-		ProductChangeEvent(Product product) {
-			super(OrderItemEdit.this, false);
-			this.product = product;
-		}
-
-		public Product getProduct() {
-			return product;
-		}
-
-	}
-
-	public class CommentChangeEvent extends ComponentEvent<OrderItemEdit> {
-
-		private final String comment;
-
-		CommentChangeEvent(String comment) {
-			super(OrderItemEdit.this, false);
-			this.comment = comment;
-		}
-
-		public String getComment() {
-			return comment;
-		}
-
-	}
-
-	public class DeleteEvent extends ComponentEvent<OrderItemEdit> {
-
-		private final int totalPrice;
-
-		DeleteEvent(int totalPrice) {
-			super(OrderItemEdit.this, false);
-			this.totalPrice = totalPrice;
-		}
-
-		public int getTotalPrice() {
-			return totalPrice;
-		}
-
 	}
 }

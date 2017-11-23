@@ -6,8 +6,9 @@ import java.util.List;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
+import com.vaadin.starter.bakery.ui.view.storefront.event.NewEditorEvent;
+import com.vaadin.starter.bakery.ui.view.storefront.event.TotalPriceChangeEvent;
 import com.vaadin.ui.common.HasValue;
-import com.vaadin.ui.event.ComponentEvent;
 import com.vaadin.ui.event.ComponentEventListener;
 import com.vaadin.ui.html.Div;
 
@@ -111,7 +112,7 @@ public class OrderItemsEdit extends Div implements HasValue<OrderItemsEdit, List
 			orderItem.setProduct(product);
 			items.add(orderItem);
 			item.setValue(orderItem);
-			fireEvent(new NewEditorEvent());
+			fireEvent(new NewEditorEvent(this));
 		}
 	}
 
@@ -119,15 +120,15 @@ public class OrderItemsEdit extends Div implements HasValue<OrderItemsEdit, List
 		final int delta = newItemPrice - oldItemPrice;
 		totalPrice += delta;
 		setHasChanges(true);
-		fireEvent(new PriceChangeEvent(totalPrice));
+		fireEvent(new TotalPriceChangeEvent(this, totalPrice));
 	}
 
 	private void createEmptyElement() {
 		empty = createEditor(null);
 	}
 
-	public Registration addPriceChangeListener(ComponentEventListener<PriceChangeEvent> listener) {
-		return addListener(PriceChangeEvent.class, listener);
+	public Registration addPriceChangeListener(ComponentEventListener<TotalPriceChangeEvent> listener) {
+		return addListener(TotalPriceChangeEvent.class, listener);
 	}
 
 	public boolean hasChanges() {
@@ -137,36 +138,7 @@ public class OrderItemsEdit extends Div implements HasValue<OrderItemsEdit, List
 	private void setHasChanges(boolean hasChanges) {
 		this.hasChanges = hasChanges;
 		if (hasChanges) {
-			fireEvent(new ValueChangeEvent());
-		}
-	}
-
-	public class PriceChangeEvent extends ComponentEvent<OrderItemsEdit> {
-
-		private final Integer totalPrice;
-
-		PriceChangeEvent(Integer totalPrice) {
-			super(OrderItemsEdit.this, false);
-			this.totalPrice = totalPrice;
-		}
-
-		public Integer getTotalPrice() {
-			return totalPrice;
-		}
-
-	}
-
-	public class ValueChangeEvent extends ComponentEvent<OrderItemsEdit> {
-
-		ValueChangeEvent() {
-			super(OrderItemsEdit.this, false);
-		}
-	}
-
-	public class NewEditorEvent extends ComponentEvent<OrderItemsEdit> {
-
-		NewEditorEvent() {
-			super(OrderItemsEdit.this, false);
+			fireEvent(new com.vaadin.starter.bakery.ui.view.storefront.event.ValueChangeEvent(this));
 		}
 	}
 

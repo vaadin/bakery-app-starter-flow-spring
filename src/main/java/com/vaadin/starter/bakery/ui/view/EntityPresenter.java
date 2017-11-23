@@ -29,6 +29,14 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 		this.entityName = entityName;
 	}
 
+	public EntityPresenter(CrudService<T> crudService, String entityName) {
+		this(crudService, null, entityName);
+	}
+
+	public void init(EntityView<T> view) {
+		this.view = view;
+	}
+
 	public void delete() {
 		Message CONFIRM_DELETE = Message.CONFIRM_DELETE.createMessage();
 		confirmIfNecessaryAndExecute(true, CONFIRM_DELETE, () -> executeJPAOperation(() -> {
