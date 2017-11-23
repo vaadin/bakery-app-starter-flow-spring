@@ -1,0 +1,78 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="dashboard-counter-label">
+  <template>
+    <style>
+      :host {
+        text-align: center;
+        height: calc(18vh - 64px);
+        min-height: 180px;
+        padding: 10px;
+      }
+
+      .count-digit {
+        font-size: 44px;
+      }
+
+      :host(.green) .count-digit {
+        color: #55bf3b;
+      }
+
+      :host(.red) .count-digit {
+        color: #ff473a;
+      }
+
+      :host(.blue) .count-digit {
+        color: #1877f3;
+      }
+
+      :host(.gray) .count-digit {
+        color: rgba(45, 71, 105, 0.7);
+      }
+
+      .count-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 120px;
+        width: 100%;
+      }
+
+      .subtitle {
+        color: var(--valo-secondary-text-color);
+        font-size: 14px;
+      }
+
+      h4 {
+        margin: 0;
+      }
+
+    </style>
+
+    <div class="count-wrapper">
+      <span id="count_digit" class="count-digit">[[labelData.count]]</span>
+    </div>
+
+    <h4>[[labelData.title]]</h4>
+    <div class="subtitle">[[labelData.subtitle]]</div>
+  </template>
+
+  <script>
+    class DashboardCounterLabel extends Polymer.Element {
+      static get is() {
+        return 'dashboard-counter-label';
+      }
+
+      static get properties() {
+        return {
+          labelData: {
+            type: Object,
+            reflectToAttribute: true
+          }
+        };
+      }
+    }
+
+    window.customElements.define(DashboardCounterLabel.is, DashboardCounterLabel);
+  </script>
+</dom-module>

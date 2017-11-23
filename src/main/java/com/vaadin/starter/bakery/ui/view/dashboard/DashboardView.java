@@ -112,7 +112,7 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 			NamedSeries series = new NamedSeries();
 
 			series.setSeries(Arrays.asList(data.getSalesPerMonth(i)).stream().filter(number -> number != null)
-					.map(Number::toString).collect(Collectors.toList()));
+					.map(Number::doubleValue).collect(Collectors.toList()));
 
 			series.setTitle(Integer.toString(year - i));
 			yearlySales.add(series);
