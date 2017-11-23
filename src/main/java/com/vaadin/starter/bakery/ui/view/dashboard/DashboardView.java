@@ -54,11 +54,11 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 	public DashboardView(OrderService orderService, OrdersGridDataProvider orderDataProvider) {
 		this.orderService = orderService;
 
-		grid.addColumn("Order", new ComponentRenderer<>(order -> {
+		grid.addColumn(new ComponentRenderer<>(order -> {
 			StorefrontItem item = new StorefrontItem();
 			item.setOrder(order);
 			return item;
-		}));
+		})).setHeader("Order");
 		grid.addSelectionListener(this::onOrdersGridSelectionChanged);
 
 		grid.setDataProvider(orderDataProvider);
