@@ -6,7 +6,10 @@ import java.util.Locale.Category;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
-public class FormattingTest {
+/**
+ * Test superclass that runs tests in Turkish locale.
+ */
+public abstract class FormattingTest {
 
 	private static Locale locale;
 
