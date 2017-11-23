@@ -12,6 +12,12 @@ import org.springframework.stereotype.Service;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.repositories.UserRepository;
 
+/**
+ * Implements the {@link UserDetailsService}.
+ * 
+ * This implementation searches for {@link User} entities by the e-mail address
+ * supplied in the login screen.
+ */
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
@@ -22,6 +28,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		this.userRepository = userRepository;
 	}
 
+	/**
+	 *
+	 * Recovers the {@link User} from the database using the e-mail address supplied
+	 * in the login screen. If the user is found, returns a
+	 * {@link org.springframework.security.core.userdetails.User}.
+	 *
+	 * @param username User's e-mail address
+	 * 
+	 */
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		User user = userRepository.findByEmail(username);

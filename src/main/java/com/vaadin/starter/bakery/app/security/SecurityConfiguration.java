@@ -16,6 +16,14 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
+/**
+ * Configures spring security, doing the following:
+ * <li>Bypass security checks for static resources,</li>
+ * <li>Restrict access to the application, allowing only logged in users,</li>
+ * <li>Set up the login form,</li>
+ * <li>Configures the {@link UserDetailsServiceImpl}.</li>
+
+ */
 @EnableWebSecurity
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -40,33 +48,54 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		return new BCryptPasswordEncoder();
 	}
 
+	/**
+	 * Registers our UserDetailsService and the password encoder to be used on login attempts.
+	 */
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		super.configure(auth);
 		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
 	}
 
+	/**
+	 * Require login to access internal pages and configure login form.
+	 */
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// Not using Spring CSRF here to be able to use plain HTML for the login page
 		http.csrf().disable()
-		.requestCache().requestCache(new CustomRequestCache())
-		.and().authorizeRequests()
+
+				// Register our CustomRequestCache, that saves unauthorized access attempts, so
+				// the user is redirected after login.
+				.requestCache().requestCache(new CustomRequestCache())
+
+				// Restrict access to our application.
+				.and().authorizeRequests()
+
+				// Allow all flow internal requests.
 				.requestMatchers(SecurityUtils::isFrameworkInternalRequest).permitAll()
-		.anyRequest().hasAnyAuthority(Role.getAllRoles())
-		.and().formLogin()
-		.loginPage(LOGIN_URL).permitAll()
-		.loginProcessingUrl(LOGIN_PROCESSING_URL)
-		.failureUrl(LOGIN_FAILURE_URL)
-		.successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
-		.and().logout()
-		.logoutSuccessUrl(LOGOUT_SUCCESS_URL);
+
+				// Allow all requests by logged in users.
+				.anyRequest().hasAnyAuthority(Role.getAllRoles())
+
+				// Configure the login page.
+				.and().formLogin().loginPage(LOGIN_URL).permitAll().loginProcessingUrl(LOGIN_PROCESSING_URL)
+				.failureUrl(LOGIN_FAILURE_URL)
+
+				// Register the success handler that redirects users to the page they last tried
+				// to access
+				.successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
+
+				// Configure logout
+				.and().logout().logoutSuccessUrl(LOGOUT_SUCCESS_URL);
 	}
 
+	/**
+	 * Allows access to static resources, bypassing Spring security.
+	 */
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring()
-		.antMatchers(
+		web.ignoring().antMatchers(
 				// Vaadin Flow static resources
 				"/VAADIN/**",
 
@@ -74,18 +103,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				"/favicon.ico",
 
 				// development-mode static resources
-				"/bower_components/**",
-				"/icons/**",
-				"/images/**",
-				"/src/**",
-				"/manifest.json",
+				"/bower_components/**", "/icons/**", "/images/**", "/src/**", "/manifest.json",
 
 				// development-mode webjars
 				"/webjars/**",
 
 				// production-mode static resources
-				"/build/**",
-				"/frontend-es5/**",
-				"/frontend-es6/**");
+				"/build/**", "/frontend-es5/**", "/frontend-es6/**");
 	}
 }
