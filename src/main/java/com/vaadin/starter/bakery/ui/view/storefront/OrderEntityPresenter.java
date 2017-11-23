@@ -34,7 +34,6 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 	private final UserService userService;
 	private final OrdersGridDataProvider dataProvider;
 
-
 	@Autowired
 	public OrderEntityPresenter(ProductService productService, OrderService orderService, UserService userService,
 			OrdersGridDataProvider dataProvider) {
@@ -78,15 +77,6 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 		view.setDataProvider(dataProvider);
 	}
 
-	public StorefrontItemHeader getHeaderByOrderId(Long id) {
-		return headersGenerator.get(id);
-	}
-
-	void filterChanged(String filter, boolean showPrevious) {
-		headersGenerator.updateHeaders(filter, showPrevious);
-		dataProvider.setFilter(new OrderFilter(filter, showPrevious));
-	}
-
 	@Override
 	protected void beforeSave() throws ValidationException {
 		// Entity already updated
@@ -109,16 +99,13 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 		super.openDialog(entity, edit);
 	}
 
-	private void addComment(Long id, String comment) {
-		executeJPAOperation(() -> {
-			orderService.addComment(id, comment);
-			loadEntity(id, false);
-		});
+	StorefrontItemHeader getHeaderByOrderId(Long id) {
+		return headersGenerator.get(id);
 	}
 
-	private void edit(String id) {
-		view.getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT + "/" + id,
-				QueryParameters.simple(Collections.singletonMap("edit", ""))));
+	void filterChanged(String filter, boolean showPrevious) {
+		headersGenerator.updateHeaders(filter, showPrevious);
+		dataProvider.setFilter(new OrderFilter(filter, showPrevious));
 	}
 
 	// StorefrontItemDetailWrapper presenter methods
@@ -148,4 +135,17 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 			view.resizeGrid();
 		});
 	}
+
+	private void addComment(Long id, String comment) {
+		executeJPAOperation(() -> {
+			orderService.addComment(id, comment);
+			loadEntity(id, false);
+		});
+	}
+
+	private void edit(String id) {
+		view.getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT + "/" + id,
+				QueryParameters.simple(Collections.singletonMap("edit", ""))));
+	}
+
 }

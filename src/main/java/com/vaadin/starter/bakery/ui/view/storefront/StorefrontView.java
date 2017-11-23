@@ -83,17 +83,6 @@ implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 		}
 	}
 
-	void showOrderEdit() {
-		orderDetail.getElement().setAttribute("hidden", "");
-		orderEdit.getElement().removeAttribute("hidden");
-	}
-
-	void details(Order order, boolean isReview) {
-		orderDetail.getElement().removeAttribute("hidden");
-		orderEdit.getElement().setAttribute("hidden", "");
-		orderDetail.display(order, isReview);
-	}
-
 	@Override
 	public boolean isDirty() {
 		return orderEdit.hasChanges();
@@ -127,6 +116,17 @@ implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 		}
 	}
 
+	void showOrderEdit() {
+		orderDetail.getElement().setAttribute("hidden", "");
+		orderEdit.getElement().removeAttribute("hidden");
+	}
+
+	void details(Order order, boolean isReview) {
+		orderDetail.getElement().removeAttribute("hidden");
+		orderEdit.getElement().setAttribute("hidden", "");
+		orderDetail.display(order, isReview);
+	}
+
 	boolean isDesktopView() {
 		return getElement().getProperty("desktopView", true);
 	}
@@ -135,15 +135,15 @@ implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 		grid.getElement().callFunction("notifyResize");
 	}
 
-	public BakerySearch getSearchBar() {
+	BakerySearch getSearchBar() {
 		return searchBar;
 	}
 
-	public OrderEdit getOrderEdit() {
+	OrderEdit getOrderEdit() {
 		return orderEdit;
 	}
 
-	public OrderDetail getOrderDetail() {
+	OrderDetail getOrderDetail() {
 		return orderDetail;
 	}
 
