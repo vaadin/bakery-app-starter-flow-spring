@@ -5,9 +5,7 @@ import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
 import com.vaadin.ui.common.HasClickListeners;
 import com.vaadin.ui.common.HtmlImport;
-import com.vaadin.ui.event.ComponentEvent;
 import com.vaadin.ui.event.ComponentEventListener;
-import com.vaadin.ui.event.DomEvent;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import com.vaadin.ui.textfield.TextField;
@@ -64,13 +62,6 @@ public class BakerySearch extends PolymerTemplate<BakerySearch.Model> {
 
 	public void setCheckboxText(String checkboxText) {
 		getModel().setCheckboxText(checkboxText);
-	}
-
-	@DomEvent("filter-changed")
-	public static class FilterChanged extends ComponentEvent<BakerySearch> {
-		public FilterChanged(BakerySearch source, boolean fromClient) {
-			super(source, fromClient);
-		}
 	}
 
 	public void addFilterChangeListener(ComponentEventListener<FilterChanged> listener) {

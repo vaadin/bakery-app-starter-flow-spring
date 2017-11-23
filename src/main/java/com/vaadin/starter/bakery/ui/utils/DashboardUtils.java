@@ -1,6 +1,5 @@
 package com.vaadin.starter.bakery.ui.utils;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -54,71 +53,6 @@ public class DashboardUtils {
 				return (Integer) n.intValue();
 			return 0;
 		}).collect(Collectors.toList());
-
-	}
-
-	public static class OrdersCountDataWithChart extends OrdersCountData {
-
-		private Integer overall;
-
-		public OrdersCountDataWithChart() {
-
-		}
-
-		public OrdersCountDataWithChart(String title, String subtitle, Integer count, Integer overall) {
-			super(title, subtitle, count);
-			this.overall = overall;
-		}
-
-		public Integer getOverall() {
-			return overall;
-		}
-
-		public void setOverall(Integer overall) {
-			this.overall = overall;
-		}
-
-	}
-
-	public static class OrdersCountData {
-
-		private String title;
-		private String subtitle;
-		private Integer count;
-
-		public String getTitle() {
-			return title;
-		}
-
-		public void setTitle(String title) {
-			this.title = title;
-		}
-
-		public String getSubtitle() {
-			return subtitle;
-		}
-
-		public void setSubtitle(String subtitle) {
-			this.subtitle = subtitle;
-		}
-
-		public Integer getCount() {
-			return count;
-		}
-
-		public void setCount(Integer count) {
-			this.count = count;
-		}
-
-		public OrdersCountData() {
-
-		}
-
-		public OrdersCountData(String title, String subtitle, Integer count) {
-			this.title = title;
-			this.subtitle = subtitle;
-			this.count = count;
-		}
 
 	}
 
@@ -235,34 +169,5 @@ public class DashboardUtils {
 		// option if data contain orders from the future
 		ordersCountData.setSubtitle("Last just added");
 		return ordersCountData;
-	}
-
-	public static class PageInfo implements Serializable {
-		private int pageNumber;
-		private List<Order> orders;
-
-		public PageInfo(){
-		}
-
-		public PageInfo(List<Order> orders, Integer pageNumber) {
-			this.orders = orders;
-			this.pageNumber = pageNumber;
-		}
-
-		public int getPageNumber() {
-			return pageNumber;
-		}
-
-		public void setPageNumber(int pageNumber) {
-			this.pageNumber = pageNumber;
-		}
-
-		public List<Order> getOrders() {
-			return orders;
-		}
-
-		public void setOrders(List<Order> orders) {
-			this.orders = orders;
-		}
 	}
 }

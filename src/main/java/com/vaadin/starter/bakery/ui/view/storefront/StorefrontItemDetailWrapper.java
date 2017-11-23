@@ -4,13 +4,14 @@ import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.ui.entities.StorefrontItemHeader;
+import com.vaadin.starter.bakery.ui.view.storefront.event.CollapsedEvent;
+import com.vaadin.starter.bakery.ui.view.storefront.event.CommentEvent;
+import com.vaadin.starter.bakery.ui.view.storefront.event.ExpandedEvent;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
 import com.vaadin.ui.common.HasClickListeners;
 import com.vaadin.ui.common.HtmlImport;
-import com.vaadin.ui.event.ComponentEvent;
 import com.vaadin.ui.event.ComponentEventListener;
-import com.vaadin.ui.event.DomEvent;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
@@ -68,22 +69,8 @@ public class StorefrontItemDetailWrapper extends PolymerTemplate<StorefrontItemD
 		getModel().setDisplayHeader(true);
 	}
 
-	@DomEvent("expanded")
-	public static class ExpandedEvent extends ComponentEvent<StorefrontItemDetailWrapper> {
-		public ExpandedEvent(StorefrontItemDetailWrapper source, boolean fromClient) {
-			super(source, fromClient);
-		}
-	}
-
 	public Registration addExpandedListener(ComponentEventListener<ExpandedEvent> listener) {
 		return addListener(ExpandedEvent.class, listener);
-	}
-
-	@DomEvent("collapsed")
-	public static class CollapsedEvent extends ComponentEvent<StorefrontItemDetailWrapper> {
-		public CollapsedEvent(StorefrontItemDetailWrapper source, boolean fromClient) {
-			super(source, fromClient);
-		}
 	}
 
 	public Registration addCollapsedListener(ComponentEventListener<CollapsedEvent> listener) {
@@ -94,7 +81,7 @@ public class StorefrontItemDetailWrapper extends PolymerTemplate<StorefrontItemD
 		return orderDetail.addEditListener(listener);
 	}
 
-	public Registration addCommentListener(ComponentEventListener<OrderDetail.CommentEvent> listener) {
+	public Registration addCommentListener(ComponentEventListener<CommentEvent> listener) {
 		return orderDetail.addCommentListener(listener);
 	}
 }
