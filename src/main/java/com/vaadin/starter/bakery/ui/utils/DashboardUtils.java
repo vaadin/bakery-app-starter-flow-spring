@@ -11,8 +11,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import com.vaadin.starter.bakery.backend.data.DeliveryStats;
 import com.vaadin.starter.bakery.backend.data.OrderState;
@@ -32,8 +32,7 @@ public class DashboardUtils {
 	}
 
 	private static List<String> getDeliveriesThisMonthCategories(List<?> list) {
-		AtomicInteger dayNumber = new AtomicInteger(0);
-		return list.stream().map(o -> "" + dayNumber.incrementAndGet()).collect(Collectors.toList());
+		return IntStream.rangeClosed(1,list.size()).mapToObj(String::valueOf).collect(Collectors.toList());
 	}
 
 	private static String getCurrentMonthName() {
