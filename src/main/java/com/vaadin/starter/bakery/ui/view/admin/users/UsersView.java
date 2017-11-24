@@ -69,12 +69,6 @@ public class UsersView extends PolymerEntityView<User, TemplateModel> {
 	}
 
 	@Override
-	public void closeDialog() {
-		editor.clear();
-		super.closeDialog();
-	}
-
-	@Override
 	protected DefaultEntityPresenter<User> getPresenter() {
 		return presenter;
 	}
