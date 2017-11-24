@@ -24,12 +24,6 @@
         return 'dashboard-pie-chart';
       }
 
-      static get observers() {
-        return [
-          '_onSeriesNameChanged(data.seriesName)'
-        ];
-      }
-
       static get properties() {
         return {
           data: {
@@ -48,14 +42,6 @@
         };
       }
 
-      _onSeriesNameChanged(seriesName) {
-        this.$.donut.update({
-          series: [{
-            name: seriesName
-          }]
-        });
-      }
-
       connectedCallback() {
         super.connectedCallback();
         this.$.donut.update({
@@ -68,18 +54,8 @@
           },
           series: [{
             name: 'Count',
-            colorByPoint: true,
             innerSize: '60%'
-          }],
-          xAxis: {
-            tickInterval: 1,
-            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-          },
-          yAxis: {
-            title: {
-              enabled: false
-            },
-          },
+          }]
         });
       }
     }
