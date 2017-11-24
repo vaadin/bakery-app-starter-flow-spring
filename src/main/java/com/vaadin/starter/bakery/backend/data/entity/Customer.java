@@ -5,7 +5,6 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-@SuppressWarnings("serial")
 @Entity
 public class Customer extends AbstractEntity {
 
