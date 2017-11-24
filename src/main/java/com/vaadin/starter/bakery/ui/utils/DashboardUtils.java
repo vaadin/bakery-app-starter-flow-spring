@@ -42,8 +42,10 @@ public class DashboardUtils {
 	}
 
 	public static ColumnChartData getDeliveriesThisMonthChartData(List<Number> deliveriesThisMonth) {
+		// A range going from 1 to the number of items in deliveriesThisMonth
 		List<String> deliveriesThisMonthCategories = IntStream.rangeClosed(1, deliveriesThisMonth.size())
 				.mapToObj(String::valueOf).collect(Collectors.toList());
+
 		String deliveriesThisMonthTitle = "Deliveries in " + getFullMonthName(LocalDate.now());
 		return new ColumnChartData(deliveriesThisMonthTitle, "per Day",
 				convertNumbersToIntegers(deliveriesThisMonth), deliveriesThisMonthCategories);
