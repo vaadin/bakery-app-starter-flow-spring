@@ -28,20 +28,6 @@
 <dom-module id="bakery-button-styles" theme-for="vaadin-button">
   <template>
     <style>
-      :host([theme~="menu"]) [part="button"] {
-        text-align: left;
-      }
-
-      :host([hidden]) {
-        display: none !important;
-      }
-
-      :host([theme~="menu"]) {
-        margin: 0;
-        padding: 0;
-        --valo-size: var(--valo-size-s);
-      }
-
       :host([theme~="narrow"]) [part="button"] {
         padding: 0 calc(var(--valo-size, var(--valo-size-m)) / 8 + var(--valo-button-border-radius, var(--valo-border-radius)) / 2);
       }
@@ -73,17 +59,6 @@
 
       :host([theme~="center"]) [part="value"] {
         text-align: center;
-      }
-    </style>
-  </template>
-</dom-module>
-
-<!-- Theme for the vaadin-overlays -->
-<dom-module id="bakery-overlay-styles" theme-for="vaadin-overlay">
-  <template>
-    <style include="vaadin-overlay-default-theme">
-      [part="content"] {
-        background: var(--valo-base-color) !important;
       }
     </style>
   </template>
@@ -238,7 +213,6 @@
 
       .total {
         flex: 1;
-        order: -1;
         box-sizing: border-box;
         padding: 0 var(--valo-space-s);
         min-width: 100%;
@@ -255,48 +229,16 @@
         }
       }
 
-      .baseline {
-        align-items: baseline;
-      }
-
       .flex {
         display: flex;
-      }
-
-      .flex0 {
-        flex: 0;
       }
 
       .flex1 {
         flex: 1;
       }
 
-      .flex2 {
-        flex: 2;
-      }
-
-      .flex5 {
-        flex: 5;
-      }
-
-      .flex9 {
-        flex: 9;
-      }
-
-      .column {
-        flex-direction: column;
-      }
-
       .bold {
         font-weight: 600;
-      }
-
-      .align-center {
-        align-items: center;
-      }
-
-      .justify-center {
-        justify-content: center;
       }
     </style>
   </template>
