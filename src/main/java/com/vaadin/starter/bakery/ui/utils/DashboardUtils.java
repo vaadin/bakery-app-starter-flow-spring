@@ -31,7 +31,6 @@ public class DashboardUtils {
 				return (Integer) n.intValue();
 			return 0;
 		}).collect(Collectors.toList());
-
 	}
 
 	public static ColumnChartData getDeliveriesThisYearChartData(List<Number> deliveriesThisYear) {

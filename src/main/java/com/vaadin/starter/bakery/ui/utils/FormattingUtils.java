@@ -60,7 +60,12 @@ public class FormattingUtils {
 				.appendLiteral(' ').optionalEnd().appendText(java.time.temporal.ChronoField.AMPM_OF_DAY, ampm)
 				.toFormatter();
 	}
-	
+
+	/**
+	 * Returns the month name of the date, according to the application locale. 
+	 * @param date {@link LocalDate}
+	 * @return The full month name. E.g: November
+	 */
 	public static String getFullMonthName(LocalDate date) {
 		return date.getMonth().getDisplayName(TextStyle.FULL, BakeryConst.APP_LOCALE);
 	}
