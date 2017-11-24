@@ -31,10 +31,6 @@ public class DashboardUtils {
 		return Arrays.asList("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
 	}
 
-	private static List<String> getDeliveriesThisMonthCategories(List<?> list) {
-		return IntStream.rangeClosed(1,list.size()).mapToObj(String::valueOf).collect(Collectors.toList());
-	}
-
 	private static String getCurrentMonthName() {
 		return Calendar.getInstance().getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH);
 	}
@@ -60,8 +56,10 @@ public class DashboardUtils {
 	}
 
 	public static ColumnChartData getDeliveriesThisMonthChartData(List<Number> deliveriesThisMonth) {
+		List<String> deliveriesThisMonthCategories = IntStream.rangeClosed(1, deliveriesThisMonth.size())
+				.mapToObj(String::valueOf).collect(Collectors.toList());
 		return new ColumnChartData(getDeliveriesThisMonthTitle(), "per Day",
-				convertNumbersToIntegers(deliveriesThisMonth), getDeliveriesThisMonthCategories(deliveriesThisMonth));
+				convertNumbersToIntegers(deliveriesThisMonth), deliveriesThisMonthCategories);
 	}
 
 	public static ProductDeliveriesChartData getDeliveriesPerProductPieChartData(
