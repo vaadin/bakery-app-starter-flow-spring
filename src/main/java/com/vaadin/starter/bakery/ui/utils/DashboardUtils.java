@@ -126,33 +126,32 @@ public class DashboardUtils {
 		return ordersCountData;
 	}
 
+	public static OrdersCountData getNewOrdersCountData(DeliveryStats deliveryStats, Order lastOrder) {
+		return new OrdersCountData("New", createSubtitle(lastOrder), deliveryStats.getNewOrders());
+	}
+
 	private static final String NEW_ORDERS_COUNT_SUBTITLE_PATTERN = "Last %d%s ago";
 
-	public static OrdersCountData getNewOrdersCountData(DeliveryStats deliveryStats, Order lastOrder) {
-		OrdersCountData ordersCountData = new OrdersCountData("New", null, deliveryStats.getNewOrders());
+	private static String createSubtitle(Order lastOrder) {
 		LocalDateTime currTime = LocalDateTime.now();
-
 		LocalDateTime timestamp = lastOrder.getHistory().get(0).getTimestamp();
 
 		long value = timestamp.until(currTime, ChronoUnit.DAYS);
 		if (value > 0) {
-			ordersCountData.setSubtitle(String.format(NEW_ORDERS_COUNT_SUBTITLE_PATTERN, value, "d"));
-			return ordersCountData;
+			return String.format(NEW_ORDERS_COUNT_SUBTITLE_PATTERN, value, "d");
 		}
 
 		value = timestamp.until(currTime, ChronoUnit.HOURS);
 		if (value > 0) {
-			ordersCountData.setSubtitle(String.format(NEW_ORDERS_COUNT_SUBTITLE_PATTERN, value, "h"));
-			return ordersCountData;
+			return String.format(NEW_ORDERS_COUNT_SUBTITLE_PATTERN, value, "h");
 		}
+
 		value = timestamp.until(currTime, ChronoUnit.MINUTES);
 		if (value > 0) {
-			ordersCountData.setSubtitle(String.format(NEW_ORDERS_COUNT_SUBTITLE_PATTERN, value, "m"));
-			return ordersCountData;
+			return String.format(NEW_ORDERS_COUNT_SUBTITLE_PATTERN, value, "m");
 		}
 
 		// option if data contain orders from the future
-		ordersCountData.setSubtitle("Last just added");
-		return ordersCountData;
+		return "Last just added";
 	}
 }
