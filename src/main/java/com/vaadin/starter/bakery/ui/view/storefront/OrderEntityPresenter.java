@@ -30,8 +30,6 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 	private StorefrontView view;
 
 	private final OrderService orderService;
-	private final ProductService productService;
-	private final UserService userService;
 	private final OrdersGridDataProvider dataProvider;
 
 	@Autowired
@@ -39,8 +37,6 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 			OrdersGridDataProvider dataProvider) {
 		super(orderService, "Order");
 		this.orderService = orderService;
-		this.productService = productService;
-		this.userService = userService;
 		this.dataProvider = dataProvider;
 		headersGenerator = new StorefrontItemHeaderGenerator(orderService);
 		headersGenerator.updateHeaders("", false);
@@ -91,12 +87,6 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 		}
 
 		super.onSaveSuccess(isNew);
-	}
-
-	@Override
-	protected void openDialog(Order entity, boolean edit) {
-		view.getOrderEdit().init(userService.getCurrentUser(), productService.getRepository().findAll());
-		super.openDialog(entity, edit);
 	}
 
 	StorefrontItemHeader getHeaderByOrderId(Long id) {

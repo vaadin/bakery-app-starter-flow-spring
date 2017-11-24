@@ -5,7 +5,6 @@ import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Collection;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -23,8 +22,6 @@ import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.PickupLocation;
-import com.vaadin.starter.bakery.backend.data.entity.Product;
-import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
@@ -92,8 +89,6 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 
 	private OrderItemsEdit items;
 
-	private User currentUser;
-
 	private BeanValidationBinder<Order> binder = new BeanValidationBinder<>(Order.class);
 
 	private final LocalTimeConverter localTimeConverter = new LocalTimeConverter();
@@ -155,20 +150,12 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 		getElement().callFunction("_updateDesktopViewOnItemsEdit");
 	}
 
-	public void init(User currentUser, Collection<Product> availableProducts) {
-		this.currentUser = currentUser;
-	}
-
 	public void close() {
 		items.reset();
 		setTotalPrice(0);
 	}
 
 	public void write(Order order) throws ValidationException {
-		order.setDueTime(time.getValue());
-		order.setPickupLocation(pickupLocation.getValue());
-		order.changeState(currentUser, status.getValue());
-
 		binder.writeBean(order);
 	}
 
