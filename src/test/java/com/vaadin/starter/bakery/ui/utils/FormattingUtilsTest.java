@@ -16,13 +16,13 @@ import com.vaadin.starter.bakery.test.FormattingTest;
 public class FormattingUtilsTest extends FormattingTest {
 
 	@Test
-	public void formatAsCurrencyShoudBeLocaleIndependent() {
+	public void formatAsCurrencyShouldBeLocaleIndependent() {
 		String result = FormattingUtils.formatAsCurrency(987654345);
 		assertEquals("$9,876,543.45", result);
 	}
 
 	@Test
-	public void getUiPriceFormatterShoudBeLocaleIndependent() {
+	public void getUiPriceFormatterShouldBeLocaleIndependent() {
 		String result = FormattingUtils.getUiPriceFormatter().format(9876543);
 		assertEquals("9876543.00", result);
 	}
@@ -53,9 +53,15 @@ public class FormattingUtilsTest extends FormattingTest {
 	}
 
 	@Test
-	public void fullDateformatterShoudBeLocaleIndependent() {
+	public void fullDateformatterShouldBeLocaleIndependent() {
 		String result = FormattingUtils.FULL_DATE_FORMATTER.format(LocalDateTime.of(2016, 11, 27, 22, 15, 33));
 		assertEquals("27.11.2016", result);
+	}
+
+	@Test
+	public void getFullMonthNameShouldBeLocaleIndependent() {
+		String result = FormattingUtils.getFullMonthName(LocalDate.of(2003, 8, 22));
+		assertEquals("August", result);
 	}
 
 	private int getWeek(int year, int month, int day) {

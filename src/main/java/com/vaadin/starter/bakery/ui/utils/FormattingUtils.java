@@ -4,9 +4,11 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.SignStyle;
+import java.time.format.TextStyle;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
 import java.util.HashMap;
@@ -57,6 +59,15 @@ public class FormattingUtils {
 				.appendLiteral(':').appendValue(java.time.temporal.ChronoField.MINUTE_OF_HOUR, 2).optionalStart()
 				.appendLiteral(' ').optionalEnd().appendText(java.time.temporal.ChronoField.AMPM_OF_DAY, ampm)
 				.toFormatter();
+	}
+
+	/**
+	 * Returns the month name of the date, according to the application locale. 
+	 * @param date {@link LocalDate}
+	 * @return The full month name. E.g: November
+	 */
+	public static String getFullMonthName(LocalDate date) {
+		return date.getMonth().getDisplayName(TextStyle.FULL, BakeryConst.APP_LOCALE);
 	}
 
 	public static String formatAsCurrency(int valueInCents) {
