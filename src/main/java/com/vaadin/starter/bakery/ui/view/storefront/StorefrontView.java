@@ -60,7 +60,7 @@ implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 		searchBar.setPlaceHolder("Search");
 
 		grid.setSelectionMode(Grid.SelectionMode.NONE);
-		grid.addColumn("Order", new ComponentRenderer<>(order -> {
+		grid.addColumn(new ComponentRenderer<>(order -> {
 			StorefrontItemDetailWrapper orderCard = new StorefrontItemDetailWrapper();
 			orderCard.setOrder(order);
 			orderCard.setHeader(presenter.getHeaderByOrderId(order.getId()));
@@ -69,7 +69,7 @@ implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 			orderCard.addEditListener(e -> presenter.onOrderCardEdit(orderCard));
 			orderCard.addCommentListener(e -> presenter.onOrderCardAddComment(orderCard, e.getMessage()));
 			return orderCard;
-		}));
+		})).setHeader("Order");
 
 		getModel().setEditing(false);
 		presenter.init(this);
