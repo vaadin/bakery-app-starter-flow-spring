@@ -13,17 +13,6 @@
 <link rel="import" href="../../../bower_components/vaadin-valo-theme/vaadin-combo-box.html">
 <link rel="import" href="../../../bower_components/vaadin-valo-theme/vaadin-grid.html">
 
-<!-- valo theme shows clear icons in date-picker and combo-box, but we want it hidden in bakery app -->
-<dom-module id="bakery-combo-box-date-picker-styles" theme-for="vaadin-combo-box vaadin-date-picker">
-  <template>
-    <style>
-      [part="clear-button"] {
-        display: none;
-      }
-    </style>
-  </template>
-</dom-module>
-
 <!-- theme for vaadin-buttons in menus -->
 <dom-module id="bakery-button-styles" theme-for="vaadin-button">
   <template>
@@ -64,23 +53,6 @@
   </template>
 </dom-module>
 
-<!-- Theme for the vaadin-combo-box-items -->
-<dom-module id="bakery-combo-box-item-styles" theme-for="vaadin-combo-box-item">
-  <template>
-    <style include="vaadin-combo-box-item-default-theme">
-      :host(:not([touch-device]):hover),
-      :host([focused]) {
-        background: var(--valo-base-color);
-        background-image: linear-gradient(var(--valo-tint-5pct), var(--valo-tint-5pct));
-      }
-
-      :host([selected])::before {
-        content: "";
-      }
-    </style>
-  </template>
-</dom-module>
-
 <!-- Theme for the vaadin-grid -->
 <dom-module id="bakery-grid-styles" theme-for="vaadin-grid">
   <template>
@@ -95,11 +67,6 @@
 
       [part~="body-cell"] {
         border-bottom: 1px solid var(--valo-shade-5pct);
-      }
-
-      /* hides the grid header (for the storefront and the dashboard views) */
-      :host([theme~="no-header"]) [part~="header-cell"] {
-        display: none;
       }
 
       /* a special grid theme for the bakery storefront view */
