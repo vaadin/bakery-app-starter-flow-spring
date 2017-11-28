@@ -7,27 +7,16 @@
     "Vaadin Ltd"
   ],
   "dependencies": {
-    "app-layout": "PolymerElements/app-layout#^2.0.0",
-    "app-route": "PolymerElements/app-route#^2.0.0",
     "iron-flex-layout": "PolymerElements/iron-flex-layout#^2.0.0",
     "iron-form": "PolymerElements/iron-form#^2.0.0",
-    "iron-iconset-svg": "PolymerElements/iron-iconset-svg#^2.0.0",
     "iron-media-query": "PolymerElements/iron-media-query#^2.0.0",
-    "iron-pages": "PolymerElements/iron-pages#^2.0.0",
-    "paper-icon-button": "PolymerElements/paper-icon-button#^2.0.0",
     "polymer": "Polymer/polymer#^2.0.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0",
     "iron-icon": "^2.0.0",
     "paper-tabs": "^2.0.0",
-    "paper-listbox": "^2.0.0",
-    "paper-item": "^2.0.0",
-    "paper-menu-button": "^2.0.0",
     "paper-toast": "^2.0.0",
-    "web-animations-js": "^2.2.5",
     "vaadin": "vaadin/vaadin#10.0.0-alpha7",
     "vaadin-grid": "vaadin/vaadin-grid#4.1.0-alpha3",
-    "vaadin-text-field": "vaadin/vaadin-text-field#stats",
-    "vaadin-button": "vaadin/vaadin-button#stats",
     "vaadin-charts": "vaadin/vaadin-charts#6.0.0-alpha4"
   },
   "devDependencies": {
@@ -36,9 +25,6 @@
   "private": true,
   "resolutions": {
     "vaadin-grid": "4.1.0-alpha3",
-    "vaadin-text-field": "stats",
-    "vaadin-button": "stats",
-    "vaadin-charts": "6.0.0-alpha4",
-    "highcharts": "^5.0.0"
+    "vaadin-charts": "6.0.0-alpha4"
   }
 }
