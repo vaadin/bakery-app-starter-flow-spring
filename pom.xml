@@ -311,7 +311,6 @@
                             </execution>
                         </executions>
                     </plugin>
-
                 </plugins>
             </build>
         </profile>
@@ -328,7 +327,7 @@
             </properties>
 
 
-            <!-- (4): Makes the package run in production mode when deployed, without the need of setting extra
+            <!-- (2): Makes the package run in production mode when deployed, without the need of setting extra
                       properties on the server -->
             <dependencies>
                 <dependency>
@@ -339,7 +338,7 @@
 
             <build>
                 <plugins>
-                    <!-- unpack the flow-component-renderer.html component definition so that
+                    <!-- (3): unpack the flow-component-renderer.html component definition so that
                          it can be included into the production frontend build -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -367,8 +366,32 @@
                             </execution>
                         </executions>
                     </plugin>
+                    <!-- (4): copy the flow-component-renderer.html component definition so that
+                         it can be included into the production frontend build -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-flow-component-renderer-html</id>
+                                <phase>process-sources</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${frontend.directory}</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${project.build.directory}/META-INF/resources</directory>
+                                            <includes>flow-component-renderer.html</includes>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
 
-                    <!-- (2): Configures the frontend plugin to compile the web components source -->
+                    <!-- (5): Configures the frontend plugin to compile the web components source -->
                     <plugin>
                         <groupId>com.github.eirslett</groupId>
                         <artifactId>frontend-maven-plugin</artifactId>
@@ -395,30 +418,8 @@
                             </execution>
                         </executions>
                     </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-resources-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>copy-flow-component-renderer-html</id>
-                                <phase>process-sources</phase>
-                                <goals>
-                                    <goal>copy-resources</goal>
-                                </goals>
-                                <configuration>
-                                    <outputDirectory>${frontend.directory}</outputDirectory>
-                                    <resources>
-                                        <resource>
-                                            <directory>${project.build.directory}/META-INF/resources</directory>
-                                            <includes>flow-component-renderer.html</includes>
-                                        </resource>
-                                    </resources>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
 
-                    <!-- (5): Copies the files compiled by polymer-build to a directory from where they can be
+                    <!-- (6): Copies the files compiled by polymer-build to a directory from where they can be
                               served when in production mode (root of the WAR) -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -453,7 +454,7 @@
     
             <build>
                 <plugins>
-                    <!-- (7): Adds the files from src/main/frontend directly 
+                    <!-- (1): Adds the files from src/main/frontend directly 
                         into the WAR when in development mode -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
