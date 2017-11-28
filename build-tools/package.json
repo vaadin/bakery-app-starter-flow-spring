@@ -23,7 +23,6 @@
     "test": "cd ../src/main/webapp && polymer test",
     "test:integration": "cd ../src/main/webapp && polymer build # test that psk builds without error with the CLI",
     "install": "cd ../src/main/webapp && bower install",
-    "build": "cd ../src/main/webapp && polymer build",
-    "skip-build": "echo \"skipping polymer build\""
+    "build": "cd ../src/main/webapp && polymer build"
   }
 }

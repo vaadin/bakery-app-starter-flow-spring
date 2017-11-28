@@ -116,7 +116,43 @@
             <artifactId>spring-data-provider</artifactId>
             <version>2.0.0-alpha1</version>
         </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-charts-webjar</artifactId>
+            <version>6.0.0-alpha4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-board-flow</artifactId>
+            <version>1.1.0-beta1</version>
+        </dependency>
         <!-- End of Vaadin -->
+        <!-- Iron and paper elements -->
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>github-com-PolymerElements-iron-form</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>github-com-polymerelements-paper-tabs</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>github-com-polymerelements-paper-styles</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>github-com-polymerelements-paper-ripple</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>paper-toast</artifactId>
+            <version>2.0.0</version>
+        </dependency>
         <!-- Spring -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -280,7 +316,6 @@
                             </execution>
                         </executions>
                     </plugin>
-
                 </plugins>
             </build>
         </profile>
@@ -297,7 +332,7 @@
             </properties>
 
 
-            <!-- (4): Makes the package run in production mode when deployed, without the need of setting extra
+            <!-- (2): Makes the package run in production mode when deployed, without the need of setting extra
                       properties on the server -->
             <dependencies>
                 <dependency>
@@ -308,7 +343,7 @@
 
             <build>
                 <plugins>
-                    <!-- unpack the flow-component-renderer.html component definition so that
+                    <!-- (3): unpack the flow-component-renderer.html component definition so that
                          it can be included into the production frontend build -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -336,6 +371,8 @@
                             </execution>
                         </executions>
                     </plugin>
+                    <!-- (4): copy the flow-component-renderer.html component definition so that
+                         it can be included into the production frontend build -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-resources-plugin</artifactId>
@@ -359,7 +396,35 @@
                         </executions>
                     </plugin>
 
-                    <!-- (5): Copies the files compiled by polymer-build to a directory from where they can be
+                    <!-- (5): Configures the frontend plugin to compile the web components source -->
+                    <plugin>
+                        <groupId>com.github.eirslett</groupId>
+                        <artifactId>frontend-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>install-node-and-yarn</id>
+                                <goals>
+                                    <goal>install-node-and-yarn</goal>
+                                    <goal>yarn</goal> <!-- runs 'install' by default -->
+                                </goals>
+                                <configuration>
+                                    <workingDirectory>${buildtools.directory}</workingDirectory>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>run-polymer-build</id>
+                                <goals>
+                                    <goal>yarn</goal>
+                                </goals>
+                                <configuration>
+                                    <workingDirectory>${buildtools.directory}</workingDirectory>
+                                    <arguments>${yarn.build.goal}</arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!-- (6): Copies the files compiled by polymer-build to a directory from where they can be
                               served when in production mode (root of the WAR) -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -392,12 +457,9 @@
                 </property>
             </activation>
     
-            <properties>
-                <yarn.build.goal>run skip-build</yarn.build.goal>
-            </properties>
             <build>
                 <plugins>
-                    <!-- (7): Adds the files from src/main/frontend directly 
+                    <!-- (1): Adds the files from src/main/frontend directly 
                         into the WAR when in development mode -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -412,52 +474,6 @@
                                 </resource>
                             </webResources>
                         </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <!-- When running mvn with `-DskipFrontendBuild`, all frontend-related build steps are skipped:
-             - yarn install
-             - bower install
-             - polymer build
-
-             This is handy when the app is restarted without any changes to frontend resources. -->
-        <profile>
-            <id>frontend-build</id>
-            <activation>
-                <property>
-                    <name>!skipFrontendBuild</name>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <!-- (2): Configures the frontend plugin to compile the web components source -->
-                    <plugin>
-                        <groupId>com.github.eirslett</groupId>
-                        <artifactId>frontend-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>install-node-and-yarn</id>
-                                <goals>
-                                    <goal>install-node-and-yarn</goal>
-                                    <goal>yarn</goal> <!-- runs 'install' by default -->
-                                </goals>
-                                <configuration>
-                                    <workingDirectory>${buildtools.directory}</workingDirectory>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>run-polymer-build</id>
-                                <goals>
-                                    <goal>yarn</goal>
-                                </goals>
-                                <configuration>
-                                    <workingDirectory>${buildtools.directory}</workingDirectory>
-                                    <arguments>${yarn.build.goal}</arguments>
-                                </configuration>
-                            </execution>
-                        </executions>
                     </plugin>
                 </plugins>
             </build>
