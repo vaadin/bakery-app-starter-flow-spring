@@ -13,17 +13,6 @@
 <link rel="import" href="../../../bower_components/vaadin-valo-theme/vaadin-combo-box.html">
 <link rel="import" href="../../../bower_components/vaadin-valo-theme/vaadin-grid.html">
 
-<!-- theme for vaadin-buttons in menus -->
-<dom-module id="bakery-button-styles" theme-for="vaadin-button">
-  <template>
-    <style>
-      :host([theme~="narrow"]) [part="button"] {
-        padding: 0 calc(var(--valo-size, var(--valo-size-m)) / 8 + var(--valo-button-border-radius, var(--valo-border-radius)) / 2);
-      }
-    </style>
-  </template>
-</dom-module>
-
 <!-- Theme for the status selector, we need to theme the text-field instead of the combo-box -->
 <dom-module id="bakery-text-field-styles" theme-for="vaadin-text-field">
   <template>
@@ -85,26 +74,6 @@
     </style>
   </template>
 </dom-module>
-
-
-<!-- style for the main page -->
-<custom-style>
-  <style is="custom-style" include="valo-colors valo-typography">
-    html,
-    body {
-      height: 100%;
-    }
-
-    body {
-      margin: 0;
-      background: var(--valo-shade-10pct);
-    }
-
-    bakery-app {
-      height: 100%;
-    }
-  </style>
-</custom-style>
 
 <!-- shared styles for all views -->
 <dom-module id="shared-styles">
@@ -180,6 +149,7 @@
 
       .total {
         flex: 1;
+        order: -1;
         box-sizing: border-box;
         padding: 0 var(--valo-space-s);
         min-width: 100%;
