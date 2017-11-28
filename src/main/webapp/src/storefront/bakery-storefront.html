@@ -1,16 +1,9 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
-
 <link rel="import" href="../app/bakery-search.html">
-
 <link rel="import" href="../elements/item-detail-dialog.html">
 <link rel="import" href="../elements/utils-mixin.html">
-
-<!--
-Added dynamically
- -->
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
-<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-column.html">
 
 <!-- Ensure the flow-component-renderer component gets bundled:
       - at build time this this resolves to webapp/flow-component-renderer.html
@@ -70,7 +63,7 @@ Added dynamically
     <bakery-search id="search" show-checkbox></bakery-search>
 
     <div class="grid-wrapper">
-      <vaadin-grid id="storefront-grid" theme="no-header storefront-grid"></vaadin-grid>
+      <vaadin-grid id="storefront-grid" theme="storefront-grid"></vaadin-grid>
 
       <item-detail-dialog desktop-view$="[[desktopView]]" opened="[[editing]]">
         <order-detail id="order-detail" desktop-view="[[desktopView]]"></order-detail>
