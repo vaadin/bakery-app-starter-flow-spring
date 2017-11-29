@@ -18,6 +18,24 @@
         height: 100%;
       }
 
+      /*
+        Workaround for non-working dom-repeat inside tables in IE11
+        (https://github.com/Polymer/polymer/issues/1567):
+        use divs with table-like display values instead of the actual
+        <table>, <tr> and <td> elements.
+      */
+      .table {
+        display: table;
+      }
+
+      .tr {
+        display: table-row;
+      }
+
+      .td {
+        display: table-cell;
+      }
+
       .main-row {
         flex: 1;
       }
@@ -51,7 +69,7 @@
         width: 100%;
       }
 
-      .products td {
+      .products .td {
         text-align: center;
         vertical-align: middle;
         padding: var(--valo-space-xs);
@@ -59,17 +77,17 @@
         border-bottom: 1px solid var(--valo-contrast-10pct);
       }
 
-      .products td.product-name {
+      .products .td.product-name {
         text-align: left;
         padding-left: 0;
         width: 100%;
       }
 
-      .products td.number {
+      .products .td.number {
         text-align: right;
       }
 
-      .products td.money {
+      .products .td.money {
         text-align: right;
         padding-right: 0;
       }
@@ -85,7 +103,7 @@
       @media (min-width: 600px) {
         .main-row {
           padding: var(--valo-space-l);
-          height: auto;
+          flex-basis: auto;
         }
       }
 
@@ -139,27 +157,27 @@
 
           <vaadin-form-item>
             <label slot="label">Products</label>
-            <table class="products">
+            <div class="table products">
               <template is="dom-repeat" items="[[item.items]]" as="item">
                 <dom-if if="[[item.product.name]]">
                   <template>
-                    <tr>
-                      <td class="product-name">
+                    <div class="tr">
+                      <div class="td product-name">
                         <div class="bold">[[item.product.name]]</div>
                         <div class="secondary">[[item.comment]]</div>
-                      </td>
-                      <td class="number">
+                      </div>
+                      <div class="td number">
                         <span class="count">[[item.quantity]]</span>
-                      </td>
-                      <td class="dim">&times;</td>
-                      <td class="money">
+                      </div>
+                      <div class="td dim">×</div>
+                      <div class="td money">
                         [[item.product.price]]
-                      </td>
-                    </tr>
+                      </div>
+                    </div>
                   </template>
                 </dom-if>
               </template>
-            </table>
+            </div>
           </vaadin-form-item>
 
           <vaadin-form-item id="history" label-position="top" hidden="[[review]]">
