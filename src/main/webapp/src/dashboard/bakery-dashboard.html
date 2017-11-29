@@ -20,8 +20,7 @@
         overflow-y: scroll;
       }
 
-      dashboard-pie-chart,
-      .grid-wrapper {
+      dashboard-pie-chart {
         --fourth-row-style: {
           border-radius: 4px;
           box-shadow: 0 2px 5px 0 rgba(23, 68, 128, 0.1);
@@ -43,9 +42,11 @@
       }
 
       #orders-grid {
-        height: 100%;
-        @apply --margin-style;
-        @apply --fourth-row-style;
+        margin: 12px 6px;
+        border-radius: 4px;
+        box-shadow: 0 2px 5px 0 rgba(23, 68, 128, 0.1);
+        height: calc(40vh - 64px) !important;
+        min-height: 355px;
       }
 
     </style>
@@ -66,8 +67,8 @@
       </vaadin-board-row>
       <vaadin-board-row>
         <dashboard-pie-chart data="[[productDeliveriesThisMonth]]"></dashboard-pie-chart>
-        <div class="grid-wrapper">
-          <vaadin-grid id="orders-grid" theme="no-header"></vaadin-grid>
+        <div class="board-cell-wrapper">
+          <vaadin-grid id="orders-grid"></vaadin-grid>
         </div>
       </vaadin-board-row>
     </vaadin-board>
