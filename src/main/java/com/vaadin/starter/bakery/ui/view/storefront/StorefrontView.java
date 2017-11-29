@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.provider.DataProvider;
-import com.vaadin.data.selection.SingleSelectionEvent;
+import com.vaadin.data.selection.SingleSelectionListener;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.router.HasUrlParameter;
 import com.vaadin.router.OptionalParameter;
@@ -24,6 +24,7 @@ import com.vaadin.starter.bakery.ui.view.EntityView;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.grid.Grid;
+import com.vaadin.ui.grid.GridSingleSelectionModel;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import com.vaadin.ui.renderers.ComponentRenderer;
@@ -74,15 +75,16 @@ implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 			orderCard.addEditListener(e -> presenter.onOrderCardEdit(orderCard));
 			orderCard.addCommentListener(e -> presenter.onOrderCardAddComment(orderCard, e.getMessage()));
 			orderCard.addCancelListener(e -> presenter.onOrderCardCollapsed(orderCard));
-			components.put(order,orderCard);
+			components.put(order, orderCard);
 			return orderCard;
 		}));
-		grid.addListener(SingleSelectionEvent.class, e -> {
-			if(e.getOldValue() != null)
+		SingleSelectionListener<Grid<Order>, Order> listener = e -> {
+			if (e.getOldValue() != null)
 				presenter.onOrderCardCollapsed(components.get(e.getOldValue()));
-			if(e.getValue() != null)
+			if (e.getValue() != null)
 				presenter.onOrderCardExpanded(components.get(e.getValue()));
-		});
+		};
+		((GridSingleSelectionModel<Order>) grid.getSelectionModel()).addSingleSelectionListener(listener);
 		getModel().setEditing(false);
 		presenter.init(this);
 	}
