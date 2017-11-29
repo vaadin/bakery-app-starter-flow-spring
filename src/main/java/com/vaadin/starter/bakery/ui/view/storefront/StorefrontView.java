@@ -1,9 +1,13 @@
 package com.vaadin.starter.bakery.ui.view.storefront;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.provider.DataProvider;
+import com.vaadin.data.selection.SingleSelectionEvent;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.router.HasUrlParameter;
 import com.vaadin.router.OptionalParameter;
@@ -61,18 +65,24 @@ implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 		searchBar.setCheckboxText("Show past orders");
 		searchBar.setPlaceHolder("Search");
 
-		grid.setSelectionMode(Grid.SelectionMode.NONE);
+		grid.setSelectionMode(Grid.SelectionMode.SINGLE);
+		Map<Order, StorefrontItemDetailWrapper> components = new HashMap<>();
 		grid.addColumn(new ComponentRenderer<>(order -> {
 			StorefrontItemDetailWrapper orderCard = new StorefrontItemDetailWrapper();
 			orderCard.setOrder(order);
 			orderCard.setHeader(presenter.getHeaderByOrderId(order.getId()));
-			orderCard.addExpandedListener(e -> presenter.onOrderCardExpanded(orderCard));
-			orderCard.addCollapsedListener(e -> presenter.onOrderCardCollapsed(orderCard));
 			orderCard.addEditListener(e -> presenter.onOrderCardEdit(orderCard));
 			orderCard.addCommentListener(e -> presenter.onOrderCardAddComment(orderCard, e.getMessage()));
+			orderCard.addCancelListener(e -> presenter.onOrderCardCollapsed(orderCard));
+			components.put(order,orderCard);
 			return orderCard;
 		}));
-
+		grid.addListener(SingleSelectionEvent.class, e -> {
+			if(e.getOldValue() != null)
+				presenter.onOrderCardCollapsed(components.get(e.getOldValue()));
+			if(e.getValue() != null)
+				presenter.onOrderCardExpanded(components.get(e.getValue()));
+		});
 		getModel().setEditing(false);
 		presenter.init(this);
 	}

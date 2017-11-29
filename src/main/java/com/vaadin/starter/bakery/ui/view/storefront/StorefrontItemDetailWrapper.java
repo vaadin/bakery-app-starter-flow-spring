@@ -4,9 +4,8 @@ import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.ui.entities.StorefrontItemHeader;
-import com.vaadin.starter.bakery.ui.view.storefront.event.CollapsedEvent;
+import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.view.storefront.event.CommentEvent;
-import com.vaadin.starter.bakery.ui.view.storefront.event.ExpandedEvent;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
 import com.vaadin.ui.common.HasClickListeners;
@@ -36,8 +35,6 @@ public class StorefrontItemDetailWrapper extends PolymerTemplate<StorefrontItemD
 	private OrderDetail orderDetail;
 
 	public StorefrontItemDetailWrapper() {
-		orderDetail.addCancelListener(
-				e -> this.fireEvent(new CollapsedEvent(this, false)));
 		getModel().setDisplayHeader(false);
 		setSelected(false);
 	}
@@ -69,19 +66,15 @@ public class StorefrontItemDetailWrapper extends PolymerTemplate<StorefrontItemD
 		getModel().setDisplayHeader(true);
 	}
 
-	public Registration addExpandedListener(ComponentEventListener<ExpandedEvent> listener) {
-		return addListener(ExpandedEvent.class, listener);
-	}
-
-	public Registration addCollapsedListener(ComponentEventListener<CollapsedEvent> listener) {
-		return addListener(CollapsedEvent.class, listener);
-	}
-
 	public Registration addEditListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {
 		return orderDetail.addEditListener(listener);
 	}
 
 	public Registration addCommentListener(ComponentEventListener<CommentEvent> listener) {
 		return orderDetail.addCommentListener(listener);
+	}
+	
+	public Registration addCancelListener(ComponentEventListener<CancelEvent> listener) {
+		return orderDetail.addCancelListener(listener);
 	}
 }
