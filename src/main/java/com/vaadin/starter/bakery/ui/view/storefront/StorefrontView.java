@@ -74,7 +74,7 @@ implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 			orderCard.setHeader(presenter.getHeaderByOrderId(order.getId()));
 			orderCard.addEditListener(e -> presenter.onOrderCardEdit(orderCard));
 			orderCard.addCommentListener(e -> presenter.onOrderCardAddComment(orderCard, e.getMessage()));
-			orderCard.addCancelListener(e -> presenter.onOrderCardCollapsed(orderCard));
+			orderCard.addCancelListener(e -> grid.deselectAll());
 			components.put(order, orderCard);
 			return orderCard;
 		}));
