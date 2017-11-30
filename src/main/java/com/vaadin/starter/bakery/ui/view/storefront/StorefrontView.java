@@ -79,10 +79,12 @@ implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 			return orderCard;
 		}));
 		SingleSelectionListener<Grid<Order>, Order> listener = e -> {
-			if (e.getOldValue() != null)
+			if (e.getOldValue() != null) {
 				presenter.onOrderCardCollapsed(components.get(e.getOldValue()));
-			if (e.getValue() != null)
+			}
+			if (e.getValue() != null) {
 				presenter.onOrderCardExpanded(components.get(e.getValue()));
+			}
 		};
 		((GridSingleSelectionModel<Order>) grid.getSelectionModel()).addSingleSelectionListener(listener);
 		getModel().setEditing(false);
