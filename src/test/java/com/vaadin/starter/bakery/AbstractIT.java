@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.slf4j.LoggerFactory;
 
 import com.vaadin.starter.bakery.ui.view.LoginViewElement;
@@ -35,7 +36,10 @@ public abstract class AbstractIT extends TestBenchTestCase {
 	}
 
 	protected WebDriver createDriver() {
-		return TestBench.createDriver(new ChromeDriver());
+		// Trying the workaround described here: https://github.com/SeleniumHQ/selenium/issues/4961
+		ChromeOptions options = new ChromeOptions();
+		options.addArguments("--no-sandbox");
+		return TestBench.createDriver(new ChromeDriver(options));
 	}
 
 	@Override
