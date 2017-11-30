@@ -6,7 +6,7 @@
 <dom-module id="dashboard-orders-counter">
   <template>
     <style>
-      :host {
+      .board-cell-wrapper {
         position: relative;
         text-align: center;
         height: calc(18vh - 64px);
@@ -32,12 +32,14 @@
 
     </style>
 
-    <div class="chart-wrapper" >
-      <vaadin-chart id="gauge" class="counter">
-        <vaadin-chart-series values="[[_computeValues(data.count)]]"></vaadin-chart-series>
-      </vaadin-chart>
+    <div class="board-cell-wrapper">
+      <div class="chart-wrapper" >
+        <vaadin-chart id="gauge" class="counter">
+          <vaadin-chart-series values="[[_computeValues(data.count)]]"></vaadin-chart-series>
+        </vaadin-chart>
+      </div>
+      <dashboard-counter-label label-data="[[data]]" class="green counter-label"></dashboard-counter-label>
     </div>
-    <dashboard-counter-label label-data="[[data]]" class="green counter-label"></dashboard-counter-label>
   </template>
 
   <script>
