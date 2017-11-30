@@ -2,7 +2,6 @@
 <link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="storefront-item.html">
 <link rel="import" href="order-detail.html">
-<link rel="import" href="../elements/item-detail-inline.html">
 
 <dom-module id="storefront-item-detail-wrapper">
   <template>
@@ -77,10 +76,8 @@
       </template>
 
       <div id="wrapper">
-        <storefront-item id="storefront-item" hidden$="[[_showDetailsDesktop(selected, desktopView)]]" on-click="_onClicked"></storefront-item>
-        <item-detail-inline opened="[[_showDetailsDesktop(selected, desktopView)]]" hidden$="[[!desktopView]]" on-closed="_onClosed">
-          <order-detail id="order-detail" desktop-view="[[desktopView]]"></order-detail>
-        </item-detail-inline>
+        <storefront-item id="storefront-item" hidden$="[[showDetail]]" ></storefront-item>
+        <order-detail id="order-detail" desktop-view="[[desktopView]]" hidden$="[[!showDetail]]"></order-detail>
       </div>
     </div>
 
@@ -102,6 +99,10 @@
           desktopView: {
             type: Boolean
           },
+          showDetail: {
+            type: Boolean,
+            computed: '_showDetailsDesktop(selected, desktopView)'
+          },
           displayHeader: Boolean,
           header: Object
         };
@@ -113,18 +114,6 @@
 
       _getSecondaryFontSize(desktop) {
         return desktop ? 'm-text' : 's-text';
-      }
-
-      _onClicked() {
-        if (!this.selected) {
-          this.dispatchEvent(new CustomEvent('expanded', {bubbles: true, composed: true}));
-        }
-      }
-
-      _onClosed() {
-        if (this.selected) {
-          this.dispatchEvent(new CustomEvent('collapsed', {bubbles: true, composed: true}));
-        }
       }
 
       _showDetailsDesktop(selected, desktopView) {
