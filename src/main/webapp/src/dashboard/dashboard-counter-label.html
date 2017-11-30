@@ -3,7 +3,7 @@
 <dom-module id="dashboard-counter-label">
   <template>
     <style>
-      :host {
+      .board-cell-wrapper {
         text-align: center;
         height: calc(18vh - 64px);
         min-height: 180px;
@@ -49,12 +49,14 @@
 
     </style>
 
-    <div class="count-wrapper">
-      <span id="count_digit" class="count-digit">[[labelData.count]]</span>
-    </div>
+    <div class="board-cell-wrapper">
+      <div class="count-wrapper">
+        <span id="count_digit" class="count-digit">[[labelData.count]]</span>
+      </div>
 
-    <h4>[[labelData.title]]</h4>
-    <div class="subtitle">[[labelData.subtitle]]</div>
+      <h4>[[labelData.title]]</h4>
+      <div class="subtitle">[[labelData.subtitle]]</div>
+    </div>
   </template>
 
   <script>
