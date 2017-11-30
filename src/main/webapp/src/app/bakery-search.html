@@ -8,7 +8,7 @@
 
 <dom-module id="bakery-search">
   <template>
-    <style>
+    <style include="shared-styles">
       :host {
         position: relative;
         z-index: 2;
@@ -52,10 +52,6 @@
         flex: 1;
         width: auto;
         padding-right: var(--valo-space-s);
-      }
-
-      .checkbox[hidden] {
-        display: none !important;
       }
 
       @media (min-width: 600px) {
