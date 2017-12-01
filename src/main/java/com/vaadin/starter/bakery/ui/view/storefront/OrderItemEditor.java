@@ -22,9 +22,9 @@ import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import com.vaadin.ui.textfield.TextField;
 
-@Tag("order-item-edit")
-@HtmlImport("src/storefront/order-item-edit.html")
-public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements HasValue<OrderItemEdit, OrderItem> {
+@Tag("order-item-editor")
+@HtmlImport("src/storefront/order-item-editor.html")
+public class OrderItemEditor extends PolymerTemplate<TemplateModel> implements HasValue<OrderItemEditor, OrderItem> {
 
 	@Id("products")
 	private ComboBox<Product> products;
@@ -47,7 +47,7 @@ public class OrderItemEdit extends PolymerTemplate<TemplateModel> implements Has
 
 	private BeanValidationBinder<OrderItem> binder = new BeanValidationBinder<>(OrderItem.class);
 
-	public OrderItemEdit(ProductDataProvider productSource) {
+	public OrderItemEditor(ProductDataProvider productSource) {
 		this.amount.setDisabled(true);
 		ComboboxBinderWrapper<Product> productsWrapper = new ComboboxBinderWrapper<>(products);
 		products.setDataProvider(productSource);

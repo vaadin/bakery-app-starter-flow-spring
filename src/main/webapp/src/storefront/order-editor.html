@@ -80,7 +80,7 @@
 
               <vaadin-form-item colspan="3">
                 <label slot="label">Products</label>
-                <slot name="order-items-edit"></slot>
+                <slot name="order-items-editor"></slot>
               </vaadin-form-item>
 
             </vaadin-form-layout>
@@ -122,7 +122,7 @@
       }
 
       _updateDesktopViewOnItemsEdit() {
-        this.querySelectorAll('order-item-edit').forEach(item => item.updateDesktopView(this.desktopView));
+        this.querySelectorAll('order-item-editor').forEach(item => item.updateDesktopView(this.desktopView));
       }
 
       _onStatusChange() {

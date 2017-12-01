@@ -7,7 +7,7 @@
 <link rel="import" href="../elements/amount-field.html">
 <link rel="import" href="../elements/utils-mixin.html">
 
-<dom-module id="order-item-edit">
+<dom-module id="order-item-editor">
   <template>
     <style include="shared-styles">
       .product {
@@ -36,10 +36,10 @@
   </template>
 
   <script>
-    class OrderItemEdit extends Polymer.Element {
+    class OrderItemEditor extends Polymer.Element {
 
       static get is() {
-        return 'order-item-edit';
+        return 'order-item-editor';
       }
 
       static get properties() {
@@ -66,6 +66,6 @@
       }
     }
 
-    window.customElements.define(OrderItemEdit.is, OrderItemEdit);
+    window.customElements.define(OrderItemEditor.is, OrderItemEditor);
   </script>
 </dom-module>
