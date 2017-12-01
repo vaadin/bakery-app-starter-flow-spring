@@ -10,16 +10,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.vaadin.starter.bakery.backend.data.DeliveryStats;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
-import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.ui.entities.chart.ColumnChartData;
-import com.vaadin.starter.bakery.ui.entities.chart.ProductDeliveriesChartData;
 
 public class DashboardUtils {
 
@@ -51,12 +48,6 @@ public class DashboardUtils {
 		String deliveriesThisMonthTitle = "Deliveries in " + getFullMonthName(LocalDate.now());
 		return new ColumnChartData(deliveriesThisMonthTitle, "per Day",
 				convertNumbersToIntegers(deliveriesThisMonth), deliveriesThisMonthCategories);
-	}
-
-	public static ProductDeliveriesChartData getDeliveriesPerProductPieChartData(
-			Map<Product, Integer> productDeliveries) {
-		return new ProductDeliveriesChartData("Products delivered in " + getFullMonthName(LocalDate.now()), "count",
-				productDeliveries);
 	}
 
 	private static final String NEXT_DELIVERY_PATTERN = "Next Delivery %s";

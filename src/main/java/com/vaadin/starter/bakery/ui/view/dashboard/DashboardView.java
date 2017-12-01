@@ -1,14 +1,16 @@
 package com.vaadin.starter.bakery.ui.view.dashboard;
 
+import static com.vaadin.starter.bakery.ui.utils.FormattingUtils.getFullMonthName;
+
 import java.time.LocalDate;
 import java.time.MonthDay;
 import java.time.Year;
-import java.time.format.TextStyle;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.addon.charts.Chart;
 import com.vaadin.addon.charts.model.AxisTitle;
@@ -20,8 +22,6 @@ import com.vaadin.addon.charts.model.ListSeries;
 import com.vaadin.addon.charts.model.PlotOptionsPie;
 import com.vaadin.addon.charts.model.XAxis;
 import com.vaadin.addon.charts.model.YAxis;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.vaadin.data.selection.SelectionEvent;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.router.PageTitle;
@@ -34,7 +34,6 @@ import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider;
 import com.vaadin.starter.bakery.ui.entities.chart.ColumnChartData;
-import com.vaadin.starter.bakery.ui.entities.chart.ProductDeliveriesChartData;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.utils.DashboardUtils;
 import com.vaadin.starter.bakery.ui.utils.OrdersCountData;
@@ -82,7 +81,6 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 		populateYearlySalesChart(data);
 		populateDeliveriesCharts(data);
 		populateOrdersCounts(data.getDeliveryStats());
-		populateDeliveriesPerProductChart(data.getProductDeliveries());
 		initProductSplitMonthlyGraph(data.getProductDeliveries());
 	}
 
@@ -92,8 +90,7 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 
 		Configuration conf = monthlyProductSplit.getConfiguration();
 		conf.getChart().setType(ChartType.PIE);
-		String thisMonth = today.getMonth().getDisplayName(TextStyle.FULL, Locale.US);
-		conf.setTitle("Products delivered in " + thisMonth);
+		conf.setTitle("Products delivered in " + getFullMonthName(today));
 		DataSeries deliveriesPerProductSeries = new DataSeries(productDeliveries.entrySet().stream()
 				.map(e -> new DataSeriesItem(e.getKey().getName(), e.getValue())).collect(Collectors.toList()));
 		PlotOptionsPie plotOptionsPie = new PlotOptionsPie();
@@ -112,10 +109,6 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 		getModel()
 		.setNewOrdersCount(DashboardUtils.getNewOrdersCountData(deliveryStats, orders.get(orders.size() - 1)));
 		getModel().setTomorrowOrdersCount(DashboardUtils.getTomorrowOrdersCountData(deliveryStats, orders.iterator()));
-	}
-
-	private void populateDeliveriesPerProductChart(Map<Product, Integer> productDeliveries) {
-		getModel().setProductDeliveriesThisMonth(DashboardUtils.getDeliveriesPerProductPieChartData(productDeliveries));
 	}
 
 	private void onOrdersGridSelectionChanged(SelectionEvent<Order> e) {
@@ -171,8 +164,6 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 		void setDeliveriesThisYear(ColumnChartData deliveriesThisYear);
 
 		void setDeliveriesThisMonth(ColumnChartData deliveriesThisMonth);
-
-		void setProductDeliveriesThisMonth(ProductDeliveriesChartData productDeliveriesThisMonth);
 
 	}
 
