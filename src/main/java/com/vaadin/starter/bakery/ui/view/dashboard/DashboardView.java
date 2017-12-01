@@ -3,15 +3,21 @@ package com.vaadin.starter.bakery.ui.view.dashboard;
 import java.time.LocalDate;
 import java.time.MonthDay;
 import java.time.Year;
+import java.time.format.TextStyle;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.vaadin.addon.charts.Chart;
 import com.vaadin.addon.charts.model.AxisTitle;
 import com.vaadin.addon.charts.model.ChartType;
 import com.vaadin.addon.charts.model.Configuration;
+import com.vaadin.addon.charts.model.DataSeries;
+import com.vaadin.addon.charts.model.DataSeriesItem;
 import com.vaadin.addon.charts.model.ListSeries;
+import com.vaadin.addon.charts.model.PlotOptionsPie;
 import com.vaadin.addon.charts.model.XAxis;
 import com.vaadin.addon.charts.model.YAxis;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +62,9 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 	@Id("orders-grid")
 	private Grid<Order> grid;
 
+	@Id("monthly-product-split")
+	private Chart monthlyProductSplit;
+	
 	@Autowired
 	public DashboardView(OrderService orderService, OrdersGridDataProvider orderDataProvider) {
 		this.orderService = orderService;
@@ -74,6 +83,23 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 		populateDeliveriesCharts(data);
 		populateOrdersCounts(data.getDeliveryStats());
 		populateDeliveriesPerProductChart(data.getProductDeliveries());
+		initProductSplitMonthlyGraph(data.getProductDeliveries());
+	}
+
+	private void initProductSplitMonthlyGraph(Map<Product, Integer> productDeliveries) {
+
+		LocalDate today = LocalDate.now();
+
+		Configuration conf = monthlyProductSplit.getConfiguration();
+		conf.getChart().setType(ChartType.PIE);
+		String thisMonth = today.getMonth().getDisplayName(TextStyle.FULL, Locale.US);
+		conf.setTitle("Products delivered in " + thisMonth);
+		DataSeries deliveriesPerProductSeries = new DataSeries(productDeliveries.entrySet().stream()
+				.map(e -> new DataSeriesItem(e.getKey().getName(), e.getValue())).collect(Collectors.toList()));
+		PlotOptionsPie plotOptionsPie = new PlotOptionsPie();
+		plotOptionsPie.setInnerSize("60%");
+		deliveriesPerProductSeries.setPlotOptions(plotOptionsPie);
+		conf.addSeries(deliveriesPerProductSeries);
 	}
 
 	private void populateOrdersCounts(DeliveryStats deliveryStats) {

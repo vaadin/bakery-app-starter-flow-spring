@@ -2,7 +2,7 @@
 <link rel="import" href="../../bower_components/vaadin-board/vaadin-board.html">
 <link rel="import" href="../../bower_components/vaadin-board/vaadin-board-row.html">
 <link rel="import" href="../app/style-modules/bakery-charts-default-theme.html">
-
+<link rel="import" href="../../bower_components/vaadin-charts/vaadin-chart.html">
 <link rel="import" href="dashboard-orders-counter.html">
 <link rel="import" href="dashboard-column-chart.html">
 <link rel="import" href="dashboard-pie-chart.html">
@@ -53,6 +53,15 @@
         min-height: 355px;
       }
 
+      #donut-wrapper {
+        @apply --margin-style;
+        border-radius: 4px;
+        box-shadow: 0 2px 5px 0 rgba(23, 68, 128, 0.1);
+        height: calc(40vh - 64px) !important;
+        min-height: 355px;
+        overflow: hidden;
+      }
+
     </style>
 
     <vaadin-board>
@@ -71,7 +80,9 @@
       </vaadin-board-row>
       <vaadin-board-row>
         <dashboard-pie-chart data="[[productDeliveriesThisMonth]]"></dashboard-pie-chart>
-
+        <div id="donut-wrapper">
+          <vaadin-chart  id="monthly-product-split" class="product-split-donut"></vaadin-chart >
+        </div>
         <!-- If a cell in a vaadin-board has padding it needs to be wrapped into a div
              to work around the IE11 flex box issue. See the Known Issues section at
              https://vaadin.com/docs/v8/board/webcomponents-api/board-basic-use.html -->
