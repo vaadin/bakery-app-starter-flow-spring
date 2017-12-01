@@ -17,16 +17,21 @@
       .delete {
         min-width: 0;
       }
+
+      /* Workaround for vertically distorted elements inside a flex container in IE11 */
+      .v-align {
+        align-self: center;
+      }
     </style>
 
     <vaadin-form-layout class="product" responsive-steps="[[_computeResponsiveSteps(desktopView, 18, 10)]]">
       <vaadin-combo-box id="products" colspan="8" index="[[index]]"></vaadin-combo-box>
 
-      <vaadin-button id="delete" colspan="2" class="delete" index="[[index]]"
+      <vaadin-button id="delete" colspan="2" class="delete v-align" index="[[index]]"
                      style$="order: [[_getConditional(desktopView, 2, 0)]];">✕
       </vaadin-button>
 
-      <amount-field id="amount" colspan="4" min="1" max="15" index="[[index]]" style="order: 1"></amount-field>
+      <amount-field class="v-align" id="amount" colspan="4" min="1" max="15" index="[[index]]" style="order: 1"></amount-field>
 
       <div id="product-price" colspan="4" class="money" style="order: 1"></div>
 
