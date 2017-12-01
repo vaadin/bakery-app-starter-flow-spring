@@ -98,8 +98,8 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 		dataProvider.setFilter(new OrderFilter(filter, showPrevious));
 	}
 
-	// StorefrontItemDetailWrapper presenter methods
-	void onOrderCardExpanded(StorefrontItemDetailWrapper orderCard) {
+	// StorefrontOrderCard presenter methods
+	void onOrderCardExpanded(StorefrontOrderCard orderCard) {
 		if (view.isDesktopView()) {
 			orderCard.setSelected(true);
 			view.resizeGrid();
@@ -108,17 +108,17 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 		}
 	}
 
-	void onOrderCardCollapsed(StorefrontItemDetailWrapper orderCard) {
+	void onOrderCardCollapsed(StorefrontOrderCard orderCard) {
 		orderCard.setSelected(false);
 		view.resizeGrid();
 	}
 
-	void onOrderCardEdit(StorefrontItemDetailWrapper orderCard) {
+	void onOrderCardEdit(StorefrontOrderCard orderCard) {
 		onOrderCardCollapsed(orderCard);
 		edit(orderCard.getOrder().getId().toString());
 	}
 
-	void onOrderCardAddComment(StorefrontItemDetailWrapper orderCard, String message) {
+	void onOrderCardAddComment(StorefrontOrderCard orderCard, String message) {
 		executeJPAOperation(() -> {
 			Order updated = orderService.addComment(orderCard.getOrder().getId(), message);
 			orderCard.setOrder(updated);

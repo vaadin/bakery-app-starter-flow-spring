@@ -14,9 +14,19 @@ import com.vaadin.ui.event.ComponentEventListener;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
-@Tag("storefront-item-detail-wrapper")
-@HtmlImport("src/storefront/storefront-item-detail-wrapper.html")
-public class StorefrontItemDetailWrapper extends PolymerTemplate<StorefrontItemDetailWrapper.Model> {
+/**
+ * The component for expandable order cards for the list on the Storefront view.
+ * When collapsed the order card shows brief order details, and switches to full
+ * order details when expanded.
+ * <p>
+ * In addition, it includes an optional header above the order card. It is used
+ * to visually separate orders into groups. Technically all order cards are
+ * equivalent, but those that do have the header visible create a visual group
+ * separation.
+ */
+@Tag("storefront-order-card")
+@HtmlImport("src/storefront/storefront-order-card.html")
+public class StorefrontOrderCard extends PolymerTemplate<StorefrontOrderCard.Model> {
 
 	public interface Model extends TemplateModel {
 		void setSelected(boolean selected);
@@ -33,7 +43,7 @@ public class StorefrontItemDetailWrapper extends PolymerTemplate<StorefrontItemD
 
 	private OrderDetail orderDetail = new OrderDetail();
 
-	public StorefrontItemDetailWrapper() {
+	public StorefrontOrderCard() {
 		orderDetail.getElement().setAttribute("slot", "order-detail");
 		getModel().setDisplayHeader(false);
 		setSelected(false);

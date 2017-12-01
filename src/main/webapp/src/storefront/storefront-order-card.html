@@ -3,7 +3,7 @@
 <link rel="import" href="storefront-item.html">
 <link rel="import" href="order-detail.html">
 
-<dom-module id="storefront-item-detail-wrapper">
+<dom-module id="storefront-order-card">
   <template>
     <style include="shared-styles">
       :host {
@@ -84,9 +84,9 @@
   </template>
 
   <script>
-    class StorefrontItemDetailWrapper extends Polymer.Element {
+    class StorefrontOrderCard extends Polymer.Element {
       static get is() {
-        return 'storefront-item-detail-wrapper';
+        return 'storefront-order-card';
       }
 
       static get properties() {
@@ -121,6 +121,6 @@
       }
     }
 
-    window.customElements.define(StorefrontItemDetailWrapper.is, StorefrontItemDetailWrapper);
+    window.customElements.define(StorefrontOrderCard.is, StorefrontOrderCard);
   </script>
 </dom-module>

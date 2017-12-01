@@ -67,9 +67,9 @@ implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 		searchBar.setPlaceHolder("Search");
 
 		grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-		Map<Order, StorefrontItemDetailWrapper> components = new HashMap<>();
+		Map<Order, StorefrontOrderCard> components = new HashMap<>();
 		grid.addColumn(new ComponentRenderer<>(order -> {
-			StorefrontItemDetailWrapper orderCard = new StorefrontItemDetailWrapper();
+			StorefrontOrderCard orderCard = new StorefrontOrderCard();
 			orderCard.setOrder(order);
 			orderCard.setHeader(presenter.getHeaderByOrderId(order.getId()));
 			orderCard.addEditListener(e -> presenter.onOrderCardEdit(orderCard));
