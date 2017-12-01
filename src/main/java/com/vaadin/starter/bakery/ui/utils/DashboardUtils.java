@@ -23,6 +23,9 @@ import com.vaadin.starter.bakery.ui.entities.chart.ProductDeliveriesChartData;
 
 public class DashboardUtils {
 
+	public static final String[] MONTH_LABELS = new String[] {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
+			"Aug", "Sep", "Oct", "Nov", "Dec"};
+
 	private static List<Integer> convertNumbersToIntegers(List<Number> numbersList) {
 		if (numbersList == null)
 			return Collections.emptyList();
@@ -34,8 +37,7 @@ public class DashboardUtils {
 	}
 
 	public static ColumnChartData getDeliveriesThisYearChartData(List<Number> deliveriesThisYear) {
-		List<String> deliveriesThisYearCategories = Arrays.asList("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
-				"Aug", "Sep", "Oct", "Nov", "Dec");
+		List<String> deliveriesThisYearCategories = Arrays.asList(MONTH_LABELS);
 		String deliveriesThisYearTitle = "Deliveries in " + LocalDate.now().getYear();
 		return new ColumnChartData(deliveriesThisYearTitle, "per Month",
 				convertNumbersToIntegers(deliveriesThisYear), deliveriesThisYearCategories);
