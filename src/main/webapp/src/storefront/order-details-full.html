@@ -7,7 +7,7 @@
 <link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="../elements/utils-mixin.html">
 
-<link rel="import" href="storefront-item-badge.html">
+<link rel="import" href="order-status-badge.html">
 
 <dom-module id="order-details-full">
   <template>
@@ -113,7 +113,7 @@
 
     <div class="scrollable main-row" id="main">
       <div class="meta-row">
-        <storefront-item-badge status="[[item.state]]"></storefront-item-badge>
+        <order-status-badge status="[[item.state]]"></order-status-badge>
         <span class="dim">Order #[[item.id]]</span>
       </div>
 

@@ -1,5 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="storefront-item-badge.html">
+<link rel="import" href="order-status-badge.html">
 
 <dom-module id="order-details-brief">
   <template>
@@ -89,7 +89,7 @@
     </style>
 
     <div id="info-wrapper" class="flex">
-      <storefront-item-badge id="storefront-item-status" status="[[item.state]]"></storefront-item-badge>
+      <order-status-badge id="storefront-item-status" status="[[item.state]]"></order-status-badge>
       <div id="time-place"></div>
     </div>
 
