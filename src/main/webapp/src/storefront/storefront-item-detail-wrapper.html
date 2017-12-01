@@ -76,8 +76,8 @@
       </template>
 
       <div id="wrapper">
-        <storefront-item id="storefront-item" hidden$="[[showDetail]]" ></storefront-item>
-        <order-detail id="order-detail" desktop-view="[[desktopView]]" hidden$="[[!showDetail]]"></order-detail>
+        <storefront-item id="storefront-item" hidden$="[[showDetail]]"></storefront-item>
+        <slot name="order-detail"></slot>
       </div>
     </div>
 

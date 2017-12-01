@@ -31,10 +31,10 @@ public class StorefrontItemDetailWrapper extends PolymerTemplate<StorefrontItemD
 	@Id("storefront-item")
 	private StorefrontItem storefrontItem;
 
-	@Id("order-detail")
-	private OrderDetail orderDetail;
+	private OrderDetail orderDetail = new OrderDetail();
 
 	public StorefrontItemDetailWrapper() {
+		orderDetail.getElement().setAttribute("slot", "order-detail");
 		getModel().setDisplayHeader(false);
 		setSelected(false);
 	}
@@ -50,6 +50,11 @@ public class StorefrontItemDetailWrapper extends PolymerTemplate<StorefrontItemD
 	}
 
 	public void setSelected(boolean selected) {
+		if (selected) {
+			getElement().appendChild(orderDetail.getElement());
+		} else {
+			orderDetail.getElement().removeFromParent();
+		}
 		getModel().setSelected(selected);
 	}
 
