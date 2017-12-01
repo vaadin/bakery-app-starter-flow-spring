@@ -41,10 +41,10 @@ public class StorefrontOrderCard extends PolymerTemplate<StorefrontOrderCard.Mod
 	@Id("order-details-brief")
 	private OrderDetailsBrief orderDetailsBrief;
 
-	private OrderDetail orderDetail = new OrderDetail();
+	private OrderDetailsFull orderDetailsFull = new OrderDetailsFull();
 
 	public StorefrontOrderCard() {
-		orderDetail.getElement().setAttribute("slot", "order-detail");
+		orderDetailsFull.getElement().setAttribute("slot", "order-details-full");
 		getModel().setDisplayHeader(false);
 		setSelected(false);
 	}
@@ -52,7 +52,7 @@ public class StorefrontOrderCard extends PolymerTemplate<StorefrontOrderCard.Mod
 	public void setOrder(Order order) {
 		this.order = order;
 		orderDetailsBrief.setOrder(order);
-		orderDetail.display(order, false);
+		orderDetailsFull.display(order, false);
 	}
 
 	public Order getOrder() {
@@ -61,9 +61,9 @@ public class StorefrontOrderCard extends PolymerTemplate<StorefrontOrderCard.Mod
 
 	public void setSelected(boolean selected) {
 		if (selected) {
-			getElement().appendChild(orderDetail.getElement());
+			getElement().appendChild(orderDetailsFull.getElement());
 		} else {
-			orderDetail.getElement().removeFromParent();
+			orderDetailsFull.getElement().removeFromParent();
 		}
 		getModel().setSelected(selected);
 	}
@@ -82,14 +82,14 @@ public class StorefrontOrderCard extends PolymerTemplate<StorefrontOrderCard.Mod
 	}
 
 	public Registration addEditListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {
-		return orderDetail.addEditListener(listener);
+		return orderDetailsFull.addEditListener(listener);
 	}
 
 	public Registration addCommentListener(ComponentEventListener<CommentEvent> listener) {
-		return orderDetail.addCommentListener(listener);
+		return orderDetailsFull.addCommentListener(listener);
 	}
 	
 	public Registration addCancelListener(ComponentEventListener<CancelEvent> listener) {
-		return orderDetail.addCancelListener(listener);
+		return orderDetailsFull.addCancelListener(listener);
 	}
 }

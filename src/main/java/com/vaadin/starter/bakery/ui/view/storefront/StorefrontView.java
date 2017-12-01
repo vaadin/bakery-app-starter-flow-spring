@@ -50,8 +50,8 @@ implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 	@Id("order-edit")
 	private OrderEdit orderEdit;
 
-	@Id("order-detail")
-	private OrderDetail orderDetail;
+	@Id("order-details")
+	private OrderDetailsFull openedOrderDetails;
 
 	private OrderEntityPresenter presenter;
 
@@ -128,19 +128,19 @@ implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 			orderEdit.read(order);
 			showOrderEdit();
 		} else {
-			details(order, false);
+			openOrderDetails(order, false);
 		}
 	}
 
 	void showOrderEdit() {
-		orderDetail.getElement().setAttribute("hidden", "");
+		openedOrderDetails.getElement().setAttribute("hidden", "");
 		orderEdit.getElement().removeAttribute("hidden");
 	}
 
-	void details(Order order, boolean isReview) {
-		orderDetail.getElement().removeAttribute("hidden");
+	void openOrderDetails(Order order, boolean isReview) {
+		openedOrderDetails.getElement().removeAttribute("hidden");
 		orderEdit.getElement().setAttribute("hidden", "");
-		orderDetail.display(order, isReview);
+		openedOrderDetails.display(order, isReview);
 	}
 
 	boolean isDesktopView() {
@@ -159,8 +159,8 @@ implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 		return orderEdit;
 	}
 
-	OrderDetail getOrderDetail() {
-		return orderDetail;
+	OrderDetailsFull getOpenedOrderDetails() {
+		return openedOrderDetails;
 	}
 
 }

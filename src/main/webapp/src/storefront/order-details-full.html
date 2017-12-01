@@ -9,7 +9,7 @@
 
 <link rel="import" href="storefront-item-badge.html">
 
-<dom-module id="order-detail">
+<dom-module id="order-details-full">
   <template>
     <style include="shared-styles">
       :host {
@@ -218,9 +218,9 @@
   </template>
 
   <script>
-    class OrderDetail extends window.ScrollShadowMixin(Polymer.Element) {
+    class OrderDetailsFull extends window.ScrollShadowMixin(Polymer.Element) {
       static get is() {
-        return 'order-detail';
+        return 'order-details-full';
       }
 
       static get properties() {
@@ -250,6 +250,6 @@
       }
     }
 
-    window.customElements.define(OrderDetail.is, OrderDetail);
+    window.customElements.define(OrderDetailsFull.is, OrderDetailsFull);
   </script>
 </dom-module>

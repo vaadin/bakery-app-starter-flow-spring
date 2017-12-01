@@ -53,20 +53,20 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 		view.getOrderEdit().addReviewListener(e -> {
 			try {
 				writeEntity();
-				view.details(getEntity(), true);
+				view.openOrderDetails(getEntity(), true);
 			} catch (ValidationException ex) {
 				showValidationError();
 			}
 		});
 
-		view.getOrderDetail().addListener(SaveEvent.class, e -> save());
-		view.getOrderDetail().addCancelListener(e -> cancel());
-		view.getOrderDetail().addBackListener(e -> view.showOrderEdit());
-		view.getOrderDetail().addEditListener(e -> {
+		view.getOpenedOrderDetails().addListener(SaveEvent.class, e -> save());
+		view.getOpenedOrderDetails().addCancelListener(e -> cancel());
+		view.getOpenedOrderDetails().addBackListener(e -> view.showOrderEdit());
+		view.getOpenedOrderDetails().addEditListener(e -> {
 			view.getOrderEdit().read(getEntity());
 			view.showOrderEdit();
 		});
-		view.getOrderDetail().addCommentListener(e -> {
+		view.getOpenedOrderDetails().addCommentListener(e -> {
 			this.addComment(e.getOrderId(), e.getMessage());
 		});
 
