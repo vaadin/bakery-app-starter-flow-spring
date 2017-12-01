@@ -57,10 +57,10 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 
 	}
 
-	@Id("order-edit-title")
+	@Id("title")
 	private H2 title;
 
-	@Id("order-edit-status")
+	@Id("status")
 	private ComboBox<OrderState> status;
 
 	@Id("due-date")
@@ -81,7 +81,7 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 	@Id("customer-details")
 	private TextField customerDetails;
 
-	@Id("order-edit-cancel")
+	@Id("cancel")
 	private Button cancel;
 
 	@Id("review")

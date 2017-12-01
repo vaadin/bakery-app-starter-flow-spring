@@ -37,22 +37,22 @@ public class OrderDetailsFull extends PolymerTemplate<OrderDetailsFull.Model> {
 
 	private Order order;
 
-	@Id("order-detail-back")
+	@Id("back")
 	private Button back;
 
-	@Id("order-detail-cancel")
+	@Id("cancel")
 	private Button cancel;
 
-	@Id("order-detail-save")
+	@Id("save")
 	private Button save;
 
-	@Id("order-detail-edit")
+	@Id("edit")
 	private Button edit;
 
 	@Id("history")
 	private Element history;
 
-	@Id("order-detail-comment")
+	@Id("comment")
 	private Element comment;
 
 	@Id("send-comment")

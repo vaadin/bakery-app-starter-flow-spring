@@ -29,16 +29,16 @@ public class OrderItemEditor extends PolymerTemplate<TemplateModel> implements H
 	@Id("products")
 	private ComboBox<Product> products;
 
-	@Id("order-item-edit-delete")
+	@Id("delete")
 	private Button delete;
 
-	@Id("order-item-edit-amount")
+	@Id("amount")
 	private AmountField amount;
 
 	@Id("product-price")
 	private Div price;
 
-	@Id("order-item-edit-comment")
+	@Id("comment")
 	private TextField comment;
 
 	private OrderItem orderItem;
