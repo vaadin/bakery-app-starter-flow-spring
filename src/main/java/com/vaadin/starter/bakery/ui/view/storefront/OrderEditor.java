@@ -41,11 +41,11 @@ import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import com.vaadin.ui.textfield.TextField;
 
-@Tag("order-edit")
-@HtmlImport("src/storefront/order-edit.html")
+@Tag("order-editor")
+@HtmlImport("src/storefront/order-editor.html")
 @SpringComponent
 @Scope("prototype")
-public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
+public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 
 	public interface Model extends TemplateModel {
 
@@ -94,7 +94,7 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 	private final LocalTimeConverter localTimeConverter = new LocalTimeConverter();
 
 	@Autowired
-	public OrderEdit(PickupLocationDataProvider locationProvider, ProductDataProvider productDataProvider) {
+	public OrderEditor(PickupLocationDataProvider locationProvider, ProductDataProvider productDataProvider) {
 		items = new OrderItemsEdit(productDataProvider);
 		addToSlot(this, items, "order-items-edit");
 

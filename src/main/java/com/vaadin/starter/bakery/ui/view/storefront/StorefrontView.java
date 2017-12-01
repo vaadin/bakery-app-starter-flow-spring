@@ -47,8 +47,8 @@ implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 	@Id("storefront-grid")
 	private Grid<Order> grid;
 
-	@Id("order-edit")
-	private OrderEdit orderEdit;
+	@Id("order-editor")
+	private OrderEditor openedOrderEditor;
 
 	@Id("order-details")
 	private OrderDetailsFull openedOrderDetails;
@@ -101,17 +101,17 @@ implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 
 	@Override
 	public boolean isDirty() {
-		return orderEdit.hasChanges();
+		return openedOrderEditor.hasChanges();
 	}
 
 	@Override
 	public void write(Order entity) throws ValidationException {
-		orderEdit.write(entity);
+		openedOrderEditor.write(entity);
 	}
 
 	@Override
 	public void closeDialog() {
-		orderEdit.close();
+		openedOrderEditor.close();
 		getModel().setEditing(false);
 		getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT));
 	}
@@ -125,7 +125,7 @@ implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 	public void openDialog(Order order, boolean edit) {
 		getModel().setEditing(true);
 		if (edit) {
-			orderEdit.read(order);
+			openedOrderEditor.read(order);
 			showOrderEdit();
 		} else {
 			openOrderDetails(order, false);
@@ -134,12 +134,12 @@ implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 
 	void showOrderEdit() {
 		openedOrderDetails.getElement().setAttribute("hidden", "");
-		orderEdit.getElement().removeAttribute("hidden");
+		openedOrderEditor.getElement().removeAttribute("hidden");
 	}
 
 	void openOrderDetails(Order order, boolean isReview) {
 		openedOrderDetails.getElement().removeAttribute("hidden");
-		orderEdit.getElement().setAttribute("hidden", "");
+		openedOrderEditor.getElement().setAttribute("hidden", "");
 		openedOrderDetails.display(order, isReview);
 	}
 
@@ -155,8 +155,8 @@ implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 		return searchBar;
 	}
 
-	OrderEdit getOrderEdit() {
-		return orderEdit;
+	OrderEditor getOpenedOrderEditor() {
+		return openedOrderEditor;
 	}
 
 	OrderDetailsFull getOpenedOrderDetails() {

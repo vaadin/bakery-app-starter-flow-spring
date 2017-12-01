@@ -49,8 +49,8 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 				e -> filterChanged(view.getSearchBar().getFilter(), view.getSearchBar().isCheckboxChecked()));
 		view.getSearchBar().addActionClickListener(e -> createNew());
 
-		view.getOrderEdit().addListener(CancelEvent.class, e -> cancel());
-		view.getOrderEdit().addReviewListener(e -> {
+		view.getOpenedOrderEditor().addListener(CancelEvent.class, e -> cancel());
+		view.getOpenedOrderEditor().addReviewListener(e -> {
 			try {
 				writeEntity();
 				view.openOrderDetails(getEntity(), true);
@@ -63,7 +63,7 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 		view.getOpenedOrderDetails().addCancelListener(e -> cancel());
 		view.getOpenedOrderDetails().addBackListener(e -> view.showOrderEdit());
 		view.getOpenedOrderDetails().addEditListener(e -> {
-			view.getOrderEdit().read(getEntity());
+			view.getOpenedOrderEditor().read(getEntity());
 			view.showOrderEdit();
 		});
 		view.getOpenedOrderDetails().addCommentListener(e -> {
