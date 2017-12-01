@@ -14,6 +14,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.vaadin.addon.charts.model.AxisTitle;
+import com.vaadin.addon.charts.model.ChartType;
+import com.vaadin.addon.charts.model.Configuration;
+import com.vaadin.addon.charts.model.Legend;
+import com.vaadin.addon.charts.model.ListSeries;
+import com.vaadin.addon.charts.model.PlotOptionsColumn;
+import com.vaadin.addon.charts.model.XAxis;
+import com.vaadin.addon.charts.model.YAxis;
 import com.vaadin.starter.bakery.backend.data.DeliveryStats;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
@@ -26,31 +34,52 @@ public class DashboardUtils {
 	public static final String[] MONTH_LABELS = new String[] {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
 			"Aug", "Sep", "Oct", "Nov", "Dec"};
 
-	private static List<Integer> convertNumbersToIntegers(List<Number> numbersList) {
-		if (numbersList == null)
-			return Collections.emptyList();
-		return numbersList.stream().map(n -> {
-			if (n != null)
-				return (Integer) n.intValue();
-			return 0;
-		}).collect(Collectors.toList());
-	}
-
-	public static ColumnChartData getDeliveriesThisYearChartData(List<Number> deliveriesThisYear) {
-		List<String> deliveriesThisYearCategories = Arrays.asList(MONTH_LABELS);
+	public static void writeDeliveriesThisYearChartConfig(Configuration conf, List<Number> deliveriesThisYear) {
 		String deliveriesThisYearTitle = "Deliveries in " + LocalDate.now().getYear();
-		return new ColumnChartData(deliveriesThisYearTitle, "per Month",
-				convertNumbersToIntegers(deliveriesThisYear), deliveriesThisYearCategories);
+		ListSeries series = new ListSeries("per Month", deliveriesThisYear);
+
+		writeDashboardColumnChartConfig(conf, series, deliveriesThisYearTitle, MONTH_LABELS);
 	}
 
-	public static ColumnChartData getDeliveriesThisMonthChartData(List<Number> deliveriesThisMonth) {
+	public static void writeDeliveriesThisMonthChartConfig(Configuration conf, List<Number> deliveriesThisMonth) {
 		// A range going from 1 to the number of items in deliveriesThisMonth
-		List<String> deliveriesThisMonthCategories = IntStream.rangeClosed(1, deliveriesThisMonth.size())
-				.mapToObj(String::valueOf).collect(Collectors.toList());
+		String[] deliveriesThisMonthCategories = IntStream.rangeClosed(1, deliveriesThisMonth.size())
+				.mapToObj(String::valueOf).toArray(String[]::new);
 
 		String deliveriesThisMonthTitle = "Deliveries in " + getFullMonthName(LocalDate.now());
-		return new ColumnChartData(deliveriesThisMonthTitle, "per Day",
-				convertNumbersToIntegers(deliveriesThisMonth), deliveriesThisMonthCategories);
+		ListSeries series = new ListSeries("per Day", deliveriesThisMonth);
+
+		writeDashboardColumnChartConfig(conf, series, deliveriesThisMonthTitle, deliveriesThisMonthCategories);
+	}
+
+	private static void writeDashboardColumnChartConfig(Configuration conf, ListSeries series, String chartTitle,
+			String[] categories) {
+		conf.getChart().setType(ChartType.COLUMN);
+		conf.getChart().setBorderRadius(4);
+
+		conf.setTitle(chartTitle);
+		conf.addSeries(series);
+
+		XAxis xAxis = new XAxis();
+		xAxis.setTickInterval(1);
+		xAxis.setMinorTickLength(0);
+		xAxis.setTickLength(0);
+		xAxis.setCategories(categories);
+		conf.addxAxis(xAxis);
+
+		YAxis yAxis = new YAxis();
+		AxisTitle title = new AxisTitle();
+		title.setText(null);
+		yAxis.setTitle(title);
+		conf.addyAxis(yAxis);
+
+		PlotOptionsColumn plotOptions = new PlotOptionsColumn();
+		plotOptions.setPointWidth(20);
+		conf.setPlotOptions(plotOptions);
+
+		Legend legend = new Legend();
+		legend.setEnabled(false);
+		conf.setLegend(legend);
 	}
 
 	public static ProductDeliveriesChartData getDeliveriesPerProductPieChartData(

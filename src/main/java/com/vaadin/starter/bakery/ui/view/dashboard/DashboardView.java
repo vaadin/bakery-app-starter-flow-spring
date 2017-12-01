@@ -41,7 +41,6 @@ import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import com.vaadin.ui.renderers.ComponentRenderer;
 
-
 @Tag("bakery-dashboard")
 @HtmlImport("src/dashboard/bakery-dashboard.html")
 @Route(value = BakeryConst.PAGE_DASHBOARD, layout = BakeryApp.class)
@@ -49,6 +48,12 @@ import com.vaadin.ui.renderers.ComponentRenderer;
 public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 
 	private final OrderService orderService;
+
+	@Id("deliveries-this-month")
+	private Chart deliveriesThisMonthChart;
+
+	@Id("deliveries-this-year")
+	private Chart deliveriesThisYearChart;
 
 	@Id("yearly-sales-graph")
 	private Chart yearlySalesGraph;
@@ -100,13 +105,11 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 	}
 
 	private void populateDeliveriesCharts(DashboardData data) {
-		ColumnChartData deliveriesThisMonth = DashboardUtils
-				.getDeliveriesThisMonthChartData(data.getDeliveriesThisMonth());
-		getModel().setDeliveriesThisMonth(deliveriesThisMonth);
+		DashboardUtils.writeDeliveriesThisMonthChartConfig(
+				deliveriesThisMonthChart.getConfiguration(), data.getDeliveriesThisMonth());
 
-		ColumnChartData deliveriesThisYear = DashboardUtils
-				.getDeliveriesThisYearChartData(data.getDeliveriesThisYear());
-		getModel().setDeliveriesThisYear(deliveriesThisYear);
+		DashboardUtils.writeDeliveriesThisYearChartConfig(
+				deliveriesThisYearChart.getConfiguration(), data.getDeliveriesThisYear());
 	}
 
 	private void populateYearlySalesChart(DashboardData data) {
@@ -141,10 +144,6 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 		void setNotAvailableOrdersCount(OrdersCountData ordersNotAvailable);
 
 		void setTodayOrdersCount(OrdersCountDataWithChart ordersToday);
-
-		void setDeliveriesThisYear(ColumnChartData deliveriesThisYear);
-
-		void setDeliveriesThisMonth(ColumnChartData deliveriesThisMonth);
 
 		void setProductDeliveriesThisMonth(ProductDeliveriesChartData productDeliveriesThisMonth);
 
