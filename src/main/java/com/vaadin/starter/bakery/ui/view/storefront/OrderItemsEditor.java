@@ -12,13 +12,13 @@ import com.vaadin.ui.common.HasValue;
 import com.vaadin.ui.event.ComponentEventListener;
 import com.vaadin.ui.html.Div;
 
-public class OrderItemsEdit extends Div implements HasValue<OrderItemsEdit, List<OrderItem>> {
+public class OrderItemsEditor extends Div implements HasValue<OrderItemsEditor, List<OrderItem>> {
 
-	private OrderItemEdit empty;
+	private OrderItemEditor empty;
 
 	private List<OrderItem> items;
 
-	private List<OrderItemEdit> editors = new LinkedList<>();
+	private List<OrderItemEditor> editors = new LinkedList<>();
 
 	private List<Registration> registrations = new LinkedList<>();
 
@@ -28,7 +28,7 @@ public class OrderItemsEdit extends Div implements HasValue<OrderItemsEdit, List
 
 	private boolean hasChanges = false;
 
-	public OrderItemsEdit(ProductDataProvider productDataProvider) {
+	public OrderItemsEditor(ProductDataProvider productDataProvider) {
 		this.productDataProvider = productDataProvider;
 	}
 
@@ -56,8 +56,8 @@ public class OrderItemsEdit extends Div implements HasValue<OrderItemsEdit, List
 		setHasChanges(false);
 	}
 
-	private OrderItemEdit createEditor(OrderItem value) {
-		OrderItemEdit editor = new OrderItemEdit(productDataProvider);
+	private OrderItemEditor createEditor(OrderItem value) {
+		OrderItemEditor editor = new OrderItemEditor(productDataProvider);
 		editors.add(editor);
 		getElement().appendChild(editor.getElement());
 		Registration priceChangeRegistration = addRegistration(editor
@@ -104,7 +104,7 @@ public class OrderItemsEdit extends Div implements HasValue<OrderItemsEdit, List
 		return items;
 	}
 
-	private void productChanged(OrderItemEdit item, Product product) {
+	private void productChanged(OrderItemEditor item, Product product) {
 		setHasChanges(true);
 		if (empty == item) {
 			createEmptyElement();

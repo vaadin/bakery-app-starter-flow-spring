@@ -1,11 +1,11 @@
 package com.vaadin.starter.bakery.ui.view.storefront.event;
 
-import com.vaadin.starter.bakery.ui.view.storefront.OrderItemsEdit;
+import com.vaadin.starter.bakery.ui.view.storefront.OrderItemsEditor;
 import com.vaadin.ui.event.ComponentEvent;
 
-public class ValueChangeEvent extends ComponentEvent<OrderItemsEdit> {
+public class ValueChangeEvent extends ComponentEvent<OrderItemsEditor> {
 
-	public ValueChangeEvent(OrderItemsEdit component) {
+	public ValueChangeEvent(OrderItemsEditor component) {
 		super(component, false);
 	}
 }

@@ -87,7 +87,7 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 	@Id("review")
 	private Button review;
 
-	private OrderItemsEdit items;
+	private OrderItemsEditor items;
 
 	private BeanValidationBinder<Order> binder = new BeanValidationBinder<>(Order.class);
 
@@ -95,8 +95,8 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 
 	@Autowired
 	public OrderEditor(PickupLocationDataProvider locationProvider, ProductDataProvider productDataProvider) {
-		items = new OrderItemsEdit(productDataProvider);
-		addToSlot(this, items, "order-items-edit");
+		items = new OrderItemsEditor(productDataProvider);
+		addToSlot(this, items, "order-items-editor");
 
 		cancel.addClickListener(e -> fireEvent(new CancelEvent(this, false)));
 		review.addClickListener(e -> fireEvent(new ReviewEvent(this)));
