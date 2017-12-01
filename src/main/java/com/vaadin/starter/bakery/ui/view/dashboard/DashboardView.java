@@ -3,13 +3,17 @@ package com.vaadin.starter.bakery.ui.view.dashboard;
 import java.time.LocalDate;
 import java.time.MonthDay;
 import java.time.Year;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
+import com.vaadin.addon.charts.Chart;
+import com.vaadin.addon.charts.model.AxisTitle;
+import com.vaadin.addon.charts.model.ChartType;
+import com.vaadin.addon.charts.model.Configuration;
+import com.vaadin.addon.charts.model.ListSeries;
+import com.vaadin.addon.charts.model.XAxis;
+import com.vaadin.addon.charts.model.YAxis;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.data.selection.SelectionEvent;
@@ -23,7 +27,6 @@ import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider;
-import com.vaadin.starter.bakery.ui.entities.NamedSeries;
 import com.vaadin.starter.bakery.ui.entities.chart.ColumnChartData;
 import com.vaadin.starter.bakery.ui.entities.chart.ProductDeliveriesChartData;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
@@ -46,6 +49,9 @@ import com.vaadin.ui.renderers.ComponentRenderer;
 public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 
 	private final OrderService orderService;
+
+	@Id("yearly-sales-graph")
+	private Chart yearlySalesGraph;
 
 	@Id("orders-grid")
 	private Grid<Order> grid;
@@ -104,21 +110,27 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 	}
 
 	private void populateYearlySalesChart(DashboardData data) {
-		List<NamedSeries> yearlySales = new ArrayList<>();
+		Configuration conf = yearlySalesGraph.getConfiguration();
+		conf.getChart().setType(ChartType.AREASPLINE);
+		conf.getChart().setBorderRadius(4);
+		
+		conf.setTitle("Sales last years");
+
+		XAxis xAxis = new XAxis();
+		xAxis.setVisible(false);
+		xAxis.setCategories(DashboardUtils.MONTH_LABELS);
+		conf.addxAxis(xAxis);
+
+		YAxis yAxis = new YAxis();
+		AxisTitle title = new AxisTitle();
+		title.setText(null);
+		yAxis.setTitle(title);
+		conf.addyAxis(yAxis);
 
 		int year = Year.now().getValue();
-
 		for (int i = 0; i < 3; i++) {
-			NamedSeries series = new NamedSeries();
-
-			series.setSeries(Arrays.asList(data.getSalesPerMonth(i)).stream().filter(number -> number != null)
-					.map(Number::doubleValue).collect(Collectors.toList()));
-
-			series.setTitle(Integer.toString(year - i));
-			yearlySales.add(series);
+			conf.addSeries(new ListSeries(Integer.toString(year - i), data.getSalesPerMonth(i)));
 		}
-		getModel().setSalesGraphSeries(yearlySales);
-		getModel().setSalesGraphTitle("Sales last years");
 	}
 
 	public interface Model extends TemplateModel {
@@ -133,10 +145,6 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 		void setDeliveriesThisYear(ColumnChartData deliveriesThisYear);
 
 		void setDeliveriesThisMonth(ColumnChartData deliveriesThisMonth);
-
-		void setSalesGraphSeries(List<NamedSeries> sales);
-
-		void setSalesGraphTitle(String title);
 
 		void setProductDeliveriesThisMonth(ProductDeliveriesChartData productDeliveriesThisMonth);
 
