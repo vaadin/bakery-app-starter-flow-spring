@@ -19,11 +19,8 @@
         justify-content: flex-end;
       }
 
-      storefront-item-badge {
+      order-status-badge {
         margin: var(--valo-space-s) 0;
-      }
-
-      #storefront-item-status {
         width: 100px;
       }
 
@@ -82,14 +79,14 @@
           flex-direction: row;
         }
 
-        storefront-item-badge {
+        order-status-badge {
           margin: 0;
         }
       }
     </style>
 
     <div id="info-wrapper" class="flex">
-      <order-status-badge id="storefront-item-status" status="[[item.state]]"></order-status-badge>
+      <order-status-badge status="[[item.state]]"></order-status-badge>
       <div id="time-place"></div>
     </div>
 
