@@ -38,8 +38,8 @@ public class StorefrontOrderCard extends PolymerTemplate<StorefrontOrderCard.Mod
 
 	private Order order;
 
-	@Id("storefront-item")
-	private StorefrontItem storefrontItem;
+	@Id("order-details-brief")
+	private OrderDetailsBrief orderDetailsBrief;
 
 	private OrderDetail orderDetail = new OrderDetail();
 
@@ -51,7 +51,7 @@ public class StorefrontOrderCard extends PolymerTemplate<StorefrontOrderCard.Mod
 
 	public void setOrder(Order order) {
 		this.order = order;
-		storefrontItem.setOrder(order);
+		orderDetailsBrief.setOrder(order);
 		orderDetail.display(order, false);
 	}
 

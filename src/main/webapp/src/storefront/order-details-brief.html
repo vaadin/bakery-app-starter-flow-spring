@@ -1,7 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="storefront-item-badge.html">
 
-<dom-module id="storefront-item">
+<dom-module id="order-details-brief">
   <template>
     <style include="shared-styles">
       :host {
@@ -107,9 +107,9 @@
   </template>
 
   <script>
-    class StorefrontItem extends Polymer.Element {
+    class OrderDetailsBrief extends Polymer.Element {
       static get is() {
-        return 'storefront-item';
+        return 'order-details-brief';
       }
 
       static get properties() {
@@ -122,6 +122,6 @@
 
     }
 
-    window.customElements.define(StorefrontItem.is, StorefrontItem);
+    window.customElements.define(OrderDetailsBrief.is, OrderDetailsBrief);
   </script>
 </dom-module>
