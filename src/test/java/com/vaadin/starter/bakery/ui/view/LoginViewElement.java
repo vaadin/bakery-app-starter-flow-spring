@@ -9,12 +9,12 @@ import com.vaadin.testbench.elementsbase.Element;
 @Element("bakery-login")
 public class LoginViewElement extends TestBenchElement {
 
-	public StoreFrontViewElement login(String username, String password) {
+	public StorefrontViewElement login(String username, String password) {
 		getLogin().setValue(username);
 		getPassword().setValue(password);
 		getSignIn().click();
 
-		return $(StoreFrontViewElement.class).onPage().waitForFirst();
+		return $(StorefrontViewElement.class).onPage().waitForFirst();
 	}
 
 	public ButtonElement getSignIn() {

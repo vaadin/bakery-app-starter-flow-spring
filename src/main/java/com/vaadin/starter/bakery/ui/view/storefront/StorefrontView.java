@@ -47,11 +47,11 @@ implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 	@Id("storefront-grid")
 	private Grid<Order> grid;
 
-	@Id("order-edit")
-	private OrderEdit orderEdit;
+	@Id("order-editor")
+	private OrderEditor openedOrderEditor;
 
-	@Id("order-detail")
-	private OrderDetail orderDetail;
+	@Id("order-details")
+	private OrderDetailsFull openedOrderDetails;
 
 	private OrderEntityPresenter presenter;
 
@@ -67,9 +67,9 @@ implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 		searchBar.setPlaceHolder("Search");
 
 		grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-		Map<Order, StorefrontItemDetailWrapper> components = new HashMap<>();
+		Map<Order, StorefrontOrderCard> components = new HashMap<>();
 		grid.addColumn(new ComponentRenderer<>(order -> {
-			StorefrontItemDetailWrapper orderCard = new StorefrontItemDetailWrapper();
+			StorefrontOrderCard orderCard = new StorefrontOrderCard();
 			orderCard.setOrder(order);
 			orderCard.setHeader(presenter.getHeaderByOrderId(order.getId()));
 			orderCard.addEditListener(e -> presenter.onOrderCardEdit(orderCard));
@@ -101,17 +101,17 @@ implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 
 	@Override
 	public boolean isDirty() {
-		return orderEdit.hasChanges();
+		return openedOrderEditor.hasChanges();
 	}
 
 	@Override
 	public void write(Order entity) throws ValidationException {
-		orderEdit.write(entity);
+		openedOrderEditor.write(entity);
 	}
 
 	@Override
 	public void closeDialog() {
-		orderEdit.close();
+		openedOrderEditor.close();
 		getModel().setEditing(false);
 		getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT));
 	}
@@ -125,22 +125,22 @@ implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 	public void openDialog(Order order, boolean edit) {
 		getModel().setEditing(true);
 		if (edit) {
-			orderEdit.read(order);
+			openedOrderEditor.read(order);
 			showOrderEdit();
 		} else {
-			details(order, false);
+			openOrderDetails(order, false);
 		}
 	}
 
 	void showOrderEdit() {
-		orderDetail.getElement().setAttribute("hidden", "");
-		orderEdit.getElement().removeAttribute("hidden");
+		openedOrderDetails.getElement().setAttribute("hidden", "");
+		openedOrderEditor.getElement().removeAttribute("hidden");
 	}
 
-	void details(Order order, boolean isReview) {
-		orderDetail.getElement().removeAttribute("hidden");
-		orderEdit.getElement().setAttribute("hidden", "");
-		orderDetail.display(order, isReview);
+	void openOrderDetails(Order order, boolean isReview) {
+		openedOrderDetails.getElement().removeAttribute("hidden");
+		openedOrderEditor.getElement().setAttribute("hidden", "");
+		openedOrderDetails.display(order, isReview);
 	}
 
 	boolean isDesktopView() {
@@ -155,12 +155,12 @@ implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 		return searchBar;
 	}
 
-	OrderEdit getOrderEdit() {
-		return orderEdit;
+	OrderEditor getOpenedOrderEditor() {
+		return openedOrderEditor;
 	}
 
-	OrderDetail getOrderDetail() {
-		return orderDetail;
+	OrderDetailsFull getOpenedOrderDetails() {
+		return openedOrderDetails;
 	}
 
 }

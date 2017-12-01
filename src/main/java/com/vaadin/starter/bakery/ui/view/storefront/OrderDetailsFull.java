@@ -27,28 +27,32 @@ import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import com.vaadin.ui.textfield.TextField;
 
-@Tag("order-detail")
-@HtmlImport("src/storefront/order-detail.html")
-public class OrderDetail extends PolymerTemplate<OrderDetail.Model> {
+/**
+ * The component displaying a full (read-only) summary of an order, and a comment
+ * field to add comments.
+ */
+@Tag("order-details-full")
+@HtmlImport("src/storefront/order-details-full.html")
+public class OrderDetailsFull extends PolymerTemplate<OrderDetailsFull.Model> {
 
 	private Order order;
 
-	@Id("order-detail-back")
+	@Id("back")
 	private Button back;
 
-	@Id("order-detail-cancel")
+	@Id("cancel")
 	private Button cancel;
 
-	@Id("order-detail-save")
+	@Id("save")
 	private Button save;
 
-	@Id("order-detail-edit")
+	@Id("edit")
 	private Button edit;
 
 	@Id("history")
 	private Element history;
 
-	@Id("order-detail-comment")
+	@Id("comment")
 	private Element comment;
 
 	@Id("send-comment")
@@ -57,7 +61,7 @@ public class OrderDetail extends PolymerTemplate<OrderDetail.Model> {
 	@Id("comment-field")
 	private TextField commentField;
 
-	public OrderDetail() {
+	public OrderDetailsFull() {
 		sendComment.addClickListener(e -> {
 			String message = commentField.getValue();
 			message = message == null ? "" : message.trim();

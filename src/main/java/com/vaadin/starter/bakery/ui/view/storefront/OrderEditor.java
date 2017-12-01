@@ -41,11 +41,11 @@ import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import com.vaadin.ui.textfield.TextField;
 
-@Tag("order-edit")
-@HtmlImport("src/storefront/order-edit.html")
+@Tag("order-editor")
+@HtmlImport("src/storefront/order-editor.html")
 @SpringComponent
 @Scope("prototype")
-public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
+public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 
 	public interface Model extends TemplateModel {
 
@@ -57,10 +57,10 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 
 	}
 
-	@Id("order-edit-title")
+	@Id("title")
 	private H2 title;
 
-	@Id("order-edit-status")
+	@Id("status")
 	private ComboBox<OrderState> status;
 
 	@Id("due-date")
@@ -81,22 +81,22 @@ public class OrderEdit extends PolymerTemplate<OrderEdit.Model> {
 	@Id("customer-details")
 	private TextField customerDetails;
 
-	@Id("order-edit-cancel")
+	@Id("cancel")
 	private Button cancel;
 
 	@Id("review")
 	private Button review;
 
-	private OrderItemsEdit items;
+	private OrderItemsEditor items;
 
 	private BeanValidationBinder<Order> binder = new BeanValidationBinder<>(Order.class);
 
 	private final LocalTimeConverter localTimeConverter = new LocalTimeConverter();
 
 	@Autowired
-	public OrderEdit(PickupLocationDataProvider locationProvider, ProductDataProvider productDataProvider) {
-		items = new OrderItemsEdit(productDataProvider);
-		addToSlot(this, items, "order-items-edit");
+	public OrderEditor(PickupLocationDataProvider locationProvider, ProductDataProvider productDataProvider) {
+		items = new OrderItemsEditor(productDataProvider);
+		addToSlot(this, items, "order-items-editor");
 
 		cancel.addClickListener(e -> fireEvent(new CancelEvent(this, false)));
 		review.addClickListener(e -> fireEvent(new ReviewEvent(this)));

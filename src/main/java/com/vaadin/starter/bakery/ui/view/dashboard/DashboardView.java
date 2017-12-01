@@ -33,7 +33,7 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.utils.DashboardUtils;
 import com.vaadin.starter.bakery.ui.utils.OrdersCountData;
 import com.vaadin.starter.bakery.ui.utils.OrdersCountDataWithChart;
-import com.vaadin.starter.bakery.ui.view.storefront.StorefrontItem;
+import com.vaadin.starter.bakery.ui.view.storefront.OrderDetailsBrief;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.grid.Grid;
@@ -66,7 +66,7 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 		this.orderService = orderService;
 
 		grid.addColumn(new ComponentRenderer<>(order -> {
-			StorefrontItem item = new StorefrontItem();
+			OrderDetailsBrief item = new OrderDetailsBrief();
 			item.setOrder(order);
 			return item;
 		}));

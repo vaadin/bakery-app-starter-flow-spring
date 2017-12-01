@@ -9,7 +9,7 @@ import org.junit.Test;
 public class DashboardViewIT extends AbstractIT {
 
 	private DashboardViewElement openDashboardPage() {
-		StoreFrontViewElement storefront = openLoginView().login("admin@vaadin.com", "admin");
+		StorefrontViewElement storefront = openLoginView().login("admin@vaadin.com", "admin");
 		return storefront.getMenu().navigateToDashboard();
 	}
 

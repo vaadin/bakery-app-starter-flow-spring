@@ -26,9 +26,12 @@ import com.vaadin.ui.html.H3;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
-@Tag("storefront-item")
-@HtmlImport("src/storefront/storefront-item.html")
-public class StorefrontItem extends PolymerTemplate<StorefrontItem.Model> {
+/**
+ * The component displaying a brief (read-only) summary of an order.
+ */
+@Tag("order-details-brief")
+@HtmlImport("src/storefront/order-details-brief.html")
+public class OrderDetailsBrief extends PolymerTemplate<OrderDetailsBrief.Model> {
 
 	public interface Model extends TemplateModel {
 		@Include({ "id", "state", "customer.fullName", "items.product.name", "items.quantity" })

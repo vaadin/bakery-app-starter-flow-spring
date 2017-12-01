@@ -19,7 +19,7 @@ public class LoginIT extends AbstractIT {
 	@Test
 	public void logout() {
 		LoginViewElement loginView = openLoginView();
-		StoreFrontViewElement storefront = loginView.login("barista@vaadin.com", "barista");
+		StorefrontViewElement storefront = loginView.login("barista@vaadin.com", "barista");
 		storefront.getMenu().logout();
 		Assert.assertTrue(getDriver().getCurrentUrl().endsWith("login"));
 	}

@@ -1,14 +1,15 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-item.html">
 <link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
 <link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="../elements/utils-mixin.html">
 
-<link rel="import" href="storefront-item-badge.html">
+<link rel="import" href="order-status-badge.html">
 
-<dom-module id="order-detail">
+<dom-module id="order-details-full">
   <template>
     <style include="shared-styles">
       :host {
@@ -108,9 +109,11 @@
       }
     </style>
 
+    <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
+
     <div class="scrollable main-row" id="main">
       <div class="meta-row">
-        <storefront-item-badge status="[[item.state]]"></storefront-item-badge>
+        <order-status-badge status="[[item.state]]"></order-status-badge>
         <span class="dim">Order #[[item.id]]</span>
       </div>
 
@@ -182,13 +185,13 @@
               <div class="history-line">
                 <span class="bold">[[event.createdBy.firstName]]</span>
                 <span class="secondary">[[event.timestamp]]</span>
-                <storefront-item-badge status="[[event.newState]]" small></storefront-item-badge>
+                <order-status-badge status="[[event.newState]]" small></order-status-badge>
               </div>
               <div class="comment">[[event.message]]</div>
             </template>
           </vaadin-form-item>
 
-          <vaadin-form-item id="order-detail-comment" hidden="[[review]]">
+          <vaadin-form-item id="comment" hidden="[[review]]">
             <vaadin-text-field id="comment-field" placeholder="Add comment" class="full-width" on-keydown="_onCommentKeydown">
               <div slot="suffix" class="comment-suffix">
                 <vaadin-button id="send-comment" theme="tertiary">Send</vaadin-button>
@@ -201,13 +204,13 @@
     </div>
 
     <div class="footer">
-      <vaadin-button id="order-detail-back" hidden="[[!review]]">Back</vaadin-button>
-      <vaadin-button id="order-detail-cancel" hidden="[[review]]">Cancel</vaadin-button>
+      <vaadin-button id="back" hidden="[[!review]]">Back</vaadin-button>
+      <vaadin-button id="cancel" hidden="[[review]]">Cancel</vaadin-button>
       <div class="total money">Total [[item.totalPrice]]</div>
 
-      <vaadin-button id="order-detail-save" theme="primary success" class="edit-button" hidden="[[!review]]">Place Order ✓</vaadin-button>
+      <vaadin-button id="save" theme="primary success" class="edit-button" hidden="[[!review]]">Place Order ✓</vaadin-button>
 
-      <vaadin-button id="order-detail-edit" theme="primary" class="edit-button" hidden="[[review]]">
+      <vaadin-button id="edit" theme="primary" class="edit-button" hidden="[[review]]">
         <span>Edit order</span>
         <iron-icon icon="valo:edit"></iron-icon>
       </vaadin-button>
@@ -215,9 +218,9 @@
   </template>
 
   <script>
-    class OrderDetail extends window.ScrollShadowMixin(Polymer.Element) {
+    class OrderDetailsFull extends window.ScrollShadowMixin(Polymer.Element) {
       static get is() {
-        return 'order-detail';
+        return 'order-details-full';
       }
 
       static get properties() {
@@ -247,6 +250,6 @@
       }
     }
 
-    window.customElements.define(OrderDetail.is, OrderDetail);
+    window.customElements.define(OrderDetailsFull.is, OrderDetailsFull);
   </script>
 </dom-module>

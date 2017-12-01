@@ -397,7 +397,7 @@ class BaristaFlow extends Simulation {
       http("request_112")
         .get("/src/app/bakery-search.html"),
       http("request_113")
-        .get("/src/storefront/storefront-item-detail-wrapper.html"),
+        .get("/src/storefront/storefront-order-card.html"),
       http("request_115")
         .get("/src/elements/utils-mixin.html"),
       http("request_116")
@@ -481,7 +481,7 @@ class BaristaFlow extends Simulation {
 
   val afterLoginHtmlFiles3 =
     exec(http("Load html files after login (3/8)")
-      .get("/src/storefront/storefront-item.html")
+      .get("/src/storefront/order-details-brief.html")
       .headers(headers_0)
       .resources(http("request_155")
         .get("/src/elements/item-detail-inline.html"),
@@ -607,7 +607,7 @@ class BaristaFlow extends Simulation {
       http("request_214")
         .get("/bower_components/iron-iconset-svg/iron-iconset-svg.html"),
       http("request_215")
-        .get("/src/storefront/storefront-item-badge.html"),
+        .get("/src/storefront/order-status-badge.html"),
       http("request_216")
         .get("/bower_components/iron-form/iron-form.html"),
       http("request_217")
