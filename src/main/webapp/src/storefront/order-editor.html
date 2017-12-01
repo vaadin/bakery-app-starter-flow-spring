@@ -1,5 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="order-item-edit.html">
+<link rel="import" href="order-item-editor.html">
 <link rel="import" href="../elements/utils-mixin.html">
 <link rel="import" href="../app/style-modules/shared-styles.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
@@ -11,7 +11,7 @@
 <link rel="import" href="../../bower_components/vaadin-combo-box/vaadin-combo-box.html">
 <link rel="import" href="../../bower_components/vaadin-date-picker/vaadin-date-picker.html">
 
-<dom-module id="order-edit">
+<dom-module id="order-editor">
   <template>
    <style include="shared-styles">
       :host {
@@ -36,7 +36,7 @@
     </style>
 
     <div class="scrollable flex1" id="main">
-      <h2 id="order-edit-title"></h2>
+      <h2 id="title"></h2>
 
       <iron-form id="itemEditForm">
         <form on-submit="_submitEditForm">
@@ -44,7 +44,7 @@
           <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 4, 1)]]">
             <vaadin-form-layout responsive-steps='[{"columns": 1, "labelsPosition": "top"}]'>
 
-              <vaadin-combo-box label="Status" id="order-edit-status" >
+              <vaadin-combo-box label="Status" id="status" >
               </vaadin-combo-box>
 
               <vaadin-form-item>
@@ -80,7 +80,7 @@
 
               <vaadin-form-item colspan="3">
                 <label slot="label">Products</label>
-                <slot name="order-items-edit"></slot>
+                <slot name="order-items-editor"></slot>
               </vaadin-form-item>
 
             </vaadin-form-layout>
@@ -90,17 +90,17 @@
     </div>
 
     <div id="footer" class="footer">
-      <vaadin-button id="order-edit-cancel">Cancel</vaadin-button>
+      <vaadin-button id="cancel">Cancel</vaadin-button>
       <div class="total money">Total [[totalPrice]]</div>
       <vaadin-button id="review" theme="primary">Review Order →</vaadin-button>
     </div>
   </template>
 
   <script>
-    class OrderEdit extends window.ScrollShadowMixin(Polymer.Element) {
+    class OrderEditor extends window.ScrollShadowMixin(Polymer.Element) {
 
       static get is() {
-        return 'order-edit';
+        return 'order-editor';
       }
 
       static get properties() {
@@ -118,16 +118,16 @@
 
       ready() {
         super.ready();
-        this.$['order-edit-status'].$.input.setAttribute('theme', 'status');
+        this.$['status'].$.input.setAttribute('theme', 'status');
       }
 
       _updateDesktopViewOnItemsEdit() {
-        this.querySelectorAll('order-item-edit').forEach(item => item.updateDesktopView(this.desktopView));
+        this.querySelectorAll('order-item-editor').forEach(item => item.updateDesktopView(this.desktopView));
       }
 
       _onStatusChange() {
         const status = this.status ? this.status.toLowerCase() : this.status;
-        this.$['order-edit-status'].$.input.setAttribute('status', status);
+        this.$['status'].$.input.setAttribute('status', status);
       }
 
       _computeResponsiveSteps(desktopView, desktopColumns, mobileColumns) {
@@ -138,6 +138,6 @@
       }
     }
 
-    window.customElements.define(OrderEdit.is, OrderEdit);
+    window.customElements.define(OrderEditor.is, OrderEditor);
   </script>
 </dom-module>

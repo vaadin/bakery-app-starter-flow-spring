@@ -7,22 +7,22 @@ import org.junit.Test;
 import com.vaadin.starter.bakery.AbstractIT;
 import com.vaadin.starter.bakery.elements.ButtonElement;
 import com.vaadin.starter.bakery.elements.GridElement;
-import com.vaadin.starter.bakery.ui.components.storefront.StoreFrontItemDetailWrapperElement;
+import com.vaadin.starter.bakery.ui.components.storefront.StorefrontOrderCardElement;
 
 public class StorefrontViewIT extends AbstractIT {
 
-	private StoreFrontViewElement openStorefrontPage() {
+	private StorefrontViewElement openStorefrontPage() {
 		return openLoginView().login("admin@vaadin.com", "admin");
 	}
 
 	@Test
-	public void orderItemExpandAndCollapse() {
-		StoreFrontViewElement storefrontPage = openStorefrontPage();
+	public void orderCardExpandAndCollapse() {
+		StorefrontViewElement storefrontPage = openStorefrontPage();
 
 		GridElement grid = storefrontPage.getGrid();
 		Assert.assertTrue(grid.getGridSize() >= 0);
 
-		StoreFrontItemDetailWrapperElement firstOrder = storefrontPage.getFirstOrderDetailWrapper();
+		StorefrontOrderCardElement firstOrder = storefrontPage.getFirstOrderCard();
 		Assert.assertNotNull(firstOrder);
 		Assert.assertFalse(firstOrder.isOrderSelected());
 
@@ -33,9 +33,9 @@ public class StorefrontViewIT extends AbstractIT {
 	@Ignore("until the issue BFF-339 is fixed")
 	@Test
 	public void editOrder() {
-		StoreFrontViewElement storefrontPage = openStorefrontPage();
+		StorefrontViewElement storefrontPage = openStorefrontPage();
 
-		StoreFrontItemDetailWrapperElement firstOrder = storefrontPage.getFirstOrderDetailWrapper();
+		StorefrontOrderCardElement firstOrder = storefrontPage.getFirstOrderCard();
 		Assert.assertNotNull(firstOrder);
 		firstOrder.click();
 		ButtonElement editBtn = firstOrder.getDetail().getEditButton();

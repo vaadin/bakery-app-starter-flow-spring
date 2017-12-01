@@ -4,8 +4,8 @@ import com.vaadin.starter.bakery.elements.ButtonElement;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elementsbase.Element;
 
-@Element("order-detail")
-public class OrderDetailElement extends TestBenchElement {
+@Element("order-details-full")
+public class OrderDetailsFullElement extends TestBenchElement {
 
 	public ButtonElement getCancelButton() {
 		return $(ButtonElement.class).id("collapse-order-detail");

@@ -12,12 +12,12 @@ import com.vaadin.starter.bakery.elements.PasswordFieldElement;
 import com.vaadin.starter.bakery.elements.TextFieldElement;
 import com.vaadin.starter.bakery.ui.components.ItemDetailDialogElement;
 import com.vaadin.starter.bakery.ui.components.UserEditElement;
-import com.vaadin.starter.bakery.ui.view.StoreFrontViewElement;
+import com.vaadin.starter.bakery.ui.view.StorefrontViewElement;
 
 public class UsersViewIT extends AbstractIT {
 
 	private UsersViewElement openTestPage() {
-		StoreFrontViewElement storefront = openLoginView().login("admin@vaadin.com", "admin");
+		StorefrontViewElement storefront = openLoginView().login("admin@vaadin.com", "admin");
 		return storefront.getMenu().navigateToUsers();
 	}
 

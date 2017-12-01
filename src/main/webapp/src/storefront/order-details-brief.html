@@ -1,7 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="storefront-item-badge.html">
+<link rel="import" href="order-status-badge.html">
 
-<dom-module id="storefront-item">
+<dom-module id="order-details-brief">
   <template>
     <style include="shared-styles">
       :host {
@@ -19,11 +19,8 @@
         justify-content: flex-end;
       }
 
-      storefront-item-badge {
+      order-status-badge {
         margin: var(--valo-space-s) 0;
-      }
-
-      #storefront-item-status {
         width: 100px;
       }
 
@@ -82,14 +79,14 @@
           flex-direction: row;
         }
 
-        storefront-item-badge {
+        order-status-badge {
           margin: 0;
         }
       }
     </style>
 
     <div id="info-wrapper" class="flex">
-      <storefront-item-badge id="storefront-item-status" status="[[item.state]]"></storefront-item-badge>
+      <order-status-badge status="[[item.state]]"></order-status-badge>
       <div id="time-place"></div>
     </div>
 
@@ -107,9 +104,9 @@
   </template>
 
   <script>
-    class StorefrontItem extends Polymer.Element {
+    class OrderDetailsBrief extends Polymer.Element {
       static get is() {
-        return 'storefront-item';
+        return 'order-details-brief';
       }
 
       static get properties() {
@@ -122,6 +119,6 @@
 
     }
 
-    window.customElements.define(StorefrontItem.is, StorefrontItem);
+    window.customElements.define(OrderDetailsBrief.is, OrderDetailsBrief);
   </script>
 </dom-module>

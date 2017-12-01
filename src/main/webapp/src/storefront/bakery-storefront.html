@@ -12,9 +12,9 @@
         (which is provided by flow-server.jar)-->
 <link rel="import" href="../../flow-component-renderer.html">
 
-<link rel="import" href="storefront-item-detail-wrapper.html">
-<link rel="import" href="order-edit.html">
-<link rel="import" href="order-detail.html">
+<link rel="import" href="storefront-order-card.html">
+<link rel="import" href="order-editor.html">
+<link rel="import" href="order-details-full.html">
 
 
 <dom-module id="bakery-storefront">
@@ -66,8 +66,8 @@
       <vaadin-grid id="storefront-grid" theme="storefront-grid"></vaadin-grid>
 
       <item-detail-dialog desktop-view$="[[desktopView]]" opened="[[editing]]">
-        <order-detail id="order-detail" desktop-view="[[desktopView]]"></order-detail>
-        <order-edit id="order-edit" desktop-view="[[desktopView]]"></order-edit>
+        <order-details-full id="order-details" desktop-view="[[desktopView]]"></order-details-full>
+        <order-editor id="order-editor" desktop-view="[[desktopView]]"></order-editor>
       </item-detail-dialog>
     </div>
   </template>

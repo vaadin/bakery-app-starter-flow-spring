@@ -14,9 +14,19 @@ import com.vaadin.ui.event.ComponentEventListener;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
-@Tag("storefront-item-detail-wrapper")
-@HtmlImport("src/storefront/storefront-item-detail-wrapper.html")
-public class StorefrontItemDetailWrapper extends PolymerTemplate<StorefrontItemDetailWrapper.Model> {
+/**
+ * The component for expandable order cards for the list on the Storefront view.
+ * When collapsed the order card shows brief order details, and switches to full
+ * order details when expanded.
+ * <p>
+ * In addition, it includes an optional header above the order card. It is used
+ * to visually separate orders into groups. Technically all order cards are
+ * equivalent, but those that do have the header visible create a visual group
+ * separation.
+ */
+@Tag("storefront-order-card")
+@HtmlImport("src/storefront/storefront-order-card.html")
+public class StorefrontOrderCard extends PolymerTemplate<StorefrontOrderCard.Model> {
 
 	public interface Model extends TemplateModel {
 		void setSelected(boolean selected);
@@ -28,21 +38,21 @@ public class StorefrontItemDetailWrapper extends PolymerTemplate<StorefrontItemD
 
 	private Order order;
 
-	@Id("storefront-item")
-	private StorefrontItem storefrontItem;
+	@Id("order-details-brief")
+	private OrderDetailsBrief orderDetailsBrief;
 
-	@Id("order-detail")
-	private OrderDetail orderDetail;
+	private OrderDetailsFull orderDetailsFull = new OrderDetailsFull();
 
-	public StorefrontItemDetailWrapper() {
+	public StorefrontOrderCard() {
+		orderDetailsFull.getElement().setAttribute("slot", "order-details-full");
 		getModel().setDisplayHeader(false);
 		setSelected(false);
 	}
 
 	public void setOrder(Order order) {
 		this.order = order;
-		storefrontItem.setOrder(order);
-		orderDetail.display(order, false);
+		orderDetailsBrief.setOrder(order);
+		orderDetailsFull.display(order, false);
 	}
 
 	public Order getOrder() {
@@ -50,6 +60,11 @@ public class StorefrontItemDetailWrapper extends PolymerTemplate<StorefrontItemD
 	}
 
 	public void setSelected(boolean selected) {
+		if (selected) {
+			getElement().appendChild(orderDetailsFull.getElement());
+		} else {
+			orderDetailsFull.getElement().removeFromParent();
+		}
 		getModel().setSelected(selected);
 	}
 
@@ -67,14 +82,14 @@ public class StorefrontItemDetailWrapper extends PolymerTemplate<StorefrontItemD
 	}
 
 	public Registration addEditListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {
-		return orderDetail.addEditListener(listener);
+		return orderDetailsFull.addEditListener(listener);
 	}
 
 	public Registration addCommentListener(ComponentEventListener<CommentEvent> listener) {
-		return orderDetail.addCommentListener(listener);
+		return orderDetailsFull.addCommentListener(listener);
 	}
 	
 	public Registration addCancelListener(ComponentEventListener<CancelEvent> listener) {
-		return orderDetail.addCancelListener(listener);
+		return orderDetailsFull.addCancelListener(listener);
 	}
 }

@@ -9,7 +9,7 @@ import org.junit.Test;
 public class ProductsViewIT extends AbstractIT {
 
 	private ProductsViewElement openProductsPage() {
-		StoreFrontViewElement storefront = openLoginView().login("admin@vaadin.com", "admin");
+		StorefrontViewElement storefront = openLoginView().login("admin@vaadin.com", "admin");
 		return storefront.getMenu().navigateToProducts();
 	}
 

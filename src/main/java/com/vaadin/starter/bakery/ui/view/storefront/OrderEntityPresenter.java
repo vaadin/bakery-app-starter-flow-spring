@@ -49,24 +49,24 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 				e -> filterChanged(view.getSearchBar().getFilter(), view.getSearchBar().isCheckboxChecked()));
 		view.getSearchBar().addActionClickListener(e -> createNew());
 
-		view.getOrderEdit().addListener(CancelEvent.class, e -> cancel());
-		view.getOrderEdit().addReviewListener(e -> {
+		view.getOpenedOrderEditor().addListener(CancelEvent.class, e -> cancel());
+		view.getOpenedOrderEditor().addReviewListener(e -> {
 			try {
 				writeEntity();
-				view.details(getEntity(), true);
+				view.openOrderDetails(getEntity(), true);
 			} catch (ValidationException ex) {
 				showValidationError();
 			}
 		});
 
-		view.getOrderDetail().addListener(SaveEvent.class, e -> save());
-		view.getOrderDetail().addCancelListener(e -> cancel());
-		view.getOrderDetail().addBackListener(e -> view.showOrderEdit());
-		view.getOrderDetail().addEditListener(e -> {
-			view.getOrderEdit().read(getEntity());
+		view.getOpenedOrderDetails().addListener(SaveEvent.class, e -> save());
+		view.getOpenedOrderDetails().addCancelListener(e -> cancel());
+		view.getOpenedOrderDetails().addBackListener(e -> view.showOrderEdit());
+		view.getOpenedOrderDetails().addEditListener(e -> {
+			view.getOpenedOrderEditor().read(getEntity());
 			view.showOrderEdit();
 		});
-		view.getOrderDetail().addCommentListener(e -> {
+		view.getOpenedOrderDetails().addCommentListener(e -> {
 			this.addComment(e.getOrderId(), e.getMessage());
 		});
 
@@ -98,8 +98,8 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 		dataProvider.setFilter(new OrderFilter(filter, showPrevious));
 	}
 
-	// StorefrontItemDetailWrapper presenter methods
-	void onOrderCardExpanded(StorefrontItemDetailWrapper orderCard) {
+	// StorefrontOrderCard presenter methods
+	void onOrderCardExpanded(StorefrontOrderCard orderCard) {
 		if (view.isDesktopView()) {
 			orderCard.setSelected(true);
 			view.resizeGrid();
@@ -108,17 +108,17 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 		}
 	}
 
-	void onOrderCardCollapsed(StorefrontItemDetailWrapper orderCard) {
+	void onOrderCardCollapsed(StorefrontOrderCard orderCard) {
 		orderCard.setSelected(false);
 		view.resizeGrid();
 	}
 
-	void onOrderCardEdit(StorefrontItemDetailWrapper orderCard) {
+	void onOrderCardEdit(StorefrontOrderCard orderCard) {
 		onOrderCardCollapsed(orderCard);
 		edit(orderCard.getOrder().getId().toString());
 	}
 
-	void onOrderCardAddComment(StorefrontItemDetailWrapper orderCard, String message) {
+	void onOrderCardAddComment(StorefrontOrderCard orderCard, String message) {
 		executeJPAOperation(() -> {
 			Order updated = orderService.addComment(orderCard.getOrder().getId(), message);
 			orderCard.setOrder(updated);

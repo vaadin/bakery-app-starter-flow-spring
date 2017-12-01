@@ -1,15 +1,15 @@
 package com.vaadin.starter.bakery.ui.view.storefront.event;
 
-import com.vaadin.starter.bakery.ui.view.storefront.OrderItemEdit;
+import com.vaadin.starter.bakery.ui.view.storefront.OrderItemEditor;
 import com.vaadin.ui.event.ComponentEvent;
 
-public class PriceChangeEvent extends ComponentEvent<OrderItemEdit> {
+public class PriceChangeEvent extends ComponentEvent<OrderItemEditor> {
 
 	private final int oldValue;
 
 	private final int newValue;
 
-	public PriceChangeEvent(OrderItemEdit component, int oldValue, int newValue) {
+	public PriceChangeEvent(OrderItemEditor component, int oldValue, int newValue) {
 		super(component, false);
 		this.oldValue = oldValue;
 		this.newValue = newValue;
