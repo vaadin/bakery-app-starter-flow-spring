@@ -2,8 +2,11 @@ package com.vaadin.starter.bakery.ui.view;
 
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.provider.DataProvider;
-import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
+import com.vaadin.generated.starter.elements.GeneratedStarterConfirmDialog;
+import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.ui.utils.messages.Message;
+import com.vaadin.ui.UI;
+import com.vaadin.ui.event.ComponentEventListener;
 
 /**
  * A master / detail view for entities of the type <code>T</code>. The view
@@ -48,7 +51,7 @@ public interface EntityView<T> extends HasNotifications {
 	 *            command to execute if the user presses 'ok' in the dialog
 	 */
 	default void showConfirmationRequest(Message message, Runnable onOk) {
-		ConfirmationDialog.show(message, onOk);
+	    Message.confirm(message, onOk);
 	}
 
 	/**
