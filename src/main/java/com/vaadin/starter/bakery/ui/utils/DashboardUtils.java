@@ -6,52 +6,16 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import com.vaadin.starter.bakery.backend.data.DeliveryStats;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
-import com.vaadin.starter.bakery.ui.entities.chart.ColumnChartData;
 import com.vaadin.starter.bakery.ui.entities.chart.ProductDeliveriesChartData;
 
 public class DashboardUtils {
-
-	public static final String[] MONTH_LABELS = new String[] {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
-			"Aug", "Sep", "Oct", "Nov", "Dec"};
-
-	private static List<Integer> convertNumbersToIntegers(List<Number> numbersList) {
-		if (numbersList == null)
-			return Collections.emptyList();
-		return numbersList.stream().map(n -> {
-			if (n != null)
-				return (Integer) n.intValue();
-			return 0;
-		}).collect(Collectors.toList());
-	}
-
-	public static ColumnChartData getDeliveriesThisYearChartData(List<Number> deliveriesThisYear) {
-		List<String> deliveriesThisYearCategories = Arrays.asList(MONTH_LABELS);
-		String deliveriesThisYearTitle = "Deliveries in " + LocalDate.now().getYear();
-		return new ColumnChartData(deliveriesThisYearTitle, "per Month",
-				convertNumbersToIntegers(deliveriesThisYear), deliveriesThisYearCategories);
-	}
-
-	public static ColumnChartData getDeliveriesThisMonthChartData(List<Number> deliveriesThisMonth) {
-		// A range going from 1 to the number of items in deliveriesThisMonth
-		List<String> deliveriesThisMonthCategories = IntStream.rangeClosed(1, deliveriesThisMonth.size())
-				.mapToObj(String::valueOf).collect(Collectors.toList());
-
-		String deliveriesThisMonthTitle = "Deliveries in " + getFullMonthName(LocalDate.now());
-		return new ColumnChartData(deliveriesThisMonthTitle, "per Day",
-				convertNumbersToIntegers(deliveriesThisMonth), deliveriesThisMonthCategories);
-	}
 
 	public static ProductDeliveriesChartData getDeliveriesPerProductPieChartData(
 			Map<Product, Integer> productDeliveries) {
