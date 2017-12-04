@@ -7,17 +7,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.IntStream;
 
-import com.vaadin.addon.charts.model.AxisTitle;
-import com.vaadin.addon.charts.model.ChartType;
-import com.vaadin.addon.charts.model.Configuration;
-import com.vaadin.addon.charts.model.Legend;
-import com.vaadin.addon.charts.model.ListSeries;
-import com.vaadin.addon.charts.model.XAxis;
-import com.vaadin.addon.charts.model.YAxis;
 import com.vaadin.starter.bakery.backend.data.DeliveryStats;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
@@ -25,53 +16,6 @@ import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.ui.entities.chart.ProductDeliveriesChartData;
 
 public class DashboardUtils {
-
-	public static final String[] MONTH_LABELS = new String[] {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
-			"Aug", "Sep", "Oct", "Nov", "Dec"};
-
-	public static void writeDeliveriesThisYearChartConfig(Configuration conf, List<Number> deliveriesThisYear) {
-		String deliveriesThisYearTitle = "Deliveries in " + LocalDate.now().getYear();
-		ListSeries series = new ListSeries("per Month", deliveriesThisYear);
-
-		writeDashboardColumnChartConfig(conf, series, deliveriesThisYearTitle, MONTH_LABELS);
-	}
-
-	public static void writeDeliveriesThisMonthChartConfig(Configuration conf, List<Number> deliveriesThisMonth) {
-		// A range going from 1 to the number of items in deliveriesThisMonth
-		String[] deliveriesThisMonthCategories = IntStream.rangeClosed(1, deliveriesThisMonth.size())
-				.mapToObj(String::valueOf).toArray(String[]::new);
-
-		String deliveriesThisMonthTitle = "Deliveries in " + getFullMonthName(LocalDate.now());
-		ListSeries series = new ListSeries("per Day", deliveriesThisMonth);
-
-		writeDashboardColumnChartConfig(conf, series, deliveriesThisMonthTitle, deliveriesThisMonthCategories);
-	}
-
-	private static void writeDashboardColumnChartConfig(Configuration conf, ListSeries series, String chartTitle,
-			String[] categories) {
-		conf.getChart().setType(ChartType.COLUMN);
-		conf.getChart().setBorderRadius(4);
-
-		conf.setTitle(chartTitle);
-		conf.addSeries(series);
-
-		XAxis xAxis = new XAxis();
-		xAxis.setTickInterval(1);
-		xAxis.setMinorTickLength(0);
-		xAxis.setTickLength(0);
-		xAxis.setCategories(categories);
-		conf.addxAxis(xAxis);
-
-		YAxis yAxis = new YAxis();
-		AxisTitle title = new AxisTitle();
-		title.setText(null);
-		yAxis.setTitle(title);
-		conf.addyAxis(yAxis);
-
-		Legend legend = new Legend();
-		legend.setEnabled(false);
-		conf.setLegend(legend);
-	}
 
 	public static ProductDeliveriesChartData getDeliveriesPerProductPieChartData(
 			Map<Product, Integer> productDeliveries) {

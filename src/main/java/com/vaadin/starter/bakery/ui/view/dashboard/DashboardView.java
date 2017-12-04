@@ -6,6 +6,7 @@ import java.time.Year;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 import com.vaadin.addon.charts.Chart;
 import com.vaadin.addon.charts.model.AxisTitle;
@@ -40,11 +41,16 @@ import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import com.vaadin.ui.renderers.ComponentRenderer;
 
+import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
+
 @Tag("bakery-dashboard")
 @HtmlImport("src/dashboard/bakery-dashboard.html")
 @Route(value = BakeryConst.PAGE_DASHBOARD, layout = BakeryApp.class)
 @PageTitle(BakeryConst.TITLE_DASHBOARD)
 public class DashboardView extends PolymerTemplate<DashboardView.Model> {
+
+	private static final String[] MONTH_LABELS = new String[] {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
+			"Aug", "Sep", "Oct", "Nov", "Dec"};
 
 	private final OrderService orderService;
 
@@ -104,11 +110,40 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 	}
 
 	private void populateDeliveriesCharts(DashboardData data) {
-		DashboardUtils.writeDeliveriesThisMonthChartConfig(
-				deliveriesThisMonthChart.getConfiguration(), data.getDeliveriesThisMonth());
+		LocalDate today = LocalDate.now();
 
-		DashboardUtils.writeDeliveriesThisYearChartConfig(
-				deliveriesThisYearChart.getConfiguration(), data.getDeliveriesThisYear());
+		// init the 'Deliveries in [this year]' chart
+		Configuration yearConf = deliveriesThisYearChart.getConfiguration();
+		configureColumnChart(yearConf);
+
+		yearConf.setTitle("Deliveries in " + today.getYear());
+		yearConf.getxAxis().setCategories(MONTH_LABELS);
+		yearConf.addSeries(new ListSeries("per Month", data.getDeliveriesThisYear()));
+
+		// init the 'Deliveries in [this month]' chart
+		Configuration monthConf = deliveriesThisMonthChart.getConfiguration();
+		configureColumnChart(monthConf);
+
+		List<Number> deliveriesThisMonth = data.getDeliveriesThisMonth();
+		String[] deliveriesThisMonthCategories = IntStream.rangeClosed(1, deliveriesThisMonth.size())
+				.mapToObj(String::valueOf).toArray(String[]::new);
+
+		monthConf.setTitle("Deliveries in " + FormattingUtils.getFullMonthName(today));
+		monthConf.getxAxis().setCategories(deliveriesThisMonthCategories);
+		monthConf.addSeries(new ListSeries("per Day", deliveriesThisMonth));
+	}
+
+	private void configureColumnChart(Configuration conf) {
+		conf.getChart().setType(ChartType.COLUMN);
+		conf.getChart().setBorderRadius(4);
+
+		conf.getxAxis().setTickInterval(1);
+		conf.getxAxis().setMinorTickLength(0);
+		conf.getxAxis().setTickLength(0);
+
+		conf.getyAxis().getTitle().setText(null);
+
+		conf.getLegend().setEnabled(false);
 	}
 
 	private void populateYearlySalesChart(DashboardData data) {
@@ -120,7 +155,7 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 
 		XAxis xAxis = new XAxis();
 		xAxis.setVisible(false);
-		xAxis.setCategories(DashboardUtils.MONTH_LABELS);
+		xAxis.setCategories(MONTH_LABELS);
 		conf.addxAxis(xAxis);
 
 		YAxis yAxis = new YAxis();
