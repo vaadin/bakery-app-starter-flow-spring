@@ -95,13 +95,10 @@
         <vaadin-chart id="yearly-sales-graph" class="yearly-sales"></vaadin-chart>
       </vaadin-board-row>
       <vaadin-board-row>
-      <div class="vaadin-board-cell">
+        <div class="vaadin-board-cell">
           <vaadin-chart id="monthly-product-split" class="product-split-donut"></vaadin-chart >
-      </div>
-        <!-- If a cell in a vaadin-board has padding it needs to be wrapped into a div
-             to work around the IE11 flex box issue. See the Known Issues section at
-             https://vaadin.com/docs/v8/board/webcomponents-api/board-basic-use.html -->
-        <div>
+        </div>
+        <div class="vaadin-board-cell">
           <vaadin-grid id="orders-grid"></vaadin-grid>
         </div>
       </vaadin-board-row>
