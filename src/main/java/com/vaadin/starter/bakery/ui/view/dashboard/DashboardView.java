@@ -6,14 +6,12 @@ import java.time.Year;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 import com.vaadin.addon.charts.Chart;
-import com.vaadin.addon.charts.model.AxisTitle;
 import com.vaadin.addon.charts.model.ChartType;
 import com.vaadin.addon.charts.model.Configuration;
 import com.vaadin.addon.charts.model.ListSeries;
-import com.vaadin.addon.charts.model.XAxis;
-import com.vaadin.addon.charts.model.YAxis;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.data.selection.SelectionEvent;
@@ -27,7 +25,6 @@ import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider;
-import com.vaadin.starter.bakery.ui.entities.chart.ColumnChartData;
 import com.vaadin.starter.bakery.ui.entities.chart.ProductDeliveriesChartData;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.utils.DashboardUtils;
@@ -41,6 +38,7 @@ import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import com.vaadin.ui.renderers.ComponentRenderer;
 
+import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 
 @Tag("bakery-dashboard")
 @HtmlImport("src/dashboard/bakery-dashboard.html")
@@ -48,7 +46,16 @@ import com.vaadin.ui.renderers.ComponentRenderer;
 @PageTitle(BakeryConst.TITLE_DASHBOARD)
 public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 
+	private static final String[] MONTH_LABELS = new String[] {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
+			"Aug", "Sep", "Oct", "Nov", "Dec"};
+
 	private final OrderService orderService;
+
+	@Id("deliveries-this-month")
+	private Chart deliveriesThisMonthChart;
+
+	@Id("deliveries-this-year")
+	private Chart deliveriesThisYearChart;
 
 	@Id("yearly-sales-graph")
 	private Chart yearlySalesGraph;
@@ -100,13 +107,40 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 	}
 
 	private void populateDeliveriesCharts(DashboardData data) {
-		ColumnChartData deliveriesThisMonth = DashboardUtils
-				.getDeliveriesThisMonthChartData(data.getDeliveriesThisMonth());
-		getModel().setDeliveriesThisMonth(deliveriesThisMonth);
+		LocalDate today = LocalDate.now();
 
-		ColumnChartData deliveriesThisYear = DashboardUtils
-				.getDeliveriesThisYearChartData(data.getDeliveriesThisYear());
-		getModel().setDeliveriesThisYear(deliveriesThisYear);
+		// init the 'Deliveries in [this year]' chart
+		Configuration yearConf = deliveriesThisYearChart.getConfiguration();
+		configureColumnChart(yearConf);
+
+		yearConf.setTitle("Deliveries in " + today.getYear());
+		yearConf.getxAxis().setCategories(MONTH_LABELS);
+		yearConf.addSeries(new ListSeries("per Month", data.getDeliveriesThisYear()));
+
+		// init the 'Deliveries in [this month]' chart
+		Configuration monthConf = deliveriesThisMonthChart.getConfiguration();
+		configureColumnChart(monthConf);
+
+		List<Number> deliveriesThisMonth = data.getDeliveriesThisMonth();
+		String[] deliveriesThisMonthCategories = IntStream.rangeClosed(1, deliveriesThisMonth.size())
+				.mapToObj(String::valueOf).toArray(String[]::new);
+
+		monthConf.setTitle("Deliveries in " + FormattingUtils.getFullMonthName(today));
+		monthConf.getxAxis().setCategories(deliveriesThisMonthCategories);
+		monthConf.addSeries(new ListSeries("per Day", deliveriesThisMonth));
+	}
+
+	private void configureColumnChart(Configuration conf) {
+		conf.getChart().setType(ChartType.COLUMN);
+		conf.getChart().setBorderRadius(4);
+
+		conf.getxAxis().setTickInterval(1);
+		conf.getxAxis().setMinorTickLength(0);
+		conf.getxAxis().setTickLength(0);
+
+		conf.getyAxis().getTitle().setText(null);
+
+		conf.getLegend().setEnabled(false);
 	}
 
 	private void populateYearlySalesChart(DashboardData data) {
@@ -116,16 +150,10 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 		
 		conf.setTitle("Sales last years");
 
-		XAxis xAxis = new XAxis();
-		xAxis.setVisible(false);
-		xAxis.setCategories(DashboardUtils.MONTH_LABELS);
-		conf.addxAxis(xAxis);
+		conf.getxAxis().setVisible(false);
+		conf.getxAxis().setCategories(MONTH_LABELS);
 
-		YAxis yAxis = new YAxis();
-		AxisTitle title = new AxisTitle();
-		title.setText(null);
-		yAxis.setTitle(title);
-		conf.addyAxis(yAxis);
+		conf.getyAxis().getTitle().setText(null);
 
 		int year = Year.now().getValue();
 		for (int i = 0; i < 3; i++) {
@@ -141,10 +169,6 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 		void setNotAvailableOrdersCount(OrdersCountData ordersNotAvailable);
 
 		void setTodayOrdersCount(OrdersCountDataWithChart ordersToday);
-
-		void setDeliveriesThisYear(ColumnChartData deliveriesThisYear);
-
-		void setDeliveriesThisMonth(ColumnChartData deliveriesThisMonth);
 
 		void setProductDeliveriesThisMonth(ProductDeliveriesChartData productDeliveriesThisMonth);
 
