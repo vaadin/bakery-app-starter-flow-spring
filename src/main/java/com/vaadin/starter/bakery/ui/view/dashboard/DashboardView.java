@@ -9,12 +9,9 @@ import java.util.Optional;
 import java.util.stream.IntStream;
 
 import com.vaadin.addon.charts.Chart;
-import com.vaadin.addon.charts.model.AxisTitle;
 import com.vaadin.addon.charts.model.ChartType;
 import com.vaadin.addon.charts.model.Configuration;
 import com.vaadin.addon.charts.model.ListSeries;
-import com.vaadin.addon.charts.model.XAxis;
-import com.vaadin.addon.charts.model.YAxis;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.data.selection.SelectionEvent;
@@ -153,16 +150,10 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 		
 		conf.setTitle("Sales last years");
 
-		XAxis xAxis = new XAxis();
-		xAxis.setVisible(false);
-		xAxis.setCategories(MONTH_LABELS);
-		conf.addxAxis(xAxis);
+		conf.getxAxis().setVisible(false);
+		conf.getxAxis().setCategories(MONTH_LABELS);
 
-		YAxis yAxis = new YAxis();
-		AxisTitle title = new AxisTitle();
-		title.setText(null);
-		yAxis.setTitle(title);
-		conf.addyAxis(yAxis);
+		conf.getyAxis().getTitle().setText(null);
 
 		int year = Year.now().getValue();
 		for (int i = 0; i < 3; i++) {
