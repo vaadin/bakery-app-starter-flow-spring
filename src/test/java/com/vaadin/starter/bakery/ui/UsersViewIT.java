@@ -12,6 +12,7 @@ import com.vaadin.starter.bakery.elements.PasswordFieldElement;
 import com.vaadin.starter.bakery.elements.TextFieldElement;
 import com.vaadin.starter.bakery.ui.components.ItemDetailDialogElement;
 import com.vaadin.starter.bakery.ui.components.UserEditElement;
+import com.vaadin.starter.bakery.ui.utils.messages.Message;
 import com.vaadin.starter.bakery.ui.view.StorefrontViewElement;
 
 public class UsersViewIT extends AbstractIT {
@@ -68,8 +69,7 @@ public class UsersViewIT extends AbstractIT {
 		page.getGridCell("barista@vaadin.com").click();
 		page.getUserEdit().getEditForm().getDeleteButton().click();
 
-		ConfirmationDialogElement dialog = page.getConfirmDialog();
-		dialog.confirm();
+	    Message.confirm();
 
 		PaperToastElement toast = $(PaperToastElement.class).onPage().id("_persistentToast");
 		Assert.assertEquals(MODIFY_LOCKED_USER_NOT_PERMITTED, toast.getText());
