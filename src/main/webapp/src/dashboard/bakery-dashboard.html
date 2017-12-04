@@ -2,9 +2,10 @@
 <link rel="import" href="../../bower_components/vaadin-board/vaadin-board.html">
 <link rel="import" href="../../bower_components/vaadin-board/vaadin-board-row.html">
 <link rel="import" href="../app/style-modules/bakery-charts-default-theme.html">
-<link rel="import" href="../../bower_components/vaadin-charts/vaadin-chart.html">
+
 <link rel="import" href="dashboard-orders-counter.html">
 <link rel="import" href="dashboard-column-chart.html">
+<link rel="import" href="dashboard-pie-chart.html">
 <link rel="import" href="dashboard-counter-label.html">
 
 <dom-module id="bakery-dashboard">
@@ -18,16 +19,37 @@
         overflow-y: scroll;
       }
 
-      vaadin-board-row:not(.small) {
+      .vaadin-board-cell {
+        /*
+         If a cell in a vaadin-board has margins or padding it needs to be wrapped into
+         a div to work around the IE11 flex box issue. See the Known Issues section at
+         https://vaadin.com/docs/v8/board/webcomponents-api/board-basic-use.html
+
+         This class is an indicator for such divs.
+        */
+      }
+
+      dashboard-pie-chart {
+        --fourth-row-style: {
+          border-radius: 4px;
+          box-shadow: 0 2px 5px 0 rgba(23, 68, 128, 0.1);
+          height: calc(40vh - 64px) !important;
+          min-height: 355px;
+        }
+      }
+
+      vaadin-board-row > * {
         --margin-style: {
           margin: 12px 6px;
         };
       }
 
-      vaadin-board-row.small {
-        --margin-style: {
-          margin: 6px 0;
-        };
+      .column-chart {
+        box-shadow: 0 2px 5px 0 rgba(23, 68, 128, 0.1);
+        border-radius: 4px;
+        margin: 12px 6px;
+        height: calc(20vh - 64px) !important;
+        min-height: 150px;
       }
 
       #yearly-sales-graph {
@@ -62,14 +84,18 @@
         <dashboard-counter-label label-data="[[tomorrowOrdersCount]]" class="gray"></dashboard-counter-label>
       </vaadin-board-row>
       <vaadin-board-row>
-        <dashboard-column-chart data="[[deliveriesThisMonth]]"></dashboard-column-chart>
-        <dashboard-column-chart data="[[deliveriesThisYear]]"></dashboard-column-chart>
+        <div class="vaadin-board-cell">
+          <vaadin-chart id="deliveries-this-month" class="column-chart"></vaadin-chart>
+        </div>
+        <div class="vaadin-board-cell">
+          <vaadin-chart id="deliveries-this-year" class="column-chart"></vaadin-chart>
+        </div>
       </vaadin-board-row>
       <vaadin-board-row>
         <vaadin-chart id="yearly-sales-graph" class="yearly-sales"></vaadin-chart>
       </vaadin-board-row>
       <vaadin-board-row>
-      <div>
+      <div class="vaadin-board-cell">
           <vaadin-chart id="monthly-product-split" class="product-split-donut"></vaadin-chart >
       </div>
         <!-- If a cell in a vaadin-board has padding it needs to be wrapped into a div
