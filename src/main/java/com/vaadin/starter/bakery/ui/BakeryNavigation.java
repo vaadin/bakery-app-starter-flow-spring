@@ -58,7 +58,6 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> {
 	    if (href.equals("foo")) {
 	        return;
 	    }
-
 		UI.getCurrent().navigateTo(href);
 	}
 }
