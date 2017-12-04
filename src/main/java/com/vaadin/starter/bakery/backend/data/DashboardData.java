@@ -10,7 +10,6 @@ public class DashboardData {
 	private DeliveryStats deliveryStats;
 	private List<Number> deliveriesThisMonth;
 	private List<Number> deliveriesThisYear;
-	private Object salesLastYears;
 	private Number[][] salesPerMonth;
 	private LinkedHashMap<Product, Integer> productDeliveries;
 
@@ -36,18 +35,6 @@ public class DashboardData {
 
 	public void setDeliveriesThisYear(List<Number> deliveriesThisYear) {
 		this.deliveriesThisYear = deliveriesThisYear;
-	}
-
-	public Object getSalesLastYears() {
-		return salesLastYears;
-	}
-
-	public void setSalesLastYears(Object salesLastYears) {
-		this.salesLastYears = salesLastYears;
-	}
-
-	public Number[][] getSalesPerMonth() {
-		return salesPerMonth;
 	}
 
 	public void setSalesPerMonth(Number[][] salesPerMonth) {

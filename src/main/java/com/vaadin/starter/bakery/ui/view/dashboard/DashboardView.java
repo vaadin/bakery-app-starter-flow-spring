@@ -27,7 +27,6 @@ import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider;
-import com.vaadin.starter.bakery.ui.entities.chart.ColumnChartData;
 import com.vaadin.starter.bakery.ui.entities.chart.ProductDeliveriesChartData;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.utils.DashboardUtils;

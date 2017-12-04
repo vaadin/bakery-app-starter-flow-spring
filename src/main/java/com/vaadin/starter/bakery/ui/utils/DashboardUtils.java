@@ -6,12 +6,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.vaadin.addon.charts.model.AxisTitle;
@@ -19,14 +16,12 @@ import com.vaadin.addon.charts.model.ChartType;
 import com.vaadin.addon.charts.model.Configuration;
 import com.vaadin.addon.charts.model.Legend;
 import com.vaadin.addon.charts.model.ListSeries;
-import com.vaadin.addon.charts.model.PlotOptionsColumn;
 import com.vaadin.addon.charts.model.XAxis;
 import com.vaadin.addon.charts.model.YAxis;
 import com.vaadin.starter.bakery.backend.data.DeliveryStats;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
-import com.vaadin.starter.bakery.ui.entities.chart.ColumnChartData;
 import com.vaadin.starter.bakery.ui.entities.chart.ProductDeliveriesChartData;
 
 public class DashboardUtils {
@@ -72,10 +67,6 @@ public class DashboardUtils {
 		title.setText(null);
 		yAxis.setTitle(title);
 		conf.addyAxis(yAxis);
-
-		PlotOptionsColumn plotOptions = new PlotOptionsColumn();
-		plotOptions.setPointWidth(20);
-		conf.setPlotOptions(plotOptions);
 
 		Legend legend = new Legend();
 		legend.setEnabled(false);
