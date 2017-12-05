@@ -39,7 +39,7 @@
         <node.version>v8.1.2</node.version>
         <yarn.version>v0.27.5</yarn.version>
         <buildtools.directory>build-tools</buildtools.directory>
-        <frontend.directory>src/main/webapp</frontend.directory>
+        <frontend.directory>src/main/webapp/frontend</frontend.directory>
     </properties>
 
     <repositories>
@@ -447,7 +447,7 @@
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <configuration>
-                            <jvmArguments>-Dvaadin.frontend.url.es5=context://build/frontend-es5/ -Dvaadin.frontend.url.es6=context://build/frontend-es6/ -Dvaadin.productionMode</jvmArguments>
+                            <jvmArguments>-Dvaadin.frontend.url.es5=context://frontend/build/frontend-es5/ -Dvaadin.frontend.url.es6=context://frontend/build/frontend-es6/ -Dvaadin.productionMode</jvmArguments>
                         </configuration>
                     </plugin>
                 </plugins>
