@@ -131,6 +131,19 @@
             <artifactId>vaadin-board-flow</artifactId>
             <version>1.1.0-beta1</version>
         </dependency>
+
+        <!-- override the default versions coming from vaadin-bom/vaadin-webjars-bom -->
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>vaadin-grid</artifactId>
+            <version>4.1.0-alpha3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>vaadin-valo-theme</artifactId>
+            <version>2.0.0-alpha5</version>
+        </dependency>
+
         <!-- End of Vaadin -->
         <!-- Iron and paper elements -->
         <dependency>
