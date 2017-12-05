@@ -4,7 +4,6 @@
 <link rel="import" href="../app/style-modules/bakery-charts-default-theme.html">
 
 <link rel="import" href="dashboard-orders-counter.html">
-<link rel="import" href="dashboard-pie-chart.html">
 <link rel="import" href="dashboard-counter-label.html">
 
 <dom-module id="bakery-dashboard">
@@ -64,6 +63,15 @@
         min-height: 355px;
       }
 
+      #monthly-product-split {
+        @apply --margin-style;
+        border-radius: 4px;
+        box-shadow: 0 2px 5px 0 rgba(23, 68, 128, 0.1);
+        height: calc(40vh - 64px) !important;
+        min-height: 355px;
+        overflow: hidden;
+      }
+
     </style>
 
     <vaadin-board>
@@ -85,7 +93,9 @@
         <vaadin-chart id="yearly-sales-graph" class="yearly-sales"></vaadin-chart>
       </vaadin-board-row>
       <vaadin-board-row>
-        <dashboard-pie-chart data="[[productDeliveriesThisMonth]]"></dashboard-pie-chart>
+        <div class="vaadin-board-cell">
+          <vaadin-chart id="monthly-product-split" class="product-split-donut"></vaadin-chart >
+        </div>
         <div class="vaadin-board-cell">
           <vaadin-grid id="orders-grid"></vaadin-grid>
         </div>

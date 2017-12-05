@@ -1,19 +1,25 @@
 package com.vaadin.starter.bakery.ui.view.dashboard;
 
+import static com.vaadin.starter.bakery.ui.utils.FormattingUtils.getFullMonthName;
+
 import java.time.LocalDate;
 import java.time.MonthDay;
 import java.time.Year;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.addon.charts.Chart;
 import com.vaadin.addon.charts.model.ChartType;
 import com.vaadin.addon.charts.model.Configuration;
+import com.vaadin.addon.charts.model.DataSeries;
+import com.vaadin.addon.charts.model.DataSeriesItem;
 import com.vaadin.addon.charts.model.ListSeries;
-import org.springframework.beans.factory.annotation.Autowired;
-
+import com.vaadin.addon.charts.model.PlotOptionsPie;
 import com.vaadin.data.selection.SelectionEvent;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.router.PageTitle;
@@ -25,9 +31,9 @@ import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider;
-import com.vaadin.starter.bakery.ui.entities.chart.ProductDeliveriesChartData;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.utils.DashboardUtils;
+import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.starter.bakery.ui.utils.OrdersCountData;
 import com.vaadin.starter.bakery.ui.utils.OrdersCountDataWithChart;
 import com.vaadin.starter.bakery.ui.view.storefront.OrderDetailsBrief;
@@ -37,8 +43,6 @@ import com.vaadin.ui.grid.Grid;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import com.vaadin.ui.renderers.ComponentRenderer;
-
-import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 
 @Tag("bakery-dashboard")
 @HtmlImport("src/dashboard/bakery-dashboard.html")
@@ -63,6 +67,9 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 	@Id("orders-grid")
 	private Grid<Order> grid;
 
+	@Id("monthly-product-split")
+	private Chart monthlyProductSplit;
+	
 	@Autowired
 	public DashboardView(OrderService orderService, OrdersGridDataProvider orderDataProvider) {
 		this.orderService = orderService;
@@ -80,7 +87,22 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 		populateYearlySalesChart(data);
 		populateDeliveriesCharts(data);
 		populateOrdersCounts(data.getDeliveryStats());
-		populateDeliveriesPerProductChart(data.getProductDeliveries());
+		initProductSplitMonthlyGraph(data.getProductDeliveries());
+	}
+
+	private void initProductSplitMonthlyGraph(Map<Product, Integer> productDeliveries) {
+
+		LocalDate today = LocalDate.now();
+
+		Configuration conf = monthlyProductSplit.getConfiguration();
+		conf.getChart().setType(ChartType.PIE);
+		conf.setTitle("Products delivered in " + getFullMonthName(today));
+		DataSeries deliveriesPerProductSeries = new DataSeries(productDeliveries.entrySet().stream()
+				.map(e -> new DataSeriesItem(e.getKey().getName(), e.getValue())).collect(Collectors.toList()));
+		PlotOptionsPie plotOptionsPie = new PlotOptionsPie();
+		plotOptionsPie.setInnerSize("60%");
+		deliveriesPerProductSeries.setPlotOptions(plotOptionsPie);
+		conf.addSeries(deliveriesPerProductSeries);
 	}
 
 	private void populateOrdersCounts(DeliveryStats deliveryStats) {
@@ -93,10 +115,6 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 		getModel()
 		.setNewOrdersCount(DashboardUtils.getNewOrdersCountData(deliveryStats, orders.get(orders.size() - 1)));
 		getModel().setTomorrowOrdersCount(DashboardUtils.getTomorrowOrdersCountData(deliveryStats, orders.iterator()));
-	}
-
-	private void populateDeliveriesPerProductChart(Map<Product, Integer> productDeliveries) {
-		getModel().setProductDeliveriesThisMonth(DashboardUtils.getDeliveriesPerProductPieChartData(productDeliveries));
 	}
 
 	private void onOrdersGridSelectionChanged(SelectionEvent<Order> e) {
@@ -170,7 +188,6 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 
 		void setTodayOrdersCount(OrdersCountDataWithChart ordersToday);
 
-		void setProductDeliveriesThisMonth(ProductDeliveriesChartData productDeliveriesThisMonth);
 
 	}
 

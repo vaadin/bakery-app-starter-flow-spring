@@ -1,27 +1,17 @@
 package com.vaadin.starter.bakery.ui.utils;
 
-import static com.vaadin.starter.bakery.ui.utils.FormattingUtils.getFullMonthName;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Iterator;
-import java.util.Map;
 
 import com.vaadin.starter.bakery.backend.data.DeliveryStats;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
-import com.vaadin.starter.bakery.backend.data.entity.Product;
-import com.vaadin.starter.bakery.ui.entities.chart.ProductDeliveriesChartData;
 
 public class DashboardUtils {
 
-	public static ProductDeliveriesChartData getDeliveriesPerProductPieChartData(
-			Map<Product, Integer> productDeliveries) {
-		return new ProductDeliveriesChartData("Products delivered in " + getFullMonthName(LocalDate.now()), "count",
-				productDeliveries);
-	}
 
 	private static final String NEXT_DELIVERY_PATTERN = "Next Delivery %s";
 
