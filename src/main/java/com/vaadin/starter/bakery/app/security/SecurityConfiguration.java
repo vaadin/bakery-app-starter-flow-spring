@@ -1,7 +1,6 @@
 package com.vaadin.starter.bakery.app.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,7 +8,6 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 
@@ -35,18 +33,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	private final UserDetailsService userDetailsService;
 
+	private final PasswordEncoder passwordEncoder;
+	
 	@Autowired
-	public SecurityConfiguration(UserDetailsService userDetailsService) {
+	public SecurityConfiguration(UserDetailsService userDetailsService,PasswordEncoder passwordEncoder) {
 		this.userDetailsService = userDetailsService;
+		this.passwordEncoder = passwordEncoder;
 	}
 
-	/**
-	 * The password encoder to use when encrypting passwords.
-	 */
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
 
 	/**
 	 * Registers our UserDetailsService and the password encoder to be used on login attempts.
@@ -54,7 +48,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		super.configure(auth);
-		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
 	}
 
 	/**
@@ -104,6 +98,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 				// development-mode static resources
 				"/bower_components/**", "/icons/**", "/images/**", "/src/**", "/manifest.json",
+
+				// resources from the framework jars
+				"/*.html", "/*.js",
 
 				// development-mode webjars
 				"/webjars/**",
