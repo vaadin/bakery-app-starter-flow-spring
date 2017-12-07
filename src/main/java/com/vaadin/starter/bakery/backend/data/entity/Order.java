@@ -9,6 +9,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedAttributeNode;
@@ -16,6 +17,7 @@ import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderColumn;
+import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -31,6 +33,8 @@ import com.vaadin.starter.bakery.backend.data.OrderState;
 		@NamedAttributeNode("customer"),
 		@NamedAttributeNode("pickupLocation")
 })
+@Table(indexes=@Index(columnList="dueDate"))
+
 public class Order extends AbstractEntity {
 
 	@NotNull
@@ -39,7 +43,6 @@ public class Order extends AbstractEntity {
 	private LocalTime dueTime;
 	@NotNull
 	@ManyToOne
-	@Fetch(FetchMode.JOIN)
 	private PickupLocation pickupLocation;
 	@NotNull
 	@OneToOne(cascade = CascadeType.ALL)
