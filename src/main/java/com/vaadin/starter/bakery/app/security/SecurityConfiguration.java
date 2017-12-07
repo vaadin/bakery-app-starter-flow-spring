@@ -1,6 +1,7 @@
 package com.vaadin.starter.bakery.app.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -8,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 
@@ -33,14 +35,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	private final UserDetailsService userDetailsService;
 
-	private final PasswordEncoder passwordEncoder;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
-	public SecurityConfiguration(UserDetailsService userDetailsService,PasswordEncoder passwordEncoder) {
+	public SecurityConfiguration(UserDetailsService userDetailsService) {
 		this.userDetailsService = userDetailsService;
-		this.passwordEncoder = passwordEncoder;
 	}
 
+	/**
+	 * The password encoder to use when encrypting passwords.
+	 */
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
 	/**
 	 * Registers our UserDetailsService and the password encoder to be used on login attempts.

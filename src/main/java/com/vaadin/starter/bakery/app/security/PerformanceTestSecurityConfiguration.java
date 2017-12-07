@@ -17,7 +17,6 @@ import com.vaadin.starter.bakery.backend.data.Role;
 /**
  * Allows accessing all views without login for performance testing.
  */
-
 @Configuration
 @Order(1)
 @Profile("performance-test")
