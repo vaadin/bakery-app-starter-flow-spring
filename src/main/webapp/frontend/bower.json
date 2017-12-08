@@ -17,7 +17,7 @@
     "paper-toast": "^2.0.0",
     "vaadin": "vaadin/vaadin#10.0.0-alpha7",
     "vaadin-grid": "vaadin/vaadin-grid#4.1.0-alpha3",
-    "vaadin-charts": "vaadin/vaadin-charts#6.0.0-alpha4"
+    "vaadin-charts": "vaadin/vaadin-charts#6.0.0-alpha6"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0"
