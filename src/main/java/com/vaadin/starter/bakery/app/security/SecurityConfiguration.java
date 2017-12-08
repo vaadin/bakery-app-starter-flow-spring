@@ -106,7 +106,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				"/favicon.ico",
 
 				// development-mode static resources
-				"/frontend/bower_components/**", "/icons/**", "/frontend/images/**", "/frontend/src/**", "/frontend/manifest.json",
+				"/frontend/bower_components/**", "/icons/**", "/frontend/images/**", "/frontend/src/**", "/manifest.json",
 
 				// resources from the framework jars
 				"/*.html", "/*.js",
