@@ -27,7 +27,7 @@ import com.vaadin.ui.grid.Grid;
 import com.vaadin.ui.grid.GridSingleSelectionModel;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
-import com.vaadin.ui.renderers.ComponentRenderer;
+import com.vaadin.ui.renderers.ComponentTemplateRenderer;
 
 @Tag("bakery-storefront")
 @HtmlImport("src/storefront/bakery-storefront.html")
@@ -68,7 +68,7 @@ implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 
 		grid.setSelectionMode(Grid.SelectionMode.SINGLE);
 		Map<Order, StorefrontOrderCard> components = new HashMap<>();
-		grid.addColumn(new ComponentRenderer<>(order -> {
+		grid.addColumn(new ComponentTemplateRenderer<>(order -> {
 			StorefrontOrderCard orderCard = new StorefrontOrderCard();
 			orderCard.setOrder(order);
 			orderCard.setHeader(presenter.getHeaderByOrderId(order.getId()));

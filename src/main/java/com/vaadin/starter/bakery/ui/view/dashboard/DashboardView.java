@@ -42,7 +42,7 @@ import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.grid.Grid;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
-import com.vaadin.ui.renderers.ComponentRenderer;
+import com.vaadin.ui.renderers.ComponentTemplateRenderer;
 
 @Tag("bakery-dashboard")
 @HtmlImport("src/dashboard/bakery-dashboard.html")
@@ -74,7 +74,7 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 	public DashboardView(OrderService orderService, OrdersGridDataProvider orderDataProvider) {
 		this.orderService = orderService;
 
-		grid.addColumn(new ComponentRenderer<>(order -> {
+		grid.addColumn(new ComponentTemplateRenderer<>(order -> {
 			OrderDetailsBrief item = new OrderDetailsBrief();
 			item.setOrder(order);
 			return item;
