@@ -9,9 +9,9 @@ gulp.task('lint', ['lint:js', 'lint:html', 'lint:css']);
 
 gulp.task('lint:js', function() {
   return gulp.src([
-    '../src/main/webapp/*.js',
-    '../src/main/webapp/src/**/*.js',
-    '../src/main/webapp/test/**/*.js'
+    '../src/main/webapp/frontend/*.js',
+    '../src/main/webapp/frontend/src/**/*.js',
+    '../src/main/webapp/frontend/test/**/*.js'
   ])
     .pipe(eslint())
     .pipe(eslint.format())
@@ -20,10 +20,10 @@ gulp.task('lint:js', function() {
 
 gulp.task('lint:html', function() {
   return gulp.src([
-    '../src/main/webapp/*.html',
-    '!../src/main/webapp/flow-component-renderer.html',
-    '../src/main/webapp/src/**/*.html',
-    '../src/main/webapp/test/**/*.html'
+    '../src/main/webapp/frontend/*.html',
+    '!../src/main/webapp/frontend/flow-component-renderer.html',
+    '../src/main/webapp/frontend/src/**/*.html',
+    '../src/main/webapp/frontend/test/**/*.html'
   ])
     .pipe(htmlExtract({
       sel: 'script, code-example code',
@@ -36,10 +36,10 @@ gulp.task('lint:html', function() {
 
 gulp.task('lint:css', function() {
   return gulp.src([
-    '../src/main/webapp/*.html',
-    '!../src/main/webapp/flow-component-renderer.html',
-    '../src/main/webapp/src/**/*.html',
-    '../src/main/webapp/test/**/*.html'
+    '../src/main/webapp/frontend/*.html',
+    '!../src/main/webapp/frontend/flow-component-renderer.html',
+    '../src/main/webapp/frontend/src/**/*.html',
+    '../src/main/webapp/frontend/test/**/*.html'
   ])
     .pipe(htmlExtract({
       sel: 'style'
