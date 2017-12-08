@@ -25,6 +25,6 @@
   "private": true,
   "resolutions": {
     "vaadin-grid": "4.1.0-alpha3",
-    "vaadin-charts": "6.0.0-alpha4"
+    "vaadin-charts": "6.0.0-alpha6"
   }
 }
