@@ -36,6 +36,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	private final UserDetailsService userDetailsService;
 
 	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
 	public SecurityConfiguration(UserDetailsService userDetailsService) {
 		this.userDetailsService = userDetailsService;
 	}
@@ -54,7 +57,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		super.configure(auth);
-		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
 	}
 
 	/**
@@ -104,6 +107,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 				// development-mode static resources
 				"/frontend/bower_components/**", "/icons/**", "/frontend/images/**", "/frontend/src/**", "/frontend/manifest.json",
+
+				// resources from the framework jars
+				"/*.html", "/*.js",
 
 				// development-mode webjars
 				"/webjars/**",

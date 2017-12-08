@@ -31,7 +31,7 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> {
 	}
 
 	public void updateNavigationBar() {
-		if (!pagesAdded && SecurityUtils.isUserLoggedIn()) {
+		if (!pagesAdded) {
 			setupNavigationButtons();
 			pagesAdded = true;
 		}

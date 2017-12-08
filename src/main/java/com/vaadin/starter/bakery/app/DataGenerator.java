@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -44,8 +43,6 @@ public class DataGenerator implements HasLogger {
 			"Whitney", "Farmer", "Henry", "Chen", "Macias", "Rowland", "Pierce", "Cortez", "Noble", "Howard", "Nixon",
 			"Mcbride", "Leblanc", "Russell", "Carver", "Benton", "Maldonado", "Lyons" };
 
-	private final PasswordEncoder passwordEncoder;
-
 	private final Random random = new Random(1L);
 
 	private final List<PickupLocation> pickupLocations = new ArrayList<>();
@@ -55,11 +52,6 @@ public class DataGenerator implements HasLogger {
 	private User baker;
 	private User barista;
 	private User admin;
-
-	@Autowired
-	public DataGenerator(PasswordEncoder passwordEncoder) {
-		this.passwordEncoder = passwordEncoder;
-	}
 
 	@Bean
 	public CommandLineRunner loadData(OrderRepository orders, UserRepository users, ProductRepository products,
@@ -72,7 +64,7 @@ public class DataGenerator implements HasLogger {
 
 			getLogger().info("Generating demo data");
 			getLogger().info("... generating users");
-			createUsers(users);
+			createUsers(users,passwordEncoder);
 			getLogger().info("... generating products");
 			createProducts(products);
 			getLogger().info("... generating pickup locations");
@@ -321,7 +313,7 @@ public class DataGenerator implements HasLogger {
 		return name;
 	}
 
-	private void createUsers(UserRepository userRepository) {
+	private void createUsers(UserRepository userRepository, PasswordEncoder passwordEncoder) {
 		User user = new User("baker@vaadin.com", "Heidi", "Carter",
 				passwordEncoder.encode("baker"), Role.BAKER,
 				"https://randomuser.me/api/portraits/women/76.jpg");
