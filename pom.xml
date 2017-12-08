@@ -386,7 +386,7 @@
                                             <artifactId>flow-server</artifactId>
                                             <type>jar</type>
                                             <overWrite>true</overWrite>
-                                            <includes>META-INF/resources/flow-component-renderer.html</includes>
+                                            <includes>META-INF/resources/frontend/flow-component-renderer.html</includes>
                                             <outputDirectory>${project.build.directory}</outputDirectory>
                                         </artifactItem>
                                     </artifactItems>
@@ -410,7 +410,7 @@
                                     <outputDirectory>${frontend.directory}</outputDirectory>
                                     <resources>
                                         <resource>
-                                            <directory>${project.build.directory}/META-INF/resources</directory>
+                                            <directory>${project.build.directory}/META-INF/resources/frontend</directory>
                                             <includes>flow-component-renderer.html</includes>
                                         </resource>
                                     </resources>
