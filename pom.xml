@@ -119,12 +119,12 @@
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-charts-flow</artifactId>
-            <version>6.0.0.alpha3</version>
+            <version>6.0.0.alpha6</version>
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-charts-webjar</artifactId>
-            <version>6.0.0-alpha4</version>
+            <version>6.0.0-alpha6</version>
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
