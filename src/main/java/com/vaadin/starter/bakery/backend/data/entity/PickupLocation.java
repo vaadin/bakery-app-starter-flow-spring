@@ -4,11 +4,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.Size;
 
-import org.hibernate.annotations.BatchSize;
 import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
-@BatchSize(size=5)
 public class PickupLocation extends AbstractEntity {
 
 	@Size(max = 255)
