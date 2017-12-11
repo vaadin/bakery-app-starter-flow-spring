@@ -18,6 +18,7 @@ import org.vaadin.artur.spring.dataprovider.FilterablePageableDataProvider;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * A singleton pageable order data provider.
@@ -28,7 +29,8 @@ public class OrdersGridDataProvider extends FilterablePageableDataProvider<Order
 
 	private final OrderService orderService;
 	private List<QuerySortOrder> defaultSortOrders;
-
+	private Consumer<Page<Order>> pageObserver;
+	
 	@Autowired
 	public OrdersGridDataProvider(OrderService orderService) {
 		this.orderService = orderService;
@@ -50,9 +52,11 @@ public class OrdersGridDataProvider extends FilterablePageableDataProvider<Order
 	@Override
 	protected Page<Order> fetchFromBackEnd(Query<Order, OrderFilter> query, Pageable pageable) {
 		OrderFilter filter = query.getFilter().orElse(OrderFilter.getEmptyFilter());
-		return orderService
-				.findAnyMatchingAfterDueDate(Optional.of(filter.getFilter()), getFilterDate(filter.isShowPrevious()),
-						pageable);
+		Page<Order> page = orderService.findAnyMatchingAfterDueDate(Optional.of(filter.getFilter()),
+				getFilterDate(filter.isShowPrevious()), pageable);
+		if (pageObserver != null)
+			pageObserver.accept(page);
+		return page;
 	}
 
 	@Override
@@ -74,4 +78,10 @@ public class OrdersGridDataProvider extends FilterablePageableDataProvider<Order
 
 		return Optional.of(LocalDate.now().minusDays(1));
 	}
+
+	public void setPageObserver(Consumer<Page<Order>> pageObserver) {
+		this.pageObserver = pageObserver;
+	}
+	
+	
 }

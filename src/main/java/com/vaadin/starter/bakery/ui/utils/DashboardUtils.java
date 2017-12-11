@@ -9,6 +9,7 @@ import java.util.Iterator;
 import com.vaadin.starter.bakery.backend.data.DeliveryStats;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
+import com.vaadin.starter.bakery.backend.data.entity.OrderSummary;
 
 public class DashboardUtils {
 
@@ -16,7 +17,7 @@ public class DashboardUtils {
 	private static final String NEXT_DELIVERY_PATTERN = "Next Delivery %s";
 
 	public static OrdersCountDataWithChart getTodaysOrdersCountData(DeliveryStats deliveryStats,
-			Iterator<Order> ordersIterator) {
+			Iterator<OrderSummary> ordersIterator) {
 		OrdersCountDataWithChart ordersCountData = new OrdersCountDataWithChart("Remaining Today", null,
 				deliveryStats.getDueToday() - deliveryStats.getDeliveredToday(), deliveryStats.getDueToday());
 
@@ -24,7 +25,7 @@ public class DashboardUtils {
 		LocalTime time = LocalTime.now();
 		while (ordersIterator.hasNext()) {
 
-			Order order = ordersIterator.next();
+			OrderSummary order = ordersIterator.next();
 			if (isOrderNextToDeliver(order, date, time)) {
 				if (order.getDueDate().isEqual(date))
 					ordersCountData.setSubtitle(String.format(NEXT_DELIVERY_PATTERN, order.getDueTime()));
@@ -39,7 +40,7 @@ public class DashboardUtils {
 		return ordersCountData;
 	}
 
-	private static boolean isOrderNextToDeliver(Order order, LocalDate nowDate, LocalTime nowTime) {
+	private static boolean isOrderNextToDeliver(OrderSummary order, LocalDate nowDate, LocalTime nowTime) {
 		// ready order starting from current time
 		return order.getState() == OrderState.READY
 				&& ((order.getDueDate().isEqual(nowDate) && order.getDueTime().isAfter(nowTime))
@@ -54,13 +55,13 @@ public class DashboardUtils {
 	}
 
 	public static OrdersCountData getTomorrowOrdersCountData(DeliveryStats deliveryStats,
-			Iterator<Order> ordersIterator) {
+			Iterator<OrderSummary> ordersIterator) {
 		OrdersCountData ordersCountData = new OrdersCountData("Tomorrow", null, deliveryStats.getDueTomorrow());
 
 		LocalDate date = LocalDate.now().plusDays(1);
 		LocalTime minTime = LocalTime.MAX;
 		while (ordersIterator.hasNext()) {
-			Order order = ordersIterator.next();
+			OrderSummary order = ordersIterator.next();
 			if (order.getDueDate().isBefore(date)) {
 				continue;
 			}

@@ -114,6 +114,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				// development-mode webjars
 				"/webjars/**",
 
+				//For debugging.
+				"/h2-console/**",
+
 				// production-mode static resources
 				"/frontend/build/**", "/frontend-es5/**", "/frontend-es6/**");
 	}

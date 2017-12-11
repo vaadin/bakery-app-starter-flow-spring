@@ -13,6 +13,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
+import com.vaadin.starter.bakery.backend.data.entity.OrderSummary;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
 	Page<Order> findByDueDateAfterAndStateIn(LocalDate dueDate, Collection<OrderState> states, Pageable page);
@@ -32,6 +33,13 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 	@Override
 	@EntityGraph(value = "Order.summary", type = EntityGraphType.LOAD)
 	List<Order> findAll();
+	
+	@EntityGraph(value = "Order.summary", type = EntityGraphType.LOAD)
+	List<OrderSummary> findByDueDateGreaterThanEqual(LocalDate dueDate);
+
+	@Override
+	@EntityGraph(value = "Order.full", type = EntityGraphType.LOAD)	
+	Order findOne(Long id);
 
 	long countByDueDateAfter(LocalDate dueDate);
 

@@ -14,7 +14,7 @@ import java.util.function.Function;
 import com.vaadin.flow.model.Convert;
 import com.vaadin.flow.model.Include;
 import com.vaadin.flow.model.TemplateModel;
-import com.vaadin.starter.bakery.backend.data.entity.Order;
+import com.vaadin.starter.bakery.backend.data.entity.OrderSummary;
 import com.vaadin.starter.bakery.ui.utils.converters.LongToStringConverter;
 import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
 import com.vaadin.ui.Component;
@@ -37,24 +37,24 @@ public class OrderDetailsBrief extends PolymerTemplate<OrderDetailsBrief.Model> 
 		@Include({ "id", "state", "customer.fullName", "items.product.name", "items.quantity" })
 		@Convert(value = LongToStringConverter.class, path = "id")
 		@Convert(value = OrderStateConverter.class, path = "state")
-		void setItem(Order order);
+		void setItem(OrderSummary order);
 	}
 
 	@Id("time-place")
 	private Div timePlace;
 
-	public void setOrder(Order order) {
+	public void setOrder(OrderSummary order) {
 		getModel().setItem(order);
 		timePlace.removeAll();
 		createComponents(order).forEach(timePlace::add);
 	}
 
-	private List<Component> createComponents(Order order) {
+	private List<Component> createComponents(OrderSummary order) {
 		LocalDate now = LocalDate.now();
 		LocalDate date = order.getDueDate();
 		List<Component> result = new ArrayList<>(3);
 
-		Function<Order, Component> PLACE = o -> createTimeComponent("place", o.getPickupLocation().getName());
+		Function<OrderSummary, Component> PLACE = o -> createTimeComponent("place", o.getPickupLocation().getName());
 
 		if (date.equals(now) || date.equals(now.minusDays(1))) {
 			// Today or yesterday
