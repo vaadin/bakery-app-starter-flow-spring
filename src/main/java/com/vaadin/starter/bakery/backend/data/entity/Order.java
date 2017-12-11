@@ -14,8 +14,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedEntityGraphs;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.validation.Valid;
@@ -29,13 +31,16 @@ import org.hibernate.validator.constraints.NotEmpty;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 
 @Entity(name = "OrderInfo") // "Order" is a reserved word
-@NamedEntityGraph(name = "Order.summary", attributeNodes = {
+@NamedEntityGraphs({@NamedEntityGraph(name = "Order.summary", attributeNodes = {
+		@NamedAttributeNode("customer")
+}),@NamedEntityGraph(name = "Order.full", attributeNodes = {
 		@NamedAttributeNode("customer"),
-		@NamedAttributeNode("pickupLocation")
-})
-@Table(indexes=@Index(columnList="dueDate"))
+		@NamedAttributeNode("pickupLocation"),
+		@NamedAttributeNode("history")
+})})
 
-public class Order extends AbstractEntity {
+@Table(indexes=@Index(columnList="dueDate"))
+public class Order extends AbstractEntity implements OrderSummary {
 
 	@NotNull
 	private LocalDate dueDate;
@@ -43,7 +48,9 @@ public class Order extends AbstractEntity {
 	private LocalTime dueTime;
 	@NotNull
 	@ManyToOne
+	@Fetch(FetchMode.SELECT)
 	private PickupLocation pickupLocation;
+
 	@NotNull
 	@OneToOne(cascade = CascadeType.ALL)
 	@Fetch(FetchMode.JOIN)
@@ -61,9 +68,8 @@ public class Order extends AbstractEntity {
 
 	private boolean paid;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-	@OrderColumn(name = "id")
-	@BatchSize(size = 1000)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OrderBy("timestamp")
 	private List<HistoryItem> history;
 
 	public Order(User createdBy) {
@@ -173,7 +179,6 @@ public class Order extends AbstractEntity {
 	@Override
 	public String toString() {
 		return "Order{" + "dueDate=" + dueDate + ", dueTime=" + dueTime + ", pickupLocation=" + pickupLocation
-				+ ", customer=" + customer + ", items=" + items + ", state=" + state + ", paid=" + paid + ", history="
-				+ history + '}';
+				+ ", customer=" + customer + ", items=" + items + ", state=" + state + ", paid=" + paid + '}';
 	}
 }

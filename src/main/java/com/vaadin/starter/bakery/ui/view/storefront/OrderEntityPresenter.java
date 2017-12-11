@@ -38,8 +38,9 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 		super(orderService, "Order");
 		this.orderService = orderService;
 		this.dataProvider = dataProvider;
-		headersGenerator = new StorefrontItemHeaderGenerator(orderService);
-		headersGenerator.updateHeaders("", false);
+		headersGenerator = new StorefrontItemHeaderGenerator();
+		headersGenerator.setShowPrevious(false);
+		dataProvider.setPageObserver(p -> headersGenerator.ordersRead(p.getContent()));
 	}
 
 	void init(StorefrontView view) {
@@ -94,14 +95,17 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 	}
 
 	void filterChanged(String filter, boolean showPrevious) {
-		headersGenerator.updateHeaders(filter, showPrevious);
+		headersGenerator.setShowPrevious(showPrevious);
 		dataProvider.setFilter(new OrderFilter(filter, showPrevious));
 	}
 
 	// StorefrontOrderCard presenter methods
 	void onOrderCardExpanded(StorefrontOrderCard orderCard) {
 		if (view.isDesktopView()) {
-			orderCard.setSelected(true);
+			executeJPAOperation(() -> {
+				Order fullOrder = orderService.load(orderCard.getOrder().getId());
+				orderCard.openCard(fullOrder);
+			});
 			view.resizeGrid();
 		} else {
 			loadEntity(orderCard.getOrder().getId(), false);
@@ -109,7 +113,7 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 	}
 
 	void onOrderCardCollapsed(StorefrontOrderCard orderCard) {
-		orderCard.setSelected(false);
+		orderCard.closeCard();
 		view.resizeGrid();
 	}
 
