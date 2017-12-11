@@ -24,21 +24,19 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.vaadin.starter.bakery.backend.data.OrderState;
 
 @Entity(name = "OrderInfo") // "Order" is a reserved word
 @NamedEntityGraphs({@NamedEntityGraph(name = "Order.summary", attributeNodes = {
-		@NamedAttributeNode("customer")
+		@NamedAttributeNode("customer"),
+		@NamedAttributeNode("pickupLocation")
 }),@NamedEntityGraph(name = "Order.full", attributeNodes = {
 		@NamedAttributeNode("customer"),
 		@NamedAttributeNode("pickupLocation"),
 		@NamedAttributeNode("history")
 })})
-
 @Table(indexes=@Index(columnList="dueDate"))
 public class Order extends AbstractEntity implements OrderSummary {
 
@@ -48,12 +46,10 @@ public class Order extends AbstractEntity implements OrderSummary {
 	private LocalTime dueTime;
 	@NotNull
 	@ManyToOne
-	@Fetch(FetchMode.SELECT)
 	private PickupLocation pickupLocation;
 
 	@NotNull
 	@OneToOne(cascade = CascadeType.ALL)
-	@Fetch(FetchMode.JOIN)
 	private Customer customer;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)

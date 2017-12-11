@@ -52,7 +52,7 @@ public class OrdersGridDataProvider extends FilterablePageableDataProvider<Order
 	@Override
 	protected Page<Order> fetchFromBackEnd(Query<Order, OrderFilter> query, Pageable pageable) {
 		OrderFilter filter = query.getFilter().orElse(OrderFilter.getEmptyFilter());
-		Page<Order> page = orderService.findAnyMatchingAfterDueDate(Optional.of(filter.getFilter()),
+		Page<Order> page = orderService.findAnyMatchingAfterDueDate(Optional.ofNullable(filter.getFilter()),
 				getFilterDate(filter.isShowPrevious()), pageable);
 		if (pageObserver != null)
 			pageObserver.accept(page);
@@ -68,7 +68,7 @@ public class OrdersGridDataProvider extends FilterablePageableDataProvider<Order
 	protected int sizeInBackEnd(Query<Order, OrderFilter> query) {
 		OrderFilter filter = query.getFilter().orElse(OrderFilter.getEmptyFilter());
 		return (int) orderService
-				.countAnyMatchingAfterDueDate(Optional.of(filter.getFilter()), getFilterDate(filter.isShowPrevious()));
+				.countAnyMatchingAfterDueDate(Optional.ofNullable(filter.getFilter()), getFilterDate(filter.isShowPrevious()));
 	}
 
 	private Optional<LocalDate> getFilterDate(boolean showPrevious) {
