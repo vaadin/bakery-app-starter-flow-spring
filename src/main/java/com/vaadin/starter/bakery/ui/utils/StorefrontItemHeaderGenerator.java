@@ -1,24 +1,16 @@
 package com.vaadin.starter.bakery.ui.utils;
 
-import com.vaadin.starter.bakery.backend.data.entity.Order;
-import com.vaadin.starter.bakery.backend.service.OrderService;
-import com.vaadin.starter.bakery.ui.entities.StorefrontItemHeader;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.function.BiPredicate;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
+
+import com.vaadin.starter.bakery.backend.data.entity.Order;
+import com.vaadin.starter.bakery.ui.entities.StorefrontItemHeader;
 
 public class StorefrontItemHeaderGenerator {
 

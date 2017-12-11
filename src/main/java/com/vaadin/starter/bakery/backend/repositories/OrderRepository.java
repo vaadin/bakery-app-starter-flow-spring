@@ -33,7 +33,11 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 	@Override
 	@EntityGraph(value = "Order.summary", type = EntityGraphType.LOAD)
 	List<Order> findAll();
-	
+
+	@Override
+	@EntityGraph(value = "Order.summary", type = EntityGraphType.LOAD)
+	Page<Order> findAll(Pageable pageable);
+
 	@EntityGraph(value = "Order.summary", type = EntityGraphType.LOAD)
 	List<OrderSummary> findByDueDateGreaterThanEqual(LocalDate dueDate);
 
