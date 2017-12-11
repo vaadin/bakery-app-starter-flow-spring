@@ -10,6 +10,7 @@ gulp.task('lint', ['lint:js', 'lint:html', 'lint:css']);
 gulp.task('lint:js', function() {
   return gulp.src([
     '../src/main/webapp/frontend/*.js',
+    '!../src/main/webapp/frontend/gridConnector.js',
     '../src/main/webapp/frontend/src/**/*.js',
     '../src/main/webapp/frontend/test/**/*.js'
   ])

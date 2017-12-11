@@ -19,9 +19,9 @@ import com.vaadin.starter.bakery.ui.view.wrapper.ComboboxBinderWrapper;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.combobox.ComboBox;
 import com.vaadin.ui.common.HtmlImport;
-import com.vaadin.ui.passwordfield.PasswordField;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
+import com.vaadin.ui.textfield.PasswordField;
 import com.vaadin.ui.textfield.TextField;
 
 @Tag("user-edit")

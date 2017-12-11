@@ -20,7 +20,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Dependencies -->
-        <vaadin.version>10.0.0.alpha7</vaadin.version>
+        <vaadin.version>10.0.0.alpha8</vaadin.version>
 
         <spring-boot.version>1.5.8.RELEASE</spring-boot.version>
         <failOnMissingWebXml>false</failOnMissingWebXml>
@@ -46,6 +46,11 @@
         <repository>
             <id>flow-internal-release</id>
             <url>https://repo.vaadin.com/nexus/content/repositories/flow</url>
+        </repository>
+
+        <repository>
+            <id>vaadin-prereleases</id>
+            <url>https://maven.vaadin.com/vaadin-prereleases/</url>
         </repository>
 
         <repository>
@@ -295,6 +300,7 @@
                             <directory>${frontend.directory}</directory>
                             <includes>
                                 <include>flow-component-renderer.html</include>
+                                <include>gridConnector.js</include>
                             </includes>
                         </fileset>
                     </filesets>
@@ -361,8 +367,9 @@
 
             <build>
                 <plugins>
-                    <!-- (3): unpack the flow-component-renderer.html component definition so that
-                         it can be included into the production frontend build -->
+                    <!-- (3): Unpack those frontend project dependencies that are embedded into Flow and Flow components
+                         JARs so that they can be included into the production frontend build. This step will become
+                         unnecessary after switching to the flow-maven-plugin -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-dependency-plugin</artifactId>
@@ -376,12 +383,23 @@
                                 </goals>
                                 <configuration>
                                     <artifactItems>
+                                        <!-- flow-component-renderer.html is a dependency of `ComponentTemplateRenderer` -->
                                         <artifactItem>
                                             <groupId>com.vaadin</groupId>
                                             <artifactId>flow-server</artifactId>
                                             <type>jar</type>
                                             <overWrite>true</overWrite>
-                                            <includes>META-INF/resources/flow-component-renderer.html</includes>
+                                            <includes>META-INF/resources/frontend/flow-component-renderer.html</includes>
+                                            <outputDirectory>${project.build.directory}</outputDirectory>
+                                        </artifactItem>
+
+                                        <!-- gridConnector.js is a dependency of `Grid<T>` -->
+                                        <artifactItem>
+                                            <groupId>com.vaadin</groupId>
+                                            <artifactId>vaadin-grid-flow</artifactId>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>
+                                            <includes>META-INF/resources/frontend/gridConnector.js</includes>
                                             <outputDirectory>${project.build.directory}</outputDirectory>
                                         </artifactItem>
                                     </artifactItems>
@@ -389,8 +407,8 @@
                             </execution>
                         </executions>
                     </plugin>
-                    <!-- (4): copy the flow-component-renderer.html component definition so that
-                         it can be included into the production frontend build -->
+                    <!-- (4): copy the JAR-embedded frontend dependencies into the location where they can be picked up
+                         by the production frontend build -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-resources-plugin</artifactId>
@@ -405,8 +423,8 @@
                                     <outputDirectory>${frontend.directory}</outputDirectory>
                                     <resources>
                                         <resource>
-                                            <directory>${project.build.directory}/META-INF/resources</directory>
-                                            <includes>flow-component-renderer.html</includes>
+                                            <directory>${project.build.directory}/META-INF/resources/frontend</directory>
+                                            <includes>flow-component-renderer.html,gridConnector.js</includes>
                                         </resource>
                                     </resources>
                                 </configuration>
