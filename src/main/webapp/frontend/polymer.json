@@ -9,7 +9,8 @@
   ],
   "extraDependencies": [
     "bower_components/webcomponentsjs/*.js",
-    "bower_components/webcomponentsjs/*.js.map"
+    "bower_components/webcomponentsjs/*.js.map",
+    "gridConnector.js"
   ],
   "lint": {
     "rules": ["polymer-2"]

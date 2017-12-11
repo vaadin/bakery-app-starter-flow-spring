@@ -1,2 +1,5 @@
-# unpacked from flow-server.jar!META-INF/resources/flow-component-renderer.html by `mvn install -Dvaadin.productionMode`
+# unpacked from flow-server.jar by `mvn install -Dvaadin.productionMode`
 flow-component-renderer.html
+
+# unpacked from vaadin-grid-flow.jar by `mvn install -Dvaadin.productionMode`
+gridConnector.js
