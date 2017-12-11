@@ -26,7 +26,7 @@ public class PickupLocationService {
 			String repositoryFilter = "%" + filter.get() + "%";
 			return pickupLocationRepository.findByNameLikeIgnoreCase(repositoryFilter, pageable);
 		} else {
-			return pickupLocationRepository.findByNameLikeIgnoreCase("%", pageable);
+			return pickupLocationRepository.findAll(pageable);
 		}
 	}
 
@@ -35,7 +35,7 @@ public class PickupLocationService {
 			String repositoryFilter = "%" + filter.get() + "%";
 			return pickupLocationRepository.countByNameLikeIgnoreCase(repositoryFilter);
 		} else {
-			return pickupLocationRepository.countByNameLikeIgnoreCase("%");
+			return pickupLocationRepository.count();
 		}
 	}
 
