@@ -67,7 +67,7 @@ public class StorefrontOrderCard extends PolymerTemplate<StorefrontOrderCard.Mod
 	public void openCard(Order fullOrder) {
 		orderDetailsFull = createOrderDetailsFull();
 		addToSlot(this, orderDetailsFull, "order-details-full");
-		orderDetailsFull.display(fullOrder, false);
+		updateOrder(fullOrder);
 		getModel().setSelected(true);
 	}
 

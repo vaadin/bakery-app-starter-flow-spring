@@ -31,13 +31,15 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 
 	private final OrderService orderService;
 	private final OrdersGridDataProvider dataProvider;
-
+	private final UserService userService;
+	
 	@Autowired
 	public OrderEntityPresenter(ProductService productService, OrderService orderService, UserService userService,
 			OrdersGridDataProvider dataProvider) {
 		super(orderService, "Order");
 		this.orderService = orderService;
 		this.dataProvider = dataProvider;
+		this.userService = userService;
 		headersGenerator = new StorefrontItemHeaderGenerator();
 		headersGenerator.setShowPrevious(false);
 		dataProvider.setPageObserver(p -> headersGenerator.ordersRead(p.getContent()));
@@ -72,6 +74,7 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 		});
 
 		view.setDataProvider(dataProvider);
+		view.getOpenedOrderEditor().setCurrentUser(userService.getCurrentUser());
 	}
 
 	@Override
@@ -118,14 +121,15 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 	}
 
 	void onOrderCardEdit(StorefrontOrderCard orderCard) {
-		onOrderCardCollapsed(orderCard);
-		edit(orderCard.getOrder().getId().toString());
+		Long id = orderCard.getOrder().getId();
+		view.getGrid().deselectAll();
+		edit(id.toString());
 	}
 
 	void onOrderCardAddComment(StorefrontOrderCard orderCard, String message) {
 		executeJPAOperation(() -> {
 			Order updated = orderService.addComment(orderCard.getOrder().getId(), message);
-			orderCard.setOrder(updated);
+			orderCard.updateOrder(updated);
 			view.resizeGrid();
 		});
 	}

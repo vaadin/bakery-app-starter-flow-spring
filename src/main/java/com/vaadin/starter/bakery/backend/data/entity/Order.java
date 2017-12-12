@@ -17,7 +17,6 @@ import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedEntityGraphs;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.OrderBy;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 import javax.validation.Valid;
@@ -65,7 +64,8 @@ public class Order extends AbstractEntity implements OrderSummary {
 	private boolean paid;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@OrderBy("timestamp")
+	@OrderColumn(name = "INDEX")
+	@JoinColumn
 	private List<HistoryItem> history;
 
 	public Order(User createdBy) {

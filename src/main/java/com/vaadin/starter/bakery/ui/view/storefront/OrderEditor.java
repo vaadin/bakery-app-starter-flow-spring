@@ -22,6 +22,7 @@ import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.PickupLocation;
+import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
@@ -89,6 +90,8 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 
 	private OrderItemsEditor items;
 
+	private User currentUser;
+	
 	private BeanValidationBinder<Order> binder = new BeanValidationBinder<>(Order.class);
 
 	private final LocalTimeConverter localTimeConverter = new LocalTimeConverter();
@@ -105,7 +108,8 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 		status.setDataProvider(DataProvider.ofItems(OrderState.values()));
 		status.addValueChangeListener(
 				e -> getModel().setStatus(DataProviderUtil.convertIfNotNull(e.getValue(), OrderState::name)));
-		binder.forField(new ComboboxBinderWrapper<>(status)).bind("state");
+		binder.forField(new ComboboxBinderWrapper<>(status)).bind(Order::getState,
+				(o, s) -> o.changeState(currentUser, s));
 		date.setValue(LocalDate.now());
 
 		SortedSet<LocalTime> timeValues = IntStream.rangeClosed(8, 16).mapToObj(i -> LocalTime.of(i, 0))
@@ -177,6 +181,10 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 
 	private void setTotalPrice(int totalPrice) {
 		getModel().setTotalPrice(FormattingUtils.formatAsCurrency(totalPrice));
+	}
+
+	public void setCurrentUser(User currentUser) {
+		this.currentUser = currentUser;
 	}
 
 }
