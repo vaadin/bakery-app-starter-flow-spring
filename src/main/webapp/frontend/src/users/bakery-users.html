@@ -1,13 +1,21 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/polymer/lib/utils/async.html">
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-column.html">
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-sorter.html">
+
+<link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
+<link rel="import" href="../../bower_components/vaadin-combo-box/vaadin-combo-box.html">
+<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
+<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-password-field.html">
+
 <link rel="import" href="../../bower_components/vaadin-valo-theme/icons.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
-<link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
 
-<link rel="import" href="../elements/items-view.html">
+<link rel="import" href="../../bower_components/starter-elements/starter-search-bar.html">
+<link rel="import" href="../../bower_components/starter-elements/starter-dialog.html">
+<link rel="import" href="../../bower_components/starter-elements/starter-buttons-bar.html">
+
 <link rel="import" href="../elements/utils-mixin.html">
 <link rel="import" href="user-edit.html">
 
@@ -17,15 +25,41 @@
       :host {
         max-width: none !important;
         display: flex;
+        flex-direction: column;
       }
+      vaadin-grid {
+        width: 100%;
+        height: 100%;
+      }
+      
+            
     </style>
 
-    <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
+      <starter-search-bar id="search-bar"></starter-search-bar>
 
-    <items-view id="bakery-users-items-view" desktop-view=[[desktopView]]>
       <vaadin-grid id="users-grid" slot="grid" theme="borderless"></vaadin-grid>
-      <slot name="user-editor" slot="editor"></slot>
-    </items-view>
+
+      <!--  dialogs are teleported to body, hence you need to inline styles -->
+      <starter-dialog id="dialog-editor" theme="right">
+		    <h3 id="title" class="header-title"></h3>
+		    
+		    <vaadin-form-layout style="flex: 1">
+		      <vaadin-text-field id="email" label="Email (login)" colspan="2"></vaadin-text-field>
+		      <br>
+		      <vaadin-text-field id="first" label="First Name" colspan="2"></vaadin-text-field>
+		      <vaadin-text-field id="last" label="Last Name" colspan="2"></vaadin-text-field>
+		      <br>
+		      <vaadin-password-field id="user-edit-password" label="Password" colspan="2"></vaadin-password-field>
+		      <br>
+		      <vaadin-combo-box id="role" label="Role" colspan="2"></vaadin-combo-box>
+		    </vaadin-form-layout>
+		    
+        <starter-buttons-bar id="buttons"
+          action1-text="Save" action2-text="Cancel" action3-text="Delete">
+        </starter-buttons-bar>
+		    
+		    <template><!-- vaadin-dialog fails if not present --></template>
+      </starter-dialog>
   </template>
 
   <script>

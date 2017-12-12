@@ -65,6 +65,11 @@
             <id>vaadin-addons</id>
             <url>http://maven.vaadin.com/vaadin-addons</url>
         </repository>
+
+        <repository>
+            <id>webjars</id>
+            <url>https://dl.bintray.com/webjars/maven</url>
+        </repository>
         
     </repositories>
 
@@ -179,7 +184,7 @@
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>github-com-vaadin-starter-elements</artifactId>
-            <version>0.0.2</version>
+            <version>0.0.5</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.webjars.bower</groupId>
