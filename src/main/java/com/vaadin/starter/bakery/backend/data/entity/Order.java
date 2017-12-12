@@ -28,17 +28,21 @@ import org.hibernate.validator.constraints.NotEmpty;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 
 @Entity(name = "OrderInfo") // "Order" is a reserved word
-@NamedEntityGraphs({@NamedEntityGraph(name = "Order.summary", attributeNodes = {
+@NamedEntityGraphs({@NamedEntityGraph(name = Order.ENTITY_GRAPTH_BRIEF, attributeNodes = {
 		@NamedAttributeNode("customer"),
 		@NamedAttributeNode("pickupLocation")
-}),@NamedEntityGraph(name = "Order.full", attributeNodes = {
+}),@NamedEntityGraph(name = Order.ENTITY_GRAPTH_FULL, attributeNodes = {
 		@NamedAttributeNode("customer"),
 		@NamedAttributeNode("pickupLocation"),
 		@NamedAttributeNode("history")
 })})
-@Table(indexes=@Index(columnList="dueDate"))
+@Table(indexes = @Index(columnList = "dueDate"))
 public class Order extends AbstractEntity implements OrderSummary {
 
+	public static final String ENTITY_GRAPTH_BRIEF = "Order.brief";
+	public static final String ENTITY_GRAPTH_FULL = "Order.full";
+	
+	
 	@NotNull
 	private LocalDate dueDate;
 	@NotNull
