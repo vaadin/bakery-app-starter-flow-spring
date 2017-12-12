@@ -18,6 +18,7 @@ import com.vaadin.starter.bakery.ui.event.SaveEvent;
 import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
 import com.vaadin.starter.bakery.ui.view.storefront.converter.StorefrontLocalDateConverter;
 import com.vaadin.starter.bakery.ui.view.storefront.event.CommentEvent;
+import com.vaadin.starter.bakery.ui.view.storefront.event.EditEvent;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
 import com.vaadin.ui.common.HasClickListeners;
@@ -72,6 +73,7 @@ public class OrderDetailsFull extends PolymerTemplate<OrderDetailsFull.Model> {
 		});
 		save.addClickListener(e -> fireEvent(new SaveEvent(this, false)));
 		cancel.addClickListener(e -> fireEvent(new CancelEvent(this, false)));
+		edit.addClickListener(e -> fireEvent(new EditEvent(this)));
 	}
 
 	public void display(Order order, boolean review) {
@@ -105,8 +107,8 @@ public class OrderDetailsFull extends PolymerTemplate<OrderDetailsFull.Model> {
 		return addListener(SaveEvent.class, listener);
 	}
 
-	public Registration addEditListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {
-		return edit.addClickListener(listener);
+	public Registration addEditListener(ComponentEventListener<EditEvent> listener) {
+		return addListener(EditEvent.class,listener);
 	}
 
 	public Registration addBackListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {

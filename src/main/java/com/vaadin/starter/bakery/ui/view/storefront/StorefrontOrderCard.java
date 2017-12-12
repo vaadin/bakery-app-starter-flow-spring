@@ -1,14 +1,16 @@
 package com.vaadin.starter.bakery.ui.view.storefront;
 
+import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
+
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
+import com.vaadin.starter.bakery.backend.data.entity.OrderSummary;
 import com.vaadin.starter.bakery.ui.entities.StorefrontItemHeader;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.view.storefront.event.CommentEvent;
+import com.vaadin.starter.bakery.ui.view.storefront.event.EditEvent;
 import com.vaadin.ui.Tag;
-import com.vaadin.ui.button.Button;
-import com.vaadin.ui.common.HasClickListeners;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.event.ComponentEventListener;
 import com.vaadin.ui.polymertemplate.Id;
@@ -30,46 +32,50 @@ public class StorefrontOrderCard extends PolymerTemplate<StorefrontOrderCard.Mod
 
 	public interface Model extends TemplateModel {
 		void setSelected(boolean selected);
-		boolean getSelected();
 
 		void setHeader(StorefrontItemHeader header);
 		void setDisplayHeader(boolean displayHeader);
 	}
 
-	private Order order;
+	private OrderSummary order;
 
 	@Id("order-details-brief")
 	private OrderDetailsBrief orderDetailsBrief;
-
-	private OrderDetailsFull orderDetailsFull = new OrderDetailsFull();
+	
+	private OrderDetailsFull orderDetailsFull;
 
 	public StorefrontOrderCard() {
-		orderDetailsFull.getElement().setAttribute("slot", "order-details-full");
 		getModel().setDisplayHeader(false);
-		setSelected(false);
+		getModel().setSelected(false);
 	}
 
-	public void setOrder(Order order) {
+	public void setOrder(OrderSummary order) {
 		this.order = order;
 		orderDetailsBrief.setOrder(order);
-		orderDetailsFull.display(order, false);
 	}
 
-	public Order getOrder() {
+	public void updateOrder(Order fullOrder) {
+		setOrder(fullOrder);
+		orderDetailsFull.display(fullOrder, false);
+	}
+
+	public OrderSummary getOrder() {
 		return order;
 	}
 
-	public void setSelected(boolean selected) {
-		if (selected) {
-			getElement().appendChild(orderDetailsFull.getElement());
-		} else {
-			orderDetailsFull.getElement().removeFromParent();
-		}
-		getModel().setSelected(selected);
+	public void openCard(Order fullOrder) {
+		orderDetailsFull = createOrderDetailsFull();
+		addToSlot(this, orderDetailsFull, "order-details-full");
+		updateOrder(fullOrder);
+		getModel().setSelected(true);
 	}
 
-	public boolean isSelected() {
-		return getModel().getSelected();
+	public void closeCard() {
+		if (orderDetailsFull != null) {
+			orderDetailsFull.getElement().removeFromParent();
+			orderDetailsFull = null;
+		}
+		getModel().setSelected(false);
 	}
 
 	public void setHeader(StorefrontItemHeader header) {
@@ -80,16 +86,24 @@ public class StorefrontOrderCard extends PolymerTemplate<StorefrontOrderCard.Mod
 		getModel().setHeader(header);
 		getModel().setDisplayHeader(true);
 	}
+	
+	private OrderDetailsFull createOrderDetailsFull() {
+		OrderDetailsFull result = new OrderDetailsFull();
+		result.addEditListener(this::fireEvent);
+		result.addCommentListener(this::fireEvent);
+		result.addCancelListener(this::fireEvent);
+		return result;
+	}
 
-	public Registration addEditListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {
-		return orderDetailsFull.addEditListener(listener);
+	public Registration addEditListener(ComponentEventListener<EditEvent> listener) {
+		return addListener(EditEvent.class, listener);
 	}
 
 	public Registration addCommentListener(ComponentEventListener<CommentEvent> listener) {
-		return orderDetailsFull.addCommentListener(listener);
+		return addListener(CommentEvent.class,listener);
 	}
 	
 	public Registration addCancelListener(ComponentEventListener<CancelEvent> listener) {
-		return orderDetailsFull.addCancelListener(listener);
+		return addListener(CancelEvent.class,listener);
 	}
 }

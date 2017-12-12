@@ -163,4 +163,8 @@ implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 		return openedOrderDetails;
 	}
 
+	Grid<Order> getGrid() {
+		return grid;
+	}
+	
 }

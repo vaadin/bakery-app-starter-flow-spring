@@ -31,15 +31,18 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 
 	private final OrderService orderService;
 	private final OrdersGridDataProvider dataProvider;
-
+	private final UserService userService;
+	
 	@Autowired
 	public OrderEntityPresenter(ProductService productService, OrderService orderService, UserService userService,
 			OrdersGridDataProvider dataProvider) {
 		super(orderService, "Order");
 		this.orderService = orderService;
 		this.dataProvider = dataProvider;
-		headersGenerator = new StorefrontItemHeaderGenerator(orderService);
-		headersGenerator.updateHeaders("", false);
+		this.userService = userService;
+		headersGenerator = new StorefrontItemHeaderGenerator();
+		headersGenerator.resetHeaderChain(false);
+		dataProvider.setPageObserver(p -> headersGenerator.ordersRead(p.getContent()));
 	}
 
 	void init(StorefrontView view) {
@@ -71,6 +74,7 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 		});
 
 		view.setDataProvider(dataProvider);
+		view.getOpenedOrderEditor().setCurrentUser(userService.getCurrentUser());
 	}
 
 	@Override
@@ -94,14 +98,17 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 	}
 
 	void filterChanged(String filter, boolean showPrevious) {
-		headersGenerator.updateHeaders(filter, showPrevious);
+		headersGenerator.resetHeaderChain(showPrevious);
 		dataProvider.setFilter(new OrderFilter(filter, showPrevious));
 	}
 
 	// StorefrontOrderCard presenter methods
 	void onOrderCardExpanded(StorefrontOrderCard orderCard) {
 		if (view.isDesktopView()) {
-			orderCard.setSelected(true);
+			executeJPAOperation(() -> {
+				Order fullOrder = orderService.load(orderCard.getOrder().getId());
+				orderCard.openCard(fullOrder);
+			});
 			view.resizeGrid();
 		} else {
 			loadEntity(orderCard.getOrder().getId(), false);
@@ -109,19 +116,20 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 	}
 
 	void onOrderCardCollapsed(StorefrontOrderCard orderCard) {
-		orderCard.setSelected(false);
+		orderCard.closeCard();
 		view.resizeGrid();
 	}
 
 	void onOrderCardEdit(StorefrontOrderCard orderCard) {
-		onOrderCardCollapsed(orderCard);
-		edit(orderCard.getOrder().getId().toString());
+		Long id = orderCard.getOrder().getId();
+		view.getGrid().deselectAll();
+		edit(id.toString());
 	}
 
 	void onOrderCardAddComment(StorefrontOrderCard orderCard, String message) {
 		executeJPAOperation(() -> {
 			Order updated = orderService.addComment(orderCard.getOrder().getId(), message);
-			orderCard.setOrder(updated);
+			orderCard.updateOrder(updated);
 			view.resizeGrid();
 		});
 	}

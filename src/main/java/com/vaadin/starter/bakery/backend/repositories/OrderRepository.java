@@ -13,25 +13,36 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
+import com.vaadin.starter.bakery.backend.data.entity.OrderSummary;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
-	Page<Order> findByDueDateAfterAndStateIn(LocalDate dueDate, Collection<OrderState> states, Pageable page);
 
-	@EntityGraph(value = "Order.summary", type = EntityGraphType.LOAD)
+	@EntityGraph(value = Order.ENTITY_GRAPTH_BRIEF, type = EntityGraphType.LOAD)
 	Page<Order> findByDueDateAfter(LocalDate filterDate, Pageable pageable);
 
-	@EntityGraph(value = "Order.summary", type = EntityGraphType.LOAD)
+	@EntityGraph(value = Order.ENTITY_GRAPTH_BRIEF, type = EntityGraphType.LOAD)
 	Page<Order> findByCustomerFullNameContainingIgnoreCaseOrStateIn(String searchQuery,
 			Collection<OrderState> orderStates, Pageable pageable);
 
 	@Query("SELECT o FROM OrderInfo o join o.pickupLocation l join o.customer c WHERE (LOWER(o.customer.fullName) LIKE CONCAT('%', LOWER(?1), '%') OR o.state IN ?2) AND o.dueDate > ?3")
-	@EntityGraph(value = "Order.summary", type = EntityGraphType.LOAD)
+	@EntityGraph(value = Order.ENTITY_GRAPTH_BRIEF, type = EntityGraphType.LOAD)
 	Page<Order> findByCustomerFullNameContainingIgnoreCaseOrStateInAndDueDateAfter(String searchQuery,
 			Collection<OrderState> orderStates, LocalDate dueDate, Pageable pageable);
 
 	@Override
-	@EntityGraph(value = "Order.summary", type = EntityGraphType.LOAD)
+	@EntityGraph(value = Order.ENTITY_GRAPTH_BRIEF, type = EntityGraphType.LOAD)
 	List<Order> findAll();
+
+	@Override
+	@EntityGraph(value = Order.ENTITY_GRAPTH_BRIEF, type = EntityGraphType.LOAD)
+	Page<Order> findAll(Pageable pageable);
+
+	@EntityGraph(value = Order.ENTITY_GRAPTH_BRIEF, type = EntityGraphType.LOAD)
+	List<OrderSummary> findByDueDateGreaterThanEqual(LocalDate dueDate);
+
+	@Override
+	@EntityGraph(value = Order.ENTITY_GRAPTH_FULL, type = EntityGraphType.LOAD)	
+	Order findOne(Long id);
 
 	long countByDueDateAfter(LocalDate dueDate);
 

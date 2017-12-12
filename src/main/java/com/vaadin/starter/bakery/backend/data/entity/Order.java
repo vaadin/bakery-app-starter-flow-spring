@@ -9,41 +9,50 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedEntityGraphs;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderColumn;
+import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.vaadin.starter.bakery.backend.data.OrderState;
 
 @Entity(name = "OrderInfo") // "Order" is a reserved word
-@NamedEntityGraph(name = "Order.summary", attributeNodes = {
+@NamedEntityGraphs({@NamedEntityGraph(name = Order.ENTITY_GRAPTH_BRIEF, attributeNodes = {
 		@NamedAttributeNode("customer"),
 		@NamedAttributeNode("pickupLocation")
-})
-public class Order extends AbstractEntity {
+}),@NamedEntityGraph(name = Order.ENTITY_GRAPTH_FULL, attributeNodes = {
+		@NamedAttributeNode("customer"),
+		@NamedAttributeNode("pickupLocation"),
+		@NamedAttributeNode("history")
+})})
+@Table(indexes = @Index(columnList = "dueDate"))
+public class Order extends AbstractEntity implements OrderSummary {
 
+	public static final String ENTITY_GRAPTH_BRIEF = "Order.brief";
+	public static final String ENTITY_GRAPTH_FULL = "Order.full";
+	
+	
 	@NotNull
 	private LocalDate dueDate;
 	@NotNull
 	private LocalTime dueTime;
 	@NotNull
 	@ManyToOne
-	@Fetch(FetchMode.JOIN)
 	private PickupLocation pickupLocation;
+
 	@NotNull
 	@OneToOne(cascade = CascadeType.ALL)
-	@Fetch(FetchMode.JOIN)
 	private Customer customer;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
@@ -56,11 +65,10 @@ public class Order extends AbstractEntity {
 	@NotNull
 	private OrderState state;
 
-	private boolean paid;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-	@OrderColumn(name = "id")
-	@BatchSize(size = 1000)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OrderColumn(name = "INDEX")
+	@JoinColumn
 	private List<HistoryItem> history;
 
 	public Order(User createdBy) {
@@ -81,18 +89,6 @@ public class Order extends AbstractEntity {
 			history = new LinkedList<>();
 		}
 		history.add(item);
-	}
-
-	public void clearItems() {
-		this.items.clear();
-	}
-
-	public void addOrderItem(Product product, int quantity, String comment) {
-		OrderItem item = new OrderItem();
-		item.setProduct(product);
-		item.setQuantity(quantity);
-		item.setComment(comment);
-		this.items.add(item);
 	}
 
 	public LocalDate getDueDate() {
@@ -135,14 +131,6 @@ public class Order extends AbstractEntity {
 		this.items = items;
 	}
 
-	public boolean isPaid() {
-		return paid;
-	}
-
-	public void setPaid(boolean paid) {
-		this.paid = paid;
-	}
-
 	public List<HistoryItem> getHistory() {
 		return history;
 	}
@@ -163,14 +151,9 @@ public class Order extends AbstractEntity {
 		}
 	}
 
-	public int getTotalPrice() {
-		return items == null ? 0 : items.stream().mapToInt(OrderItem::getTotalPrice).sum();
-	}
-
 	@Override
 	public String toString() {
 		return "Order{" + "dueDate=" + dueDate + ", dueTime=" + dueTime + ", pickupLocation=" + pickupLocation
-				+ ", customer=" + customer + ", items=" + items + ", state=" + state + ", paid=" + paid + ", history="
-				+ history + '}';
+				+ ", customer=" + customer + ", items=" + items + ", state=" + state + '}';
 	}
 }

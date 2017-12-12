@@ -1,32 +1,22 @@
 package com.vaadin.starter.bakery.ui.utils;
 
-import com.vaadin.starter.bakery.backend.data.entity.Order;
-import com.vaadin.starter.bakery.backend.service.OrderService;
-import com.vaadin.starter.bakery.ui.entities.StorefrontItemHeader;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+
+import com.vaadin.starter.bakery.backend.data.entity.Order;
+import com.vaadin.starter.bakery.ui.entities.StorefrontItemHeader;
 
 public class StorefrontItemHeaderGenerator {
 
 	private final DateTimeFormatter HEADER_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("EEE, MMM d");
 
-	private final OrderService orderService;
 	private final Map<Long, StorefrontItemHeader> ordersWithHeaders = new HashMap<>();
-
-	private Sort sort;
-
-	public StorefrontItemHeaderGenerator(OrderService orderService) {
-		this.orderService = orderService;
-
-		sort = new Sort(BakeryConst.DEFAULT_SORT_DIRECTION, BakeryConst.ORDER_SORT_FIELDS);
-	}
+	private List<HeaderGenerator> headerChain = new ArrayList<>();
 
 	private StorefrontItemHeader getRecentHeader() {
 		return new StorefrontItemHeader("Recent", "Before this week");
@@ -69,59 +59,53 @@ public class StorefrontItemHeaderGenerator {
 		return secondaryHeaderFor(start) + " - " + secondaryHeaderFor(end);
 	}
 
-	public void updateHeaders(String filter, boolean showPrevious) {
-		ordersWithHeaders.clear();
-
-		if (showPrevious) {
-			LocalDate date = LocalDate.now().minusDays(2);
-			Long id = findFirstOrderAfterDueDate(filter, date, sort);
-			if (id != null) {
-				ordersWithHeaders.put(id, getYesterdayHeader());
-			}
-
-			date = date.minusDays(date.getDayOfWeek().getValue());
-			id = findFirstOrderAfterDueDate(filter, date, sort);
-			if (id != null) {
-				ordersWithHeaders.put(id, getThisWeekBeforeYesterdayHeader());
-			}
-
-			id = findFirstOrderAfterDueDate(filter, null, sort);
-			if (id != null) {
-				ordersWithHeaders.put(id, getRecentHeader());
-			}
-		}
-
-		LocalDate date = LocalDate.now().minusDays(1);
-		Long id = findFirstOrderAfterDueDate(filter, date, sort);
-		if (id != null) {
-			ordersWithHeaders.put(id, getTodayHeader());
-		}
-
-		date = LocalDate.now();
-		id = findFirstOrderAfterDueDate(filter, date, sort);
-		if (id != null) {
-			ordersWithHeaders.put(id, getThisWeekStartingTomorrow(showPrevious));
-		}
-
-		date = date.minusDays(date.getDayOfWeek().getValue()).plusWeeks(1);
-		id = findFirstOrderAfterDueDate(filter, date, sort);
-		if (id != null) {
-			ordersWithHeaders.put(id, getUpcomingHeader());
-		}
-	}
-
-	public Long findFirstOrderAfterDueDate(String filter, LocalDate date, Sort sort) {
-		Page<Order> page = orderService
-				.findAnyMatchingAfterDueDate(Optional.ofNullable(filter), Optional.ofNullable(date),
-						new PageRequest(0, 1, sort));
-		if (page.getContent().isEmpty()) {
-			return null;
-		}
-		return page.getContent().get(0).getId();
-	}
-
-
 	public StorefrontItemHeader get(Long id) {
 		return ordersWithHeaders.get(id);
+	}
+
+	public void resetHeaderChain(boolean showPrevious) {
+		this.headerChain = createHeaderChain(showPrevious);
+		ordersWithHeaders.clear();
+	}
+
+	public void ordersRead(List<Order> orders) {
+		Iterator<HeaderGenerator> headerIterator = headerChain.stream().filter(h -> h.getSelected() == null).iterator();
+		if(!headerIterator.hasNext()) 
+			return;
+		HeaderGenerator current = headerIterator.next();
+		for (Order order : orders) {
+			// If last selected, discard orders that match it.
+			if (current.getSelected() != null && current.matches(order.getDueDate()))
+				continue;
+			while (current != null && !current.matches(order.getDueDate())) {
+				current = headerIterator.hasNext() ? headerIterator.next() : null;
+			}
+			if (current == null)
+				break;
+			current.setSelected(order.getId());
+			ordersWithHeaders.put(order.getId(), current.getHeader());
+		}
+	}
+
+	private List<HeaderGenerator> createHeaderChain(boolean showPrevious) {
+		List<HeaderGenerator> headerChain = new ArrayList<>();
+		LocalDate today = LocalDate.now();
+		LocalDate startOfTheWeek = today.minusDays(today.getDayOfWeek().getValue() - 1);
+		if (showPrevious) {
+			LocalDate yesterday = today.minusDays(1);
+			// Week starting on Monday
+			headerChain.add(new HeaderGenerator(d -> d.isBefore(startOfTheWeek), this.getRecentHeader()));
+			if (startOfTheWeek.isBefore(yesterday)) {
+				headerChain.add(new HeaderGenerator(d -> d.isBefore(yesterday) && !d.isAfter(startOfTheWeek),
+						this.getThisWeekBeforeYesterdayHeader()));
+			}
+			headerChain.add(new HeaderGenerator(yesterday::equals, this.getYesterdayHeader()));
+		}
+		LocalDate firstDayOfTheNextWeek = startOfTheWeek.plusDays(7);
+		headerChain.add(new HeaderGenerator(today::equals, getTodayHeader()));
+		headerChain.add(new HeaderGenerator(d -> d.isAfter(today) && d.isBefore(firstDayOfTheNextWeek),
+				getThisWeekStartingTomorrow(showPrevious)));
+		headerChain.add(new HeaderGenerator(d -> !d.isBefore(firstDayOfTheNextWeek), getUpcomingHeader()));
+		return headerChain;
 	}
 }

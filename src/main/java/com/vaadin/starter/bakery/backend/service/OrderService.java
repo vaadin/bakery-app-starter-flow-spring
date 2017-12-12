@@ -28,6 +28,7 @@ import com.vaadin.starter.bakery.backend.data.DashboardData;
 import com.vaadin.starter.bakery.backend.data.DeliveryStats;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
+import com.vaadin.starter.bakery.backend.data.entity.OrderSummary;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.repositories.OrderRepository;
@@ -99,6 +100,11 @@ public class OrderService implements CrudService<Order> {
 				return orderRepository.findAll(pageable);
 			}
 		}
+	}
+	
+	@Transactional
+	public List<OrderSummary> findAnyMatchingStartingToday() {
+		return orderRepository.findByDueDateGreaterThanEqual(LocalDate.now());
 	}
 
 	private static Set<OrderState> matchingStates(String filter) {
