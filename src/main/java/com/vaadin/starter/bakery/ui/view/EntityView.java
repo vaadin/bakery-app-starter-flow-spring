@@ -49,7 +49,7 @@ public interface EntityView<T> extends HasNotifications {
 	 *            command to execute if the user presses 'ok' in the dialog
 	 */
 	default void showConfirmationRequest(Message message, Runnable onOk) {
-	    Message.confirm(message, onOk);
+		Message.confirm(message, onOk);
 	}
 
 	/**
