@@ -1,13 +1,20 @@
 package com.vaadin.starter.bakery.ui.view.admin.users;
 
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_USERS;
-import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.vaadin.data.BeanValidationBinder;
+import com.vaadin.data.ValidationException;
+import com.vaadin.data.provider.DataProvider;
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.flow.model.TemplateModel;
+import com.vaadin.generated.starter.elements.GeneratedStarterButtonsBar;
+import com.vaadin.generated.starter.elements.GeneratedStarterDialog;
+import com.vaadin.generated.starter.elements.GeneratedStarterSearchBar;
 import com.vaadin.router.PageTitle;
 import com.vaadin.router.Route;
 import com.vaadin.starter.bakery.backend.data.Role;
@@ -17,39 +24,81 @@ import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.view.admin.DefaultEntityPresenter;
 import com.vaadin.starter.bakery.ui.view.admin.EntityEditor;
-import com.vaadin.starter.bakery.ui.view.admin.ItemsView;
-import com.vaadin.starter.bakery.ui.view.admin.PolymerEntityView;
+import com.vaadin.starter.bakery.ui.view.crud.CrudView;
 import com.vaadin.ui.Tag;
+import com.vaadin.ui.combobox.ComboBox;
+import com.vaadin.ui.common.HasText;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.grid.Grid;
+import com.vaadin.ui.html.H3;
 import com.vaadin.ui.polymertemplate.Id;
+import com.vaadin.ui.textfield.PasswordField;
+import com.vaadin.ui.textfield.TextField;
 
 @Tag("bakery-users")
 @HtmlImport("src/users/bakery-users.html")
 @Route(value = PAGE_USERS, layout = BakeryApp.class)
 @PageTitle(BakeryConst.TITLE_USERS)
 @Secured(Role.ADMIN)
-public class UsersView extends PolymerEntityView<User, TemplateModel> {
+public class UsersView extends CrudView<User, TemplateModel> {
 
-	@Id("bakery-users-items-view")
-	private ItemsView view;
-
-	private UserEdit editor;
+	@Id("search-bar")
+	private GeneratedStarterSearchBar searchbar;
 
 	@Id("users-grid")
 	private Grid<User> grid;
 
+	@Id("dialog-editor")
+	private GeneratedStarterDialog dialog;
+
+	@Id("buttons")
+	private GeneratedStarterButtonsBar buttons;
+
+	@Id("title")
+	private H3 title;
+
+	@Id("first")
+	private TextField firstnameField;
+
+	@Id("last")
+	private TextField lastnameField;
+
+	@Id("email")
+	private TextField emailField;
+
+	@Id("user-edit-password")
+	private PasswordField passwordField;
+
+	@Id("role")
+	private ComboBox<String> roleField;
+
+
+
 	private DefaultEntityPresenter<User> presenter;
 
+	private final BeanValidationBinder<User> binder = new BeanValidationBinder<>(User.class);
+
+	private PasswordEncoder passwordEncoder = NoOpPasswordEncoder.getInstance();
+
 	@Autowired
-	public UsersView(UserService userService, PasswordEncoder passwordEncoder) {
-		editor = new UserEdit();
-		editor.setPasswordEncoder(passwordEncoder);
-		addToSlot(this, editor, "user-editor");
-		presenter = new DefaultEntityPresenter<>(userService, this, "User");
+	public UsersView(UserService userService) {
+		presenter = new DefaultEntityPresenter<>(userService, this, getEntityName());
 		setupEventListeners();
-		view.setActionText("New user");
+
 		setupGrid();
+
+	    ListDataProvider<String> roleProvider = DataProvider.ofItems(Role.getAllRoles());
+	    roleField.setItemLabelGenerator(s -> s != null  ? s : "");
+	    roleField.setDataProvider(roleProvider);
+	    binder.bind(firstnameField, "firstName");
+	    binder.bind(lastnameField, "lastName");
+	    binder.bind(emailField, "email");
+	    binder.bind(roleField, "role");
+	    binder.bind(passwordField, (user) -> passwordField.getEmptyValue(), (user, password) -> {
+	        if (!passwordField.getEmptyValue().equals(password)) {
+	            user.setPassword(passwordEncoder.encode(password));
+	        }
+	    });
 	}
 
 	private void setupGrid() {
@@ -80,12 +129,50 @@ public class UsersView extends PolymerEntityView<User, TemplateModel> {
 
 	@Override
 	protected EntityEditor<User> getEditor() {
-		return editor;
+		return this;
 	}
 
 	@Override
-	protected ItemsView getItemsView() {
-		return view;
+	public boolean isDirty() {
+	    return binder.hasChanges();
 	}
 
+	@Override
+	public void write(User entity) throws ValidationException {
+	    binder.writeBean(entity);
+	}
+
+	public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+	    this.passwordEncoder = passwordEncoder;
+	}
+
+	@Override
+	public GeneratedStarterSearchBar getSearchBar() {
+	    return searchbar;
+	}
+
+	@Override
+	protected GeneratedStarterButtonsBar getButtonsBar() {
+	    return buttons;
+	}
+
+	@Override
+	protected GeneratedStarterDialog getDialog() {
+	    return dialog;
+	}
+
+	@Override
+	protected BeanValidationBinder<User> getBinder() {
+	    return binder;
+	}
+
+	@Override
+	protected HasText getTitle() {
+	    return title;
+	}
+
+	@Override
+	protected String getEntityName() {
+	    return "User";
+	}
 }
