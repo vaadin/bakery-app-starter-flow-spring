@@ -40,42 +40,42 @@ import com.vaadin.ui.textfield.TextField;
 @Secured(Role.ADMIN)
 public class ProductsView extends CrudView<Product, TemplateModel>  {
 
-    @Id("search-bar")
-    private GeneratedStarterSearchBar searchbar;
-    
+	@Id("search-bar")
+	private GeneratedStarterSearchBar searchbar;
+
 	@Id("products-grid")
 	private Grid<Product> grid;
-	
-    @Id("dialog-editor")
-    private GeneratedStarterDialog dialog;
-    
-    @Id("buttons")
-    private GeneratedStarterButtonsBar buttons; 
 
-    private DefaultEntityPresenter<Product> presenter;
-    
-    private final BeanValidationBinder<Product> binder = new BeanValidationBinder<>(Product.class);
-    
-    @Id("title")
-    private H3 title;
+	@Id("dialog-editor")
+	private GeneratedStarterDialog dialog;
 
-    @Id("product-edit-name")
-    private TextField nameField;
+	@Id("buttons")
+	private GeneratedStarterButtonsBar buttons;
 
-    @Id("price")
-    private TextField priceField;    
-    
-    private CurrencyFormatter currencyFormatter = new CurrencyFormatter();
-	
+	private DefaultEntityPresenter<Product> presenter;
+
+	private final BeanValidationBinder<Product> binder = new BeanValidationBinder<>(Product.class);
+
+	@Id("title")
+	private H3 title;
+
+	@Id("product-edit-name")
+	private TextField nameField;
+
+	@Id("price")
+	private TextField priceField;
+
+	private CurrencyFormatter currencyFormatter = new CurrencyFormatter();
+
 	@Autowired
 	public ProductsView(ProductService service) {
 		presenter = new DefaultEntityPresenter<>(service, this, getEntityName());
 		setupEventListeners();
 		setupGrid();
-		
-        binder.bind(nameField, "name");
-        binder.forField(priceField).withConverter(new PriceConverter()).bind("price");
-        priceField.addToPrefix(new Span(Currency.getInstance(Locale.getDefault()).getSymbol()));
+
+	    binder.bind(nameField, "name");
+	    binder.forField(priceField).withConverter(new PriceConverter()).bind("price");
+	    priceField.addToPrefix(new Span(Currency.getInstance(Locale.getDefault()).getSymbol()));
 	}
 
 	private void setupGrid() {
@@ -84,11 +84,11 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 
 		grid.getElement().addEventListener("animationend", e -> productNameColumn.setFlexGrow(10));
 	}
-	
-    @Override
-    public Grid<Product> getGrid() {
-        return grid;
-    }	
+
+	@Override
+	public Grid<Product> getGrid() {
+	    return grid;
+	}
 
 	@Override
 	protected DefaultEntityPresenter<Product> getPresenter() {
@@ -105,33 +105,33 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 		return this;
 	}
 
-    @Override
-    protected BeanValidationBinder<Product> getBinder() {
-        return binder;
-    }
+	@Override
+	protected BeanValidationBinder<Product> getBinder() {
+	    return binder;
+	}
 
-    @Override
-    protected GeneratedStarterButtonsBar getButtonsBar() {
-        return buttons;
-    }
+	@Override
+	protected GeneratedStarterButtonsBar getButtonsBar() {
+	    return buttons;
+	}
 
-    @Override
-    protected GeneratedStarterDialog getDialog() {
-        return dialog;
-    }
+	@Override
+	protected GeneratedStarterDialog getDialog() {
+	    return dialog;
+	}
 
-    @Override
-    protected GeneratedStarterSearchBar getSearchBar() {
-        return searchbar;
-    }
+	@Override
+	protected GeneratedStarterSearchBar getSearchBar() {
+	    return searchbar;
+	}
 
-    @Override
-    protected HasText getTitle() {
-        return title;
-    }
+	@Override
+	protected HasText getTitle() {
+	    return title;
+	}
 
-    @Override
-    protected String getEntityName() {
-        return "Product";
-    }
+	@Override
+	protected String getEntityName() {
+	    return "Product";
+	}
 }

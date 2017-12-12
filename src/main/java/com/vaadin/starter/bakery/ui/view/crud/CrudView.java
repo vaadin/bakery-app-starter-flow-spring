@@ -32,12 +32,12 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 			getGrid().deselectAll();
 		});
 		addListener(CloseDialogEvent.class, e -> getPresenter().cancel());
-		
-        getButtonsBar().addAction1Listener(e -> getPresenter().save());
-        getButtonsBar().addAction2Listener(e -> getPresenter().cancel());
-        getButtonsBar().addAction3Listener(e -> getPresenter().delete());
-        
-		
+
+	    getButtonsBar().addAction1Listener(e -> getPresenter().save());
+	    getButtonsBar().addAction2Listener(e -> getPresenter().cancel());
+	    getButtonsBar().addAction3Listener(e -> getPresenter().delete());
+
+
 		getSearchBar().addButtonClickListener(e -> getPresenter().createNew());
 		getSearchBar().addFieldValueChangeListener(
 		        e -> {
@@ -46,27 +46,27 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 
 		getSearchBar().setButtonText("New " + getEntityName());
 	}
-	
+
 	protected abstract DefaultEntityPresenter<E> getPresenter();
 
 	protected abstract String getBasePage();
 
 	protected abstract EntityEditor<E> getEditor();
-	
+
 	protected abstract BeanValidationBinder<E> getBinder();
-	
+
 	protected abstract GeneratedStarterButtonsBar getButtonsBar();
-	
+
 	protected abstract GeneratedStarterDialog getDialog();
-	
+
 	protected abstract GeneratedStarterSearchBar getSearchBar();
 
 	protected abstract Grid<E> getGrid();
-	
+
 	protected abstract HasText getTitle();
-	
+
 	protected abstract String getEntityName();
-	
+
 	@Override
 	public void setDataProvider(DataProvider<E, ?> dataProvider) {
 		getGrid().setDataProvider(dataProvider);
@@ -89,11 +89,11 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 	    getDialog().setOpened(false);
 		navigateToEntity(null);
 	}
-    
+
 	@Override
 	public void openDialog(E entity, boolean edit) {
 		getEditor().read(entity);
-        getDialog().setOpened(true);
+	    getDialog().setOpened(true);
 	}
 
 	@Override
@@ -105,12 +105,12 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 	public void write(E entity) throws ValidationException {
 		getEditor().write(entity);
 	}
-	
-    @Override
-    public void read(E e) {
-        getBinder().readBean(e);
-        getButtonsBar().setAction1Disabled(true);
-        getButtonsBar().setAction3Disabled(e.isNew());
-        getTitle().setText((e.isNew() ? "New" : "Edit") + " " + getEntityName());
-    }	
+
+	@Override
+	public void read(E e) {
+	    getBinder().readBean(e);
+	    getButtonsBar().setAction1Disabled(true);
+	    getButtonsBar().setAction3Disabled(e.isNew());
+	    getTitle().setText((e.isNew() ? "New" : "Edit") + " " + getEntityName());
+	}
 }

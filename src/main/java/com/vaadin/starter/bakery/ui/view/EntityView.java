@@ -20,7 +20,7 @@ import com.vaadin.ui.event.ComponentEventListener;
  * @param <T> the entity type
  */
 public interface EntityView<T> extends HasNotifications {
-    
+
 	/**
 	 * Sets / refreshes the entities in grid.
 	 *
