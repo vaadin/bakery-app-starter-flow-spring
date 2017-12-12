@@ -49,11 +49,16 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> {
 		if (SecurityUtils.isAccessGranted(ProductsView.class)) {
 			pages.add(new PageInfo(BakeryConst.PAGE_PRODUCTS, ICON_PRODUCTS, BakeryConst.TITLE_PRODUCTS));
 		}
+	    pages.add(new PageInfo("foo", ICON_PRODUCTS, "Bar"));
 		getModel().setPages(pages);
 	}
 
 	@ClientDelegate
 	private void navigateTo(String href) {
+	    if (href.equals("foo")) {
+	        return;
+	    }
+
 		UI.getCurrent().navigateTo(href);
 	}
 }
