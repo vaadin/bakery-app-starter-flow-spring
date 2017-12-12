@@ -2,13 +2,15 @@
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-column.html">
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-sorter.html">
+
 <link rel="import" href="../../bower_components/vaadin-valo-theme/icons.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
-<link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
 
-<link rel="import" href="../elements/items-view.html">
+<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
+
+
 <link rel="import" href="../elements/utils-mixin.html">
-<link rel="import" href="product-edit.html">
 
 <dom-module id="bakery-products">
   <template>
@@ -16,17 +18,37 @@
       :host {
         max-width: none !important;
         display: flex;
+        flex-direction: column;
       }
+      vaadin-grid {
+        width: 100%;
+        height: 100%;
+      }      
     </style>
 
-    <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
+     <starter-search-bar id="search-bar"></starter-search-bar>
 
-    <items-view id="bakery-products-items-view" desktop-view=[[desktopView]] >
+     <vaadin-grid id="products-grid" slot="grid" theme="borderless"></vaadin-grid>
+     
+      <!--  dialogs are teleported to body, hence you need to inline styles -->
+      <starter-dialog id="dialog-editor" theme="right">
+        <h3 id="title" class="header-title"></h3>
 
-      <vaadin-grid id="products-grid" slot="grid" theme="borderless"></vaadin-grid>
-
-      <slot name="product-editor" slot="editor"></slot>
-    </items-view>
+	      <vaadin-form-layout style="flex: 1">
+	        <vaadin-text-field id="product-edit-name" label="Product name" colspan="2" required pattern=".*[^ ].*"
+	                       error-message="Please enter a valid name"></vaadin-text-field>
+	        <br>
+	        <vaadin-text-field id="price" label="Unit price" colspan="2" on-focus="priceFocusGained"
+	          pattern="\d+(\.\d?\d?)?$" required prevent-invalid-input>
+	        </vaadin-text-field>
+	      </vaadin-form-layout>
+        
+        <starter-buttons-bar id="buttons"
+          action1-text="Save" action2-text="Cancel" action3-text="Delete">
+        </starter-buttons-bar>
+        
+        <template><!-- vaadin-dialog fails if not present --></template>
+      </starter-dialog>
   </template>
 
   <script>
