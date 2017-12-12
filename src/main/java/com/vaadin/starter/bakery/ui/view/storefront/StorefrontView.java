@@ -1,7 +1,7 @@
 package com.vaadin.starter.bakery.ui.view.storefront;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -67,7 +67,7 @@ implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 		searchBar.setPlaceHolder("Search");
 
 		grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-		Map<Order, StorefrontOrderCard> components = new HashMap<>();
+		Map<Order, StorefrontOrderCard> components = new WeakHashMap<>();
 		grid.addColumn(new ComponentTemplateRenderer<>(order -> {
 			StorefrontOrderCard orderCard = new StorefrontOrderCard();
 			orderCard.setOrder(order);
