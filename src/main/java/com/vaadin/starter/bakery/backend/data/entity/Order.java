@@ -91,10 +91,6 @@ public class Order extends AbstractEntity implements OrderSummary {
 		history.add(item);
 	}
 
-	public void clearItems() {
-		this.items.clear();
-	}
-
 	public void addOrderItem(Product product, int quantity, String comment) {
 		OrderItem item = new OrderItem();
 		item.setProduct(product);

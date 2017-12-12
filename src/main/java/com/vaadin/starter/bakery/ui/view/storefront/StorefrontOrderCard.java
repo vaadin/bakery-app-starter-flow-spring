@@ -32,7 +32,6 @@ public class StorefrontOrderCard extends PolymerTemplate<StorefrontOrderCard.Mod
 
 	public interface Model extends TemplateModel {
 		void setSelected(boolean selected);
-		boolean getSelected();
 
 		void setHeader(StorefrontItemHeader header);
 		void setDisplayHeader(boolean displayHeader);
@@ -77,10 +76,6 @@ public class StorefrontOrderCard extends PolymerTemplate<StorefrontOrderCard.Mod
 			orderDetailsFull = null;
 		}
 		getModel().setSelected(false);
-	}
-
-	public boolean isSelected() {
-		return getModel().getSelected();
 	}
 
 	public void setHeader(StorefrontItemHeader header) {
