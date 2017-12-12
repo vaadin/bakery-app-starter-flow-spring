@@ -3,7 +3,6 @@
 <link rel="import" href="../../bower_components/vaadin-board/vaadin-board-row.html">
 <link rel="import" href="../app/style-modules/bakery-charts-default-theme.html">
 
-<link rel="import" href="dashboard-orders-counter.html">
 <link rel="import" href="dashboard-counter-label.html">
 
 <dom-module id="bakery-dashboard">
@@ -76,10 +75,10 @@
 
     <vaadin-board>
       <vaadin-board-row>
-        <dashboard-orders-counter data="[[todayOrdersCount]]"></dashboard-orders-counter>
-        <dashboard-counter-label label-data="[[notAvailableOrdersCount]]" class="red"></dashboard-counter-label>
-        <dashboard-counter-label label-data="[[newOrdersCount]]" class="blue"></dashboard-counter-label>
-        <dashboard-counter-label label-data="[[tomorrowOrdersCount]]" class="gray"></dashboard-counter-label>
+        <dashboard-counter-label id="today-count" class="green"></dashboard-counter-label>
+        <dashboard-counter-label id="not-available-count" class="red"></dashboard-counter-label>
+        <dashboard-counter-label id="new-count" class="blue"></dashboard-counter-label>
+        <dashboard-counter-label id="tomorrow-count" class="gray"></dashboard-counter-label>
       </vaadin-board-row>
       <vaadin-board-row>
         <div class="vaadin-board-cell">
