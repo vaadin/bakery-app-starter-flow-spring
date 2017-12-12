@@ -23,30 +23,30 @@
       vaadin-grid {
         width: 100%;
         height: 100%;
-      }      
+      }
     </style>
 
      <starter-search-bar id="search-bar"></starter-search-bar>
 
      <vaadin-grid id="products-grid" slot="grid" theme="borderless"></vaadin-grid>
-     
+
       <!--  dialogs are teleported to body, hence you need to inline styles -->
       <starter-dialog id="dialog-editor" theme="right">
         <h3 id="title" class="header-title"></h3>
 
-	      <vaadin-form-layout style="flex: 1">
-	        <vaadin-text-field id="product-edit-name" label="Product name" colspan="2" required pattern=".*[^ ].*"
-	                       error-message="Please enter a valid name"></vaadin-text-field>
-	        <br>
-	        <vaadin-text-field id="price" label="Unit price" colspan="2" on-focus="priceFocusGained"
-	          pattern="\d+(\.\d?\d?)?$" required prevent-invalid-input>
-	        </vaadin-text-field>
-	      </vaadin-form-layout>
-        
+          <vaadin-form-layout style="flex: 1">
+            <vaadin-text-field id="product-edit-name" label="Product name" colspan="2" required pattern=".*[^ ].*"
+                           error-message="Please enter a valid name"></vaadin-text-field>
+            <br>
+            <vaadin-text-field id="price" label="Unit price" colspan="2" on-focus="priceFocusGained"
+              pattern="\d+(\.\d?\d?)?$" required prevent-invalid-input>
+            </vaadin-text-field>
+          </vaadin-form-layout>
+
         <starter-buttons-bar id="buttons"
           action1-text="Save" action2-text="Cancel" action3-text="Delete">
         </starter-buttons-bar>
-        
+
         <template><!-- vaadin-dialog fails if not present --></template>
       </starter-dialog>
   </template>

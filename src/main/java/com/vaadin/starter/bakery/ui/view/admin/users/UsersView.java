@@ -42,63 +42,63 @@ import com.vaadin.ui.textfield.TextField;
 @Secured(Role.ADMIN)
 public class UsersView extends CrudView<User, TemplateModel> {
 
-    @Id("search-bar")
-    private GeneratedStarterSearchBar searchbar;
+	@Id("search-bar")
+	private GeneratedStarterSearchBar searchbar;
 
 	@Id("users-grid")
 	private Grid<User> grid;
-	
+
 	@Id("dialog-editor")
 	private GeneratedStarterDialog dialog;
-	
-    @Id("buttons")
-    private GeneratedStarterButtonsBar buttons;	
-	
-    @Id("title")
-    private H3 title;
 
-    @Id("first")
-    private TextField firstnameField;
+	@Id("buttons")
+	private GeneratedStarterButtonsBar buttons;
 
-    @Id("last")
-    private TextField lastnameField;
+	@Id("title")
+	private H3 title;
 
-    @Id("email")
-    private TextField emailField;
+	@Id("first")
+	private TextField firstnameField;
 
-    @Id("user-edit-password")
-    private PasswordField passwordField;
+	@Id("last")
+	private TextField lastnameField;
 
-    @Id("role")
-    private ComboBox<String> roleField;
-    
+	@Id("email")
+	private TextField emailField;
 
-    
-    private DefaultEntityPresenter<User> presenter;
+	@Id("user-edit-password")
+	private PasswordField passwordField;
 
-    private final BeanValidationBinder<User> binder = new BeanValidationBinder<>(User.class);
+	@Id("role")
+	private ComboBox<String> roleField;
 
-    private PasswordEncoder passwordEncoder = NoOpPasswordEncoder.getInstance();
+
+
+	private DefaultEntityPresenter<User> presenter;
+
+	private final BeanValidationBinder<User> binder = new BeanValidationBinder<>(User.class);
+
+	private PasswordEncoder passwordEncoder = NoOpPasswordEncoder.getInstance();
 
 	@Autowired
 	public UsersView(UserService userService) {
 		presenter = new DefaultEntityPresenter<>(userService, this, getEntityName());
 		setupEventListeners();
-		
+
 		setupGrid();
-		
-        ListDataProvider<String> roleProvider = DataProvider.ofItems(Role.getAllRoles());
-        roleField.setItemLabelGenerator(s -> s != null  ? s : "");
-        roleField.setDataProvider(roleProvider);
-        binder.bind(firstnameField, "firstName");
-        binder.bind(lastnameField, "lastName");
-        binder.bind(emailField, "email");
-        binder.bind(roleField, "role");
-        binder.bind(passwordField, (user) -> passwordField.getEmptyValue(), (user, password) -> {
-            if (!passwordField.getEmptyValue().equals(password)) {
-                user.setPassword(passwordEncoder.encode(password));
-            }
-        });		
+
+		ListDataProvider<String> roleProvider = DataProvider.ofItems(Role.getAllRoles());
+		roleField.setItemLabelGenerator(s -> s != null  ? s : "");
+		roleField.setDataProvider(roleProvider);
+		binder.bind(firstnameField, "firstName");
+		binder.bind(lastnameField, "lastName");
+		binder.bind(emailField, "email");
+		binder.bind(roleField, "role");
+		binder.bind(passwordField, (user) -> passwordField.getEmptyValue(), (user, password) -> {
+			if (!passwordField.getEmptyValue().equals(password)) {
+				user.setPassword(passwordEncoder.encode(password));
+			}
+		});
 	}
 
 	private void setupGrid() {
@@ -132,47 +132,47 @@ public class UsersView extends CrudView<User, TemplateModel> {
 		return this;
 	}
 
-    @Override
-    public boolean isDirty() {
-        return binder.hasChanges();
-    }
+	@Override
+	public boolean isDirty() {
+		return binder.hasChanges();
+	}
 
-    @Override
-    public void write(User entity) throws ValidationException {
-        binder.writeBean(entity);
-    }
+	@Override
+	public void write(User entity) throws ValidationException {
+		binder.writeBean(entity);
+	}
 
-    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
-    }
+	public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+		this.passwordEncoder = passwordEncoder;
+	}
 
-    @Override
-    public GeneratedStarterSearchBar getSearchBar() {
-        return searchbar;
-    }
+	@Override
+	public GeneratedStarterSearchBar getSearchBar() {
+		return searchbar;
+	}
 
-    @Override
-    protected GeneratedStarterButtonsBar getButtonsBar() {
-        return buttons;
-    }
+	@Override
+	protected GeneratedStarterButtonsBar getButtonsBar() {
+		return buttons;
+	}
 
-    @Override
-    protected GeneratedStarterDialog getDialog() {
-        return dialog;
-    }
+	@Override
+	protected GeneratedStarterDialog getDialog() {
+		return dialog;
+	}
 
-    @Override
-    protected BeanValidationBinder<User> getBinder() {
-        return binder;
-    }
-    
-    @Override
-    protected HasText getTitle() {
-        return title;
-    }
+	@Override
+	protected BeanValidationBinder<User> getBinder() {
+		return binder;
+	}
 
-    @Override
-    protected String getEntityName() {
-        return "User";
-    }
+	@Override
+	protected HasText getTitle() {
+		return title;
+	}
+
+	@Override
+	protected String getEntityName() {
+		return "User";
+	}
 }
