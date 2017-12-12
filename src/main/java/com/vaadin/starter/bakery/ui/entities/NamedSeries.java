@@ -9,18 +9,18 @@ public class NamedSeries {
 	public NamedSeries() {}
 
 	public List<Double> getSeries() {
-	    return series;
+		return series;
 	}
 
 	public void setSeries(List<Double> series) {
-	    this.series = series;
+		this.series = series;
 	}
 
 	public String getTitle() {
-	    return title;
+		return title;
 	}
 
 	public void setTitle(String title) {
-	    this.title = title;
+		this.title = title;
 	}
 }
