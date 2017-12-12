@@ -41,7 +41,7 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 		this.dataProvider = dataProvider;
 		this.userService = userService;
 		headersGenerator = new StorefrontItemHeaderGenerator();
-		headersGenerator.setShowPrevious(false);
+		headersGenerator.resetHeaderChain(false);
 		dataProvider.setPageObserver(p -> headersGenerator.ordersRead(p.getContent()));
 	}
 
@@ -98,7 +98,7 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 	}
 
 	void filterChanged(String filter, boolean showPrevious) {
-		headersGenerator.setShowPrevious(showPrevious);
+		headersGenerator.resetHeaderChain(showPrevious);
 		dataProvider.setFilter(new OrderFilter(filter, showPrevious));
 	}
 

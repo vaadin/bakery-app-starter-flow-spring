@@ -63,7 +63,7 @@ public class StorefrontItemHeaderGenerator {
 		return ordersWithHeaders.get(id);
 	}
 
-	public void setShowPrevious(boolean showPrevious) {
+	public void resetHeaderChain(boolean showPrevious) {
 		this.headerChain = createHeaderChain(showPrevious);
 		ordersWithHeaders.clear();
 	}
