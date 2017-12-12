@@ -91,14 +91,6 @@ public class Order extends AbstractEntity implements OrderSummary {
 		history.add(item);
 	}
 
-	public void addOrderItem(Product product, int quantity, String comment) {
-		OrderItem item = new OrderItem();
-		item.setProduct(product);
-		item.setQuantity(quantity);
-		item.setComment(comment);
-		this.items.add(item);
-	}
-
 	public LocalDate getDueDate() {
 		return dueDate;
 	}
