@@ -54,8 +54,9 @@ public class OrdersGridDataProvider extends FilterablePageableDataProvider<Order
 		OrderFilter filter = query.getFilter().orElse(OrderFilter.getEmptyFilter());
 		Page<Order> page = orderService.findAnyMatchingAfterDueDate(Optional.ofNullable(filter.getFilter()),
 				getFilterDate(filter.isShowPrevious()), pageable);
-		if (pageObserver != null)
+		if (pageObserver != null) {
 			pageObserver.accept(page);
+		}
 		return page;
 	}
 

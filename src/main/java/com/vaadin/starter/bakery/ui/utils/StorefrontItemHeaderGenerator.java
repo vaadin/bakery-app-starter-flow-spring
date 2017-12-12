@@ -113,16 +113,16 @@ public class StorefrontItemHeaderGenerator {
 
 class HeaderGenerator {
 	private Predicate<LocalDate> matcher;
-	
+
 	private StorefrontItemHeader header;
-	
+
 	private Long selected;
 
 	public HeaderGenerator(Predicate<LocalDate> matcher, StorefrontItemHeader header) {
 		this.matcher = matcher;
 		this.header = header;
 	}
-	
+
 	public boolean matches(LocalDate date) {
 		return matcher.test(date);
 	}
@@ -138,6 +138,5 @@ class HeaderGenerator {
 	public StorefrontItemHeader getHeader() {
 		return header;
 	}
-	
-	
+
 }

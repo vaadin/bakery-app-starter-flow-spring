@@ -65,7 +65,6 @@ public class Order extends AbstractEntity implements OrderSummary {
 	@NotNull
 	private OrderState state;
 
-	private boolean paid;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@OrderColumn(name = "INDEX")
@@ -144,14 +143,6 @@ public class Order extends AbstractEntity implements OrderSummary {
 		this.items = items;
 	}
 
-	public boolean isPaid() {
-		return paid;
-	}
-
-	public void setPaid(boolean paid) {
-		this.paid = paid;
-	}
-
 	public List<HistoryItem> getHistory() {
 		return history;
 	}
@@ -172,13 +163,9 @@ public class Order extends AbstractEntity implements OrderSummary {
 		}
 	}
 
-	public int getTotalPrice() {
-		return items == null ? 0 : items.stream().mapToInt(OrderItem::getTotalPrice).sum();
-	}
-
 	@Override
 	public String toString() {
 		return "Order{" + "dueDate=" + dueDate + ", dueTime=" + dueTime + ", pickupLocation=" + pickupLocation
-				+ ", customer=" + customer + ", items=" + items + ", state=" + state + ", paid=" + paid + '}';
+				+ ", customer=" + customer + ", items=" + items + ", state=" + state + '}';
 	}
 }
