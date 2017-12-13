@@ -68,12 +68,10 @@
     <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
 
     <div class="content" selected$="[[selected]]">
-      <template is="dom-if" if="[[displayHeader]]">
-        <div class="group-heading" opened$="[[_showDetailsDesktop(selected, desktopView)]]">
-          <span class="main" theme$="[[_getMainFontSize(desktopView)]]">[[header.main]]</span>
-          <span class="secondary" theme$="[[_getSecondaryFontSize(desktopView)]]">[[header.secondary]]</span>
-        </div>
-      </template>
+      <div class="group-heading" opened$="[[_showDetailsDesktop(selected, desktopView)]]" hidden$="[[!displayHeader]]">
+        <span class="main" theme$="[[_getMainFontSize(desktopView)]]">[[header.main]]</span>
+        <span class="secondary" theme$="[[_getSecondaryFontSize(desktopView)]]">[[header.secondary]]</span>
+      </div>
 
       <div id="wrapper">
         <order-details-brief id="order-details-brief" hidden$="[[showDetail]]"></order-details-brief>

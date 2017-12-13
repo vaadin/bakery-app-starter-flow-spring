@@ -20,7 +20,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Dependencies -->
-        <vaadin.version>10.0.0.alpha8</vaadin.version>
+        <vaadin.version>10.0.0.alpha9</vaadin.version>
 
         <spring-boot.version>1.5.8.RELEASE</spring-boot.version>
         <failOnMissingWebXml>false</failOnMissingWebXml>
@@ -46,6 +46,13 @@
         <repository>
             <id>flow-internal-release</id>
             <url>https://repo.vaadin.com/nexus/content/repositories/flow</url>
+        </repository>
+
+        <!-- Workaround for the Flow alpha 13 issue https://github.com/vaadin/flow/issues/3142 -->
+        <!-- Remove when upgrading to a newer version of Flow -->
+        <repository>
+            <id>webjars</id>
+            <url>https://dl.bintray.com/webjars/maven</url>
         </repository>
 
         <repository>
