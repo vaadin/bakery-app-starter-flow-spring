@@ -10,6 +10,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.vaadin.addon.charts.model.Background;
+import com.vaadin.addon.charts.model.BackgroundShape;
+import com.vaadin.addon.charts.model.Pane;
+import com.vaadin.addon.charts.model.PlotOptionsSolidgauge;
+import com.vaadin.starter.bakery.ui.utils.OrdersCountDataWithChart;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.addon.charts.Chart;
@@ -80,6 +85,9 @@ public class DashboardView extends PolymerTemplate<TemplateModel> {
 	@Id("monthly-product-split")
 	private Chart monthlyProductSplit;
 
+	@Id("today-count-chart")
+	private Chart todayCountChart;
+
 	@Autowired
 	public DashboardView(OrderService orderService, OrdersGridDataProvider orderDataProvider) {
 		this.orderService = orderService;
@@ -118,11 +126,51 @@ public class DashboardView extends PolymerTemplate<TemplateModel> {
 	private void populateOrdersCounts(DeliveryStats deliveryStats) {
 		List<OrderSummary> orders = orderService.findAnyMatchingStartingToday();
 
-		todayCount.setOrdersCountData(DashboardUtils.getTodaysOrdersCountData(deliveryStats, orders.iterator()));
+		OrdersCountDataWithChart todaysOrdersCountData = DashboardUtils
+				.getTodaysOrdersCountData(deliveryStats, orders.iterator());
+		todayCount.setOrdersCountData(todaysOrdersCountData);
+		initTodayCountSolidgaugeChart(todaysOrdersCountData);
 		notAvailableCount.setOrdersCountData(DashboardUtils.getNotAvailableOrdersCountData(deliveryStats));
 		Order lastOrder = orderService.load(orders.get(orders.size() - 1).getId());
 		newCount.setOrdersCountData(DashboardUtils.getNewOrdersCountData(deliveryStats, lastOrder));
 		tomorrowCount.setOrdersCountData(DashboardUtils.getTomorrowOrdersCountData(deliveryStats, orders.iterator()));
+	}
+
+
+	private void initTodayCountSolidgaugeChart(OrdersCountDataWithChart data) {
+		Configuration configuration = todayCountChart.getConfiguration();
+		configuration.getChart().setType(ChartType.SOLIDGAUGE);
+		configuration.setTitle("");
+		configuration.getTooltip().setEnabled(false);
+
+		configuration.getyAxis().setMin(0);
+		configuration.getyAxis().setMax(data.getOverall());
+		configuration.getyAxis().setLineWidth(0);
+		configuration.getyAxis().getLabels().setEnabled(false);
+
+		PlotOptionsSolidgauge opt = new PlotOptionsSolidgauge();
+		opt.getDataLabels().setY(0);
+		opt.getDataLabels().setBorderWidth(0);
+		opt.getDataLabels().setUseHTML(true);
+		// To hide original chart data label
+		opt.getDataLabels().setFormat("<div></div>");
+		configuration.setPlotOptions(opt);
+
+		DataSeriesItemWithRadius point = new DataSeriesItemWithRadius();
+		point.setY(data.getCount());
+		point.setInnerRadius("100%");
+		point.setRadius("110%");
+		configuration.setSeries(new DataSeries(point));
+
+		Pane pane = configuration.getPane();
+		pane.setStartAngle(0);
+		pane.setEndAngle(360);
+
+		Background background = new Background();
+		background.setShape(BackgroundShape.ARC);
+		background.setInnerRadius("100%");
+		background.setOuterRadius("110%");
+		pane.setBackground(background);
 	}
 
 	private void onOrdersGridSelectionChanged(SelectionEvent<Order> e) {
