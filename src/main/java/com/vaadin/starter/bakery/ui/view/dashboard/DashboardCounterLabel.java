@@ -26,10 +26,6 @@ public class DashboardCounterLabel extends PolymerTemplate<TemplateModel> {
 	@Id("chart-wrapper")
 	private Div chartWrapper;
 
-	public DashboardCounterLabel() {
-
-	}
-
 	public void setOrdersCountData(OrdersCountData data) {
 		title.setText(data.getTitle());
 		subtitle.setText(data.getSubtitle());
