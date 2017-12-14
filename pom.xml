@@ -190,7 +190,7 @@
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>github-com-vaadin-starter-elements</artifactId>
-            <version>0.0.2</version>
+            <version>0.0.6</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.webjars.bower</groupId>
