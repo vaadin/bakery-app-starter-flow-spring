@@ -153,8 +153,7 @@ public class DashboardView extends PolymerTemplate<TemplateModel> {
 		opt.getDataLabels().setY(0);
 		opt.getDataLabels().setBorderWidth(0);
 		opt.getDataLabels().setUseHTML(true);
-		// To hide original chart data label
-		opt.getDataLabels().setFormat("<div></div>");
+		opt.getDataLabels().setEnabled(false);
 		configuration.setPlotOptions(opt);
 
 		DataSeriesItemWithRadius point = new DataSeriesItemWithRadius();
