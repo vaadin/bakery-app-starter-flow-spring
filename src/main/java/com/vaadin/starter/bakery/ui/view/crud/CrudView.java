@@ -7,9 +7,6 @@ import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.flow.model.TemplateModel;
-import com.vaadin.generated.starter.elements.GeneratedStarterButtonsBar;
-import com.vaadin.generated.starter.elements.GeneratedStarterDialog;
-import com.vaadin.generated.starter.elements.GeneratedStarterSearchBar;
 import com.vaadin.router.HasUrlParameter;
 import com.vaadin.router.OptionalParameter;
 import com.vaadin.router.event.BeforeNavigationEvent;
@@ -19,6 +16,9 @@ import com.vaadin.starter.bakery.ui.event.CloseDialogEvent;
 import com.vaadin.starter.bakery.ui.view.EntityView;
 import com.vaadin.starter.bakery.ui.view.admin.DefaultEntityPresenter;
 import com.vaadin.starter.bakery.ui.view.admin.EntityEditor;
+import com.vaadin.starter.elements.StarterButtonsBar;
+import com.vaadin.starter.elements.StarterDialog;
+import com.vaadin.starter.elements.StarterSearchBar;
 import com.vaadin.ui.common.HasText;
 import com.vaadin.ui.grid.Grid;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
@@ -55,11 +55,11 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 
 	protected abstract BeanValidationBinder<E> getBinder();
 
-	protected abstract GeneratedStarterButtonsBar getButtonsBar();
+	protected abstract StarterButtonsBar getButtonsBar();
 
-	protected abstract GeneratedStarterDialog getDialog();
+	protected abstract StarterDialog getDialog();
 
-	protected abstract GeneratedStarterSearchBar getSearchBar();
+	protected abstract StarterSearchBar getSearchBar();
 
 	protected abstract Grid<E> getGrid();
 

@@ -12,9 +12,6 @@ import com.vaadin.data.ValidationException;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.flow.model.TemplateModel;
-import com.vaadin.generated.starter.elements.GeneratedStarterButtonsBar;
-import com.vaadin.generated.starter.elements.GeneratedStarterDialog;
-import com.vaadin.generated.starter.elements.GeneratedStarterSearchBar;
 import com.vaadin.router.PageTitle;
 import com.vaadin.router.Route;
 import com.vaadin.starter.bakery.backend.data.Role;
@@ -25,6 +22,9 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.view.admin.DefaultEntityPresenter;
 import com.vaadin.starter.bakery.ui.view.admin.EntityEditor;
 import com.vaadin.starter.bakery.ui.view.crud.CrudView;
+import com.vaadin.starter.elements.StarterButtonsBar;
+import com.vaadin.starter.elements.StarterDialog;
+import com.vaadin.starter.elements.StarterSearchBar;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.combobox.ComboBox;
 import com.vaadin.ui.common.HasText;
@@ -43,16 +43,16 @@ import com.vaadin.ui.textfield.TextField;
 public class UsersView extends CrudView<User, TemplateModel> {
 
 	@Id("search-bar")
-	private GeneratedStarterSearchBar searchbar;
+	private StarterSearchBar searchbar;
 
 	@Id("users-grid")
 	private Grid<User> grid;
 
 	@Id("dialog-editor")
-	private GeneratedStarterDialog dialog;
+	private StarterDialog dialog;
 
 	@Id("buttons")
-	private GeneratedStarterButtonsBar buttons;
+	private StarterButtonsBar buttons;
 
 	@Id("title")
 	private H3 title;
@@ -147,17 +147,17 @@ public class UsersView extends CrudView<User, TemplateModel> {
 	}
 
 	@Override
-	public GeneratedStarterSearchBar getSearchBar() {
+	public StarterSearchBar getSearchBar() {
 		return searchbar;
 	}
 
 	@Override
-	protected GeneratedStarterButtonsBar getButtonsBar() {
+	protected StarterButtonsBar getButtonsBar() {
 		return buttons;
 	}
 
 	@Override
-	protected GeneratedStarterDialog getDialog() {
+	protected StarterDialog getDialog() {
 		return dialog;
 	}
 
