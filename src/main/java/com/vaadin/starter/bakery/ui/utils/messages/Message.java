@@ -1,51 +1,10 @@
 package com.vaadin.starter.bakery.ui.utils.messages;
 
-import com.vaadin.generated.starter.elements.GeneratedStarterConfirmDialog;
-import com.vaadin.shared.Registration;
+import com.vaadin.starter.elements.StarterConfirmDialog;
 import com.vaadin.ui.UI;
-import com.vaadin.ui.event.ComponentEventListener;
 
-@SuppressWarnings({ "unchecked", "rawtypes", "serial" })
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class Message {
-
-	private static ComponentEventListener onOk;
-
-	/**
-	 * A singleton of <starter-confirmation-dialog> for reusing, since
-	 * only one instance is used simultaneously in the app.
-	 *
-	 * We don't need to create a new class, since overriding a couple of
-	 * methods in the generated class is enough for having an unique instance.
-	 */
-	public static final GeneratedStarterConfirmDialog<?> confirmation = new GeneratedStarterConfirmDialog() {
-		{
-			super.addOkClickListener(e -> {
-				if (onOk != null) {
-					onOk.onComponentEvent(e);
-					onOk = null;
-					UI.getCurrent().remove(this);
-				}
-			});
-
-			super.addCancelClickListener(e -> {
-				UI.getCurrent().remove(this);
-			 });
-		}
-
-		@Override
-		public void setOpened(boolean opened) {
-			if (opened) {
-				UI.getCurrent().add(this);
-			}
-			super.setOpened(opened);
-		};
-
-		@Override
-		public Registration addOkClickListener(ComponentEventListener listener) {
-			onOk = listener;
-			return null;
-		};
-	};
 
 	public static final String CONFIRM_CAPTION_DELETE = "Confirm Delete";
 	public static final String CONFIRM_MESSAGE_DELETE = "Are you sure you want to delete the selected Item? This action cannot be undone.";
@@ -100,20 +59,20 @@ public class Message {
 	 * When user clicks on OK button, onOk callback is executed.
 	 */
 	public static void confirm(Message message, Runnable onOk) {
+		StarterConfirmDialog confirmation = new StarterConfirmDialog();
+
 		confirmation.setMessage(message.getMessage());
 		confirmation.setCaption(message.getCaption());
 		confirmation.setCancelText(message.getCancelText());
 		confirmation.setOkText(message.getOkText());
-		confirmation.addOkClickListener(e -> onOk.run());
-		confirmation.setOpened(true);
-	}
 
-	/**
-	 * Used in tests. It emulates an OK event.
-	 */
-	public static void confirm() {
-		onOk.onComponentEvent(null);
-		onOk = null;
-		confirmation.setOpened(false);
+		confirmation.addOkClickListener(e -> {
+			onOk.run();
+			UI.getCurrent().remove(confirmation);
+		});
+		confirmation.addCancelClickListener(e -> UI.getCurrent().remove(confirmation));
+
+		UI.getCurrent().add(confirmation);
+		confirmation.setOpened(true);
 	}
 }
