@@ -29,7 +29,7 @@ import com.vaadin.ui.event.ComponentEventListener;
 import com.vaadin.shared.Registration;
 
 @Generated({ "Generator: com.vaadin.generator.ComponentGenerator#1.0-SNAPSHOT",
-        "WebComponent: ConfirmDialogElement#null", "Flow#1.0-SNAPSHOT" })
+        "WebComponent: ConfirmDialogElement#0.0.6", "Flow#1.0-SNAPSHOT" })
 @Tag("starter-confirm-dialog")
 @HtmlImport("frontend://bower_components/starter-elements/starter-confirm-dialog.html")
 public class GeneratedStarterConfirmDialog<R extends GeneratedStarterConfirmDialog<R>>
