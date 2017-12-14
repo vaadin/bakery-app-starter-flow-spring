@@ -10,6 +10,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.vaadin.addon.charts.model.Background;
+import com.vaadin.addon.charts.model.BackgroundShape;
+import com.vaadin.addon.charts.model.Pane;
+import com.vaadin.addon.charts.model.PlotOptionsSolidgauge;
+import com.vaadin.starter.bakery.ui.utils.OrdersCountDataWithChart;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.addon.charts.Chart;
@@ -34,8 +39,6 @@ import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.utils.DashboardUtils;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
-import com.vaadin.starter.bakery.ui.utils.OrdersCountData;
-import com.vaadin.starter.bakery.ui.utils.OrdersCountDataWithChart;
 import com.vaadin.starter.bakery.ui.view.storefront.OrderDetailsBrief;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HtmlImport;
@@ -48,12 +51,24 @@ import com.vaadin.ui.renderers.ComponentTemplateRenderer;
 @HtmlImport("src/dashboard/bakery-dashboard.html")
 @Route(value = BakeryConst.PAGE_DASHBOARD, layout = BakeryApp.class)
 @PageTitle(BakeryConst.TITLE_DASHBOARD)
-public class DashboardView extends PolymerTemplate<DashboardView.Model> {
+public class DashboardView extends PolymerTemplate<TemplateModel> {
 
 	private static final String[] MONTH_LABELS = new String[] {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
 			"Aug", "Sep", "Oct", "Nov", "Dec"};
 
 	private final OrderService orderService;
+
+	@Id("today-count")
+	private DashboardCounterLabel todayCount;
+
+	@Id("not-available-count")
+	private DashboardCounterLabel notAvailableCount;
+
+	@Id("new-count")
+	private DashboardCounterLabel newCount;
+
+	@Id("tomorrow-count")
+	private DashboardCounterLabel tomorrowCount;
 
 	@Id("deliveries-this-month")
 	private Chart deliveriesThisMonthChart;
@@ -69,7 +84,10 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 
 	@Id("monthly-product-split")
 	private Chart monthlyProductSplit;
-	
+
+	@Id("today-count-chart")
+	private Chart todayCountChart;
+
 	@Autowired
 	public DashboardView(OrderService orderService, OrdersGridDataProvider orderDataProvider) {
 		this.orderService = orderService;
@@ -96,6 +114,7 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 
 		Configuration conf = monthlyProductSplit.getConfiguration();
 		conf.getChart().setType(ChartType.PIE);
+		conf.getChart().setBorderRadius(4);
 		conf.setTitle("Products delivered in " + getFullMonthName(today));
 		DataSeries deliveriesPerProductSeries = new DataSeries(productDeliveries.entrySet().stream()
 				.map(e -> new DataSeriesItem(e.getKey().getName(), e.getValue())).collect(Collectors.toList()));
@@ -108,11 +127,47 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 	private void populateOrdersCounts(DeliveryStats deliveryStats) {
 		List<OrderSummary> orders = orderService.findAnyMatchingStartingToday();
 
-		getModel().setTodayOrdersCount(DashboardUtils.getTodaysOrdersCountData(deliveryStats, orders.iterator()));
-		getModel().setNotAvailableOrdersCount(DashboardUtils.getNotAvailableOrdersCountData(deliveryStats));
+		OrdersCountDataWithChart todaysOrdersCountData = DashboardUtils
+				.getTodaysOrdersCountData(deliveryStats, orders.iterator());
+		todayCount.setOrdersCountData(todaysOrdersCountData);
+		initTodayCountSolidgaugeChart(todaysOrdersCountData);
+		notAvailableCount.setOrdersCountData(DashboardUtils.getNotAvailableOrdersCountData(deliveryStats));
 		Order lastOrder = orderService.load(orders.get(orders.size() - 1).getId());
-		getModel().setNewOrdersCount(DashboardUtils.getNewOrdersCountData(deliveryStats, lastOrder));
-		getModel().setTomorrowOrdersCount(DashboardUtils.getTomorrowOrdersCountData(deliveryStats, orders.iterator()));
+		newCount.setOrdersCountData(DashboardUtils.getNewOrdersCountData(deliveryStats, lastOrder));
+		tomorrowCount.setOrdersCountData(DashboardUtils.getTomorrowOrdersCountData(deliveryStats, orders.iterator()));
+	}
+
+
+	private void initTodayCountSolidgaugeChart(OrdersCountDataWithChart data) {
+		Configuration configuration = todayCountChart.getConfiguration();
+		configuration.getChart().setType(ChartType.SOLIDGAUGE);
+		configuration.setTitle("");
+		configuration.getTooltip().setEnabled(false);
+
+		configuration.getyAxis().setMin(0);
+		configuration.getyAxis().setMax(data.getOverall());
+		configuration.getyAxis().setLineWidth(0);
+		configuration.getyAxis().getLabels().setEnabled(false);
+
+		PlotOptionsSolidgauge opt = new PlotOptionsSolidgauge();
+		opt.getDataLabels().setEnabled(false);
+		configuration.setPlotOptions(opt);
+
+		DataSeriesItemWithRadius point = new DataSeriesItemWithRadius();
+		point.setY(data.getCount());
+		point.setInnerRadius("100%");
+		point.setRadius("110%");
+		configuration.setSeries(new DataSeries(point));
+
+		Pane pane = configuration.getPane();
+		pane.setStartAngle(0);
+		pane.setEndAngle(360);
+
+		Background background = new Background();
+		background.setShape(BackgroundShape.ARC);
+		background.setInnerRadius("100%");
+		background.setOuterRadius("110%");
+		pane.setBackground(background);
 	}
 
 	private void onOrdersGridSelectionChanged(SelectionEvent<Order> e) {
@@ -163,7 +218,7 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 		Configuration conf = yearlySalesGraph.getConfiguration();
 		conf.getChart().setType(ChartType.AREASPLINE);
 		conf.getChart().setBorderRadius(4);
-		
+
 		conf.setTitle("Sales last years");
 
 		conf.getxAxis().setVisible(false);
@@ -176,17 +231,4 @@ public class DashboardView extends PolymerTemplate<DashboardView.Model> {
 			conf.addSeries(new ListSeries(Integer.toString(year - i), data.getSalesPerMonth(i)));
 		}
 	}
-
-	public interface Model extends TemplateModel {
-		void setTomorrowOrdersCount(OrdersCountData ordersTomorrow);
-
-		void setNewOrdersCount(OrdersCountData ordersNew);
-
-		void setNotAvailableOrdersCount(OrdersCountData ordersNotAvailable);
-
-		void setTodayOrdersCount(OrdersCountDataWithChart ordersToday);
-
-
-	}
-
 }

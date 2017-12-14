@@ -3,7 +3,6 @@
 <link rel="import" href="../../bower_components/vaadin-board/vaadin-board-row.html">
 <link rel="import" href="../app/style-modules/bakery-charts-default-theme.html">
 
-<link rel="import" href="dashboard-orders-counter.html">
 <link rel="import" href="dashboard-counter-label.html">
 
 <dom-module id="bakery-dashboard">
@@ -27,21 +26,6 @@
         */
       }
 
-      dashboard-pie-chart {
-        --fourth-row-style: {
-          border-radius: 4px;
-          box-shadow: 0 2px 5px 0 rgba(23, 68, 128, 0.1);
-          height: calc(40vh - 64px) !important;
-          min-height: 355px;
-        }
-      }
-
-      vaadin-board-row > * {
-        --margin-style: {
-          margin: 12px 6px;
-        };
-      }
-
       .column-chart {
         box-shadow: 0 2px 5px 0 rgba(23, 68, 128, 0.1);
         border-radius: 4px;
@@ -55,16 +39,9 @@
         min-height: 200px;
       }
 
+      #monthly-product-split,
       #orders-grid {
         margin: 12px 6px;
-        border-radius: 4px;
-        box-shadow: 0 2px 5px 0 rgba(23, 68, 128, 0.1);
-        height: calc(40vh - 64px) !important;
-        min-height: 355px;
-      }
-
-      #monthly-product-split {
-        @apply --margin-style;
         border-radius: 4px;
         box-shadow: 0 2px 5px 0 rgba(23, 68, 128, 0.1);
         height: calc(40vh - 64px) !important;
@@ -76,10 +53,12 @@
 
     <vaadin-board>
       <vaadin-board-row>
-        <dashboard-orders-counter data="[[todayOrdersCount]]"></dashboard-orders-counter>
-        <dashboard-counter-label label-data="[[notAvailableOrdersCount]]" class="red"></dashboard-counter-label>
-        <dashboard-counter-label label-data="[[newOrdersCount]]" class="blue"></dashboard-counter-label>
-        <dashboard-counter-label label-data="[[tomorrowOrdersCount]]" class="gray"></dashboard-counter-label>
+        <dashboard-counter-label id="today-count" class="green">
+          <vaadin-chart id="today-count-chart" class="counter"></vaadin-chart>
+        </dashboard-counter-label>
+        <dashboard-counter-label id="not-available-count" class="red"></dashboard-counter-label>
+        <dashboard-counter-label id="new-count" class="blue"></dashboard-counter-label>
+        <dashboard-counter-label id="tomorrow-count" class="gray"></dashboard-counter-label>
       </vaadin-board-row>
       <vaadin-board-row>
         <div class="vaadin-board-cell">

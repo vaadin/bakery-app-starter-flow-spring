@@ -1,17 +1,16 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 
+<link rel="import" href="../app/style-modules/bakery-charts-default-theme.html">
+
 <dom-module id="dashboard-counter-label">
   <template>
-    <style>
-      .board-cell-wrapper {
+    <style include="bakery-charts-default-theme">
+      :host {
+        position: relative;
         text-align: center;
         height: calc(18vh - 64px);
         min-height: 180px;
         padding: 10px;
-      }
-
-      .count-digit {
-        font-size: 44px;
       }
 
       :host(.green) .count-digit {
@@ -31,11 +30,18 @@
       }
 
       .count-wrapper {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 120px;
+        position: absolute;
+        display: block;
+        top: 0;
+        height: 100%;
         width: 100%;
+        left: 0;
+        text-align: center;
+        padding-top: 32px;
+      }
+
+      .count-digit {
+        font-size: 44px;
       }
 
       .subtitle {
@@ -47,31 +53,28 @@
         margin: 0;
       }
 
+      #chart-wrapper {
+        height: 120px;
+        display: block;
+      }
     </style>
 
-    <div class="board-cell-wrapper">
-      <div class="count-wrapper">
-        <span id="count_digit" class="count-digit">[[labelData.count]]</span>
-      </div>
-
-      <h4>[[labelData.title]]</h4>
-      <div class="subtitle">[[labelData.subtitle]]</div>
+    <div id="chart-wrapper">
+      <slot></slot>
     </div>
+
+    <div class="count-wrapper">
+      <span id="count" class="count-digit"></span>
+    </div>
+
+    <h4 id="title"></h4>
+    <div id="subtitle" class="subtitle"></div>
   </template>
 
   <script>
     class DashboardCounterLabel extends Polymer.Element {
       static get is() {
         return 'dashboard-counter-label';
-      }
-
-      static get properties() {
-        return {
-          labelData: {
-            type: Object,
-            reflectToAttribute: true
-          }
-        };
       }
     }
 

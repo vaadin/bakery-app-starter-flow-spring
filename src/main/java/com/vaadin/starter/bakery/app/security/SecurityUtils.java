@@ -55,6 +55,9 @@ public final class SecurityUtils {
 		}
 
 		Authentication userAuthentication = SecurityContextHolder.getContext().getAuthentication();
+		if (userAuthentication == null) {
+			return false;
+		}
 		List<String> allowedRoles = Arrays.asList(secured.value());
 		return userAuthentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
 				.anyMatch(allowedRoles::contains);
