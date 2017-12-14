@@ -10,9 +10,6 @@ import org.springframework.security.access.annotation.Secured;
 
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.flow.model.TemplateModel;
-import com.vaadin.generated.starter.elements.GeneratedStarterButtonsBar;
-import com.vaadin.generated.starter.elements.GeneratedStarterDialog;
-import com.vaadin.generated.starter.elements.GeneratedStarterSearchBar;
 import com.vaadin.router.PageTitle;
 import com.vaadin.router.Route;
 import com.vaadin.starter.bakery.backend.data.Role;
@@ -24,6 +21,9 @@ import com.vaadin.starter.bakery.ui.utils.converters.CurrencyFormatter;
 import com.vaadin.starter.bakery.ui.view.admin.DefaultEntityPresenter;
 import com.vaadin.starter.bakery.ui.view.admin.EntityEditor;
 import com.vaadin.starter.bakery.ui.view.crud.CrudView;
+import com.vaadin.starter.elements.StarterButtonsBar;
+import com.vaadin.starter.elements.StarterDialog;
+import com.vaadin.starter.elements.StarterSearchBar;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HasText;
 import com.vaadin.ui.common.HtmlImport;
@@ -41,16 +41,16 @@ import com.vaadin.ui.textfield.TextField;
 public class ProductsView extends CrudView<Product, TemplateModel>  {
 
 	@Id("search-bar")
-	private GeneratedStarterSearchBar searchbar;
+	private StarterSearchBar searchbar;
 
 	@Id("products-grid")
 	private Grid<Product> grid;
 
 	@Id("dialog-editor")
-	private GeneratedStarterDialog dialog;
+	private StarterDialog dialog;
 
 	@Id("buttons")
-	private GeneratedStarterButtonsBar buttons;
+	private StarterButtonsBar buttons;
 
 	private DefaultEntityPresenter<Product> presenter;
 
@@ -111,17 +111,17 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 	}
 
 	@Override
-	protected GeneratedStarterButtonsBar getButtonsBar() {
+	protected StarterButtonsBar getButtonsBar() {
 		return buttons;
 	}
 
 	@Override
-	protected GeneratedStarterDialog getDialog() {
+	protected StarterDialog getDialog() {
 		return dialog;
 	}
 
 	@Override
-	protected GeneratedStarterSearchBar getSearchBar() {
+	protected StarterSearchBar getSearchBar() {
 		return searchbar;
 	}
 
