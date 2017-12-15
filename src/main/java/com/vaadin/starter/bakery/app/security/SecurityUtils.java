@@ -37,6 +37,9 @@ public final class SecurityUtils {
 	 */
 	public static String getUsername() {
 		SecurityContext context = SecurityContextHolder.getContext();
+		if (context.getAuthentication().getPrincipal() instanceof String) {
+			return (String) context.getAuthentication().getPrincipal();
+		}
 		UserDetails userDetails = (UserDetails) context.getAuthentication().getPrincipal();
 		return userDetails.getUsername();
 	}
