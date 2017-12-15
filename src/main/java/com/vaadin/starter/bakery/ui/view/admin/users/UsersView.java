@@ -13,7 +13,7 @@ import com.vaadin.router.Route;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.UserService;
-import com.vaadin.starter.bakery.ui.BakeryApp;
+import com.vaadin.starter.bakery.ui.BakeryLayout;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.view.admin.DefaultEntityPresenter;
 import com.vaadin.starter.bakery.ui.view.admin.EntityEditor;
@@ -26,7 +26,7 @@ import com.vaadin.ui.polymertemplate.Id;
 
 @Tag("bakery-users")
 @HtmlImport("src/users/bakery-users.html")
-@Route(value = PAGE_USERS, layout = BakeryApp.class)
+@Route(value = PAGE_USERS, layout = BakeryLayout.class)
 @PageTitle(BakeryConst.TITLE_USERS)
 @Secured(Role.ADMIN)
 public class UsersView extends PolymerEntityView<User, TemplateModel> {

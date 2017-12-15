@@ -6,7 +6,7 @@ import com.vaadin.router.HasErrorParameter;
 import com.vaadin.router.Route;
 import com.vaadin.router.PageTitle;
 import com.vaadin.router.event.BeforeNavigationEvent;
-import com.vaadin.starter.bakery.ui.BakeryApp;
+import com.vaadin.starter.bakery.ui.BakeryLayout;
 import com.vaadin.starter.bakery.ui.exceptions.AccessDeniedException;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.ui.Tag;
@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Tag("access-denied")
 @HtmlImport("src/admin/access-denied.html")
-@Route(value = BakeryConst.ACCESS_DENIED, layout = BakeryApp.class)
+@Route(value = BakeryConst.ACCESS_DENIED, layout = BakeryLayout.class)
 @PageTitle(BakeryConst.TITLE_ACCESS_DENIED)
 public class AccessDeniedView extends PolymerTemplate<TemplateModel> implements HasErrorParameter<AccessDeniedException> {
 

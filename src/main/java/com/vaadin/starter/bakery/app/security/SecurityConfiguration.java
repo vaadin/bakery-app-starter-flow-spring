@@ -105,19 +105,28 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				// the standard favicon URI
 				"/favicon.ico",
 
-				// development-mode static resources
-				"/frontend/bower_components/**", "/icons/**", "/frontend/images/**", "/frontend/src/**", "/manifest.json",
+				// web application manifest
+				"/manifest.json",
 
-				// resources from the framework jars
-				"/*.html", "/*.js",
+				// icons
+				"/icons/**",
 
-				// development-mode webjars
+				// (development mode) static resources
+				"/frontend/bower_components/**",
+				"/frontend/images/**",
+				"/frontend/src/**",
+
+				// (development mode) resources from the framework jars
+				"/frontend/*.html",
+				"/frontend/*.js",
+
+				// (development mode) webjars
 				"/webjars/**",
 
-				//For debugging.
+				// (development mode) H2 debugging console
 				"/h2-console/**",
 
-				// production-mode static resources
-				"/frontend/build/**", "/frontend-es5/**", "/frontend-es6/**");
+				// (production mode) static resources
+				"/frontend/build/**");
 	}
 }

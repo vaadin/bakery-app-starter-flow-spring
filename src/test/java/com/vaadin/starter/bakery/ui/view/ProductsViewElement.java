@@ -7,7 +7,7 @@ import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elementsbase.Element;
 
 @Element("bakery-products")
-public class ProductsViewElement extends TestBenchElement implements HasApp, HasGrid {
+public class ProductsViewElement extends TestBenchElement implements HasBakeryLayout, HasGrid {
 
 	@Override
 	public GridElement getGrid() {

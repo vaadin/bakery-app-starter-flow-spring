@@ -2,36 +2,26 @@ package com.vaadin.starter.bakery.ui;
 
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.router.RouterLayout;
-import com.vaadin.router.event.BeforeNavigationEvent;
-import com.vaadin.router.event.BeforeNavigationObserver;
-import com.vaadin.starter.bakery.app.security.SecurityUtils;
-import com.vaadin.starter.bakery.ui.exceptions.AccessDeniedException;
+import com.vaadin.server.InitialPageSettings;
+import com.vaadin.server.PageConfigurator;
+import com.vaadin.shared.ui.Dependency;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HtmlImport;
-import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 @Tag("bakery-app")
 @HtmlImport("src/app/bakery-app.html")
-public class BakeryApp extends PolymerTemplate<BakeryApp.Model> implements RouterLayout, BeforeNavigationObserver {
-
-	@Id("navigation")
-	private BakeryNavigation navigation;
-
-	public interface Model extends TemplateModel {
-		void setPage(String page);
-	}
+public class BakeryApp extends PolymerTemplate<TemplateModel> implements RouterLayout, PageConfigurator {
 
 	@Override
-	public void beforeNavigation(BeforeNavigationEvent event) {
-		if (!SecurityUtils.isAccessGranted(event.getNavigationTarget())) {
-			event.rerouteToError(AccessDeniedException.class);
-			return;
+	public void configurePage(InitialPageSettings settings) {
+		if (settings.getAfterNavigationEvent().getLocation().getFirstSegment().equals("login")) {
+			// Force login page to use Shady DOM to avoid problems with browsers and
+			// password managers not supporting shadow DOM
+			settings.addInlineWithContents(InitialPageSettings.Position.PREPEND,
+					"window.customElements=window.customElements||{};" +
+							"window.customElements.forcePolyfill=true;" +
+							"window.ShadyDOM={force:true};", Dependency.Type.JAVASCRIPT);
 		}
-		String path = event.getLocation().getFirstSegment();
-		if (!path.isEmpty()) {
-			getModel().setPage(path);
-		}
-		navigation.updateNavigationBar();
 	}
 }
