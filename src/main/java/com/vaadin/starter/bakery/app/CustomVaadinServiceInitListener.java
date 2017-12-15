@@ -11,7 +11,6 @@ public class CustomVaadinServiceInitListener implements VaadinServiceInitListene
 
     @Override
     public void serviceInit(ServiceInitEvent event) {
-        event.addBootstrapListener(new CustomBootstrapListener());
         event.addDependencyFilter((dependencies, filterContext) -> {
             if (filterContext.getService().getDeploymentConfiguration().isProductionMode()) {
                 dependencies.removeIf(e -> e.getType().equals(Dependency.Type.HTML_IMPORT));
