@@ -7,16 +7,6 @@ import org.jsoup.nodes.Element;
 public class CustomBootstrapListener implements BootstrapListener {
 	public void modifyBootstrapPage(BootstrapPageResponse response) {
 		final Element head = response.getDocument().head();
-		if ("/login".equals(response.getRequest().getPathInfo())) {
-			// Force login page to use Shady DOM to avoid problems with browsers and
-			// password managers not supporting shadow DOM
-			head.prepend(
-					"<script type='text/javascript'>" +
-							"window.customElements=window.customElements||{};" +
-							"window.customElements.forcePolyfill=true;" +
-							"window.ShadyDOM={force:true};" +
-					"</script>");
-		}
 
 		// manifest needs to be prepended before scripts or it won't be loaded
 		head.prepend("<meta name=\"theme-color\" content=\"#227aef\">");
@@ -40,7 +30,7 @@ public class CustomBootstrapListener implements BootstrapListener {
 				"<meta name=\"viewport\" content=\"width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes\">");
 		head.append("<!-- Add any global styles for body, document, etc. -->\n" +
                 "    <custom-style>\n" +
-                "      <style is=\"custom-style\" include=\"valo-colors valo-typography\">\n" +
+                "      <style is=\"custom-style\" include=\"valo-color valo-typography\">\n" +
                 "        html,\n" +
                 "        body {\n" +
                 "          height: 100%;\n" +
