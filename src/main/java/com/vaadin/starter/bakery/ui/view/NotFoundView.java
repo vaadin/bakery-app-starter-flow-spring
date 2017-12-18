@@ -8,14 +8,14 @@ import com.vaadin.router.Route;
 import com.vaadin.router.RouteNotFoundError;
 import com.vaadin.router.RouterLink;
 import com.vaadin.router.event.BeforeNavigationEvent;
-import com.vaadin.starter.bakery.ui.BakeryLayout;
+import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Text;
 
 import javax.servlet.http.HttpServletResponse;
 
-@Route(value = BakeryConst.PAGE_NOTFOUND, layout = BakeryLayout.class)
+@Route(value = BakeryConst.PAGE_NOTFOUND, layout = BakeryApp.class)
 @PageTitle(BakeryConst.TITLE_NOT_FOUND)
 public class NotFoundView extends RouteNotFoundError {
 

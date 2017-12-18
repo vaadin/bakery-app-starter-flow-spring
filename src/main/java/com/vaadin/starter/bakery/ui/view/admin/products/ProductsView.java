@@ -12,7 +12,7 @@ import com.vaadin.router.Route;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.service.ProductService;
-import com.vaadin.starter.bakery.ui.BakeryLayout;
+import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.utils.converters.CurrencyFormatter;
 import com.vaadin.starter.bakery.ui.view.admin.DefaultEntityPresenter;
@@ -26,7 +26,7 @@ import com.vaadin.ui.polymertemplate.Id;
 
 @Tag("bakery-products")
 @HtmlImport("src/products/bakery-products.html")
-@Route(value = PAGE_PRODUCTS, layout = BakeryLayout.class)
+@Route(value = PAGE_PRODUCTS, layout = BakeryApp.class)
 @PageTitle(BakeryConst.TITLE_PRODUCTS)
 @Secured(Role.ADMIN)
 public class ProductsView extends PolymerEntityView<Product, TemplateModel> {

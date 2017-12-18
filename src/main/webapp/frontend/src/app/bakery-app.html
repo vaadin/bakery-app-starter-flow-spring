@@ -1,21 +1,50 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-
 <link rel="import" href="style-modules/shared-styles.html">
+
 <link rel="import" href="all-views.html">
+<link rel="import" href="bakery-navigation.html">
 
 <dom-module id="bakery-app">
   <template>
     <style>
       :host {
-        display: block;
-        height: 100%;
+        --app-primary-color: var(--valo-primary-color);
+        --app-secondary-color: var(--valo-body-text-color);
 
+        height: 100%;
+        display: flex;
+        flex-direction: column-reverse;
         color: var(--valo-body-text-color);
-        background: var(--valo-shade-10pct);
+        font-family: var(--valo-font-family);
+      }
+
+      bakery-navigation {
+        width: 100%;
+      }
+
+      #child-wrapper {
+        display: flex;
+        flex: 1;
+        overflow: auto;
+        width: 100%;
+        justify-content: center;
+      }
+
+      #child-wrapper > ::slotted(*) {
+        flex: 1;
+      }
+
+      @media (min-width: 600px) {
+        :host {
+          flex-direction: column;
+        }
       }
     </style>
 
-    <slot></slot>
+    <bakery-navigation id="navigation" page="[[page]]"></bakery-navigation>
+    <div id="child-wrapper">
+      <slot></slot>
+    </div>
   </template>
 
   <script>

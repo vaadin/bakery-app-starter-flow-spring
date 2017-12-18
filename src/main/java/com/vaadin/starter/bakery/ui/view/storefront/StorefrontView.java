@@ -17,7 +17,7 @@ import com.vaadin.router.RouteAlias;
 import com.vaadin.router.event.BeforeNavigationEvent;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
-import com.vaadin.starter.bakery.ui.BakeryLayout;
+import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.components.BakerySearch;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.view.EntityView;
@@ -31,8 +31,8 @@ import com.vaadin.ui.renderers.ComponentTemplateRenderer;
 
 @Tag("bakery-storefront")
 @HtmlImport("src/storefront/bakery-storefront.html")
-@Route(value = BakeryConst.PAGE_STOREFRONT, layout = BakeryLayout.class)
-@RouteAlias(value = BakeryConst.PAGE_ROOT, layout = BakeryLayout.class)
+@Route(value = BakeryConst.PAGE_STOREFRONT, layout = BakeryApp.class)
+@RouteAlias(value = BakeryConst.PAGE_ROOT, layout = BakeryApp.class)
 @PageTitle(BakeryConst.TITLE_STOREFRONT)
 public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
