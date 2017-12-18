@@ -9,6 +9,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 
 import com.vaadin.starter.bakery.backend.data.Role;
 
@@ -27,8 +28,10 @@ public class PerformanceTestSecurityConfiguration extends WebSecurityConfigurerA
 		// Not using Spring CSRF here to be able to use plain HTML for the login page
 		http.csrf().disable().authorizeRequests()
 				// Allow all requests by anonymous users.
-				.anyRequest().permitAll().and().anonymous().authorities(Arrays.stream(Role.getAllRoles())
-						.map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
+				.anyRequest().permitAll().and().anonymous()
+				.principal(new User("admin@vaadin.com", "", Arrays.asList(new SimpleGrantedAuthority("admin"))))
+				.authorities(Arrays.stream(Role.getAllRoles()).map(SimpleGrantedAuthority::new)
+						.collect(Collectors.toList()));
 	}
 
 }
