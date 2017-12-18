@@ -3,7 +3,6 @@ package com.vaadin.starter.bakery.ui.utils.messages;
 import com.vaadin.starter.elements.StarterConfirmDialog;
 import com.vaadin.ui.UI;
 
-@SuppressWarnings({ "unchecked", "rawtypes" })
 public class Message {
 
 	public static final String CONFIRM_CAPTION_DELETE = "Confirm Delete";
