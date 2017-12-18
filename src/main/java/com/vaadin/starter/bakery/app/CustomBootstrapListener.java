@@ -30,21 +30,7 @@ public class CustomBootstrapListener implements BootstrapListener {
 				"<meta name=\"viewport\" content=\"width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes\">");
 		head.append("<!-- Add any global styles for body, document, etc. -->\n" +
                 "    <custom-style>\n" +
-                "      <style is=\"custom-style\" include=\"valo-color valo-typography\">\n" +
-                "        html,\n" +
-                "        body {\n" +
-                "          height: 100%;\n" +
-                "        }\n" +
-                "\n" +
-                "        body {\n" +
-                "          margin: 0;\n" +
-                "          background: var(--valo-shade-10pct);\n" +
-                "        }\n" +
-                "\n" +
-                "        bakery-app {\n" +
-                "          height: 100%;\n" +
-                "        }\n" +
-                "      </style>\n" +
+                "      <style is=\"custom-style\" include=\"valo-color valo-typography\"></style>\n" +
                 "    </custom-style>");
 	}
 }
