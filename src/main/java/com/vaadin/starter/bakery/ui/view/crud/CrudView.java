@@ -12,13 +12,13 @@ import com.vaadin.router.OptionalParameter;
 import com.vaadin.router.event.BeforeNavigationEvent;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
+import com.vaadin.starter.bakery.ui.components.BakerySearch;
 import com.vaadin.starter.bakery.ui.event.CloseDialogEvent;
 import com.vaadin.starter.bakery.ui.view.EntityView;
 import com.vaadin.starter.bakery.ui.view.admin.DefaultEntityPresenter;
 import com.vaadin.starter.bakery.ui.view.admin.EntityEditor;
 import com.vaadin.starter.elements.StarterButtonsBar;
 import com.vaadin.starter.elements.StarterDialog;
-import com.vaadin.starter.elements.StarterSearchBar;
 import com.vaadin.ui.common.HasText;
 import com.vaadin.ui.grid.Grid;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
@@ -38,13 +38,10 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 		getButtonsBar().addAction3Listener(e -> getPresenter().delete());
 
 
-		getSearchBar().addButtonClickListener(e -> getPresenter().createNew());
-		getSearchBar().addFieldValueChangeListener(
-				e -> {
-					getPresenter().filter(getSearchBar().getFieldValue());
-				});
+		getSearchBar().addActionClickListener(e -> getPresenter().createNew());
+		getSearchBar().addFilterChangeListener(e -> getPresenter().filter(getSearchBar().getFilter()));
 
-		getSearchBar().setButtonText("New " + getEntityName());
+		getSearchBar().setActionText("New " + getEntityName());
 	}
 
 	protected abstract DefaultEntityPresenter<E> getPresenter();
@@ -59,7 +56,7 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 
 	protected abstract StarterDialog getDialog();
 
-	protected abstract StarterSearchBar getSearchBar();
+	protected abstract BakerySearch getSearchBar();
 
 	protected abstract Grid<E> getGrid();
 

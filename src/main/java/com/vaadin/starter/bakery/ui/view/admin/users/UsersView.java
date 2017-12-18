@@ -18,13 +18,13 @@ import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.UserService;
 import com.vaadin.starter.bakery.ui.BakeryApp;
+import com.vaadin.starter.bakery.ui.components.BakerySearch;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.view.admin.DefaultEntityPresenter;
 import com.vaadin.starter.bakery.ui.view.admin.EntityEditor;
 import com.vaadin.starter.bakery.ui.view.crud.CrudView;
 import com.vaadin.starter.elements.StarterButtonsBar;
 import com.vaadin.starter.elements.StarterDialog;
-import com.vaadin.starter.elements.StarterSearchBar;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.combobox.ComboBox;
 import com.vaadin.ui.common.HasText;
@@ -43,7 +43,7 @@ import com.vaadin.ui.textfield.TextField;
 public class UsersView extends CrudView<User, TemplateModel> {
 
 	@Id("search-bar")
-	private StarterSearchBar searchbar;
+	private BakerySearch searchbar;
 
 	@Id("users-grid")
 	private Grid<User> grid;
@@ -147,7 +147,7 @@ public class UsersView extends CrudView<User, TemplateModel> {
 	}
 
 	@Override
-	public StarterSearchBar getSearchBar() {
+	public BakerySearch getSearchBar() {
 		return searchbar;
 	}
 
