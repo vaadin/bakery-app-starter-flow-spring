@@ -19,9 +19,9 @@ public class ProductsViewIT extends AbstractIT {
 
 		ItemDetailDialogElement editor = productsPage.getItemsView().getEditorDialog();
 		Assert.assertFalse(editor.isDisplayed());
-
+		String url = getDriver().getCurrentUrl();
 		productsPage.getGridCell("Strawberry Bun").click();
-		Assert.assertTrue(getDriver().getCurrentUrl().endsWith("products/1"));
+		Assert.assertTrue(getDriver().getCurrentUrl().length() > url.length());
 		Assert.assertTrue(editor.isDisplayed());
 
 		ProductEditElement editElement = productsPage.getProductEdit();
