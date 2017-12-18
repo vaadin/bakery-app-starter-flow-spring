@@ -10,10 +10,16 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
 
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import javax.transaction.Transactional;
+
+import com.vaadin.starter.bakery.app.security.SecurityConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.Role;
@@ -29,8 +35,8 @@ import com.vaadin.starter.bakery.backend.repositories.PickupLocationRepository;
 import com.vaadin.starter.bakery.backend.repositories.ProductRepository;
 import com.vaadin.starter.bakery.backend.repositories.UserRepository;
 
-@Configuration
-public class DataGenerator implements HasLogger {
+@Component
+public class DataGenerator implements HasLogger, ApplicationListener<ContextRefreshedEvent> {
 
 	private static final String[] FILLING = new String[] { "Strawberry", "Chocolate", "Blueberry", "Raspberry",
 			"Vanilla" };
@@ -46,34 +52,46 @@ public class DataGenerator implements HasLogger {
 
 	private final Random random = new Random(1L);
 
-	@Bean
-	public CommandLineRunner loadData(OrderRepository orderRepository, UserRepository userRepository,
-			ProductRepository productRepository, PickupLocationRepository pickupLocationRepository,
-			PasswordEncoder passwordEncoder) {
-		return args -> {
-			if (userRepository.count() != 0L) {
-				getLogger().info("Using existing database");
-				return;
-			}
+	OrderRepository orderRepository;
+	UserRepository userRepository;
+	ProductRepository productRepository;
+	PickupLocationRepository pickupLocationRepository;
+	PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-			getLogger().info("Generating demo data");
+	@Autowired
+	public DataGenerator(OrderRepository orderRepository, UserRepository userRepository,
+			ProductRepository productRepository, PickupLocationRepository pickupLocationRepository) {
+		super();
+		this.orderRepository = orderRepository;
+		this.userRepository = userRepository;
+		this.productRepository = productRepository;
+		this.pickupLocationRepository = pickupLocationRepository;
+	}
 
-			getLogger().info("... generating users");
-			User baker = createBaker(userRepository, passwordEncoder);
-			User barista = createBarista(userRepository, passwordEncoder);
-			createAdmin(userRepository, passwordEncoder);
+	@Transactional
+	public void onApplicationEvent(ContextRefreshedEvent e) {
+		if (userRepository.count() != 0L) {
+			getLogger().info("Using existing database");
+			return;
+		}
 
-			getLogger().info("... generating products");
-			Supplier<Product> productSupplier = createProducts(productRepository);
+		getLogger().info("Generating demo data");
 
-			getLogger().info("... generating pickup locations");
-			Supplier<PickupLocation> pickupLocationSupplier = createPickupLocations(pickupLocationRepository);
+		getLogger().info("... generating users");
+		User baker = createBaker(userRepository, passwordEncoder);
+		User barista = createBarista(userRepository, passwordEncoder);
+		createAdmin(userRepository, passwordEncoder);
 
-			getLogger().info("... generating orders");
-			createOrders(orderRepository, productSupplier, pickupLocationSupplier, barista, baker);
+		getLogger().info("... generating products");
+		Supplier<Product> productSupplier = createProducts(productRepository);
 
-			getLogger().info("Generated demo data");
-		};
+		getLogger().info("... generating pickup locations");
+		Supplier<PickupLocation> pickupLocationSupplier = createPickupLocations(pickupLocationRepository);
+
+		getLogger().info("... generating orders");
+		createOrders(orderRepository, productSupplier, pickupLocationSupplier, barista, baker);
+
+		getLogger().info("Generated demo data");
 	}
 
 	private void fillCustomer(Customer customer) {
@@ -254,7 +272,7 @@ public class DataGenerator implements HasLogger {
 				pickupLocationRepository.save(createPickupLocation("Bakery")));
 		return () -> pickupLocations.get(random.nextInt(pickupLocations.size()));
 	}
-	
+
 	private PickupLocation createPickupLocation(String name) {
 		PickupLocation store = new PickupLocation();
 		store.setName(name);
