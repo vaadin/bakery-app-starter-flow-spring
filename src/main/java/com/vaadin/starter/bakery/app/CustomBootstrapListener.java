@@ -29,8 +29,12 @@ public class CustomBootstrapListener implements BootstrapListener {
 		head.append(
 				"<meta name=\"viewport\" content=\"width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes\">");
 		head.append("<!-- Add any global styles for body, document, etc. -->\n" +
-                "    <custom-style>\n" +
-                "      <style is=\"custom-style\" include=\"valo-color valo-typography\"></style>\n" +
-                "    </custom-style>");
+				"    <custom-style>\n" +
+				"      <style is=\"custom-style\" include=\"valo-color valo-typography\">\n" +
+				"        html {\n" +
+				"          background: var(--valo-shade-10pct);\n" +
+				"        }\n" +
+				"      </style>\n" +
+				"    </custom-style>");
 	}
 }
