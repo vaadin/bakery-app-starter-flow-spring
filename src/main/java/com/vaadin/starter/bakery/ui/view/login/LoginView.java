@@ -5,6 +5,9 @@ import com.vaadin.router.PageTitle;
 import com.vaadin.router.Route;
 import com.vaadin.router.event.AfterNavigationEvent;
 import com.vaadin.router.event.AfterNavigationObserver;
+import com.vaadin.server.InitialPageSettings;
+import com.vaadin.server.PageConfigurator;
+import com.vaadin.shared.ui.Dependency;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
@@ -13,7 +16,17 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 @HtmlImport("src/login/bakery-login.html")
 @Route(value = "login")
 @PageTitle("###Bakery###")
-public class LoginView extends PolymerTemplate<LoginView.Model> implements AfterNavigationObserver {
+public class LoginView extends PolymerTemplate<LoginView.Model> implements PageConfigurator, AfterNavigationObserver {
+
+	@Override
+	public void configurePage(InitialPageSettings settings) {
+		// Force login page to use Shady DOM to avoid problems with browsers and
+		// password managers not supporting shadow DOM
+		settings.addInlineWithContents(InitialPageSettings.Position.PREPEND,
+				"window.customElements=window.customElements||{};" +
+						"window.customElements.forcePolyfill=true;" +
+						"window.ShadyDOM={force:true};", Dependency.Type.JAVASCRIPT);
+	}
 
 	@Override
 	public void afterNavigation(AfterNavigationEvent event) {
