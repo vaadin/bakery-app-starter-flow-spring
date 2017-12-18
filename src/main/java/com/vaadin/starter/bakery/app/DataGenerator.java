@@ -24,7 +24,6 @@ import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.PickupLocation;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.User;
-import com.vaadin.starter.bakery.backend.repositories.CustomerRepository;
 import com.vaadin.starter.bakery.backend.repositories.OrderRepository;
 import com.vaadin.starter.bakery.backend.repositories.PickupLocationRepository;
 import com.vaadin.starter.bakery.backend.repositories.ProductRepository;
@@ -48,10 +47,11 @@ public class DataGenerator implements HasLogger {
 	private final Random random = new Random(1L);
 
 	@Bean
-	public CommandLineRunner loadData(OrderRepository orders, UserRepository users, ProductRepository productRepository,
-			CustomerRepository customers, PickupLocationRepository pickupRepo, PasswordEncoder passwordEncoder) {
+	public CommandLineRunner loadData(OrderRepository orderRepository, UserRepository userRepository,
+			ProductRepository productRepository, PickupLocationRepository pickupLocationRepository,
+			PasswordEncoder passwordEncoder) {
 		return args -> {
-			if (users.count() != 0L) {
+			if (userRepository.count() != 0L) {
 				getLogger().info("Using existing database");
 				return;
 			}
@@ -59,25 +59,18 @@ public class DataGenerator implements HasLogger {
 			getLogger().info("Generating demo data");
 
 			getLogger().info("... generating users");
-			User baker = users.save(createUser("baker@vaadin.com", "Heidi", "Carter", passwordEncoder.encode("baker"),
-					Role.BAKER, "https://randomuser.me/api/portraits/women/76.jpg", false));
-			User barista = users
-					.save(createUser("barista@vaadin.com", "Malin", "Castro", passwordEncoder.encode("barista"),
-							Role.BARISTA, "https://randomuser.me/api/portraits/women/89.jpg", true));
-			users.save(createUser("admin@vaadin.com", "Göran", "Rich", passwordEncoder.encode("admin"), Role.ADMIN,
-					"https://randomuser.me/api/portraits/men/34.jpg", true));
+			User baker = createBaker(userRepository, passwordEncoder);
+			User barista = createBarista(userRepository, passwordEncoder);
+			createAdmin(userRepository, passwordEncoder);
 
 			getLogger().info("... generating products");
 			Supplier<Product> productSupplier = createProducts(productRepository);
 
 			getLogger().info("... generating pickup locations");
-			List<PickupLocation> pickupLocations = Arrays.asList(pickupRepo.save(createPickupLocation("Store")),
-					pickupRepo.save(createPickupLocation("Bakery")));
-			Supplier<PickupLocation> pickupLocationSupplier = () -> pickupLocations
-					.get(random.nextInt(pickupLocations.size()));
+			Supplier<PickupLocation> pickupLocationSupplier = createPickupLocations(pickupLocationRepository);
 
 			getLogger().info("... generating orders");
-			createOrders(orders, productSupplier, pickupLocationSupplier, barista, baker);
+			createOrders(orderRepository, productSupplier, pickupLocationSupplier, barista, baker);
 
 			getLogger().info("Generated demo data");
 		};
@@ -255,6 +248,13 @@ public class DataGenerator implements HasLogger {
 		return array[random.nextInt(array.length)];
 	}
 
+	private Supplier<PickupLocation> createPickupLocations(PickupLocationRepository pickupLocationRepository) {
+		List<PickupLocation> pickupLocations = Arrays.asList(
+				pickupLocationRepository.save(createPickupLocation("Store")),
+				pickupLocationRepository.save(createPickupLocation("Bakery")));
+		return () -> pickupLocations.get(random.nextInt(pickupLocations.size()));
+	}
+	
 	private PickupLocation createPickupLocation(String name) {
 		PickupLocation store = new PickupLocation();
 		store.setName(name);
@@ -299,7 +299,22 @@ public class DataGenerator implements HasLogger {
 		return name;
 	}
 
-	
+	private User createBaker(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+		return userRepository.save(createUser("baker@vaadin.com", "Heidi", "Carter", passwordEncoder.encode("baker"),
+				Role.BAKER, "https://randomuser.me/api/portraits/women/76.jpg", false));
+	}
+
+	private User createBarista(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+		return userRepository
+				.save(createUser("barista@vaadin.com", "Malin", "Castro", passwordEncoder.encode("barista"),
+						Role.BARISTA, "https://randomuser.me/api/portraits/women/89.jpg", true));
+	}
+
+	private User createAdmin(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+		return userRepository.save(createUser("admin@vaadin.com", "Göran", "Rich", passwordEncoder.encode("admin"),
+				Role.ADMIN, "https://randomuser.me/api/portraits/men/34.jpg", true));
+	}
+
 	private User createUser(String email, String firstName, String lastName, String password, String role, String photoUrl,boolean locked) {
 		User user = new User();
 		user.setEmail(email);
