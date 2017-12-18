@@ -50,11 +50,11 @@ public class DataGenerator implements HasLogger, ApplicationListener<ContextRefr
 
 	private final Random random = new Random(1L);
 
-	OrderRepository orderRepository;
-	UserRepository userRepository;
-	ProductRepository productRepository;
-	PickupLocationRepository pickupLocationRepository;
-	PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+	private OrderRepository orderRepository;
+	private UserRepository userRepository;
+	private ProductRepository productRepository;
+	private PickupLocationRepository pickupLocationRepository;
+	private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 	@Autowired
 	public DataGenerator(OrderRepository orderRepository, UserRepository userRepository,
