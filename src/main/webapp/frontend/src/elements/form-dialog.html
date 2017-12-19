@@ -28,6 +28,7 @@
       :host([theme="right"]) [part="overlay"] {
         flex: 1;
         max-width: 45em;
+        padding: 5px;
       }
 
       :host([theme="top-right"]) [part="overlay"]{
@@ -52,6 +53,7 @@
       }
     </style>
   </template>
+
 </dom-module>
 
 <dom-module id="form-dialog">
@@ -69,10 +71,17 @@
               type: String,
               observer: '_themeChanged',
             },
-
-            // FIXME: set focusTrap to true when https://github.com/vaadin/vaadin-overlay/pull/46 merged
+            // FIXME: set to true when https://github.com/vaadin/vaadin-overlay/pull/46 merged
             focusTrap: {
               value: false
+            },
+            // FIXME: set to false when https://github.com/vaadin/vaadin-overlay/pull/44 merged
+            noCloseOnOutsideClick: {
+              value: true
+            },
+            // FIXME: set to false when https://github.com/vaadin/vaadin-overlay/pull/44 merged
+            noCloseOnEsc: {
+              value: true
             }
           };
         }
@@ -80,18 +89,19 @@
         ready() {
           super.ready();
           this._observer = new Polymer.FlattenedNodesObserver(this, info => {
-            console.log(">>>> I ", info);
-            const elements = info.addedNodes.filter(e => e.localName != 'template');
-            if (elements.length) {
-              // Insert ligth-dom content in the overlay
-              this.$.overlay.$.content.innerHTML = '';
-              elements.forEach(e => {
-                console.log("Appending", e.localName);
-                this.$.overlay.$.content.appendChild(e)
-              });
-            } else {
-              // It's a template, reset instance and let super templatize it
-              delete this._instance;
+            if (info.addedNodes.length) {
+                  const elements = info.addedNodes.filter(e => e.localName != 'template');
+                  if (elements.length) {
+                    // Insert ligth-dom content in the overlay
+                    this.$.overlay.$.content.innerHTML = '';
+                    elements.forEach(e => {
+                      console.log("Appending", e.localName);
+                      this.$.overlay.$.content.appendChild(e)
+                    });
+                  } else {
+                    // It's a template, reset instance and let super templatize it
+                    delete this._instance;
+                  }
             }
           });
         }
