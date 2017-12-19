@@ -17,13 +17,13 @@ import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.service.ProductService;
 import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.components.BakerySearch;
+import com.vaadin.starter.bakery.ui.components.ButtonsBar;
+import com.vaadin.starter.bakery.ui.components.FormDialog;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.utils.converters.CurrencyFormatter;
 import com.vaadin.starter.bakery.ui.view.admin.DefaultEntityPresenter;
 import com.vaadin.starter.bakery.ui.view.admin.EntityEditor;
 import com.vaadin.starter.bakery.ui.view.crud.CrudView;
-import com.vaadin.starter.elements.StarterButtonsBar;
-import com.vaadin.starter.elements.StarterDialog;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HasText;
 import com.vaadin.ui.common.HtmlImport;
@@ -47,10 +47,10 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 	private Grid<Product> grid;
 
 	@Id("dialog-editor")
-	private StarterDialog dialog;
+	private FormDialog dialog;
 
 	@Id("buttons")
-	private StarterButtonsBar buttons;
+	private ButtonsBar buttons;
 
 	private DefaultEntityPresenter<Product> presenter;
 
@@ -111,12 +111,12 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 	}
 
 	@Override
-	protected StarterButtonsBar getButtonsBar() {
+	protected ButtonsBar getButtons() {
 		return buttons;
 	}
 
 	@Override
-	protected StarterDialog getDialog() {
+	protected FormDialog getDialog() {
 		return dialog;
 	}
 
