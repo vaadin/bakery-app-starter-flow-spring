@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.support.SpringBootServletInitializer;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import com.vaadin.starter.bakery.app.security.SecurityConfiguration;
@@ -24,8 +24,8 @@ import com.vaadin.starter.bakery.ui.BakeryApp;
  * org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration.
  * class })
  */
-@SpringBootApplication(scanBasePackageClasses = { BakeryApp.class, Application.class, UserService.class,
-		SecurityConfiguration.class })
+@SpringBootApplication(scanBasePackageClasses = { SecurityConfiguration.class, BakeryApp.class, Application.class,
+		UserService.class })
 @EnableJpaRepositories(basePackageClasses = { UserRepository.class })
 @EntityScan(basePackageClasses = { User.class })
 public class Application extends SpringBootServletInitializer {

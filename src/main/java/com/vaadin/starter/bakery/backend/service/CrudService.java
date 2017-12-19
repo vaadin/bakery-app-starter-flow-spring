@@ -27,7 +27,7 @@ public interface CrudService<T extends AbstractEntity> {
 	}
 
 	default T load(long id) {
-		T entity = getRepository().findOne(id);
+		T entity = getRepository().findById(id).orElse(null);
 		if (entity == null) {
 			throw new EntityNotFoundException();
 		}
