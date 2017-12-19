@@ -68,7 +68,7 @@ public class UsersViewIT extends AbstractIT {
 		page.getGridCell("barista@vaadin.com").click();
 		page.getUserEdit().getEditForm().getDeleteButton().click();
 
-		ConfirmationDialogElement dialog = page.getConfirmDialog();
+		ConfirmDialogElement dialog = page.getConfirmDialog();
 		dialog.confirm();
 
 		PaperToastElement toast = $(PaperToastElement.class).onPage().id("_persistentToast");
