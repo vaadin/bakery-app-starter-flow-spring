@@ -88,6 +88,32 @@
       static get is() {
         return 'bakery-dashboard';
       }
+
+      // This method is overridden to measure the page load performance and can be safely removed
+      // if there is no need for that.
+      ready() {
+        super.ready();
+        this._chartsLoaded = new Promise((resolve, reject) => {
+          // save the 'resolve' callback to trigger it later from the server
+          this._chartsLoadedResolve = () => {
+            resolve();
+          };
+        });
+
+        this._gridLoaded = new Promise((resolve, reject) => {
+          const listener = () => {
+            if (!this.$['orders-grid'].loading) {
+              this.$['orders-grid'].removeEventListener('loading-changed', listener);
+              resolve();
+            }
+          };
+          this.$['orders-grid'].addEventListener('loading-changed', listener);
+        });
+
+        Promise.all([this._chartsLoaded, this._gridLoaded]).then(() => {
+          window.performance.mark('bakery-page-loaded');
+        });
+      }
     }
 
     window.customElements.define(BakeryDashboard.is, BakeryDashboard);

@@ -7,14 +7,18 @@ import java.time.MonthDay;
 import java.time.Year;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.vaadin.addon.charts.ChartLoadEvent;
 import com.vaadin.addon.charts.model.Background;
 import com.vaadin.addon.charts.model.BackgroundShape;
 import com.vaadin.addon.charts.model.Pane;
 import com.vaadin.addon.charts.model.PlotOptionsSolidgauge;
 import com.vaadin.starter.bakery.ui.utils.OrdersCountDataWithChart;
+import com.vaadin.ui.UI;
+import com.vaadin.ui.event.ComponentEventListener;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.addon.charts.Chart;
@@ -106,6 +110,27 @@ public class DashboardView extends PolymerTemplate<TemplateModel> {
 		populateDeliveriesCharts(data);
 		populateOrdersCounts(data.getDeliveryStats());
 		initProductSplitMonthlyGraph(data.getProductDeliveries());
+
+		measurePageLoadPerformance();
+	}
+
+	// This method is overridden to measure the page load performance and can be safely removed
+	// if there is no need for that.
+	private void measurePageLoadPerformance() {
+		final int nTotal = 5; // the total number of charts on the page
+		AtomicInteger nLoaded = new AtomicInteger();
+		ComponentEventListener<ChartLoadEvent> chartLoadListener = (event) -> {
+			nLoaded.addAndGet(1);
+			if (nLoaded.get() == nTotal) {
+				UI.getCurrent().getPage().executeJavaScript("$0._chartsLoadedResolve()", this);
+			}
+		};
+
+		todayCountChart.addChartLoadListener(chartLoadListener);
+		deliveriesThisMonthChart.addChartLoadListener(chartLoadListener);
+		deliveriesThisYearChart.addChartLoadListener(chartLoadListener);
+		yearlySalesGraph.addChartLoadListener(chartLoadListener);
+		monthlyProductSplit.addChartLoadListener(chartLoadListener);
 	}
 
 	private void initProductSplitMonthlyGraph(Map<Product, Integer> productDeliveries) {
