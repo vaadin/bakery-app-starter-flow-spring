@@ -126,7 +126,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				// (development mode) H2 debugging console
 				"/h2-console/**",
 
-				// (production mode) static resources
-				"/frontend/build/**");
+				// (production mode) static resources - for mvn spring-boot:run
+				"/frontend/build/**",
+
+				// (production mode) static resources - for .war deployments (e.g. Tomcat)
+				"/frontend-es5/**", "/frontend-es6/**");
 	}
 }
