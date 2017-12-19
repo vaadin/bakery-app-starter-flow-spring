@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.vaadin.starter.bakery.ui.view.admin;
+package com.vaadin.starter.bakery.ui.crud;
 
 import com.vaadin.data.provider.CallbackDataProvider;
 import com.vaadin.data.provider.ConfigurableFilterDataProvider;
