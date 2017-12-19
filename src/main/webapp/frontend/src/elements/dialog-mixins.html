@@ -89,7 +89,7 @@
 
       _canClose(e) {
         // Do not close if click was in this dialog or in any vaadin-overlay attached to body (e.g confirmation)
-        return !e.composedPath().reduce((prev, e) => prev || e === this || /vaadin.+overlay/.test(e.localName), false)
+        return !e.composedPath().reduce((prev, e) => prev || e === this || /vaadin.+overlay/.test(e.localName), false);
       }
 
       _onBodyClick(e) {
