@@ -9,7 +9,9 @@
 <link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
 
-<link rel="import" href="../elements/utils-mixin.html">
+<link rel="import" href="../app/bakery-search.html">
+<link rel="import" href="../elements/form-dialog.html">
+<link rel="import" href="../elements/buttons-bar.html">
 
 <dom-module id="bakery-products">
   <template>
@@ -19,7 +21,10 @@
         display: flex;
         flex-direction: column;
       }
+
       vaadin-grid {
+        max-width: calc(964px + var(--valo-space-m));
+        margin: auto;
         width: 100%;
         height: 100%;
       }

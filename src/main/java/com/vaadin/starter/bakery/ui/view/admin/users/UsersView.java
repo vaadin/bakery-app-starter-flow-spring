@@ -21,10 +21,10 @@ import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.components.BakerySearch;
 import com.vaadin.starter.bakery.ui.components.ButtonsBar;
 import com.vaadin.starter.bakery.ui.components.FormDialog;
+import com.vaadin.starter.bakery.ui.crud.CrudView;
+import com.vaadin.starter.bakery.ui.crud.DefaultEntityPresenter;
+import com.vaadin.starter.bakery.ui.crud.EntityEditor;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
-import com.vaadin.starter.bakery.ui.view.admin.DefaultEntityPresenter;
-import com.vaadin.starter.bakery.ui.view.admin.EntityEditor;
-import com.vaadin.starter.bakery.ui.view.crud.CrudView;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.combobox.ComboBox;
 import com.vaadin.ui.common.HasText;
@@ -71,8 +71,6 @@ public class UsersView extends CrudView<User, TemplateModel> {
 
 	@Id("role")
 	private ComboBox<String> roleField;
-
-
 
 	private DefaultEntityPresenter<User> presenter;
 

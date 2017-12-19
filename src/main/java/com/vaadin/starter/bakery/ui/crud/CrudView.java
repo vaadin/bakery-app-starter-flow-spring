@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.vaadin.starter.bakery.ui.view.crud;
+package com.vaadin.starter.bakery.ui.crud;
 
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.ValidationException;
@@ -17,8 +17,6 @@ import com.vaadin.starter.bakery.ui.components.ButtonsBar;
 import com.vaadin.starter.bakery.ui.components.FormDialog;
 import com.vaadin.starter.bakery.ui.event.CloseDialogEvent;
 import com.vaadin.starter.bakery.ui.view.EntityView;
-import com.vaadin.starter.bakery.ui.view.admin.DefaultEntityPresenter;
-import com.vaadin.starter.bakery.ui.view.admin.EntityEditor;
 import com.vaadin.ui.common.HasText;
 import com.vaadin.ui.grid.Grid;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
@@ -91,11 +89,6 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 	public void openDialog(E entity, boolean edit) {
 		getEditor().read(entity);
 		getDialog().setOpened(true);
-	}
-
-	@Override
-	public boolean isDirty() {
-		return getEditor().isDirty();
 	}
 
 	@Override

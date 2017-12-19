@@ -11,6 +11,7 @@
           right: 0;
           bottom: 0;
         }
+
         [part="overlay"] {
           width: 100%;
         }
@@ -31,12 +32,12 @@
         padding: 5px;
       }
 
-      :host([theme="top-right"]) [part="overlay"]{
+      :host([theme="top-right"]) [part="overlay"] {
         position: absolute;
         top: 0;
       }
 
-      :host([theme="top-right"]) [part="backdrop"]{
+      :host([theme="top-right"]) [part="backdrop"] {
         background: transparent;
       }
 
@@ -59,7 +60,9 @@
 <dom-module id="form-dialog">
   <script>
     {
-      Vaadin.DialogElement = Vaadin.DialogElement || Vaadin.VaadinDialog
+      // FIXME: remove line when upgrading vaadin-dialog
+      Vaadin.DialogElement = Vaadin.DialogElement || Vaadin.VaadinDialog;
+
       class StarterDialog extends Vaadin.VaadinDialog {
         static get is() {
           return 'form-dialog';
@@ -69,7 +72,7 @@
           return {
             theme: {
               type: String,
-              observer: '_themeChanged',
+              observer: '_themeChanged'
             },
             // FIXME: set to true when https://github.com/vaadin/vaadin-overlay/pull/46 merged
             focusTrap: {
@@ -90,18 +93,15 @@
           super.ready();
           this._observer = new Polymer.FlattenedNodesObserver(this, info => {
             if (info.addedNodes.length) {
-                  const elements = info.addedNodes.filter(e => e.localName != 'template');
-                  if (elements.length) {
-                    // Insert ligth-dom content in the overlay
-                    this.$.overlay.$.content.innerHTML = '';
-                    elements.forEach(e => {
-                      console.log("Appending", e.localName);
-                      this.$.overlay.$.content.appendChild(e)
-                    });
-                  } else {
-                    // It's a template, reset instance and let super templatize it
-                    delete this._instance;
-                  }
+              const elements = info.addedNodes.filter(e => e.localName != 'template');
+              if (elements.length) {
+                // Insert ligth-dom content in the overlay
+                this.$.overlay.$.content.innerHTML = '';
+                elements.forEach(e => this.$.overlay.$.content.appendChild(e));
+              } else {
+                // It's a template, reset instance and let super templatize it
+                delete this._instance;
+              }
             }
           });
         }
