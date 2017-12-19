@@ -1,4 +1,4 @@
-package com.vaadin.starter.elements;
+package com.vaadin.starter.bakery.ui.components;
 
 import com.vaadin.shared.Registration;
 import com.vaadin.ui.Component;
@@ -9,16 +9,9 @@ import com.vaadin.ui.event.ComponentEventListener;
 import com.vaadin.ui.event.DomEvent;
 import com.vaadin.ui.event.Synchronize;
 
-/**
- * Java wrapper of the polymer element `starter-elements/starter-confirm-dialog`
- * 
- * TODO: this hand-written class should be replaced by an auto-generated one
- * when flow provides a maven plugin for generating java classes for 3rd party
- * polymer elements.
- */
-@Tag("starter-confirm-dialog")
-@HtmlImport("frontend://bower_components/starter-elements/starter-confirm-dialog.html")
-public class StarterConfirmDialog extends Component {
+@Tag("confirm-dialog")
+@HtmlImport("frontend://src/elements/confirm-dialog.html")
+public class ConfirmDialog extends Component {
 
 	public String getCaption() {
 		return getElement().getProperty("caption");
@@ -50,8 +43,8 @@ public class StarterConfirmDialog extends Component {
 	}
 
 	@DomEvent("cancel-click")
-	public static class CancelClickEvent extends ComponentEvent<StarterConfirmDialog> {
-		public CancelClickEvent(StarterConfirmDialog source, boolean fromClient) {
+	public static class CancelClickEvent extends ComponentEvent<ConfirmDialog> {
+		public CancelClickEvent(ConfirmDialog source, boolean fromClient) {
 			super(source, fromClient);
 		}
 	}
@@ -62,8 +55,8 @@ public class StarterConfirmDialog extends Component {
 	}
 
 	@DomEvent("ok-click")
-	public static class OkClickEvent extends ComponentEvent<StarterConfirmDialog> {
-		public OkClickEvent(StarterConfirmDialog source, boolean fromClient) {
+	public static class OkClickEvent extends ComponentEvent<ConfirmDialog> {
+		public OkClickEvent(ConfirmDialog source, boolean fromClient) {
 			super(source, fromClient);
 		}
 	}

@@ -1,6 +1,6 @@
 package com.vaadin.starter.bakery.ui.utils.messages;
 
-import com.vaadin.starter.elements.StarterConfirmDialog;
+import com.vaadin.starter.bakery.ui.components.ConfirmDialog;
 import com.vaadin.ui.UI;
 
 public class Message {
@@ -58,7 +58,7 @@ public class Message {
 	 * When user clicks on OK button, onOk callback is executed.
 	 */
 	public static void confirm(Message message, Runnable onOk) {
-		StarterConfirmDialog confirmation = new StarterConfirmDialog();
+		ConfirmDialog confirmation = new ConfirmDialog();
 
 		confirmation.setMessage(message.getMessage());
 		confirmation.setCaption(message.getCaption());
