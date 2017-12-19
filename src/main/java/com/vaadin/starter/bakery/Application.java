@@ -24,8 +24,8 @@ import com.vaadin.starter.bakery.ui.BakeryApp;
  * org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration.
  * class })
  */
-@SpringBootApplication(scanBasePackageClasses = { BakeryApp.class, Application.class, UserService.class,
-		SecurityConfiguration.class })
+@SpringBootApplication(scanBasePackageClasses = { SecurityConfiguration.class, BakeryApp.class, Application.class,
+		UserService.class })
 @EnableJpaRepositories(basePackageClasses = { UserRepository.class })
 @EntityScan(basePackageClasses = { User.class })
 public class Application extends SpringBootServletInitializer {

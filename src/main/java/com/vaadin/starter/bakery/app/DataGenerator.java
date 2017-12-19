@@ -10,13 +10,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
 
-import javax.transaction.Transactional;
-
 import com.vaadin.spring.annotation.SpringComponent;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.vaadin.starter.bakery.backend.data.OrderState;
@@ -33,8 +28,10 @@ import com.vaadin.starter.bakery.backend.repositories.PickupLocationRepository;
 import com.vaadin.starter.bakery.backend.repositories.ProductRepository;
 import com.vaadin.starter.bakery.backend.repositories.UserRepository;
 
+import javax.annotation.PostConstruct;
+
 @SpringComponent
-public class DataGenerator implements HasLogger, ApplicationListener<ContextRefreshedEvent> {
+public class DataGenerator implements HasLogger {
 
 	private static final String[] FILLING = new String[] { "Strawberry", "Chocolate", "Blueberry", "Raspberry",
 			"Vanilla" };
@@ -54,20 +51,21 @@ public class DataGenerator implements HasLogger, ApplicationListener<ContextRefr
 	private UserRepository userRepository;
 	private ProductRepository productRepository;
 	private PickupLocationRepository pickupLocationRepository;
-	private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+	private PasswordEncoder passwordEncoder;
 
 	@Autowired
 	public DataGenerator(OrderRepository orderRepository, UserRepository userRepository,
-			ProductRepository productRepository, PickupLocationRepository pickupLocationRepository) {
-		super();
+			ProductRepository productRepository, PickupLocationRepository pickupLocationRepository,
+			PasswordEncoder passwordEncoder) {
 		this.orderRepository = orderRepository;
 		this.userRepository = userRepository;
 		this.productRepository = productRepository;
 		this.pickupLocationRepository = pickupLocationRepository;
+		this.passwordEncoder = passwordEncoder;
 	}
 
-	@Transactional
-	public void onApplicationEvent(ContextRefreshedEvent e) {
+	@PostConstruct
+	public void loadData() {
 		if (userRepository.count() != 0L) {
 			getLogger().info("Using existing database");
 			return;
