@@ -10,9 +10,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
 
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import com.vaadin.spring.annotation.SpringComponent;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.vaadin.starter.bakery.backend.data.OrderState;
@@ -29,7 +28,9 @@ import com.vaadin.starter.bakery.backend.repositories.PickupLocationRepository;
 import com.vaadin.starter.bakery.backend.repositories.ProductRepository;
 import com.vaadin.starter.bakery.backend.repositories.UserRepository;
 
-@Configuration
+import javax.annotation.PostConstruct;
+
+@SpringComponent
 public class DataGenerator implements HasLogger {
 
 	private static final String[] FILLING = new String[] { "Strawberry", "Chocolate", "Blueberry", "Raspberry",
@@ -46,34 +47,47 @@ public class DataGenerator implements HasLogger {
 
 	private final Random random = new Random(1L);
 
-	@Bean
-	public CommandLineRunner loadData(OrderRepository orderRepository, UserRepository userRepository,
+	private OrderRepository orderRepository;
+	private UserRepository userRepository;
+	private ProductRepository productRepository;
+	private PickupLocationRepository pickupLocationRepository;
+	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	public DataGenerator(OrderRepository orderRepository, UserRepository userRepository,
 			ProductRepository productRepository, PickupLocationRepository pickupLocationRepository,
 			PasswordEncoder passwordEncoder) {
-		return args -> {
-			if (userRepository.count() != 0L) {
-				getLogger().info("Using existing database");
-				return;
-			}
+		this.orderRepository = orderRepository;
+		this.userRepository = userRepository;
+		this.productRepository = productRepository;
+		this.pickupLocationRepository = pickupLocationRepository;
+		this.passwordEncoder = passwordEncoder;
+	}
 
-			getLogger().info("Generating demo data");
+	@PostConstruct
+	public void loadData() {
+		if (userRepository.count() != 0L) {
+			getLogger().info("Using existing database");
+			return;
+		}
 
-			getLogger().info("... generating users");
-			User baker = createBaker(userRepository, passwordEncoder);
-			User barista = createBarista(userRepository, passwordEncoder);
-			createAdmin(userRepository, passwordEncoder);
+		getLogger().info("Generating demo data");
 
-			getLogger().info("... generating products");
-			Supplier<Product> productSupplier = createProducts(productRepository);
+		getLogger().info("... generating users");
+		User baker = createBaker(userRepository, passwordEncoder);
+		User barista = createBarista(userRepository, passwordEncoder);
+		createAdmin(userRepository, passwordEncoder);
 
-			getLogger().info("... generating pickup locations");
-			Supplier<PickupLocation> pickupLocationSupplier = createPickupLocations(pickupLocationRepository);
+		getLogger().info("... generating products");
+		Supplier<Product> productSupplier = createProducts(productRepository);
 
-			getLogger().info("... generating orders");
-			createOrders(orderRepository, productSupplier, pickupLocationSupplier, barista, baker);
+		getLogger().info("... generating pickup locations");
+		Supplier<PickupLocation> pickupLocationSupplier = createPickupLocations(pickupLocationRepository);
 
-			getLogger().info("Generated demo data");
-		};
+		getLogger().info("... generating orders");
+		createOrders(orderRepository, productSupplier, pickupLocationSupplier, barista, baker);
+
+		getLogger().info("Generated demo data");
 	}
 
 	private void fillCustomer(Customer customer) {
@@ -254,7 +268,7 @@ public class DataGenerator implements HasLogger {
 				pickupLocationRepository.save(createPickupLocation("Bakery")));
 		return () -> pickupLocations.get(random.nextInt(pickupLocations.size()));
 	}
-	
+
 	private PickupLocation createPickupLocation(String name) {
 		PickupLocation store = new PickupLocation();
 		store.setName(name);

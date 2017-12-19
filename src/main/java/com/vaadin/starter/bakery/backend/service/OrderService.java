@@ -51,7 +51,7 @@ public class OrderService implements CrudService<Order> {
 			EnumSet.complementOf(EnumSet.of(OrderState.DELIVERED, OrderState.READY, OrderState.CANCELLED)));
 
 	public Order findOrder(Long id) {
-		Order order = orderRepository.findOne(id);
+		Order order = orderRepository.findById(id).orElse(null);
 		if (order == null) {
 			throw new ValidationException("Someone has already deleted the order. Please refresh the page.");
 		}
