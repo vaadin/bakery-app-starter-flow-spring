@@ -12,10 +12,6 @@
 <link rel="import" href="../../bower_components/vaadin-valo-theme/icons.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 
-<link rel="import" href="../../bower_components/starter-elements/starter-search-bar.html">
-<link rel="import" href="../../bower_components/starter-elements/starter-dialog.html">
-<link rel="import" href="../../bower_components/starter-elements/starter-buttons-bar.html">
-
 <link rel="import" href="../elements/utils-mixin.html">
 
 <dom-module id="bakery-users">
@@ -28,37 +24,33 @@
       }
       vaadin-grid {
         width: 100%;
-        height: 100%;
+        height: 400px;
       }
-
-
     </style>
 
-      <starter-search-bar id="search-bar"></starter-search-bar>
+    <bakery-search id="search-bar"></bakery-search>
 
-      <vaadin-grid id="users-grid" slot="grid" theme="borderless"></vaadin-grid>
+    <vaadin-grid id="users-grid" slot="grid" theme="borderless"></vaadin-grid>
 
-      <!--  dialogs are teleported to body, hence you need to inline styles -->
-      <starter-dialog id="dialog-editor" theme="right">
-        <h3 id="title" class="header-title"></h3>
+    <!--  dialogs are tele-ported to body, hence you need to inline styles or use styled web components -->
+    <form-dialog id="dialog-editor" theme="right">
+      <h3 id="title" class="header-title"></h3><em></em>
 
-        <vaadin-form-layout style="flex: 1">
-          <vaadin-text-field id="email" label="Email (login)" colspan="2"></vaadin-text-field>
-          <br>
-          <vaadin-text-field id="first" label="First Name" colspan="2"></vaadin-text-field>
-          <vaadin-text-field id="last" label="Last Name" colspan="2"></vaadin-text-field>
-          <br>
-          <vaadin-password-field id="user-edit-password" label="Password" colspan="2"></vaadin-password-field>
-          <br>
-          <vaadin-combo-box id="role" label="Role" colspan="2"></vaadin-combo-box>
-        </vaadin-form-layout>
+      <vaadin-form-layout style="flex: 1">
+        <vaadin-text-field id="email" label="Email (login)" colspan="2"></vaadin-text-field>
+        <br>
+        <vaadin-text-field id="first" label="First Name" colspan="2"></vaadin-text-field>
+        <vaadin-text-field id="last" label="Last Name" colspan="2"></vaadin-text-field>
+        <br>
+        <vaadin-password-field id="user-edit-password" label="Password" colspan="2"></vaadin-password-field>
+        <br>
+        <vaadin-combo-box id="role" label="Role" colspan="2"></vaadin-combo-box>
+      </vaadin-form-layout>
+      
+      <buttons-bar id="buttons"></buttons-bar>
 
-        <starter-buttons-bar id="buttons"
-          action1-text="Save" action2-text="Cancel" action3-text="Delete">
-        </starter-buttons-bar>
-
-        <template><!-- vaadin-dialog fails if not present --></template>
-      </starter-dialog>
+      <template><!-- vaadin-dialog fails if not present (#43) --></template>
+    </form-dialog>
   </template>
 
   <script>

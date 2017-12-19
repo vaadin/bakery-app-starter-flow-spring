@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.vaadin.starter.elements;
+package com.vaadin.starter.bakery.ui.components;
 
 import com.vaadin.shared.Registration;
 import com.vaadin.ui.Component;
@@ -26,16 +26,9 @@ import com.vaadin.ui.event.Synchronize;
 
 import elemental.json.JsonObject;
 
-/**
- * Java implementation of the polymer element `starter-elements/starter-dialog`
- * 
- * TODO: this hand-written class should be replaced by flow component for
- * vaadin-dialog when it supports non static content, or a DOM api for adding
- * content.
- */
-@Tag("starter-dialog")
-@HtmlImport("frontend://bower_components/starter-elements/starter-dialog.html")
-public class StarterDialog extends Component {
+@Tag("form-dialog")
+@HtmlImport("frontend://src/elements/form-dialog.html")
+public class FormDialog extends Component {
 
 	@Synchronize(property = "opened", value = "opened-changed")
 	public boolean isOpened() {
@@ -81,7 +74,7 @@ public class StarterDialog extends Component {
 
 	@DomEvent("opened-changed")
 	public static class OpenedChangeEvent extends ComponentEvent {
-		public OpenedChangeEvent(StarterDialog source, boolean fromClient) {
+		public OpenedChangeEvent(FormDialog source, boolean fromClient) {
 			super(source, fromClient);
 		}
 	}

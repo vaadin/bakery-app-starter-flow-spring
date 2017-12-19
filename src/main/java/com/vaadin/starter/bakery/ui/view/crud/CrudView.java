@@ -13,12 +13,12 @@ import com.vaadin.router.event.BeforeNavigationEvent;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
 import com.vaadin.starter.bakery.ui.components.BakerySearch;
+import com.vaadin.starter.bakery.ui.components.ButtonsBar;
+import com.vaadin.starter.bakery.ui.components.FormDialog;
 import com.vaadin.starter.bakery.ui.event.CloseDialogEvent;
 import com.vaadin.starter.bakery.ui.view.EntityView;
 import com.vaadin.starter.bakery.ui.view.admin.DefaultEntityPresenter;
 import com.vaadin.starter.bakery.ui.view.admin.EntityEditor;
-import com.vaadin.starter.elements.StarterButtonsBar;
-import com.vaadin.starter.elements.StarterDialog;
 import com.vaadin.ui.common.HasText;
 import com.vaadin.ui.grid.Grid;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
@@ -33,9 +33,9 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 		});
 		addListener(CloseDialogEvent.class, e -> getPresenter().cancel());
 
-		getButtonsBar().addAction1Listener(e -> getPresenter().save());
-		getButtonsBar().addAction2Listener(e -> getPresenter().cancel());
-		getButtonsBar().addAction3Listener(e -> getPresenter().delete());
+		getButtons().addSaveListener(e -> getPresenter().save());
+		getButtons().addCancelListener(e -> getPresenter().cancel());
+		getButtons().addDeleteListener(e -> getPresenter().delete());
 
 
 		getSearchBar().addActionClickListener(e -> getPresenter().createNew());
@@ -52,9 +52,9 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 
 	protected abstract BeanValidationBinder<E> getBinder();
 
-	protected abstract StarterButtonsBar getButtonsBar();
+	protected abstract ButtonsBar getButtons();
 
-	protected abstract StarterDialog getDialog();
+	protected abstract FormDialog getDialog();
 
 	protected abstract BakerySearch getSearchBar();
 
@@ -106,8 +106,8 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 	@Override
 	public void read(E e) {
 		getBinder().readBean(e);
-		getButtonsBar().setAction1Disabled(true);
-		getButtonsBar().setAction3Disabled(e.isNew());
+		getButtons().setSaveDisabled(true);
+		getButtons().setDeleteDisabled(e.isNew());
 		getTitle().setText((e.isNew() ? "New" : "Edit") + " " + getEntityName());
 	}
 }
