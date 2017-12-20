@@ -4,9 +4,12 @@ import static com.vaadin.starter.bakery.backend.service.UserService.MODIFY_LOCKE
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.openqa.selenium.WebElement;
 
 import com.vaadin.starter.bakery.AbstractIT;
+import com.vaadin.starter.bakery.elements.FormLayoutElement;
 import com.vaadin.starter.bakery.elements.PaperToastElement;
+import com.vaadin.starter.bakery.elements.PasswordFieldElement;
 import com.vaadin.starter.bakery.elements.TextFieldElement;
 import com.vaadin.starter.bakery.ui.view.StorefrontViewElement;
 
@@ -17,31 +20,32 @@ public class UsersViewIT extends AbstractIT {
 		return storefront.getMenu().navigateToUsers();
 	}
 
-	// @Test
-	// public void updatePassword() {
-	// UsersViewElement usersView = openTestPage();
-	//
-	// ItemDetailDialogElement editor =
-	// usersView.getItemsView().getEditorDialog();
-	// Assert.assertFalse(editor.isDisplayed());
-	//
-	// WebElement bakerCell = usersView.getGridCell("baker@vaadin.com");
-	// Assert.assertNotNull(bakerCell);
-	//
-	// bakerCell.click();
-	// Assert.assertTrue(editor.isDisplayed());
-	//
-	// PasswordFieldElement password =
-	// usersView.getUserEdit().getPasswordField();
-	// Assert.assertEquals("", password.getValue());
-	//
-	// password.setValue("foobar");
-	// usersView.getUserEdit().getEditForm().getSaveButton().click();
-	// Assert.assertFalse(editor.isDisplayed());
-	//
-	// bakerCell.click();
-	// Assert.assertEquals("", password.getAttribute("value"));
-	// }
+	@Test
+	public void updatePassword() {
+		UsersViewElement usersView = openTestPage();
+
+		Assert.assertFalse(usersView.getDialog().isOpened());
+
+		WebElement bakerCell = usersView.getGridCell("baker@vaadin.com");
+		Assert.assertNotNull(bakerCell);
+
+		bakerCell.click();
+
+		Assert.assertTrue(usersView.getDialog().isOpened());
+
+		FormLayoutElement form = usersView.getForm();
+		Assert.assertTrue(form.isDisplayed());
+
+		PasswordFieldElement password = usersView.getPasswordField();
+		Assert.assertEquals("", password.getValue());
+
+		password.setValue("foobar");
+		usersView.getButtonsBar().getSaveButton().click();
+		Assert.assertFalse(form.isDisplayed());
+
+		bakerCell.click();
+		Assert.assertEquals("", password.getAttribute("value"));
+	}
 
 	@Test
 	public void tryToUpdateLockedEntity() {

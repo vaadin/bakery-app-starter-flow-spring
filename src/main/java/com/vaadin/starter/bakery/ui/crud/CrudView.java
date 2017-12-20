@@ -40,12 +40,7 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 		getSearchBar().addFilterChangeListener(e -> getPresenter().filter(getSearchBar().getFilter()));
 
 		getSearchBar().setActionText("New " + getEntityName());
-
-		getBinder().addValueChangeListener(e -> {
-			System.err.println(
-					">>>>>>>> " + e.getSource() + " " + e.isFromClient() + " " + e.getValue() + " " + e.getOldValue());
-			getButtons().setSaveDisabled(!isDirty());
-		});
+		getBinder().addValueChangeListener(e -> getButtons().setSaveDisabled(!isDirty()));
 	}
 
 	protected abstract DefaultEntityPresenter<E> getPresenter();
