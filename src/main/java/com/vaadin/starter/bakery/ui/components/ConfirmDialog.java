@@ -10,7 +10,7 @@ import com.vaadin.ui.event.DomEvent;
 import com.vaadin.ui.event.Synchronize;
 
 @Tag("confirm-dialog")
-@HtmlImport("frontend://src/elements/confirm-dialog.html")
+@HtmlImport("src/elements/confirm-dialog.html")
 public class ConfirmDialog extends Component {
 
 	public String getCaption() {
