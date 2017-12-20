@@ -82,8 +82,8 @@
       // if there is no need for that.
       ready() {
         super.ready();
-        var grid = this.$["storefront-grid"];
-        grid.addEventListener("loading-changed", function () {
+        const grid = this.$['storefront-grid'];
+        grid.addEventListener('loading-changed', () => {
           if (!grid.loading) {
             window.performance.mark('bakery-page-loaded');
           }
