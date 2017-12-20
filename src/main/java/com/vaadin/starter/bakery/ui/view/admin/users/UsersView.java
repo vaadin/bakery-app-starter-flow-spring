@@ -8,7 +8,6 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.vaadin.data.BeanValidationBinder;
-import com.vaadin.data.ValidationException;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.flow.model.TemplateModel;
@@ -23,7 +22,6 @@ import com.vaadin.starter.bakery.ui.components.ButtonsBar;
 import com.vaadin.starter.bakery.ui.components.FormDialog;
 import com.vaadin.starter.bakery.ui.crud.CrudView;
 import com.vaadin.starter.bakery.ui.crud.DefaultEntityPresenter;
-import com.vaadin.starter.bakery.ui.crud.EntityEditor;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.combobox.ComboBox;
@@ -88,6 +86,7 @@ public class UsersView extends CrudView<User, TemplateModel> {
 		ListDataProvider<String> roleProvider = DataProvider.ofItems(Role.getAllRoles());
 		roleField.setItemLabelGenerator(s -> s != null  ? s : "");
 		roleField.setDataProvider(roleProvider);
+
 		binder.bind(firstnameField, "firstName");
 		binder.bind(lastnameField, "lastName");
 		binder.bind(emailField, "email");
@@ -123,21 +122,6 @@ public class UsersView extends CrudView<User, TemplateModel> {
 	@Override
 	protected String getBasePage() {
 		return PAGE_USERS;
-	}
-
-	@Override
-	protected EntityEditor<User> getEditor() {
-		return this;
-	}
-
-	@Override
-	public boolean isDirty() {
-		return binder.hasChanges();
-	}
-
-	@Override
-	public void write(User entity) throws ValidationException {
-		binder.writeBean(entity);
 	}
 
 	public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
