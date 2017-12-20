@@ -34,6 +34,17 @@
         return 'bakery-users';
       }
 
+      // This method is overriden to measure the page load performance and can be safely removed
+      // if there is no need for that
+      // loading-changed is not used cause loading becomes undefined twice while page is being loaded
+      ready() {
+        super.ready();
+        const grid = this.$['users-grid'];
+        grid.addEventListener('animationend', () => {
+            window.performance.mark('bakery-page-loaded');
+        });
+      }
+
       static get properties() {
         return {
           desktopView: {
