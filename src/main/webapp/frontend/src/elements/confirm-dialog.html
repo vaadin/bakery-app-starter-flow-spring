@@ -1,82 +1,99 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
-<link rel="import" href="dialog-mixins.html">
+<link rel="import" href="../../bower_components/vaadin-dialog/vaadin-dialog.html">
 
 <dom-module id="confirm-dialog">
   <template>
-    <style include="vaadin-modal-dialog-styles">
-      :host #fore {
-        max-width: 400px;
-        max-height: 200px;
-        width: 100%;
-        margin: auto;
-        left: 16px;
-        right: 16px;
-        border-radius: var(--valo-border-radius);
-        box-shadow: 0 4px 20px var(--valo-shade-20pct);
-      }
+    <vaadin-dialog id="dialog" opened="{{opened}}">
+      <template>
+        <style>
+          #caption {
+            font-size: 14px;
+            text-align: center;
+            color: var(--valo-body-text-color);
+          }
 
-      #caption {
-        font-size: 14px;
-        font-weight: 500;
-        line-height: 1.57;
-        text-align: center;
-        color: rgba(42, 71, 110, 0.6);
-        color: var(--valo-body-text-color);
-        margin-bottom: 0;
-        padding: 0 16px;
-      }
+          #message {
+            padding: 0 16px;
+            color: grey;
+          }
 
-      #message {
-        padding: 0 16px;
-        font-size: 16px;
-        line-height: 1.63;
-        color: var(--valo-secondary-text-color);
-      }
+          #buttons {
+            margin-top: 30px;
+            display: flex;
+            border-top: 1px solid var(--valo-contrast-10pct);
+          }
+        </style>
 
-      #buttons {
-        border-top: 1px solid var(--valo-contrast-10pct);
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-      }
-
-      .flex {
-        display: flex;
-      }
-
-      .flex1 {
-        flex: 1;
-      }
-    </style>
-
-    <div id="back" on-click="close"></div>
-    <div id="fore">
-      <p id="caption">[[caption]]</p>
-      <p class="flex1" id="message">[[message]]</p>
-      <div id="buttons" class="flex">
-        <vaadin-button id="ok" theme="tertiary error">[[okText]]</vaadin-button>
-        <div class="flex1"></div>
-        <vaadin-button id="cancel" theme="tertiary" class="right">[[cancelText]]</vaadin-button>
-      </div>
-    </div>
+        <p id="caption">[[caption]]</p>
+        <p id="message">[[message]]</p>
+        <div id="buttons">
+          <vaadin-button on-click="_ok" theme="raised tertiary error">[[okText]]</vaadin-button>
+          <div style="flex: 1"></div>
+          <vaadin-button on-click="_cancel" theme="raised tertiary" class="right">[[cancelText]]</vaadin-button>
+        </div>
+      </template>
+    </vaadin-dialog>
   </template>
 
   <script>
-    class ConfirmDialog extends window.CloseableDialogMixin(Polymer.Element) {
-      static get is() {
-        return 'confirm-dialog';
-      }
-      static get properties() {
-        return {
-          opened: {
-            type: Boolean,
-            value: true
-          }
-        };
-      }
-    }
+    {
+      class ConfirmationDialogElement extends (class extends Polymer.Element {}) {
+        static get is() {
+          return 'confirm-dialog';
+        }
 
-    window.customElements.define(ConfirmDialog.is, ConfirmDialog);
+        static get properties() {
+          return {
+            caption: {
+              value: 'Confirmation needed'
+            },
+            message: {
+              value: 'Do you want to continue?'
+            },
+            okText: {
+              value: 'OK'
+            },
+            cancelText: {
+              value: 'Cancel'
+            },
+            callback: Function,
+            opened: {
+              type: Boolean,
+              notify: true
+            }
+          };
+        }
+
+        ready() {
+          super.ready();
+
+          // We need to unify opened-changed and cancel-event in one, because removing from UI in
+          // server side, implies events after removal not being executed, and opened-changes is always
+          // fired before cancel-click
+          this.$.dialog.$.overlay.addEventListener('vaadin-overlay-outside-click', () => this._cancel());
+          this.$.dialog.$.overlay.addEventListener('vaadin-overlay-escape-press', () => this._cancel());
+        }
+
+        /** @event cancel-click */
+        _cancel() {
+          delete this.callback;
+          this.dispatchEvent(new CustomEvent('cancel-click'));
+          this.opened = false;
+        }
+
+        /** @event ok-click */
+        _ok() {
+          if (this.callback) {
+            this.callback();
+            delete this.callback;
+          }
+          this.dispatchEvent(new CustomEvent('ok-click'));
+          this.opened = false;
+        }
+      }
+
+      window.customElements.define(ConfirmationDialogElement.is, ConfirmationDialogElement);
+    }
   </script>
 </dom-module>

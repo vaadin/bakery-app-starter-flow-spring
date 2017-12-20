@@ -2,7 +2,6 @@ package com.vaadin.starter.bakery.ui.view;
 
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.provider.DataProvider;
-import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
 import com.vaadin.starter.bakery.ui.utils.messages.Message;
 
 /**
@@ -17,7 +16,7 @@ import com.vaadin.starter.bakery.ui.utils.messages.Message;
  * @param <T> the entity type
  */
 public interface EntityView<T> extends HasNotifications {
-
+	
 	/**
 	 * Sets / refreshes the entities in grid.
 	 *
@@ -48,7 +47,7 @@ public interface EntityView<T> extends HasNotifications {
 	 *            command to execute if the user presses 'ok' in the dialog
 	 */
 	default void showConfirmationRequest(Message message, Runnable onOk) {
-		ConfirmationDialog.show(message, onOk);
+	    Message.confirm(message, onOk);
 	}
 
 	/**

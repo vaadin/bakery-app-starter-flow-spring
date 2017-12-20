@@ -87,16 +87,17 @@
         });
       }
 
+      _canClose(e) {
+        // Do not close if click was in this dialog or in any vaadin-overlay attached to body (e.g confirmation)
+        return !e.composedPath().reduce((prev, e) => prev || e === this || /vaadin.+overlay/.test(e.localName), false);
+      }
+
       _onBodyClick(e) {
-        if (e.composedPath().indexOf(this) < 0) {
-          this.close();
-        }
+        this._canClose(e) && this.close();
       }
 
       _onBodyKeydown(e) {
-        if (e.keyCode == 27) {
-          this.close();
-        }
+        e.keyCode == 27 && this._canClose(e) && this.close();
       }
 
       close(e) {
