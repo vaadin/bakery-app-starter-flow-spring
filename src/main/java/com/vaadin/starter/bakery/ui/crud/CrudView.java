@@ -13,7 +13,7 @@ import com.vaadin.router.event.BeforeNavigationEvent;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
 import com.vaadin.starter.bakery.ui.components.BakerySearch;
-import com.vaadin.starter.bakery.ui.components.ButtonsBar;
+import com.vaadin.starter.bakery.ui.components.FormButtonsBar;
 import com.vaadin.starter.bakery.ui.components.FormDialog;
 import com.vaadin.starter.bakery.ui.event.CloseDialogEvent;
 import com.vaadin.starter.bakery.ui.view.EntityView;
@@ -49,7 +49,7 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 
 	protected abstract BeanValidationBinder<E> getBinder();
 
-	protected abstract ButtonsBar getButtons();
+	protected abstract FormButtonsBar getButtons();
 
 	protected abstract FormDialog getDialog();
 

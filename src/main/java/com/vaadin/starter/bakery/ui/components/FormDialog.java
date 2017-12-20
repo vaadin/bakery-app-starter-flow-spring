@@ -12,7 +12,7 @@ import com.vaadin.ui.event.Synchronize;
 import elemental.json.JsonObject;
 
 @Tag("form-dialog")
-@HtmlImport("frontend://src/elements/form-dialog.html")
+@HtmlImport("src/elements/form-dialog.html")
 public class FormDialog extends Component {
 
 	@Synchronize(property = "opened", value = "opened-changed")
@@ -58,16 +58,14 @@ public class FormDialog extends Component {
 	}
 
 	@DomEvent("opened-changed")
-	public static class OpenedChangeEvent extends ComponentEvent {
+	public static class OpenedChangeEvent extends ComponentEvent<FormDialog> {
 		public OpenedChangeEvent(FormDialog source, boolean fromClient) {
 			super(source, fromClient);
 		}
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Registration addOpenedChangeListener(ComponentEventListener listener) {
-		return addListener(OpenedChangeEvent.class,
-				listener);
+	public Registration addOpenedChangeListener(ComponentEventListener<OpenedChangeEvent> listener) {
+		return addListener(OpenedChangeEvent.class, listener);
 	}
 }
 

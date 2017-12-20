@@ -1,11 +1,12 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
 
-<dom-module id="buttons-bar">
+<dom-module id="form-buttons-bar">
   <template>
     <style>
       :host {
-        margin-top: 30px;
+        margin-top: 10px;
+        padding-top: 10px;
         display: flex;
         min-width: 100%;
         border-top: 1px solid var(--valo-contrast-10pct);
@@ -21,18 +22,21 @@
     {
       class ButtonsBarElement extends Polymer.Element {
         static get is() {
-          return 'buttons-bar';
+          return 'form-buttons-bar';
         }
 
         static get properties() {
           return {
             saveText: {
+              type: String,
               value: 'Save'
             },
             cancelText: {
+              type: String,
               value: 'Cancel'
             },
             deleteText: {
+              type: String,
               value: 'Delete'
             },
             saveDisabled: {

@@ -18,7 +18,7 @@ import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.UserService;
 import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.components.BakerySearch;
-import com.vaadin.starter.bakery.ui.components.ButtonsBar;
+import com.vaadin.starter.bakery.ui.components.FormButtonsBar;
 import com.vaadin.starter.bakery.ui.components.FormDialog;
 import com.vaadin.starter.bakery.ui.crud.CrudView;
 import com.vaadin.starter.bakery.ui.crud.DefaultEntityPresenter;
@@ -51,7 +51,7 @@ public class UsersView extends CrudView<User, TemplateModel> {
 	private FormDialog dialog;
 
 	@Id("buttons")
-	private ButtonsBar buttons;
+	private FormButtonsBar buttons;
 
 	@Id("title")
 	private H3 title;
@@ -135,7 +135,7 @@ public class UsersView extends CrudView<User, TemplateModel> {
 	}
 
 	@Override
-	protected ButtonsBar getButtons() {
+	protected FormButtonsBar getButtons() {
 		return buttons;
 	}
 
