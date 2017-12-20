@@ -10,4 +10,8 @@ public class PaperToastElement extends TestBenchElement {
 	public String getText() {
 		return getPropertyString("text");
 	}
+
+	public Boolean isOpened() {
+		return getPropertyBoolean("opened");
+	}
 }
