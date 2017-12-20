@@ -17,7 +17,7 @@ import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.service.ProductService;
 import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.components.BakerySearch;
-import com.vaadin.starter.bakery.ui.components.ButtonsBar;
+import com.vaadin.starter.bakery.ui.components.FormButtonsBar;
 import com.vaadin.starter.bakery.ui.components.FormDialog;
 import com.vaadin.starter.bakery.ui.crud.CrudView;
 import com.vaadin.starter.bakery.ui.crud.DefaultEntityPresenter;
@@ -49,7 +49,7 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 	private FormDialog dialog;
 
 	@Id("buttons")
-	private ButtonsBar buttons;
+	private FormButtonsBar buttons;
 
 	private DefaultEntityPresenter<Product> presenter;
 
@@ -105,7 +105,7 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 	}
 
 	@Override
-	protected ButtonsBar getButtons() {
+	protected FormButtonsBar getButtons() {
 		return buttons;
 	}
 

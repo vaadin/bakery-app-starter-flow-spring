@@ -10,7 +10,7 @@ import com.vaadin.starter.bakery.elements.FormLayoutElement;
 import com.vaadin.starter.bakery.elements.GridElement;
 import com.vaadin.starter.bakery.elements.VaadinGridCellContentElement;
 import com.vaadin.starter.bakery.ui.ConfirmDialogElement;
-import com.vaadin.starter.bakery.ui.components.ButtonsBarElement;
+import com.vaadin.starter.bakery.ui.components.FormButtonsBarElement;
 import com.vaadin.testbench.HasElementQuery;
 import com.vaadin.testbench.TestBenchElement;
 
@@ -40,8 +40,8 @@ public interface HasCrudView extends HasElementQuery {
 		return $(DialogOverlayElement.class).onPage().first();
 	}
 
-	default ButtonsBarElement getButtonsBar() {
-		return getVaadinOverlay().$(ButtonsBarElement.class).first();
+	default FormButtonsBarElement getButtonsBar() {
+		return getVaadinOverlay().$(FormButtonsBarElement.class).first();
 	}
 
 	default FormLayoutElement getForm() {

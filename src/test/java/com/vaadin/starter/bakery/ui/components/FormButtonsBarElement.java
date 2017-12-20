@@ -4,8 +4,8 @@ import com.vaadin.starter.bakery.elements.ButtonElement;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elementsbase.Element;
 
-@Element("buttons-bar")
-public class ButtonsBarElement extends TestBenchElement {
+@Element("form-buttons-bar")
+public class FormButtonsBarElement extends TestBenchElement {
 
 	public ButtonElement getSaveButton() {
 		return $(ButtonElement.class).id("save");

@@ -9,11 +9,11 @@ import com.vaadin.ui.event.ComponentEventListener;
 import com.vaadin.ui.event.DomEvent;
 
 /**
- * Java wrapper of the polymer element `buttons-bar`
+ * Java wrapper of the polymer element `form-buttons-bar`
  */
-@Tag("buttons-bar")
-@HtmlImport("src/elements/buttons-bar.html")
-public class ButtonsBar extends Component {
+@Tag("form-buttons-bar")
+@HtmlImport("src/elements/form-buttons-bar.html")
+public class FormButtonsBar extends Component {
 
 	public void setSaveText(String saveText) {
 		getElement().setProperty("saveText", saveText == null ? "" : saveText);
@@ -40,8 +40,8 @@ public class ButtonsBar extends Component {
 	}
 
 	@DomEvent("save")
-	public static class SaveEvent extends ComponentEvent<ButtonsBar> {
-		public SaveEvent(ButtonsBar source, boolean fromClient) {
+	public static class SaveEvent extends ComponentEvent<FormButtonsBar> {
+		public SaveEvent(FormButtonsBar source, boolean fromClient) {
 			super(source, fromClient);
 		}
 	}
@@ -51,8 +51,8 @@ public class ButtonsBar extends Component {
 	}
 
 	@DomEvent("cancel")
-	public static class CancelEvent extends ComponentEvent<ButtonsBar> {
-		public CancelEvent(ButtonsBar source, boolean fromClient) {
+	public static class CancelEvent extends ComponentEvent<FormButtonsBar> {
+		public CancelEvent(FormButtonsBar source, boolean fromClient) {
 			super(source, fromClient);
 		}
 	}
@@ -62,8 +62,8 @@ public class ButtonsBar extends Component {
 	}
 
 	@DomEvent("delete")
-	public static class DeleteEvent extends ComponentEvent<ButtonsBar> {
-		public DeleteEvent(ButtonsBar source, boolean fromClient) {
+	public static class DeleteEvent extends ComponentEvent<FormButtonsBar> {
+		public DeleteEvent(FormButtonsBar source, boolean fromClient) {
 			super(source, fromClient);
 		}
 	}
