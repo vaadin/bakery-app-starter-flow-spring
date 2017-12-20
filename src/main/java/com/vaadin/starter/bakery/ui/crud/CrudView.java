@@ -22,7 +22,7 @@ import com.vaadin.ui.grid.Grid;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel> extends PolymerTemplate<T>
-		implements HasLogger, EntityView<E>, EntityEditor<E>, HasUrlParameter<Long> {
+		implements HasLogger, EntityView<E>, HasUrlParameter<Long> {
 
 	protected void setupEventListeners() {
 		getGrid().addSelectionListener(e -> {
@@ -41,7 +41,11 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 
 		getSearchBar().setActionText("New " + getEntityName());
 
-		getBinder().addValueChangeListener(e -> getButtons().setSaveDisabled(!isDirty()));
+		getBinder().addValueChangeListener(e -> {
+			System.err.println(
+					">>>>>>>> " + e.getSource() + " " + e.isFromClient() + " " + e.getValue() + " " + e.getOldValue());
+			getButtons().setSaveDisabled(!isDirty());
+		});
 	}
 
 	protected abstract DefaultEntityPresenter<E> getPresenter();
@@ -101,7 +105,6 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 		return getBinder().hasChanges();
 	}
 
-	@Override
 	public void read(E e) {
 		getBinder().readBean(e);
 		getButtons().setSaveDisabled(true);
