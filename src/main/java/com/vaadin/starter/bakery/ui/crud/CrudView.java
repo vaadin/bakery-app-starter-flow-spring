@@ -40,13 +40,13 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 		getSearchBar().addFilterChangeListener(e -> getPresenter().filter(getSearchBar().getFilter()));
 
 		getSearchBar().setActionText("New " + getEntityName());
+
+		getBinder().addValueChangeListener(e -> getButtons().setSaveDisabled(!isDirty()));
 	}
 
 	protected abstract DefaultEntityPresenter<E> getPresenter();
 
 	protected abstract String getBasePage();
-
-	protected abstract EntityEditor<E> getEditor();
 
 	protected abstract BeanValidationBinder<E> getBinder();
 
@@ -87,13 +87,18 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 
 	@Override
 	public void openDialog(E entity, boolean edit) {
-		getEditor().read(entity);
+		read(entity);
 		getDialog().setOpened(true);
 	}
 
 	@Override
 	public void write(E entity) throws ValidationException {
-		getEditor().write(entity);
+		getBinder().writeBean(entity);
+	}
+
+	@Override
+	public boolean isDirty() {
+		return getBinder().hasChanges();
 	}
 
 	@Override

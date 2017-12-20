@@ -21,7 +21,6 @@ import com.vaadin.starter.bakery.ui.components.ButtonsBar;
 import com.vaadin.starter.bakery.ui.components.FormDialog;
 import com.vaadin.starter.bakery.ui.crud.CrudView;
 import com.vaadin.starter.bakery.ui.crud.DefaultEntityPresenter;
-import com.vaadin.starter.bakery.ui.crud.EntityEditor;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.utils.converters.CurrencyFormatter;
 import com.vaadin.ui.Tag;
@@ -98,16 +97,6 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 	@Override
 	protected String getBasePage() {
 		return PAGE_PRODUCTS;
-	}
-
-	@Override
-	protected EntityEditor<Product> getEditor() {
-		return this;
-	}
-
-	@Override
-	public boolean isDirty() {
-		return binder.hasChanges();
 	}
 
 	@Override
