@@ -190,6 +190,27 @@
         };
       }
 
+      connectedCallback() {
+        super.connectedCallback();
+        this._measureLoadPerformance();
+      }
+
+      // This method is used to measure the page load performance and can be safely removed
+      // if there is no need for that.
+      _measureLoadPerformance() {
+        const banner = new Image();
+        banner.onload = () => {
+          window.performance.mark('bakery-page-loaded');
+        };
+
+        const info = this.shadowRoot.querySelector('.info');
+        const cssBackgroundImage = window.getComputedStyle(info).getPropertyValue('background-image');
+        const match = cssBackgroundImage.match(/url\("?(.+?)"?\)/i);
+        if (match) {
+          banner.src = match[1];
+        }
+      }
+
       login() {
         if (!this.$.username.invalid && !this.$.password.invalid) {
           this.$.form.submit();
