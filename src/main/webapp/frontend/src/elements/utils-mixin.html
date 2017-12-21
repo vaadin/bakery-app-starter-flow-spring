@@ -80,7 +80,8 @@
             this._persistentToast.setAttribute('id', '_persistentToast');
             this._persistentToast.setAttribute('duration', '0');
             this._persistentToast.innerHTML =
-              '<paper-button onclick="this.parentElement.toggle()" class="yellow-button">Close</paper-button>';
+              '<vaadin-button onclick="this.parentElement.toggle()" theme="tertiary small error">Close</vaadin-button>';
+            this._persistentToast.style.pointerEvents = 'all';
             document.body.appendChild(this._persistentToast);
           }
         });
