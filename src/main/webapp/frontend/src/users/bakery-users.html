@@ -35,9 +35,10 @@
 
     <!--  dialogs are tele-ported to body, hence you need to inline styles or use styled web components -->
     <form-dialog id="dialog-editor" theme="right">
-      <h3 id="title"></h3>
 
-      <vaadin-form-layout style="flex: 1">
+      <vaadin-form-layout style="flex: 1; overflow: auto">
+        <h3 id="title"></h3>
+        <br>
         <vaadin-text-field id="email" label="Email (login)" colspan="2"></vaadin-text-field>
         <br>
         <vaadin-text-field id="first" label="First Name" colspan="2"></vaadin-text-field>
