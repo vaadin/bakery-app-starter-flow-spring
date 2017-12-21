@@ -1,9 +1,0 @@
-package com.vaadin.starter.bakery.tb.elements.core;
-
-import com.vaadin.testbench.TestBenchElement;
-import com.vaadin.testbench.elementsbase.Element;
-
-@Element("paper-tab")
-public class PaperTabElement extends TestBenchElement {
-
-}
