@@ -1,29 +1,34 @@
 package com.vaadin.starter.bakery.ui;
 
 import com.vaadin.starter.bakery.elements.GridElement;
-import com.vaadin.starter.bakery.ui.components.ItemsViewElement;
-import com.vaadin.starter.bakery.ui.components.UserEditElement;
-import com.vaadin.starter.bakery.ui.view.HasGrid;
+import com.vaadin.starter.bakery.elements.PasswordFieldElement;
+import com.vaadin.starter.bakery.elements.TextFieldElement;
+import com.vaadin.starter.bakery.ui.view.HasCrudView;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elementsbase.Element;
 
 @Element("bakery-users")
-public class UsersViewElement extends TestBenchElement implements HasGrid {
+public class UsersViewElement extends TestBenchElement implements HasCrudView {
 
 	@Override
 	public GridElement getGrid() {
 		return $(GridElement.class).id("users-grid");
 	}
 
-	public ItemsViewElement getItemsView() {
-		return $(ItemsViewElement.class).first();
+	public TextFieldElement getFirstField() {
+
+		return getField("first", TextFieldElement.class);
+	};
+
+	public TextFieldElement getLastField() {
+		return getField("last", TextFieldElement.class);
 	}
 
-	public UserEditElement getUserEdit() {
-		return $(UserEditElement.class).first();
+	public TextFieldElement getEmailField() {
+		return getField("email", TextFieldElement.class);
 	}
 
-	public ConfirmDialogElement getConfirmDialog() {
-		return $(ConfirmDialogElement.class).onPage().first();
+	public PasswordFieldElement getPasswordField() {
+		return getField("user-edit-password", PasswordFieldElement.class);
 	}
 }

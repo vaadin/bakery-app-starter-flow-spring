@@ -1,8 +1,9 @@
 /**
  *
  */
-package com.vaadin.starter.bakery.ui.view.admin;
+package com.vaadin.starter.bakery.ui.crud;
 
+import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.flow.model.TemplateModel;
@@ -11,15 +12,16 @@ import com.vaadin.router.OptionalParameter;
 import com.vaadin.router.event.BeforeNavigationEvent;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
-import com.vaadin.starter.bakery.ui.event.CancelEvent;
+import com.vaadin.starter.bakery.ui.components.BakerySearch;
+import com.vaadin.starter.bakery.ui.components.FormButtonsBar;
+import com.vaadin.starter.bakery.ui.components.FormDialog;
 import com.vaadin.starter.bakery.ui.event.CloseDialogEvent;
-import com.vaadin.starter.bakery.ui.event.DeleteEvent;
-import com.vaadin.starter.bakery.ui.event.SaveEvent;
 import com.vaadin.starter.bakery.ui.view.EntityView;
+import com.vaadin.ui.common.HasText;
 import com.vaadin.ui.grid.Grid;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
-public abstract class PolymerEntityView<E extends AbstractEntity, T extends TemplateModel> extends PolymerTemplate<T>
+public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel> extends PolymerTemplate<T>
 		implements HasLogger, EntityView<E>, HasUrlParameter<Long> {
 
 	protected void setupEventListeners() {
@@ -28,22 +30,36 @@ public abstract class PolymerEntityView<E extends AbstractEntity, T extends Temp
 			getGrid().deselectAll();
 		});
 		addListener(CloseDialogEvent.class, e -> getPresenter().cancel());
-		getEditor().addListener(CancelEvent.class, e -> getPresenter().cancel());
-		getEditor().addListener(SaveEvent.class, e -> getPresenter().save());
-		getEditor().addListener(DeleteEvent.class, e -> getPresenter().delete());
-		getItemsView().addActionClickListener(e -> getPresenter().createNew());
-		getItemsView().addFilterChangeListener(e -> getPresenter().filter(getItemsView().getFilter()));
+
+		getButtons().addSaveListener(e -> getPresenter().save());
+		getButtons().addCancelListener(e -> getPresenter().cancel());
+		getButtons().addDeleteListener(e -> getPresenter().delete());
+
+
+		getSearchBar().addActionClickListener(e -> getPresenter().createNew());
+		getSearchBar().addFilterChangeListener(e -> getPresenter().filter(getSearchBar().getFilter()));
+
+		getSearchBar().setActionText("New " + getEntityName());
+		getBinder().addValueChangeListener(e -> getButtons().setSaveDisabled(!isDirty()));
 	}
 
 	protected abstract DefaultEntityPresenter<E> getPresenter();
 
 	protected abstract String getBasePage();
 
-	protected abstract EntityEditor<E> getEditor();
+	protected abstract BeanValidationBinder<E> getBinder();
 
-	protected abstract ItemsView getItemsView();
+	protected abstract FormButtonsBar getButtons();
+
+	protected abstract FormDialog getDialog();
+
+	protected abstract BakerySearch getSearchBar();
 
 	protected abstract Grid<E> getGrid();
+
+	protected abstract HasText getTitle();
+
+	protected abstract String getEntityName();
 
 	@Override
 	public void setDataProvider(DataProvider<E, ?> dataProvider) {
@@ -64,24 +80,30 @@ public abstract class PolymerEntityView<E extends AbstractEntity, T extends Temp
 
 	@Override
 	public void closeDialog() {
-		getItemsView().openDialog(false);
+		getDialog().setOpened(false);
 		navigateToEntity(null);
 	}
 
 	@Override
 	public void openDialog(E entity, boolean edit) {
-		getEditor().read(entity);
-		getItemsView().openDialog(true);
-	}
-
-	@Override
-	public boolean isDirty() {
-		return getEditor().isDirty();
+		read(entity);
+		getDialog().setOpened(true);
 	}
 
 	@Override
 	public void write(E entity) throws ValidationException {
-		getEditor().write(entity);
+		getBinder().writeBean(entity);
 	}
 
+	@Override
+	public boolean isDirty() {
+		return getBinder().hasChanges();
+	}
+
+	public void read(E e) {
+		getBinder().readBean(e);
+		getButtons().setSaveDisabled(true);
+		getButtons().setDeleteDisabled(e.isNew());
+		getTitle().setText((e.isNew() ? "New" : "Edit") + " " + getEntityName());
+	}
 }
