@@ -83,11 +83,13 @@
       ready() {
         super.ready();
         const grid = this.$['storefront-grid'];
-        grid.addEventListener('loading-changed', () => {
+        const listener = () => {
           if (!grid.loading) {
             window.performance.mark('bakery-page-loaded');
+            grid.removeEventListener('loading-changed', listener);
           }
-        });
+        };
+        grid.addEventListener('loading-changed', listener);
       }
 
       static get properties() {

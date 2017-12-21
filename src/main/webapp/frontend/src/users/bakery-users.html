@@ -34,6 +34,23 @@
         return 'bakery-users';
       }
 
+      // This method is overridden to measure the page load performance and can be safely removed
+      // if there is no need for that
+      ready() {
+        super.ready();
+        const grid = this.$['users-grid'];
+        let partsLoaded = 0;
+        const listener = () => {
+          if (!grid.loading && ++partsLoaded === 2) {
+            // the 'loading-changed' event is fired separately for the headers (first)
+            // and for the content (second). Waiting for the second time
+            window.performance.mark('bakery-page-loaded');
+            grid.removeEventListener('loading-changed', listener);
+          }
+        };
+        grid.addEventListener('loading-changed', listener);
+      }
+
       static get properties() {
         return {
           desktopView: {
