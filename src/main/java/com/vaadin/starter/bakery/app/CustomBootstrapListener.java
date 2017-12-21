@@ -4,6 +4,10 @@ import com.vaadin.server.BootstrapListener;
 import com.vaadin.server.BootstrapPageResponse;
 import org.jsoup.nodes.Element;
 
+/**
+ * Adds link-tags for manifest and icons, adds custom styles
+ * to the head-section of the bootstrap page.
+ */
 public class CustomBootstrapListener implements BootstrapListener {
 	public void modifyBootstrapPage(BootstrapPageResponse response) {
 		final Element head = response.getDocument().head();

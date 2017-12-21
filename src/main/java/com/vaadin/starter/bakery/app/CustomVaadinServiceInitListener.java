@@ -6,6 +6,11 @@ import com.vaadin.shared.ui.Dependency;
 import com.vaadin.shared.ui.LoadMode;
 import com.vaadin.spring.annotation.SpringComponent;
 
+/**
+ * Configures BootstrapListener and DependencyFilter.
+ * Dependency filter in production mode removes all dependencies from the page
+ * except bakery-app.html.
+ */
 @SpringComponent
 public class CustomVaadinServiceInitListener implements VaadinServiceInitListener {
 

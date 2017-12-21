@@ -16,14 +16,6 @@ import com.vaadin.starter.bakery.ui.BakeryApp;
 /**
  * Spring boot web application initializer.
  */
-
-/*
- * To disable web security:
- *
- * @SpringBootApplication(exclude = {
- * org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration.
- * class })
- */
 @SpringBootApplication(scanBasePackageClasses = { SecurityConfiguration.class, BakeryApp.class, Application.class,
 		UserService.class })
 @EnableJpaRepositories(basePackageClasses = { UserRepository.class })
