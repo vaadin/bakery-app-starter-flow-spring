@@ -10,10 +10,12 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
 
-import com.vaadin.spring.annotation.SpringComponent;
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.Customer;
@@ -27,8 +29,6 @@ import com.vaadin.starter.bakery.backend.repositories.OrderRepository;
 import com.vaadin.starter.bakery.backend.repositories.PickupLocationRepository;
 import com.vaadin.starter.bakery.backend.repositories.ProductRepository;
 import com.vaadin.starter.bakery.backend.repositories.UserRepository;
-
-import javax.annotation.PostConstruct;
 
 @SpringComponent
 public class DataGenerator implements HasLogger {
@@ -77,9 +77,14 @@ public class DataGenerator implements HasLogger {
 		User baker = createBaker(userRepository, passwordEncoder);
 		User barista = createBarista(userRepository, passwordEncoder);
 		createAdmin(userRepository, passwordEncoder);
+		// A set of products without constrains that can be deleted
+		createDeletableUsers(userRepository, passwordEncoder);
 
 		getLogger().info("... generating products");
-		Supplier<Product> productSupplier = createProducts(productRepository);
+		// A set of products that will be used for creating orders.
+		Supplier<Product> productSupplier = createProducts(productRepository, 8);
+		// A set of products without relationships that can be deleted
+		createProducts(productRepository, 4);
 
 		getLogger().info("... generating pickup locations");
 		Supplier<PickupLocation> pickupLocationSupplier = createPickupLocations(pickupLocationRepository);
@@ -275,9 +280,9 @@ public class DataGenerator implements HasLogger {
 		return store;
 	}
 
-	private Supplier<Product> createProducts(ProductRepository productsRepo) {
+	private Supplier<Product> createProducts(ProductRepository productsRepo, int numberOfItems) {
 		List<Product> products  = new ArrayList<>();
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < numberOfItems; i++) {
 			Product product = new Product();
 			product.setName(getRandomProductName());
 			double doublePrice = 2.0 + random.nextDouble() * 100.0;
@@ -327,6 +332,14 @@ public class DataGenerator implements HasLogger {
 	private User createAdmin(UserRepository userRepository, PasswordEncoder passwordEncoder) {
 		return userRepository.save(createUser("admin@vaadin.com", "Göran", "Rich", passwordEncoder.encode("admin"),
 				Role.ADMIN, "https://randomuser.me/api/portraits/men/34.jpg", true));
+	}
+
+	private void createDeletableUsers(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+		userRepository
+				.save(createUser("peter@vaadin.com", "Peter", "Bush", passwordEncoder.encode("peter"), Role.BARISTA,
+				"https://randomuser.me/api/portraits/men/10.jpg", false));
+		userRepository.save(createUser("mary@vaadin.com", "Mary", "Ocon", passwordEncoder.encode("mary"), Role.BAKER,
+				"https://randomuser.me/api/portraits/women/40.jpg", true));
 	}
 
 	private User createUser(String email, String firstName, String lastName, String password, String role, String photoUrl,boolean locked) {
