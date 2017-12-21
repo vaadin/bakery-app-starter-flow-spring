@@ -20,18 +20,11 @@
         display: flex;
         flex-direction: column;
       }
-
-      vaadin-grid {
-        max-width: calc(964px + var(--valo-space-m));
-        margin: auto;
-        width: 100%;
-        height: 100%;
-      }
     </style>
     
     <bakery-search id="search-bar"></bakery-search>
 
-    <vaadin-grid id="users-grid" slot="grid" theme="borderless"></vaadin-grid>
+    <vaadin-grid id="users-grid" theme="borderless"></vaadin-grid>
 
     <!--  dialogs are tele-ported to body, hence you need to inline styles or use styled web components -->
     <form-dialog id="dialog-editor" theme="right">
