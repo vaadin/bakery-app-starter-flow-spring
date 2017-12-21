@@ -22,7 +22,7 @@
     <style include="shared-styles">
       :host {
         display: flex;
-        flex-direction: column-reverse;
+        flex-direction: column;
         max-width: calc(964px + var(--valo-space-m)) !important; /* Allow selected order to be 16px wider */
       }
 
@@ -47,7 +47,6 @@
       @media (min-width: 600px) {
         :host {
           max-width: none !important;
-          flex-direction: column;
           padding: 0 !important;
         }
 
