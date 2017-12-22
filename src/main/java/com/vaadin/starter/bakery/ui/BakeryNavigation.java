@@ -43,6 +43,7 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> im
 		if (SecurityUtils.isAccessGranted(ProductsView.class)) {
 			pages.add(new PageInfo(BakeryConst.PAGE_PRODUCTS, ICON_PRODUCTS, BakeryConst.TITLE_PRODUCTS));
 		}
+
 		getModel().setPages(pages);
 	}
 

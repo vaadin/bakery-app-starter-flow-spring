@@ -1,24 +1,23 @@
 package com.vaadin.starter.bakery.ui.view;
 
 import com.vaadin.starter.bakery.elements.GridElement;
-import com.vaadin.starter.bakery.ui.components.ItemsViewElement;
-import com.vaadin.starter.bakery.ui.components.ProductEditElement;
+import com.vaadin.starter.bakery.elements.TextFieldElement;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elementsbase.Element;
 
 @Element("bakery-products")
-public class ProductsViewElement extends TestBenchElement implements HasApp, HasGrid {
+public class ProductsViewElement extends TestBenchElement implements HasApp, HasCrudView {
 
 	@Override
 	public GridElement getGrid() {
 		return $(GridElement.class).id("products-grid");
 	}
 
-	public ItemsViewElement getItemsView() {
-		return $(ItemsViewElement.class).first();
-	}
+	public TextFieldElement getName() {
+		return getField("product-edit-name", TextFieldElement.class);
+	};
 
-	public ProductEditElement getProductEdit() {
-		return $(ProductEditElement.class).first();
+	public TextFieldElement getPrice() {
+		return getField("price", TextFieldElement.class);
 	}
 }

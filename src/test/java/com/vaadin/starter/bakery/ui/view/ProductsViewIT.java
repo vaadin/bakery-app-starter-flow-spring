@@ -1,10 +1,9 @@
 package com.vaadin.starter.bakery.ui.view;
 
-import com.vaadin.starter.bakery.AbstractIT;
-import com.vaadin.starter.bakery.ui.components.ItemDetailDialogElement;
-import com.vaadin.starter.bakery.ui.components.ProductEditElement;
 import org.junit.Assert;
 import org.junit.Test;
+
+import com.vaadin.starter.bakery.AbstractIT;
 
 public class ProductsViewIT extends AbstractIT {
 
@@ -17,32 +16,31 @@ public class ProductsViewIT extends AbstractIT {
 	public void editProduct() {
 		ProductsViewElement productsPage = openProductsPage();
 
-		ItemDetailDialogElement editor = productsPage.getItemsView().getEditorDialog();
-		Assert.assertFalse(editor.isDisplayed());
+		Assert.assertFalse(productsPage.getDialog().isOpened());
+
 		String url = getDriver().getCurrentUrl();
 		productsPage.getGridCell("Strawberry Bun").click();
 		Assert.assertTrue(getDriver().getCurrentUrl().length() > url.length());
-		Assert.assertTrue(editor.isDisplayed());
 
-		ProductEditElement editElement = productsPage.getProductEdit();
-		Assert.assertNotNull(editElement);
-		String initialValue = editElement.getPrice().getValue();
+		Assert.assertTrue(productsPage.getDialog().isOpened());
 
-		editElement.getPrice().setValue("123.45");
+		String initialValue = productsPage.getPrice().getValue();
 
-		editElement.getEditForm().getSaveButton().click();
+		productsPage.getPrice().setValue("123.45");
 
-		Assert.assertFalse(editor.isDisplayed());
+		productsPage.getButtonsBar().getSaveButton().click();
+
+		Assert.assertFalse(productsPage.getDialog().isOpened());
+
 		Assert.assertTrue(getDriver().getCurrentUrl().endsWith("products"));
 
 		productsPage.getGridCell("Strawberry Bun").click();
-		Assert.assertEquals("123.45", productsPage.getProductEdit().getPrice().getValue());
+		Assert.assertEquals("123.45", productsPage.getPrice().getValue());
 
 		//Return initial value
-		editElement.getPrice().setValue(initialValue);
+		productsPage.getPrice().setValue(initialValue);
 
-		editElement.getEditForm().getSaveButton().click();
-
+		productsPage.getButtonsBar().getSaveButton().click();
 	}
 
 }
