@@ -4,6 +4,15 @@ import com.vaadin.server.BootstrapListener;
 import com.vaadin.server.BootstrapPageResponse;
 import org.jsoup.nodes.Element;
 
+/**
+ * Modifies the Vaadin bootstrap page (the HTTP repoponse) in order to
+ * <ul>
+ *  <li>add links to favicons</li>
+ *  <li>add a link to the web app manifest</li>
+ *  <li>set the viewport</li>
+ *  <li>define the global styles for the main document (initialize the Vaadin Valo theme)</li>
+ * </ul>
+ */
 public class CustomBootstrapListener implements BootstrapListener {
 	public void modifyBootstrapPage(BootstrapPageResponse response) {
 		final Element head = response.getDocument().head();
