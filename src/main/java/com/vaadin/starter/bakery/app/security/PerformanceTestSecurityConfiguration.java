@@ -1,3 +1,8 @@
+// vaadin-com-generator:exclude
+/*
+	The line above is a marker for the vaadin.com/start page .zip file generator.
+	It ensures that this file is excluded from the generated project package.
+*/
 package com.vaadin.starter.bakery.app.security;
 
 import java.util.Arrays;
