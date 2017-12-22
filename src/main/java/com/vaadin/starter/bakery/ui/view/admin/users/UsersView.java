@@ -18,12 +18,12 @@ import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.UserService;
 import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.components.BakerySearch;
+import com.vaadin.starter.bakery.ui.components.ComboBoxForBinder;
 import com.vaadin.starter.bakery.ui.components.FormButtonsBar;
 import com.vaadin.starter.bakery.ui.components.FormDialog;
 import com.vaadin.starter.bakery.ui.crud.CrudView;
 import com.vaadin.starter.bakery.ui.crud.DefaultEntityPresenter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
-import com.vaadin.starter.bakery.ui.view.wrapper.ComboboxBinderWrapper;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HasText;
 import com.vaadin.ui.common.HtmlImport;
@@ -68,7 +68,7 @@ public class UsersView extends CrudView<User, TemplateModel> {
 	private PasswordField passwordField;
 
 	@Id("role")
-	private ComboboxBinderWrapper<String> roleField;
+	private ComboBoxForBinder<String> roleField;
 
 	private DefaultEntityPresenter<User> presenter;
 

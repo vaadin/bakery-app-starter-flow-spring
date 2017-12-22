@@ -5,12 +5,12 @@ import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
+import com.vaadin.starter.bakery.ui.components.ComboBoxForBinder;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.starter.bakery.ui.view.storefront.event.CommentChangeEvent;
 import com.vaadin.starter.bakery.ui.view.storefront.event.DeleteEvent;
 import com.vaadin.starter.bakery.ui.view.storefront.event.PriceChangeEvent;
 import com.vaadin.starter.bakery.ui.view.storefront.event.ProductChangeEvent;
-import com.vaadin.starter.bakery.ui.view.wrapper.ComboboxBinderWrapper;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
 import com.vaadin.ui.common.HasValue;
@@ -26,7 +26,7 @@ import com.vaadin.ui.textfield.TextField;
 public class OrderItemEditor extends PolymerTemplate<TemplateModel> implements HasValue<OrderItemEditor, OrderItem> {
 
 	@Id("products")
-	private ComboboxBinderWrapper<Product> products;
+	private ComboBoxForBinder<Product> products;
 
 	@Id("delete")
 	private Button delete;
