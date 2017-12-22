@@ -25,7 +25,6 @@ import com.vaadin.starter.bakery.ui.crud.DefaultEntityPresenter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.view.wrapper.ComboboxBinderWrapper;
 import com.vaadin.ui.Tag;
-import com.vaadin.ui.combobox.ComboBox;
 import com.vaadin.ui.common.HasText;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.grid.Grid;
@@ -69,7 +68,7 @@ public class UsersView extends CrudView<User, TemplateModel> {
 	private PasswordField passwordField;
 
 	@Id("role")
-	private ComboBox<String> roleField;
+	private ComboboxBinderWrapper<String> roleField;
 
 	private DefaultEntityPresenter<User> presenter;
 
@@ -91,7 +90,7 @@ public class UsersView extends CrudView<User, TemplateModel> {
 		binder.bind(firstnameField, "firstName");
 		binder.bind(lastnameField, "lastName");
 		binder.bind(emailField, "email");
-		binder.bind(new ComboboxBinderWrapper<>(roleField), "role");
+		binder.bind(roleField, "role");
 		binder.bind(passwordField, (user) -> passwordField.getEmptyValue(), (user, password) -> {
 			if (!passwordField.getEmptyValue().equals(password)) {
 				user.setPassword(passwordEncoder.encode(password));

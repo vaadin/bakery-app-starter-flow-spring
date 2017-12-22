@@ -13,7 +13,6 @@ import com.vaadin.starter.bakery.ui.view.storefront.event.ProductChangeEvent;
 import com.vaadin.starter.bakery.ui.view.wrapper.ComboboxBinderWrapper;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
-import com.vaadin.ui.combobox.ComboBox;
 import com.vaadin.ui.common.HasValue;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.event.ComponentEventListener;
@@ -27,7 +26,7 @@ import com.vaadin.ui.textfield.TextField;
 public class OrderItemEditor extends PolymerTemplate<TemplateModel> implements HasValue<OrderItemEditor, OrderItem> {
 
 	@Id("products")
-	private ComboBox<Product> products;
+	private ComboboxBinderWrapper<Product> products;
 
 	@Id("delete")
 	private Button delete;
@@ -49,9 +48,8 @@ public class OrderItemEditor extends PolymerTemplate<TemplateModel> implements H
 
 	public OrderItemEditor(ProductDataProvider productSource) {
 		this.amount.setDisabled(true);
-		ComboboxBinderWrapper<Product> productsWrapper = new ComboboxBinderWrapper<>(products);
 		products.setDataProvider(productSource);
-		productsWrapper.addValueChangeListener(e -> {
+		products.addValueChangeListener(e -> {
 			if (this.amount.getValue() == null) {
 				this.amount.setDisabled(false);
 				this.amount.setValue(1);
@@ -68,7 +66,7 @@ public class OrderItemEditor extends PolymerTemplate<TemplateModel> implements H
 
 		binder.forField(amount).bind("quantity");
 		binder.forField(comment).bind("comment");
-		binder.forField(productsWrapper).bind("product");
+		binder.forField(products).bind("product");
 
 		delete.addClickListener(e -> fireEvent(new DeleteEvent(this, totalPrice)));
 		this.setPrice();

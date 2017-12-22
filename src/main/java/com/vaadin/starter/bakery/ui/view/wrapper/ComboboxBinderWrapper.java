@@ -2,53 +2,29 @@ package com.vaadin.starter.bakery.ui.view.wrapper;
 
 import com.vaadin.shared.Registration;
 import com.vaadin.ui.combobox.ComboBox;
-import com.vaadin.ui.common.HasValue;
 
 /**
  * Wrapper for combobox to allow initial values to be set via binder.
- *
  */
-public class ComboboxBinderWrapper<T> implements HasValue<ComboBox<T>, T> {
-
-	private final ComboBox<T> comboBox;
+public class ComboboxBinderWrapper<T> extends ComboBox<T> {
 
 	private T lastSetValue;
 
-	public ComboboxBinderWrapper(ComboBox<T> comboBox) {
-		this.comboBox = comboBox;
-	}
-
 	@Override
 	public void setValue(T value) {
-		final String ATTRIBUTE = "value";
-		comboBox.setValue(value);
+		super.setValue(value);
 		this.lastSetValue = value;
 		if (value != null) {
-			comboBox.getElement().setAttribute(ATTRIBUTE, comboBox.getItemLabelGenerator().apply(value));
+			getElement().setAttribute("value", getItemLabelGenerator().apply(value));
 		}
 	}
 
+	@Override
 	public Registration addValueChangeListener(ValueChangeListener<ComboBox<T>, T> listener) {
-		return comboBox.addValueChangeListener(e -> {
-			boolean isLastSetValue = e.getValue() != null && e.getValue().equals(lastSetValue);
-			if (e.getOldValue() != null || !isLastSetValue) {
+		return super.addValueChangeListener(e -> {
+			if (e.getOldValue() != null && e.getValue() != null && !e.getValue().equals(lastSetValue)) {
 				listener.onComponentEvent(e);
 			}
 		});
 	}
-
-	@Override
-	public T getValue() {
-		return comboBox.getValue();
-	}
-
-	@Override
-	public ComboBox<T> get() {
-		return comboBox;
-	}
-
-	public T getLastSetValue() {
-		return lastSetValue;
-	}
-
 }
