@@ -16,7 +16,7 @@ import com.vaadin.starter.bakery.ui.utils.messages.Message;
  * @param <T> the entity type
  */
 public interface EntityView<T> extends HasNotifications {
-	
+
 	/**
 	 * Sets / refreshes the entities in grid.
 	 *
@@ -47,7 +47,7 @@ public interface EntityView<T> extends HasNotifications {
 	 *            command to execute if the user presses 'ok' in the dialog
 	 */
 	default void showConfirmationRequest(Message message, Runnable onOk) {
-	    Message.confirm(message, onOk);
+		Message.confirm(message, onOk);
 	}
 
 	/**

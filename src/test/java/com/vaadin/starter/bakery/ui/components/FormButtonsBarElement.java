@@ -1,15 +1,11 @@
-package com.vaadin.starter.bakery.ui.form;
+package com.vaadin.starter.bakery.ui.components;
 
 import com.vaadin.starter.bakery.elements.ButtonElement;
-import com.vaadin.starter.bakery.elements.H3Element;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elementsbase.Element;
 
-@Element("edit-form")
-public class EditFormElement extends TestBenchElement {
-	public H3Element getTitle() {
-		return $(H3Element.class).id("title");
-	}
+@Element("form-buttons-bar")
+public class FormButtonsBarElement extends TestBenchElement {
 
 	public ButtonElement getSaveButton() {
 		return $(ButtonElement.class).id("save");
@@ -22,5 +18,4 @@ public class EditFormElement extends TestBenchElement {
 	public ButtonElement getCancelButton() {
 		return $(ButtonElement.class).id("cancel");
 	}
-
 }
