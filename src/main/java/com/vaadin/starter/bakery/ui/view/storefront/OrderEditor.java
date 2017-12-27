@@ -154,7 +154,6 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 	}
 
 	public void close() {
-		items.reset();
 		setTotalPrice(0);
 	}
 

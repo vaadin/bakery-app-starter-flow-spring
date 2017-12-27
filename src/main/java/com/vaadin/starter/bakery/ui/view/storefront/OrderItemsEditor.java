@@ -27,16 +27,14 @@ public class OrderItemsEditor extends Div implements HasValue<OrderItemsEditor, 
 		this.productDataProvider = productDataProvider;
 	}
 
-	public void reset() {
-		getElement().removeAllChildren();
-		this.totalPrice = 0;
-		this.hasChanges = false;
-	}
-
 	@Override
 	public void setValue(List<OrderItem> items) {
-		reset();
 		this.items = items;
+
+		this.removeAll();
+		this.totalPrice = 0;
+		this.hasChanges = false;
+
 		if (items != null) {
 			items.forEach(this::createEditor);
 		}
