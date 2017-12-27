@@ -5,15 +5,14 @@ import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
+import com.vaadin.starter.bakery.ui.components.ComboBoxForBinder;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.starter.bakery.ui.view.storefront.event.CommentChangeEvent;
 import com.vaadin.starter.bakery.ui.view.storefront.event.DeleteEvent;
 import com.vaadin.starter.bakery.ui.view.storefront.event.PriceChangeEvent;
 import com.vaadin.starter.bakery.ui.view.storefront.event.ProductChangeEvent;
-import com.vaadin.starter.bakery.ui.view.wrapper.ComboboxBinderWrapper;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
-import com.vaadin.ui.combobox.ComboBox;
 import com.vaadin.ui.common.HasValue;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.event.ComponentEventListener;
@@ -27,7 +26,7 @@ import com.vaadin.ui.textfield.TextField;
 public class OrderItemEditor extends PolymerTemplate<TemplateModel> implements HasValue<OrderItemEditor, OrderItem> {
 
 	@Id("products")
-	private ComboBox<Product> products;
+	private ComboBoxForBinder<Product> products;
 
 	@Id("delete")
 	private Button delete;
@@ -49,9 +48,8 @@ public class OrderItemEditor extends PolymerTemplate<TemplateModel> implements H
 
 	public OrderItemEditor(ProductDataProvider productSource) {
 		this.amount.setDisabled(true);
-		ComboboxBinderWrapper<Product> productsWrapper = new ComboboxBinderWrapper<>(products);
 		products.setDataProvider(productSource);
-		productsWrapper.addValueChangeListener(e -> {
+		products.addValueChangeListener(e -> {
 			if (this.amount.getValue() == null) {
 				this.amount.setDisabled(false);
 				this.amount.setValue(1);
@@ -68,7 +66,7 @@ public class OrderItemEditor extends PolymerTemplate<TemplateModel> implements H
 
 		binder.forField(amount).bind("quantity");
 		binder.forField(comment).bind("comment");
-		binder.forField(productsWrapper).bind("product");
+		binder.forField(products).bind("product");
 
 		delete.addClickListener(e -> fireEvent(new DeleteEvent(this, totalPrice)));
 		this.setPrice();

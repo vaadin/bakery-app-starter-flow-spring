@@ -23,6 +23,7 @@ import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.PickupLocation;
 import com.vaadin.starter.bakery.backend.data.entity.User;
+import com.vaadin.starter.bakery.ui.components.ComboBoxForBinder;
 import com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
@@ -30,10 +31,8 @@ import com.vaadin.starter.bakery.ui.utils.converters.LocalTimeConverter;
 import com.vaadin.starter.bakery.ui.view.storefront.event.NewEditorEvent;
 import com.vaadin.starter.bakery.ui.view.storefront.event.ReviewEvent;
 import com.vaadin.starter.bakery.ui.view.storefront.event.ValueChangeEvent;
-import com.vaadin.starter.bakery.ui.view.wrapper.ComboboxBinderWrapper;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
-import com.vaadin.ui.combobox.ComboBox;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.datepicker.DatePicker;
 import com.vaadin.ui.event.ComponentEventListener;
@@ -62,16 +61,16 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 	private H2 title;
 
 	@Id("status")
-	private ComboBox<OrderState> status;
+	private ComboBoxForBinder<OrderState> status;
 
 	@Id("due-date")
 	private DatePicker date;
 
 	@Id("due-time")
-	private ComboBox<LocalTime> time;
+	private ComboBoxForBinder<LocalTime> time;
 
 	@Id("pickup-location")
-	private ComboBox<PickupLocation> pickupLocation;
+	private ComboBoxForBinder<PickupLocation> pickupLocation;
 
 	@Id("customer-name")
 	private TextField customerName;
@@ -108,7 +107,7 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 		status.setDataProvider(DataProvider.ofItems(OrderState.values()));
 		status.addValueChangeListener(
 				e -> getModel().setStatus(DataProviderUtil.convertIfNotNull(e.getValue(), OrderState::name)));
-		binder.forField(new ComboboxBinderWrapper<>(status)).bind(Order::getState,
+		binder.forField(status).bind(Order::getState,
 				(o, s) -> o.changeState(currentUser, s));
 		date.setValue(LocalDate.now());
 
@@ -120,12 +119,12 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 			timeValues.add(localTimeConverter.toModel(e.getDetail()));
 			time.setItems(timeValues);
 		});
-		binder.forField(new ComboboxBinderWrapper<>(time)).bind("dueTime");
+		binder.forField(time).bind("dueTime");
 
 		pickupLocation.setItemLabelGenerator(createItemLabelGenerator(PickupLocation::getName));
 		pickupLocation.setDataProvider(locationProvider);
 		pickupLocation.setRequired(true);
-		binder.forField(new ComboboxBinderWrapper<>(pickupLocation)).bind("pickupLocation");
+		binder.forField(pickupLocation).bind("pickupLocation");
 
 		customerName.setRequired(true);
 		binder.forField(customerName).bind("customer.fullName");
