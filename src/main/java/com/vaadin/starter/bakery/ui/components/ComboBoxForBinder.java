@@ -15,6 +15,9 @@ public class ComboBoxForBinder<T> extends ComboBox<T> {
 	public void setValue(T value) {
 		super.setValue(value);
 		this.lastSetValue = value;
+		if (value != null) {
+			getElement().setAttribute("value", getItemLabelGenerator().apply(value));
+		}
 	}
 
 	@Override
