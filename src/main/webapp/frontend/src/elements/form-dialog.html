@@ -77,10 +77,6 @@
               type: String,
               observer: '_themeChanged'
             },
-            // FIXME: set to true when https://github.com/vaadin/vaadin-overlay/pull/46 merged
-            focusTrap: {
-              value: false
-            },
             // FIXME: set to false when https://github.com/vaadin/vaadin-overlay/pull/44 merged
             noCloseOnOutsideClick: {
               value: true
@@ -94,6 +90,10 @@
 
         ready() {
           super.ready();
+
+          // FIXME: set to true when https://github.com/vaadin/vaadin-overlay/pull/46 merged
+          this.$.overlay.focusTrap = false;
+
           this._observer = new Polymer.FlattenedNodesObserver(this, info => {
             if (info.addedNodes.length) {
               const elements = info.addedNodes.filter(e => e.localName != 'template');
