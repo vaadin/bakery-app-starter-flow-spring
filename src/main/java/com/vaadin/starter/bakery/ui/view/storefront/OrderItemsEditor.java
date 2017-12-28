@@ -31,9 +31,9 @@ public class OrderItemsEditor extends Div implements HasValue<OrderItemsEditor, 
 	public void setValue(List<OrderItem> items) {
 		this.items = items;
 
-		this.removeAll();
-		this.totalPrice = 0;
-		this.hasChanges = false;
+		removeAll();
+		totalPrice = 0;
+		hasChanges = false;
 
 		if (items != null) {
 			items.forEach(this::createEditor);
@@ -45,14 +45,14 @@ public class OrderItemsEditor extends Div implements HasValue<OrderItemsEditor, 
 	private OrderItemEditor createEditor(OrderItem value) {
 		OrderItemEditor editor = new OrderItemEditor(productDataProvider);
 		getElement().appendChild(editor.getElement());
-		editor.addPriceChangeListener(e -> this.updateTotalPriceOnItemPriceChange(e.getOldValue(), e.getNewValue()));
-		editor.addProductChangeListener(e -> this.productChanged(e.getSource(), e.getProduct()));
+		editor.addPriceChangeListener(e -> updateTotalPriceOnItemPriceChange(e.getOldValue(), e.getNewValue()));
+		editor.addProductChangeListener(e -> productChanged(e.getSource(), e.getProduct()));
 		editor.addCommentChangeListener(e -> setHasChanges(true));
 		editor.addDeleteListener(e -> {
 			if (empty != editor) {
 				OrderItem orderItem = editor.getValue();
 				items.remove(orderItem);
-				this.remove(editor);
+				remove(editor);
 				updateTotalPriceOnItemPriceChange(e.getTotalPrice(), 0);
 				setHasChanges(true);
 			}
@@ -64,7 +64,7 @@ public class OrderItemsEditor extends Div implements HasValue<OrderItemsEditor, 
 	@Override
 	public void setReadOnly(boolean readOnly) {
 		HasValue.super.setReadOnly(readOnly);
-		this.getChildren().forEach(e -> ((OrderItemEditor) e).setReadOnly(readOnly));
+		getChildren().forEach(e -> ((OrderItemEditor) e).setReadOnly(readOnly));
 	}
 
 	@Override
