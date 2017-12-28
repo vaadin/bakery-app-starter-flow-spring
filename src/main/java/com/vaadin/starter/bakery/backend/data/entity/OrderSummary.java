@@ -7,10 +7,10 @@ import java.util.List;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 
 public interface OrderSummary {
-	Long getId(); 
-	
+	Long getId();
+
 	OrderState getState();
-	
+
 	Customer getCustomer();
 
 	List<OrderItem> getItems();
@@ -20,5 +20,6 @@ public interface OrderSummary {
 	LocalTime getDueTime();
 
 	PickupLocation getPickupLocation();
-	
+
+	int getTotalPrice();
 }

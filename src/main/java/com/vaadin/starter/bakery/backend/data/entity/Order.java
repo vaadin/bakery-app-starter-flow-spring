@@ -41,8 +41,8 @@ public class Order extends AbstractEntity implements OrderSummary {
 
 	public static final String ENTITY_GRAPTH_BRIEF = "Order.brief";
 	public static final String ENTITY_GRAPTH_FULL = "Order.full";
-	
-	
+
+
 	@NotNull
 	private LocalDate dueDate;
 	@NotNull
@@ -91,6 +91,7 @@ public class Order extends AbstractEntity implements OrderSummary {
 		history.add(item);
 	}
 
+	@Override
 	public LocalDate getDueDate() {
 		return dueDate;
 	}
@@ -99,6 +100,7 @@ public class Order extends AbstractEntity implements OrderSummary {
 		this.dueDate = dueDate;
 	}
 
+	@Override
 	public LocalTime getDueTime() {
 		return dueTime;
 	}
@@ -107,6 +109,7 @@ public class Order extends AbstractEntity implements OrderSummary {
 		this.dueTime = dueTime;
 	}
 
+	@Override
 	public PickupLocation getPickupLocation() {
 		return pickupLocation;
 	}
@@ -115,6 +118,7 @@ public class Order extends AbstractEntity implements OrderSummary {
 		this.pickupLocation = pickupLocation;
 	}
 
+	@Override
 	public Customer getCustomer() {
 		return customer;
 	}
@@ -123,6 +127,7 @@ public class Order extends AbstractEntity implements OrderSummary {
 		this.customer = customer;
 	}
 
+	@Override
 	public List<OrderItem> getItems() {
 		return items;
 	}
@@ -139,6 +144,7 @@ public class Order extends AbstractEntity implements OrderSummary {
 		this.history = history;
 	}
 
+	@Override
 	public OrderState getState() {
 		return state;
 	}
@@ -155,5 +161,10 @@ public class Order extends AbstractEntity implements OrderSummary {
 	public String toString() {
 		return "Order{" + "dueDate=" + dueDate + ", dueTime=" + dueTime + ", pickupLocation=" + pickupLocation
 				+ ", customer=" + customer + ", items=" + items + ", state=" + state + '}';
+	}
+
+	@Override
+	public int getTotalPrice() {
+		return items.stream().map(i -> i.getTotalPrice()).reduce(0, Integer::sum);
 	}
 }
