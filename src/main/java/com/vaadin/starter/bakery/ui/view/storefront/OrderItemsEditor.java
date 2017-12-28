@@ -1,6 +1,5 @@
 package com.vaadin.starter.bakery.ui.view.storefront;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import com.vaadin.shared.Registration;
@@ -18,10 +17,6 @@ public class OrderItemsEditor extends Div implements HasValue<OrderItemsEditor, 
 
 	private List<OrderItem> items;
 
-	private List<OrderItemEditor> editors = new LinkedList<>();
-
-	private List<Registration> registrations = new LinkedList<>();
-
 	private ProductDataProvider productDataProvider;
 
 	private int totalPrice = 0;
@@ -32,49 +27,32 @@ public class OrderItemsEditor extends Div implements HasValue<OrderItemsEditor, 
 		this.productDataProvider = productDataProvider;
 	}
 
-	public void reset() {
-		registrations.forEach(Registration::remove);
-		registrations.clear();
-		editors.clear();
-		if (items != null)
-			items.clear();
-		getElement().removeAllChildren();
-		this.totalPrice = 0;
-		this.hasChanges = false;
-	}
-
 	@Override
 	public void setValue(List<OrderItem> items) {
-		reset();
 		this.items = items;
+
+		removeAll();
+		totalPrice = 0;
+		hasChanges = false;
 
 		if (items != null) {
 			items.forEach(this::createEditor);
 		}
-
 		createEmptyElement();
 		setHasChanges(false);
 	}
 
 	private OrderItemEditor createEditor(OrderItem value) {
 		OrderItemEditor editor = new OrderItemEditor(productDataProvider);
-		editors.add(editor);
 		getElement().appendChild(editor.getElement());
-		Registration priceChangeRegistration = addRegistration(editor
-				.addPriceChangeListener(e -> this.updateTotalPriceOnItemPriceChange(e.getOldValue(), e.getNewValue())));
-		Registration productChangeRegistration = addRegistration(
-				editor.addProductChangeListener(e -> this.productChanged(e.getSource(), e.getProduct())));
-		Registration commentChangeRegistration = addRegistration(
-				editor.addCommentChangeListener(e -> setHasChanges(true)));
+		editor.addPriceChangeListener(e -> updateTotalPriceOnItemPriceChange(e.getOldValue(), e.getNewValue()));
+		editor.addProductChangeListener(e -> productChanged(e.getSource(), e.getProduct()));
+		editor.addCommentChangeListener(e -> setHasChanges(true));
 		editor.addDeleteListener(e -> {
 			if (empty != editor) {
 				OrderItem orderItem = editor.getValue();
 				items.remove(orderItem);
-				editors.remove(editor);
-				removeRegistration(priceChangeRegistration);
-				removeRegistration(productChangeRegistration);
-				removeRegistration(commentChangeRegistration);
-				getElement().removeChild(editor.getElement());
+				remove(editor);
 				updateTotalPriceOnItemPriceChange(e.getTotalPrice(), 0);
 				setHasChanges(true);
 			}
@@ -83,20 +61,10 @@ public class OrderItemsEditor extends Div implements HasValue<OrderItemsEditor, 
 		return editor;
 	}
 
-	private void removeRegistration(Registration r) {
-		r.remove();
-		registrations.remove(r);
-	}
-
-	private Registration addRegistration(Registration r) {
-		registrations.add(r);
-		return r;
-	}
-
 	@Override
 	public void setReadOnly(boolean readOnly) {
 		HasValue.super.setReadOnly(readOnly);
-		this.editors.forEach(e -> e.setReadOnly(readOnly));
+		getChildren().forEach(e -> ((OrderItemEditor) e).setReadOnly(readOnly));
 	}
 
 	@Override
