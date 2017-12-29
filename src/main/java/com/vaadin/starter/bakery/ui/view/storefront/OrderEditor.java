@@ -15,6 +15,9 @@ import org.springframework.context.annotation.Scope;
 
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.ValidationException;
+import com.vaadin.data.ValidationResult;
+import com.vaadin.data.Validator;
+import com.vaadin.data.ValueContext;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.shared.Registration;
@@ -123,10 +126,24 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 
 		pickupLocation.setItemLabelGenerator(createItemLabelGenerator(PickupLocation::getName));
 		pickupLocation.setDataProvider(locationProvider);
-		pickupLocation.setRequired(true);
-		binder.forField(pickupLocation)
-				.withValidator(value -> value == null || value.getName().isEmpty(), "select a pickup location")
-				.bind("pickupLocation");
+		binder.forField(pickupLocation).withValidator(new Validator<PickupLocation>() {
+			// Change default null validator in entity, so as we can customize
+			// the message to show
+			@Override
+			public ValidationResult apply(PickupLocation value, ValueContext context) {
+				return new ValidationResult() {
+					@Override
+					public boolean isError() {
+						return value == null || value.getName().isEmpty();
+					}
+
+					@Override
+					public String getErrorMessage() {
+						return "select a pickup location";
+					}
+				};
+			}
+		}).bind("pickupLocation");
 
 		customerName.setRequired(true);
 		binder.forField(customerName).bind("customer.fullName");
