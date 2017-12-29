@@ -124,7 +124,9 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 		pickupLocation.setItemLabelGenerator(createItemLabelGenerator(PickupLocation::getName));
 		pickupLocation.setDataProvider(locationProvider);
 		pickupLocation.setRequired(true);
-		binder.forField(pickupLocation).bind("pickupLocation");
+		binder.forField(pickupLocation)
+				.withValidator(value -> value == null || value.getName().isEmpty(), "select a pickup location")
+				.bind("pickupLocation");
 
 		customerName.setRequired(true);
 		binder.forField(customerName).bind("customer.fullName");
