@@ -9,6 +9,8 @@ Open http://localhost:8080/ to view the application.
 Default credentials are admin@vaadin.com/admin for admin access and
 barista@vaadin.com/barista for normal user access.
 
+Spring boot's developer tools is enabled by default. Live reload is supported.
+
 Note that when running in development mode, the application will not work in IE11.
 
 # Running Integration Tests and Linter
