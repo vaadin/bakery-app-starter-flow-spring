@@ -15,9 +15,6 @@ import org.springframework.context.annotation.Scope;
 
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.ValidationException;
-import com.vaadin.data.ValidationResult;
-import com.vaadin.data.Validator;
-import com.vaadin.data.ValueContext;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.shared.Registration;
@@ -126,29 +123,25 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 
 		pickupLocation.setItemLabelGenerator(createItemLabelGenerator(PickupLocation::getName));
 		pickupLocation.setDataProvider(locationProvider);
-		binder.forField(pickupLocation).withValidator(new Validator<PickupLocation>() {
-			// Change default null validator in entity, so as we can customize
-			// the message to show
-			@Override
-			public ValidationResult apply(PickupLocation value, ValueContext context) {
-				return new ValidationResult() {
-					@Override
-					public boolean isError() {
-						return value == null || value.getName().isEmpty();
-					}
-
-					@Override
-					public String getErrorMessage() {
-						return "select a pickup location";
-					}
-				};
-			}
-		}).bind("pickupLocation");
+		binder.forField(pickupLocation).bind("pickupLocation");
 
 		customerName.setRequired(true);
-		binder.forField(customerName).bind("customer.fullName");
+		binder.forField(customerName)
+				.withValidator(fullName -> fullName.matches("^[\\p{L} .'-]+ [\\p{L} .'-]+$"),
+						// TODO: use message keys in
+						// ValidationMessages.properties when
+						// https://github.com/vaadin/flow/issues/3228
+						// TODO: check that messages remains when
+						// https://github.com/vaadin/flow/issues/3230
+						"type a valid full name")
+				.bind("customer.fullName");
+
 		customerNumber.setRequired(true);
-		binder.forField(customerNumber).bind("customer.phoneNumber");
+		binder.forField(customerNumber)
+				.withValidator(number -> number.replaceAll("[ -]", "").matches("^\\+?(?:[0-9] ?){6,14}[0-9]$"),
+						"type a valid phone number")
+				.bind("customer.phoneNumber");
+
 		binder.forField(customerDetails).bind("customer.details");
 
 		items.setRequiredIndicatorVisible(true);
