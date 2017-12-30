@@ -47,7 +47,7 @@ public class Order extends AbstractEntity implements OrderSummary {
 	private LocalDate dueDate;
 	@NotNull
 	private LocalTime dueTime;
-	@NotNull
+	@NotNull(message = "{bakery.pickup.location.required}")
 	@ManyToOne
 	private PickupLocation pickupLocation;
 
