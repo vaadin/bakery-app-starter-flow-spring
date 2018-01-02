@@ -78,7 +78,7 @@ public class UsersView extends CrudView<User, TemplateModel> {
 
 	@Autowired
 	public UsersView(UserService userService,User currentUser) {
-		presenter = new DefaultEntityPresenter<>(userService, this, getEntityName(),currentUser);
+		presenter = new DefaultEntityPresenter<>(userService, this, getEntityName(), currentUser);
 		setupEventListeners(currentUser);
 
 		setupGrid();
