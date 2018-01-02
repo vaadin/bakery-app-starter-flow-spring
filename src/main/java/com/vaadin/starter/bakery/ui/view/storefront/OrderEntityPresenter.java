@@ -10,9 +10,9 @@ import com.vaadin.data.ValidationException;
 import com.vaadin.router.QueryParameters;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
+import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.backend.service.ProductService;
-import com.vaadin.starter.bakery.backend.service.UserService;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider;
 import com.vaadin.starter.bakery.ui.entities.StorefrontItemHeader;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
@@ -31,15 +31,15 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 
 	private final OrderService orderService;
 	private final OrdersGridDataProvider dataProvider;
-	private final UserService userService;
+	private final User currentUser;
 	
 	@Autowired
-	public OrderEntityPresenter(ProductService productService, OrderService orderService, UserService userService,
-			OrdersGridDataProvider dataProvider) {
-		super(orderService, "Order");
+	public OrderEntityPresenter(ProductService productService, OrderService orderService, 
+			OrdersGridDataProvider dataProvider,User currentUser) {
+		super(orderService, "Order",currentUser);
 		this.orderService = orderService;
 		this.dataProvider = dataProvider;
-		this.userService = userService;
+		this.currentUser = currentUser;
 		headersGenerator = new StorefrontItemHeaderGenerator();
 		headersGenerator.resetHeaderChain(false);
 		dataProvider.setPageObserver(p -> headersGenerator.ordersRead(p.getContent()));
@@ -50,7 +50,7 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 		this.view = view;
 		view.getSearchBar().addFilterChangeListener(
 				e -> filterChanged(view.getSearchBar().getFilter(), view.getSearchBar().isCheckboxChecked()));
-		view.getSearchBar().addActionClickListener(e -> createNew());
+		view.getSearchBar().addActionClickListener(e -> createNew(currentUser));
 
 		view.getOpenedOrderEditor().addListener(CancelEvent.class, e -> cancel());
 		view.getOpenedOrderEditor().addReviewListener(e -> {
@@ -74,7 +74,7 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 		});
 
 		view.setDataProvider(dataProvider);
-		view.getOpenedOrderEditor().setCurrentUser(userService.getCurrentUser());
+		view.getOpenedOrderEditor().setCurrentUser(currentUser);
 	}
 
 	@Override
@@ -128,7 +128,7 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 
 	void onOrderCardAddComment(StorefrontOrderCard orderCard, String message) {
 		executeJPAOperation(() -> {
-			Order updated = orderService.addComment(orderCard.getOrder().getId(), message);
+			Order updated = orderService.addComment(currentUser,orderCard.getOrder().getId(), message);
 			orderCard.updateOrder(updated);
 			view.resizeGrid();
 		});
@@ -136,7 +136,7 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 
 	private void addComment(Long id, String comment) {
 		executeJPAOperation(() -> {
-			orderService.addComment(id, comment);
+			orderService.addComment(currentUser,id, comment);
 			loadEntity(id, false);
 		});
 	}

@@ -27,10 +27,6 @@ public class UserService implements FilterableCrudService<User> {
 		this.userRepository = userRepository;
 	}
 
-	public User getCurrentUser() {
-		return getRepository().findByEmail(SecurityUtils.getUsername());
-	}
-
 	public List<User> findAnyMatching(Optional<String> filter) {
 		if (filter.isPresent()) {
 			String repositoryFilter = "%" + filter.get() + "%";
@@ -54,22 +50,21 @@ public class UserService implements FilterableCrudService<User> {
 
 	@Override
 	@Transactional
-	public User save(User entity) {
+	public User save(User currentUser,User entity) {
 		throwIfUserLocked(entity);
 		return getRepository().saveAndFlush(entity);
 	}
 
 	@Override
 	@Transactional
-	public void delete(User user) {
-		throwIfDeletingSelf(user);
-		throwIfUserLocked(user);
-		FilterableCrudService.super.delete(user);
+	public void delete(User currentUser,User userToDelete) {
+		throwIfDeletingSelf(currentUser,userToDelete);
+		throwIfUserLocked(userToDelete);
+		FilterableCrudService.super.delete(currentUser,userToDelete);
 	}
 
-	private void throwIfDeletingSelf(User user) {
-		User current = getCurrentUser();
-		if (current.equals(user)) {
+	private void throwIfDeletingSelf(User currentUser,User user) {
+		if (currentUser.equals(user)) {
 			throw new UserFriendlyDataException(DELETING_SELF_NOT_PERMITTED);
 		}
 	}
@@ -81,7 +76,7 @@ public class UserService implements FilterableCrudService<User> {
 	}
 
 	@Override
-	public User createNew() {
+	public User createNew(User currentUser) {
 		return new User();
 	}
 

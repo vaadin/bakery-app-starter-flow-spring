@@ -38,13 +38,10 @@ public class OrderService implements CrudService<Order> {
 
 	private final OrderRepository orderRepository;
 
-	private final UserService userService;
-
 	@Autowired
-	public OrderService(OrderRepository orderRepository, UserService userService) {
+	public OrderService(OrderRepository orderRepository) {
 		super();
 		this.orderRepository = orderRepository;
-		this.userService = userService;
 	}
 
 	private static final Set<OrderState> notAvailableStates = Collections.unmodifiableSet(
@@ -59,8 +56,7 @@ public class OrderService implements CrudService<Order> {
 	}
 
 	@Transactional(rollbackOn = Exception.class)
-	public Order saveOrder(Long id,BiConsumer<User,Order> orderFiller) {
-		User currentUser = userService.getCurrentUser();
+	public Order saveOrder(User currentUser, Long id,BiConsumer<User,Order> orderFiller) {
 		Order order;
 		if(id == null) {
 			order = new Order(currentUser);
@@ -77,9 +73,9 @@ public class OrderService implements CrudService<Order> {
 	}
 
 	@Transactional(rollbackOn = Exception.class)
-	public Order addComment(Long id, String comment) {
+	public Order addComment(User currentUser,Long id, String comment) {
 		Order order = findOrder(id);
-		order.addHistoryItem(userService.getCurrentUser(), comment);
+		order.addHistoryItem(currentUser, comment);
 		return orderRepository.save(order);
 	}
 
@@ -202,8 +198,8 @@ public class OrderService implements CrudService<Order> {
 
 	@Override
 	@Transactional
-	public Order createNew() {
-		Order order = new Order(userService.getCurrentUser());
+	public Order createNew(User currentUser) {
+		Order order = new Order(currentUser);
 		order.setDueTime(LocalTime.of(16, 0));
 		order.setDueDate(LocalDate.now());
 		return order;

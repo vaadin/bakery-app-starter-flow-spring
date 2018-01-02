@@ -77,9 +77,9 @@ public class UsersView extends CrudView<User, TemplateModel> {
 	private PasswordEncoder passwordEncoder = NoOpPasswordEncoder.getInstance();
 
 	@Autowired
-	public UsersView(UserService userService) {
-		presenter = new DefaultEntityPresenter<>(userService, this, getEntityName());
-		setupEventListeners();
+	public UsersView(UserService userService,User currentUser) {
+		presenter = new DefaultEntityPresenter<>(userService, this, getEntityName(),currentUser);
+		setupEventListeners(currentUser);
 
 		setupGrid();
 

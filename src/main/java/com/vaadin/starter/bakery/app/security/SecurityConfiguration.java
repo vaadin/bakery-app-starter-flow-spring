@@ -1,8 +1,10 @@
 package com.vaadin.starter.bakery.app.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -13,7 +15,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.starter.bakery.backend.data.Role;
+import com.vaadin.starter.bakery.backend.data.entity.User;
+import com.vaadin.starter.bakery.backend.repositories.UserRepository;
+import com.vaadin.starter.bakery.backend.service.UserService;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
 /**
@@ -51,6 +57,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		return new BCryptPasswordEncoder();
 	}
 
+	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	public User currentUser(UserRepository userRepository) {
+	    return userRepository.findByEmail(SecurityUtils.getUsername());
+	}
+	
 	/**
 	 * Registers our UserDetailsService and the password encoder to be used on login attempts.
 	 */

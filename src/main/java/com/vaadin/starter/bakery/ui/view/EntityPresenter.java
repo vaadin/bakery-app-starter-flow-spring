@@ -9,6 +9,7 @@ import org.springframework.dao.OptimisticLockingFailureException;
 import com.vaadin.data.ValidationException;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
+import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.CrudService;
 import com.vaadin.starter.bakery.backend.service.UserFriendlyDataException;
 import com.vaadin.starter.bakery.ui.utils.messages.Message;
@@ -21,16 +22,19 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 
 	private String entityName;
 
+	private User currentUser;
+	
 	private T entity;
 
-	public EntityPresenter(CrudService<T> crudService, EntityView<T> view, String entityName) {
+	public EntityPresenter(CrudService<T> crudService, EntityView<T> view, String entityName,User currentUser) {
 		this.crudService = crudService;
 		this.view = view;
 		this.entityName = entityName;
+		this.currentUser = currentUser;
 	}
 
-	public EntityPresenter(CrudService<T> crudService, String entityName) {
-		this(crudService, null, entityName);
+	public EntityPresenter(CrudService<T> crudService, String entityName,User currentUser) {
+		this(crudService, null, entityName,currentUser);
 	}
 
 	public void init(EntityView<T> view) {
@@ -40,7 +44,7 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 	public void delete() {
 		Message CONFIRM_DELETE = Message.CONFIRM_DELETE.createMessage();
 		confirmIfNecessaryAndExecute(true, CONFIRM_DELETE, () -> executeJPAOperation(() -> {
-			crudService.delete(entity);
+			crudService.delete(currentUser,entity);
 			onDeleteSuccess();
 		}));
 	}
@@ -63,7 +67,7 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 	}
 
 	protected void saveEntity() {
-		crudService.save(entity);
+		crudService.save(currentUser,entity);
 	}
 
 	protected void beforeSave() throws ValidationException {
@@ -133,8 +137,8 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 		view.openDialog(entity, edit);
 	}
 
-	public void createNew() {
-		this.entity = crudService.createNew();
+	public void createNew(User currentUser) {
+		this.entity = crudService.createNew(currentUser);
 		openDialog(entity, true);
 	}
 
