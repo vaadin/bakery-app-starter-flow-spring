@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.vaadin.flow.model.TemplateModel;
-import com.vaadin.router.event.AfterNavigationEvent;
-import com.vaadin.router.event.AfterNavigationObserver;
 import com.vaadin.starter.bakery.app.security.SecurityUtils;
 import com.vaadin.starter.bakery.ui.entities.PageInfo;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
@@ -19,7 +17,7 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 @Tag("bakery-navigation")
 @HtmlImport("src/app/bakery-navigation.html")
-public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> implements AfterNavigationObserver {
+public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> {
 
 	private static final String ICON_STOREFRONT = "edit";
 	private static final String ICON_DASHBOARD = "clock";
@@ -47,13 +45,13 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> im
 		getModel().setPages(pages);
 	}
 
-	@Override
-	public void afterNavigation(AfterNavigationEvent event) {
-		getModel().setPage(event.getLocation().getFirstSegment());
-	}
-
 	@ClientDelegate
 	private void navigateTo(String href) {
 		UI.getCurrent().navigateTo(href);
+	}
+
+	@Override
+	public Model getModel() {
+		return super.getModel();
 	}
 }
