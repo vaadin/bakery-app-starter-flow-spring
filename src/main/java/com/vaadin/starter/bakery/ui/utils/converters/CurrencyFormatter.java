@@ -1,6 +1,6 @@
 package com.vaadin.starter.bakery.ui.utils.converters;
 
-import com.vaadin.flow.model.ModelConverter;
+import com.vaadin.flow.templatemodel.ModelConverter;
 import com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 

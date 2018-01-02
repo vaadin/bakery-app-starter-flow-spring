@@ -3,30 +3,30 @@
  */
 package com.vaadin.starter.bakery.ui.view.storefront;
 
+import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.HasClickListeners;
+import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.polymertemplate.Id;
+import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.dom.Element;
-import com.vaadin.flow.model.Convert;
-import com.vaadin.flow.model.Include;
-import com.vaadin.flow.model.TemplateModel;
-import com.vaadin.shared.Registration;
+import com.vaadin.flow.shared.Registration;
+import com.vaadin.flow.templatemodel.Convert;
+import com.vaadin.flow.templatemodel.Include;
+import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
+import com.vaadin.starter.bakery.ui.event.CancelEvent;
+import com.vaadin.starter.bakery.ui.event.SaveEvent;
 import com.vaadin.starter.bakery.ui.utils.converters.CurrencyFormatter;
 import com.vaadin.starter.bakery.ui.utils.converters.LocalDateTimeConverter;
 import com.vaadin.starter.bakery.ui.utils.converters.LocalTimeConverter;
 import com.vaadin.starter.bakery.ui.utils.converters.LongToStringConverter;
-import com.vaadin.starter.bakery.ui.event.CancelEvent;
-import com.vaadin.starter.bakery.ui.event.SaveEvent;
 import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
 import com.vaadin.starter.bakery.ui.view.storefront.converter.StorefrontLocalDateConverter;
 import com.vaadin.starter.bakery.ui.view.storefront.event.CommentEvent;
 import com.vaadin.starter.bakery.ui.view.storefront.event.EditEvent;
-import com.vaadin.ui.Tag;
-import com.vaadin.ui.button.Button;
-import com.vaadin.ui.common.HasClickListeners;
-import com.vaadin.ui.common.HtmlImport;
-import com.vaadin.ui.event.ComponentEventListener;
-import com.vaadin.ui.polymertemplate.Id;
-import com.vaadin.ui.polymertemplate.PolymerTemplate;
-import com.vaadin.ui.textfield.TextField;
 
 /**
  * The component displaying a full (read-only) summary of an order, and a comment

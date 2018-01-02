@@ -2,15 +2,15 @@ package com.vaadin.starter.bakery.ui.view.storefront;
 
 import java.util.Collections;
 
-import com.vaadin.ui.common.Focusable;
-import com.vaadin.ui.common.HasValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
-import com.vaadin.data.ValidationException;
-import com.vaadin.router.QueryParameters;
-import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.flow.component.Focusable;
+import com.vaadin.flow.component.HasValue;
+import com.vaadin.flow.data.binder.ValidationException;
+import com.vaadin.flow.router.QueryParameters;
+import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.OrderService;

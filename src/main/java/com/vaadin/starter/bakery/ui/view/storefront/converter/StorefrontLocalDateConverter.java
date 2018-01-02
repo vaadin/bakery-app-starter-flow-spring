@@ -1,11 +1,11 @@
 package com.vaadin.starter.bakery.ui.view.storefront.converter;
 
-import static com.vaadin.starter.bakery.ui.utils.FormattingUtils.WEEKDAY_FULLNAME_FORMATTER;
 import static com.vaadin.starter.bakery.ui.utils.FormattingUtils.MONTH_AND_DAY_FORMATTER;
+import static com.vaadin.starter.bakery.ui.utils.FormattingUtils.WEEKDAY_FULLNAME_FORMATTER;
 
 import java.time.LocalDate;
 
-import com.vaadin.flow.model.ModelConverter;
+import com.vaadin.flow.templatemodel.ModelConverter;
 
 /**
  * Date converter specific for the way date is displayed in storefront.

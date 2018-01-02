@@ -1,7 +1,7 @@
 package com.vaadin.starter.bakery.ui.view;
 
-import com.vaadin.data.ValidationException;
-import com.vaadin.data.provider.DataProvider;
+import com.vaadin.flow.data.binder.ValidationException;
+import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.starter.bakery.ui.utils.messages.Message;
 
 /**

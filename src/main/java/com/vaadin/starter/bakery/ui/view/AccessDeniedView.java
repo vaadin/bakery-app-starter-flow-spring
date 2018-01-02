@@ -1,19 +1,19 @@
 package com.vaadin.starter.bakery.ui.view;
 
-import com.vaadin.flow.model.TemplateModel;
-import com.vaadin.router.ErrorParameter;
-import com.vaadin.router.HasErrorParameter;
-import com.vaadin.router.Route;
-import com.vaadin.router.PageTitle;
-import com.vaadin.router.event.BeforeNavigationEvent;
+import javax.servlet.http.HttpServletResponse;
+
+import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
+import com.vaadin.flow.router.BeforeNavigationEvent;
+import com.vaadin.flow.router.ErrorParameter;
+import com.vaadin.flow.router.HasErrorParameter;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
+import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.exceptions.AccessDeniedException;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
-import com.vaadin.ui.Tag;
-import com.vaadin.ui.common.HtmlImport;
-import com.vaadin.ui.polymertemplate.PolymerTemplate;
-
-import javax.servlet.http.HttpServletResponse;
 
 @Tag("access-denied")
 @HtmlImport("src/admin/access-denied.html")

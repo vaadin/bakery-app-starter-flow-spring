@@ -8,10 +8,18 @@ import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 
-import com.vaadin.data.BeanValidationBinder;
-import com.vaadin.flow.model.TemplateModel;
-import com.vaadin.router.PageTitle;
-import com.vaadin.router.Route;
+import com.vaadin.flow.component.HasText;
+import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.polymertemplate.Id;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.binder.BeanValidationBinder;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
+import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.User;
@@ -24,14 +32,6 @@ import com.vaadin.starter.bakery.ui.crud.CrudView;
 import com.vaadin.starter.bakery.ui.crud.DefaultEntityPresenter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.utils.converters.CurrencyFormatter;
-import com.vaadin.ui.Tag;
-import com.vaadin.ui.common.HasText;
-import com.vaadin.ui.common.HtmlImport;
-import com.vaadin.ui.grid.Grid;
-import com.vaadin.ui.html.H3;
-import com.vaadin.ui.html.Span;
-import com.vaadin.ui.polymertemplate.Id;
-import com.vaadin.ui.textfield.TextField;
 
 @Tag("bakery-products")
 @HtmlImport("src/products/bakery-products.html")

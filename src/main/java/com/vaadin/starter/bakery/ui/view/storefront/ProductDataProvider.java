@@ -4,9 +4,9 @@ import java.util.stream.Stream;
 
 import org.springframework.data.domain.PageRequest;
 
-import com.vaadin.data.provider.AbstractBackEndDataProvider;
-import com.vaadin.data.provider.Query;
-import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.flow.data.provider.AbstractBackEndDataProvider;
+import com.vaadin.flow.data.provider.Query;
+import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.service.ProductService;
 

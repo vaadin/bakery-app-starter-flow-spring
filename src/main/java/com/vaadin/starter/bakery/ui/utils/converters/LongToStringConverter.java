@@ -1,6 +1,6 @@
 package com.vaadin.starter.bakery.ui.utils.converters;
 
-import com.vaadin.flow.model.ModelConverter;
+import com.vaadin.flow.templatemodel.ModelConverter;
 
 public class LongToStringConverter implements ModelConverter<Long, String> {
 

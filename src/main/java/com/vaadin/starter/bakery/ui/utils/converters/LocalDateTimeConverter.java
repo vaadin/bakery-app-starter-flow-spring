@@ -5,7 +5,7 @@ import static com.vaadin.starter.bakery.ui.utils.FormattingUtils.FULL_DATE_FORMA
 
 import java.time.LocalDateTime;
 
-import com.vaadin.flow.model.ModelConverter;
+import com.vaadin.flow.templatemodel.ModelConverter;
 
 public class LocalDateTimeConverter implements ModelConverter<LocalDateTime, String> {
 

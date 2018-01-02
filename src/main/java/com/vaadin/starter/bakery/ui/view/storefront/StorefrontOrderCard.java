@@ -2,19 +2,19 @@ package com.vaadin.starter.bakery.ui.view.storefront;
 
 import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
-import com.vaadin.flow.model.TemplateModel;
-import com.vaadin.shared.Registration;
+import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.polymertemplate.Id;
+import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
+import com.vaadin.flow.shared.Registration;
+import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.OrderSummary;
 import com.vaadin.starter.bakery.ui.entities.StorefrontItemHeader;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.view.storefront.event.CommentEvent;
 import com.vaadin.starter.bakery.ui.view.storefront.event.EditEvent;
-import com.vaadin.ui.Tag;
-import com.vaadin.ui.common.HtmlImport;
-import com.vaadin.ui.event.ComponentEventListener;
-import com.vaadin.ui.polymertemplate.Id;
-import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 /**
  * The component for expandable order cards for the list on the Storefront view.

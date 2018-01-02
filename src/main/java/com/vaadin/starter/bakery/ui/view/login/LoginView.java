@@ -1,16 +1,16 @@
 package com.vaadin.starter.bakery.ui.view.login;
 
-import com.vaadin.flow.model.TemplateModel;
-import com.vaadin.router.PageTitle;
-import com.vaadin.router.Route;
-import com.vaadin.router.event.AfterNavigationEvent;
-import com.vaadin.router.event.AfterNavigationObserver;
-import com.vaadin.server.InitialPageSettings;
-import com.vaadin.server.PageConfigurator;
-import com.vaadin.shared.ui.Dependency;
-import com.vaadin.ui.Tag;
-import com.vaadin.ui.common.HtmlImport;
-import com.vaadin.ui.polymertemplate.PolymerTemplate;
+import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
+import com.vaadin.flow.router.AfterNavigationEvent;
+import com.vaadin.flow.router.AfterNavigationObserver;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.InitialPageSettings;
+import com.vaadin.flow.server.PageConfigurator;
+import com.vaadin.flow.shared.ui.Dependency;
+import com.vaadin.flow.templatemodel.TemplateModel;
 
 @Tag("bakery-login")
 @HtmlImport("src/login/bakery-login.html")

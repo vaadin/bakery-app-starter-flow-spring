@@ -1,13 +1,10 @@
 package com.vaadin.starter.bakery.ui.dataproviders;
 
-import com.vaadin.data.provider.Query;
-import com.vaadin.data.provider.QuerySortOrder;
-import com.vaadin.data.provider.QuerySortOrderBuilder;
-import com.vaadin.spring.annotation.SpringComponent;
-import com.vaadin.starter.bakery.backend.data.entity.Order;
-import com.vaadin.starter.bakery.backend.service.OrderService;
-import com.vaadin.starter.bakery.ui.utils.BakeryConst;
-import com.vaadin.starter.bakery.ui.utils.OrderFilter;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
@@ -15,10 +12,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.vaadin.artur.spring.dataprovider.FilterablePageableDataProvider;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Consumer;
+import com.vaadin.flow.data.provider.Query;
+import com.vaadin.flow.data.provider.QuerySortOrder;
+import com.vaadin.flow.data.provider.QuerySortOrderBuilder;
+import com.vaadin.flow.spring.annotation.SpringComponent;
+import com.vaadin.starter.bakery.backend.data.entity.Order;
+import com.vaadin.starter.bakery.backend.service.OrderService;
+import com.vaadin.starter.bakery.ui.utils.BakeryConst;
+import com.vaadin.starter.bakery.ui.utils.OrderFilter;
 
 /**
  * A singleton pageable order data provider.

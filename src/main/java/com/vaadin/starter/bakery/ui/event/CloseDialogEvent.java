@@ -1,8 +1,8 @@
 package com.vaadin.starter.bakery.ui.event;
 
-import com.vaadin.ui.Component;
-import com.vaadin.ui.event.ComponentEvent;
-import com.vaadin.ui.event.DomEvent;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.DomEvent;
 
 /**
  * The user requested the edit dialog to be closed.

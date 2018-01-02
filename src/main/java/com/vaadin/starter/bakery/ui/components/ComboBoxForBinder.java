@@ -1,8 +1,8 @@
 package com.vaadin.starter.bakery.ui.components;
 
-import com.vaadin.shared.Registration;
-import com.vaadin.ui.combobox.ComboBox;
-import com.vaadin.ui.common.Focusable;
+import com.vaadin.flow.component.Focusable;
+import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.shared.Registration;
 
 /**
  * Workaround for combo-box to avoid receiving a value-changed event when
