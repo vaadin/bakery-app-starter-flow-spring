@@ -40,6 +40,6 @@ public class PickupLocationService {
 	}
 
 	public PickupLocation getDefault() {
-		return findAnyMatching(Optional.empty(), new PageRequest(0, 1)).iterator().next();
+		return findAnyMatching(Optional.empty(), PageRequest.of(0, 1)).iterator().next();
 	}
 }

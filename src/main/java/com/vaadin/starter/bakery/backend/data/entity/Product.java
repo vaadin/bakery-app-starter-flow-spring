@@ -3,9 +3,8 @@ package com.vaadin.starter.bakery.backend.data.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-
-import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 public class Product extends AbstractEntity {

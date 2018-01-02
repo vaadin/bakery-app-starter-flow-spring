@@ -35,7 +35,7 @@ public class PickupLocationDataProvider extends AbstractBackEndDataProvider<Pick
 
 	public List<PickupLocation> findLocations(Query<PickupLocation, String> query) {
 		return pickupLocationService
-				.findAnyMatching(query.getFilter(), new PageRequest(query.getOffset(), query.getLimit())).getContent();
+				.findAnyMatching(query.getFilter(), PageRequest.of(query.getOffset(), query.getLimit())).getContent();
 
 	}
 }

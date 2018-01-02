@@ -1,9 +1,9 @@
 package com.vaadin.starter.bakery.backend.data.entity;
 
 import javax.persistence.Entity;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 public class Customer extends AbstractEntity {
