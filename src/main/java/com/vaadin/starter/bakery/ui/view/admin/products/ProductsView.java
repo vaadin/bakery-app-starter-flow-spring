@@ -68,8 +68,8 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 	private CurrencyFormatter currencyFormatter = new CurrencyFormatter();
 
 	@Autowired
-	public ProductsView(ProductService service,User currentUser) {
-		presenter = new DefaultEntityPresenter<>(service, this, getEntityName(),currentUser);
+	public ProductsView(ProductService service, User currentUser) {
+		presenter = new DefaultEntityPresenter<>(service, this, getEntityName(), currentUser);
 		setupEventListeners(currentUser);
 		setupGrid();
 

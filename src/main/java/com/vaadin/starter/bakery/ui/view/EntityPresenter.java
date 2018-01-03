@@ -26,15 +26,15 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 	
 	private T entity;
 
-	public EntityPresenter(CrudService<T> crudService, EntityView<T> view, String entityName,User currentUser) {
+	public EntityPresenter(CrudService<T> crudService, EntityView<T> view, String entityName, User currentUser) {
 		this.crudService = crudService;
 		this.view = view;
 		this.entityName = entityName;
 		this.currentUser = currentUser;
 	}
 
-	public EntityPresenter(CrudService<T> crudService, String entityName,User currentUser) {
-		this(crudService, null, entityName,currentUser);
+	public EntityPresenter(CrudService<T> crudService, String entityName, User currentUser) {
+		this(crudService, null, entityName, currentUser);
 	}
 
 	public void init(EntityView<T> view) {
@@ -44,7 +44,7 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 	public void delete() {
 		Message CONFIRM_DELETE = Message.CONFIRM_DELETE.createMessage();
 		confirmIfNecessaryAndExecute(true, CONFIRM_DELETE, () -> executeJPAOperation(() -> {
-			crudService.delete(currentUser,entity);
+			crudService.delete(currentUser, entity);
 			onDeleteSuccess();
 		}));
 	}
@@ -67,7 +67,7 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 	}
 
 	protected void saveEntity() {
-		crudService.save(currentUser,entity);
+		crudService.save(currentUser, entity);
 	}
 
 	protected void beforeSave() throws ValidationException {

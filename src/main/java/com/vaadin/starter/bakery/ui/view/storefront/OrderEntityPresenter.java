@@ -32,11 +32,11 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 	private final OrderService orderService;
 	private final OrdersGridDataProvider dataProvider;
 	private final User currentUser;
-	
+
 	@Autowired
-	public OrderEntityPresenter(ProductService productService, OrderService orderService, 
-			OrdersGridDataProvider dataProvider,User currentUser) {
-		super(orderService, "Order",currentUser);
+	public OrderEntityPresenter(ProductService productService, OrderService orderService,
+			OrdersGridDataProvider dataProvider, User currentUser) {
+		super(orderService, "Order", currentUser);
 		this.orderService = orderService;
 		this.dataProvider = dataProvider;
 		this.currentUser = currentUser;
@@ -128,7 +128,7 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 
 	void onOrderCardAddComment(StorefrontOrderCard orderCard, String message) {
 		executeJPAOperation(() -> {
-			Order updated = orderService.addComment(currentUser,orderCard.getOrder().getId(), message);
+			Order updated = orderService.addComment(currentUser, orderCard.getOrder().getId(), message);
 			orderCard.updateOrder(updated);
 			view.resizeGrid();
 		});
@@ -136,7 +136,7 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 
 	private void addComment(Long id, String comment) {
 		executeJPAOperation(() -> {
-			orderService.addComment(currentUser,id, comment);
+			orderService.addComment(currentUser, id, comment);
 			loadEntity(id, false);
 		});
 	}

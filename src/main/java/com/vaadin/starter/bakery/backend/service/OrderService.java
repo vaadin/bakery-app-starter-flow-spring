@@ -56,14 +56,14 @@ public class OrderService implements CrudService<Order> {
 	}
 
 	@Transactional(rollbackOn = Exception.class)
-	public Order saveOrder(User currentUser, Long id,BiConsumer<User,Order> orderFiller) {
+	public Order saveOrder(User currentUser, Long id, BiConsumer<User, Order> orderFiller) {
 		Order order;
-		if(id == null) {
+		if (id == null) {
 			order = new Order(currentUser);
 		} else {
 			order = findOrder(id);
 		}
-		orderFiller.accept(currentUser,order);
+		orderFiller.accept(currentUser, order);
 		return orderRepository.save(order);
 	}
 
@@ -73,7 +73,7 @@ public class OrderService implements CrudService<Order> {
 	}
 
 	@Transactional(rollbackOn = Exception.class)
-	public Order addComment(User currentUser,Long id, String comment) {
+	public Order addComment(User currentUser, Long id, String comment) {
 		Order order = findOrder(id);
 		order.addHistoryItem(currentUser, comment);
 		return orderRepository.save(order);

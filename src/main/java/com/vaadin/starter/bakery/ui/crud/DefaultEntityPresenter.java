@@ -16,8 +16,9 @@ public class DefaultEntityPresenter<T extends AbstractEntity> extends EntityPres
 
 	private final ConfigurableFilterDataProvider<T, Void, String> filteredDataProvider;
 
-	public DefaultEntityPresenter(FilterableCrudService<T> crudService, EntityView<T> view, String entityName,User currentUser) {
-		super(crudService, view, entityName,currentUser);
+	public DefaultEntityPresenter(FilterableCrudService<T> crudService, EntityView<T> view, String entityName,
+			User currentUser) {
+		super(crudService, view, entityName, currentUser);
 
 		DataProvider<T, String> dataProvider = new CallbackDataProvider<>(
 				query -> crudService.findAnyMatching(query.getFilter()).stream(),

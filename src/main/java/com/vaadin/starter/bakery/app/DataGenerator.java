@@ -165,7 +165,7 @@ public class DataGenerator implements HasLogger {
 		return order;
 	}
 
-	private List<HistoryItem> createOrderHistory(Order order,User barista,User baker) {
+	private List<HistoryItem> createOrderHistory(Order order, User barista, User baker) {
 		ArrayList<HistoryItem> history = new ArrayList<>();
 		HistoryItem item = new HistoryItem(barista, "Order placed");
 		item.setNewState(OrderState.NEW);
@@ -342,7 +342,8 @@ public class DataGenerator implements HasLogger {
 				"https://randomuser.me/api/portraits/women/40.jpg", true));
 	}
 
-	private User createUser(String email, String firstName, String lastName, String password, String role, String photoUrl,boolean locked) {
+	private User createUser(String email, String firstName, String lastName, String password, String role,
+			String photoUrl, boolean locked) {
 		User user = new User();
 		user.setEmail(email);
 		user.setFirstName(firstName);
