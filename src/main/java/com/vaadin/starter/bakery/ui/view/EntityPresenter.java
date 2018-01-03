@@ -16,6 +16,14 @@ import com.vaadin.starter.bakery.ui.utils.messages.Message;
 
 public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 
+	public static final String DB_NOT_FOUND_MESSAGE = "The selected %s was not found.";
+
+	public static final String DB_CHANGES_MESSAGE = "Somebody else might have updated the data. Please refresh and try again.";
+
+	public static final String DB_REFERENCES_MESSAGE = "The operation can not be executed as there are references to entity in the database";
+
+	public static final String REQUIRED_MESSAGE = "Please fill out all required fields before proceeding.";
+
 	private CrudService<T> crudService;
 
 	protected EntityView<T> view;
@@ -63,7 +71,7 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 	}
 
 	protected void showValidationError() {
-		view.showError("Please fill out all required fields before proceeding.", false);
+		view.showError(REQUIRED_MESSAGE, false);
 	}
 
 	protected void saveEntity() {
@@ -95,11 +103,11 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 			showError(e, e.getMessage(), true);
 		} catch (DataIntegrityViolationException e) {
 			// Commit failed because of validation errors
-			showError(e, "The operation can not be executed as there are references to entity in the database", true);
+			showError(e, DB_REFERENCES_MESSAGE, true);
 		} catch (OptimisticLockingFailureException e) {
-			showError(e, "Somebody else might have updated the data. Please refresh and try again.", true);
+			showError(e, DB_CHANGES_MESSAGE, true);
 		} catch (EntityNotFoundException e) {
-			showError(e, String.format("The selected %s was not found.", entityName), false);
+			showError(e, String.format(DB_NOT_FOUND_MESSAGE, entityName), false);
 		} catch (ConstraintViolationException e) {
 			showValidationError();
 		}
