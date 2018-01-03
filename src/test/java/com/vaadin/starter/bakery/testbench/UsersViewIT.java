@@ -10,6 +10,7 @@ import org.openqa.selenium.WebElement;
 import com.vaadin.starter.bakery.testbench.elements.core.FormLayoutElement;
 import com.vaadin.starter.bakery.testbench.elements.core.PaperToastElement;
 import com.vaadin.starter.bakery.testbench.elements.core.PasswordFieldElement;
+import com.vaadin.starter.bakery.testbench.elements.core.TextFieldElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.UsersViewElement;
 
@@ -21,7 +22,7 @@ public class UsersViewIT extends AbstractIT {
 	}
 
 	@Test
-	public void updatePassword() {
+	public void updatePassword() throws InterruptedException {
 		UsersViewElement usersView = openTestPage();
 
 		Assert.assertFalse(usersView.getDialog().isOpened());
@@ -36,10 +37,19 @@ public class UsersViewIT extends AbstractIT {
 		FormLayoutElement form = usersView.getForm();
 		Assert.assertTrue(form.isDisplayed());
 
+		// When opening form the password value must be always empty
 		PasswordFieldElement password = usersView.getPasswordField();
 		Assert.assertEquals("", password.getValue());
 
+		// Saving any field without changing password should save and close
+		TextFieldElement emailField = usersView.getEmailField();
+		emailField.setValue("foo@bar.com");
+		usersView.getButtonsBar().getSaveButton().click();
+		Assert.assertFalse(form.isDisplayed());
+
 		// Invalid password prevents closing form
+		bakerCell.click();
+		emailField.setValue("baker@vaadin.com");
 		password.setValue("123");
 		usersView.getButtonsBar().getSaveButton().click();
 		PaperToastElement toast = $(PaperToastElement.class).onPage().id("_defaultToast");
@@ -51,7 +61,7 @@ public class UsersViewIT extends AbstractIT {
 		usersView.getButtonsBar().getSaveButton().click();
 		Assert.assertFalse(form.isDisplayed());
 
-		// Do not display any password when opening the form
+		// When reopening the form password field must be empty.
 		bakerCell.click();
 		Assert.assertEquals("", password.getAttribute("value"));
 	}
