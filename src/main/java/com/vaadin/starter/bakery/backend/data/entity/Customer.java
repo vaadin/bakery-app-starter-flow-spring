@@ -2,6 +2,7 @@ package com.vaadin.starter.bakery.backend.data.entity;
 
 import javax.persistence.Entity;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 
@@ -14,6 +15,7 @@ public class Customer extends AbstractEntity {
 
 	@NotBlank
 	@Size(max = 255)
+	@Pattern(regexp = "^(\\+\\d+[ \\-]+)?(\\d+[ \\-]+)?(\\d[ \\-\\.]?){6,14}$", message = "{bakery.phone.number.invalid}")
 	private String phoneNumber;
 	
 	private String details;

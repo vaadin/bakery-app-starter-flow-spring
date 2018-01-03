@@ -88,11 +88,22 @@ public class UsersView extends CrudView<User, TemplateModel> {
 		binder.bind(lastnameField, "lastName");
 		binder.bind(emailField, "email");
 		binder.bind(roleField, "role");
-		binder.bind(passwordField, (user) -> passwordField.getEmptyValue(), (user, password) -> {
-			if (!passwordField.getEmptyValue().equals(password)) {
-				user.setPassword(passwordEncoder.encode(password));
-			}
-		});
+
+		binder.forField(passwordField)
+				.withValidator(password -> {
+					return password.matches("(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,}");
+				},
+						// FIXME: use message keys in
+						// ValidationMessages.properties when
+						// https://github.com/vaadin/flow/issues/3228
+						// and check that messages remains when
+						// https://github.com/vaadin/flow/issues/3230
+						"need 6 o more chars, mixing digits, lowercase and uppercase letters")
+				.bind(user -> passwordField.getEmptyValue(), (user, password) -> {
+					if (!passwordField.getEmptyValue().equals(password)) {
+						user.setPassword(passwordEncoder.encode(password));
+					}
+				});
 	}
 
 	private void setupGrid() {
