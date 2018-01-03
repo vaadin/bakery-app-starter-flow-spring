@@ -119,33 +119,22 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 			timeValues.add(localTimeConverter.toModel(e.getDetail()));
 			time.setItems(timeValues);
 		});
-		binder.forField(time).bind("dueTime");
+		binder.bind(time, "dueTime");
 
 		pickupLocation.setItemLabelGenerator(createItemLabelGenerator(PickupLocation::getName));
 		pickupLocation.setDataProvider(locationProvider);
-		binder.forField(pickupLocation).bind("pickupLocation");
+		binder.bind(pickupLocation, "pickupLocation");
 
 		customerName.setRequired(true);
-		binder.forField(customerName)
-				.withValidator(fullName -> fullName.matches("^[\\p{L} .'-]+ [\\p{L} .'-]+$"),
-						// TODO: use message keys in
-						// ValidationMessages.properties when
-						// https://github.com/vaadin/flow/issues/3228
-						// TODO: check that messages remains when
-						// https://github.com/vaadin/flow/issues/3230
-						"type a valid full name")
-				.bind("customer.fullName");
+		binder.bind(customerName, "customer.fullName");
 
 		customerNumber.setRequired(true);
-		binder.forField(customerNumber)
-				.withValidator(number -> number.replaceAll("[ -]", "").matches("^\\+?(?:[0-9] ?){6,14}[0-9]$"),
-						"type a valid phone number")
-				.bind("customer.phoneNumber");
+		binder.bind(customerNumber, "customer.phoneNumber");
 
-		binder.forField(customerDetails).bind("customer.details");
+		binder.bind(customerDetails, "customer.details");
 
 		items.setRequiredIndicatorVisible(true);
-		binder.forField(items).bind("items");
+		binder.bind(items, "items");
 		items.addPriceChangeListener(e -> setTotalPrice(e.getTotalPrice()));
 
 		items.addListener(ValueChangeEvent.class, e -> review.setDisabled(!hasChanges()));
