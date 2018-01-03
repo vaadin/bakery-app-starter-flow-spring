@@ -7,6 +7,7 @@ import com.vaadin.data.provider.CallbackDataProvider;
 import com.vaadin.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
+import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.FilterableCrudService;
 import com.vaadin.starter.bakery.ui.view.EntityPresenter;
 import com.vaadin.starter.bakery.ui.view.EntityView;
@@ -15,8 +16,9 @@ public class DefaultEntityPresenter<T extends AbstractEntity> extends EntityPres
 
 	private final ConfigurableFilterDataProvider<T, Void, String> filteredDataProvider;
 
-	public DefaultEntityPresenter(FilterableCrudService<T> crudService, EntityView<T> view, String entityName) {
-		super(crudService, view, entityName);
+	public DefaultEntityPresenter(FilterableCrudService<T> crudService, EntityView<T> view, String entityName,
+			User currentUser) {
+		super(crudService, view, entityName, currentUser);
 
 		DataProvider<T, String> dataProvider = new CallbackDataProvider<>(
 				query -> crudService.findAnyMatching(query.getFilter()).stream(),

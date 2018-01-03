@@ -77,14 +77,14 @@ public class UsersView extends CrudView<User, TemplateModel> {
 	private PasswordEncoder passwordEncoder = NoOpPasswordEncoder.getInstance();
 
 	@Autowired
-	public UsersView(UserService userService) {
-		presenter = new DefaultEntityPresenter<>(userService, this, getEntityName());
-		setupEventListeners();
+	public UsersView(UserService userService, User currentUser) {
+		presenter = new DefaultEntityPresenter<>(userService, this, getEntityName(), currentUser);
+		setupEventListeners(currentUser);
 
 		setupGrid();
 
 		ListDataProvider<String> roleProvider = DataProvider.ofItems(Role.getAllRoles());
-		roleField.setItemLabelGenerator(s -> s != null  ? s : "");
+		roleField.setItemLabelGenerator(s -> s != null ? s : "");
 		roleField.setDataProvider(roleProvider);
 
 		binder.bind(firstnameField, "firstName");

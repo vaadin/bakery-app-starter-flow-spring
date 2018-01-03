@@ -108,7 +108,7 @@ public class OrderDetailsFull extends PolymerTemplate<OrderDetailsFull.Model> {
 	}
 
 	public Registration addEditListener(ComponentEventListener<EditEvent> listener) {
-		return addListener(EditEvent.class,listener);
+		return addListener(EditEvent.class, listener);
 	}
 
 	public Registration addBackListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {

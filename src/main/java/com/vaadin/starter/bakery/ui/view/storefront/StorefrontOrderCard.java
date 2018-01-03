@@ -100,10 +100,10 @@ public class StorefrontOrderCard extends PolymerTemplate<StorefrontOrderCard.Mod
 	}
 
 	public Registration addCommentListener(ComponentEventListener<CommentEvent> listener) {
-		return addListener(CommentEvent.class,listener);
+		return addListener(CommentEvent.class, listener);
 	}
-	
+
 	public Registration addCancelListener(ComponentEventListener<CancelEvent> listener) {
-		return addListener(CancelEvent.class,listener);
+		return addListener(CancelEvent.class, listener);
 	}
 }

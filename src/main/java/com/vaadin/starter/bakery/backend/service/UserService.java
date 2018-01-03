@@ -9,26 +9,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.vaadin.starter.bakery.app.security.SecurityUtils;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.repositories.UserRepository;
 
 @Service
 public class UserService implements FilterableCrudService<User> {
 
-	public static final String MODIFY_LOCKED_USER_NOT_PERMITTED =
-			"User has been locked and cannot be modified or deleted";
+	public static final String MODIFY_LOCKED_USER_NOT_PERMITTED = "User has been locked and cannot be modified or deleted";
 	private static final String DELETING_SELF_NOT_PERMITTED = "You cannot delete your own account";
 	private final UserRepository userRepository;
-
 
 	@Autowired
 	public UserService(UserRepository userRepository) {
 		this.userRepository = userRepository;
-	}
-
-	public User getCurrentUser() {
-		return getRepository().findByEmail(SecurityUtils.getUsername());
 	}
 
 	public List<User> findAnyMatching(Optional<String> filter) {
@@ -54,22 +47,21 @@ public class UserService implements FilterableCrudService<User> {
 
 	@Override
 	@Transactional
-	public User save(User entity) {
+	public User save(User currentUser, User entity) {
 		throwIfUserLocked(entity);
 		return getRepository().saveAndFlush(entity);
 	}
 
 	@Override
 	@Transactional
-	public void delete(User user) {
-		throwIfDeletingSelf(user);
-		throwIfUserLocked(user);
-		FilterableCrudService.super.delete(user);
+	public void delete(User currentUser, User userToDelete) {
+		throwIfDeletingSelf(currentUser, userToDelete);
+		throwIfUserLocked(userToDelete);
+		FilterableCrudService.super.delete(currentUser, userToDelete);
 	}
 
-	private void throwIfDeletingSelf(User user) {
-		User current = getCurrentUser();
-		if (current.equals(user)) {
+	private void throwIfDeletingSelf(User currentUser, User user) {
+		if (currentUser.equals(user)) {
 			throw new UserFriendlyDataException(DELETING_SELF_NOT_PERMITTED);
 		}
 	}
@@ -81,7 +73,7 @@ public class UserService implements FilterableCrudService<User> {
 	}
 
 	@Override
-	public User createNew() {
+	public User createNew(User currentUser) {
 		return new User();
 	}
 
