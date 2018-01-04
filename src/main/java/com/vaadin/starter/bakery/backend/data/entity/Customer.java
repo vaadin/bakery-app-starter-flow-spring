@@ -2,6 +2,7 @@ package com.vaadin.starter.bakery.backend.data.entity;
 
 import javax.persistence.Entity;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 
@@ -14,6 +15,10 @@ public class Customer extends AbstractEntity {
 
 	@NotBlank
 	@Size(max = 255)
+	// A simple phone number checker, allowing an optional international prefix
+	// plus a variable number of digits that could be separated by dashes or
+	// spaces
+	@Pattern(regexp = "^(\\+\\d+)?([ -]?\\d+){4,14}$", message = "{bakery.phone.number.invalid}")
 	private String phoneNumber;
 	
 	private String details;

@@ -119,21 +119,23 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 			timeValues.add(localTimeConverter.toModel(e.getDetail()));
 			time.setItems(timeValues);
 		});
-		binder.forField(time).bind("dueTime");
+		binder.bind(time, "dueTime");
 
 		pickupLocation.setItemLabelGenerator(createItemLabelGenerator(PickupLocation::getName));
 		pickupLocation.setDataProvider(locationProvider);
-		pickupLocation.setRequired(true);
-		binder.forField(pickupLocation).bind("pickupLocation");
+		binder.bind(pickupLocation, "pickupLocation");
+		pickupLocation.setRequired(false);
 
 		customerName.setRequired(true);
-		binder.forField(customerName).bind("customer.fullName");
+		binder.bind(customerName, "customer.fullName");
+
 		customerNumber.setRequired(true);
-		binder.forField(customerNumber).bind("customer.phoneNumber");
-		binder.forField(customerDetails).bind("customer.details");
+		binder.bind(customerNumber, "customer.phoneNumber");
+
+		binder.bind(customerDetails, "customer.details");
 
 		items.setRequiredIndicatorVisible(true);
-		binder.forField(items).bind("items");
+		binder.bind(items, "items");
 		items.addPriceChangeListener(e -> setTotalPrice(e.getTotalPrice()));
 
 		items.addListener(ValueChangeEvent.class, e -> review.setDisabled(!hasChanges()));
