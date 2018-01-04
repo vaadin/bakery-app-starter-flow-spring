@@ -15,7 +15,10 @@ public class Customer extends AbstractEntity {
 
 	@NotBlank
 	@Size(max = 255)
-	@Pattern(regexp = "^(\\+\\d+[ \\-]+)?(\\d+[ \\-]+)?(\\d[ \\-\\.]?){6,14}$", message = "{bakery.phone.number.invalid}")
+	// A simple phone number checker, allowing an optional international prefix
+	// plus a variable number of digits that could be separated by dashes or
+	// spaces
+	@Pattern(regexp = "^(\\+\\d+)?([ -]?\\d+){4,14}$", message = "{bakery.phone.number.invalid}")
 	private String phoneNumber;
 	
 	private String details;

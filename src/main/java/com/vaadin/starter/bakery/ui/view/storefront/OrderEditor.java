@@ -124,6 +124,11 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 		pickupLocation.setItemLabelGenerator(createItemLabelGenerator(PickupLocation::getName));
 		pickupLocation.setDataProvider(locationProvider);
 		binder.bind(pickupLocation, "pickupLocation");
+		// FIXME: temporary solution to avoid that client side sets the invalid
+		// attribute when clearing the value. Client side does not know the
+		// error message to show, hence it's more consistent to leave server
+		// side do the validation.
+		pickupLocation.setRequired(false);
 
 		customerName.setRequired(true);
 		binder.bind(customerName, "customer.fullName");
