@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 public class OrderItem extends AbstractEntity {
 
 	@ManyToOne
-	@NotNull(message = "choose a product")
+	@NotNull(message = "{bakery.pickup.product.required}")
 	private Product product;
 
 	@Min(1)
