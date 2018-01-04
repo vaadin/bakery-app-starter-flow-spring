@@ -4,7 +4,6 @@ import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_USERS;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.vaadin.data.BeanValidationBinder;
@@ -74,10 +73,8 @@ public class UsersView extends CrudView<User, TemplateModel> {
 
 	private final BeanValidationBinder<User> binder = new BeanValidationBinder<>(User.class);
 
-	private PasswordEncoder passwordEncoder = NoOpPasswordEncoder.getInstance();
-
 	@Autowired
-	public UsersView(UserService userService, User currentUser) {
+	public UsersView(UserService userService, PasswordEncoder passwordEncoder, User currentUser) {
 		presenter = new DefaultEntityPresenter<>(userService, this, getEntityName(), currentUser);
 		setupEventListeners(currentUser);
 
@@ -122,10 +119,6 @@ public class UsersView extends CrudView<User, TemplateModel> {
 	@Override
 	protected String getBasePage() {
 		return PAGE_USERS;
-	}
-
-	public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
-		this.passwordEncoder = passwordEncoder;
 	}
 
 	@Override

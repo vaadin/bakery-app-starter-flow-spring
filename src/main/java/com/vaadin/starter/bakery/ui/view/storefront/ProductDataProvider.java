@@ -26,7 +26,7 @@ class ProductDataProvider extends AbstractBackEndDataProvider<Product, String> {
 
 	@Override
 	public Stream<Product> fetchFromBackEnd(Query<Product, String> query) {
-		return productService.findAnyMatching(query.getFilter(), new PageRequest(query.getOffset(), query.getLimit()))
+		return productService.findAnyMatching(query.getFilter(), PageRequest.of(query.getOffset(), query.getLimit()))
 				.stream();
 	}
 
