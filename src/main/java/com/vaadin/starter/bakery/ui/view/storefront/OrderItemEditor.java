@@ -1,6 +1,7 @@
 package com.vaadin.starter.bakery.ui.view.storefront;
 
 import com.vaadin.data.BeanValidationBinder;
+import com.vaadin.data.BindingValidationStatus;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
@@ -20,6 +21,8 @@ import com.vaadin.ui.html.Div;
 import com.vaadin.ui.polymertemplate.Id;
 import com.vaadin.ui.polymertemplate.PolymerTemplate;
 import com.vaadin.ui.textfield.TextField;
+
+import java.util.stream.Stream;
 
 @Tag("order-item-editor")
 @HtmlImport("src/storefront/order-item-editor.html")
@@ -107,6 +110,10 @@ public class OrderItemEditor extends PolymerTemplate<TemplateModel> implements H
 	@Override
 	public OrderItem getValue() {
 		return this.orderItem;
+	}
+
+	public Stream<HasValue> validate() {
+		return binder.validate().getFieldValidationErrors().stream().map(BindingValidationStatus::getField);
 	}
 
 	public Registration addPriceChangeListener(ComponentEventListener<PriceChangeEvent> listener) {

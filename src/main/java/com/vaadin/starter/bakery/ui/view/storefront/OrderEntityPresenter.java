@@ -1,7 +1,10 @@
 package com.vaadin.starter.bakery.ui.view.storefront;
 
 import java.util.Collections;
+import java.util.Optional;
 
+import com.vaadin.ui.common.Focusable;
+import com.vaadin.ui.common.HasValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -55,6 +58,11 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 		view.getOpenedOrderEditor().addListener(CancelEvent.class, e -> cancel());
 		view.getOpenedOrderEditor().addReviewListener(e -> {
 			try {
+				Optional<HasValue> firstErrorField = view.validate().findFirst();
+				if (firstErrorField.isPresent()) {
+					return;
+				}
+
 				writeEntity();
 				view.openOrderDetails(getEntity(), true);
 			} catch (ValidationException ex) {
