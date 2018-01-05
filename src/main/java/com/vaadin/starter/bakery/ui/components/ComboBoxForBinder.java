@@ -23,7 +23,8 @@ public class ComboBoxForBinder<T> extends ComboBox<T> {
 	@Override
 	public Registration addValueChangeListener(ValueChangeListener<ComboBox<T>, T> listener) {
 		return super.addValueChangeListener(e -> {
-			if (e.getValue() != null && !e.getValue().equals(lastSetValue)) {
+			if (e.getValue() != null && !e.getValue().equals(lastSetValue) ||
+					e.getValue() == null && lastSetValue != null) {
 				listener.onComponentEvent(e);
 			}
 		});

@@ -124,4 +124,8 @@ public class OrderItemEditor extends PolymerTemplate<TemplateModel> implements H
 	public Registration addDeleteListener(ComponentEventListener<DeleteEvent> listener) {
 		return addListener(DeleteEvent.class, listener);
 	}
+
+	public boolean isValid() {
+		return binder.isValid();
+	}
 }

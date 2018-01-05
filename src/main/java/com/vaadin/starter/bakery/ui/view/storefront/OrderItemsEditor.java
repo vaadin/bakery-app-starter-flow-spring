@@ -1,5 +1,6 @@
 package com.vaadin.starter.bakery.ui.view.storefront;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.vaadin.shared.Registration;
@@ -17,6 +18,8 @@ public class OrderItemsEditor extends Div implements HasValue<OrderItemsEditor, 
 
 	private List<OrderItem> items;
 
+	private List<OrderItemEditor> editors;
+
 	private ProductDataProvider productDataProvider;
 
 	private int totalPrice = 0;
@@ -30,7 +33,7 @@ public class OrderItemsEditor extends Div implements HasValue<OrderItemsEditor, 
 	@Override
 	public void setValue(List<OrderItem> items) {
 		this.items = items;
-
+		editors = new ArrayList<>(items.size() + 1);
 		removeAll();
 		totalPrice = 0;
 		hasChanges = false;
@@ -44,6 +47,7 @@ public class OrderItemsEditor extends Div implements HasValue<OrderItemsEditor, 
 
 	private OrderItemEditor createEditor(OrderItem value) {
 		OrderItemEditor editor = new OrderItemEditor(productDataProvider);
+		editors.add(editor);
 		getElement().appendChild(editor.getElement());
 		editor.addPriceChangeListener(e -> updateTotalPriceOnItemPriceChange(e.getOldValue(), e.getNewValue()));
 		editor.addProductChangeListener(e -> productChanged(e.getSource(), e.getProduct()));
@@ -52,6 +56,7 @@ public class OrderItemsEditor extends Div implements HasValue<OrderItemsEditor, 
 			if (empty != editor) {
 				OrderItem orderItem = editor.getValue();
 				items.remove(orderItem);
+				editors.remove(editor);
 				remove(editor);
 				updateTotalPriceOnItemPriceChange(e.getTotalPrice(), 0);
 				setHasChanges(true);
@@ -110,4 +115,17 @@ public class OrderItemsEditor extends Div implements HasValue<OrderItemsEditor, 
 		}
 	}
 
+	public boolean isValid() {
+		if (editors == null) {
+			return true;
+		}
+
+		for (OrderItemEditor editor : editors) {
+			if (editor != empty && !editor.isValid()) {
+				return false;
+			}
+		}
+
+		return true;
+	}
 }
