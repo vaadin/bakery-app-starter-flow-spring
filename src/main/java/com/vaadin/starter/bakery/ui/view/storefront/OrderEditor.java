@@ -10,6 +10,7 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.vaadin.data.validator.BeanValidator;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -112,12 +113,7 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 		status.addValueChangeListener(
 				e -> getModel().setStatus(DataProviderUtil.convertIfNotNull(e.getValue(), OrderState::name)));
 		binder.forField(status)
-				.withValidator(new AbstractValidator<OrderState>("must not be null") {
-					@Override
-					public ValidationResult apply(OrderState orderState, ValueContext valueContext) {
-						return toResult(orderState, orderState != null);
-					}
-				})
+				.withValidator(new BeanValidator(Order.class, "state"))
 				.bind(Order::getState, (o, s) -> {
 					o.changeState(currentUser, s);
 				});
