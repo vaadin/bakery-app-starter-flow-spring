@@ -145,7 +145,7 @@ implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 		openedOrderDetails.display(order, isReview);
 	}
 
-	public Stream<HasValue> validate() {
+	public Stream<HasValue<?, ?>> validate() {
 		return openedOrderEditor.validate();
 	}
 

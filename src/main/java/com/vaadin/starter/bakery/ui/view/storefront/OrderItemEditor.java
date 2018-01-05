@@ -112,7 +112,7 @@ public class OrderItemEditor extends PolymerTemplate<TemplateModel> implements H
 		return this.orderItem;
 	}
 
-	public Stream<HasValue> validate() {
+	public Stream<HasValue<?, ?>> validate() {
 		return binder.validate().getFieldValidationErrors().stream().map(BindingValidationStatus::getField);
 	}
 

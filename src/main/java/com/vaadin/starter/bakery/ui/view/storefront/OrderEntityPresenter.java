@@ -1,7 +1,6 @@
 package com.vaadin.starter.bakery.ui.view.storefront;
 
 import java.util.Collections;
-import java.util.Optional;
 
 import com.vaadin.ui.common.Focusable;
 import com.vaadin.ui.common.HasValue;
@@ -58,17 +57,13 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 		view.getOpenedOrderEditor().addListener(CancelEvent.class, e -> cancel());
 		view.getOpenedOrderEditor().addReviewListener(e -> {
 			try {
-				Optional<HasValue> firstErrorField = view.validate().findFirst();
-				if (firstErrorField.isPresent()) {
-					HasValue field = firstErrorField.get();
-					if (field instanceof Focusable) {
-						((Focusable) field).focus();
-					}
-					return;
+				HasValue<?, ?> firstErrorField = view.validate().findFirst().orElse(null);
+				if (firstErrorField == null) {
+					writeEntity();
+					view.openOrderDetails(getEntity(), true);
+				} else if (firstErrorField instanceof Focusable) {
+					((Focusable<?>) firstErrorField).focus();
 				}
-
-				writeEntity();
-				view.openOrderDetails(getEntity(), true);
 			} catch (ValidationException ex) {
 				showValidationError();
 			}
