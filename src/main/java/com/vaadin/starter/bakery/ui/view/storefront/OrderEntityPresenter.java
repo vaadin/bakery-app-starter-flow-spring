@@ -60,6 +60,10 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 			try {
 				Optional<HasValue> firstErrorField = view.validate().findFirst();
 				if (firstErrorField.isPresent()) {
+					HasValue field = firstErrorField.get();
+					if (field instanceof Focusable) {
+						((Focusable) field).focus();
+					}
 					return;
 				}
 
