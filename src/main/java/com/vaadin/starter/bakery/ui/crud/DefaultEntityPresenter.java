@@ -9,7 +9,6 @@ import com.vaadin.data.provider.DataProvider;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.FilterableCrudService;
-import com.vaadin.starter.bakery.ui.utils.messages.Message;
 import com.vaadin.starter.bakery.ui.view.EntityPresenter;
 import com.vaadin.starter.bakery.ui.view.EntityView;
 
@@ -48,11 +47,9 @@ public class DefaultEntityPresenter<T extends AbstractEntity> {
 	}
 
 	public void save() {
-
 		if (entityPresenter.writeEntity()) {
 			entityPresenter.save();
 		}
-
 	}
 
 	public void cancel() {
