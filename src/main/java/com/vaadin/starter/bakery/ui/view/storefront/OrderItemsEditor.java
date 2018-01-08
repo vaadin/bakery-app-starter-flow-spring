@@ -1,6 +1,7 @@
 package com.vaadin.starter.bakery.ui.view.storefront;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
@@ -110,4 +111,10 @@ public class OrderItemsEditor extends Div implements HasValue<OrderItemsEditor, 
 		}
 	}
 
+	public Stream<HasValue<?, ?>> validate() {
+		return getChildren()
+				.filter(component -> component instanceof OrderItemEditor && !component.equals(empty))
+				.map(editor -> ((OrderItemEditor) editor).validate())
+				.flatMap(stream -> stream);
+	}
 }

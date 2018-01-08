@@ -9,7 +9,10 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
+import com.vaadin.data.BindingValidationStatus;
+import com.vaadin.ui.common.HasValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 
@@ -173,6 +176,13 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 
 		review.setDisabled(true);
 		updateDesktopViewOnItemsEdit();
+	}
+
+	public Stream<HasValue<?, ?>> validate() {
+		Stream<HasValue<?, ?>> errorFields = binder.validate().getFieldValidationErrors().stream()
+				.map(BindingValidationStatus::getField);
+
+		return Stream.concat(errorFields, items.validate());
 	}
 
 	public Registration addReviewListener(ComponentEventListener<ReviewEvent> listener) {
