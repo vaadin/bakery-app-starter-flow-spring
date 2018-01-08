@@ -20,19 +20,6 @@
         box-sizing: border-box;
         height: 100%;
       }
-
-      .at-icon {
-        display: inline-block;
-        width: 24px;
-        height: 24px;
-        font-size: 18px;
-        line-height: 24px;
-        text-align: center;
-      }
-
-      .at-icon::before {
-        content: '@';
-      }
     </style>
 
     <div class="scrollable flex1" id="main">
@@ -54,25 +41,26 @@
                   </vaadin-date-picker>
 
                   <vaadin-combo-box id="due-time" allow-custom-value>
-                    <iron-icon slot="prefix" icon="valo:clock"></iron-icon>
+                    <iron-icon slot="prefix" icon="vaadin:clock"></iron-icon>
                   </vaadin-combo-box>
                 </vaadin-form-layout>
 
               </vaadin-form-item>
 
-              <vaadin-combo-box id="pickup-location" class="full-width">
-                <div slot="prefix" class="at-icon"></div>
+              <vaadin-combo-box id="pickup-location" class="full-width" value="[[pickupLocation]]">
+                <iron-icon slot="prefix" icon="vaadin:at"></iron-icon>
               </vaadin-combo-box>
             </vaadin-form-layout>
 
             <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 3, 1)]]" colspan="3">
 
-              <vaadin-text-field id="customer-name" label="Customer" colspan="2">
-                <iron-icon slot="prefix" icon="valo:user"></iron-icon>
+              <vaadin-text-field id="customer-name" label="Customer" colspan="2"
+                required>
+                <iron-icon slot="prefix" icon="vaadin:user"></iron-icon>
               </vaadin-text-field>
 
-              <vaadin-text-field id="customer-number" label="Phone number">
-                <iron-icon slot="prefix" icon="valo:phone"></iron-icon>
+              <vaadin-text-field id="customer-number" label="Phone number"  required>
+                <iron-icon slot="prefix" icon="vaadin:phone"></iron-icon>
               </vaadin-text-field>
 
               <vaadin-text-field  id="customer-details" label="Additional Details" colspan="2"></vaadin-text-field>
