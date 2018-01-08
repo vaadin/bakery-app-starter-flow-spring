@@ -12,7 +12,6 @@ import com.vaadin.router.OptionalParameter;
 import com.vaadin.router.event.BeforeNavigationEvent;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
-import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.ui.components.BakerySearch;
 import com.vaadin.starter.bakery.ui.components.FormButtonsBar;
 import com.vaadin.starter.bakery.ui.components.FormDialog;
@@ -25,7 +24,7 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel> extends PolymerTemplate<T>
 		implements HasLogger, EntityView<E>, HasUrlParameter<Long> {
 
-	protected void setupEventListeners(User currentUser) {
+	protected void setupEventListeners() {
 		getGrid().addSelectionListener(e -> {
 			e.getFirstSelectedItem().ifPresent(entity -> navigateToEntity(entity.getId().toString()));
 			getGrid().deselectAll();
@@ -37,7 +36,7 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 		getButtons().addDeleteListener(e -> getPresenter().delete());
 
 
-		getSearchBar().addActionClickListener(e -> getPresenter().createNew(currentUser));
+		getSearchBar().addActionClickListener(e -> getPresenter().createNew());
 		getSearchBar().addFilterChangeListener(e -> getPresenter().filter(getSearchBar().getFilter()));
 
 		getSearchBar().setActionText("New " + getEntityName());

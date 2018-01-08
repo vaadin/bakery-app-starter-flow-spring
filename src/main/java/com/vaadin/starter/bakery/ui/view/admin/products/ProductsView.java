@@ -14,8 +14,6 @@ import com.vaadin.router.PageTitle;
 import com.vaadin.router.Route;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
-import com.vaadin.starter.bakery.backend.data.entity.User;
-import com.vaadin.starter.bakery.backend.service.ProductService;
 import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.components.BakerySearch;
 import com.vaadin.starter.bakery.ui.components.FormButtonsBar;
@@ -68,14 +66,16 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 	private CurrencyFormatter currencyFormatter = new CurrencyFormatter();
 
 	@Autowired
-	public ProductsView(ProductService service, User currentUser) {
-		presenter = new DefaultEntityPresenter<>(service, this, getEntityName(), currentUser);
-		setupEventListeners(currentUser);
+	public ProductsView(DefaultEntityPresenter<Product> presenter) {
+		this.presenter = presenter;
+		setupEventListeners();
 		setupGrid();
 
 		binder.bind(nameField, "name");
 		binder.forField(priceField).withConverter(new PriceConverter()).bind("price");
 		priceField.addToPrefix(new Span(Currency.getInstance(Locale.getDefault()).getSymbol()));
+		
+		presenter.init(this);
 	}
 
 	private void setupGrid() {

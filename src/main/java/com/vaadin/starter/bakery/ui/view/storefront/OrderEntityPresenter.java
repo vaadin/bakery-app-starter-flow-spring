@@ -2,13 +2,10 @@ package com.vaadin.starter.bakery.ui.view.storefront;
 
 import java.util.Collections;
 
-import com.vaadin.ui.common.Focusable;
-import com.vaadin.ui.common.HasValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
-import com.vaadin.data.ValidationException;
 import com.vaadin.router.QueryParameters;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
@@ -23,6 +20,8 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.utils.OrderFilter;
 import com.vaadin.starter.bakery.ui.utils.StorefrontItemHeaderGenerator;
 import com.vaadin.starter.bakery.ui.view.EntityPresenter;
+import com.vaadin.ui.common.Focusable;
+import com.vaadin.ui.common.HasValue;
 
 @SpringComponent
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -45,6 +44,8 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 		headersGenerator = new StorefrontItemHeaderGenerator();
 		headersGenerator.resetHeaderChain(false);
 		dataProvider.setPageObserver(p -> headersGenerator.ordersRead(p.getContent()));
+		onInsert(e -> dataProvider.refreshAll());
+		onUpdate(e -> dataProvider.refreshItem(e));
 	}
 
 	void init(StorefrontView view) {
@@ -52,21 +53,18 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 		this.view = view;
 		view.getSearchBar().addFilterChangeListener(
 				e -> filterChanged(view.getSearchBar().getFilter(), view.getSearchBar().isCheckboxChecked()));
-		view.getSearchBar().addActionClickListener(e -> createNew(currentUser));
+		view.getSearchBar().addActionClickListener(e -> createNew());
 
 		view.getOpenedOrderEditor().addListener(CancelEvent.class, e -> cancel());
 		view.getOpenedOrderEditor().addReviewListener(e -> {
-			try {
 				HasValue<?, ?> firstErrorField = view.validate().findFirst().orElse(null);
 				if (firstErrorField == null) {
-					writeEntity();
-					view.openOrderDetails(getEntity(), true);
+					if(writeEntity()) {
+						view.openOrderDetails(getEntity(), true);
+					};
 				} else if (firstErrorField instanceof Focusable) {
 					((Focusable<?>) firstErrorField).focus();
 				}
-			} catch (ValidationException ex) {
-				showValidationError();
-			}
 		});
 
 		view.getOpenedOrderDetails().addListener(SaveEvent.class, e -> save());
@@ -82,22 +80,6 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 
 		view.setDataProvider(dataProvider);
 		view.getOpenedOrderEditor().setCurrentUser(currentUser);
-	}
-
-	@Override
-	protected void beforeSave() throws ValidationException {
-		// Entity already updated
-	}
-
-	@Override
-	protected void onSaveSuccess(boolean isNew) {
-		if (isNew) {
-			dataProvider.refreshAll();
-		} else {
-			dataProvider.refreshItem(getEntity());
-		}
-
-		super.onSaveSuccess(isNew);
 	}
 
 	StorefrontItemHeader getHeaderByOrderId(Long id) {
