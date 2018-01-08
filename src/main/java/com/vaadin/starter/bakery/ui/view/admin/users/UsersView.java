@@ -14,7 +14,6 @@ import com.vaadin.router.PageTitle;
 import com.vaadin.router.Route;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.User;
-import com.vaadin.starter.bakery.backend.service.UserService;
 import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.components.BakerySearch;
 import com.vaadin.starter.bakery.ui.components.ComboBoxForBinder;
@@ -74,10 +73,9 @@ public class UsersView extends CrudView<User, TemplateModel> {
 	private final BeanValidationBinder<User> binder = new BeanValidationBinder<>(User.class);
 
 	@Autowired
-	public UsersView(UserService userService, PasswordEncoder passwordEncoder, User currentUser) {
-		presenter = new DefaultEntityPresenter<>(userService, this, getEntityName(), currentUser);
-		setupEventListeners(currentUser);
-
+	public UsersView(DefaultEntityPresenter<User> presenter, PasswordEncoder passwordEncoder, User currentUser) {
+		this.presenter = presenter;
+		setupEventListeners();
 		setupGrid();
 
 		ListDataProvider<String> roleProvider = DataProvider.ofItems(Role.getAllRoles());
@@ -98,6 +96,7 @@ public class UsersView extends CrudView<User, TemplateModel> {
 						user.setPassword(passwordEncoder.encode(password));
 					}
 				});
+		presenter.init(this);
 	}
 
 	private void setupGrid() {

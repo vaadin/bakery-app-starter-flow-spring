@@ -26,48 +26,59 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 
 	private CrudService<T> crudService;
 
-	protected EntityView<T> view;
-
 	private String entityName;
 
 	private User currentUser;
-	
+
+	private EntityView<T> view;
+
+	private CrudOperationListener<T> onInsert = e -> this.close();
+
+	private CrudOperationListener<T> onUpdate = e -> this.close();
+
+	private CrudOperationListener<T> onDelete = e -> this.close();
+
 	private T entity;
 
-	public EntityPresenter(CrudService<T> crudService, EntityView<T> view, String entityName, User currentUser) {
+	public EntityPresenter(CrudService<T> crudService, String entityName, User currentUser) {
 		this.crudService = crudService;
-		this.view = view;
 		this.entityName = entityName;
 		this.currentUser = currentUser;
-	}
-
-	public EntityPresenter(CrudService<T> crudService, String entityName, User currentUser) {
-		this(crudService, null, entityName, currentUser);
 	}
 
 	public void init(EntityView<T> view) {
 		this.view = view;
 	}
 
+	public void onInsert(CrudOperationListener<T> listener) {
+		this.onInsert = listener;
+	}
+
+	public void onUpdate(CrudOperationListener<T> listener) {
+		this.onUpdate = listener;
+	}
+
+	public void onDelete(CrudOperationListener<T> listener) {
+		this.onDelete = listener;
+	}
+
 	public void delete() {
 		Message CONFIRM_DELETE = Message.CONFIRM_DELETE.createMessage();
-		confirmIfNecessaryAndExecute(true, CONFIRM_DELETE, () -> executeJPAOperation(() -> {
-			crudService.delete(currentUser, entity);
-			onDeleteSuccess();
-		}));
+		confirmIfNecessaryAndExecute(true, CONFIRM_DELETE, () -> {
+			executeJPAOperation(() -> crudService.delete(currentUser, entity));
+			onDelete.execute(entity);
+			entity = null;
+		});
 	}
 
 	public void save() {
 
-		try {
-			beforeSave();
-			boolean isNew = getEntity().isNew();
-			if (executeJPAOperation(() -> saveEntity())) {
-				onSaveSuccess(isNew);
-			}
-		} catch (ValidationException e) {
-			showValidationError();
+		boolean isNew = getEntity().isNew();
+		if (executeJPAOperation(() -> saveEntity())) {
+			CrudOperationListener<T> onSave = isNew ? onInsert : onUpdate;
+			onSave.execute(entity);
 		}
+
 	}
 
 	protected void showValidationError() {
@@ -78,20 +89,14 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 		crudService.save(currentUser, entity);
 	}
 
-	protected void beforeSave() throws ValidationException {
-		writeEntity();
-	}
-
-	protected void onSaveSuccess(boolean isNew) {
-		close();
-	}
-
-	protected void onDeleteSuccess() {
-		close();
-	}
-
-	protected void writeEntity() throws ValidationException {
-		view.write(entity);
+	public boolean writeEntity() {
+		try {
+			view.write(entity);
+			return true;
+		} catch (ValidationException e) {
+			showValidationError();
+			return false;
+		}
 	}
 
 	protected boolean executeJPAOperation(Runnable operation) {
@@ -114,7 +119,7 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 		return false;
 	}
 
-	private void close() {
+	public void close() {
 		view.closeDialog();
 		this.entity = null;
 	}
@@ -145,7 +150,7 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 		view.openDialog(entity, edit);
 	}
 
-	public void createNew(User currentUser) {
+	public void createNew() {
 		this.entity = crudService.createNew(currentUser);
 		openDialog(entity, true);
 	}
