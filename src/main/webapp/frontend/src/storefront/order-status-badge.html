@@ -37,9 +37,14 @@
         padding: 0 5px;
       }
 
+      iron-icon {
+        --iron-icon-height: var(--valo-font-size-s);
+        --iron-icon-width: var(--valo-font-size-s);
+      }
+
       :host([small]) iron-icon {
-        --iron-icon-height: var(--valo-font-size-xs);
-        --iron-icon-width: var(--valo-font-size-xs);
+        --iron-icon-height: var(--valo-font-size-xxs);
+        --iron-icon-width: var(--valo-font-size-xxs);
       }
     </style>
 
@@ -71,7 +76,7 @@
 
       _getContent(status) {
         if (status === 'delivered') {
-          return '<iron-icon icon="valo:checkmark"></iron-icon>';
+          return '<iron-icon icon="vaadin:check"></iron-icon>';
         }
 
         return status;
