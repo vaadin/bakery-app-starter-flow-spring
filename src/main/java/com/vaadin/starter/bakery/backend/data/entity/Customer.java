@@ -13,7 +13,6 @@ public class Customer extends AbstractEntity {
 	@Size(max = 255)
 	private String fullName;
 
-	@NotBlank
 	@Size(max = 255)
 	// A simple phone number checker, allowing an optional international prefix
 	// plus a variable number of digits that could be separated by dashes or

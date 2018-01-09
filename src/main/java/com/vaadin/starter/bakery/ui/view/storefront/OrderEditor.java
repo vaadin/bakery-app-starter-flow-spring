@@ -3,8 +3,8 @@ package com.vaadin.starter.bakery.ui.view.storefront;
 import static com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil.createItemLabelGenerator;
 import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -12,10 +12,15 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import com.vaadin.data.BindingValidationStatus;
+import com.vaadin.data.validator.BeanValidator;
+import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.ui.common.HasValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 
+import com.vaadin.data.ValidationResult;
+import com.vaadin.data.ValueContext;
+import com.vaadin.data.validator.AbstractValidator;
 import com.vaadin.data.BeanValidationBinder;
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.provider.DataProvider;
@@ -110,9 +115,14 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 		status.setDataProvider(DataProvider.ofItems(OrderState.values()));
 		status.addValueChangeListener(
 				e -> getModel().setStatus(DataProviderUtil.convertIfNotNull(e.getValue(), OrderState::name)));
-		binder.forField(status).bind(Order::getState,
-				(o, s) -> o.changeState(currentUser, s));
-		date.setValue(LocalDate.now());
+		binder.forField(status)
+				.withValidator(new BeanValidator(Order.class, "state"))
+				.bind(Order::getState, (o, s) -> {
+					o.changeState(currentUser, s);
+				});
+
+		date.setRequired(true);
+		binder.bind(date, "dueDate");
 
 		SortedSet<LocalTime> timeValues = IntStream.rangeClosed(8, 16).mapToObj(i -> LocalTime.of(i, 0))
 				.collect(Collectors.toCollection(TreeSet::new));
@@ -139,6 +149,7 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 
 		items.setRequiredIndicatorVisible(true);
 		binder.bind(items, "items");
+
 		items.addPriceChangeListener(e -> setTotalPrice(e.getTotalPrice()));
 
 		items.addListener(ValueChangeEvent.class, e -> review.setDisabled(!hasChanges()));
