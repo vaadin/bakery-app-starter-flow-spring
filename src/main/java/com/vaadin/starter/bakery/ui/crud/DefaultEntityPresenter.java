@@ -20,9 +20,8 @@ public class DefaultEntityPresenter<T extends AbstractEntity> {
 	private final EntityPresenter<T> entityPresenter;
 
 	private final String entityName;
-	
-	public DefaultEntityPresenter(FilterableCrudService<T> crudService, String entityName,
-			User currentUser) {
+
+	public DefaultEntityPresenter(FilterableCrudService<T> crudService, String entityName, User currentUser) {
 		this.entityPresenter = new EntityPresenter<>(crudService, entityName, currentUser);
 		this.entityName = entityName;
 		DataProvider<T, String> dataProvider = new CallbackDataProvider<>(
@@ -30,27 +29,10 @@ public class DefaultEntityPresenter<T extends AbstractEntity> {
 				query -> crudService.findAnyMatching(query.getFilter()).size());
 
 		filteredDataProvider = dataProvider.withConfigurableFilter();
-
-		CrudOperationListener<T> refreshAllAndClose = e -> {
-			filteredDataProvider.refreshAll();
-			entityPresenter.close();
-		};
-		this.entityPresenter.onInsert(refreshAllAndClose);
-		this.entityPresenter.onUpdate(refreshAllAndClose);
-		this.entityPresenter.onDelete(e -> {
-			filteredDataProvider.refreshItem(e);
-			entityPresenter.close();
-		});
 	}
 
 	public void filter(String filter) {
 		filteredDataProvider.setFilter(filter);
-	}
-
-	public void save() {
-		if (entityPresenter.writeEntity()) {
-			entityPresenter.save();
-		}
 	}
 
 	public void cancel() {
@@ -59,10 +41,6 @@ public class DefaultEntityPresenter<T extends AbstractEntity> {
 
 	public void createNew() {
 		entityPresenter.createNew();
-	}
-
-	public void delete() {
-		entityPresenter.delete();
 	}
 
 	public void init(CrudView<T, ?> view) {
@@ -75,9 +53,9 @@ public class DefaultEntityPresenter<T extends AbstractEntity> {
 		});
 		view.addListener(CloseDialogEvent.class, e -> entityPresenter.cancel());
 
-		view.getButtons().addSaveListener(e -> entityPresenter.save());
+		view.getButtons().addSaveListener(e -> save());
 		view.getButtons().addCancelListener(e -> entityPresenter.cancel());
-		view.getButtons().addDeleteListener(e -> entityPresenter.delete());
+		view.getButtons().addDeleteListener(e -> delete());
 
 		view.getSearchBar().addActionClickListener(e -> entityPresenter.createNew());
 		view.getSearchBar()
@@ -90,5 +68,21 @@ public class DefaultEntityPresenter<T extends AbstractEntity> {
 	public void loadEntity(Long id, boolean edit) {
 		entityPresenter.loadEntity(id, edit);
 	}
-	
+
+	private void save() {
+		if (entityPresenter.writeEntity()) {
+			CrudOperationListener<T> onSaveSuccess = e -> {
+				filteredDataProvider.refreshAll();
+				entityPresenter.close();
+			};
+			entityPresenter.save(onSaveSuccess);
+		}
+	}
+
+	private void delete() {
+		entityPresenter.delete(e -> {
+			filteredDataProvider.refreshItem(e);
+			entityPresenter.close();
+		});
+	}
 }

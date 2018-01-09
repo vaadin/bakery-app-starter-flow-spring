@@ -32,12 +32,6 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 
 	private EntityView<T> view;
 
-	private CrudOperationListener<T> onInsert = e -> this.close();
-
-	private CrudOperationListener<T> onUpdate = e -> this.close();
-
-	private CrudOperationListener<T> onDelete = e -> this.close();
-
 	private T entity;
 
 	public EntityPresenter(CrudService<T> crudService, String entityName, User currentUser) {
@@ -50,35 +44,19 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 		this.view = view;
 	}
 
-	public void onInsert(CrudOperationListener<T> listener) {
-		this.onInsert = listener;
-	}
-
-	public void onUpdate(CrudOperationListener<T> listener) {
-		this.onUpdate = listener;
-	}
-
-	public void onDelete(CrudOperationListener<T> listener) {
-		this.onDelete = listener;
-	}
-
-	public void delete() {
+	public void delete(CrudOperationListener<T> onSuccess) {
 		Message CONFIRM_DELETE = Message.CONFIRM_DELETE.createMessage();
 		confirmIfNecessaryAndExecute(true, CONFIRM_DELETE, () -> {
 			executeJPAOperation(() -> crudService.delete(currentUser, entity));
-			onDelete.execute(entity);
+			onSuccess.execute(entity);
 			entity = null;
 		});
 	}
 
-	public void save() {
-
-		boolean isNew = getEntity().isNew();
+	public void save(CrudOperationListener<T> onSuccess) {
 		if (executeJPAOperation(() -> saveEntity())) {
-			CrudOperationListener<T> onSave = isNew ? onInsert : onUpdate;
-			onSave.execute(entity);
+			onSuccess.execute(entity);
 		}
-
 	}
 
 	protected void showValidationError() {
