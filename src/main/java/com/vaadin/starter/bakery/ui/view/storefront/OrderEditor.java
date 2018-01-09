@@ -148,12 +148,7 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 		binder.bind(customerDetails, "customer.details");
 
 		items.setRequiredIndicatorVisible(true);
-		binder.forField(items).withValidator(new AbstractValidator<List<OrderItem>>("") {
-			@Override
-			public ValidationResult apply(List<OrderItem> orderItems, ValueContext valueContext) {
-				return toResult(orderItems, items.isValid());
-			}
-		}).bind("items");
+		binder.bind(items, "items");
 
 		items.addPriceChangeListener(e -> setTotalPrice(e.getTotalPrice()));
 

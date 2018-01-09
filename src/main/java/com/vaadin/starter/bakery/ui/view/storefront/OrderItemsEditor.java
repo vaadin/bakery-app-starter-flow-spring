@@ -111,10 +111,6 @@ public class OrderItemsEditor extends Div implements HasValue<OrderItemsEditor, 
 		}
 	}
 
-	public boolean isValid() {
-		return !validate().iterator().hasNext();
-	}
-
 	public Stream<HasValue<?, ?>> validate() {
 		return getChildren()
 				.filter(component -> component instanceof OrderItemEditor && !component.equals(empty))
