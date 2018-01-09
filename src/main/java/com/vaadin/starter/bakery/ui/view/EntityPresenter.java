@@ -99,7 +99,7 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 		}
 	}
 
-	protected boolean executeJPAOperation(Runnable operation) {
+	public boolean executeJPAOperation(Runnable operation) {
 		try {
 			operation.run();
 			return true;
@@ -160,7 +160,7 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 		getLogger().debug(message, e);
 	}
 
-	protected T getEntity() {
+	public T getEntity() {
 		return entity;
 	}
 

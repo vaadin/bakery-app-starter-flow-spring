@@ -25,11 +25,12 @@ import com.vaadin.ui.common.HasValue;
 
 @SpringComponent
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-class OrderEntityPresenter extends EntityPresenter<Order> {
+class OrderEntityPresenter {
 
 	private StorefrontItemHeaderGenerator headersGenerator;
 	private StorefrontView view;
 
+	private final EntityPresenter<Order> entityPresenter;
 	private final OrderService orderService;
 	private final OrdersGridDataProvider dataProvider;
 	private final User currentUser;
@@ -37,45 +38,48 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 	@Autowired
 	public OrderEntityPresenter(ProductService productService, OrderService orderService,
 			OrdersGridDataProvider dataProvider, User currentUser) {
-		super(orderService, "Order", currentUser);
+		this.entityPresenter = new EntityPresenter<>(orderService, "Order", currentUser);
 		this.orderService = orderService;
 		this.dataProvider = dataProvider;
 		this.currentUser = currentUser;
 		headersGenerator = new StorefrontItemHeaderGenerator();
 		headersGenerator.resetHeaderChain(false);
 		dataProvider.setPageObserver(p -> headersGenerator.ordersRead(p.getContent()));
-		onInsert(e -> dataProvider.refreshAll());
-		onUpdate(e -> dataProvider.refreshItem(e));
+		this.entityPresenter.onInsert(e -> dataProvider.refreshAll());
+		this.entityPresenter.onUpdate(e -> dataProvider.refreshItem(e));
 	}
 
 	void init(StorefrontView view) {
-		super.init(view);
+		this.entityPresenter.init(view);
 		this.view = view;
 		view.getSearchBar().addFilterChangeListener(
 				e -> filterChanged(view.getSearchBar().getFilter(), view.getSearchBar().isCheckboxChecked()));
-		view.getSearchBar().addActionClickListener(e -> createNew());
+		view.getSearchBar().addActionClickListener(e -> this.entityPresenter.createNew());
 
-		view.getOpenedOrderEditor().addListener(CancelEvent.class, e -> cancel());
+		view.getOpenedOrderEditor().addListener(CancelEvent.class, e -> this.entityPresenter.cancel());
 		view.getOpenedOrderEditor().addReviewListener(e -> {
-				HasValue<?, ?> firstErrorField = view.validate().findFirst().orElse(null);
-				if (firstErrorField == null) {
-					if(writeEntity()) {
-						view.openOrderDetails(getEntity(), true);
-					};
-				} else if (firstErrorField instanceof Focusable) {
-					((Focusable<?>) firstErrorField).focus();
+			HasValue<?, ?> firstErrorField = view.validate().findFirst().orElse(null);
+			if (firstErrorField == null) {
+				if (this.entityPresenter.writeEntity()) {
+					view.openOrderDetails(this.entityPresenter.getEntity(), true);
 				}
+			} else if (firstErrorField instanceof Focusable) {
+				((Focusable<?>) firstErrorField).focus();
+			}
 		});
 
-		view.getOpenedOrderDetails().addListener(SaveEvent.class, e -> save());
-		view.getOpenedOrderDetails().addCancelListener(e -> cancel());
+		view.getOpenedOrderDetails().addListener(SaveEvent.class, e -> this.entityPresenter.save());
+		view.getOpenedOrderDetails().addCancelListener(e -> this.entityPresenter.cancel());
 		view.getOpenedOrderDetails().addBackListener(e -> view.showOrderEdit());
 		view.getOpenedOrderDetails().addEditListener(e -> {
-			view.getOpenedOrderEditor().read(getEntity());
+			view.getOpenedOrderEditor().read(this.entityPresenter.getEntity());
 			view.showOrderEdit();
 		});
 		view.getOpenedOrderDetails().addCommentListener(e -> {
-			this.addComment(e.getOrderId(), e.getMessage());
+			entityPresenter.executeJPAOperation(() -> {
+				orderService.addComment(currentUser, e.getOrderId(), e.getMessage());
+				entityPresenter.loadEntity(e.getOrderId(), false);
+			});
 		});
 
 		view.setDataProvider(dataProvider);
@@ -94,13 +98,13 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 	// StorefrontOrderCard presenter methods
 	void onOrderCardExpanded(StorefrontOrderCard orderCard) {
 		if (view.isDesktopView()) {
-			executeJPAOperation(() -> {
+			entityPresenter.executeJPAOperation(() -> {
 				Order fullOrder = orderService.load(orderCard.getOrder().getId());
 				orderCard.openCard(fullOrder);
 			});
 			view.resizeGrid();
 		} else {
-			loadEntity(orderCard.getOrder().getId(), false);
+			entityPresenter.loadEntity(orderCard.getOrder().getId(), false);
 		}
 	}
 
@@ -112,27 +116,20 @@ class OrderEntityPresenter extends EntityPresenter<Order> {
 	void onOrderCardEdit(StorefrontOrderCard orderCard) {
 		Long id = orderCard.getOrder().getId();
 		view.getGrid().deselectAll();
-		edit(id.toString());
+		view.getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT + "/" + id,
+				QueryParameters.simple(Collections.singletonMap("edit", ""))));
 	}
 
 	void onOrderCardAddComment(StorefrontOrderCard orderCard, String message) {
-		executeJPAOperation(() -> {
+		entityPresenter.executeJPAOperation(() -> {
 			Order updated = orderService.addComment(currentUser, orderCard.getOrder().getId(), message);
 			orderCard.updateOrder(updated);
 			view.resizeGrid();
 		});
 	}
 
-	private void addComment(Long id, String comment) {
-		executeJPAOperation(() -> {
-			orderService.addComment(currentUser, id, comment);
-			loadEntity(id, false);
-		});
-	}
-
-	private void edit(String id) {
-		view.getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT + "/" + id,
-				QueryParameters.simple(Collections.singletonMap("edit", ""))));
+	void loadEntity(Long id, boolean edit) {
+		entityPresenter.loadEntity(id, edit);
 	}
 
 }
