@@ -15,7 +15,6 @@ import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
 import com.vaadin.starter.bakery.ui.components.BakerySearch;
 import com.vaadin.starter.bakery.ui.components.FormButtonsBar;
 import com.vaadin.starter.bakery.ui.components.FormDialog;
-import com.vaadin.starter.bakery.ui.event.CloseDialogEvent;
 import com.vaadin.starter.bakery.ui.view.EntityView;
 import com.vaadin.ui.common.HasText;
 import com.vaadin.ui.grid.Grid;
@@ -24,25 +23,8 @@ import com.vaadin.ui.polymertemplate.PolymerTemplate;
 public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel> extends PolymerTemplate<T>
 		implements HasLogger, EntityView<E>, HasUrlParameter<Long> {
 
-	protected void setupEventListeners() {
-		getGrid().addSelectionListener(e -> {
-			e.getFirstSelectedItem().ifPresent(entity -> navigateToEntity(entity.getId().toString()));
-			getGrid().deselectAll();
-		});
-		addListener(CloseDialogEvent.class, e -> getPresenter().cancel());
-
-		getButtons().addSaveListener(e -> getPresenter().save());
-		getButtons().addCancelListener(e -> getPresenter().cancel());
-		getButtons().addDeleteListener(e -> getPresenter().delete());
-
-
-		getSearchBar().addActionClickListener(e -> getPresenter().createNew());
-		getSearchBar().addFilterChangeListener(e -> getPresenter().filter(getSearchBar().getFilter()));
-
-		getSearchBar().setActionText("New " + getEntityName());
-		getBinder().addValueChangeListener(e -> getButtons().setSaveDisabled(!isDirty()));
-	}
-
+	private String entityName;
+	
 	protected abstract DefaultEntityPresenter<E> getPresenter();
 
 	protected abstract String getBasePage();
@@ -59,7 +41,6 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 
 	protected abstract HasText getTitle();
 
-	protected abstract String getEntityName();
 
 	@Override
 	public void setDataProvider(DataProvider<E, ?> dataProvider) {
@@ -104,6 +85,11 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 		getBinder().readBean(e);
 		getButtons().setSaveDisabled(true);
 		getButtons().setDeleteDisabled(e.isNew());
-		getTitle().setText((e.isNew() ? "New" : "Edit") + " " + getEntityName());
+		getTitle().setText((e.isNew() ? "New" : "Edit") + " " + entityName);
 	}
+
+	public void setEntityName(String entityName) {
+		this.entityName = entityName;
+	}
+	
 }
