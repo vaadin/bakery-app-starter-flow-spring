@@ -50,8 +50,7 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> {
 		UI.getCurrent().navigateTo(href);
 	}
 
-	@Override
-	public Model getModel() {
-		return super.getModel();
+	void onLocationChange(String currentPath) {
+		getModel().setPage(currentPath.isEmpty() ? BakeryConst.PAGE_DEFAULT : currentPath);
 	}
 }

@@ -2,7 +2,9 @@ package com.vaadin.starter.bakery.ui.view.storefront;
 
 import java.util.Map;
 import java.util.WeakHashMap;
+import java.util.stream.Stream;
 
+import com.vaadin.ui.common.HasValue;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.data.ValidationException;
@@ -141,6 +143,10 @@ implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 		openedOrderDetails.getElement().removeAttribute("hidden");
 		openedOrderEditor.getElement().setAttribute("hidden", "");
 		openedOrderDetails.display(order, isReview);
+	}
+
+	public Stream<HasValue<?, ?>> validate() {
+		return openedOrderEditor.validate();
 	}
 
 	boolean isDesktopView() {
