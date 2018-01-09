@@ -75,7 +75,6 @@ public class UsersView extends CrudView<User, TemplateModel> {
 	@Autowired
 	public UsersView(DefaultEntityPresenter<User> presenter, PasswordEncoder passwordEncoder, User currentUser) {
 		this.presenter = presenter;
-		setupEventListeners();
 		setupGrid();
 
 		ListDataProvider<String> roleProvider = DataProvider.ofItems(Role.getAllRoles());
@@ -150,8 +149,4 @@ public class UsersView extends CrudView<User, TemplateModel> {
 		return title;
 	}
 
-	@Override
-	protected String getEntityName() {
-		return "User";
-	}
 }
