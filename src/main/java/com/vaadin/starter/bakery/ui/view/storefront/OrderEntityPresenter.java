@@ -19,6 +19,7 @@ import com.vaadin.starter.bakery.ui.event.SaveEvent;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.utils.OrderFilter;
 import com.vaadin.starter.bakery.ui.utils.StorefrontItemHeaderGenerator;
+import com.vaadin.starter.bakery.ui.view.CrudOperationListener;
 import com.vaadin.starter.bakery.ui.view.EntityPresenter;
 import com.vaadin.ui.common.Focusable;
 import com.vaadin.ui.common.HasValue;
@@ -45,8 +46,7 @@ class OrderEntityPresenter {
 		headersGenerator = new StorefrontItemHeaderGenerator();
 		headersGenerator.resetHeaderChain(false);
 		dataProvider.setPageObserver(p -> headersGenerator.ordersRead(p.getContent()));
-		this.entityPresenter.onInsert(e -> dataProvider.refreshAll());
-		this.entityPresenter.onUpdate(e -> dataProvider.refreshItem(e));
+
 	}
 
 	void init(StorefrontView view) {
@@ -68,7 +68,14 @@ class OrderEntityPresenter {
 			}
 		});
 
-		view.getOpenedOrderDetails().addListener(SaveEvent.class, e -> this.entityPresenter.save());
+		CrudOperationListener<Order> onSaveSuccess = e -> {
+			if(entityPresenter.getEntity().isNew()) {
+				dataProvider.refreshAll();
+			}else {
+				dataProvider.refreshItem(e);
+			}
+		};
+		view.getOpenedOrderDetails().addListener(SaveEvent.class, e -> this.entityPresenter.save(onSaveSuccess));
 		view.getOpenedOrderDetails().addCancelListener(e -> this.entityPresenter.cancel());
 		view.getOpenedOrderDetails().addBackListener(e -> view.showOrderEdit());
 		view.getOpenedOrderDetails().addEditListener(e -> {
