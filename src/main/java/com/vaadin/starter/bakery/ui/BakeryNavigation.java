@@ -23,15 +23,14 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> {
 	private static final String ICON_DASHBOARD = "clock";
 	private static final String ICON_USERS = "user";
 	private static final String ICON_PRODUCTS = "calendar";
+	private static final List<PageInfo> pages = new ArrayList<>();
 
 	public interface Model extends TemplateModel {
-		void setPage(String page);
+		void setPageNumber(int page);
 		void setPages(List<PageInfo> pages);
 	}
 
 	public BakeryNavigation() {
-		List<PageInfo> pages = new ArrayList<>();
-
 		pages.add(new PageInfo(BakeryConst.PAGE_STOREFRONT, ICON_STOREFRONT, BakeryConst.TITLE_STOREFRONT));
 		pages.add(new PageInfo(BakeryConst.PAGE_DASHBOARD, ICON_DASHBOARD, BakeryConst.TITLE_DASHBOARD));
 
@@ -51,6 +50,10 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> {
 	}
 
 	void onLocationChange(String currentPath) {
-		getModel().setPage(currentPath.isEmpty() ? BakeryConst.PAGE_DEFAULT : currentPath);
+		for (int i = 0; i < pages.size(); i++) {
+			if (pages.get(i).getLink().equals(currentPath)) {
+				this.getModel().setPageNumber(i);
+			}
+		}
 	}
 }

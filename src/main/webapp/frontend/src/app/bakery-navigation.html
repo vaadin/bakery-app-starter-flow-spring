@@ -1,8 +1,8 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
-<link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
-<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../bower_components/vaadin-tabs/vaadin-tabs.html">
+<link rel="import" href="../../bower_components/vaadin-tabs/vaadin-tab.html">
 <link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="../../bower_components/vaadin-valo-theme/icons.html">
 
@@ -30,18 +30,8 @@
       }
 
       .navigation-tabs {
-        --paper-tabs-selection-bar-color: var(--valo-primary-color);
-        --paper-tabs-selection-bar: {
-          box-shadow: 0 0 20px 6px var(--valo-primary-color-10pct);
-        };
         height: 100%;
         width: 100%;
-      }
-
-      paper-tab {
-        --paper-tab-ink: var(--valo-secondary-text-color);
-        padding: 0 var(--valo-space-s);
-        height: 100%;
       }
 
       .navigation-label {
@@ -49,7 +39,6 @@
         @apply --layout-vertical;
         @apply --layout-center-center;
         color: var(--valo-secondary-text-color);
-        font-family: var(--valo-font-family);
         text-decoration: none;
       }
 
@@ -61,12 +50,20 @@
         margin-bottom: var(--valo-space-xs);
       }
 
-      paper-tab.iron-selected iron-icon {
+      vaadin-tab[selected] a iron-icon {
         color: var(--valo-primary-color);
       }
 
-      paper-tab.iron-selected span {
+      vaadin-tab[selected] a span {
         color: var(--valo-body-text-color);
+      }
+
+      vaadin-tab::before,
+      vaadin-tab::after {
+        width: 100% !important;
+        top: 0;
+        bottom: auto;
+        content: ' ';
       }
 
       .tabsContainer {
@@ -125,27 +122,26 @@
         ###Bakery###
       </div>
       <div class="tabsContainer">
-        <paper-tabs selected="[[page]]" attr-for-selected="page-id" on-transitionend="_onNavAnimationEnd"
-                    class="navigation-tabs" align-bottom="[[_desktopView]]">
+        <vaadin-tabs selected="[[pageNumber]]" on-selected-changed="_onSelectedChanged" class="navigation-tabs" align-bottom="[[_desktopView]]">
           <template is="dom-repeat" items="[[pages]]">
-            <paper-tab page-id$="[[item.link]]">
+            <vaadin-tab value$="[[item.link]]">
               <div class="navigation-label">
                 <iron-icon icon="vaadin:[[item.icon]]"></iron-icon>
                 <span>[[item.title]]</span>
               </div>
-            </paper-tab>
+            </vaadin-tab>
           </template>
           <!-- The logout button is a 'normal' URL (i.e. it's not a Flow-managed in-app URL).
                It trigges a regular GET request which is handled by Spring Security. -->
           <a href="logout">
-            <paper-tab>
+            <vaadin-tab>
               <div class="navigation-label">
                 <iron-icon icon="vaadin:arrow-right"></iron-icon>
                 <span>Logout</span>
               </div>
-            </paper-tab>
+            </vaadin-tab>
           </a>
-        </paper-tabs>
+        </vaadin-tabs>
       </div>
 
     </div>
@@ -164,17 +160,13 @@
         };
       }
 
-      _onNavAnimationEnd(event) {
-        const pageId = event.target.getAttribute('page-id');
-        this._debouncer = Polymer.Debouncer.debounce(
-          this._debouncer,
-          Polymer.Async.timeOut.after(30),
-          () => {
-            if (pageId && this.page !== pageId) {
-              this.$server.navigateTo(pageId);
-            }
-          }
-        );
+      _onSelectedChanged(event) {
+        const items = event.target._navItems;
+        if (items) {
+          let page;
+          items.forEach((item, idx) => idx == event.target.selected && (page = item.value));
+          page && this.$server.navigateTo(page);
+        }
       }
     }
 
