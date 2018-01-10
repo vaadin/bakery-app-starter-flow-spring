@@ -29,11 +29,6 @@
         display: none;
       }
 
-      .navigation-tabs {
-        height: 100%;
-        width: 100%;
-      }
-
       .navigation-label {
         /* These mixins (from iron-flex-layout) center the link text. */
         @apply --layout-vertical;
@@ -50,11 +45,11 @@
         margin-bottom: var(--valo-space-xs);
       }
 
-      vaadin-tab[selected] a iron-icon {
+      vaadin-tab[selected] iron-icon {
         color: var(--valo-primary-color);
       }
 
-      vaadin-tab[selected] a span {
+      vaadin-tab[selected] span {
         color: var(--valo-body-text-color);
       }
 
@@ -122,7 +117,7 @@
         ###Bakery###
       </div>
       <div class="tabsContainer">
-        <vaadin-tabs selected="[[pageNumber]]" on-selected-changed="_onSelectedChanged" class="navigation-tabs" align-bottom="[[_desktopView]]">
+        <vaadin-tabs selected="[[pageNumber]]" on-selected-changed="_onSelectedChanged">
           <template is="dom-repeat" items="[[pages]]">
             <vaadin-tab value$="[[item.link]]">
               <div class="navigation-label">
