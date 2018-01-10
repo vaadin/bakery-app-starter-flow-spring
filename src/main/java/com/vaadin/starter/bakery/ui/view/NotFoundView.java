@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.dom.ElementFactory;
-import com.vaadin.flow.router.BeforeNavigationEvent;
+import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.ErrorParameter;
 import com.vaadin.flow.router.NotFoundException;
 import com.vaadin.flow.router.PageTitle;
@@ -27,7 +27,7 @@ public class NotFoundView extends RouteNotFoundError {
 	}
 
 	@Override
-	public int setErrorParameter(BeforeNavigationEvent event, ErrorParameter<NotFoundException> parameter) {
+	public int setErrorParameter(BeforeEnterEvent event, ErrorParameter<NotFoundException> parameter) {
 		return HttpServletResponse.SC_NOT_FOUND;
 	}
 }

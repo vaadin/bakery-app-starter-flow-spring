@@ -20,7 +20,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Dependencies -->
-        <vaadin.version>10.0.0.alpha11</vaadin.version>
+        <vaadin.version>10.0.0.alpha12</vaadin.version>
 
         <spring-boot.version>1.5.9.RELEASE</spring-boot.version>
         <failOnMissingWebXml>false</failOnMissingWebXml>
@@ -149,11 +149,6 @@
         </dependency>
 
         <!-- override the default versions coming from vaadin-bom/vaadin-webjars-bom -->
-        <dependency>
-            <groupId>org.webjars.bower</groupId>
-            <artifactId>vaadin-grid</artifactId>
-            <version>4.1.0-beta1</version>
-        </dependency>
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>vaadin-valo-theme</artifactId>

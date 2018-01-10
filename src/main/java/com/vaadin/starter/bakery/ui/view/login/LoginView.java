@@ -9,7 +9,6 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.InitialPageSettings;
 import com.vaadin.flow.server.PageConfigurator;
-import com.vaadin.flow.shared.ui.Dependency;
 import com.vaadin.flow.templatemodel.TemplateModel;
 
 @Tag("bakery-login")
@@ -25,7 +24,7 @@ public class LoginView extends PolymerTemplate<LoginView.Model> implements PageC
 		settings.addInlineWithContents(InitialPageSettings.Position.PREPEND,
 				"window.customElements=window.customElements||{};" +
 						"window.customElements.forcePolyfill=true;" +
-						"window.ShadyDOM={force:true};", Dependency.Type.JAVASCRIPT);
+						"window.ShadyDOM={force:true};", InitialPageSettings.WrapMode.JAVASCRIPT);
 	}
 
 	@Override

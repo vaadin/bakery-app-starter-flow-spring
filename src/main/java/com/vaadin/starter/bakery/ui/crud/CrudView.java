@@ -9,7 +9,7 @@ import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.data.provider.DataProvider;
-import com.vaadin.flow.router.BeforeNavigationEvent;
+import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.templatemodel.TemplateModel;
@@ -73,7 +73,7 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 	}
 
 	@Override
-	public void setParameter(BeforeNavigationEvent event, @OptionalParameter Long id) {
+	public void setParameter(BeforeEvent event, @OptionalParameter Long id) {
 		if (id != null) {
 			getPresenter().loadEntity(id, true);
 		}

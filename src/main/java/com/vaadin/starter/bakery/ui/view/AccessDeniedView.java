@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
-import com.vaadin.flow.router.BeforeNavigationEvent;
+import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.ErrorParameter;
 import com.vaadin.flow.router.HasErrorParameter;
 import com.vaadin.flow.router.PageTitle;
@@ -22,8 +22,7 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 public class AccessDeniedView extends PolymerTemplate<TemplateModel> implements HasErrorParameter<AccessDeniedException> {
 
 	@Override
-	public int setErrorParameter(BeforeNavigationEvent beforeNavigationEvent,
-			ErrorParameter<AccessDeniedException> errorParameter) {
+	public int setErrorParameter(BeforeEnterEvent beforeEnterEvent, ErrorParameter<AccessDeniedException> errorParameter) {
 		return HttpServletResponse.SC_FORBIDDEN;
 	}
 }
