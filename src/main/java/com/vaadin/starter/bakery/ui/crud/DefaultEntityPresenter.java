@@ -7,13 +7,12 @@ import com.vaadin.data.provider.CallbackDataProvider;
 import com.vaadin.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
-import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.FilterableCrudService;
 import com.vaadin.starter.bakery.ui.event.CloseDialogEvent;
 import com.vaadin.starter.bakery.ui.view.CrudOperationListener;
 import com.vaadin.starter.bakery.ui.view.EntityPresenter;
 
-public class DefaultEntityPresenter<T extends AbstractEntity> {
+public abstract class DefaultEntityPresenter<T extends AbstractEntity> {
 
 	private final ConfigurableFilterDataProvider<T, Void, String> filteredDataProvider;
 
@@ -21,8 +20,8 @@ public class DefaultEntityPresenter<T extends AbstractEntity> {
 
 	private final String entityName;
 
-	public DefaultEntityPresenter(FilterableCrudService<T> crudService, String entityName, User currentUser) {
-		this.entityPresenter = new EntityPresenter<>(crudService, entityName, currentUser);
+	public DefaultEntityPresenter(EntityPresenter<T> entityPresenter, FilterableCrudService<T> crudService, String entityName) {
+		this.entityPresenter = entityPresenter;
 		this.entityName = entityName;
 		DataProvider<T, String> dataProvider = new CallbackDataProvider<>(
 				query -> crudService.findAnyMatching(query.getFilter()).stream(),
@@ -44,7 +43,7 @@ public class DefaultEntityPresenter<T extends AbstractEntity> {
 	}
 
 	public void init(CrudView<T, ?> view) {
-		entityPresenter.init(view);
+		entityPresenter.setView(view);
 		view.setEntityName(entityName);
 		view.setDataProvider(filteredDataProvider);
 		view.getGrid().addSelectionListener(e -> {

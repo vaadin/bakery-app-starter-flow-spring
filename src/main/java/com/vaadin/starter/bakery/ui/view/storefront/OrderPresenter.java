@@ -26,7 +26,7 @@ import com.vaadin.ui.common.HasValue;
 
 @SpringComponent
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-class OrderEntityPresenter {
+class OrderPresenter {
 
 	private StorefrontItemHeaderGenerator headersGenerator;
 	private StorefrontView view;
@@ -37,20 +37,19 @@ class OrderEntityPresenter {
 	private final User currentUser;
 
 	@Autowired
-	public OrderEntityPresenter(ProductService productService, OrderService orderService,
-			OrdersGridDataProvider dataProvider, User currentUser) {
-		this.entityPresenter = new EntityPresenter<>(orderService, "Order", currentUser);
+	OrderPresenter(ProductService productService, OrderService orderService,
+			OrdersGridDataProvider dataProvider, EntityPresenter<Order> entityPresenter,User currentUser) {
+		this.entityPresenter = entityPresenter;
 		this.orderService = orderService;
 		this.dataProvider = dataProvider;
 		this.currentUser = currentUser;
 		headersGenerator = new StorefrontItemHeaderGenerator();
 		headersGenerator.resetHeaderChain(false);
 		dataProvider.setPageObserver(p -> headersGenerator.ordersRead(p.getContent()));
-
 	}
 
 	void init(StorefrontView view) {
-		this.entityPresenter.init(view);
+		this.entityPresenter.setView(view);
 		this.view = view;
 		view.getSearchBar().addFilterChangeListener(
 				e -> filterChanged(view.getSearchBar().getFilter(), view.getSearchBar().isCheckboxChecked()));

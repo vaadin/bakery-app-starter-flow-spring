@@ -73,7 +73,7 @@ public class UsersView extends CrudView<User, TemplateModel> {
 	private final BeanValidationBinder<User> binder = new BeanValidationBinder<>(User.class);
 
 	@Autowired
-	public UsersView(DefaultEntityPresenter<User> presenter, PasswordEncoder passwordEncoder, User currentUser) {
+	public UsersView(UserPresenter presenter, PasswordEncoder passwordEncoder, User currentUser) {
 		this.presenter = presenter;
 		setupGrid();
 
