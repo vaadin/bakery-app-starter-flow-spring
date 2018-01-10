@@ -52,7 +52,7 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 	}
 
 	protected void saveEntity() {
-		crudService.save(currentUser, entity);
+		this.entity = crudService.save(currentUser, entity);
 	}
 
 	public boolean writeEntity() {
@@ -82,23 +82,18 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 		}
 	}
 
-	public void loadEntity(Long id, boolean edit) {
+	public void loadEntity(Long id, CrudOperationListener<T> onSuccess) {
 		boolean loaded = executeJPAOperation(() -> {
 			this.entity = crudService.load(id);
-			openDialog(entity, edit);
+			onSuccess.execute(entity);
 		});
 		if (!loaded) {
 			view.closeDialog();
 		}
 	}
 
-	protected void openDialog(T entity, boolean edit) {
-		view.openDialog(entity, edit);
-	}
-
-	public void createNew() {
-		this.entity = crudService.createNew(currentUser);
-		openDialog(entity, true);
+	public T createNew() {
+		return this.entity = crudService.createNew(currentUser);
 	}
 
 	public T getEntity() {

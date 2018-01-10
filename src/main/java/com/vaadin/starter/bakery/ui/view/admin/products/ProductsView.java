@@ -50,7 +50,7 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 	@Id("buttons")
 	private FormButtonsBar buttons;
 
-	private ProductPresenter presenter;
+	private DefaultEntityPresenter<Product> presenter;
 
 	private final BeanValidationBinder<Product> binder = new BeanValidationBinder<>(Product.class);
 
@@ -66,8 +66,10 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 	private CurrencyFormatter currencyFormatter = new CurrencyFormatter();
 
 	@Autowired
-	public ProductsView(ProductPresenter presenter) {
+	public ProductsView(DefaultEntityPresenter<Product> presenter) {
+		super("Product");
 		this.presenter = presenter;
+		setupEventListeners();
 		setupGrid();
 
 		binder.bind(nameField, "name");

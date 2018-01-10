@@ -14,6 +14,7 @@ import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.backend.service.ProductService;
 import com.vaadin.starter.bakery.backend.service.UserService;
+import com.vaadin.starter.bakery.ui.crud.DefaultEntityPresenter;
 import com.vaadin.starter.bakery.ui.view.EntityPresenter;
 import com.vaadin.starter.bakery.ui.view.JPAPresenter;
 
@@ -22,20 +23,22 @@ public class PresenterFactory {
 
 	@Bean
 	@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public EntityPresenter<Product> productEntityPresenter(ProductService crudService, JPAPresenter jpaPresenter,
+	public DefaultEntityPresenter<Product> productPresenter(ProductService crudService, JPAPresenter jpaPresenter,
 			User currentUser) {
-		return new EntityPresenter<>(crudService, currentUser, jpaPresenter);
+		return new DefaultEntityPresenter<>(new EntityPresenter<>(crudService, currentUser, jpaPresenter), crudService);
 	}
 
 	@Bean
 	@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public EntityPresenter<User> userEntityPresenter(UserService crudService, JPAPresenter jpaPresenter, User currentUser) {
-		return new EntityPresenter<>(crudService, currentUser, jpaPresenter);
+	public DefaultEntityPresenter<User> userPresenter(UserService crudService, JPAPresenter jpaPresenter,
+			User currentUser) {
+		return new DefaultEntityPresenter<>(new EntityPresenter<>(crudService, currentUser, jpaPresenter), crudService);
 	}
 
 	@Bean
 	@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public EntityPresenter<Order> orderEntityPresenter(OrderService crudService, JPAPresenter jpaPresenter, User currentUser) {
+	public EntityPresenter<Order> orderEntityPresenter(OrderService crudService, JPAPresenter jpaPresenter,
+			User currentUser) {
 		return new EntityPresenter<>(crudService, currentUser, jpaPresenter);
 	}
 
