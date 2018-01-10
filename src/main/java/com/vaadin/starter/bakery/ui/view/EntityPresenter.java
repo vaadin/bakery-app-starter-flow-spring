@@ -1,28 +1,14 @@
 package com.vaadin.starter.bakery.ui.view;
 
-import javax.persistence.EntityNotFoundException;
-import javax.validation.ConstraintViolationException;
-
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.OptimisticLockingFailureException;
-
 import com.vaadin.data.ValidationException;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.CrudService;
-import com.vaadin.starter.bakery.backend.service.UserFriendlyDataException;
+import com.vaadin.starter.bakery.ui.utils.messages.ErrorMessage;
 import com.vaadin.starter.bakery.ui.utils.messages.Message;
 
 public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
-
-	public static final String DB_NOT_FOUND_MESSAGE = "The selected %s was not found.";
-
-	public static final String DB_CHANGES_MESSAGE = "Somebody else might have updated the data. Please refresh and try again.";
-
-	public static final String DB_REFERENCES_MESSAGE = "The operation can not be executed as there are references to entity in the database";
-
-	public static final String REQUIRED_MESSAGE = "Please fill out all required fields before proceeding.";
 
 	private CrudService<T> crudService;
 
@@ -30,17 +16,19 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 
 	private User currentUser;
 
+	private JPAPresenter jpaPresenter;
+
 	private EntityView<T> view;
 
 	private T entity;
 
-	public EntityPresenter(CrudService<T> crudService, String entityName, User currentUser) {
+	public EntityPresenter(CrudService<T> crudService, User currentUser, JPAPresenter jpaPresenter) {
 		this.crudService = crudService;
-		this.entityName = entityName;
 		this.currentUser = currentUser;
+		this.jpaPresenter = jpaPresenter;
 	}
 
-	public void init(EntityView<T> view) {
+	public void setView(EntityView<T> view) {
 		this.view = view;
 	}
 
@@ -59,8 +47,8 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 		}
 	}
 
-	protected void showValidationError() {
-		view.showError(REQUIRED_MESSAGE, false);
+	public boolean executeJPAOperation(Runnable operation) {
+		return jpaPresenter.executeJPAOperation(operation, view::showError);
 	}
 
 	protected void saveEntity() {
@@ -72,29 +60,9 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 			view.write(entity);
 			return true;
 		} catch (ValidationException e) {
-			showValidationError();
+			view.showError(ErrorMessage.REQUIRED_MESSAGE, false);
 			return false;
 		}
-	}
-
-	public boolean executeJPAOperation(Runnable operation) {
-		try {
-			operation.run();
-			return true;
-		} catch (UserFriendlyDataException e) {
-			// Commit failed because of application-level data constraints
-			showError(e, e.getMessage(), true);
-		} catch (DataIntegrityViolationException e) {
-			// Commit failed because of validation errors
-			showError(e, DB_REFERENCES_MESSAGE, true);
-		} catch (OptimisticLockingFailureException e) {
-			showError(e, DB_CHANGES_MESSAGE, true);
-		} catch (EntityNotFoundException e) {
-			showError(e, String.format(DB_NOT_FOUND_MESSAGE, entityName), false);
-		} catch (ConstraintViolationException e) {
-			showValidationError();
-		}
-		return false;
 	}
 
 	public void close() {
@@ -131,11 +99,6 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 	public void createNew() {
 		this.entity = crudService.createNew(currentUser);
 		openDialog(entity, true);
-	}
-
-	private void showError(Exception e, String message, boolean isPersistent) {
-		view.showError(message, isPersistent);
-		getLogger().debug(message, e);
 	}
 
 	public T getEntity() {

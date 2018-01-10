@@ -55,10 +55,10 @@ implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 	@Id("order-details")
 	private OrderDetailsFull openedOrderDetails;
 
-	private OrderEntityPresenter presenter;
+	private OrderPresenter presenter;
 
 	@Autowired
-	public StorefrontView(OrderEntityPresenter presenter) {
+	public StorefrontView(OrderPresenter presenter) {
 
 		this.presenter = presenter;
 		// required for the `isDesktopView()` method

@@ -1,7 +1,7 @@
 package com.vaadin.starter.bakery.testbench;
 
 import static com.vaadin.starter.bakery.backend.service.UserService.MODIFY_LOCKED_USER_NOT_PERMITTED;
-import static com.vaadin.starter.bakery.ui.view.EntityPresenter.REQUIRED_MESSAGE;
+
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,6 +13,7 @@ import com.vaadin.starter.bakery.testbench.elements.core.PasswordFieldElement;
 import com.vaadin.starter.bakery.testbench.elements.core.TextFieldElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.UsersViewElement;
+import com.vaadin.starter.bakery.ui.utils.messages.ErrorMessage;
 
 public class UsersViewIT extends AbstractIT {
 
@@ -54,7 +55,7 @@ public class UsersViewIT extends AbstractIT {
 		usersView.getButtonsBar().getSaveButton().click();
 		PaperToastElement toast = $(PaperToastElement.class).onPage().id("_defaultToast");
 		Assert.assertTrue(form.isDisplayed());
-		Assert.assertEquals(REQUIRED_MESSAGE, toast.getText());
+		Assert.assertEquals(ErrorMessage.REQUIRED_MESSAGE, toast.getText());
 
 		// Good password
 		password.setValue("Abc123");
