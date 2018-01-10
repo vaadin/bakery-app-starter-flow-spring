@@ -4,26 +4,20 @@ import static com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil.create
 import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
 import java.time.LocalTime;
-import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import com.vaadin.data.BindingValidationStatus;
-import com.vaadin.data.validator.BeanValidator;
-import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
-import com.vaadin.ui.common.HasValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 
-import com.vaadin.data.ValidationResult;
-import com.vaadin.data.ValueContext;
-import com.vaadin.data.validator.AbstractValidator;
 import com.vaadin.data.BeanValidationBinder;
+import com.vaadin.data.BindingValidationStatus;
 import com.vaadin.data.ValidationException;
 import com.vaadin.data.provider.DataProvider;
+import com.vaadin.data.validator.BeanValidator;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.spring.annotation.SpringComponent;
@@ -41,6 +35,7 @@ import com.vaadin.starter.bakery.ui.view.storefront.event.ReviewEvent;
 import com.vaadin.starter.bakery.ui.view.storefront.event.ValueChangeEvent;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.button.Button;
+import com.vaadin.ui.common.HasValue;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.datepicker.DatePicker;
 import com.vaadin.ui.event.ComponentEventListener;
