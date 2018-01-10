@@ -14,12 +14,9 @@ import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.backend.service.ProductService;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider;
 import com.vaadin.starter.bakery.ui.entities.StorefrontItemHeader;
-import com.vaadin.starter.bakery.ui.event.CancelEvent;
-import com.vaadin.starter.bakery.ui.event.SaveEvent;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.utils.OrderFilter;
 import com.vaadin.starter.bakery.ui.utils.StorefrontItemHeaderGenerator;
-import com.vaadin.starter.bakery.ui.view.CrudOperationListener;
 import com.vaadin.starter.bakery.ui.view.EntityPresenter;
 import com.vaadin.ui.common.Focusable;
 import com.vaadin.ui.common.HasValue;
@@ -37,8 +34,8 @@ class OrderPresenter {
 	private final User currentUser;
 
 	@Autowired
-	OrderPresenter(ProductService productService, OrderService orderService,
-			OrdersGridDataProvider dataProvider, EntityPresenter<Order> entityPresenter,User currentUser) {
+	OrderPresenter(ProductService productService, OrderService orderService, OrdersGridDataProvider dataProvider,
+			EntityPresenter<Order> entityPresenter, User currentUser) {
 		this.entityPresenter = entityPresenter;
 		this.orderService = orderService;
 		this.dataProvider = dataProvider;
@@ -51,44 +48,7 @@ class OrderPresenter {
 	void init(StorefrontView view) {
 		this.entityPresenter.setView(view);
 		this.view = view;
-		view.getSearchBar().addFilterChangeListener(
-				e -> filterChanged(view.getSearchBar().getFilter(), view.getSearchBar().isCheckboxChecked()));
-		view.getSearchBar().addActionClickListener(e -> this.entityPresenter.createNew());
-
-		view.getOpenedOrderEditor().addListener(CancelEvent.class, e -> this.entityPresenter.cancel());
-		view.getOpenedOrderEditor().addReviewListener(e -> {
-			HasValue<?, ?> firstErrorField = view.validate().findFirst().orElse(null);
-			if (firstErrorField == null) {
-				if (this.entityPresenter.writeEntity()) {
-					view.openOrderDetails(this.entityPresenter.getEntity(), true);
-				}
-			} else if (firstErrorField instanceof Focusable) {
-				((Focusable<?>) firstErrorField).focus();
-			}
-		});
-
-		CrudOperationListener<Order> onSaveSuccess = e -> {
-			if(entityPresenter.getEntity().isNew()) {
-				dataProvider.refreshAll();
-			}else {
-				dataProvider.refreshItem(e);
-			}
-		};
-		view.getOpenedOrderDetails().addListener(SaveEvent.class, e -> this.entityPresenter.save(onSaveSuccess));
-		view.getOpenedOrderDetails().addCancelListener(e -> this.entityPresenter.cancel());
-		view.getOpenedOrderDetails().addBackListener(e -> view.showOrderEdit());
-		view.getOpenedOrderDetails().addEditListener(e -> {
-			view.getOpenedOrderEditor().read(this.entityPresenter.getEntity());
-			view.showOrderEdit();
-		});
-		view.getOpenedOrderDetails().addCommentListener(e -> {
-			entityPresenter.executeJPAOperation(() -> {
-				orderService.addComment(currentUser, e.getOrderId(), e.getMessage());
-				entityPresenter.loadEntity(e.getOrderId(), false);
-			});
-		});
-
-		view.setDataProvider(dataProvider);
+		view.getGrid().setDataProvider(dataProvider);
 		view.getOpenedOrderEditor().setCurrentUser(currentUser);
 	}
 
@@ -96,7 +56,7 @@ class OrderPresenter {
 		return headersGenerator.get(id);
 	}
 
-	void filterChanged(String filter, boolean showPrevious) {
+	public void filterChanged(String filter, boolean showPrevious) {
 		headersGenerator.resetHeaderChain(showPrevious);
 		dataProvider.setFilter(new OrderFilter(filter, showPrevious));
 	}
@@ -110,7 +70,7 @@ class OrderPresenter {
 			});
 			view.resizeGrid();
 		} else {
-			entityPresenter.loadEntity(orderCard.getOrder().getId(), false);
+			loadEntity(orderCard.getOrder().getId(), false);
 		}
 	}
 
@@ -135,7 +95,47 @@ class OrderPresenter {
 	}
 
 	void loadEntity(Long id, boolean edit) {
-		entityPresenter.loadEntity(id, edit);
+		entityPresenter.loadEntity(id, entity -> view.openDialog(entity, edit));
 	}
 
+	void addComment(Long id, String comment) {
+		entityPresenter.executeJPAOperation(() -> {
+			orderService.addComment(currentUser, id, comment);
+			loadEntity(id, false);
+		});
+	}
+
+	void save() {
+		entityPresenter.save(e -> {
+			if (e.isNew()) {
+				dataProvider.refreshAll();
+			} else {
+				dataProvider.refreshItem(e);
+			}
+		});
+	}
+
+	void review() {
+		HasValue<?, ?> firstErrorField = view.validate().findFirst().orElse(null);
+		if (firstErrorField == null) {
+			if (this.entityPresenter.writeEntity()) {
+				view.openOrderDetails(this.entityPresenter.getEntity(), true);
+			}
+		} else if (firstErrorField instanceof Focusable) {
+			((Focusable<?>) firstErrorField).focus();
+		}
+	}
+
+	void edit() {
+		view.getOpenedOrderEditor().read(this.entityPresenter.getEntity());
+		view.showOrderEdit();
+	}
+
+	void createNew() {
+		view.openDialog(this.entityPresenter.createNew(), true);
+	}
+	
+	void cancel() {
+		entityPresenter.cancel();
+	}
 }

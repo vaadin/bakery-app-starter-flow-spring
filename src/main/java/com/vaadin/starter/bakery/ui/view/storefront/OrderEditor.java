@@ -199,6 +199,10 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 	public Registration addReviewListener(ComponentEventListener<ReviewEvent> listener) {
 		return addListener(ReviewEvent.class, listener);
 	}
+	
+	public Registration addCancelListener(ComponentEventListener<CancelEvent> listener) {
+		return addListener(CancelEvent.class, listener);
+	}
 
 	private void setTotalPrice(int totalPrice) {
 		getModel().setTotalPrice(FormattingUtils.formatAsCurrency(totalPrice));

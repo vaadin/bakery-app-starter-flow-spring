@@ -4,11 +4,9 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.stream.Stream;
 
-import com.vaadin.ui.common.HasValue;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.data.ValidationException;
-import com.vaadin.data.provider.DataProvider;
 import com.vaadin.data.selection.SingleSelectionListener;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.router.HasUrlParameter;
@@ -24,6 +22,7 @@ import com.vaadin.starter.bakery.ui.components.BakerySearch;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.view.EntityView;
 import com.vaadin.ui.Tag;
+import com.vaadin.ui.common.HasValue;
 import com.vaadin.ui.common.HtmlImport;
 import com.vaadin.ui.grid.Grid;
 import com.vaadin.ui.grid.GridSingleSelectionModel;
@@ -37,7 +36,7 @@ import com.vaadin.ui.renderers.ComponentTemplateRenderer;
 @RouteAlias(value = BakeryConst.PAGE_ROOT, layout = BakeryApp.class)
 @PageTitle(BakeryConst.TITLE_STOREFRONT)
 public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
-implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
+		implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 
 	public interface Model extends TemplateModel {
 		void setEditing(boolean editing);
@@ -90,6 +89,18 @@ implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 		};
 		((GridSingleSelectionModel<Order>) grid.getSelectionModel()).addSingleSelectionListener(listener);
 		getModel().setEditing(false);
+		getSearchBar().addFilterChangeListener(
+				e -> presenter.filterChanged(getSearchBar().getFilter(), getSearchBar().isCheckboxChecked()));
+		getSearchBar().addActionClickListener(e -> presenter.createNew());
+		getOpenedOrderEditor().addCancelListener(e -> presenter.cancel());
+		getOpenedOrderEditor().addReviewListener(e -> presenter.review());
+
+		getOpenedOrderDetails().addSaveListenter(e -> presenter.save());
+		getOpenedOrderDetails().addCancelListener(e -> presenter.cancel());
+		getOpenedOrderDetails().addBackListener(e -> showOrderEdit());
+		getOpenedOrderDetails().addEditListener(e -> presenter.edit());
+		getOpenedOrderDetails().addCommentListener(e -> presenter.addComment(e.getOrderId(), e.getMessage()));
+
 		presenter.init(this);
 	}
 
@@ -118,12 +129,6 @@ implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 		getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT));
 	}
 
-	@Override
-	public void setDataProvider(DataProvider<Order, ?> dataProvider) {
-		grid.setDataProvider(dataProvider);
-	}
-
-	@Override
 	public void openDialog(Order order, boolean edit) {
 		getModel().setEditing(true);
 		if (edit) {
@@ -172,5 +177,5 @@ implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 	Grid<Order> getGrid() {
 		return grid;
 	}
-	
+
 }
