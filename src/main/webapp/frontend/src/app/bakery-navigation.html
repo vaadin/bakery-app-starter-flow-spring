@@ -8,7 +8,7 @@
 
 <dom-module id="bakery-navigation">
   <template>
-    <style>
+    <style include="shared-styles">
       :host {
         display: block;
         box-shadow: 0 0 16px 2px var(--valo-shade-20pct);
@@ -58,8 +58,6 @@
       }
 
       paper-tab iron-icon {
-        --iron-icon-height: var(--valo-size-xs);
-        --iron-icon-width: var(--valo-size-xs);
         margin-bottom: var(--valo-space-xs);
       }
 
@@ -132,7 +130,7 @@
           <template is="dom-repeat" items="[[pages]]">
             <paper-tab page-id$="[[item.link]]">
               <div class="navigation-label">
-                <iron-icon icon="valo:[[item.icon]]"></iron-icon>
+                <iron-icon icon="vaadin:[[item.icon]]"></iron-icon>
                 <span>[[item.title]]</span>
               </div>
             </paper-tab>
@@ -142,7 +140,7 @@
           <a href="logout">
             <paper-tab>
               <div class="navigation-label">
-                <iron-icon icon="valo:arrow-right"></iron-icon>
+                <iron-icon icon="vaadin:arrow-right"></iron-icon>
                 <span>Logout</span>
               </div>
             </paper-tab>
