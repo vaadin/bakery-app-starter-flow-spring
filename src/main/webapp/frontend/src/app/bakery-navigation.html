@@ -8,7 +8,7 @@
 
 <dom-module id="bakery-navigation">
   <template>
-    <style>
+    <style include="shared-styles">
       :host {
         display: block;
         box-shadow: 0 0 16px 2px var(--valo-shade-20pct);
@@ -58,8 +58,6 @@
       }
 
       paper-tab iron-icon {
-        --iron-icon-height: var(--valo-size-xxxs);
-        --iron-icon-width: var(--valo-size-xxxs);
         margin-bottom: var(--valo-space-xs);
       }
 
