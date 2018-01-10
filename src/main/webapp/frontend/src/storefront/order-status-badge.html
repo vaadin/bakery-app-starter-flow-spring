@@ -30,16 +30,19 @@
       }
 
       :host([status="delivered"]) #wrapper {
-        padding: 2px 3px;
+        padding: 2px 8px;
       }
 
       :host([small]) #wrapper {
         padding: 0 5px;
       }
 
+      iron-icon {
+        --iron-icon-width: 12px;
+      }
+
       :host([small]) iron-icon {
-        --iron-icon-height: var(--valo-font-size-xs);
-        --iron-icon-width: var(--valo-font-size-xs);
+        --iron-icon-width: 8px;
       }
     </style>
 
@@ -71,7 +74,7 @@
 
       _getContent(status) {
         if (status === 'delivered') {
-          return '<iron-icon icon="valo:checkmark"></iron-icon>';
+          return '<iron-icon icon="vaadin:check"></iron-icon>';
         }
 
         return status;
