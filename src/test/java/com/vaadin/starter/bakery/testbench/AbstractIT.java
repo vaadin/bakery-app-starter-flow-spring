@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.slf4j.LoggerFactory;
 
 import com.vaadin.starter.bakery.testbench.elements.ui.LoginViewElement;
@@ -36,9 +35,7 @@ public abstract class AbstractIT extends TestBenchTestCase {
 	}
 
 	protected WebDriver createDriver() {
-		// A workaround for the 'Chrome failed to start: crashed' error when running tests in Travis
-		// (see https://github.com/SeleniumHQ/selenium/issues/4961)
-		return TestBench.createDriver(new ChromeDriver(new ChromeOptions().addArguments("--no-sandbox")));
+		return TestBench.createDriver(new ChromeDriver());
 	}
 
 	@Override
