@@ -52,7 +52,7 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> {
 		if (BakeryConst.PAGE_LOGOUT.equals(href)) {
 			// The logout button is a 'normal' URL, not Flow-managed but
 			// handled by Spring Security.
-			UI.getCurrent().getPage().executeJavaScript("location.assign('/logout')");
+			UI.getCurrent().getPage().executeJavaScript("location.assign('logout')");
 		} else {
 			UI.getCurrent().navigateTo(href);
 		}
