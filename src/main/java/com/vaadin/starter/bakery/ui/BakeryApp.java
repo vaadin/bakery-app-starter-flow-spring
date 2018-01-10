@@ -30,6 +30,6 @@ public class BakeryApp extends PolymerTemplate<TemplateModel>
 
 	@Override
 	public void afterNavigation(AfterNavigationEvent event) {
-		navigation.onLocationChange(event.getLocation().getPath());
+		navigation.onLocationChange(event.getLocation().getFirstSegment());
 	}
 }
