@@ -23,7 +23,8 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> {
 	private static final String ICON_DASHBOARD = "clock";
 	private static final String ICON_USERS = "user";
 	private static final String ICON_PRODUCTS = "calendar";
-	private static final List<PageInfo> pages = new ArrayList<>();
+	private static final String ICON_LOGOUT = "arrow-right";
+	private final List<PageInfo> pages = new ArrayList<>();
 
 	public interface Model extends TemplateModel {
 		void setPageNumber(int page);
@@ -41,12 +42,20 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> {
 			pages.add(new PageInfo(BakeryConst.PAGE_PRODUCTS, ICON_PRODUCTS, BakeryConst.TITLE_PRODUCTS));
 		}
 
+		pages.add(new PageInfo(BakeryConst.PAGE_LOGOUT, ICON_LOGOUT, BakeryConst.TITLE_LOGOUT));
+
 		getModel().setPages(pages);
 	}
 
 	@ClientDelegate
 	private void navigateTo(String href) {
-		UI.getCurrent().navigateTo(href);
+		if (BakeryConst.PAGE_LOGOUT.equals(href)) {
+			// The logout button is a 'normal' URL, not Flow-managed but
+			// handled by Spring Security.
+			UI.getCurrent().getPage().executeJavaScript("location.assign('/logout')");
+		} else {
+			UI.getCurrent().navigateTo(href);
+		}
 	}
 
 	void onLocationChange(String currentPath) {
