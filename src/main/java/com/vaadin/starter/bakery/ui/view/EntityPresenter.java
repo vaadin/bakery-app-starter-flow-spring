@@ -104,4 +104,9 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 		this.entity = entity;
 	}
 
+	@FunctionalInterface
+	public interface CrudOperationListener<T> {
+
+		void execute(T entity);
+	}
 }

@@ -8,7 +8,6 @@ import com.vaadin.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
 import com.vaadin.starter.bakery.backend.service.FilterableCrudService;
-import com.vaadin.starter.bakery.ui.view.CrudOperationListener;
 import com.vaadin.starter.bakery.ui.view.EntityPresenter;
 
 public class DefaultEntityPresenter<T extends AbstractEntity> {
@@ -61,15 +60,14 @@ public class DefaultEntityPresenter<T extends AbstractEntity> {
 	public void save() {
 		if (entityPresenter.writeEntity()) {
 			final boolean isNew = entityPresenter.getEntity().isNew();
-			CrudOperationListener<T> onSaveSuccess = e -> {
+			entityPresenter.save(e -> {
 				if (isNew) {
 					filteredDataProvider.refreshAll();
 				} else {
 					filteredDataProvider.refreshItem(e);
 				}
 				entityPresenter.close();
-			};
-			entityPresenter.save(onSaveSuccess);
+			});
 		}
 	}
 
