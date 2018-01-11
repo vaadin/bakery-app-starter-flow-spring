@@ -34,8 +34,8 @@ class OrderPresenter {
 	private final OrderService orderService;
 	private final OrdersGridDataProvider dataProvider;
 	private final User currentUser;
+	private final ModalDialogPresenter modalDialogPresenter = new ModalDialogPresenter();
 
-	
 	@Autowired
 	OrderPresenter(ProductService productService, OrderService orderService, OrdersGridDataProvider dataProvider,
 			EntityPresenter<Order> entityPresenter, User currentUser) {
@@ -88,12 +88,12 @@ class OrderPresenter {
 		view.resizeGrid();
 	}
 
-	private void openEntity(Long id,boolean edit) {
+	private void openEntity(Long id, boolean edit) {
 		view.getGrid().deselectAll();
 		view.navigateToEntity(id.toString(), edit);
 	}
 
-	private void onOrderCardAddComment(StorefrontOrderCard orderCard,String message) {
+	private void onOrderCardAddComment(StorefrontOrderCard orderCard, String message) {
 		entityPresenter.executeJPAOperation(() -> {
 			Order updated = orderService.addComment(currentUser, orderCard.getOrder().getId(), message);
 			orderCard.updateOrder(updated);
@@ -101,33 +101,8 @@ class OrderPresenter {
 		});
 	}
 
-	void openDialog(Order order, boolean edit) {
-		view.setEditing(true);
-		if (edit) {
-			view.getOpenedOrderEditor().read(order);
-			showOrderEdit();
-		} else {
-			openOrderDetails(order, false);
-		}
-	}
-
-	void showOrderEdit() {
-		view.getOpenedOrderDetails().setVisible(false);
-		view.getOpenedOrderEditor().setVisible(true);
-	}
-
-	void showOrderDetails() {
-		view.getOpenedOrderDetails().setVisible(true);
-		view.getOpenedOrderEditor().setVisible(false);		
-	}
- 
-	void openOrderDetails(Order order, boolean isReview) {
-		showOrderDetails();
-		view.getOpenedOrderDetails().display(order, isReview);
-	}
-
 	void loadEntity(Long id, boolean edit) {
-		entityPresenter.loadEntity(id, entity -> openDialog(entity, edit));
+		entityPresenter.loadEntity(id, entity -> modalDialogPresenter.open(entity, edit));
 	}
 
 	void addComment(Long id, String comment) {
@@ -148,29 +123,79 @@ class OrderPresenter {
 		});
 	}
 
-	void review() {
-		HasValue<?, ?> firstErrorField = view.validate().findFirst().orElse(null);
-		if (firstErrorField == null) {
-			if (this.entityPresenter.writeEntity()) {
-				openOrderDetails(this.entityPresenter.getEntity(), true);
-			}
-		} else if (firstErrorField instanceof Focusable) {
-			((Focusable<?>) firstErrorField).focus();
-		}
-	}
-
 	void createNew() {
-		openDialog(this.entityPresenter.createNew(), true);
+		 modalDialogPresenter.open(this.entityPresenter.createNew(), true);
 	}
 
 	void cancel() {
 		entityPresenter.cancel(() -> closeDialog());
 	}
 
+	void nextModalState() {
+		modalDialogPresenter.next.run();
+	}
+	
+	void previousModalState() {
+		modalDialogPresenter.previous.run();
+	}
+
 	void closeDialog() {
-		view.getOpenedOrderEditor().close();
-		view.setEditing(false);
+		modalDialogPresenter.close();
 		view.navigateToEntity(null, false);
 	}
 
+	class ModalDialogPresenter {
+
+		Runnable next;
+		Runnable previous;
+		
+		void open(Order order, boolean edit) {
+			view.setEditing(true);
+			previous = null;
+			if (edit) {
+				view.getOpenedOrderEditor().read(order);
+				edit();
+			} else {
+				openOrderDetails(order, false);
+				next = () -> open(order, true);
+			}
+		}
+
+		void close() {
+			view.getOpenedOrderEditor().close();
+			view.setEditing(false);
+			next = null;
+			previous = null;
+		}
+
+		void setElementsVisibility(boolean editing) {
+			view.getOpenedOrderDetails().setVisible(!editing);
+			view.getOpenedOrderEditor().setVisible(editing);
+		}
+
+		void openOrderDetails(Order order, boolean isReview) {
+			setElementsVisibility(false);
+			view.getOpenedOrderDetails().display(order, isReview);
+		}
+
+		void edit() {
+			setElementsVisibility(true);
+			next = this::review;
+			previous = null;
+		}
+
+		void review() {
+			HasValue<?, ?> firstErrorField = view.validate().findFirst().orElse(null);
+			if (firstErrorField == null) {
+				if (entityPresenter.writeEntity()) {
+					openOrderDetails(entityPresenter.getEntity(), true);
+					next = null;
+					previous = this::edit;
+				}
+			} else if (firstErrorField instanceof Focusable) {
+				((Focusable<?>) firstErrorField).focus();
+			}
+		}
+
+	}
 }

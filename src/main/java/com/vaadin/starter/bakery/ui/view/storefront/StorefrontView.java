@@ -93,12 +93,12 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 				e -> presenter.filterChanged(getSearchBar().getFilter(), getSearchBar().isCheckboxChecked()));
 		getSearchBar().addActionClickListener(e -> presenter.createNew());
 		getOpenedOrderEditor().addCancelListener(e -> presenter.cancel());
-		getOpenedOrderEditor().addReviewListener(e -> presenter.review());
+		getOpenedOrderEditor().addReviewListener(e -> presenter.nextModalState());
 
 		getOpenedOrderDetails().addSaveListenter(e -> presenter.save());
 		getOpenedOrderDetails().addCancelListener(e -> presenter.cancel());
-		getOpenedOrderDetails().addBackListener(e -> presenter.showOrderEdit());
-		getOpenedOrderDetails().addEditListener(e -> presenter.showOrderEdit());
+		getOpenedOrderDetails().addBackListener(e -> presenter.previousModalState());
+		getOpenedOrderDetails().addEditListener(e -> presenter.nextModalState());
 		getOpenedOrderDetails().addCommentListener(e -> presenter.addComment(e.getOrderId(), e.getMessage()));
 
 		presenter.init(this);
