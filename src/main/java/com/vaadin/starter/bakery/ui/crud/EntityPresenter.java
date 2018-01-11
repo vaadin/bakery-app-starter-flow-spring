@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery.ui.presenter;
+package com.vaadin.starter.bakery.ui.crud;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolationException;

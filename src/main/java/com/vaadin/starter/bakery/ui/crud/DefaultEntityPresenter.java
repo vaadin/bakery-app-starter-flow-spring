@@ -8,7 +8,6 @@ import com.vaadin.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.data.provider.DataProvider;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
 import com.vaadin.starter.bakery.backend.service.FilterableCrudService;
-import com.vaadin.starter.bakery.ui.presenter.EntityPresenter;
 
 public class DefaultEntityPresenter<T extends AbstractEntity> {
 

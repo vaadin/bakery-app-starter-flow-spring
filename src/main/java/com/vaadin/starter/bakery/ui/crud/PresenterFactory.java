@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.vaadin.starter.bakery.ui.presenter;
+package com.vaadin.starter.bakery.ui.crud;
 
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +14,6 @@ import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.backend.service.ProductService;
 import com.vaadin.starter.bakery.backend.service.UserService;
-import com.vaadin.starter.bakery.ui.crud.DefaultEntityPresenter;
 
 @Configuration
 public class PresenterFactory {
