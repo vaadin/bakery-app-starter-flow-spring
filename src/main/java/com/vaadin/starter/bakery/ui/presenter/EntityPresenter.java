@@ -1,10 +1,17 @@
 package com.vaadin.starter.bakery.ui.presenter;
 
+import javax.persistence.EntityNotFoundException;
+import javax.validation.ConstraintViolationException;
+
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.OptimisticLockingFailureException;
+
 import com.vaadin.data.ValidationException;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.CrudService;
+import com.vaadin.starter.bakery.backend.service.UserFriendlyDataException;
 import com.vaadin.starter.bakery.ui.utils.messages.ErrorMessage;
 import com.vaadin.starter.bakery.ui.utils.messages.Message;
 import com.vaadin.starter.bakery.ui.view.EntityView;
@@ -17,16 +24,13 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 
 	private User currentUser;
 
-	private JPAPresenter jpaPresenter;
-
 	private EntityView<T> view;
 
 	private T entity;
 
-	public EntityPresenter(CrudService<T> crudService, User currentUser, JPAPresenter jpaPresenter) {
+	public EntityPresenter(CrudService<T> crudService, User currentUser) {
 		this.crudService = crudService;
 		this.currentUser = currentUser;
-		this.jpaPresenter = jpaPresenter;
 	}
 
 	public void setView(EntityView<T> view) {
@@ -49,7 +53,28 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 	}
 
 	public boolean executeJPAOperation(Runnable operation) {
-		return jpaPresenter.executeJPAOperation(operation, view::showError);
+		try {
+			operation.run();
+			return true;
+		} catch (UserFriendlyDataException e) {
+			// Commit failed because of application-level data constraints
+			consumeError(e, e.getMessage(), true);
+		} catch (DataIntegrityViolationException e) {
+			// Commit failed because of validation errors
+			consumeError(e, ErrorMessage.OPERATION_PREVENTED_BY_REFERENCES, true);
+		} catch (OptimisticLockingFailureException e) {
+			consumeError(e, ErrorMessage.CONCURRENT_UPDATE, true);
+		} catch (EntityNotFoundException e) {
+			consumeError(e, ErrorMessage.ENTITY_NOT_FOUND, false);
+		} catch (ConstraintViolationException e) {
+			consumeError(e, ErrorMessage.REQUIRED_FIELDS_MISSING, false);
+		}
+		return false;
+	}
+
+	private void consumeError(Exception e, String message, boolean isPersistent) {
+		getLogger().debug(message, e);
+		view.showError(message, isPersistent);
 	}
 
 	protected void saveEntity() {
