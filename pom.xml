@@ -21,6 +21,7 @@
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Dependencies -->
         <vaadin.version>10.0.0.alpha12</vaadin.version>
+        <flow.version>1.0.0.alpha17</flow.version>
 
         <spring-boot.version>1.5.9.RELEASE</spring-boot.version>
         <failOnMissingWebXml>false</failOnMissingWebXml>
@@ -120,6 +121,31 @@
         <!-- Vaadin -->
         <dependency>
             <groupId>com.vaadin</groupId>
+            <artifactId>flow-client</artifactId>
+            <version>${flow.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>flow-push</artifactId>
+            <version>${flow.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>flow-html-components</artifactId>
+            <version>${flow.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>flow-data</artifactId>
+            <version>${flow.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>flow-server</artifactId>
+            <version>${flow.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
             <artifactId>vaadin</artifactId>
             <exclusions>
                 <exclusion>
@@ -139,20 +165,8 @@
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-charts-flow</artifactId>
-            <version>6.0.0.alpha10</version>
-        </dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
             <artifactId>vaadin-board-flow</artifactId>
             <version>1.1.0-beta1</version>
-        </dependency>
-
-        <!-- override the default versions coming from vaadin-bom/vaadin-webjars-bom -->
-        <dependency>
-            <groupId>org.webjars.bower</groupId>
-            <artifactId>vaadin-valo-theme</artifactId>
-            <version>2.0.0-alpha5</version>
         </dependency>
 
         <!-- End of Vaadin -->

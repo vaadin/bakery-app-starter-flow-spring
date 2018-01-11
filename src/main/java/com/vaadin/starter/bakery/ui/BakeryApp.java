@@ -2,6 +2,7 @@ package com.vaadin.starter.bakery.ui;
 
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.page.BodySize;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.router.AfterNavigationEvent;
@@ -16,6 +17,7 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
 @Tag("bakery-app")
 @HtmlImport("src/app/bakery-app.html")
+@BodySize(height = "100vh", width = "100vw")
 public class BakeryApp extends PolymerTemplate<TemplateModel>
 		implements RouterLayout, BeforeEnterObserver, AfterNavigationObserver {
 
