@@ -15,6 +15,7 @@ import com.vaadin.starter.bakery.ui.components.BakerySearch;
 import com.vaadin.starter.bakery.ui.components.FormButtonsBar;
 import com.vaadin.starter.bakery.ui.components.FormDialog;
 import com.vaadin.starter.bakery.ui.event.CloseDialogEvent;
+import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
 import com.vaadin.starter.bakery.ui.view.EntityView;
 import com.vaadin.ui.common.HasText;
 import com.vaadin.ui.grid.Grid;
@@ -65,8 +66,7 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 	}
 
 	protected void navigateToEntity(String id) {
-		final String location = getBasePage() + (id == null || id.isEmpty() ? "" : "/" + id);
-		getUI().ifPresent(ui -> ui.navigateTo(location));
+		getUI().ifPresent(ui -> ui.navigateTo(TemplateUtil.generateLocation(getBasePage(), id)));
 	}
 
 	@Override
@@ -76,7 +76,6 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 		}
 	}
 
-	@Override
 	public void closeDialog() {
 		getDialog().setOpened(false);
 		navigateToEntity(null);

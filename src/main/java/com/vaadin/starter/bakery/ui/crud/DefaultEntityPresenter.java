@@ -37,7 +37,7 @@ public class DefaultEntityPresenter<T extends AbstractEntity> {
 	}
 
 	public void cancel() {
-		entityPresenter.cancel();
+		entityPresenter.cancel(view::closeDialog);
 	}
 
 	public void createNew() {

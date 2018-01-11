@@ -92,12 +92,11 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 	}
 
 	public void close() {
-		view.closeDialog();
 		this.entity = null;
 	}
 
-	public void cancel() {
-		confirmIfNecessaryAndExecute(view.isDirty(), Message.UNSAVED_CHANGES.createMessage(entityName), this::close);
+	public void cancel(Runnable onConfirmed) {
+		confirmIfNecessaryAndExecute(view.isDirty(), Message.UNSAVED_CHANGES.createMessage(entityName), onConfirmed);
 	}
 
 	protected void confirmIfNecessaryAndExecute(boolean needsConfirmation, Message message, Runnable operation) {
@@ -108,14 +107,11 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 		}
 	}
 
-	public void loadEntity(Long id, CrudOperationListener<T> onSuccess) {
-		boolean loaded = executeJPAOperation(() -> {
+	public boolean loadEntity(Long id, CrudOperationListener<T> onSuccess) {
+		return executeJPAOperation(() -> {
 			this.entity = crudService.load(id);
 			onSuccess.execute(entity);
 		});
-		if (!loaded) {
-			view.closeDialog();
-		}
 	}
 
 	public T createNew() {

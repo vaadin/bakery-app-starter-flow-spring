@@ -9,6 +9,7 @@ import com.vaadin.flow.model.Include;
 import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
+import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
 import com.vaadin.starter.bakery.ui.utils.converters.CurrencyFormatter;
 import com.vaadin.starter.bakery.ui.utils.converters.LocalDateTimeConverter;
 import com.vaadin.starter.bakery.ui.utils.converters.LocalTimeConverter;
@@ -121,5 +122,9 @@ public class OrderDetailsFull extends PolymerTemplate<OrderDetailsFull.Model> {
 
 	public Registration addCancelListener(ComponentEventListener<CancelEvent> listener) {
 		return addListener(CancelEvent.class, listener);
+	}
+
+	public void setVisible(boolean visible) {
+		TemplateUtil.setVisible(this, visible);
 	}
 }

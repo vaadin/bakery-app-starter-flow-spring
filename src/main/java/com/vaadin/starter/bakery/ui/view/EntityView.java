@@ -17,11 +17,6 @@ import com.vaadin.starter.bakery.ui.utils.messages.Message;
 public interface EntityView<T> extends HasNotifications {
 
 	/**
-	 * Closes the entity dialog.
-	 */
-	void closeDialog();
-
-	/**
 	 * Shows a confirmation request dialog with the given message.
 	 *
 	 * @param message

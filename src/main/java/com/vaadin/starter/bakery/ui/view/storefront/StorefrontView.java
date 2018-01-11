@@ -1,5 +1,6 @@
 package com.vaadin.starter.bakery.ui.view.storefront;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.stream.Stream;
@@ -12,6 +13,7 @@ import com.vaadin.flow.model.TemplateModel;
 import com.vaadin.router.HasUrlParameter;
 import com.vaadin.router.OptionalParameter;
 import com.vaadin.router.PageTitle;
+import com.vaadin.router.QueryParameters;
 import com.vaadin.router.Route;
 import com.vaadin.router.RouteAlias;
 import com.vaadin.router.event.BeforeNavigationEvent;
@@ -20,6 +22,7 @@ import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.components.BakerySearch;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
+import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
 import com.vaadin.starter.bakery.ui.view.EntityView;
 import com.vaadin.ui.Tag;
 import com.vaadin.ui.common.HasValue;
@@ -73,9 +76,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 			StorefrontOrderCard orderCard = new StorefrontOrderCard();
 			orderCard.setOrder(order);
 			orderCard.setHeader(presenter.getHeaderByOrderId(order.getId()));
-			orderCard.addEditListener(e -> presenter.onOrderCardEdit(orderCard));
-			orderCard.addCommentListener(e -> presenter.onOrderCardAddComment(orderCard, e.getMessage()));
-			orderCard.addCancelListener(e -> grid.deselectAll());
 			components.put(order, orderCard);
 			return orderCard;
 		}));
@@ -97,19 +97,30 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 
 		getOpenedOrderDetails().addSaveListenter(e -> presenter.save());
 		getOpenedOrderDetails().addCancelListener(e -> presenter.cancel());
-		getOpenedOrderDetails().addBackListener(e -> showOrderEdit());
-		getOpenedOrderDetails().addEditListener(e -> presenter.edit());
+		getOpenedOrderDetails().addBackListener(e -> presenter.showOrderEdit());
+		getOpenedOrderDetails().addEditListener(e -> presenter.showOrderEdit());
 		getOpenedOrderDetails().addCommentListener(e -> presenter.addComment(e.getOrderId(), e.getMessage()));
 
 		presenter.init(this);
 	}
 
+	void setEditing(boolean editing) {
+		getModel().setEditing(editing);
+	}
+	
 	@Override
 	public void setParameter(BeforeNavigationEvent event, @OptionalParameter Long orderId) {
 		if (orderId != null) {
 			boolean editView = event.getLocation().getQueryParameters().getParameters().containsKey("edit");
 			presenter.loadEntity(orderId, editView);
 		}
+	}
+
+	void navigateToEntity(String id, boolean edit) {
+		final String page = TemplateUtil.generateLocation(BakeryConst.PAGE_STOREFRONT, id);
+		final QueryParameters parameters = edit ? QueryParameters.simple(Collections.singletonMap("edit", ""))
+				: QueryParameters.empty();
+		getUI().ifPresent(ui -> ui.navigateTo(page, parameters));
 	}
 
 	@Override
@@ -120,34 +131,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	@Override
 	public void write(Order entity) throws ValidationException {
 		openedOrderEditor.write(entity);
-	}
-
-	@Override
-	public void closeDialog() {
-		openedOrderEditor.close();
-		getModel().setEditing(false);
-		getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT));
-	}
-
-	public void openDialog(Order order, boolean edit) {
-		getModel().setEditing(true);
-		if (edit) {
-			openedOrderEditor.read(order);
-			showOrderEdit();
-		} else {
-			openOrderDetails(order, false);
-		}
-	}
-
-	void showOrderEdit() {
-		openedOrderDetails.getElement().setAttribute("hidden", "");
-		openedOrderEditor.getElement().removeAttribute("hidden");
-	}
-
-	void openOrderDetails(Order order, boolean isReview) {
-		openedOrderDetails.getElement().removeAttribute("hidden");
-		openedOrderEditor.getElement().setAttribute("hidden", "");
-		openedOrderDetails.display(order, isReview);
 	}
 
 	public Stream<HasValue<?, ?>> validate() {

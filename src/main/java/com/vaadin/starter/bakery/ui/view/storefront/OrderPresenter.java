@@ -1,12 +1,14 @@
 package com.vaadin.starter.bakery.ui.view.storefront;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
-import com.vaadin.router.QueryParameters;
+import com.vaadin.shared.Registration;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.User;
@@ -15,7 +17,6 @@ import com.vaadin.starter.bakery.backend.service.ProductService;
 import com.vaadin.starter.bakery.ui.crud.EntityPresenter;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider;
 import com.vaadin.starter.bakery.ui.entities.StorefrontItemHeader;
-import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.utils.OrderFilter;
 import com.vaadin.starter.bakery.ui.utils.StorefrontItemHeaderGenerator;
 import com.vaadin.ui.common.Focusable;
@@ -27,12 +28,14 @@ class OrderPresenter {
 
 	private StorefrontItemHeaderGenerator headersGenerator;
 	private StorefrontView view;
+	private List<Registration> registrations = Collections.emptyList();
 
 	private final EntityPresenter<Order> entityPresenter;
 	private final OrderService orderService;
 	private final OrdersGridDataProvider dataProvider;
 	private final User currentUser;
 
+	
 	@Autowired
 	OrderPresenter(ProductService productService, OrderService orderService, OrdersGridDataProvider dataProvider,
 			EntityPresenter<Order> entityPresenter, User currentUser) {
@@ -63,30 +66,34 @@ class OrderPresenter {
 
 	// StorefrontOrderCard presenter methods
 	void onOrderCardExpanded(StorefrontOrderCard orderCard) {
-		if (view.isDesktopView()) {
-			entityPresenter.executeJPAOperation(() -> {
-				Order fullOrder = orderService.load(orderCard.getOrder().getId());
-				orderCard.openCard(fullOrder);
-			});
-			view.resizeGrid();
-		} else {
-			loadEntity(orderCard.getOrder().getId(), false);
-		}
+		entityPresenter.loadEntity(orderCard.getOrder().getId(), entity -> {
+			final Long id = entity.getId();
+			if (view.isDesktopView()) {
+				registrations = Arrays.asList(orderCard.addEditListener(e -> openEntity(id, true)),
+						orderCard.addCommentListener(e -> onOrderCardAddComment(orderCard, e.getMessage())),
+						orderCard.addCancelListener(e -> view.getGrid().deselectAll()));
+				orderCard.openCard(entity);
+				view.resizeGrid();
+			} else {
+				openEntity(id, false);
+			}
+		});
 	}
 
 	void onOrderCardCollapsed(StorefrontOrderCard orderCard) {
+		registrations.forEach(Registration::remove);
+		registrations = Collections.emptyList();
+		entityPresenter.close();
 		orderCard.closeCard();
 		view.resizeGrid();
 	}
 
-	void onOrderCardEdit(StorefrontOrderCard orderCard) {
-		Long id = orderCard.getOrder().getId();
+	private void openEntity(Long id,boolean edit) {
 		view.getGrid().deselectAll();
-		view.getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT + "/" + id,
-				QueryParameters.simple(Collections.singletonMap("edit", ""))));
+		view.navigateToEntity(id.toString(), edit);
 	}
 
-	void onOrderCardAddComment(StorefrontOrderCard orderCard, String message) {
+	private void onOrderCardAddComment(StorefrontOrderCard orderCard,String message) {
 		entityPresenter.executeJPAOperation(() -> {
 			Order updated = orderService.addComment(currentUser, orderCard.getOrder().getId(), message);
 			orderCard.updateOrder(updated);
@@ -94,8 +101,33 @@ class OrderPresenter {
 		});
 	}
 
+	void openDialog(Order order, boolean edit) {
+		view.setEditing(true);
+		if (edit) {
+			view.getOpenedOrderEditor().read(order);
+			showOrderEdit();
+		} else {
+			openOrderDetails(order, false);
+		}
+	}
+
+	void showOrderEdit() {
+		view.getOpenedOrderDetails().setVisible(false);
+		view.getOpenedOrderEditor().setVisible(true);
+	}
+
+	void showOrderDetails() {
+		view.getOpenedOrderDetails().setVisible(true);
+		view.getOpenedOrderEditor().setVisible(false);		
+	}
+ 
+	void openOrderDetails(Order order, boolean isReview) {
+		showOrderDetails();
+		view.getOpenedOrderDetails().display(order, isReview);
+	}
+
 	void loadEntity(Long id, boolean edit) {
-		entityPresenter.loadEntity(id, entity -> view.openDialog(entity, edit));
+		entityPresenter.loadEntity(id, entity -> openDialog(entity, edit));
 	}
 
 	void addComment(Long id, String comment) {
@@ -111,6 +143,7 @@ class OrderPresenter {
 				dataProvider.refreshAll();
 			} else {
 				dataProvider.refreshItem(e);
+				closeDialog();
 			}
 		});
 	}
@@ -119,23 +152,25 @@ class OrderPresenter {
 		HasValue<?, ?> firstErrorField = view.validate().findFirst().orElse(null);
 		if (firstErrorField == null) {
 			if (this.entityPresenter.writeEntity()) {
-				view.openOrderDetails(this.entityPresenter.getEntity(), true);
+				openOrderDetails(this.entityPresenter.getEntity(), true);
 			}
 		} else if (firstErrorField instanceof Focusable) {
 			((Focusable<?>) firstErrorField).focus();
 		}
 	}
 
-	void edit() {
-		view.getOpenedOrderEditor().read(this.entityPresenter.getEntity());
-		view.showOrderEdit();
+	void createNew() {
+		openDialog(this.entityPresenter.createNew(), true);
 	}
 
-	void createNew() {
-		view.openDialog(this.entityPresenter.createNew(), true);
-	}
-	
 	void cancel() {
-		entityPresenter.cancel();
+		entityPresenter.cancel(() -> closeDialog());
 	}
+
+	void closeDialog() {
+		view.getOpenedOrderEditor().close();
+		view.setEditing(false);
+		view.navigateToEntity(null, false);
+	}
+
 }
