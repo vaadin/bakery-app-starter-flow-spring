@@ -55,7 +55,7 @@ public class UsersViewIT extends AbstractIT {
 		usersView.getButtonsBar().getSaveButton().click();
 		PaperToastElement toast = $(PaperToastElement.class).onPage().id("_defaultToast");
 		Assert.assertTrue(form.isDisplayed());
-		Assert.assertEquals(ErrorMessage.REQUIRED_MESSAGE, toast.getText());
+		Assert.assertEquals(ErrorMessage.REQUIRED_FIELDS_MISSING, toast.getText());
 
 		// Good password
 		password.setValue("Abc123");

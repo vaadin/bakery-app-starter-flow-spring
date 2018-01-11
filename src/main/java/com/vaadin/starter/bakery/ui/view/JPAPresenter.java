@@ -25,13 +25,13 @@ public class JPAPresenter implements HasLogger {
 			showError(onError, e, e.getMessage(), true);
 		} catch (DataIntegrityViolationException e) {
 			// Commit failed because of validation errors
-			showError(onError, e, ErrorMessage.DB_REFERENCES_MESSAGE, true);
+			showError(onError, e, ErrorMessage.OPERATION_PREVENTED_BY_REFERENCES, true);
 		} catch (OptimisticLockingFailureException e) {
-			showError(onError, e, ErrorMessage.DB_CHANGES_MESSAGE, true);
+			showError(onError, e, ErrorMessage.CONCURRENT_UPDATE, true);
 		} catch (EntityNotFoundException e) {
-			showError(onError, e, ErrorMessage.DB_NOT_FOUND_MESSAGE, false);
+			showError(onError, e, ErrorMessage.ENTITY_NOT_FOUND, false);
 		} catch (ConstraintViolationException e) {
-			showError(onError, e, ErrorMessage.REQUIRED_MESSAGE, false);
+			showError(onError, e, ErrorMessage.REQUIRED_FIELDS_MISSING, false);
 		}
 		return false;
 	}

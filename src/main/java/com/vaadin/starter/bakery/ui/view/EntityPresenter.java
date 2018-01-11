@@ -60,7 +60,7 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 			view.write(entity);
 			return true;
 		} catch (ValidationException e) {
-			view.showError(ErrorMessage.REQUIRED_MESSAGE, false);
+			view.showError(ErrorMessage.REQUIRED_FIELDS_MISSING, false);
 			return false;
 		}
 	}
