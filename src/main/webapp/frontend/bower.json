@@ -13,12 +13,12 @@
     "polymer": "Polymer/polymer#^2.0.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0",
     "iron-icon": "^2.0.0",
-    "paper-tabs": "^2.0.0",
     "paper-toast": "^2.0.0",
     "vaadin": "vaadin/vaadin#10.0.0-alpha8",
     "vaadin-grid": "vaadin/vaadin-grid#4.1.0-beta1",
     "vaadin-charts": "vaadin/vaadin-charts#6.0.0-alpha10",
-    "vaadin-valo-theme": "vaadin/vaadin-valo-theme#2.0.0-alpha5"
+    "vaadin-valo-theme": "vaadin/vaadin-valo-theme#2.0.0-alpha5",
+    "vaadin-tabs" : "^1.0.0"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0"

@@ -1,8 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
-<link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
-<link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
-<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../bower_components/vaadin-tabs/vaadin-tabs.html">
+<link rel="import" href="../../bower_components/vaadin-tabs/vaadin-tab.html">
 <link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="../../bower_components/vaadin-valo-theme/icons.html">
 
@@ -29,28 +28,21 @@
         display: none;
       }
 
-      .navigation-tabs {
-        --paper-tabs-selection-bar-color: var(--valo-primary-color);
-        --paper-tabs-selection-bar: {
-          box-shadow: 0 0 20px 6px var(--valo-primary-color-10pct);
-        };
-        height: 100%;
-        width: 100%;
-      }
-
-      paper-tab {
-        --paper-tab-ink: var(--valo-secondary-text-color);
-        padding: 0 var(--valo-space-s);
-        height: 100%;
-      }
-
       .navigation-label {
-        /* These mixins (from iron-flex-layout) center the link text. */
-        @apply --layout-vertical;
-        @apply --layout-center-center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         color: var(--valo-secondary-text-color);
-        font-family: var(--valo-font-family);
         text-decoration: none;
+        font-size: var(--valo-font-size-s);
+      }
+
+      vaadin-tabs {
+         max-width: 100vw;
+      }
+
+      vaadin-tab {
+         max-width: calc(100vw / 5);
       }
 
       .navigation-tabs a {
@@ -61,11 +53,11 @@
         margin-bottom: var(--valo-space-xs);
       }
 
-      paper-tab.iron-selected iron-icon {
+      vaadin-tab[selected] iron-icon {
         color: var(--valo-primary-color);
       }
 
-      paper-tab.iron-selected span {
+      vaadin-tab[selected] span {
         color: var(--valo-body-text-color);
       }
 
@@ -93,8 +85,12 @@
           display: block;
         }
 
-        .navigation-tabs {
-          width: inherit;
+        vaadin-tab::before,
+        vaadin-tab::after {
+          width: 100% !important;
+          top: 0;
+          bottom: auto;
+          content: ' ';
         }
       }
 
@@ -118,36 +114,22 @@
       }
     </style>
 
-    <iron-media-query query="(min-width: 600px)" query-matches="{{_desktopView}}"></iron-media-query>
-
     <div class="toolbar">
       <div class="branding">
         ###Bakery###
       </div>
       <div class="tabsContainer">
-        <paper-tabs selected="[[page]]" attr-for-selected="page-id" on-transitionend="_onNavAnimationEnd"
-                    class="navigation-tabs" align-bottom="[[_desktopView]]">
+        <vaadin-tabs selected="[[pageNumber]]" on-selected-changed="_onSelectedChanged">
           <template is="dom-repeat" items="[[pages]]">
-            <paper-tab page-id$="[[item.link]]">
+            <vaadin-tab value$="[[item.link]]">
               <div class="navigation-label">
                 <iron-icon icon="vaadin:[[item.icon]]"></iron-icon>
                 <span>[[item.title]]</span>
               </div>
-            </paper-tab>
+            </vaadin-tab>
           </template>
-          <!-- The logout button is a 'normal' URL (i.e. it's not a Flow-managed in-app URL).
-               It trigges a regular GET request which is handled by Spring Security. -->
-          <a href="logout">
-            <paper-tab>
-              <div class="navigation-label">
-                <iron-icon icon="vaadin:arrow-right"></iron-icon>
-                <span>Logout</span>
-              </div>
-            </paper-tab>
-          </a>
-        </paper-tabs>
+        </vaadin-tabs>
       </div>
-
     </div>
   </template>
 
@@ -160,21 +142,19 @@
 
       static get properties() {
         return {
-          _desktopView: Boolean
+          pageNumber: {
+            value: '0'
+          }
         };
       }
 
-      _onNavAnimationEnd(event) {
-        const pageId = event.target.getAttribute('page-id');
-        this._debouncer = Polymer.Debouncer.debounce(
-          this._debouncer,
-          Polymer.Async.timeOut.after(30),
-          () => {
-            if (pageId && this.page !== pageId) {
-              this.$server.navigateTo(pageId);
-            }
-          }
-        );
+      _onSelectedChanged(evt) {
+        const items = evt.target._navItems;
+        if (items) {
+          let page;
+          items.forEach((elm, idx) => idx == evt.target.selected && (page = elm.getAttribute('value')));
+          page && this.$server.navigateTo(page);
+        }
       }
     }
 

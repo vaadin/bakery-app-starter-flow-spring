@@ -29,7 +29,7 @@ public class BakeryNavigationElement extends TestBenchElement {
 	}
 
 	private <T extends TestBenchElement> T navigateTo(String pageId, Class<T> landingPage) {
-		$(PaperTabElement.class).attribute("page-id", pageId).first().click();
+		$(PaperTabElement.class).attribute("value", pageId).first().click();
 		return $(landingPage).onPage().waitForFirst();
 	}
 }
