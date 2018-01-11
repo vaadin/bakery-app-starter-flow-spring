@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery.ui.view;
+package com.vaadin.starter.bakery.ui.presenter;
 
 import com.vaadin.data.ValidationException;
 import com.vaadin.starter.bakery.app.HasLogger;
@@ -7,6 +7,7 @@ import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.CrudService;
 import com.vaadin.starter.bakery.ui.utils.messages.ErrorMessage;
 import com.vaadin.starter.bakery.ui.utils.messages.Message;
+import com.vaadin.starter.bakery.ui.view.EntityView;
 
 public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 

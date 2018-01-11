@@ -14,10 +14,10 @@ import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.backend.service.ProductService;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider;
 import com.vaadin.starter.bakery.ui.entities.StorefrontItemHeader;
+import com.vaadin.starter.bakery.ui.presenter.EntityPresenter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.utils.OrderFilter;
 import com.vaadin.starter.bakery.ui.utils.StorefrontItemHeaderGenerator;
-import com.vaadin.starter.bakery.ui.view.EntityPresenter;
 import com.vaadin.ui.common.Focusable;
 import com.vaadin.ui.common.HasValue;
 

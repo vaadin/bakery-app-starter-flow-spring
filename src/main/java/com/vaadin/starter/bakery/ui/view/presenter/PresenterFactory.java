@@ -15,8 +15,8 @@ import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.backend.service.ProductService;
 import com.vaadin.starter.bakery.backend.service.UserService;
 import com.vaadin.starter.bakery.ui.crud.DefaultEntityPresenter;
-import com.vaadin.starter.bakery.ui.view.EntityPresenter;
-import com.vaadin.starter.bakery.ui.view.JPAPresenter;
+import com.vaadin.starter.bakery.ui.presenter.EntityPresenter;
+import com.vaadin.starter.bakery.ui.presenter.JPAPresenter;
 
 @Configuration
 public class PresenterFactory {
