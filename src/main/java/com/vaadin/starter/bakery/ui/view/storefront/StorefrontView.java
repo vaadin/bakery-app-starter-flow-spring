@@ -102,7 +102,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 
 		getOpenedOrderDetails().addSaveListenter(e -> presenter.save());
 		getOpenedOrderDetails().addCancelListener(e -> presenter.cancel());
-		getOpenedOrderDetails().addBackListener(e -> presenter.edit());
+		getOpenedOrderDetails().addBackListener(e -> presenter.back());
 		getOpenedOrderDetails().addEditListener(e -> presenter.edit());
 		getOpenedOrderDetails().addCommentListener(e -> presenter.addComment(e.getMessage()));
 	}

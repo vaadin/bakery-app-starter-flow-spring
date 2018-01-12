@@ -12,6 +12,7 @@ import com.vaadin.data.ValidationException;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
 import com.vaadin.starter.bakery.backend.data.entity.User;
+import com.vaadin.starter.bakery.backend.data.entity.util.EntityUtil;
 import com.vaadin.starter.bakery.backend.service.CrudService;
 import com.vaadin.starter.bakery.backend.service.UserFriendlyDataException;
 import com.vaadin.starter.bakery.ui.utils.messages.ErrorMessage;
@@ -73,7 +74,7 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 		} catch (OptimisticLockingFailureException e) {
 			consumeError(e, ErrorMessage.CONCURRENT_UPDATE, true);
 		} catch (EntityNotFoundException e) {
-			consumeError(e, ErrorMessage.ENTITY_NOT_FOUND, false);
+			consumeError(e, String.format(ErrorMessage.ENTITY_NOT_FOUND, entityName), false);
 		} catch (ConstraintViolationException e) {
 			consumeError(e, ErrorMessage.REQUIRED_FIELDS_MISSING, false);
 		}
@@ -118,6 +119,7 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 	public boolean loadEntity(Long id, CrudOperationListener<T> onSuccess) {
 		return executeJPAOperation(() -> {
 			this.entity = crudService.load(id);
+			this.entityName = EntityUtil.getName(this.entity.getClass());
 			onSuccess.execute(entity);
 		});
 	}

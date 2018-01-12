@@ -88,9 +88,11 @@ class OrderPresenter {
 	}
 
 	void onNavigation(Long id, boolean edit) {
-		singleOrderPresenter.openOrder(id, edit, (e) -> {
+		singleOrderPresenter.openOrder(id, edit, (e, updated) -> {
 			view.navigateToMainView();
-			dataProvider.refreshItem(e);
+			if (updated) {
+				dataProvider.refreshItem(e);
+			}
 		});
 	}
 
@@ -100,7 +102,7 @@ class OrderPresenter {
 	}
 
 	void createNewOrder() {
-		singleOrderPresenter.createOrder(e -> dataProvider.refreshAll());
+		singleOrderPresenter.createOrder((e, updated) -> dataProvider.refreshAll());
 	}
 
 	private void onOrderCardAddComment(StorefrontOrderCard orderCard, String message) {

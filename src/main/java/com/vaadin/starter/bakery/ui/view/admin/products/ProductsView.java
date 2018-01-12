@@ -14,6 +14,7 @@ import com.vaadin.router.PageTitle;
 import com.vaadin.router.Route;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
+import com.vaadin.starter.bakery.backend.data.entity.util.EntityUtil;
 import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.components.BakerySearch;
 import com.vaadin.starter.bakery.ui.components.FormButtonsBar;
@@ -67,7 +68,7 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 
 	@Autowired
 	public ProductsView(DefaultEntityPresenter<Product> presenter) {
-		super("Product");
+		super(EntityUtil.getName(Product.class));
 		this.presenter = presenter;
 		setupEventListeners();
 		setupGrid();

@@ -3,7 +3,7 @@
  */
 package com.vaadin.starter.bakery.ui.view.storefront;
 
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -25,7 +25,7 @@ public class SingleOrderPresenter {
 	private final EntityPresenter<Order> entityPresenter;
 	private final User currentUser;
 	private StorefrontView view;
-	private Consumer<Order> onClose;
+	private BiConsumer<Order, Boolean> onClose;
 
 	@Autowired
 	public SingleOrderPresenter(OrderService orderService, EntityPresenter<Order> entityPresenter, User currentUser) {
@@ -36,24 +36,30 @@ public class SingleOrderPresenter {
 
 	void init(StorefrontView view) {
 		this.view = view;
+		entityPresenter.setView(view);
 		view.setupSingleOrderListeners(this);
 	}
 
-	void openOrder(Long id, boolean edit, Consumer<Order> onClose) {
+	void openOrder(Long id, boolean edit, BiConsumer<Order, Boolean> onClose) {
 		this.onClose = onClose;
 		entityPresenter.loadEntity(id, e -> open(e, edit));
 	}
 
-	void createOrder(Consumer<Order> onClose) {
+	void createOrder(BiConsumer<Order, Boolean> onClose) {
 		this.onClose = onClose;
 		open(entityPresenter.createNew(), true);
 	}
 
 	void cancel() {
-		entityPresenter.cancel(() -> close());
+		entityPresenter.cancel(() -> close(false));
 	}
 
 	void edit() {
+		setElementsVisibility(true);
+		view.getOpenedOrderEditor().read(entityPresenter.getEntity());
+	}
+
+	void back() {
 		setElementsVisibility(true);
 	}
 
@@ -69,6 +75,17 @@ public class SingleOrderPresenter {
 		}
 	}
 
+	void save() {
+		entityPresenter.save(e -> close(true));
+	}
+
+	void addComment(String comment) {
+		if (entityPresenter.executeUpdate(e -> orderService.addComment(currentUser, e, comment))) {
+			// You can only add comments when in view mode, so reopening in that state.
+			open(entityPresenter.getEntity(), false);
+		}
+	}
+
 	private void open(Order order, boolean edit) {
 		view.setEditing(true);
 		setElementsVisibility(edit);
@@ -79,26 +96,15 @@ public class SingleOrderPresenter {
 		}
 	}
 
-	void save() {
-		entityPresenter.save(e -> close());
-	}
-
-	void addComment(String comment) {
-		if (entityPresenter.executeUpdate(e -> orderService.addComment(currentUser, e, comment))) {
-			// You can only add comments when in view mode, so reopening in that state.
-			open(entityPresenter.getEntity(), false);
-		}
-	}
-
 	private void setElementsVisibility(boolean editing) {
 		view.getOpenedOrderDetails().setVisible(!editing);
 		view.getOpenedOrderEditor().setVisible(editing);
 	}
 
-	private void close() {
+	private void close(boolean updated) {
 		view.getOpenedOrderEditor().close();
 		view.setEditing(false);
-		onClose.accept(entityPresenter.getEntity());
+		onClose.accept(entityPresenter.getEntity(), updated);
 		entityPresenter.close();
 	}
 
