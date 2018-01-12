@@ -315,6 +315,7 @@
                         <fileset>
                             <directory>${frontend.directory}</directory>
                             <includes>
+                                <include>grid-flow-component-renderer.html</include>
                                 <include>flow-component-renderer.html</include>
                                 <include>gridConnector.js</include>
                             </includes>
@@ -409,13 +410,13 @@
                                             <outputDirectory>${project.build.directory}</outputDirectory>
                                         </artifactItem>
 
-                                        <!-- gridConnector.js is a dependency of `Grid<T>` -->
+                                        <!-- gridConnector.js and flow-grid-component-renderer.html are dependencies of `Grid<T>` -->
                                         <artifactItem>
                                             <groupId>com.vaadin</groupId>
                                             <artifactId>vaadin-grid-flow</artifactId>
                                             <type>jar</type>
                                             <overWrite>true</overWrite>
-                                            <includes>META-INF/resources/frontend/gridConnector.js</includes>
+                                            <includes>META-INF/resources/frontend/gridConnector.js,META-INF/resources/frontend/flow-grid-component-renderer.html</includes>
                                             <outputDirectory>${project.build.directory}</outputDirectory>
                                         </artifactItem>
                                     </artifactItems>
@@ -440,7 +441,7 @@
                                     <resources>
                                         <resource>
                                             <directory>${project.build.directory}/META-INF/resources/frontend</directory>
-                                            <includes>flow-component-renderer.html,gridConnector.js</includes>
+                                            <includes>flow-component-renderer.html,gridConnector.js,flow-grid-component-renderer.html</includes>
                                         </resource>
                                     </resources>
                                 </configuration>
