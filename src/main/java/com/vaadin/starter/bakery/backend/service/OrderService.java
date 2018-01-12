@@ -64,8 +64,7 @@ public class OrderService implements CrudService<Order> {
 	}
 
 	@Transactional(rollbackOn = Exception.class)
-	public Order addComment(User currentUser, Long id, String comment) {
-		Order order = load(id);
+	public Order addComment(User currentUser, Order order, String comment) {
 		order.addHistoryItem(currentUser, comment);
 		return orderRepository.save(order);
 	}

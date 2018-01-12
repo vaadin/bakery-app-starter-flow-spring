@@ -19,8 +19,6 @@ import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider;
 import com.vaadin.starter.bakery.ui.entities.StorefrontItemHeader;
 import com.vaadin.starter.bakery.ui.utils.OrderFilter;
 import com.vaadin.starter.bakery.ui.utils.StorefrontItemHeaderGenerator;
-import com.vaadin.ui.common.Focusable;
-import com.vaadin.ui.common.HasValue;
 
 @SpringComponent
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -34,11 +32,11 @@ class OrderPresenter {
 	private final OrderService orderService;
 	private final OrdersGridDataProvider dataProvider;
 	private final User currentUser;
-	private final ModalDialogPresenter modalDialogPresenter = new ModalDialogPresenter();
+	private final SingleOrderPresenter singleOrderPresenter;
 
 	@Autowired
 	OrderPresenter(ProductService productService, OrderService orderService, OrdersGridDataProvider dataProvider,
-			EntityPresenter<Order> entityPresenter, User currentUser) {
+			EntityPresenter<Order> entityPresenter, SingleOrderPresenter singleOrderPresenter, User currentUser) {
 		this.entityPresenter = entityPresenter;
 		this.orderService = orderService;
 		this.dataProvider = dataProvider;
@@ -46,6 +44,7 @@ class OrderPresenter {
 		headersGenerator = new StorefrontItemHeaderGenerator();
 		headersGenerator.resetHeaderChain(false);
 		dataProvider.setPageObserver(p -> headersGenerator.ordersRead(p.getContent()));
+		this.singleOrderPresenter = singleOrderPresenter;
 	}
 
 	void init(StorefrontView view) {
@@ -53,6 +52,7 @@ class OrderPresenter {
 		this.view = view;
 		view.getGrid().setDataProvider(dataProvider);
 		view.getOpenedOrderEditor().setCurrentUser(currentUser);
+		singleOrderPresenter.init(view);
 	}
 
 	StorefrontItemHeader getHeaderByOrderId(Long id) {
@@ -64,18 +64,17 @@ class OrderPresenter {
 		dataProvider.setFilter(new OrderFilter(filter, showPrevious));
 	}
 
-	// StorefrontOrderCard presenter methods
 	void onOrderCardExpanded(StorefrontOrderCard orderCard) {
 		entityPresenter.loadEntity(orderCard.getOrder().getId(), entity -> {
 			final Long id = entity.getId();
 			if (view.isDesktopView()) {
-				registrations = Arrays.asList(orderCard.addEditListener(e -> openEntity(id, true)),
+				registrations = Arrays.asList(orderCard.addEditListener(e -> navigateToOrder(id, true)),
 						orderCard.addCommentListener(e -> onOrderCardAddComment(orderCard, e.getMessage())),
 						orderCard.addCancelListener(e -> view.getGrid().deselectAll()));
 				orderCard.openCard(entity);
 				view.resizeGrid();
 			} else {
-				openEntity(id, false);
+				navigateToOrder(id, false);
 			}
 		});
 	}
@@ -88,114 +87,27 @@ class OrderPresenter {
 		view.resizeGrid();
 	}
 
-	private void openEntity(Long id, boolean edit) {
+	void onNavigation(Long id, boolean edit) {
+		singleOrderPresenter.openOrder(id, edit, (e) -> {
+			view.navigateToMainView();
+			dataProvider.refreshItem(e);
+		});
+	}
+
+	void navigateToOrder(Long id, boolean edit) {
 		view.getGrid().deselectAll();
 		view.navigateToEntity(id.toString(), edit);
 	}
 
+	void createNewOrder() {
+		singleOrderPresenter.createOrder(e -> dataProvider.refreshAll());
+	}
+
 	private void onOrderCardAddComment(StorefrontOrderCard orderCard, String message) {
-		entityPresenter.executeJPAOperation(() -> {
-			Order updated = orderService.addComment(currentUser, orderCard.getOrder().getId(), message);
-			orderCard.updateOrder(updated);
+		if (entityPresenter.executeUpdate(e -> orderService.addComment(currentUser, e, message))) {
+			orderCard.updateOrder(entityPresenter.getEntity());
 			view.resizeGrid();
-		});
-	}
-
-	void loadEntity(Long id, boolean edit) {
-		entityPresenter.loadEntity(id, entity -> modalDialogPresenter.open(entity, edit));
-	}
-
-	void addComment(Long id, String comment) {
-		entityPresenter.executeJPAOperation(() -> {
-			orderService.addComment(currentUser, id, comment);
-			loadEntity(id, false);
-		});
-	}
-
-	void save() {
-		entityPresenter.save(e -> {
-			if (e.isNew()) {
-				dataProvider.refreshAll();
-			} else {
-				dataProvider.refreshItem(e);
-				closeDialog();
-			}
-		});
-	}
-
-	void createNew() {
-		 modalDialogPresenter.open(this.entityPresenter.createNew(), true);
-	}
-
-	void cancel() {
-		entityPresenter.cancel(() -> closeDialog());
-	}
-
-	void nextModalState() {
-		modalDialogPresenter.next.run();
-	}
-	
-	void previousModalState() {
-		modalDialogPresenter.previous.run();
-	}
-
-	void closeDialog() {
-		modalDialogPresenter.close();
-		view.navigateToEntity(null, false);
-	}
-
-	class ModalDialogPresenter {
-
-		Runnable next;
-		Runnable previous;
-		
-		void open(Order order, boolean edit) {
-			view.setEditing(true);
-			previous = null;
-			if (edit) {
-				view.getOpenedOrderEditor().read(order);
-				edit();
-			} else {
-				openOrderDetails(order, false);
-				next = () -> open(order, true);
-			}
 		}
-
-		void close() {
-			view.getOpenedOrderEditor().close();
-			view.setEditing(false);
-			next = null;
-			previous = null;
-		}
-
-		void setElementsVisibility(boolean editing) {
-			view.getOpenedOrderDetails().setVisible(!editing);
-			view.getOpenedOrderEditor().setVisible(editing);
-		}
-
-		void openOrderDetails(Order order, boolean isReview) {
-			setElementsVisibility(false);
-			view.getOpenedOrderDetails().display(order, isReview);
-		}
-
-		void edit() {
-			setElementsVisibility(true);
-			next = this::review;
-			previous = null;
-		}
-
-		void review() {
-			HasValue<?, ?> firstErrorField = view.validate().findFirst().orElse(null);
-			if (firstErrorField == null) {
-				if (entityPresenter.writeEntity()) {
-					openOrderDetails(entityPresenter.getEntity(), true);
-					next = null;
-					previous = this::edit;
-				}
-			} else if (firstErrorField instanceof Focusable) {
-				((Focusable<?>) firstErrorField).focus();
-			}
-		}
-
 	}
+
 }

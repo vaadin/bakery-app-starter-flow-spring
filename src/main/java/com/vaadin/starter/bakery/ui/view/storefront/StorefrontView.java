@@ -91,28 +91,31 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		getModel().setEditing(false);
 		getSearchBar().addFilterChangeListener(
 				e -> presenter.filterChanged(getSearchBar().getFilter(), getSearchBar().isCheckboxChecked()));
-		getSearchBar().addActionClickListener(e -> presenter.createNew());
+		getSearchBar().addActionClickListener(e -> presenter.createNewOrder());
+
+		presenter.init(this);
+	}
+
+	void setupSingleOrderListeners(SingleOrderPresenter presenter) {
 		getOpenedOrderEditor().addCancelListener(e -> presenter.cancel());
-		getOpenedOrderEditor().addReviewListener(e -> presenter.nextModalState());
+		getOpenedOrderEditor().addReviewListener(e -> presenter.review());
 
 		getOpenedOrderDetails().addSaveListenter(e -> presenter.save());
 		getOpenedOrderDetails().addCancelListener(e -> presenter.cancel());
-		getOpenedOrderDetails().addBackListener(e -> presenter.previousModalState());
-		getOpenedOrderDetails().addEditListener(e -> presenter.nextModalState());
-		getOpenedOrderDetails().addCommentListener(e -> presenter.addComment(e.getOrderId(), e.getMessage()));
-
-		presenter.init(this);
+		getOpenedOrderDetails().addBackListener(e -> presenter.edit());
+		getOpenedOrderDetails().addEditListener(e -> presenter.edit());
+		getOpenedOrderDetails().addCommentListener(e -> presenter.addComment(e.getMessage()));
 	}
 
 	void setEditing(boolean editing) {
 		getModel().setEditing(editing);
 	}
-	
+
 	@Override
 	public void setParameter(BeforeNavigationEvent event, @OptionalParameter Long orderId) {
 		if (orderId != null) {
 			boolean editView = event.getLocation().getQueryParameters().getParameters().containsKey("edit");
-			presenter.loadEntity(orderId, editView);
+			presenter.onNavigation(orderId, editView);
 		}
 	}
 
@@ -121,6 +124,10 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		final QueryParameters parameters = edit ? QueryParameters.simple(Collections.singletonMap("edit", ""))
 				: QueryParameters.empty();
 		getUI().ifPresent(ui -> ui.navigateTo(page, parameters));
+	}
+
+	void navigateToMainView() {
+		getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT));
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package com.vaadin.starter.bakery.ui.crud;
 
+import java.util.function.UnaryOperator;
+
 import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolationException;
 
@@ -52,6 +54,12 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 		}
 	}
 
+	public boolean executeUpdate(UnaryOperator<T> updater) {
+		return executeJPAOperation(() -> {
+			this.entity = updater.apply(getEntity());
+		});
+	}
+
 	public boolean executeJPAOperation(Runnable operation) {
 		try {
 			operation.run();
@@ -99,7 +107,7 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 		confirmIfNecessaryAndExecute(view.isDirty(), Message.UNSAVED_CHANGES.createMessage(entityName), onConfirmed);
 	}
 
-	protected void confirmIfNecessaryAndExecute(boolean needsConfirmation, Message message, Runnable operation) {
+	private void confirmIfNecessaryAndExecute(boolean needsConfirmation, Message message, Runnable operation) {
 		if (needsConfirmation) {
 			view.showConfirmationRequest(message, operation);
 		} else {
@@ -120,10 +128,6 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 
 	public T getEntity() {
 		return entity;
-	}
-
-	protected void setEntity(T entity) {
-		this.entity = entity;
 	}
 
 	@FunctionalInterface
