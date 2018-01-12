@@ -66,6 +66,7 @@ public class DefaultEntityPresenter<T extends AbstractEntity> {
 					filteredDataProvider.refreshItem(e);
 				}
 				entityPresenter.close();
+				view.closeDialog();
 			});
 		}
 	}
