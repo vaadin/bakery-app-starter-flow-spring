@@ -43,25 +43,25 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 	public void delete(CrudOperationListener<T> onSuccess) {
 		Message CONFIRM_DELETE = Message.CONFIRM_DELETE.createMessage();
 		confirmIfNecessaryAndExecute(true, CONFIRM_DELETE, () -> {
-			executeJPAOperation(() -> crudService.delete(currentUser, entity));
+			executeOperation(() -> crudService.delete(currentUser, entity));
 			onSuccess.execute(entity);
 			entity = null;
 		});
 	}
 
 	public void save(CrudOperationListener<T> onSuccess) {
-		if (executeJPAOperation(() -> saveEntity())) {
+		if (executeOperation(() -> saveEntity())) {
 			onSuccess.execute(entity);
 		}
 	}
 
 	public boolean executeUpdate(UnaryOperator<T> updater) {
-		return executeJPAOperation(() -> {
+		return executeOperation(() -> {
 			this.entity = updater.apply(getEntity());
 		});
 	}
 
-	public boolean executeJPAOperation(Runnable operation) {
+	private boolean executeOperation(Runnable operation) {
 		try {
 			operation.run();
 			return true;
@@ -117,7 +117,7 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 	}
 
 	public boolean loadEntity(Long id, CrudOperationListener<T> onSuccess) {
-		return executeJPAOperation(() -> {
+		return executeOperation(() -> {
 			this.entity = crudService.load(id);
 			this.entityName = EntityUtil.getName(this.entity.getClass());
 			onSuccess.execute(entity);
