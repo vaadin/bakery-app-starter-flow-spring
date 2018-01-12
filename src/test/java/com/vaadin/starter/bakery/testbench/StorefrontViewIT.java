@@ -1,7 +1,6 @@
 package com.vaadin.starter.bakery.testbench;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.vaadin.starter.bakery.testbench.elements.components.StorefrontOrderCardElement;
@@ -30,7 +29,6 @@ public class StorefrontViewIT extends AbstractIT {
 		Assert.assertTrue(firstOrder.isOrderSelected());
 	}
 
-	@Ignore("until the issue BFF-339 is fixed")
 	@Test
 	public void editOrder() {
 		StorefrontViewElement storefrontPage = openStorefrontPage();
@@ -44,7 +42,7 @@ public class StorefrontViewIT extends AbstractIT {
 
 		Assert.assertFalse(firstOrder.isOrderSelected());
 
-		Assert.assertTrue(getDriver().getCurrentUrl().endsWith("edit"));
+		Assert.assertTrue(getDriver().getCurrentUrl().endsWith("edit="));
 	}
 
 }
