@@ -12,7 +12,7 @@ public class OrderDetailsFullElement extends TestBenchElement {
 	}
 
 	public ButtonElement getEditButton() {
-		return $(ButtonElement.class).id("edit-order-detail");
+		return $(ButtonElement.class).id("edit");
 	}
 
 }

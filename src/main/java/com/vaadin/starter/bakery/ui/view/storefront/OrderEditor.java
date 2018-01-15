@@ -39,6 +39,7 @@ import com.vaadin.starter.bakery.ui.components.ComboBoxForBinder;
 import com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
+import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
 import com.vaadin.starter.bakery.ui.utils.converters.LocalTimeConverter;
 import com.vaadin.starter.bakery.ui.view.storefront.event.NewEditorEvent;
 import com.vaadin.starter.bakery.ui.view.storefront.event.ReviewEvent;
@@ -194,6 +195,10 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 	public Registration addReviewListener(ComponentEventListener<ReviewEvent> listener) {
 		return addListener(ReviewEvent.class, listener);
 	}
+	
+	public Registration addCancelListener(ComponentEventListener<CancelEvent> listener) {
+		return addListener(CancelEvent.class, listener);
+	}
 
 	private void setTotalPrice(int totalPrice) {
 		getModel().setTotalPrice(FormattingUtils.formatAsCurrency(totalPrice));
@@ -203,4 +208,7 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 		this.currentUser = currentUser;
 	}
 
+	public void setVisible(boolean visible) {
+		TemplateUtil.setVisible(this, visible);
+	}
 }
