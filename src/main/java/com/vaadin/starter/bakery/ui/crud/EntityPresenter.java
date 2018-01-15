@@ -15,7 +15,7 @@ import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.data.entity.util.EntityUtil;
 import com.vaadin.starter.bakery.backend.service.CrudService;
 import com.vaadin.starter.bakery.backend.service.UserFriendlyDataException;
-import com.vaadin.starter.bakery.ui.utils.messages.ErrorMessage;
+import com.vaadin.starter.bakery.ui.utils.messages.CrudErrorMessage;
 import com.vaadin.starter.bakery.ui.utils.messages.Message;
 import com.vaadin.starter.bakery.ui.view.EntityView;
 
@@ -70,13 +70,13 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 			consumeError(e, e.getMessage(), true);
 		} catch (DataIntegrityViolationException e) {
 			// Commit failed because of validation errors
-			consumeError(e, ErrorMessage.OPERATION_PREVENTED_BY_REFERENCES, true);
+			consumeError(e, CrudErrorMessage.OPERATION_PREVENTED_BY_REFERENCES, true);
 		} catch (OptimisticLockingFailureException e) {
-			consumeError(e, ErrorMessage.CONCURRENT_UPDATE, true);
+			consumeError(e, CrudErrorMessage.CONCURRENT_UPDATE, true);
 		} catch (EntityNotFoundException e) {
-			consumeError(e, String.format(ErrorMessage.ENTITY_NOT_FOUND, entityName), false);
+			consumeError(e, String.format(CrudErrorMessage.ENTITY_NOT_FOUND, entityName), false);
 		} catch (ConstraintViolationException e) {
-			consumeError(e, ErrorMessage.REQUIRED_FIELDS_MISSING, false);
+			consumeError(e, CrudErrorMessage.REQUIRED_FIELDS_MISSING, false);
 		}
 		return false;
 	}
@@ -95,7 +95,7 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 			view.write(entity);
 			return true;
 		} catch (ValidationException e) {
-			view.showError(ErrorMessage.REQUIRED_FIELDS_MISSING, false);
+			view.showError(CrudErrorMessage.REQUIRED_FIELDS_MISSING, false);
 			return false;
 		}
 	}
