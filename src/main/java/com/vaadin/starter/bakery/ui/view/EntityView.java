@@ -1,7 +1,6 @@
 package com.vaadin.starter.bakery.ui.view;
 
 import com.vaadin.data.ValidationException;
-import com.vaadin.data.provider.DataProvider;
 import com.vaadin.starter.bakery.ui.utils.messages.Message;
 
 /**
@@ -16,26 +15,6 @@ import com.vaadin.starter.bakery.ui.utils.messages.Message;
  * @param <T> the entity type
  */
 public interface EntityView<T> extends HasNotifications {
-
-	/**
-	 * Sets / refreshes the entities in grid.
-	 *
-	 * @param dataProvider provides entities for grid
-	 */
-	void setDataProvider(DataProvider<T, ?> dataProvider);
-
-	/**
-	 * Opens a dialog showing details of a single entity.
-	 *
-	 * @param entity the entity to show in the dialog
-	 * @param edit if <code>true</code> the dialog opens in the 'edit' mode
-	 */
-	void openDialog(T entity, boolean edit);
-
-	/**
-	 * Closes the entity dialog.
-	 */
-	void closeDialog();
 
 	/**
 	 * Shows a confirmation request dialog with the given message.

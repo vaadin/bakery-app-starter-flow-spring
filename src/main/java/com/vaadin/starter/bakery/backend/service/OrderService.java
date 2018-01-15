@@ -16,7 +16,6 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 
 import javax.transaction.Transactional;
-import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -47,21 +46,13 @@ public class OrderService implements CrudService<Order> {
 	private static final Set<OrderState> notAvailableStates = Collections.unmodifiableSet(
 			EnumSet.complementOf(EnumSet.of(OrderState.DELIVERED, OrderState.READY, OrderState.CANCELLED)));
 
-	public Order findOrder(Long id) {
-		Order order = orderRepository.findById(id).orElse(null);
-		if (order == null) {
-			throw new ValidationException("Someone has already deleted the order. Please refresh the page.");
-		}
-		return order;
-	}
-
 	@Transactional(rollbackOn = Exception.class)
 	public Order saveOrder(User currentUser, Long id, BiConsumer<User, Order> orderFiller) {
 		Order order;
 		if (id == null) {
 			order = new Order(currentUser);
 		} else {
-			order = findOrder(id);
+			order = load(id);
 		}
 		orderFiller.accept(currentUser, order);
 		return orderRepository.save(order);
@@ -73,8 +64,7 @@ public class OrderService implements CrudService<Order> {
 	}
 
 	@Transactional(rollbackOn = Exception.class)
-	public Order addComment(User currentUser, Long id, String comment) {
-		Order order = findOrder(id);
+	public Order addComment(User currentUser, Order order, String comment) {
 		order.addHistoryItem(currentUser, comment);
 		return orderRepository.save(order);
 	}
