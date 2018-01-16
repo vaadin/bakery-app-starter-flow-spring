@@ -75,11 +75,11 @@
       </iron-form>
     </div>
 
-    <div id="footer" class="footer">
-      <vaadin-button id="cancel">Cancel</vaadin-button>
-      <div class="total money">Total [[totalPrice]]</div>
-      <vaadin-button id="review" theme="primary">Review Order →</vaadin-button>
-    </div>
+    <buttons-bar id="footer" no-scroll$="[[noScroll]]">
+      <vaadin-button slot="left" id="cancel">Cancel</vaadin-button>
+      <div slot="info" class="total">Total [[totalPrice]]</div>
+      <vaadin-button slot="right" id="review" theme="primary">Review Order →</vaadin-button>
+    </buttons-bar>
   </template>
 
   <script>

@@ -206,19 +206,20 @@
         </vaadin-form-layout>
       </vaadin-form-layout>
     </div>
+    
+    
+    <buttons-bar id="footer" no-scroll$="[[noScroll]]">
+      <vaadin-button slot="left" id="back" none$="[[!review]]">Back</vaadin-button>
+      <vaadin-button slot="left" id="cancel" none$="[[review]]">Cancel</vaadin-button>
 
-    <div class="footer">
-      <vaadin-button id="back" none$="[[!review]]">Back</vaadin-button>
-      <vaadin-button id="cancel" none$="[[review]]">Cancel</vaadin-button>
-      <div class="total money">Total [[item.totalPrice]]</div>
+      <div slot="info" class="total">Total [[item.totalPrice]]</div>
 
-      <vaadin-button id="save" theme="primary success" class="edit-button" none$="[[!review]]">Place Order ✓</vaadin-button>
-
-      <vaadin-button id="edit" theme="primary" class="edit-button" none$="[[review]]">
+      <vaadin-button slot="right" id="save" theme="primary success" class="edit-button" none$="[[!review]]">Place Order ✓</vaadin-button>
+      <vaadin-button slot="right" id="edit" theme="primary" class="edit-button" none$="[[review]]">
         <span>Edit order</span>
         <iron-icon icon="vaadin:edit"></iron-icon>
       </vaadin-button>
-    </div>
+    </buttons-bar>
   </template>
 
   <script>

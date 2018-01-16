@@ -99,6 +99,7 @@
         box-sizing: border-box;
       }
 
+      :host([hidden]),
       [hidden] {
         display: none !important;
       }
@@ -140,19 +141,6 @@
         -webkit-overflow-scrolling: touch;
       }
 
-      .footer {
-        display: flex;
-        flex-wrap: wrap;
-        transition: box-shadow .2s;
-        justify-content: space-between;
-        padding: var(--valo-space-s);
-        align-items: baseline;
-      }
-
-      :host([scroll-shadow]) .footer {
-        box-shadow: 0 -1px 5px var(--valo-shade-20pct);
-      }
-
       .count {
         display: inline-block;
         background: var(--valo-shade-10pct);
@@ -162,16 +150,8 @@
         text-align: center;
       }
 
-      .money {
-        text-align: right;
-      }
-
       .total {
-        flex: 1;
-        order: -1;
-        box-sizing: border-box;
         padding: 0 var(--valo-space-s);
-        min-width: 100%;
         font-size: var(--valo-font-size-l);
         font-weight: bold;
         white-space: nowrap;

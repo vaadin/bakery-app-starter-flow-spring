@@ -1,25 +1,20 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="buttons-bar.html">
 <link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
 
 <dom-module id="form-buttons-bar">
   <template>
-    <style>
-      :host {
-        padding-top: 10px;
-        display: flex;
-        min-width: 100%;
-        border-top: 1px solid var(--valo-contrast-10pct);
-      }
-    </style>
-    <vaadin-button id="save" on-click="_save" theme="raised primary" disabled="[[saveDisabled]]">[[saveText]]</vaadin-button>
-    <vaadin-button id="cancel" on-click="_cancel" theme="raised" disabled="[[cancelDisabled]]">[[cancelText]]</vaadin-button>
-    <div style="flex: 1"></div>
-    <vaadin-button id="delete" on-click="_delete" theme="raised tertiary error" disabled="[[deleteDisabled]]">[[deleteText]]</vaadin-button>
+    <buttons-bar>
+      <vaadin-button id="save" slot="left" on-click="_save" theme="raised primary" disabled="[[saveDisabled]]">[[saveText]]</vaadin-button>
+      <vaadin-button id="cancel" slot="left" on-click="_cancel" theme="raised" disabled="[[cancelDisabled]]">[[cancelText]]</vaadin-button>
+      <div style="flex: 1"></div>
+      <vaadin-button id="delete" slot="right" on-click="_delete" theme="raised tertiary error" disabled="[[deleteDisabled]]">[[deleteText]]</vaadin-button>
+    </buttons-bar>
   </template>
 
   <script>
     {
-      class ButtonsBarElement extends Polymer.Element {
+      class FormButtonsBarElement extends Polymer.Element {
         static get is() {
           return 'form-buttons-bar';
         }
@@ -66,7 +61,7 @@
         }
       }
 
-      window.customElements.define(ButtonsBarElement.is, ButtonsBarElement);
+      window.customElements.define(FormButtonsBarElement.is, FormButtonsBarElement);
     }
   </script>
 </dom-module>

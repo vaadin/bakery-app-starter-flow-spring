@@ -14,11 +14,13 @@
 
         [part="overlay"] {
           width: 100%;
+          border-radius: 0 !important;
         }
       }
 
       [part="overlay"] {
         overflow: hidden;
+        max-width: 65em;
       }
 
       :host([theme="left"]) {
@@ -63,9 +65,6 @@
 <dom-module id="form-dialog">
   <script>
     {
-      // FIXME: remove line when upgrading vaadin-dialog
-      Vaadin.DialogElement = Vaadin.DialogElement || Vaadin.VaadinDialog;
-
       class StarterDialog extends Vaadin.VaadinDialog {
         static get is() {
           return 'form-dialog';
