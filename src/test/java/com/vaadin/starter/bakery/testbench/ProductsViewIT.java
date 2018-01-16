@@ -14,13 +14,15 @@ public class ProductsViewIT extends AbstractIT {
 	}
 
 	@Test
-	public void editProduct() {
+	public void editProduct() throws InterruptedException {
 		ProductsViewElement productsPage = openProductsPage();
 
 		Assert.assertFalse(productsPage.getDialog().isOpened());
 
 		String url = getDriver().getCurrentUrl();
 		productsPage.getGridCell("Strawberry Bun").click();
+		Thread.sleep(100);
+
 		Assert.assertTrue(getDriver().getCurrentUrl().length() > url.length());
 
 		Assert.assertTrue(productsPage.getDialog().isOpened());
