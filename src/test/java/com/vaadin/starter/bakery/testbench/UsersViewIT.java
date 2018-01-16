@@ -2,7 +2,6 @@ package com.vaadin.starter.bakery.testbench;
 
 import static com.vaadin.starter.bakery.backend.service.UserService.MODIFY_LOCKED_USER_NOT_PERMITTED;
 
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
@@ -46,6 +45,7 @@ public class UsersViewIT extends AbstractIT {
 		TextFieldElement emailField = usersView.getEmailField();
 		emailField.setValue("foo@bar.com");
 		usersView.getButtonsBar().getSaveButton().click();
+		Thread.sleep(100);
 		Assert.assertFalse(form.isDisplayed());
 
 		// Invalid password prevents closing form
@@ -60,6 +60,8 @@ public class UsersViewIT extends AbstractIT {
 		// Good password
 		password.setValue("Abc123");
 		usersView.getButtonsBar().getSaveButton().click();
+		Thread.sleep(100);
+
 		Assert.assertFalse(form.isDisplayed());
 
 		// When reopening the form password field must be empty.
@@ -68,7 +70,7 @@ public class UsersViewIT extends AbstractIT {
 	}
 
 	@Test
-	public void tryToUpdateLockedEntity() {
+	public void tryToUpdateLockedEntity() throws InterruptedException {
 		UsersViewElement page = openTestPage();
 
 		page.getGridCell("barista@vaadin.com").click();
@@ -76,6 +78,7 @@ public class UsersViewIT extends AbstractIT {
 		PasswordFieldElement field = page.getPasswordField();
 		field.setValue("Abc123");
 		page.getButtonsBar().getSaveButton().click();
+		Thread.sleep(100);
 
 		PaperToastElement toast = $(PaperToastElement.class).onPage().id("_persistentToast");
 
@@ -84,7 +87,7 @@ public class UsersViewIT extends AbstractIT {
 	}
 
 	@Test
-	public void tryToDeleteLockedEntity() {
+	public void tryToDeleteLockedEntity() throws InterruptedException {
 		UsersViewElement page = openTestPage();
 
 		page.getGridCell("barista@vaadin.com").click();
