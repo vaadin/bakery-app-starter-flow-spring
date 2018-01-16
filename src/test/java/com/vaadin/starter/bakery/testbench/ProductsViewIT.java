@@ -21,8 +21,10 @@ public class ProductsViewIT extends AbstractIT {
 
 		String url = getDriver().getCurrentUrl();
 		productsPage.getGridCell("Strawberry Bun").click();
-		Assert.assertTrue(getDriver().getCurrentUrl().length() > url.length());
 
+		waitUntil(i -> !getDriver().getCurrentUrl().equals(url));
+
+		Assert.assertTrue(getDriver().getCurrentUrl().length() > url.length());
 		Assert.assertTrue(productsPage.getDialog().isOpened());
 
 		String initialValue = productsPage.getPrice().getValue();
