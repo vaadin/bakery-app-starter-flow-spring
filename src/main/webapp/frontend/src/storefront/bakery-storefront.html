@@ -1,7 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../app/bakery-search.html">
-<link rel="import" href="../elements/item-detail-dialog.html">
 <link rel="import" href="../elements/utils-mixin.html">
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
 
@@ -49,10 +48,13 @@
 
     <vaadin-grid id="storefront-grid" theme="compact storefront-grid"></vaadin-grid>
 
-    <item-detail-dialog desktop-view$="[[desktopView]]" opened="[[editing]]">
+    <!--  dialogs are tele-ported to body, hence you need to inline styles or use styled web components -->
+    <form-dialog opened="[[editing]]">
       <order-details-full id="order-details" desktop-view="[[desktopView]]"></order-details-full>
       <order-editor id="order-editor" desktop-view="[[desktopView]]"></order-editor>
-    </item-detail-dialog>
+      <template><!-- vaadin-dialog fails if not present (#43) --></template>
+    </form-dialog>
+
   </template>
 
   <script>
