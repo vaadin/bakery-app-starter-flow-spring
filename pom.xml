@@ -44,18 +44,6 @@
 
     <repositories>
         <repository>
-            <id>flow-internal-release</id>
-            <url>https://repo.vaadin.com/nexus/content/repositories/flow</url>
-        </repository>
-
-        <!-- Workaround for the Flow alpha 13 issue https://github.com/vaadin/flow/issues/3142 -->
-        <!-- Remove when upgrading to a newer version of Flow -->
-        <repository>
-            <id>webjars</id>
-            <url>https://dl.bintray.com/webjars/maven</url>
-        </repository>
-
-        <repository>
             <id>vaadin-prereleases</id>
             <url>https://maven.vaadin.com/vaadin-prereleases/</url>
         </repository>
