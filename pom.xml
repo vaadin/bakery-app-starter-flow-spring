@@ -22,6 +22,7 @@
         <!-- Dependencies -->
         <vaadin.version>10.0.0.alpha12</vaadin.version>
         <flow.version>1.0.0.alpha17</flow.version>
+        <charts.version>6.0.0.alpha11</charts.version>
 
         <spring-boot.version>1.5.9.RELEASE</spring-boot.version>
         <failOnMissingWebXml>false</failOnMissingWebXml>
@@ -119,6 +120,11 @@
         </dependency>
 
         <!-- Vaadin -->
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-charts-flow</artifactId>
+            <version>${charts.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>flow-client</artifactId>

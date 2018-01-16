@@ -23,6 +23,7 @@ import com.vaadin.addon.charts.model.ListSeries;
 import com.vaadin.addon.charts.model.Pane;
 import com.vaadin.addon.charts.model.PlotOptionsPie;
 import com.vaadin.addon.charts.model.PlotOptionsSolidgauge;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.HtmlImport;
@@ -47,7 +48,6 @@ import com.vaadin.starter.bakery.ui.utils.DashboardUtils;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.starter.bakery.ui.utils.OrdersCountDataWithChart;
 import com.vaadin.starter.bakery.ui.view.storefront.OrderDetailsBrief;
-import com.vaadin.ui.event.ComponentEventListener;
 
 @Tag("bakery-dashboard")
 @HtmlImport("src/dashboard/bakery-dashboard.html")
