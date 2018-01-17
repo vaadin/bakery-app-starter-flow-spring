@@ -3,12 +3,15 @@
  */
 package com.vaadin.starter.bakery.ui.crud;
 
-import com.vaadin.data.BeanValidationBinder;
-import com.vaadin.data.ValidationException;
-import com.vaadin.flow.model.TemplateModel;
-import com.vaadin.router.HasUrlParameter;
-import com.vaadin.router.OptionalParameter;
-import com.vaadin.router.event.BeforeNavigationEvent;
+import com.vaadin.flow.component.HasText;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
+import com.vaadin.flow.data.binder.BeanValidationBinder;
+import com.vaadin.flow.data.binder.ValidationException;
+import com.vaadin.flow.router.BeforeEvent;
+import com.vaadin.flow.router.HasUrlParameter;
+import com.vaadin.flow.router.OptionalParameter;
+import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
 import com.vaadin.starter.bakery.ui.components.BakerySearch;
@@ -17,9 +20,6 @@ import com.vaadin.starter.bakery.ui.components.FormDialog;
 import com.vaadin.starter.bakery.ui.event.CloseDialogEvent;
 import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
 import com.vaadin.starter.bakery.ui.view.EntityView;
-import com.vaadin.ui.common.HasText;
-import com.vaadin.ui.grid.Grid;
-import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel> extends PolymerTemplate<T>
 		implements HasLogger, EntityView<E>, HasUrlParameter<Long> {
@@ -70,7 +70,7 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 	}
 
 	@Override
-	public void setParameter(BeforeNavigationEvent event, @OptionalParameter Long id) {
+	public void setParameter(BeforeEvent event, @OptionalParameter Long id) {
 		if (id != null) {
 			getPresenter().loadEntity(id, true);
 		}

@@ -1,13 +1,13 @@
 package com.vaadin.starter.bakery.app;
 
-import com.vaadin.server.BootstrapListener;
-import com.vaadin.server.DependencyFilter;
-import com.vaadin.server.ServiceInitEvent;
-import com.vaadin.server.VaadinService;
-import com.vaadin.server.VaadinServiceInitListener;
-import com.vaadin.shared.ui.Dependency;
-import com.vaadin.shared.ui.LoadMode;
-import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.flow.server.BootstrapListener;
+import com.vaadin.flow.server.DependencyFilter;
+import com.vaadin.flow.server.ServiceInitEvent;
+import com.vaadin.flow.server.VaadinService;
+import com.vaadin.flow.server.VaadinServiceInitListener;
+import com.vaadin.flow.shared.ui.Dependency;
+import com.vaadin.flow.shared.ui.LoadMode;
+import com.vaadin.flow.spring.annotation.SpringComponent;
 
 /**
  * Configures the {@link VaadinService}:

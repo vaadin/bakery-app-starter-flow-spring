@@ -7,16 +7,24 @@ import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.vaadin.data.ValidationException;
-import com.vaadin.data.selection.SingleSelectionListener;
-import com.vaadin.flow.model.TemplateModel;
-import com.vaadin.router.HasUrlParameter;
-import com.vaadin.router.OptionalParameter;
-import com.vaadin.router.PageTitle;
-import com.vaadin.router.QueryParameters;
-import com.vaadin.router.Route;
-import com.vaadin.router.RouteAlias;
-import com.vaadin.router.event.BeforeNavigationEvent;
+import com.vaadin.flow.component.HasValue;
+import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridSingleSelectionModel;
+import com.vaadin.flow.component.polymertemplate.Id;
+import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
+import com.vaadin.flow.data.binder.ValidationException;
+import com.vaadin.flow.data.selection.SingleSelectionListener;
+import com.vaadin.flow.renderer.ComponentTemplateRenderer;
+import com.vaadin.flow.router.BeforeEvent;
+import com.vaadin.flow.router.HasUrlParameter;
+import com.vaadin.flow.router.OptionalParameter;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.QueryParameters;
+import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouteAlias;
+import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.ui.BakeryApp;
@@ -24,14 +32,6 @@ import com.vaadin.starter.bakery.ui.components.BakerySearch;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
 import com.vaadin.starter.bakery.ui.view.EntityView;
-import com.vaadin.ui.Tag;
-import com.vaadin.ui.common.HasValue;
-import com.vaadin.ui.common.HtmlImport;
-import com.vaadin.ui.grid.Grid;
-import com.vaadin.ui.grid.GridSingleSelectionModel;
-import com.vaadin.ui.polymertemplate.Id;
-import com.vaadin.ui.polymertemplate.PolymerTemplate;
-import com.vaadin.ui.renderers.ComponentTemplateRenderer;
 
 @Tag("bakery-storefront")
 @HtmlImport("src/storefront/bakery-storefront.html")
@@ -112,7 +112,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	}
 
 	@Override
-	public void setParameter(BeforeNavigationEvent event, @OptionalParameter Long orderId) {
+	public void setParameter(BeforeEvent event, @OptionalParameter Long orderId) {
 		if (orderId != null) {
 			boolean editView = event.getLocation().getQueryParameters().getParameters().containsKey("edit");
 			presenter.onNavigation(orderId, editView);

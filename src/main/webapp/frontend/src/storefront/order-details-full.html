@@ -107,6 +107,10 @@
           flex-basis: auto;
         }
       }
+
+      [none] {
+        display: none;
+      }
     </style>
 
     <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
@@ -204,13 +208,13 @@
     </div>
 
     <div class="footer">
-      <vaadin-button id="back" hidden="[[!review]]">Back</vaadin-button>
-      <vaadin-button id="cancel" hidden="[[review]]">Cancel</vaadin-button>
+      <vaadin-button id="back" none$="[[!review]]">Back</vaadin-button>
+      <vaadin-button id="cancel" none$="[[review]]">Cancel</vaadin-button>
       <div class="total money">Total [[item.totalPrice]]</div>
 
-      <vaadin-button id="save" theme="primary success" class="edit-button" hidden="[[!review]]">Place Order ✓</vaadin-button>
+      <vaadin-button id="save" theme="primary success" class="edit-button" none$="[[!review]]">Place Order ✓</vaadin-button>
 
-      <vaadin-button id="edit" theme="primary" class="edit-button" hidden="[[review]]">
+      <vaadin-button id="edit" theme="primary" class="edit-button" none$="[[review]]">
         <span>Edit order</span>
         <iron-icon icon="vaadin:edit"></iron-icon>
       </vaadin-button>

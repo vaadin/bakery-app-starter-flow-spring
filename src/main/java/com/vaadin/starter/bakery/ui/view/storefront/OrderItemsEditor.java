@@ -3,14 +3,14 @@ package com.vaadin.starter.bakery.ui.view.storefront;
 import java.util.List;
 import java.util.stream.Stream;
 
-import com.vaadin.shared.Registration;
+import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.HasValue;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.ui.view.storefront.event.NewEditorEvent;
 import com.vaadin.starter.bakery.ui.view.storefront.event.TotalPriceChangeEvent;
-import com.vaadin.ui.common.HasValue;
-import com.vaadin.ui.event.ComponentEventListener;
-import com.vaadin.ui.html.Div;
 
 public class OrderItemsEditor extends Div implements HasValue<OrderItemsEditor, List<OrderItem>> {
 

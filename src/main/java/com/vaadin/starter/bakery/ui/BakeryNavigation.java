@@ -3,17 +3,19 @@ package com.vaadin.starter.bakery.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.vaadin.flow.model.TemplateModel;
+import com.vaadin.flow.component.ClientDelegate;
+import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
+import com.vaadin.flow.router.AfterNavigationEvent;
+import com.vaadin.flow.router.AfterNavigationObserver;
+import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.app.security.SecurityUtils;
 import com.vaadin.starter.bakery.ui.entities.PageInfo;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.view.admin.products.ProductsView;
 import com.vaadin.starter.bakery.ui.view.admin.users.UsersView;
-import com.vaadin.ui.Tag;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.common.ClientDelegate;
-import com.vaadin.ui.common.HtmlImport;
-import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 @Tag("bakery-navigation")
 @HtmlImport("src/app/bakery-navigation.html")

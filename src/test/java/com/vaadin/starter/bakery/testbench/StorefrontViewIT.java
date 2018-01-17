@@ -40,8 +40,6 @@ public class StorefrontViewIT extends AbstractIT {
 		editBtn.scrollIntoView();
 		editBtn.click();
 
-		Assert.assertFalse(firstOrder.isOrderSelected());
-
 		Assert.assertTrue(getDriver().getCurrentUrl().endsWith("edit="));
 	}
 

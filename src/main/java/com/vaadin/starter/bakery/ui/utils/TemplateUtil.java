@@ -1,6 +1,6 @@
 package com.vaadin.starter.bakery.ui.utils;
 
-import com.vaadin.ui.Component;
+import com.vaadin.flow.component.Component;
 
 public class TemplateUtil {
 
