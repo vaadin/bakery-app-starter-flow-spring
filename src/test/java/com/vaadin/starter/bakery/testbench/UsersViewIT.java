@@ -2,6 +2,7 @@ package com.vaadin.starter.bakery.testbench;
 
 import static com.vaadin.starter.bakery.backend.service.UserService.MODIFY_LOCKED_USER_NOT_PERMITTED;
 
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
@@ -22,7 +23,7 @@ public class UsersViewIT extends AbstractIT {
 	}
 
 	@Test
-	public void updatePassword() {
+	public void updatePassword() throws InterruptedException {
 		UsersViewElement usersView = openTestPage();
 
 		Assert.assertFalse(usersView.getDialog().isOpened());
@@ -45,7 +46,7 @@ public class UsersViewIT extends AbstractIT {
 		TextFieldElement emailField = usersView.getEmailField();
 		emailField.setValue("foo@bar.com");
 		usersView.getButtonsBar().getSaveButton().click();
-		waitUntil(i -> !form.isDisplayed());
+		Assert.assertFalse(form.isDisplayed());
 
 		// Invalid password prevents closing form
 		bakerCell.click();
@@ -59,7 +60,7 @@ public class UsersViewIT extends AbstractIT {
 		// Good password
 		password.setValue("Abc123");
 		usersView.getButtonsBar().getSaveButton().click();
-		waitUntil(i -> !form.isDisplayed());
+		Assert.assertFalse(form.isDisplayed());
 
 		// When reopening the form password field must be empty.
 		bakerCell.click();
@@ -78,8 +79,8 @@ public class UsersViewIT extends AbstractIT {
 
 		PaperToastElement toast = $(PaperToastElement.class).onPage().id("_persistentToast");
 
-		waitUntil(i -> toast.isOpened());
 		Assert.assertEquals(MODIFY_LOCKED_USER_NOT_PERMITTED, toast.getText());
+		Assert.assertTrue(toast.isOpened());
 	}
 
 	@Test
@@ -89,7 +90,6 @@ public class UsersViewIT extends AbstractIT {
 		page.getGridCell("barista@vaadin.com").click();
 
 		page.getButtonsBar().getDeleteButton().click();
-		waitUntil(i -> null != page.getConfirmDialog());
 		page.getConfirmDialog().confirm();
 
 		PaperToastElement toast = $(PaperToastElement.class).onPage().id("_persistentToast");

@@ -26,7 +26,7 @@ public class StorefrontViewIT extends AbstractIT {
 		Assert.assertFalse(firstOrder.isOrderSelected());
 
 		firstOrder.click();
-		waitUntil(i -> firstOrder.isOrderSelected());
+		Assert.assertTrue(firstOrder.isOrderSelected());
 	}
 
 	@Test
@@ -36,9 +36,6 @@ public class StorefrontViewIT extends AbstractIT {
 		StorefrontOrderCardElement firstOrder = storefrontPage.getFirstOrderCard();
 		Assert.assertNotNull(firstOrder);
 		firstOrder.click();
-
-		waitUntil(i -> firstOrder.getDetail().getEditButton() != null);
-
 		ButtonElement editBtn = firstOrder.getDetail().getEditButton();
 		editBtn.scrollIntoView();
 		editBtn.click();
@@ -46,9 +43,11 @@ public class StorefrontViewIT extends AbstractIT {
 		// FIXME: regression in vaadin-alpha13
 		// For some reason TB getAttribute("selected") throws an exception
 		// complaining about the element is not attached to the page.
+		// selenium.StaleElementReferenceException: stale element reference:
+		// element is not attached to the page document
 		// Assert.assertFalse(firstOrder.isOrderSelected());
 
-		waitUntil(i -> getDriver().getCurrentUrl().endsWith("edit="));
+		Assert.assertTrue(getDriver().getCurrentUrl().endsWith("edit="));
 	}
 
 }

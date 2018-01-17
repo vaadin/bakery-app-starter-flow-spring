@@ -7,5 +7,4 @@
 
 TESTBENCH=-Dvaadin.testbench.developer.license=$TESTBENCH_LICENSE
 
-mvn -B -e -V -Pit -DrunLint clean verify -Dvaadin.productionMode $TESTBENCH
-
+mvn -B -e -V -Pit -DrunLint -Dvaadin.productionMode $TESTBENCH clean verify
