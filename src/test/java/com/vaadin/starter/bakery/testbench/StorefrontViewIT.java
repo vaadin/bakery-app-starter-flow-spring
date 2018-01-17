@@ -40,13 +40,6 @@ public class StorefrontViewIT extends AbstractIT {
 		editBtn.scrollIntoView();
 		editBtn.click();
 
-		// FIXME: regression in vaadin-alpha13
-		// For some reason TB getAttribute("selected") throws an exception
-		// complaining about the element is not attached to the page.
-		// selenium.StaleElementReferenceException: stale element reference:
-		// element is not attached to the page document
-		// Assert.assertFalse(firstOrder.isOrderSelected());
-
 		Assert.assertTrue(getDriver().getCurrentUrl().endsWith("edit="));
 	}
 
