@@ -1,21 +1,11 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
+<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
 <link rel="import" href="../app/bakery-search.html">
 <link rel="import" href="../elements/utils-mixin.html">
-<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
-
-<!-- Ensure the flow-component-renderer component gets bundled:
-      - at build time this this resolves to webapp/flow-component-renderer.html
-        (which is copied there from flow-server.jar by Maven)
-      - at run time this resolves to /flow-component-renderer.html
-        (which is provided by flow-server.jar)-->
-<link rel="import" href="../../flow-component-renderer.html">
-<link rel="import" href="../../flow-grid-component-renderer.html">
-
-<link rel="import" href="storefront-order-card.html">
+<link rel="import" href="../elements/form-dialog.html">
 <link rel="import" href="order-editor.html">
 <link rel="import" href="order-details-full.html">
-
 
 <dom-module id="bakery-storefront">
   <template>
