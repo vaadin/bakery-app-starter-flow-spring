@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import com.vaadin.flow.model.ModelConverter;
+import com.vaadin.flow.templatemodel.ModelConverter;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 
 public class OrderStateConverter implements ModelConverter<OrderState, String> {

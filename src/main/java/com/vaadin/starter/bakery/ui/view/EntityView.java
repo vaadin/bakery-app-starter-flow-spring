@@ -1,6 +1,6 @@
 package com.vaadin.starter.bakery.ui.view;
 
-import com.vaadin.data.ValidationException;
+import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.starter.bakery.ui.utils.messages.Message;
 
 /**
@@ -51,7 +51,7 @@ public interface EntityView<T> extends HasNotifications {
 
 	/**
 	 * Writes the changes from the entity dialog into the given entity instance
-	 * (see {@link com.vaadin.data.Binder#writeBean(Object)})
+	 * (see {@link com.vaadin.flow.data.binder.Binder#writeBean(Object)})
 	 *
 	 * @param entity the entity instance to save the changes into
 	 * @throws ValidationException if the values entered into the entity dialog

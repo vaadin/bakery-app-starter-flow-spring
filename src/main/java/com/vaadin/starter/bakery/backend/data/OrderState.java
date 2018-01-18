@@ -2,7 +2,7 @@ package com.vaadin.starter.bakery.backend.data;
 
 import java.util.Locale;
 
-import com.vaadin.shared.util.SharedUtil;
+import com.vaadin.flow.shared.util.SharedUtil;
 
 public enum OrderState {
 	NEW, CONFIRMED, READY, DELIVERED, PROBLEM, CANCELLED;

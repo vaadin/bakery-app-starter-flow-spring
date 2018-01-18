@@ -1,14 +1,14 @@
 package com.vaadin.starter.bakery.ui.view.dashboard;
 
-import com.vaadin.flow.model.TemplateModel;
+import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H4;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.polymertemplate.Id;
+import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
+import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.ui.utils.OrdersCountData;
-import com.vaadin.ui.Tag;
-import com.vaadin.ui.common.HtmlImport;
-import com.vaadin.ui.html.Div;
-import com.vaadin.ui.html.H4;
-import com.vaadin.ui.html.Span;
-import com.vaadin.ui.polymertemplate.Id;
-import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 @Tag("dashboard-counter-label")
 @HtmlImport("src/dashboard/dashboard-counter-label.html")

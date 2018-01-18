@@ -1,29 +1,31 @@
 package com.vaadin.starter.bakery.ui;
 
-import com.vaadin.flow.model.TemplateModel;
-import com.vaadin.router.RouterLayout;
-import com.vaadin.router.event.AfterNavigationEvent;
-import com.vaadin.router.event.AfterNavigationObserver;
-import com.vaadin.router.event.BeforeNavigationEvent;
-import com.vaadin.router.event.BeforeNavigationObserver;
+import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.page.BodySize;
+import com.vaadin.flow.component.polymertemplate.Id;
+import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
+import com.vaadin.flow.router.AfterNavigationEvent;
+import com.vaadin.flow.router.AfterNavigationObserver;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
+import com.vaadin.flow.router.RouterLayout;
+import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.app.security.SecurityUtils;
 import com.vaadin.starter.bakery.ui.exceptions.AccessDeniedException;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
-import com.vaadin.ui.Tag;
-import com.vaadin.ui.common.HtmlImport;
-import com.vaadin.ui.polymertemplate.Id;
-import com.vaadin.ui.polymertemplate.PolymerTemplate;
 
 @Tag("bakery-app")
 @HtmlImport("src/app/bakery-app.html")
+@BodySize(height = "100vh", width = "100vw")
 public class BakeryApp extends PolymerTemplate<TemplateModel>
-		implements RouterLayout, BeforeNavigationObserver, AfterNavigationObserver {
+		implements RouterLayout, BeforeEnterObserver, AfterNavigationObserver {
 
 	@Id("navigation")
 	private BakeryNavigation navigation;
 
 	@Override
-	public void beforeNavigation(BeforeNavigationEvent event) {
+	public void beforeEnter(BeforeEnterEvent event) {
 		if (!SecurityUtils.isAccessGranted(event.getNavigationTarget())) {
 			event.rerouteToError(AccessDeniedException.class);
 		}

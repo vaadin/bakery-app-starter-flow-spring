@@ -1,8 +1,9 @@
 package com.vaadin.starter.bakery.app;
 
-import com.vaadin.server.BootstrapListener;
-import com.vaadin.server.BootstrapPageResponse;
 import org.jsoup.nodes.Element;
+
+import com.vaadin.flow.server.BootstrapListener;
+import com.vaadin.flow.server.BootstrapPageResponse;
 
 /**
  * Modifies the Vaadin bootstrap page (the HTTP repoponse) in order to
@@ -14,6 +15,7 @@ import org.jsoup.nodes.Element;
  * </ul>
  */
 public class CustomBootstrapListener implements BootstrapListener {
+	@Override
 	public void modifyBootstrapPage(BootstrapPageResponse response) {
 		final Element head = response.getDocument().head();
 

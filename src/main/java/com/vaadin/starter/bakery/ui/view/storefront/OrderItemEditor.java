@@ -1,9 +1,20 @@
 package com.vaadin.starter.bakery.ui.view.storefront;
 
-import com.vaadin.data.BeanValidationBinder;
-import com.vaadin.data.BindingValidationStatus;
-import com.vaadin.flow.model.TemplateModel;
-import com.vaadin.shared.Registration;
+import java.util.stream.Stream;
+
+import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.HasValue;
+import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.polymertemplate.Id;
+import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.binder.BeanValidationBinder;
+import com.vaadin.flow.data.binder.BindingValidationStatus;
+import com.vaadin.flow.shared.Registration;
+import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.ui.components.ComboBoxForBinder;
@@ -12,17 +23,6 @@ import com.vaadin.starter.bakery.ui.view.storefront.event.CommentChangeEvent;
 import com.vaadin.starter.bakery.ui.view.storefront.event.DeleteEvent;
 import com.vaadin.starter.bakery.ui.view.storefront.event.PriceChangeEvent;
 import com.vaadin.starter.bakery.ui.view.storefront.event.ProductChangeEvent;
-import com.vaadin.ui.Tag;
-import com.vaadin.ui.button.Button;
-import com.vaadin.ui.common.HasValue;
-import com.vaadin.ui.common.HtmlImport;
-import com.vaadin.ui.event.ComponentEventListener;
-import com.vaadin.ui.html.Div;
-import com.vaadin.ui.polymertemplate.Id;
-import com.vaadin.ui.polymertemplate.PolymerTemplate;
-import com.vaadin.ui.textfield.TextField;
-
-import java.util.stream.Stream;
 
 @Tag("order-item-editor")
 @HtmlImport("src/storefront/order-item-editor.html")

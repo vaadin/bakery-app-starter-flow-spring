@@ -1,7 +1,7 @@
 package com.vaadin.starter.bakery.ui.utils.messages;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.starter.bakery.ui.components.ConfirmDialog;
-import com.vaadin.ui.UI;
 
 public class Message {
 

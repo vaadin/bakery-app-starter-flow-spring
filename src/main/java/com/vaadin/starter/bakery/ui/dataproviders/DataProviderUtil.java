@@ -3,7 +3,7 @@ package com.vaadin.starter.bakery.ui.dataproviders;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import com.vaadin.ui.common.ItemLabelGenerator;
+import com.vaadin.flow.component.ItemLabelGenerator;
 
 public class DataProviderUtil {
 

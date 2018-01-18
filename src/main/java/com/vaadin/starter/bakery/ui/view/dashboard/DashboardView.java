@@ -1,7 +1,5 @@
 package com.vaadin.starter.bakery.ui.view.dashboard;
 
-import static com.vaadin.starter.bakery.ui.utils.FormattingUtils.getFullMonthName;
-
 import java.time.LocalDate;
 import java.time.MonthDay;
 import java.time.Year;
@@ -11,27 +9,32 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import com.vaadin.addon.charts.ChartLoadEvent;
-import com.vaadin.addon.charts.model.Background;
-import com.vaadin.addon.charts.model.BackgroundShape;
-import com.vaadin.addon.charts.model.Pane;
-import com.vaadin.addon.charts.model.PlotOptionsSolidgauge;
-import com.vaadin.starter.bakery.ui.utils.OrdersCountDataWithChart;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.event.ComponentEventListener;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.addon.charts.Chart;
+import com.vaadin.addon.charts.ChartLoadEvent;
+import com.vaadin.addon.charts.model.Background;
+import com.vaadin.addon.charts.model.BackgroundShape;
 import com.vaadin.addon.charts.model.ChartType;
 import com.vaadin.addon.charts.model.Configuration;
 import com.vaadin.addon.charts.model.DataSeries;
 import com.vaadin.addon.charts.model.DataSeriesItem;
 import com.vaadin.addon.charts.model.ListSeries;
+import com.vaadin.addon.charts.model.Pane;
 import com.vaadin.addon.charts.model.PlotOptionsPie;
-import com.vaadin.data.selection.SelectionEvent;
-import com.vaadin.flow.model.TemplateModel;
-import com.vaadin.router.PageTitle;
-import com.vaadin.router.Route;
+import com.vaadin.addon.charts.model.PlotOptionsSolidgauge;
+import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.polymertemplate.Id;
+import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
+import com.vaadin.flow.data.selection.SelectionEvent;
+import com.vaadin.flow.renderer.ComponentTemplateRenderer;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
+import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.backend.data.DashboardData;
 import com.vaadin.starter.bakery.backend.data.DeliveryStats;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
@@ -43,13 +46,8 @@ import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.utils.DashboardUtils;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
+import com.vaadin.starter.bakery.ui.utils.OrdersCountDataWithChart;
 import com.vaadin.starter.bakery.ui.view.storefront.OrderDetailsBrief;
-import com.vaadin.ui.Tag;
-import com.vaadin.ui.common.HtmlImport;
-import com.vaadin.ui.grid.Grid;
-import com.vaadin.ui.polymertemplate.Id;
-import com.vaadin.ui.polymertemplate.PolymerTemplate;
-import com.vaadin.ui.renderers.ComponentTemplateRenderer;
 
 @Tag("bakery-dashboard")
 @HtmlImport("src/dashboard/bakery-dashboard.html")
@@ -140,7 +138,7 @@ public class DashboardView extends PolymerTemplate<TemplateModel> {
 		Configuration conf = monthlyProductSplit.getConfiguration();
 		conf.getChart().setType(ChartType.PIE);
 		conf.getChart().setBorderRadius(4);
-		conf.setTitle("Products delivered in " + getFullMonthName(today));
+		conf.setTitle("Products delivered in " + FormattingUtils.getFullMonthName(today));
 		DataSeries deliveriesPerProductSeries = new DataSeries(productDeliveries.entrySet().stream()
 				.map(e -> new DataSeriesItem(e.getKey().getName(), e.getValue())).collect(Collectors.toList()));
 		PlotOptionsPie plotOptionsPie = new PlotOptionsPie();

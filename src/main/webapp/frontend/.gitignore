@@ -2,4 +2,5 @@
 flow-component-renderer.html
 
 # unpacked from vaadin-grid-flow.jar by `mvn install -Dvaadin.productionMode`
+flow-grid-component-renderer.html
 gridConnector.js

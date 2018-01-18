@@ -23,6 +23,7 @@ gulp.task('lint:html', function() {
   return gulp.src([
     '../src/main/webapp/frontend/*.html',
     '!../src/main/webapp/frontend/flow-component-renderer.html',
+    '!../src/main/webapp/frontend/flow-grid-component-renderer.html',
     '../src/main/webapp/frontend/src/**/*.html',
     '../src/main/webapp/frontend/test/**/*.html'
   ])
@@ -39,6 +40,7 @@ gulp.task('lint:css', function() {
   return gulp.src([
     '../src/main/webapp/frontend/*.html',
     '!../src/main/webapp/frontend/flow-component-renderer.html',
+    '!../src/main/webapp/frontend/flow-grid-component-renderer.html',
     '../src/main/webapp/frontend/src/**/*.html',
     '../src/main/webapp/frontend/test/**/*.html'
   ])

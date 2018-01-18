@@ -3,9 +3,9 @@
  */
 package com.vaadin.starter.bakery.ui.crud;
 
-import com.vaadin.data.provider.CallbackDataProvider;
-import com.vaadin.data.provider.ConfigurableFilterDataProvider;
-import com.vaadin.data.provider.DataProvider;
+import com.vaadin.flow.data.provider.CallbackDataProvider;
+import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
+import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
 import com.vaadin.starter.bakery.backend.service.FilterableCrudService;
 
