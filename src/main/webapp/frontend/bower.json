@@ -15,6 +15,7 @@
     "iron-icon": "^2.0.0",
     "paper-toast": "^2.0.0",
     "vaadin": "vaadin/vaadin#10.0.0-alpha8",
+    "vaadin-board": "vaadin/vaadin-board#2.0.0-alpha1",
     "vaadin-grid": "vaadin/vaadin-grid#4.1.0-beta1",
     "vaadin-charts": "vaadin/vaadin-charts#6.0.0-alpha10",
     "vaadin-valo-theme": "vaadin/vaadin-valo-theme#2.0.0-alpha5",
@@ -27,6 +28,8 @@
   "resolutions": {
     "vaadin-grid": "4.1.0-beta1",
     "vaadin-charts": "6.0.0-alpha10",
+    "vaadin-board": "2.0.0-alpha1",
+    "vaadin-license-checker": "^2.0.0",
     "vaadin-valo-theme": "2.0.0-alpha5"
   }
 }
