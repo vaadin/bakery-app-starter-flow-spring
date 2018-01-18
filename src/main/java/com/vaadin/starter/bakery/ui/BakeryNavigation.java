@@ -8,6 +8,8 @@ import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
+import com.vaadin.flow.router.AfterNavigationEvent;
+import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.app.security.SecurityUtils;
 import com.vaadin.starter.bakery.ui.entities.PageInfo;
@@ -17,7 +19,7 @@ import com.vaadin.starter.bakery.ui.view.admin.users.UsersView;
 
 @Tag("bakery-navigation")
 @HtmlImport("src/app/bakery-navigation.html")
-public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> {
+public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> implements AfterNavigationObserver {
 
 	private static final String ICON_STOREFRONT = "edit";
 	private static final String ICON_DASHBOARD = "clock";
@@ -58,7 +60,11 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> {
 		}
 	}
 
-	void onLocationChange(String currentPath) {
+	@Override
+	public void afterNavigation(AfterNavigationEvent event) {
+		String currentPath = event.getLocation().getFirstSegment().isEmpty() ? BakeryConst.PAGE_DEFAULT
+				: event.getLocation().getFirstSegment();
+
 		for (int i = 0; i < pages.size(); i++) {
 			if (pages.get(i).getLink().equals(currentPath)) {
 				this.getModel().setPageNumber(i);
