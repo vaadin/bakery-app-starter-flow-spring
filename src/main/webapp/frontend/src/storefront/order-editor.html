@@ -1,6 +1,4 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="order-item-editor.html">
-<link rel="import" href="../elements/utils-mixin.html">
 <link rel="import" href="../app/style-modules/shared-styles.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/iron-form/iron-form.html">
@@ -8,8 +6,13 @@
 <link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
+<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-item.html">
 <link rel="import" href="../../bower_components/vaadin-combo-box/vaadin-combo-box.html">
 <link rel="import" href="../../bower_components/vaadin-date-picker/vaadin-date-picker.html">
+
+<link rel="import" href="../elements/buttons-bar.html">
+<link rel="import" href="../elements/utils-mixin.html">
+<link rel="import" href="order-item-editor.html">
 
 <dom-module id="order-editor">
   <template>
@@ -75,11 +78,11 @@
       </iron-form>
     </div>
 
-    <div id="footer" class="footer">
-      <vaadin-button id="cancel">Cancel</vaadin-button>
-      <div class="total money">Total [[totalPrice]]</div>
-      <vaadin-button id="review" theme="primary">Review Order →</vaadin-button>
-    </div>
+    <buttons-bar id="footer" no-scroll$="[[noScroll]]">
+      <vaadin-button slot="left" id="cancel">Cancel</vaadin-button>
+      <div slot="info" class="total">Total [[totalPrice]]</div>
+      <vaadin-button slot="right" id="review" theme="primary">Review Order →</vaadin-button>
+    </buttons-bar>
   </template>
 
   <script>
