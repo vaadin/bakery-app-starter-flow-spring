@@ -1,11 +1,21 @@
 package com.vaadin.starter.bakery.app;
 
-import com.vaadin.server.BootstrapListener;
-import com.vaadin.server.BootstrapPageResponse;
-import com.vaadin.ui.common.JavaScript;
 import org.jsoup.nodes.Element;
 
+import com.vaadin.flow.server.BootstrapListener;
+import com.vaadin.flow.server.BootstrapPageResponse;
+
+/**
+ * Modifies the Vaadin bootstrap page (the HTTP repoponse) in order to
+ * <ul>
+ *  <li>add links to favicons</li>
+ *  <li>add a link to the web app manifest</li>
+ *  <li>set the viewport</li>
+ *  <li>define the global styles for the main document (initialize the Vaadin Valo theme)</li>
+ * </ul>
+ */
 public class CustomBootstrapListener implements BootstrapListener {
+	@Override
 	public void modifyBootstrapPage(BootstrapPageResponse response) {
 
 		// Add service worker if app is in production mode
@@ -17,16 +27,6 @@ public class CustomBootstrapListener implements BootstrapListener {
 		}
 
 		final Element head = response.getDocument().head();
-		if ("/login".equals(response.getRequest().getPathInfo())) {
-			// Force login page to use Shady DOM to avoid problems with browsers and
-			// password managers not supporting shadow DOM
-			head.prepend(
-					"<script type='text/javascript'>" +
-							"window.customElements=window.customElements||{};" +
-							"window.customElements.forcePolyfill=true;" +
-							"window.ShadyDOM={force:true};" +
-							"</script>");
-		}
 
 		// manifest needs to be prepended before scripts or it won't be loaded
 		head.prepend("<meta name=\"theme-color\" content=\"#227aef\">");
@@ -51,19 +51,9 @@ public class CustomBootstrapListener implements BootstrapListener {
 				"<meta name=\"viewport\" content=\"width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes\">");
 		head.append("<!-- Add any global styles for body, document, etc. -->\n" +
 				"    <custom-style>\n" +
-				"      <style is=\"custom-style\" include=\"valo-colors valo-typography\">\n" +
-				"        html,\n" +
-				"        body {\n" +
-				"          height: 100%;\n" +
-				"        }\n" +
-				"\n" +
-				"        body {\n" +
-				"          margin: 0;\n" +
+				"      <style is=\"custom-style\" include=\"valo-color valo-typography\">\n" +
+				"        html {\n" +
 				"          background: var(--valo-shade-10pct);\n" +
-				"        }\n" +
-				"\n" +
-				"        bakery-app {\n" +
-				"          height: 100%;\n" +
 				"        }\n" +
 				"      </style>\n" +
 				"    </custom-style>");

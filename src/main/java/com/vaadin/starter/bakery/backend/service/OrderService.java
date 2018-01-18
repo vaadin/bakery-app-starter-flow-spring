@@ -16,7 +16,6 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 
 import javax.transaction.Transactional;
-import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,6 +27,7 @@ import com.vaadin.starter.bakery.backend.data.DashboardData;
 import com.vaadin.starter.bakery.backend.data.DeliveryStats;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
+import com.vaadin.starter.bakery.backend.data.entity.OrderSummary;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.repositories.OrderRepository;
@@ -37,36 +37,24 @@ public class OrderService implements CrudService<Order> {
 
 	private final OrderRepository orderRepository;
 
-	private final UserService userService;
-
 	@Autowired
-	public OrderService(OrderRepository orderRepository, UserService userService) {
+	public OrderService(OrderRepository orderRepository) {
 		super();
 		this.orderRepository = orderRepository;
-		this.userService = userService;
 	}
 
 	private static final Set<OrderState> notAvailableStates = Collections.unmodifiableSet(
 			EnumSet.complementOf(EnumSet.of(OrderState.DELIVERED, OrderState.READY, OrderState.CANCELLED)));
 
-	public Order findOrder(Long id) {
-		Order order = orderRepository.findOne(id);
-		if (order == null) {
-			throw new ValidationException("Someone has already deleted the order. Please refresh the page.");
-		}
-		return order;
-	}
-
 	@Transactional(rollbackOn = Exception.class)
-	public Order saveOrder(Long id,BiConsumer<User,Order> orderFiller) {
-		User currentUser = userService.getCurrentUser();
+	public Order saveOrder(User currentUser, Long id, BiConsumer<User, Order> orderFiller) {
 		Order order;
-		if(id == null) {
+		if (id == null) {
 			order = new Order(currentUser);
 		} else {
-			order = findOrder(id);
+			order = load(id);
 		}
-		orderFiller.accept(currentUser,order);
+		orderFiller.accept(currentUser, order);
 		return orderRepository.save(order);
 	}
 
@@ -76,9 +64,8 @@ public class OrderService implements CrudService<Order> {
 	}
 
 	@Transactional(rollbackOn = Exception.class)
-	public Order addComment(Long id, String comment) {
-		Order order = findOrder(id);
-		order.addHistoryItem(userService.getCurrentUser(), comment);
+	public Order addComment(User currentUser, Order order, String comment) {
+		order.addHistoryItem(currentUser, comment);
 		return orderRepository.save(order);
 	}
 
@@ -100,11 +87,16 @@ public class OrderService implements CrudService<Order> {
 			}
 		}
 	}
+	
+	@Transactional
+	public List<OrderSummary> findAnyMatchingStartingToday() {
+		return orderRepository.findByDueDateGreaterThanEqual(LocalDate.now());
+	}
 
 	private static Set<OrderState> matchingStates(String filter) {
 		return filter.isEmpty() ? Collections.emptySet()
 				: Arrays.stream(OrderState.values())
-				.filter(e -> e.getDisplayName().toLowerCase().contains(filter.toLowerCase())).collect(toSet());
+						.filter(e -> e.toString().toLowerCase().contains(filter.toLowerCase())).collect(toSet());
 	}
 
 	public long countAnyMatchingAfterDueDate(Optional<String> optionalFilter, Optional<LocalDate> optionalFilterDate) {
@@ -196,8 +188,8 @@ public class OrderService implements CrudService<Order> {
 
 	@Override
 	@Transactional
-	public Order createNew() {
-		Order order = new Order(userService.getCurrentUser());
+	public Order createNew(User currentUser) {
+		Order order = new Order(currentUser);
 		order.setDueTime(LocalTime.of(16, 0));
 		order.setDueDate(LocalDate.now());
 		return order;

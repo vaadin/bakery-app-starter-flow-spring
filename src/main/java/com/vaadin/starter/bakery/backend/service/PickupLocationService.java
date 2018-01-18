@@ -26,7 +26,7 @@ public class PickupLocationService {
 			String repositoryFilter = "%" + filter.get() + "%";
 			return pickupLocationRepository.findByNameLikeIgnoreCase(repositoryFilter, pageable);
 		} else {
-			return pickupLocationRepository.findByNameLikeIgnoreCase("%", pageable);
+			return pickupLocationRepository.findAll(pageable);
 		}
 	}
 
@@ -35,11 +35,11 @@ public class PickupLocationService {
 			String repositoryFilter = "%" + filter.get() + "%";
 			return pickupLocationRepository.countByNameLikeIgnoreCase(repositoryFilter);
 		} else {
-			return pickupLocationRepository.countByNameLikeIgnoreCase("%");
+			return pickupLocationRepository.count();
 		}
 	}
 
 	public PickupLocation getDefault() {
-		return findAnyMatching(Optional.empty(), new PageRequest(0, 1)).iterator().next();
+		return findAnyMatching(Optional.empty(), PageRequest.of(0, 1)).iterator().next();
 	}
 }

@@ -1,16 +1,14 @@
 package com.vaadin.starter.bakery.ui.components;
 
-import com.vaadin.flow.model.TemplateModel;
-import com.vaadin.ui.Tag;
-import com.vaadin.ui.button.Button;
-import com.vaadin.ui.common.HasClickListeners;
-import com.vaadin.ui.common.HtmlImport;
-import com.vaadin.ui.event.ComponentEventListener;
-import com.vaadin.ui.polymertemplate.Id;
-import com.vaadin.ui.polymertemplate.PolymerTemplate;
-import com.vaadin.ui.textfield.TextField;
-
-import java.util.function.BiConsumer;
+import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.HasClickListeners;
+import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.polymertemplate.Id;
+import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.templatemodel.TemplateModel;
 
 @Tag("bakery-search")
 @HtmlImport("src/app/bakery-search.html")
@@ -42,13 +40,15 @@ public class BakerySearch extends PolymerTemplate<BakerySearch.Model> {
 			}
 			getModel().setCheckboxChecked(false);
 		});
+
+		getElement().addPropertyChangeListener("checkboxChecked", e -> fireEvent(new FilterChanged(this, false)));
 	}
 
 	public String getFilter() {
 		return textField.getValue();
 	}
 
-	public boolean getShowPrevious() {
+	public boolean isCheckboxChecked() {
 		return getModel().getCheckboxChecked();
 	}
 
@@ -64,11 +64,8 @@ public class BakerySearch extends PolymerTemplate<BakerySearch.Model> {
 		getModel().setCheckboxText(checkboxText);
 	}
 
-	public void addFilterChangeListener(BiConsumer<String, Boolean> consumer) {
-		textField.addValueChangeListener(
-				e -> consumer.accept(textField.getValue(), getModel().getCheckboxChecked()));
-		getElement().addPropertyChangeListener("checkboxChecked",
-				e -> consumer.accept(textField.getValue(), getModel().getCheckboxChecked()));
+	public void addFilterChangeListener(ComponentEventListener<FilterChanged> listener) {
+		addListener(FilterChanged.class, listener);
 	}
 
 	public void addActionClickListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {

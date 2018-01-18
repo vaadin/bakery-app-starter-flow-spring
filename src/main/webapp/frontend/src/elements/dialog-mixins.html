@@ -1,0 +1,108 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="vaadin-modal-dialog-styles">
+  <template>
+    <style>
+      :host,
+      #back,
+      #fore {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 200;
+      }
+
+      #fore {
+        background: var(--valo-base-color);
+        background-image: linear-gradient(var(--valo-tint-5pct), var(--valo-tint-5pct));
+        overflow: hidden;
+      }
+
+      :host([desktop-view]) #fore {
+        border-radius: var(--valo-border-radius);
+        box-shadow: 0 4px 20px var(--valo-shade-20pct);
+      }
+
+      #back {
+        background: var(--valo-shade-20pct);
+      }
+    </style>
+  </template>
+</dom-module>
+
+  <script>
+    /**
+     * Adds listeners to body for closing the element on click and escape.
+     * It sends a `closed` or `opened` event up when the element changes the status.
+     */
+    /* @polymerMixin */
+    window.CloseableDialogMixin = subclass => class extends subclass {
+      static get properties() {
+        return {
+          opened: {
+            type: Boolean,
+            reflectToAttribute: true,
+            observer: '_onOpened',
+            notify: true,
+            value: false
+          }
+        };
+      }
+
+      ready() {
+        super.ready();
+        this._clickListener = this._onBodyClick.bind(this);
+        this._keydownListener = this._onBodyKeydown.bind(this);
+        this._popstateListener = e => {
+          e.preventDefault();
+          this.close(e);
+        };
+
+        this.addEventListener('click', e => e.stopPropagation());
+      }
+
+      _onOpened(opened, old) {
+        if (opened === true) {
+          setTimeout(() => {
+            document.body.addEventListener('click', this._clickListener);
+            document.body.addEventListener('keydown', this._keydownListener);
+            window.addEventListener('popstate', this._popstateListener);
+            // Trigger size update for resizable contents, e.g. <vaadin-form-layout>
+            window.dispatchEvent(new CustomEvent('resize'));
+          }, 2);
+        } else {
+          document.body.removeEventListener('click', this._clickListener);
+          document.body.removeEventListener('keydown', this._keydownListener);
+          window.removeEventListener('popstate', this._popstateListener);
+        }
+        this.style.display = opened ? 'block' : 'none';
+        if (old === undefined) {
+          return;
+        }
+        Polymer.RenderStatus.afterNextRender(this, () => {
+          this.dispatchEvent(new CustomEvent(opened ? 'opened' : 'closed', {bubbles: true, composed: true}));
+        });
+      }
+
+      _canClose(e) {
+        // Do not close if click was in this dialog or in any vaadin-overlay attached to body (e.g confirmation)
+        return !e.composedPath().reduce((prev, e) => prev || e === this || /vaadin.+overlay/.test(e.localName), false);
+      }
+
+      _onBodyClick(e) {
+        this._canClose(e) && this.close();
+      }
+
+      _onBodyKeydown(e) {
+        e.keyCode == 27 && this._canClose(e) && this.close();
+      }
+
+      close(e) {
+        this.dispatchEvent(new CustomEvent('close-dialog', {bubbles: true, composed: true, cancelable: true}));
+      }
+    };
+  </script>
+</dom-module>

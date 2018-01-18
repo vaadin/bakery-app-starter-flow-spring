@@ -1,8 +1,6 @@
 package com.vaadin.starter.bakery.ui.view;
 
-import com.vaadin.data.ValidationException;
-import com.vaadin.data.provider.DataProvider;
-import com.vaadin.starter.bakery.ui.components.ConfirmationDialog;
+import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.starter.bakery.ui.utils.messages.Message;
 
 /**
@@ -19,26 +17,6 @@ import com.vaadin.starter.bakery.ui.utils.messages.Message;
 public interface EntityView<T> extends HasNotifications {
 
 	/**
-	 * Sets / refreshes the entities in grid.
-	 *
-	 * @param dataProvider provides entities for grid
-	 */
-	void setDataProvider(DataProvider<T, Void> dataProvider);
-
-	/**
-	 * Opens a dialog showing details of a single entity.
-	 *
-	 * @param entity the entity to show in the dialog
-	 * @param edit if <code>true</code> the dialog opens in the 'edit' mode
-	 */
-	void openDialog(T entity, boolean edit);
-
-	/**
-	 * Closes the entity dialog.
-	 */
-	void closeDialog();
-
-	/**
 	 * Shows a confirmation request dialog with the given message.
 	 *
 	 * @param message
@@ -48,7 +26,7 @@ public interface EntityView<T> extends HasNotifications {
 	 *            command to execute if the user presses 'ok' in the dialog
 	 */
 	default void showConfirmationRequest(Message message, Runnable onOk) {
-		ConfirmationDialog.show(message, onOk);
+		Message.confirm(message, onOk);
 	}
 
 	/**
@@ -73,7 +51,7 @@ public interface EntityView<T> extends HasNotifications {
 
 	/**
 	 * Writes the changes from the entity dialog into the given entity instance
-	 * (see {@link com.vaadin.data.Binder#writeBean(Object)})
+	 * (see {@link com.vaadin.flow.data.binder.Binder#writeBean(Object)})
 	 *
 	 * @param entity the entity instance to save the changes into
 	 * @throws ValidationException if the values entered into the entity dialog

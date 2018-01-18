@@ -1,0 +1,204 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
+<link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
+<link rel="import" href="../../bower_components/vaadin-checkbox/vaadin-checkbox.html">
+<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../../bower_components/vaadin-valo-theme/icons.html">
+
+<dom-module id="bakery-search">
+  <template>
+    <style include="shared-styles">
+      :host {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        padding: 0 var(--valo-space-s);
+        min-height: 56px;
+        overflow: hidden;
+        background-image: linear-gradient(var(--valo-shade-20pct), var(--valo-shade-20pct));
+        background-color: var(--valo-base-color);
+        box-shadow: 0 0 16px 2px var(--valo-shade-20pct);
+      }
+
+      .row {
+        display: flex;
+        align-items: center;
+        flex: 1;
+      }
+
+      .checkbox,
+      .extra-filter,
+      :host([show-extra-filters]) .extra-action {
+        display: none;
+      }
+
+      :host([show-checkbox]) .checkbox {
+        display: inline-block;
+        margin: 0 0 calc(-1 * var(--valo-space-l));
+        transition: all .5s;
+      }
+
+      :host([show-checkbox][show-extra-filters]) .checkbox {
+        margin: 0;
+      }
+
+      :host([show-extra-filters]) .extra-filter {
+        display: block;
+      }
+
+      .field {
+        flex: 1;
+        width: auto;
+        padding-right: var(--valo-space-s);
+      }
+
+      @media (min-width: 600px) {
+        .row {
+          width: 100%;
+          max-width: 964px;
+          margin: 0 auto;
+        }
+
+        .field {
+          padding-right: var(--valo-space-m);
+        }
+
+        :host([show-checkbox]) .checkbox {
+          display: none;
+          margin: 0;
+        }
+
+        :host([show-checkbox][show-extra-filters]) .checkbox {
+          display: inline-block;
+        }
+
+        :host::after {
+          content: '';
+          width: 100%;
+          border-radius: 50%;
+          background: transparent;
+        }
+      }
+    </style>
+
+    <iron-media-query query="(min-width: 600px)" query-matches="{{_desktopView}}"></iron-media-query>
+
+    <div class="row">
+      <vaadin-text-field id="field" class="field" placeholder="[[fieldPlaceholder]]" value="{{fieldValue}}" focused="{{_fieldFocused}}" on-value-changed="_filterChanged">
+        <iron-icon icon="[[fieldIcon]]" slot="prefix"></iron-icon>
+      </vaadin-text-field>
+      <vaadin-checkbox class="checkbox" checked="{{checkboxChecked}}" focused="{{_checkboxFocused}}" hidden$="[[!_desktopView]]">[[checkboxText]]</vaadin-checkbox>
+      <vaadin-button id="clear" class="extra-filter" theme="tertiary">
+        [[clearText]]
+      </vaadin-button>
+      <vaadin-button id="action" class="extra-action" theme="primary">
+        <iron-icon icon="[[buttonIcon]]"></iron-icon>
+        <span>[[buttonText]]</span>
+      </vaadin-button>
+    </div>
+
+    <vaadin-checkbox class="checkbox" checked="{{checkboxChecked}}" focused="{{_checkboxFocused}}" hidden$="[[_desktopView]]">[[checkboxText]]</vaadin-checkbox>
+
+  </template>
+
+  <script>
+    class BakerySearch extends Polymer.Element {
+      static get is() {
+        return 'bakery-search';
+      }
+      static get properties() {
+        return {
+          fieldPlaceholder: {
+            type: String
+          },
+          fieldValue: {
+            type: String,
+            notify: true
+          },
+          fieldIcon: {
+            type: String,
+            value: 'vaadin:search'
+          },
+          buttonIcon: {
+            type: String,
+            value: 'vaadin:plus'
+          },
+          buttonText: {
+            type: String
+          },
+          showCheckbox: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true
+          },
+          checkboxText: {
+            type: String
+          },
+          checkboxChecked: {
+            type: Boolean,
+            notify: true
+          },
+          clearText: {
+            type: String,
+            value: 'Clear search'
+          },
+          showExtraFilters: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true
+          },
+          _fieldFocused: {
+            type: Boolean
+          },
+          _checkboxFocused: {
+            type: Boolean
+          },
+          _isSafari: {
+            type: Boolean,
+            value: function() {
+              return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+            }
+          }
+        };
+      }
+
+      static get observers() {
+        return [
+          '_setShowExtraFilters(fieldValue, checkboxChecked, _fieldFocused, _checkboxFocused)'
+        ];
+      }
+
+      _setShowExtraFilters(fieldValue, checkboxChecked, focused, checkboxFocused) {
+        this._debouncer = Polymer.Debouncer.debounce(
+          this._debouncer,
+          // Set 1 millisecond wait to be able move from text field to checkbox with tab.
+          Polymer.Async.timeOut.after(1), () => {
+            this.showExtraFilters = fieldValue || checkboxChecked || focused || checkboxFocused;
+
+            // Safari has an issue with repainting shadow root element styles when a host attribute changes.
+            // Need this workaround (toggle any inline css property on and off) until the issue gets fixed.
+            // Issue is fixed in Safari 11 Tech Preview version.
+            if (this._isSafari && this.root) {
+              Array.from(this.root.querySelectorAll('*')).forEach(function(el) {
+                el.style['-webkit-backface-visibility'] = 'visible';
+                el.style['-webkit-backface-visibility'] = '';
+              });
+            }
+          }
+        );
+      }
+
+      _filterChanged() {
+        this._filtersChangeDebouncer = Polymer.Debouncer.debounce(
+          this._filtersChangeDebouncer,
+          Polymer.Async.timeOut.after(300),
+          () => this.dispatchEvent(new CustomEvent('filter-changed', {bubbles: true, composed: true})) );
+        Polymer.enqueueDebouncer(this._filtersChangeDebouncer);
+      }
+    }
+
+    window.customElements.define(BakerySearch.is, BakerySearch);
+  </script>
+</dom-module>

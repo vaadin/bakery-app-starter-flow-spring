@@ -1,0 +1,100 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+
+  <script>
+    /**
+     * Adds the scroll-shadow attribute if there is a `#main` element with scrollsize
+     * larger than its height, and there is hidden content at the bottom.
+     */
+    /* @polymerMixin */
+    window.ScrollShadowMixin = subclass => class extends subclass {
+      static get properties() {
+        return {
+          scrollShadow: {
+            type: Boolean,
+            reflectToAttribute: true
+          },
+          _main: Element,
+          _boundContentScroll: Function
+        };
+      }
+
+      ready() {
+        super.ready();
+        Polymer.RenderStatus.afterNextRender(this, () => {
+          this._main = this.root.querySelector('#main');
+          if (this._main) {
+            this._main.addEventListener('scroll', this._contentScroll.bind(this));
+            this._contentScroll();
+          }
+        });
+        this._boundContentScroll = this._contentScroll.bind(this);
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        // If a parent dialog hides scrollable content, the scroll shadow
+        // state cannot be determined. We need to update the scroll shadow
+        // whenever a parent dialog opens.
+        window.addEventListener('opened', this._boundContentScroll);
+      }
+
+      disconnectedCallback() {
+        super.disconnectedCallback();
+        window.removeEventListener('opened', this._boundContentScroll);
+      }
+
+      _contentScroll() {
+        if (this._main) {
+          this.scrollShadow = this._main.scrollHeight - this._main.scrollTop !== this._main.clientHeight;
+        }
+      }
+    };
+
+    /**
+     * Mixin for editors.
+     */
+    /* @polymerMixin */
+    window.HasNotificationsMixin = subclass => class extends subclass {
+
+      static get properties() {
+        return {
+          _defaultToast: Object,
+          _persistentToast: Object
+        };
+      }
+
+      ready() {
+        super.ready();
+        Polymer.RenderStatus.afterNextRender(this, () => {
+          this._defaultToast = document.getElementById('_defaultToast');
+          if (!this._defaultToast) {
+            this._defaultToast = document.createElement('paper-toast');
+            this._defaultToast.setAttribute('id', '_defaultToast');
+            document.body.appendChild(this._defaultToast);
+          }
+
+          this._persistentToast = document.getElementById('_persistentToast');
+          if (!this._persistentToast) {
+            this._persistentToast = document.createElement('paper-toast');
+            this._persistentToast.setAttribute('id', '_persistentToast');
+            this._persistentToast.setAttribute('duration', '0');
+            this._persistentToast.innerHTML =
+              '<vaadin-button onclick="this.parentElement.toggle()" theme="tertiary small error">Close</vaadin-button>';
+            this._persistentToast.style.pointerEvents = 'all';
+            document.body.appendChild(this._persistentToast);
+          }
+        });
+      }
+
+      showNotification(message, persistent) {
+        Polymer.RenderStatus.afterNextRender(this, () => {
+          const toast = persistent ? this._persistentToast : this._defaultToast;
+          toast.style['z-index'] = 1000;
+          toast.setAttribute('text', message);
+          toast.open();
+        });
+      }
+    };
+  </script>
+</dom-module>

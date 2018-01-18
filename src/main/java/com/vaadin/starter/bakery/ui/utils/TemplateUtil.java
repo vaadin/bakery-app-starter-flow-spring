@@ -1,6 +1,6 @@
 package com.vaadin.starter.bakery.ui.utils;
 
-import com.vaadin.ui.Component;
+import com.vaadin.flow.component.Component;
 
 public class TemplateUtil {
 
@@ -13,4 +13,15 @@ public class TemplateUtil {
 		child.getElement().setAttribute("slot", slotName);
 	}
 
+	public static void setVisible(Component component, boolean visible) {
+		if (visible) {
+			component.getElement().removeAttribute("hidden");
+		} else {
+			component.getElement().setAttribute("hidden", "");
+		}
+	}
+	
+	public static String generateLocation(String basePage, String entityId) {
+		return basePage + (entityId == null || entityId.isEmpty() ? "" : "/" + entityId);
+	}
 }

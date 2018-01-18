@@ -1,0 +1,126 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/vaadin-dialog/vaadin-dialog.html">
+
+<dom-module id="form-dialog-overlay-theme" theme-for="vaadin-dialog-overlay">
+  <template>
+    <style>
+      @media (max-width: 600px) {
+        :host {
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+        }
+
+        [part="overlay"] {
+          width: 100%;
+        }
+      }
+
+      [part="overlay"] {
+        overflow: hidden;
+      }
+
+      :host([theme="left"]) {
+        align-items: flex-start;
+      }
+
+      :host([theme$="right"]) {
+        align-items: flex-end;
+      }
+
+      :host([theme="left"]) [part="overlay"],
+      :host([theme="right"]) [part="overlay"] {
+        flex: 1;
+        max-width: 45em;
+      }
+
+      :host([theme="top-right"]) [part="overlay"] {
+        position: absolute;
+        top: 0;
+      }
+
+      :host([theme="top-right"]) [part="backdrop"] {
+        background: transparent;
+      }
+
+      [part="overlay"] {
+        display: flex;
+        flex-direction: column;
+      }
+
+      [part="content"] {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+      }
+    </style>
+  </template>
+
+</dom-module>
+
+<dom-module id="form-dialog">
+  <script>
+    {
+      // FIXME: remove line when upgrading vaadin-dialog
+      Vaadin.DialogElement = Vaadin.DialogElement || Vaadin.VaadinDialog;
+
+      class StarterDialog extends Vaadin.VaadinDialog {
+        static get is() {
+          return 'form-dialog';
+        }
+
+        static get properties() {
+          return {
+            theme: {
+              type: String,
+              observer: '_themeChanged'
+            },
+            // FIXME: set to false when https://github.com/vaadin/vaadin-overlay/pull/44 merged
+            noCloseOnOutsideClick: {
+              value: true
+            },
+            // FIXME: set to false when https://github.com/vaadin/vaadin-overlay/pull/44 merged
+            noCloseOnEsc: {
+              value: true
+            }
+          };
+        }
+
+        ready() {
+          super.ready();
+
+          // FIXME: set to true when https://github.com/vaadin/vaadin-overlay/pull/46 merged
+          this.$.overlay.focusTrap = false;
+
+          this._observer = new Polymer.FlattenedNodesObserver(this, info => {
+            if (info.addedNodes.length) {
+              const elements = info.addedNodes.filter(e => e.localName != 'template');
+              if (elements.length) {
+                // Insert ligth-dom content in the overlay
+                this.$.overlay.$.content.innerHTML = '';
+                elements.forEach(e => this.$.overlay.$.content.appendChild(e));
+              } else {
+                // It's a template, reset instance and let super templatize it
+                delete this._instance;
+              }
+            }
+          });
+        }
+
+        _themeChanged(position) {
+          this.$.overlay.setAttribute('theme', position);
+        }
+
+        _onOverlayOpened(e) {
+          super._onOverlayOpened(e);
+          // Needed until https://github.com/vaadin/vaadin-overlay/issues/49 fix is in flow
+          !e.detail.value && setTimeout(() => document.body.style.pointerEvents = '');
+        }
+      }
+
+      window.customElements.define(StarterDialog.is, StarterDialog);
+    }
+  </script>
+</dom-module>

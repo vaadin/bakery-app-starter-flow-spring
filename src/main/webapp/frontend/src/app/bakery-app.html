@@ -1,0 +1,56 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="style-modules/shared-styles.html">
+
+<link rel="import" href="all-views.html">
+<link rel="import" href="bakery-navigation.html">
+
+<dom-module id="bakery-app">
+  <template>
+    <style>
+      :host {
+        height: 100%;
+        display: flex;
+        flex-direction: column-reverse;
+        color: var(--valo-body-text-color);
+        font-family: var(--valo-font-family);
+      }
+
+      bakery-navigation {
+        width: 100%;
+      }
+
+      #child-wrapper {
+        display: flex;
+        flex: 1;
+        overflow: auto;
+        width: 100%;
+        justify-content: center;
+      }
+
+      #child-wrapper > ::slotted(*) {
+        flex: 1;
+      }
+
+      @media (min-width: 600px) {
+        :host {
+          flex-direction: column;
+        }
+      }
+    </style>
+
+    <bakery-navigation id="navigation"></bakery-navigation>
+    <div id="child-wrapper">
+      <slot></slot>
+    </div>
+  </template>
+
+  <script>
+    class BakeryApp extends Polymer.Element {
+      static get is() {
+        return 'bakery-app';
+      }
+    }
+
+    window.customElements.define(BakeryApp.is, BakeryApp);
+  </script>
+</dom-module>

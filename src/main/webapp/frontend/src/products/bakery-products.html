@@ -1,0 +1,56 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-column.html">
+<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-sorter.html">
+
+<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
+<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
+
+<link rel="import" href="../app/bakery-search.html">
+<link rel="import" href="../elements/utils-mixin.html">
+<link rel="import" href="../elements/form-dialog.html">
+<link rel="import" href="../elements/form-buttons-bar.html">
+
+<dom-module id="bakery-products">
+  <template>
+    <style include="shared-styles">
+      :host {
+        max-width: none !important;
+        display: flex;
+        flex-direction: column;
+      }
+    </style>
+
+   <bakery-search id="search-bar"></bakery-search>
+
+   <vaadin-grid id="products-grid" theme="borderless"></vaadin-grid>
+
+    <!--  dialogs are tele-ported to body, hence you need to inline styles or use styled web components -->
+    <form-dialog id="dialog-editor" theme="right">
+      <vaadin-form-layout style="flex: 1; overflow-y: auto; overflow-x: hidden; padding: 5px">
+        <h3 id="title"></h3>
+        <br>
+        <vaadin-text-field id="product-edit-name" label="Product name" colspan="2" required pattern=".*[^ ].*"
+          error-message="Please enter a valid name"></vaadin-text-field>
+        <br>
+        <vaadin-text-field id="price" label="Unit price" colspan="2" on-focus="priceFocusGained"
+          pattern="\d+(\.\d?\d?)?$" required prevent-invalid-input>
+        </vaadin-text-field>
+      </vaadin-form-layout>
+
+      <form-buttons-bar id="buttons"></form-buttons-bar>
+
+      <template><!-- vaadin-dialog fails if not present (#43) --></template>
+    </form-dialog>
+  </template>
+
+  <script>
+    class BakeryProducts extends window.HasNotificationsMixin(Polymer.Element) {
+      static get is() {
+        return 'bakery-products';
+      }
+    }
+
+    window.customElements.define(BakeryProducts.is, BakeryProducts);
+  </script>
+</dom-module>

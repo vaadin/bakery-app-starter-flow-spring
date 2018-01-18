@@ -1,58 +1,40 @@
 package com.vaadin.starter.bakery.ui.utils.converters;
 
-import com.vaadin.data.Result;
-import com.vaadin.data.ValueContext;
-import com.vaadin.flow.model.ModelConverter;
-import com.vaadin.starter.bakery.ui.utils.converters.binder.BinderConverter;
+import static com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil.convertIfNotNull;
+import static com.vaadin.starter.bakery.ui.utils.FormattingUtils.HOUR_FORMATTER;
 
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
-import java.time.format.SignStyle;
-import java.util.HashMap;
-import java.util.Map;
 
-import static com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil.convertIfNotNull;
+import com.vaadin.flow.data.binder.Result;
+import com.vaadin.flow.data.binder.ValueContext;
+import com.vaadin.flow.data.converter.Converter;
+import com.vaadin.flow.templatemodel.ModelConverter;
 
-public class LocalTimeConverter implements ModelConverter<LocalTime, String>, BinderConverter<String, LocalTime> {
-
-	public static final DateTimeFormatter formatter;
-
-	static {
-		Map<Long, String> ampm = new HashMap<>();
-		ampm.put(0L, "a.m.");
-		ampm.put(1L, "p.m.");
-		formatter = new DateTimeFormatterBuilder().parseCaseInsensitive().parseLenient()
-				.appendValue(java.time.temporal.ChronoField.CLOCK_HOUR_OF_AMPM, 1, 2, SignStyle.NOT_NEGATIVE)
-				.appendLiteral(':').appendValue(java.time.temporal.ChronoField.MINUTE_OF_HOUR, 2).optionalStart()
-				.appendLiteral(' ').optionalEnd().appendText(java.time.temporal.ChronoField.AMPM_OF_DAY, ampm)
-				.toFormatter();
-	}
+public class LocalTimeConverter implements ModelConverter<LocalTime, String>, Converter<String, LocalTime> {
 
 	@Override
 	public String toPresentation(LocalTime modelValue) {
-		return convertIfNotNull(modelValue, formatter::format);
+		return convertIfNotNull(modelValue, HOUR_FORMATTER::format);
 	}
 
 	@Override
 	public LocalTime toModel(String presentationValue) {
-		return convertIfNotNull(presentationValue, p -> LocalTime.parse(p, formatter));
+		return convertIfNotNull(presentationValue, p -> LocalTime.parse(p, HOUR_FORMATTER));
 	}
 
 	@Override
-	public Result<LocalTime> convertToModelIfNotNull(String presentationValue, ValueContext valueContext) {
+	public Result<LocalTime> convertToModel(String value, ValueContext context) {
 		try {
-			return Result.ok(toModel(presentationValue));
+			return Result.ok(toModel(value));
 		} catch (DateTimeParseException e) {
 			return Result.error("Invalid time");
 		}
-
 	}
 
 	@Override
-	public String convertToPresentationIfNotNull(LocalTime arg0, ValueContext arg1) {
-		return toPresentation(arg0);
+	public String convertToPresentation(LocalTime value, ValueContext context) {
+		return toPresentation(value);
 	}
 
 }

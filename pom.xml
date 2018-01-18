@@ -9,7 +9,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.4.RELEASE</version>
+        <version>2.0.0.M7</version>
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
@@ -20,18 +20,19 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Dependencies -->
-        <vaadin.version>10.0.0-alpha6</vaadin.version>
+        <vaadin.version>10.0.0.alpha13</vaadin.version>
+        <testbench.version>6.0.0.alpha4</testbench.version>
 
-        <spring-boot.version>1.5.4.RELEASE</spring-boot.version>
+        <spring-boot.version>1.5.9.RELEASE</spring-boot.version>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Overrides the old version specified by the Spring Boot parent -->
         <selenium.version>3.6.0</selenium.version>
+        <!-- Override Hibernate version to get Java 8 date/time support -->
+        <hibernate.version>5.2.12.Final</hibernate.version>
 
         <!-- Plugins -->
         <frontend.maven.plugin.version>1.6</frontend.maven.plugin.version>
-        <driver.binary.downloader.maven.plugin.version>1.0.11</driver.binary.downloader.maven.plugin.version>
-        <maven.failsafe.plugin.version>2.19.1</maven.failsafe.plugin.version>
-        <maven.war.plugin.version>3.0.0</maven.war.plugin.version>
+        <maven.war.plugin.version>3.1.0</maven.war.plugin.version>
         <maven.resources.plugin.version>3.0.2</maven.resources.plugin.version>
         <maven.clean.plugin.version>3.0.0</maven.clean.plugin.version>
 
@@ -39,30 +40,22 @@
         <node.version>v8.1.2</node.version>
         <yarn.version>v0.27.5</yarn.version>
         <buildtools.directory>build-tools</buildtools.directory>
-        <frontend.directory>src/main/webapp</frontend.directory>
-        <vaadin.frontend.path>VAADIN/static/frontend</vaadin.frontend.path>
+        <frontend.directory>src/main/webapp/frontend</frontend.directory>
     </properties>
 
     <repositories>
         <repository>
-            <id>flow-internal-release</id>
-            <url>https://repo.vaadin.com/nexus/content/repositories/flow</url>
+            <id>vaadin-prereleases</id>
+            <url>https://maven.vaadin.com/vaadin-prereleases/</url>
         </repository>
 
         <repository>
-            <id>flow-internal-snapshots</id>
-            <url>https://repo.vaadin.com/nexus/content/repositories/flow-snapshots/</url>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
             <snapshots>
-                <enabled>true</enabled>
+                <enabled>false</enabled>
             </snapshots>
-        </repository>
-
-        <repository>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <id>repo-vaadin-com-snapshots</id>
-            <url>https://repo.vaadin.com/nexus/content/repositories/website-snapshots/</url>
         </repository>
 
         <repository>
@@ -77,7 +70,7 @@
             <id>vaadin-addons</id>
             <url>http://maven.vaadin.com/vaadin-addons</url>
         </repository>
-        
+
     </repositories>
 
     <dependencyManagement>
@@ -104,14 +97,15 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-        </dependency>
-        <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
             <version>1.1.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
+
         <!-- Vaadin -->
         <dependency>
             <groupId>com.vaadin</groupId>
@@ -126,9 +120,45 @@
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>flow-spring-addon</artifactId>
-            <version>1.0.0.alpha7</version>
         </dependency>
+        <dependency>
+            <groupId>org.vaadin.artur</groupId>
+            <artifactId>spring-data-provider</artifactId>
+            <version>2.0.0.alpha3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-board-flow</artifactId>
+            <version>1.1.0-beta1</version>
+        </dependency>
+
         <!-- End of Vaadin -->
+        <!-- Iron and paper elements -->
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>github-com-PolymerElements-iron-form</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>github-com-polymerelements-paper-tabs</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>github-com-polymerelements-paper-styles</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>github-com-polymerelements-paper-ripple</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>paper-toast</artifactId>
+            <version>2.0.0</version>
+        </dependency>
         <!-- Spring -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -145,6 +175,10 @@
                 <exclusion>
                     <groupId>org.apache.tomcat</groupId>
                     <artifactId>tomcat-juli</artifactId>
+                </exclusion>
+                <exclusion>
+                	<groupId>org.apache.tomcat</groupId>
+                	<artifactId>tomcat-jdbc</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -170,27 +204,20 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+            <scope>runtime</scope>
+        </dependency>
         <!-- End Spring -->
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.thedeanda</groupId>
-            <artifactId>lorem</artifactId>
-            <version>2.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-        </dependency>
 
         <!-- Testing -->
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-testbench</artifactId>
             <scope>test</scope>
-            <version>6.0.0.alpha1</version>
+            <version>${testbench.version}</version>
         </dependency>
     </dependencies>
 
@@ -228,6 +255,9 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring-boot.version}</version>
+                    <configuration>
+                      <fork>true</fork>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -248,11 +278,17 @@
                         <fileset>
                             <directory>${frontend.directory}</directory>
                             <includes>
+                                <include>grid-flow-component-renderer.html</include>
                                 <include>flow-component-renderer.html</include>
+                                <include>gridConnector.js</include>
                             </includes>
                         </fileset>
                     </filesets>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
@@ -284,7 +320,6 @@
                             </execution>
                         </executions>
                     </plugin>
-
                 </plugins>
             </build>
         </profile>
@@ -301,7 +336,7 @@
             </properties>
 
 
-            <!-- (4): Makes the package run in production mode when deployed, without the need of setting extra
+            <!-- (2): Makes the package run in production mode when deployed, without the need of setting extra
                       properties on the server -->
             <dependencies>
                 <dependency>
@@ -312,8 +347,9 @@
 
             <build>
                 <plugins>
-                    <!-- unpack the flow-component-renderer.html component definition so that
-                         it can be included into the production frontend build -->
+                    <!-- (3): Unpack those frontend project dependencies that are embedded into Flow and Flow components
+                         JARs so that they can be included into the production frontend build. This step will become
+                         unnecessary after switching to the flow-maven-plugin -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-dependency-plugin</artifactId>
@@ -327,13 +363,23 @@
                                 </goals>
                                 <configuration>
                                     <artifactItems>
+                                        <!-- flow-component-renderer.html is a dependency of `ComponentTemplateRenderer` -->
                                         <artifactItem>
                                             <groupId>com.vaadin</groupId>
                                             <artifactId>flow-server</artifactId>
-                                            <version>1.0-SNAPSHOT</version>
                                             <type>jar</type>
                                             <overWrite>true</overWrite>
-                                            <includes>META-INF/resources/flow-component-renderer.html</includes>
+                                            <includes>META-INF/resources/frontend/flow-component-renderer.html</includes>
+                                            <outputDirectory>${project.build.directory}</outputDirectory>
+                                        </artifactItem>
+
+                                        <!-- gridConnector.js and flow-grid-component-renderer.html are dependencies of `Grid<T>` -->
+                                        <artifactItem>
+                                            <groupId>com.vaadin</groupId>
+                                            <artifactId>vaadin-grid-flow</artifactId>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>
+                                            <includes>META-INF/resources/frontend/gridConnector.js,META-INF/resources/frontend/flow-grid-component-renderer.html</includes>
                                             <outputDirectory>${project.build.directory}</outputDirectory>
                                         </artifactItem>
                                     </artifactItems>
@@ -341,6 +387,8 @@
                             </execution>
                         </executions>
                     </plugin>
+                    <!-- (4): copy the JAR-embedded frontend dependencies into the location where they can be picked up
+                         by the production frontend build -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-resources-plugin</artifactId>
@@ -355,8 +403,8 @@
                                     <outputDirectory>${frontend.directory}</outputDirectory>
                                     <resources>
                                         <resource>
-                                            <directory>${project.build.directory}/META-INF/resources</directory>
-                                            <includes>flow-component-renderer.html</includes>
+                                            <directory>${project.build.directory}/META-INF/resources/frontend</directory>
+                                            <includes>flow-component-renderer.html,gridConnector.js,flow-grid-component-renderer.html</includes>
                                         </resource>
                                     </resources>
                                 </configuration>
@@ -364,95 +412,7 @@
                         </executions>
                     </plugin>
 
-                    <!-- (5): Copies the files compiled by polymer-build to a directory from where they can be
-                              served when in production mode (root of the WAR) -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-war-plugin</artifactId>
-                        <configuration>
-                            <webResources>
-                                <resource>
-                                    <directory>${frontend.directory}/build</directory>
-                                </resource>
-                            </webResources>
-                            <warSourceExcludes>**/build/</warSourceExcludes>
-                        </configuration>
-                    </plugin>
-
-                    <!-- When running the app locally with spring-boot:run the build output is not copied anywhere and
-                         stays in the ${frontend.directory}/build directory (accessible via context://build/frontend-es5
-                         and context://build/frontend-es6).
-
-                         That's not where Flow expects to find it by default (context://frontend-es5 and context://frontend-es6)
-                         hence the custom system properties are necessary for spring-boot:run -->
-                    <plugin>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-maven-plugin</artifactId>
-                        <configuration>
-                            <jvmArguments>-Dvaadin.frontend.url.es5=context://build/frontend-es5/ -Dvaadin.frontend.url.es6=context://build/frontend-es6/ -Dvaadin.productionMode</jvmArguments>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
-            <id>development</id>
-            <activation>
-                <property>
-                    <name>!vaadin.productionMode</name>
-                </property>
-            </activation>
-    
-            <properties>
-                <yarn.build.goal>run skip-build</yarn.build.goal>
-            </properties>
-            <build>
-                <plugins>
-                    <!-- (7): Adds the files from src/main/frontend directly 
-                        into the WAR when in development mode -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-war-plugin</artifactId>
-                        <configuration>
-                            <webResources>
-                                <resource>
-                                    <directory>${frontend.directory}</directory>
-                                    <excludes>
-                                        <exclude>build/**</exclude>
-                                    </excludes>
-                                </resource>
-                            </webResources>
-                        </configuration>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-maven-plugin</artifactId>
-                        <configuration>
-                            <jvmArguments>-Dvaadin.frontend.url.dev=context:// -Dvaadin.disable.webjars=true -Dvaadin.polyfillBase=frontend://bower_components/webcomponentsjs/</jvmArguments>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <!-- When running mvn with `-DskipFrontendBuild`, all frontend-related build steps are skipped:
-             - yarn install
-             - bower install
-             - polymer build
-
-             This is handy when the app is restarted without any changes to frontend resources. -->
-        <profile>
-            <id>frontend-build</id>
-            <activation>
-                <property>
-                    <name>!skipFrontendBuild</name>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <!-- (2): Configures the frontend plugin to compile the web components source -->
+                    <!-- (5): Configures the frontend plugin to compile the web components source -->
                     <plugin>
                         <groupId>com.github.eirslett</groupId>
                         <artifactId>frontend-maven-plugin</artifactId>
@@ -478,6 +438,28 @@
                                 </configuration>
                             </execution>
                         </executions>
+                    </plugin>
+
+                    <!-- (6): Copies the files compiled by polymer-build to a directory from where they can be
+                              served when in production mode (root of the WAR) -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <configuration>
+                            <webResources>
+                                <resource>
+                                    <directory>${frontend.directory}/build</directory>
+                                </resource>
+                            </webResources>
+                            <warSourceExcludes>**/build/,**/bower.json,**/package.json,.bowerrc,src/**,bower_components/**,images/**,frontend/**</warSourceExcludes>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <jvmArguments>-Dvaadin.frontend.url.es5=context://frontend/build/frontend-es5/ -Dvaadin.frontend.url.es6=context://frontend/build/frontend-es6/ -Dvaadin.productionMode</jvmArguments>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>

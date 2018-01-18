@@ -1,6 +1,6 @@
 package com.vaadin.starter.bakery.ui.view;
 
-import com.vaadin.ui.common.HasElement;
+import com.vaadin.flow.component.HasElement;
 
 /**
  * 

@@ -1,0 +1,102 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
+<link rel="import" href="../app/bakery-search.html">
+<link rel="import" href="../elements/item-detail-dialog.html">
+<link rel="import" href="../elements/utils-mixin.html">
+<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
+
+<!-- Ensure the flow-component-renderer component gets bundled:
+      - at build time this this resolves to webapp/flow-component-renderer.html
+        (which is copied there from flow-server.jar by Maven)
+      - at run time this resolves to /flow-component-renderer.html
+        (which is provided by flow-server.jar)-->
+<link rel="import" href="../../flow-component-renderer.html">
+<link rel="import" href="../../flow-grid-component-renderer.html">
+
+<link rel="import" href="storefront-order-card.html">
+<link rel="import" href="order-editor.html">
+<link rel="import" href="order-details-full.html">
+
+
+<dom-module id="bakery-storefront">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: flex;
+        flex-direction: column;
+        max-width: calc(964px + var(--valo-space-m)) !important; /* Allow selected order to be 16px wider */
+      }
+
+      :host([touch-scrolling]) {
+        -webkit-overflow-scrolling: touch;
+      }
+
+      #storefront-grid {
+        max-width: 100%;
+      }
+
+      @media (min-width: 600px) {
+        :host {
+          max-width: none !important;
+          padding: 0 !important;
+        }
+      }
+    </style>
+
+    <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
+
+    <bakery-search id="search" show-checkbox></bakery-search>
+
+    <vaadin-grid id="storefront-grid" theme="compact storefront-grid"></vaadin-grid>
+
+    <item-detail-dialog desktop-view$="[[desktopView]]" opened="[[editing]]">
+      <order-details-full id="order-details" desktop-view="[[desktopView]]"></order-details-full>
+      <order-editor id="order-editor" desktop-view="[[desktopView]]"></order-editor>
+    </item-detail-dialog>
+  </template>
+
+  <script>
+    class BakeryStorefront extends window.HasNotificationsMixin(Polymer.Element) {
+      static get is() {
+        return 'bakery-storefront';
+      }
+
+      // This method is overriden to measure the page load performance and can be safely removed
+      // if there is no need for that.
+      ready() {
+        super.ready();
+        const grid = this.$['storefront-grid'];
+        const listener = () => {
+          if (!grid.loading) {
+            window.performance.mark('bakery-page-loaded');
+            grid.removeEventListener('loading-changed', listener);
+          }
+        };
+        grid.addEventListener('loading-changed', listener);
+      }
+
+      static get properties() {
+        return {
+          desktopView: {
+            type: Boolean,
+            notify: true
+          },
+          editing: {
+            type: Boolean
+          },
+          touchScrolling: {
+            type: Boolean,
+            computed: '_enableTouchScrolling(editing)',
+            reflectToAttribute: true
+          }
+        };
+      }
+
+      _enableTouchScrolling(editing) {
+        return !editing;
+      }
+    }
+
+    window.customElements.define(BakeryStorefront.is, BakeryStorefront);
+  </script>
+</dom-module>

@@ -1,0 +1,124 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
+<link rel="import" href="order-details-brief.html">
+<link rel="import" href="order-details-full.html">
+
+<dom-module id="storefront-order-card">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+      }
+
+      .content {
+        display: block;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      [selected].content {
+        padding: 0;
+      }
+
+      #wrapper {
+        background: var(--valo-base-color);
+        background-image: linear-gradient(var(--valo-tint-5pct), var(--valo-tint-5pct));
+        box-shadow: 0 3px 5px var(--valo-shade-10pct);
+        border-bottom: 1px solid var(--valo-shade-10pct);
+        margin: calc(-1 * var(--valo-space-s)) 0 var(--valo-space-s); /* Last item has shadow visible */
+      }
+
+      .main {
+        color: var(--valo-body-text-color);
+        margin-right: var(--valo-space-s);
+        font-weight: bold;
+      }
+
+      .group-heading {
+        margin: var(--valo-space-l) var(--valo-space-s) var(--valo-space-m);
+      }
+
+      .secondary {
+        color: var(--valo-secondary-text-color);
+      }
+
+      @media (min-width: 600px) {
+        .content {
+          max-width: calc(964px + var(--valo-space-m)) !important; /* Allow selected order to be 16px wider */
+          padding: 0 var(--valo-space-s);
+        }
+
+        #wrapper {
+          margin: 0;
+          border-radius: var(--valo-border-radius);
+          border-bottom: none;
+        }
+
+        .group-heading {
+          margin: var(--valo-space-m) 0 var(--valo-space-s);
+        }
+      }
+
+      [opened].group-heading {
+        padding-left: 8px;
+      }
+    </style>
+
+    <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
+
+    <div class="content" selected$="[[selected]]">
+      <div class="group-heading" opened$="[[_showDetailsDesktop(selected, desktopView)]]" hidden$="[[!displayHeader]]">
+        <span class="main" theme$="[[_getMainFontSize(desktopView)]]">[[header.main]]</span>
+        <span class="secondary" theme$="[[_getSecondaryFontSize(desktopView)]]">[[header.secondary]]</span>
+      </div>
+
+      <div id="wrapper">
+        <order-details-brief id="order-details-brief" hidden$="[[showDetail]]"></order-details-brief>
+        <slot name="order-details-full"></slot>
+      </div>
+    </div>
+
+  </template>
+
+  <script>
+    class StorefrontOrderCard extends Polymer.Element {
+      static get is() {
+        return 'storefront-order-card';
+      }
+
+      static get properties() {
+        return {
+          selected: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true
+          },
+          desktopView: {
+            type: Boolean
+          },
+          showDetail: {
+            type: Boolean,
+            computed: '_showDetailsDesktop(selected, desktopView)'
+          },
+          displayHeader: Boolean,
+          header: Object
+        };
+      }
+
+      _getMainFontSize(desktop) {
+        return desktop ? 'l-text' : 'm-text';
+      }
+
+      _getSecondaryFontSize(desktop) {
+        return desktop ? 'm-text' : 's-text';
+      }
+
+      _showDetailsDesktop(selected, desktopView) {
+        return selected && desktopView;
+      }
+    }
+
+    window.customElements.define(StorefrontOrderCard.is, StorefrontOrderCard);
+  </script>
+</dom-module>

@@ -4,12 +4,11 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity(name="UserInfo")
 public class User extends AbstractEntity {
@@ -57,11 +56,6 @@ public class User extends AbstractEntity {
 		this.lastName = lastName;
 		this.password = password;
 		this.role = role;
-	}
-
-	public User(String email, String firstName, String lastName, String password, String role, String photoUrl) {
-		this(email, firstName, lastName, password, role);
-		this.photoUrl = photoUrl;
 	}
 
 	public String getPassword() {
