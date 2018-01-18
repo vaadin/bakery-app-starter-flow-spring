@@ -10,7 +10,7 @@
     window.ScrollShadowMixin = subclass => class extends subclass {
       static get properties() {
         return {
-          scrollShadow: {
+          noScroll: {
             type: Boolean,
             reflectToAttribute: true
           },
@@ -31,22 +31,9 @@
         this._boundContentScroll = this._contentScroll.bind(this);
       }
 
-      connectedCallback() {
-        super.connectedCallback();
-        // If a parent dialog hides scrollable content, the scroll shadow
-        // state cannot be determined. We need to update the scroll shadow
-        // whenever a parent dialog opens.
-        window.addEventListener('opened', this._boundContentScroll);
-      }
-
-      disconnectedCallback() {
-        super.disconnectedCallback();
-        window.removeEventListener('opened', this._boundContentScroll);
-      }
-
       _contentScroll() {
         if (this._main) {
-          this.scrollShadow = this._main.scrollHeight - this._main.scrollTop !== this._main.clientHeight;
+          this.noScroll = this._main.scrollHeight - this._main.scrollTop == this._main.clientHeight;
         }
       }
     };
