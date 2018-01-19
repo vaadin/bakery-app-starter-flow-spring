@@ -3,7 +3,6 @@ package com.vaadin.starter.bakery.ui.view.admin.products;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_PRODUCTS;
 
 import java.util.Currency;
-import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -75,7 +74,7 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 
 		binder.bind(nameField, "name");
 		binder.forField(priceField).withConverter(new PriceConverter()).bind("price");
-		priceField.addToPrefix(new Span(Currency.getInstance(Locale.getDefault()).getSymbol()));
+		priceField.addToPrefix(new Span(Currency.getInstance(BakeryConst.APP_LOCALE).getSymbol()));
 		
 		presenter.init(this);
 	}
