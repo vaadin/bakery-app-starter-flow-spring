@@ -1,7 +1,10 @@
 package com.vaadin.starter.bakery.ui.components;
 
-import com.vaadin.flow.component.Focusable;
-import com.vaadin.flow.component.combobox.ComboBox;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.shared.Registration;
 
 /**
@@ -14,21 +17,22 @@ import com.vaadin.flow.shared.Registration;
  * from server side. This prevents binder marking the bean dirty.
  * https://github.com/vaadin/flow/issues/3350
  */
-public class ComboBoxForBinder<T> extends ComboBox<T> implements Focusable<ComboBox<T>> {
+public class DatePickerForBinder extends DatePicker {
 
-	private T lastSetValue;
+	private LocalDate lastSetValue;
 
 	@Override
-	public void setValue(T value) {
+	public void setValue(LocalDate value) {
 		super.setValue(value);
 		this.lastSetValue = value;
 		if (value != null) {
-			getElement().setAttribute("value", getItemLabelGenerator().apply(value));
+			String valueString = DateTimeFormatter.ISO_DATE.format(value);
+			getElement().setAttribute("value", valueString);
 		}
 	}
 
 	@Override
-	public Registration addValueChangeListener(ValueChangeListener<ComboBox<T>, T> listener) {
+	public Registration addValueChangeListener(ValueChangeListener<DatePicker, LocalDate> listener) {
 		return super.addValueChangeListener(e -> {
 			if (e.getValue() != null && !e.getValue().equals(lastSetValue)
 					|| e.getValue() == null && lastSetValue != null) {
