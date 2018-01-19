@@ -99,6 +99,7 @@
         box-sizing: border-box;
       }
 
+      :host([hidden]),
       [hidden] {
         display: none !important;
       }
@@ -123,34 +124,10 @@
         padding: 0;
       }
 
-      .overflow-auto {
-        overflow: auto;
-      }
-
-      .card {
-        background: var(--valo-base-color);
-        background-image: linear-gradient(var(--valo-tint-5pct), var(--valo-tint-5pct));
-        border-radius: var(--valo-border-radius);
-        box-shadow: 0 3px 5px #ddd;
-      }
-
       .scrollable {
         padding: var(--valo-space-m);
         overflow: auto;
         -webkit-overflow-scrolling: touch;
-      }
-
-      .footer {
-        display: flex;
-        flex-wrap: wrap;
-        transition: box-shadow .2s;
-        justify-content: space-between;
-        padding: var(--valo-space-s);
-        align-items: baseline;
-      }
-
-      :host([scroll-shadow]) .footer {
-        box-shadow: 0 -1px 5px var(--valo-shade-20pct);
       }
 
       .count {
@@ -162,16 +139,8 @@
         text-align: center;
       }
 
-      .money {
-        text-align: right;
-      }
-
       .total {
-        flex: 1;
-        order: -1;
-        box-sizing: border-box;
         padding: 0 var(--valo-space-s);
-        min-width: 100%;
         font-size: var(--valo-font-size-l);
         font-weight: bold;
         white-space: nowrap;
