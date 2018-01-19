@@ -21,8 +21,10 @@ public class CustomBootstrapListener implements BootstrapListener {
 		// Add service worker if app is in production mode
 		if (response.getSession().getService().getDeploymentConfiguration()
 				.isProductionMode()) {
-			response.getDocument().body().appendElement("script").attr("src",
-					"app.js");
+			response.getDocument().body().appendElement("script")
+					.attr("src", "sw-register.js")
+					.attr("async", "true")
+					.attr("defer", "true");
 
 		}
 
