@@ -17,7 +17,6 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.polymertemplate.Id;
@@ -36,6 +35,7 @@ import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.PickupLocation;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.ui.components.ComboBoxForBinder;
+import com.vaadin.starter.bakery.ui.components.DatePickerForBinder;
 import com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil;
 import com.vaadin.starter.bakery.ui.event.CancelEvent;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
@@ -68,7 +68,7 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 	private ComboBoxForBinder<OrderState> status;
 
 	@Id("due-date")
-	private DatePicker date;
+	private DatePickerForBinder date;
 
 	@Id("due-time")
 	private ComboBoxForBinder<LocalTime> time;
@@ -208,6 +208,7 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 		this.currentUser = currentUser;
 	}
 
+	@Override
 	public void setVisible(boolean visible) {
 		TemplateUtil.setVisible(this, visible);
 	}
