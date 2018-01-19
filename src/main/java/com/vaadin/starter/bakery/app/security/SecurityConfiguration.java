@@ -121,8 +121,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				"/sw.js",
 				"/offline-page.html",
 
-				// icons
+				// icons and images
 				"/icons/**",
+				"/images/**",
 
 				// (development mode) static resources
 				"/frontend/bower_components/**",
