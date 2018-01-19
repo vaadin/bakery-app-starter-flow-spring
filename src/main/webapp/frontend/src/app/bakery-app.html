@@ -1,7 +1,26 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="style-modules/shared-styles.html">
 
-<link rel="import" href="all-views.html">
+<!--  Ensure that all components not used in templates but
+      created from server-side are bundled -->
+<link rel="import" href="../admin/access-denied.html">
+<link rel="import" href="../elements/confirm-dialog.html">
+<link rel="import" href="../login/bakery-login.html">
+<link rel="import" href="../storefront/bakery-storefront.html">
+<link rel="import" href="../storefront/storefront-order-card.html">
+<link rel="import" href="../dashboard/bakery-dashboard.html">
+<link rel="import" href="../users/bakery-users.html">
+<link rel="import" href="../products/bakery-products.html">
+
+<!-- Ensure that flow renderers are bundled:
+      - at build time this this resolves to webapp/flow-component-renderer.html
+        (which is copied there from flow-server.jar by Maven)
+      - at run time this resolves to /flow-component-renderer.html
+        (which is provided by flow-server.jar)-->
+<link rel="import" href="../../flow-component-renderer.html">
+<link rel="import" href="../../flow-grid-component-renderer.html">
+
+<!-- Imports used in this page -->
 <link rel="import" href="bakery-navigation.html">
 
 <dom-module id="bakery-app">
