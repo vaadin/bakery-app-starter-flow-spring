@@ -17,6 +17,7 @@ import com.vaadin.flow.shared.Registration;
 import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
+import com.vaadin.starter.bakery.ui.components.AmountField;
 import com.vaadin.starter.bakery.ui.components.ComboBoxForBinder;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.starter.bakery.ui.view.storefront.event.CommentChangeEvent;

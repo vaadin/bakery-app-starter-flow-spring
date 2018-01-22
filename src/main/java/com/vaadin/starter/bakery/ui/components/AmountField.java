@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery.ui.view.storefront;
+package com.vaadin.starter.bakery.ui.components;
 
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.Tag;
