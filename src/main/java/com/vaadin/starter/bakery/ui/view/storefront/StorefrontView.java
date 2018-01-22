@@ -28,7 +28,7 @@ import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.ui.BakeryApp;
-import com.vaadin.starter.bakery.ui.components.BakerySearch;
+import com.vaadin.starter.bakery.ui.components.SearchBar;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
 import com.vaadin.starter.bakery.ui.view.EntityView;
@@ -46,7 +46,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	}
 
 	@Id("search")
-	private BakerySearch searchBar;
+	private SearchBar searchBar;
 
 	@Id("storefront-grid")
 	private Grid<Order> grid;
@@ -152,7 +152,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		grid.getElement().callFunction("notifyResize");
 	}
 
-	BakerySearch getSearchBar() {
+	SearchBar getSearchBar() {
 		return searchBar;
 	}
 

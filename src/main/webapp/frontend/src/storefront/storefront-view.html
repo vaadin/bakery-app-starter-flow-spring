@@ -2,7 +2,7 @@
 <link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
 
-<link rel="import" href="../app/bakery-search.html">
+<link rel="import" href="../components/search-bar.html">
 <link rel="import" href="../components/utils-mixin.html">
 <link rel="import" href="../components/form-dialog.html">
 
@@ -38,7 +38,7 @@
 
     <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
 
-    <bakery-search id="search" show-checkbox></bakery-search>
+    <search-bar id="search" show-checkbox></search-bar>
 
     <vaadin-grid id="storefront-grid" theme="compact storefront-grid"></vaadin-grid>
 

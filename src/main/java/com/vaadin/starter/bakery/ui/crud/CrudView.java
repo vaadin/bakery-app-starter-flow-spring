@@ -14,7 +14,7 @@ import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
-import com.vaadin.starter.bakery.ui.components.BakerySearch;
+import com.vaadin.starter.bakery.ui.components.SearchBar;
 import com.vaadin.starter.bakery.ui.components.FormButtonsBar;
 import com.vaadin.starter.bakery.ui.components.FormDialog;
 import com.vaadin.starter.bakery.ui.event.CloseDialogEvent;
@@ -36,7 +36,7 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 
 	protected abstract FormDialog getDialog();
 
-	protected abstract BakerySearch getSearchBar();
+	protected abstract SearchBar getSearchBar();
 
 	protected abstract Grid<E> getGrid();
 

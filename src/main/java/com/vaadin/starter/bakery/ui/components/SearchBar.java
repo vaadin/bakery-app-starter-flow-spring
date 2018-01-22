@@ -10,9 +10,9 @@ import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.templatemodel.TemplateModel;
 
-@Tag("bakery-search")
-@HtmlImport("src/app/bakery-search.html")
-public class BakerySearch extends PolymerTemplate<BakerySearch.Model> {
+@Tag("search-bar")
+@HtmlImport("src/components/search-bar.html")
+public class SearchBar extends PolymerTemplate<SearchBar.Model> {
 
 	public interface Model extends TemplateModel {
 		Boolean getCheckboxChecked();
@@ -33,7 +33,7 @@ public class BakerySearch extends PolymerTemplate<BakerySearch.Model> {
 	@Id("action")
 	private Button actionButton;
 
-	public BakerySearch() {
+	public SearchBar() {
 		clearButton.addClickListener(e -> {
 			if (!textField.isEmpty()) {
 				textField.clear();

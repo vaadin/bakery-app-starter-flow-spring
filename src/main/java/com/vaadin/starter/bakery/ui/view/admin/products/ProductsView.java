@@ -23,7 +23,7 @@ import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.util.EntityUtil;
 import com.vaadin.starter.bakery.ui.BakeryApp;
-import com.vaadin.starter.bakery.ui.components.BakerySearch;
+import com.vaadin.starter.bakery.ui.components.SearchBar;
 import com.vaadin.starter.bakery.ui.components.FormButtonsBar;
 import com.vaadin.starter.bakery.ui.components.FormDialog;
 import com.vaadin.starter.bakery.ui.crud.CrudView;
@@ -39,7 +39,7 @@ import com.vaadin.starter.bakery.ui.utils.converters.CurrencyFormatter;
 public class ProductsView extends CrudView<Product, TemplateModel>  {
 
 	@Id("search-bar")
-	private BakerySearch searchbar;
+	private SearchBar searchbar;
 
 	@Id("products-grid")
 	private Grid<Product> grid;
@@ -117,7 +117,7 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 	}
 
 	@Override
-	protected BakerySearch getSearchBar() {
+	protected SearchBar getSearchBar() {
 		return searchbar;
 	}
 
