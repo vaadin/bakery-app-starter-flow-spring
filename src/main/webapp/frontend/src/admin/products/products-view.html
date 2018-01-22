@@ -1,19 +1,19 @@
-<link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
-<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-column.html">
-<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid-sorter.html">
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../../../bower_components/vaadin-grid/vaadin-grid-column.html">
+<link rel="import" href="../../../bower_components/vaadin-grid/vaadin-grid-sorter.html">
 
-<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
-<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
+<link rel="import" href="../../../bower_components/vaadin-text-field/vaadin-text-field.html">
 
-<link rel="import" href="../app/bakery-search.html">
-<link rel="import" href="../components/utils-mixin.html">
-<link rel="import" href="../components/form-dialog.html">
-<link rel="import" href="../components/form-buttons-bar.html">
+<link rel="import" href="../../app/bakery-search.html">
+<link rel="import" href="../../components/utils-mixin.html">
+<link rel="import" href="../../components/form-dialog.html">
+<link rel="import" href="../../components/form-buttons-bar.html">
 
-<link rel="import" href="../app/style-modules/shared-styles.html">
+<link rel="import" href="../../app/style-modules/shared-styles.html">
 
-<dom-module id="bakery-products">
+<dom-module id="products-view">
   <template>
     <style include="shared-styles">
       :host {
@@ -47,12 +47,12 @@
   </template>
 
   <script>
-    class BakeryProducts extends window.HasNotificationsMixin(Polymer.Element) {
+    class ProductsView extends window.HasNotificationsMixin(Polymer.Element) {
       static get is() {
-        return 'bakery-products';
+        return 'products-view';
       }
     }
 
-    window.customElements.define(BakeryProducts.is, BakeryProducts);
+    window.customElements.define(ProductsView.is, ProductsView);
   </script>
 </dom-module>

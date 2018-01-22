@@ -1,19 +1,19 @@
-<link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/vaadin-grid/vaadin-grid.html">
 
-<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
-<link rel="import" href="../../bower_components/vaadin-combo-box/vaadin-combo-box.html">
-<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
-<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-password-field.html">
+<link rel="import" href="../../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
+<link rel="import" href="../../../bower_components/vaadin-combo-box/vaadin-combo-box.html">
+<link rel="import" href="../../../bower_components/vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../../../bower_components/vaadin-text-field/vaadin-password-field.html">
 
-<link rel="import" href="../app/bakery-search.html">
-<link rel="import" href="../components/utils-mixin.html">
-<link rel="import" href="../components/form-dialog.html">
-<link rel="import" href="../components/form-buttons-bar.html">
+<link rel="import" href="../../app/bakery-search.html">
+<link rel="import" href="../../components/utils-mixin.html">
+<link rel="import" href="../../components/form-dialog.html">
+<link rel="import" href="../../components/form-buttons-bar.html">
 
-<link rel="import" href="../app/style-modules/shared-styles.html">
+<link rel="import" href="../../app/style-modules/shared-styles.html">
 
-<dom-module id="bakery-users">
+<dom-module id="users-view">
   <template>
     <style include="shared-styles">
       :host {
@@ -49,9 +49,9 @@
   </template>
 
   <script>
-    class BakeryUsers extends window.HasNotificationsMixin(Polymer.Element) {
+    class UsersView extends window.HasNotificationsMixin(Polymer.Element) {
       static get is() {
-        return 'bakery-users';
+        return 'users-view';
       }
 
       // This method is overridden to measure the page load performance and can be safely removed
@@ -80,6 +80,6 @@
       }
     }
 
-    window.customElements.define(BakeryUsers.is, BakeryUsers);
+    window.customElements.define(UsersView.is, UsersView);
   </script>
 </dom-module>

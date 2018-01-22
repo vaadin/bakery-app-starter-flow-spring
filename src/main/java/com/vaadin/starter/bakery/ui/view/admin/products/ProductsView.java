@@ -31,8 +31,8 @@ import com.vaadin.starter.bakery.ui.crud.DefaultEntityPresenter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.utils.converters.CurrencyFormatter;
 
-@Tag("bakery-products")
-@HtmlImport("src/products/bakery-products.html")
+@Tag("products-view")
+@HtmlImport("src/admin/products/products-view.html")
 @Route(value = PAGE_PRODUCTS, layout = BakeryApp.class)
 @PageTitle(BakeryConst.TITLE_PRODUCTS)
 @Secured(Role.ADMIN)

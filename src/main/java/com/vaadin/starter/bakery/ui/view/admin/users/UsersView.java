@@ -32,8 +32,8 @@ import com.vaadin.starter.bakery.ui.crud.CrudView;
 import com.vaadin.starter.bakery.ui.crud.DefaultEntityPresenter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
-@Tag("bakery-users")
-@HtmlImport("src/users/bakery-users.html")
+@Tag("users-view")
+@HtmlImport("src/admin/users/users-view.html")
 @Route(value = PAGE_USERS, layout = BakeryApp.class)
 @PageTitle(BakeryConst.TITLE_USERS)
 @Secured(Role.ADMIN)
