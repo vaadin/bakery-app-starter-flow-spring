@@ -8,7 +8,7 @@ import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.templatemodel.TemplateModel;
 
 @Tag("amount-field")
-@HtmlImport("src/elements/amount-field.html")
+@HtmlImport("src/components/amount-field.html")
 public class AmountField extends PolymerTemplate<AmountField.Model> implements HasValue<AmountField, Integer> {
 
 	public interface Model extends TemplateModel {

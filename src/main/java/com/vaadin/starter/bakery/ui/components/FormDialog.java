@@ -12,7 +12,7 @@ import com.vaadin.flow.shared.Registration;
 import elemental.json.JsonObject;
 
 @Tag("form-dialog")
-@HtmlImport("src/elements/form-dialog.html")
+@HtmlImport("src/components/form-dialog.html")
 public class FormDialog extends Component {
 
 	@Synchronize(property = "opened", value = "opened-changed")
