@@ -15,6 +15,8 @@ import com.vaadin.starter.bakery.ui.events.CancelEvent;
 import com.vaadin.starter.bakery.ui.views.storefront.events.CommentEvent;
 import com.vaadin.starter.bakery.ui.views.storefront.events.EditEvent;
 
+import java.lang.ref.WeakReference;
+
 /**
  * The component for expandable order cards for the list on the Storefront view.
  * When collapsed the order card shows brief order details, and switches to full
@@ -36,7 +38,7 @@ public class OrderCard extends PolymerTemplate<OrderCard.Model> {
 		void setDisplayHeader(boolean displayHeader);
 	}
 
-	private OrderSummary order;
+	private WeakReference<OrderSummary> orderRef;
 
 	@Id("order-details-brief")
 	private OrderDetailsBrief orderDetailsBrief;
@@ -49,7 +51,7 @@ public class OrderCard extends PolymerTemplate<OrderCard.Model> {
 	}
 
 	public void setOrder(OrderSummary order) {
-		this.order = order;
+		this.orderRef = new WeakReference<>(order);
 		orderDetailsBrief.setOrder(order);
 	}
 
@@ -59,7 +61,7 @@ public class OrderCard extends PolymerTemplate<OrderCard.Model> {
 	}
 
 	public OrderSummary getOrder() {
-		return order;
+		return orderRef.get();
 	}
 
 	public void openCard(Order fullOrder) {
