@@ -33,8 +33,8 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
 import com.vaadin.starter.bakery.ui.view.EntityView;
 
-@Tag("bakery-storefront")
-@HtmlImport("src/storefront/bakery-storefront.html")
+@Tag("storefront-view")
+@HtmlImport("src/storefront/storefront-view.html")
 @Route(value = BakeryConst.PAGE_STOREFRONT, layout = BakeryApp.class)
 @RouteAlias(value = BakeryConst.PAGE_ROOT, layout = BakeryApp.class)
 @PageTitle(BakeryConst.TITLE_STOREFRONT)

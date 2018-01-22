@@ -11,8 +11,8 @@ import com.vaadin.flow.server.InitialPageSettings;
 import com.vaadin.flow.server.PageConfigurator;
 import com.vaadin.flow.templatemodel.TemplateModel;
 
-@Tag("bakery-login")
-@HtmlImport("src/login/bakery-login.html")
+@Tag("login-view")
+@HtmlImport("src/login/login-view.html")
 @Route(value = "login")
 @PageTitle("###Bakery###")
 public class LoginView extends PolymerTemplate<LoginView.Model> implements PageConfigurator, AfterNavigationObserver {

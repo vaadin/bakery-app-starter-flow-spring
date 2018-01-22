@@ -11,7 +11,7 @@
 
 <link rel="import" href="../app/style-modules/shared-styles.html">
 
-<dom-module id="bakery-storefront">
+<dom-module id="storefront-view">
   <template>
     <style include="shared-styles">
       :host {
@@ -54,7 +54,7 @@
   <script>
     class BakeryStorefront extends window.HasNotificationsMixin(Polymer.Element) {
       static get is() {
-        return 'bakery-storefront';
+        return 'storefront-view';
       }
 
       // This method is overriden to measure the page load performance and can be safely removed

@@ -8,7 +8,7 @@
 
 <link rel="import" href="dashboard-counter-label.html">
 
-<dom-module id="bakery-dashboard">
+<dom-module id="dashboard-view">
   <template>
     <style include="shared-styles bakery-charts-default-theme">
       :host {
@@ -88,7 +88,7 @@
   <script>
     class BakeryDashboard extends Polymer.Element {
       static get is() {
-        return 'bakery-dashboard';
+        return 'dashboard-view';
       }
 
       // This method is overridden to measure the page load performance and can be safely removed
