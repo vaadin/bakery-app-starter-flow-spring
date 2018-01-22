@@ -11,10 +11,10 @@ import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.app.security.SecurityUtils;
 import com.vaadin.starter.bakery.ui.exceptions.AccessDeniedException;
 
-@Tag("bakery-app")
-@HtmlImport("src/app/bakery-app.html")
+@Tag("main-view")
+@HtmlImport("src/main-view.html")
 @BodySize(height = "100vh", width = "100vw")
-public class BakeryApp extends PolymerTemplate<TemplateModel>
+public class MainView extends PolymerTemplate<TemplateModel>
 		implements RouterLayout, BeforeEnterObserver {
 
 	@Override

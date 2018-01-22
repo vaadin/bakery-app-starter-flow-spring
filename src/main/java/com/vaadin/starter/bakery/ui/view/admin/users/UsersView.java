@@ -23,8 +23,8 @@ import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.data.entity.util.EntityUtil;
-import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.components.SearchBar;
+import com.vaadin.starter.bakery.ui.MainView;
 import com.vaadin.starter.bakery.ui.components.ComboBoxForBinder;
 import com.vaadin.starter.bakery.ui.components.FormButtonsBar;
 import com.vaadin.starter.bakery.ui.components.FormDialog;
@@ -34,7 +34,7 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
 @Tag("users-view")
 @HtmlImport("src/admin/users/users-view.html")
-@Route(value = PAGE_USERS, layout = BakeryApp.class)
+@Route(value = PAGE_USERS, layout = MainView.class)
 @PageTitle(BakeryConst.TITLE_USERS)
 @Secured(Role.ADMIN)
 public class UsersView extends CrudView<User, TemplateModel> {

@@ -22,8 +22,8 @@ import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.util.EntityUtil;
-import com.vaadin.starter.bakery.ui.BakeryApp;
 import com.vaadin.starter.bakery.ui.components.SearchBar;
+import com.vaadin.starter.bakery.ui.MainView;
 import com.vaadin.starter.bakery.ui.components.FormButtonsBar;
 import com.vaadin.starter.bakery.ui.components.FormDialog;
 import com.vaadin.starter.bakery.ui.crud.CrudView;
@@ -33,7 +33,7 @@ import com.vaadin.starter.bakery.ui.utils.converters.CurrencyFormatter;
 
 @Tag("products-view")
 @HtmlImport("src/admin/products/products-view.html")
-@Route(value = PAGE_PRODUCTS, layout = BakeryApp.class)
+@Route(value = PAGE_PRODUCTS, layout = MainView.class)
 @PageTitle(BakeryConst.TITLE_PRODUCTS)
 @Secured(Role.ADMIN)
 public class ProductsView extends CrudView<Product, TemplateModel>  {

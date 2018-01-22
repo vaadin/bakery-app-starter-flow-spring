@@ -12,10 +12,10 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteNotFoundError;
 import com.vaadin.flow.router.RouterLink;
-import com.vaadin.starter.bakery.ui.BakeryApp;
+import com.vaadin.starter.bakery.ui.MainView;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
-@Route(value = BakeryConst.PAGE_NOTFOUND, layout = BakeryApp.class)
+@Route(value = BakeryConst.PAGE_NOTFOUND, layout = MainView.class)
 @PageTitle(BakeryConst.TITLE_NOT_FOUND)
 public class NotFoundView extends RouteNotFoundError {
 

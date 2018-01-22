@@ -1,29 +1,29 @@
-<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="style-modules/shared-styles.html">
 
 <!--  Ensure that all components not used in templates but
       created from server-side are bundled -->
-<link rel="import" href="../access-denied-view.html">
-<link rel="import" href="../components/confirm-dialog.html">
-<link rel="import" href="../login/login-view.html">
-<link rel="import" href="../storefront/storefront-view.html">
-<link rel="import" href="../storefront/storefront-order-card.html">
-<link rel="import" href="../dashboard/dashboard-view.html">
-<link rel="import" href="../admin/users/users-view.html">
-<link rel="import" href="../admin/products/products-view.html">
+<link rel="import" href="view/access-denied-view.html">
+<link rel="import" href="components/confirm-dialog.html">
+<link rel="import" href="login/login-view.html">
+<link rel="import" href="storefront/storefront-view.html">
+<link rel="import" href="storefront/storefront-order-card.html">
+<link rel="import" href="dashboard/dashboard-view.html">
+<link rel="import" href="admin/users/users-view.html">
+<link rel="import" href="admin/products/products-view.html">
 
 <!-- Ensure that flow renderers are bundled:
       - at build time this this resolves to webapp/flow-component-renderer.html
         (which is copied there from flow-server.jar by Maven)
       - at run time this resolves to /flow-component-renderer.html
         (which is provided by flow-server.jar)-->
-<link rel="import" href="../../flow-component-renderer.html">
-<link rel="import" href="../../flow-grid-component-renderer.html">
+<link rel="import" href="../flow-component-renderer.html">
+<link rel="import" href="../flow-grid-component-renderer.html">
 
 <!-- Imports used in this page -->
-<link rel="import" href="bakery-navigation.html">
+<link rel="import" href="view/bakery-navigation.html">
 
-<dom-module id="bakery-app">
+<dom-module id="main-view">
   <template>
     <style>
       :host {
@@ -64,12 +64,12 @@
   </template>
 
   <script>
-    class BakeryApp extends Polymer.Element {
+    class MainView extends Polymer.Element {
       static get is() {
-        return 'bakery-app';
+        return 'main-view';
       }
     }
 
-    window.customElements.define(BakeryApp.is, BakeryApp);
+    window.customElements.define(MainView.is, MainView);
   </script>
 </dom-module>

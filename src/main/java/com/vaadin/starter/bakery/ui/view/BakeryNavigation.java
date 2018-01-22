@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery.ui;
+package com.vaadin.starter.bakery.ui.view;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ import com.vaadin.starter.bakery.ui.view.admin.products.ProductsView;
 import com.vaadin.starter.bakery.ui.view.admin.users.UsersView;
 
 @Tag("bakery-navigation")
-@HtmlImport("src/app/bakery-navigation.html")
+@HtmlImport("src/view/bakery-navigation.html")
 public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> implements AfterNavigationObserver {
 
 	private static final String ICON_STOREFRONT = "edit";
