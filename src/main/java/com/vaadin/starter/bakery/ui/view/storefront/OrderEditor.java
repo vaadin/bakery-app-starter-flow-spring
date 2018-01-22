@@ -46,7 +46,7 @@ import com.vaadin.starter.bakery.ui.view.storefront.event.ReviewEvent;
 import com.vaadin.starter.bakery.ui.view.storefront.event.ValueChangeEvent;
 
 @Tag("order-editor")
-@HtmlImport("src/storefront/order-editor.html")
+@HtmlImport("src/view/storefront/order-editor.html")
 @SpringComponent
 @Scope("prototype")
 public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {

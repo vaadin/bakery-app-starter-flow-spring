@@ -25,7 +25,7 @@ import com.vaadin.starter.bakery.ui.view.storefront.event.PriceChangeEvent;
 import com.vaadin.starter.bakery.ui.view.storefront.event.ProductChangeEvent;
 
 @Tag("order-item-editor")
-@HtmlImport("src/storefront/order-item-editor.html")
+@HtmlImport("src/view/storefront/order-item-editor.html")
 public class OrderItemEditor extends PolymerTemplate<TemplateModel> implements HasValue<OrderItemEditor, OrderItem> {
 
 	@Id("products")

@@ -34,7 +34,7 @@ import com.vaadin.starter.bakery.ui.view.storefront.event.EditEvent;
  * field to add comments.
  */
 @Tag("order-details-full")
-@HtmlImport("src/storefront/order-details-full.html")
+@HtmlImport("src/view/storefront/order-details-full.html")
 public class OrderDetailsFull extends PolymerTemplate<OrderDetailsFull.Model> {
 
 	private Order order;

@@ -27,7 +27,7 @@ import com.vaadin.starter.bakery.ui.view.storefront.event.EditEvent;
  * separation.
  */
 @Tag("storefront-order-card")
-@HtmlImport("src/storefront/storefront-order-card.html")
+@HtmlImport("src/view/storefront/storefront-order-card.html")
 public class StorefrontOrderCard extends PolymerTemplate<StorefrontOrderCard.Model> {
 
 	public interface Model extends TemplateModel {

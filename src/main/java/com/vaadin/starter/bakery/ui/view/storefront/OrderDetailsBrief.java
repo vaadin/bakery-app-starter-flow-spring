@@ -30,7 +30,7 @@ import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
  * The component displaying a brief (read-only) summary of an order.
  */
 @Tag("order-details-brief")
-@HtmlImport("src/storefront/order-details-brief.html")
+@HtmlImport("src/view/storefront/order-details-brief.html")
 public class OrderDetailsBrief extends PolymerTemplate<OrderDetailsBrief.Model> {
 
 	public interface Model extends TemplateModel {

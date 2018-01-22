@@ -11,7 +11,7 @@ import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.ui.utils.OrdersCountData;
 
 @Tag("dashboard-counter-label")
-@HtmlImport("src/dashboard/dashboard-counter-label.html")
+@HtmlImport("src/view/dashboard/dashboard-counter-label.html")
 public class DashboardCounterLabel extends PolymerTemplate<TemplateModel> {
 
 	@Id("title")
