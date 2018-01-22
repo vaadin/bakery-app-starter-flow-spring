@@ -6,7 +6,7 @@ import com.vaadin.starter.bakery.testbench.elements.core.GridElement;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elementsbase.Element;
 
-@Element("bakery-storefront")
+@Element("storefront-view")
 public class StorefrontViewElement extends TestBenchElement implements HasApp, HasCrudView {
 
 	@Override

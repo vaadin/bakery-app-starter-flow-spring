@@ -5,7 +5,7 @@ import com.vaadin.starter.bakery.testbench.elements.core.TextFieldElement;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elementsbase.Element;
 
-@Element("bakery-products")
+@Element("products-view")
 public class ProductsViewElement extends TestBenchElement implements HasApp, HasCrudView {
 
 	@Override

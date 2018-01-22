@@ -5,8 +5,8 @@ import com.vaadin.testbench.HasElementQuery;
 
 public interface HasApp extends HasElementQuery {
 
-	default BakeryAppElement getApp() {
-		return $(BakeryAppElement.class).onPage().first();
+	default MainViewElement getApp() {
+		return $(MainViewElement.class).onPage().first();
 	}
 
 	default BakeryNavigationElement getMenu() {
