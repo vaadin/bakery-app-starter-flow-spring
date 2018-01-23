@@ -6,7 +6,7 @@ import com.vaadin.starter.bakery.testbench.elements.core.TextFieldElement;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elementsbase.Element;
 
-@Element("bakery-users")
+@Element("users-view")
 public class UsersViewElement extends TestBenchElement implements HasCrudView {
 
 	@Override

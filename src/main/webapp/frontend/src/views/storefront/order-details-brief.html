@@ -1,0 +1,125 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../styles/shared-styles.html">
+<link rel="import" href="order-status-badge.html">
+
+<dom-module id="order-details-brief">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: flex;
+        padding: var(--valo-space-l) var(--valo-space-s);
+        cursor: pointer;
+      }
+
+      .flex {
+        display: flex;
+      }
+
+      #info-wrapper {
+        flex-direction: column-reverse;
+        justify-content: flex-end;
+      }
+
+      order-status-badge {
+        margin: var(--valo-space-s) 0;
+        width: 100px;
+      }
+
+      #time-place {
+        width: 120px;
+      }
+
+      #name-items {
+        flex: 1;
+      }
+
+      #place,
+      #secondary-time,
+      #full-day,
+      #goods {
+        color: var(--valo-secondary-text-color);
+      }
+
+      h3 {
+        margin: 0;
+      }
+
+      #goods {
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      #goods > div {
+        box-sizing: border-box;
+        width: 18em;
+        flex: auto;
+        padding-right: var(--valo-space-l);
+      }
+
+      .goods-item {
+        display: flex;
+        align-items: baseline;
+        font-size: var(--valo-font-size-s);
+        margin: var(--valo-space-xs) 0;
+      }
+
+      .goods-item > .count {
+        margin-right: var(--valo-space-s);
+      }
+
+      .goods-item > div {
+        flex: auto;
+      }
+
+      @media (min-width: 600px) {
+        :host {
+          padding: var(--valo-space-l);
+        }
+
+        #info-wrapper {
+          flex-direction: row;
+        }
+
+        order-status-badge {
+          margin: 0;
+        }
+      }
+    </style>
+
+    <div id="info-wrapper" class="flex">
+      <order-status-badge status="[[item.state]]"></order-status-badge>
+      <div id="time-place"></div>
+    </div>
+
+    <div id="name-items">
+      <h3 id="name">[[item.customer.fullName]]</h3>
+      <div id="goods">
+        <template is="dom-repeat" items="[[item.items]]">
+          <div class="goods-item">
+            <span class="count">[[item.quantity]]</span>
+            <div>[[item.product.name]]</div>
+          </div>
+        </template>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    class OrderDetailsBrief extends Polymer.Element {
+      static get is() {
+        return 'order-details-brief';
+      }
+
+      static get properties() {
+        return {
+          item: {
+            type: Object
+          }
+        };
+      }
+
+    }
+
+    window.customElements.define(OrderDetailsBrief.is, OrderDetailsBrief);
+  </script>
+</dom-module>

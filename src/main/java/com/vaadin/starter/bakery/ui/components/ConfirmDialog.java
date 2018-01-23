@@ -10,7 +10,7 @@ import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.shared.Registration;
 
 @Tag("confirm-dialog")
-@HtmlImport("src/elements/confirm-dialog.html")
+@HtmlImport("src/components/confirm-dialog.html")
 public class ConfirmDialog extends Component {
 
 	public String getCaption() {

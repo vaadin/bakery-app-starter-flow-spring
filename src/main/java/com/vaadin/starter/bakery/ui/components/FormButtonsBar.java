@@ -12,7 +12,7 @@ import com.vaadin.flow.shared.Registration;
  * Java wrapper of the polymer element `form-buttons-bar`
  */
 @Tag("form-buttons-bar")
-@HtmlImport("src/elements/form-buttons-bar.html")
+@HtmlImport("src/components/form-buttons-bar.html")
 public class FormButtonsBar extends Component {
 
 	public void setSaveText(String saveText) {

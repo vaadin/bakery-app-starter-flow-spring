@@ -1,6 +1,6 @@
 {
-  "entrypoint": "src/app/bakery-app.html",
-  "shell": "src/app/bakery-app.html",
+  "entrypoint": "src/main-view.html",
+  "shell": "src/main-view.html",
   "sources": [
     "src/**/*",
     "images/**/*",

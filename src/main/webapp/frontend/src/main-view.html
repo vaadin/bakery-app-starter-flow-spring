@@ -1,0 +1,75 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="styles/shared-styles.html">
+
+<!--  Ensure that all components not used in templates but
+      created from server-side are bundled -->
+<link rel="import" href="components/confirm-dialog.html">
+<link rel="import" href="views/errors/access-denied-view.html">
+<link rel="import" href="views/login/login-view.html">
+<link rel="import" href="views/storefront/storefront-view.html">
+<link rel="import" href="views/storefront/order-card.html">
+<link rel="import" href="views/dashboard/dashboard-view.html">
+<link rel="import" href="views/admin/users/users-view.html">
+<link rel="import" href="views/admin/products/products-view.html">
+
+<!-- Ensure that flow renderers are bundled:
+      - at build time this this resolves to webapp/flow-component-renderer.html
+        (which is copied there from flow-server.jar by Maven)
+      - at run time this resolves to /flow-component-renderer.html
+        (which is provided by flow-server.jar)-->
+<link rel="import" href="../flow-component-renderer.html">
+<link rel="import" href="../flow-grid-component-renderer.html">
+
+<!-- Imports used in this page -->
+<link rel="import" href="components/app-navigation.html">
+
+<dom-module id="main-view">
+  <template>
+    <style>
+      :host {
+        height: 100%;
+        display: flex;
+        flex-direction: column-reverse;
+        color: var(--valo-body-text-color);
+        font-family: var(--valo-font-family);
+      }
+
+      app-navigation {
+        width: 100%;
+      }
+
+      #child-wrapper {
+        display: flex;
+        flex: 1;
+        overflow: auto;
+        width: 100%;
+        justify-content: center;
+      }
+
+      #child-wrapper > ::slotted(*) {
+        flex: 1;
+      }
+
+      @media (min-width: 600px) {
+        :host {
+          flex-direction: column;
+        }
+      }
+    </style>
+
+    <app-navigation id="app-navigation"></app-navigation>
+    <div id="child-wrapper">
+      <slot></slot>
+    </div>
+  </template>
+
+  <script>
+    class MainView extends Polymer.Element {
+      static get is() {
+        return 'main-view';
+      }
+    }
+
+    window.customElements.define(MainView.is, MainView);
+  </script>
+</dom-module>

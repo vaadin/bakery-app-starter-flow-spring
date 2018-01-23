@@ -7,7 +7,7 @@ import com.vaadin.starter.bakery.testbench.elements.core.TextFieldElement;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elementsbase.Element;
 
-@Element("bakery-login")
+@Element("login-view")
 public class LoginViewElement extends TestBenchElement {
 
 	public StorefrontViewElement login(String username, String password) {

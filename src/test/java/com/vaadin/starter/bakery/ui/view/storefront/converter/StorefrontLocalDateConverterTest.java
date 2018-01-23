@@ -10,6 +10,8 @@ import java.time.LocalDate;
 import org.junit.Test;
 
 import com.vaadin.starter.bakery.test.FormattingTest;
+import com.vaadin.starter.bakery.ui.views.storefront.converters.StorefrontDate;
+import com.vaadin.starter.bakery.ui.views.storefront.converters.StorefrontLocalDateConverter;
 
 public class StorefrontLocalDateConverterTest extends FormattingTest {
 
