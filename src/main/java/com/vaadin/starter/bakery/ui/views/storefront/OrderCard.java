@@ -36,7 +36,7 @@ public class OrderCard extends PolymerTemplate<OrderCard.Model> {
 		void setDisplayHeader(boolean displayHeader);
 	}
 
-	private OrderSummary order;
+	private Long orderId;
 
 	@Id("order-details-brief")
 	private OrderDetailsBrief orderDetailsBrief;
@@ -49,7 +49,7 @@ public class OrderCard extends PolymerTemplate<OrderCard.Model> {
 	}
 
 	public void setOrder(OrderSummary order) {
-		this.order = order;
+		orderId = order.getId();
 		orderDetailsBrief.setOrder(order);
 	}
 
@@ -58,8 +58,8 @@ public class OrderCard extends PolymerTemplate<OrderCard.Model> {
 		orderDetailsFull.display(fullOrder, false);
 	}
 
-	public OrderSummary getOrder() {
-		return order;
+	public Long getOrderId() {
+		return orderId;
 	}
 
 	public void openCard(Order fullOrder) {
