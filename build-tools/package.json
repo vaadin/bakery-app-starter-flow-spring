@@ -5,6 +5,7 @@
   "author": "Vaadin Ltd",
   "license": "SEE LICENSE IN http://vaadin.com/license/cvtl-1",
   "devDependencies": {
+    "babel-preset-minify": "^0.2.0",
     "bower": "1.8.2",
     "eslint": "3.19.0",
     "eslint-config-vaadin": "0.2.3",
@@ -12,6 +13,8 @@
     "gulp": "3.9.1",
     "gulp-eslint": "4.0.0",
     "gulp-html-extract": "0.3.0",
+    "gulp-ignore": "^2.0.2",
+    "gulp-rename": "^1.2.2",
     "gulp-stylelint": "3.9.0",
     "polymer-cli": "1.4.1",
     "stylelint": "7.13.0",

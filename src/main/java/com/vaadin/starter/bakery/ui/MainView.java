@@ -29,6 +29,8 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.templatemodel.TemplateModel;
+import com.vaadin.flow.theme.Theme;
+import com.vaadin.flow.theme.lumo.Lumo;
 import com.vaadin.starter.bakery.app.security.SecurityUtils;
 import com.vaadin.starter.bakery.ui.components.AppNavigation;
 import com.vaadin.starter.bakery.ui.entities.PageInfo;
@@ -39,6 +41,7 @@ import com.vaadin.starter.bakery.ui.views.admin.users.UsersView;
 @Tag("main-view")
 @HtmlImport("src/main-view.html")
 @BodySize(height = "100vh", width = "100vw")
+@Theme(Lumo.class)
 public class MainView extends PolymerTemplate<TemplateModel>
 		implements RouterLayout, BeforeEnterObserver {
 

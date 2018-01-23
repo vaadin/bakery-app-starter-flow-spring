@@ -10,11 +10,14 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.InitialPageSettings;
 import com.vaadin.flow.server.PageConfigurator;
 import com.vaadin.flow.templatemodel.TemplateModel;
+import com.vaadin.flow.theme.Theme;
+import com.vaadin.flow.theme.lumo.Lumo;
 
 @Tag("login-view")
 @HtmlImport("src/views/login/login-view.html")
 @Route(value = "login")
 @PageTitle("###Bakery###")
+@Theme(Lumo.class)
 public class LoginView extends PolymerTemplate<LoginView.Model> implements PageConfigurator, AfterNavigationObserver {
 
 	@Override

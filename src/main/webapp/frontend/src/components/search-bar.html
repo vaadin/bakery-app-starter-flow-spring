@@ -4,7 +4,7 @@
 <link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="../../bower_components/vaadin-checkbox/vaadin-checkbox.html">
 <link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
-<link rel="import" href="../../bower_components/vaadin-valo-theme/icons.html">
+<link rel="import" href="../../bower_components/vaadin-lumo-styles/icons.html">
 <link rel="import" href="../styles/shared-styles.html">
 
 <dom-module id="search-bar">
@@ -15,12 +15,12 @@
         z-index: 2;
         display: flex;
         flex-direction: column;
-        padding: 0 var(--valo-space-s);
+        padding: 0 var(--lumo-space-s);
         min-height: 56px;
         overflow: hidden;
-        background-image: linear-gradient(var(--valo-shade-20pct), var(--valo-shade-20pct));
-        background-color: var(--valo-base-color);
-        box-shadow: 0 0 16px 2px var(--valo-shade-20pct);
+        background-image: linear-gradient(var(--lumo-shade-20pct), var(--lumo-shade-20pct));
+        background-color: var(--lumo-base-color);
+        box-shadow: 0 0 16px 2px var(--lumo-shade-20pct);
       }
 
       .row {
@@ -37,7 +37,7 @@
 
       :host([show-checkbox]) .checkbox {
         display: inline-block;
-        margin: 0 0 calc(-1 * var(--valo-space-l));
+        margin: 0 0 calc(-1 * var(--lumo-space-l));
         transition: all .5s;
       }
 
@@ -52,7 +52,7 @@
       .field {
         flex: 1;
         width: auto;
-        padding-right: var(--valo-space-s);
+        padding-right: var(--lumo-space-s);
       }
 
       @media (min-width: 600px) {
@@ -63,7 +63,7 @@
         }
 
         .field {
-          padding-right: var(--valo-space-m);
+          padding-right: var(--lumo-space-m);
         }
 
         :host([show-checkbox]) .checkbox {

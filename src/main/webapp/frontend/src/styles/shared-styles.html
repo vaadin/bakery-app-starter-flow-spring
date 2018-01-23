@@ -1,20 +1,20 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/vaadin-icons/vaadin-icons.html">
-<link rel="import" href="../../bower_components/vaadin-valo-theme/typography.html">
-<link rel="import" href="../../bower_components/vaadin-valo-theme/color.html">
-<link rel="import" href="../../bower_components/vaadin-valo-theme/style.html">
-<link rel="import" href="../../bower_components/vaadin-valo-theme/sizing.html">
-<link rel="import" href="../../bower_components/vaadin-valo-theme/spacing.html">
-<link rel="import" href="../../bower_components/vaadin-valo-theme/icons.html">
-<link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-button.html">
-<link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-text-field.html">
-<link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-checkbox.html">
-<link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-date-picker.html">
-<link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-form-layout.html">
-<link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-form-item.html">
-<link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-combo-box.html">
-<link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-grid.html">
-<link rel="import" href="../../bower_components/vaadin-valo-theme/vaadin-tabs.html">
+<link rel="import" href="../../bower_components/vaadin-lumo-styles/typography.html">
+<link rel="import" href="../../bower_components/vaadin-lumo-styles/color.html">
+<link rel="import" href="../../bower_components/vaadin-lumo-styles/style.html">
+<link rel="import" href="../../bower_components/vaadin-lumo-styles/sizing.html">
+<link rel="import" href="../../bower_components/vaadin-lumo-styles/spacing.html">
+<link rel="import" href="../../bower_components/vaadin-lumo-styles/icons.html">
+<link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
+<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../../bower_components/vaadin-checkbox/vaadin-checkbox.html">
+<link rel="import" href="../../bower_components/vaadin-date-picker/vaadin-date-picker.html">
+<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
+<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-item.html">
+<link rel="import" href="../../bower_components/vaadin-combo-box/vaadin-combo-box.html">
+<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../../bower_components/vaadin-tabs/vaadin-tabs.html">
 
 <!-- Theme for the status selector, we need to theme the text-field instead of the combo-box -->
 <dom-module id="bakery-text-field-theme" theme-for="vaadin-text-field">
@@ -22,20 +22,20 @@
     <style>
       :host([theme~="status"][status="new"]) [part~="input-field"],
       :host([theme~="status"][status="confirmed"]) [part~="input-field"] {
-        color: var(--valo-primary-color);
-        background: var(--valo-primary-color-10pct);
+        color: var(--lumo-primary-color);
+        background: var(--lumo-primary-color-10pct);
       }
 
       :host([theme~="status"][status="ready"]) [part~="input-field"],
       :host([theme~="status"][status="delivered"]) [part~="input-field"] {
-        color: var(--valo-success-color);
-        background: var(--valo-success-color-10pct);
+        color: var(--lumo-success-color);
+        background: var(--lumo-success-color-10pct);
       }
 
       :host([theme~="status"][status="problem"]) [part~="input-field"],
       :host([theme~="status"][status="cancelled"]) [part~="input-field"] {
-        color: var(--valo-error-color);
-        background: var(--valo-error-color-10pct);
+        color: var(--lumo-error-color);
+        background: var(--lumo-error-color-10pct);
       }
 
       :host([theme~="center"]) [part="value"] {
@@ -57,15 +57,15 @@
 
       [part~="row"]:last-child [part~="header-cell"],
       [part~="header-cell"]:not(:empty):not([details-cell]) {
-        padding-top: var(--valo-space-l);
-        padding-bottom: var(--valo-space-m);
+        padding-top: var(--lumo-space-l);
+        padding-bottom: var(--lumo-space-m);
 
-        font-size: var(--valo-font-size-s);
-        border-bottom: 1px solid var(--valo-shade-5pct);
+        font-size: var(--lumo-font-size-s);
+        border-bottom: 1px solid var(--lumo-shade-5pct);
       }
 
       [part~="body-cell"] {
-        border-bottom: 1px solid var(--valo-shade-5pct);
+        border-bottom: 1px solid var(--lumo-shade-5pct);
       }
 
       [part~="reorder-ghost"] {
@@ -116,42 +116,42 @@
 
       h2,
       h3 {
-        margin-top: var(--valo-space-m);
-        margin-bottom: var(--valo-space-s);
+        margin-top: var(--lumo-space-m);
+        margin-bottom: var(--lumo-space-s);
       }
 
       h2 {
-        font-size: var(--valo-font-size-xxl);
+        font-size: var(--lumo-font-size-xxl);
       }
 
       h3 {
-        font-size: var(--valo-font-size-xl);
+        font-size: var(--lumo-font-size-xl);
       }
 
       iron-icon {
-        width: var(--valo-size-xxxs);
+        width: var(--lumo-size-xxxs);
         height: var(--iron-icon-height, 24px);
         padding: 0;
       }
 
       .scrollable {
-        padding: var(--valo-space-m);
+        padding: var(--lumo-space-m);
         overflow: auto;
         -webkit-overflow-scrolling: touch;
       }
 
       .count {
         display: inline-block;
-        background: var(--valo-shade-10pct);
-        border-radius: var(--valo-border-radius);
-        font-size: var(--valo-font-size-s);
-        padding: 0 var(--valo-space-s);
+        background: var(--lumo-shade-10pct);
+        border-radius: var(--lumo-border-radius);
+        font-size: var(--lumo-font-size-s);
+        padding: 0 var(--lumo-space-s);
         text-align: center;
       }
 
       .total {
-        padding: 0 var(--valo-space-s);
-        font-size: var(--valo-font-size-l);
+        padding: 0 var(--lumo-space-s);
+        font-size: var(--lumo-font-size-l);
         font-weight: bold;
         white-space: nowrap;
       }
@@ -160,7 +160,7 @@
         .total {
           min-width: 0;
           order: 0;
-          padding: 0 var(--valo-space-l);
+          padding: 0 var(--lumo-space-l);
         }
       }
 
@@ -168,6 +168,13 @@
         search-bar {
           order: 1;
         }
+      }
+
+      vaadin-grid {
+         max-width: calc(964px + var(--lumo-space-m));
+         width: 100%;
+         margin: auto;
+         flex: 1;
       }
 
       .flex {
