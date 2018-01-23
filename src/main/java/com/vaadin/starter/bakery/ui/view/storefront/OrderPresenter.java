@@ -65,7 +65,7 @@ class OrderPresenter {
 	}
 
 	void onOrderCardExpanded(StorefrontOrderCard orderCard) {
-		entityPresenter.loadEntity(orderCard.getOrder().getId(), entity -> {
+		entityPresenter.loadEntity(orderCard.getOrderId(), entity -> {
 			final Long id = entity.getId();
 			if (view.isDesktopView()) {
 				registrations = Arrays.asList(orderCard.addEditListener(e -> navigateToOrder(id, true)),
