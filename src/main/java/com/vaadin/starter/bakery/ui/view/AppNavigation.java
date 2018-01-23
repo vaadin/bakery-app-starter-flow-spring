@@ -17,9 +17,9 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.view.admin.products.ProductsView;
 import com.vaadin.starter.bakery.ui.view.admin.users.UsersView;
 
-@Tag("bakery-navigation")
-@HtmlImport("src/view/bakery-navigation.html")
-public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> implements AfterNavigationObserver {
+@Tag("app-navigation")
+@HtmlImport("src/view/app-navigation.html")
+public class AppNavigation extends PolymerTemplate<AppNavigation.Model> implements AfterNavigationObserver {
 
 	private static final String ICON_STOREFRONT = "edit";
 	private static final String ICON_DASHBOARD = "clock";
@@ -33,7 +33,7 @@ public class BakeryNavigation extends PolymerTemplate<BakeryNavigation.Model> im
 		void setPages(List<PageInfo> pages);
 	}
 
-	public BakeryNavigation() {
+	public AppNavigation() {
 		pages.add(new PageInfo(BakeryConst.PAGE_STOREFRONT, ICON_STOREFRONT, BakeryConst.TITLE_STOREFRONT));
 		pages.add(new PageInfo(BakeryConst.PAGE_DASHBOARD, ICON_DASHBOARD, BakeryConst.TITLE_DASHBOARD));
 

@@ -5,7 +5,7 @@
 <link rel="import" href="../../bower_components/vaadin-valo-theme/icons.html">
 <link rel="import" href="../styles/shared-styles.html">
 
-<dom-module id="bakery-navigation">
+<dom-module id="app-navigation">
   <template>
     <style include="shared-styles">
       :host {
@@ -135,10 +135,10 @@
   </template>
 
   <script>
-    class BakeryNavigation extends Polymer.Element {
+    class AppNavigation extends Polymer.Element {
 
       static get is() {
-        return 'bakery-navigation';
+        return 'app-navigation';
       }
 
       static get properties() {
@@ -159,6 +159,6 @@
       }
     }
 
-    window.customElements.define(BakeryNavigation.is, BakeryNavigation);
+    window.customElements.define(AppNavigation.is, AppNavigation);
   </script>
 </dom-module>
