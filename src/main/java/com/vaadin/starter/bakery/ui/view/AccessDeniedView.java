@@ -17,7 +17,7 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
 @Tag("access-denied-view")
 @HtmlImport("src/view/access-denied-view.html")
-@Route(value = BakeryConst.ACCESS_DENIED, layout = MainView.class)
+@Route(value = BakeryConst.PAGE_ACCESS_DENIED, layout = MainView.class)
 @PageTitle(BakeryConst.TITLE_ACCESS_DENIED)
 public class AccessDeniedView extends PolymerTemplate<TemplateModel> implements HasErrorParameter<AccessDeniedException> {
 
