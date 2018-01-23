@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery.ui.views;
+package com.vaadin.starter.bakery.ui.views.errors;
 
 import javax.servlet.http.HttpServletResponse;
 
