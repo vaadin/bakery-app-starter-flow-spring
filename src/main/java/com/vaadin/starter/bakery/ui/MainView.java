@@ -6,6 +6,7 @@ import static com.vaadin.starter.bakery.ui.utils.BakeryConst.ICON_PRODUCTS;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.ICON_STOREFRONT;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.ICON_USERS;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_DASHBOARD;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_DEFAULT;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_LOGOUT;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_PRODUCTS;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_STOREFRONT;
@@ -32,8 +33,8 @@ import com.vaadin.starter.bakery.app.security.SecurityUtils;
 import com.vaadin.starter.bakery.ui.components.AppNavigation;
 import com.vaadin.starter.bakery.ui.entities.PageInfo;
 import com.vaadin.starter.bakery.ui.exceptions.AccessDeniedException;
-import com.vaadin.starter.bakery.ui.view.admin.products.ProductsView;
-import com.vaadin.starter.bakery.ui.view.admin.users.UsersView;
+import com.vaadin.starter.bakery.ui.views.admin.products.ProductsView;
+import com.vaadin.starter.bakery.ui.views.admin.users.UsersView;
 
 @Tag("main-view")
 @HtmlImport("src/main-view.html")
@@ -57,7 +58,7 @@ public class MainView extends PolymerTemplate<TemplateModel>
 		}
 		pages.add(new PageInfo(PAGE_LOGOUT, ICON_LOGOUT, TITLE_LOGOUT));
 
-		appNavigation.init(pages, PAGE_STOREFRONT, PAGE_LOGOUT);
+		appNavigation.init(pages, PAGE_DEFAULT, PAGE_LOGOUT);
 	}
 
 	@Override

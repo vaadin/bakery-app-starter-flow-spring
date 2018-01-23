@@ -17,7 +17,7 @@ import com.vaadin.starter.bakery.backend.service.CrudService;
 import com.vaadin.starter.bakery.backend.service.UserFriendlyDataException;
 import com.vaadin.starter.bakery.ui.utils.messages.CrudErrorMessage;
 import com.vaadin.starter.bakery.ui.utils.messages.Message;
-import com.vaadin.starter.bakery.ui.view.EntityView;
+import com.vaadin.starter.bakery.ui.views.EntityView;
 
 public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 

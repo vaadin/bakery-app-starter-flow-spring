@@ -14,12 +14,11 @@ import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
-import com.vaadin.starter.bakery.ui.components.SearchBar;
 import com.vaadin.starter.bakery.ui.components.FormButtonsBar;
 import com.vaadin.starter.bakery.ui.components.FormDialog;
-import com.vaadin.starter.bakery.ui.event.CloseDialogEvent;
+import com.vaadin.starter.bakery.ui.components.SearchBar;
 import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
-import com.vaadin.starter.bakery.ui.view.EntityView;
+import com.vaadin.starter.bakery.ui.views.EntityView;
 
 public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel> extends PolymerTemplate<T>
 		implements HasLogger, EntityView<E>, HasUrlParameter<Long> {
@@ -51,7 +50,6 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 			e.getFirstSelectedItem().ifPresent(entity -> navigateToEntity(entity.getId().toString()));
 			getGrid().deselectAll();
 		});
-		addListener(CloseDialogEvent.class, e -> getPresenter().cancel());
 
 		getButtons().addSaveListener(e -> getPresenter().save());
 		getButtons().addCancelListener(e -> getPresenter().cancel());
