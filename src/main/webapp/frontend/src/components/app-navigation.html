@@ -120,7 +120,7 @@
         ###Bakery###
       </div>
       <div class="tabsContainer">
-        <vaadin-tabs selected="[[pageNumber]]" on-selected-changed="_onSelectedChanged">
+        <vaadin-tabs selected="{{pageNumber}}">
           <template is="dom-repeat" items="[[pages]]">
             <vaadin-tab value$="[[item.link]]">
               <div class="navigation-label">
@@ -144,18 +144,17 @@
       static get properties() {
         return {
           pageNumber: {
-            value: '0'
-          }
+            observer: '_onSelectedChanged'
+          },
+          pages: Array
         };
       }
 
-      _onSelectedChanged(evt) {
-        const items = evt.target._navItems;
-        if (items) {
-          let page;
-          items.forEach((elm, idx) => idx == evt.target.selected && (page = elm.getAttribute('value')));
-          page && this.$server.navigateTo(page);
-        }
+      _onSelectedChanged(newValue,oldValue) {
+          if(oldValue !== undefined) {
+            this.$server.navigateTo(this.pages[newValue].link);
+          }
+        
       }
     }
 
