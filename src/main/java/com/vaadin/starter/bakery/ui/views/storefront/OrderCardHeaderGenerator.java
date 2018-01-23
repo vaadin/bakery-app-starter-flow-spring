@@ -99,18 +99,22 @@ public class OrderCardHeaderGenerator {
 
 	public void ordersRead(List<Order> orders) {
 		Iterator<HeaderWrapper> headerIterator = headerChain.stream().filter(h -> h.getSelected() == null).iterator();
-		if(!headerIterator.hasNext()) 
+		if (!headerIterator.hasNext()) {
 			return;
+		}
+
 		HeaderWrapper current = headerIterator.next();
 		for (Order order : orders) {
 			// If last selected, discard orders that match it.
-			if (current.getSelected() != null && current.matches(order.getDueDate()))
+			if (current.getSelected() != null && current.matches(order.getDueDate())) {
 				continue;
+			}
 			while (current != null && !current.matches(order.getDueDate())) {
 				current = headerIterator.hasNext() ? headerIterator.next() : null;
 			}
-			if (current == null)
+			if (current == null) {
 				break;
+			}
 			current.setSelected(order.getId());
 			ordersWithHeaders.put(order.getId(), current.getHeader());
 		}

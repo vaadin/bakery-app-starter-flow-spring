@@ -4,7 +4,7 @@ import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elementsbase.Element;
 
 @Element("order-card")
-public class StorefrontOrderCardElement extends TestBenchElement {
+public class OrderCardElement extends TestBenchElement {
 
 	public boolean isOrderSelected() {
 		return getAttribute("selected") != null;
