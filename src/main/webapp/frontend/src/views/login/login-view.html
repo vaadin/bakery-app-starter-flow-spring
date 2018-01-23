@@ -16,13 +16,13 @@
 
         /* workaround for a WebKit issue */
         height: 100vh;
-        --app-primary-color: var(--valo-primary-color);
-        --app-secondary-color: var(--valo-body-text-color);
+        --app-primary-color: var(--lumo-primary-color);
+        --app-secondary-color: var(--lumo-body-text-color);
 
         display: flex;
         flex-direction: column;
-        color: var(--valo-body-text-color);
-        font-family: var(--valo-font-family);
+        color: var(--lumo-body-text-color);
+        font-family: var(--lumo-font-family);
 
         justify-content: center;
       }
@@ -40,26 +40,26 @@
         background-position-x: center;
         display: table;
         width: 100%;
-        padding: var(--valo-space-l);
+        padding: var(--lumo-space-l);
       }
 
       .info__header {
         font-weight: 300;
-        color: var(--valo-base-color);
+        color: var(--lumo-base-color);
         margin-top: 2em;
         margin-bottom: 0;
       }
 
       .info__text {
-        font-size: var(--valo-font-size-s);
-        color: var(--valo-tint-70pct);
+        font-size: var(--lumo-font-size-s);
+        color: var(--lumo-tint-70pct);
         font-weight: 500;
         margin: 0;
       }
 
       .login {
-        padding: var(--valo-space-l);
-        background-color: var(--valo-base-color);
+        padding: var(--lumo-space-l);
+        background-color: var(--lumo-base-color);
         flex: 1;
       }
 
@@ -78,7 +78,7 @@
       }
 
       .login__button {
-        margin-top: var(--valo-space-m);
+        margin-top: var(--lumo-space-m);
         margin-left: 0;
         margin-right: 0;
         position: relative;
@@ -88,7 +88,7 @@
       .login__button-icon {
         text-align: right;
         position: absolute;
-        right: var(--valo-space-s);
+        right: var(--lumo-space-s);
       }
 
       .error {
@@ -98,9 +98,9 @@
 
       .error__icon {
         flex: 0 0 auto;
-        fill: var(--valo-error-color);
+        fill: var(--lumo-error-color);
         margin-top: 1.3em;
-        margin-right: var(--valo-space-s);
+        margin-right: var(--lumo-space-s);
       }
 
       .error__text {
@@ -112,7 +112,7 @@
           max-width: 700px;
           height: auto;
           margin: 0 auto;
-          box-shadow: 0 2px 5px 0 var(--valo-shade-10pct);
+          box-shadow: 0 2px 5px 0 var(--lumo-shade-10pct);
         }
 
         .info {
@@ -132,7 +132,7 @@
         }
 
         .login__layout > *:not(:first-child) {
-          margin-left: var(--valo-space-m);
+          margin-left: var(--lumo-space-m);
         }
 
         .login__button {
