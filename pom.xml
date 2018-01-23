@@ -20,7 +20,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Dependencies -->
-        <vaadin.version>10.0.0.alpha13</vaadin.version>
+        <vaadin.version>10.0.0.alpha14</vaadin.version>
         <testbench.version>6.0.0.alpha7</testbench.version>
 
         <spring-boot.version>1.5.9.RELEASE</spring-boot.version>
@@ -209,13 +209,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        <!-- End Spring -->
-
-        <!-- Compile scope is needed to run on WildFly -->
         <dependency>
-            <groupId>org.reactivestreams</groupId>
-            <artifactId>reactive-streams</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+            <scope>runtime</scope>
         </dependency>
+        <!-- End Spring -->
 
         <!-- Testing -->
         <dependency>
@@ -260,6 +260,9 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring-boot.version}</version>
+                    <configuration>
+                      <fork>true</fork>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
