@@ -2,7 +2,7 @@
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/vaadin-tabs/vaadin-tabs.html">
 <link rel="import" href="../../bower_components/vaadin-tabs/vaadin-tab.html">
-<link rel="import" href="../../bower_components/vaadin-valo-theme/icons.html">
+<link rel="import" href="../../bower_components/vaadin-lumo-styles/icons.html">
 <link rel="import" href="../styles/shared-styles.html">
 
 <dom-module id="app-navigation">
@@ -10,20 +10,20 @@
     <style include="shared-styles">
       :host {
         display: block;
-        box-shadow: 0 0 16px 2px var(--valo-shade-20pct);
+        box-shadow: 0 0 16px 2px var(--lumo-shade-20pct);
         z-index: 200;
       }
 
       .toolbar {
         display: flex;
         justify-content: space-between;
-        background-color: var(--valo-base-color);
+        background-color: var(--lumo-base-color);
         height: 64px;
         align-items: center;
       }
 
       .branding {
-        font-size: var(--valo-font-size-m);
+        font-size: var(--lumo-font-size-m);
         line-height: normal;
         display: none;
       }
@@ -32,9 +32,9 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        color: var(--valo-secondary-text-color);
+        color: var(--lumo-secondary-text-color);
         text-decoration: none;
-        font-size: var(--valo-font-size-s);
+        font-size: var(--lumo-font-size-s);
       }
 
       vaadin-tabs {
@@ -51,15 +51,15 @@
       }
 
       paper-tab iron-icon {
-        margin-bottom: var(--valo-space-xs);
+        margin-bottom: var(--lumo-space-xs);
       }
 
       vaadin-tab[selected] iron-icon {
-        color: var(--valo-primary-color);
+        color: var(--lumo-primary-color);
       }
 
       vaadin-tab[selected] span {
-        color: var(--valo-body-text-color);
+        color: var(--lumo-body-text-color);
       }
 
       .tabsContainer {
@@ -75,11 +75,11 @@
 
       @media (min-width: 600px) {
         .toolbar {
-          padding: 0 var(--valo-space-m);
+          padding: 0 var(--lumo-space-m);
         }
 
         .navigation-label {
-          padding: 0 var(--valo-space-xs);
+          padding: 0 var(--lumo-space-xs);
         }
 
         .branding {
@@ -97,7 +97,7 @@
 
       @media (min-width: 740px) {
         .navigation-label {
-          padding: 0 var(--valo-space-m);
+          padding: 0 var(--lumo-space-m);
         }
       }
 
@@ -106,11 +106,11 @@
           flex: 1;
 
           /* 964px is the width of the storefront grid */
-          max-width: calc((100% - 964px - var(--valo-space-m)) / 2);
+          max-width: calc((100% - 964px - var(--lumo-space-m)) / 2);
         }
 
         .navigation-label {
-          padding: 0 var(--valo-space-l);
+          padding: 0 var(--lumo-space-l);
         }
       }
     </style>
@@ -120,7 +120,7 @@
         ###Bakery###
       </div>
       <div class="tabsContainer">
-        <vaadin-tabs selected="[[pageNumber]]" on-selected-changed="_onSelectedChanged">
+        <vaadin-tabs selected="{{pageNumber}}">
           <template is="dom-repeat" items="[[pages]]">
             <vaadin-tab value$="[[item.link]]">
               <div class="navigation-label">
@@ -144,18 +144,17 @@
       static get properties() {
         return {
           pageNumber: {
-            value: '0'
-          }
+            observer: '_onSelectedChanged'
+          },
+          pages: Array
         };
       }
 
-      _onSelectedChanged(evt) {
-        const items = evt.target._navItems;
-        if (items) {
-          let page;
-          items.forEach((elm, idx) => idx == evt.target.selected && (page = elm.getAttribute('value')));
-          page && this.$server.navigateTo(page);
-        }
+      _onSelectedChanged(newValue,oldValue) {
+          if(oldValue !== undefined) {
+            this.$server.navigateTo(this.pages[newValue].link);
+          }
+        
       }
     }
 

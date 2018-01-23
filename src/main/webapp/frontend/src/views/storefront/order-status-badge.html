@@ -6,27 +6,27 @@
     <style>
       #wrapper {
         display: inline-block;
-        border-radius: var(--valo-border-radius);
-        background: var(--valo-shade-10pct);
-        color: var(--valo-secondary-text-color);
+        border-radius: var(--lumo-border-radius);
+        background: var(--lumo-shade-10pct);
+        color: var(--lumo-secondary-text-color);
         padding: 2px 10px;
-        font-size: var(--valo-font-size-xs);
+        font-size: var(--lumo-font-size-xs);
         text-transform: capitalize;
       }
 
       :host([status="ready"]) #wrapper {
-        color: var(--valo-success-color);
-        background: var(--valo-success-color-10pct);
+        color: var(--lumo-success-color);
+        background: var(--lumo-success-color-10pct);
       }
 
       :host([status="new"]) #wrapper {
-        color: var(--valo-primary-color);
-        background: var(--valo-primary-color-10pct);
+        color: var(--lumo-primary-color);
+        background: var(--lumo-primary-color-10pct);
       }
 
       :host([status="problem"]) #wrapper {
-        color: var(--valo-error-color);
-        background: var(--valo-error-color-10pct);
+        color: var(--lumo-error-color);
+        background: var(--lumo-error-color-10pct);
       }
 
       :host([status="delivered"]) #wrapper {
