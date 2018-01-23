@@ -456,7 +456,7 @@
                                     <directory>${frontend.directory}/build</directory>
                                 </resource>
                             </webResources>
-                            <warSourceExcludes>**/build/,**/bower.json,**/package.json,.bowerrc,src/**,bower_components/**,images/**,frontend/**</warSourceExcludes>
+                            <warSourceExcludes>**/build/,**/bower.json,**/package.json,.bowerrc,src/**,bower_components/**,frontend/**</warSourceExcludes>
                         </configuration>
                     </plugin>
                     <plugin>
