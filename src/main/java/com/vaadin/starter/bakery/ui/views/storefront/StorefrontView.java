@@ -81,13 +81,13 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		}));
 		SingleSelectionListener<Grid<Order>, Order> listener = e -> {
 			if (e.getOldValue() != null) {
-				StorefrontOrderCard card = components.get(e.getOldValue());
+				OrderCard card = components.get(e.getOldValue());
 				if (card != null) {
 					presenter.onOrderCardCollapsed(card);
 				}
 			}
 			if (e.getValue() != null) {
-				StorefrontOrderCard card = components.get(e.getValue());
+				OrderCard card = components.get(e.getValue());
 				if (card != null) {
 					presenter.onOrderCardExpanded(card);
 				}
