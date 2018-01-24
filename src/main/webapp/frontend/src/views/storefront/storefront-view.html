@@ -48,7 +48,7 @@
   </template>
 
   <script>
-    class BakeryStorefront extends window.HasNotificationsMixin(Polymer.Element) {
+    class StorefrontView extends window.HasNotificationsMixin(Polymer.Element) {
       static get is() {
         return 'storefront-view';
       }
@@ -89,6 +89,6 @@
       }
     }
 
-    window.customElements.define(BakeryStorefront.is, BakeryStorefront);
+    window.customElements.define(StorefrontView.is, StorefrontView);
   </script>
 </dom-module>
