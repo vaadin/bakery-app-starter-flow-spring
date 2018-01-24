@@ -24,10 +24,6 @@
         -webkit-overflow-scrolling: touch;
       }
 
-      #storefront-grid {
-        max-width: 100%;
-      }
-
       @media (min-width: 600px) {
         :host {
           max-width: none !important;
@@ -40,7 +36,7 @@
 
     <search-bar id="search" show-checkbox></search-bar>
 
-    <vaadin-grid id="storefront-grid" theme="compact storefront-grid"></vaadin-grid>
+    <vaadin-grid id="storefront-grid" theme="storefront-grid"></vaadin-grid>
 
     <!--  dialogs are tele-ported to body, hence you need to inline styles or use styled web components -->
     <form-dialog opened="[[editing]]">
