@@ -49,6 +49,12 @@
 <dom-module id="bakery-grid-styles" theme-for="vaadin-grid">
   <template>
     <style include="lumo-grid">
+      :host {
+         width: 100%;
+         margin: auto;
+         flex: 1;
+      }
+
       [part~="row"]:last-child [part~="header-cell"],
       [part~="header-cell"]:not(:empty):not([details-cell]) {
         padding-top: var(--lumo-space-l);
@@ -83,6 +89,10 @@
       :host([theme~="storefront-grid"]) [part~="body-cell"] {
         border-bottom: none;
         background: transparent;
+      }
+
+      :host([theme~="crud-grid"]) {
+         max-width: calc(964px + var(--valo-space-m));
       }
     </style>
   </template>
@@ -158,13 +168,6 @@
         search-bar {
           order: 1;
         }
-      }
-
-      vaadin-grid {
-         max-width: calc(964px + var(--lumo-space-m));
-         width: 100%;
-         margin: auto;
-         flex: 1;
       }
 
       .flex {
