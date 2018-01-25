@@ -56,12 +56,10 @@ public class CustomBootstrapListener implements BootstrapListener {
 
 	private void injectInlineCustomStyles(Element head) {
 		head.append("<!-- Add any global styles for body, document, etc. -->\n" +
-				"    <custom-style>\n" +
-				"      <style is=\"custom-style\" include=\"lumo-color lumo-typography\">\n" +
-				"        html {\n" +
-				"          background: var(--lumo-shade-10pct);\n" +
-				"        }\n" +
-				"      </style>\n" +
-				"    </custom-style>");
+				"    <style>\n" +
+				"      body {\n" +
+				"        background: var(--lumo-shade-10pct);\n" +
+				"      }\n" +
+				"    </style>");
 	}
 }
