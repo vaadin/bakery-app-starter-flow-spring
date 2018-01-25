@@ -463,7 +463,7 @@
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <configuration>
-                            <jvmArguments>-Dvaadin.frontend.url.es5=context://frontend/build/frontend-es5/ -Dvaadin.frontend.url.es6=context://frontend/build/frontend-es6/ -Dvaadin.productionMode</jvmArguments>
+                            <jvmArguments>-Dvaadin.frontend.url.es5=context://frontend/build/frontend-es5/ -Dvaadin.frontend.url.es6=context://frontend/build/frontend-es6/ -Dvaadin.productionMode -Ddisable.webjars=false</jvmArguments>
                         </configuration>
                     </plugin>
                 </plugins>
