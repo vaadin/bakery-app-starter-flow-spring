@@ -52,12 +52,10 @@ public class CustomBootstrapListener implements BootstrapListener {
 		head.append(
 				"<meta name=\"viewport\" content=\"width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes\">");
 		head.append("<!-- Add any global styles for body, document, etc. -->\n" +
-				"    <custom-style>\n" +
-				"      <style is=\"custom-style\" include=\"lumo-color lumo-typography\">\n" +
-				"        html {\n" +
-				"          background: var(--lumo-shade-10pct);\n" +
-				"        }\n" +
-				"      </style>\n" +
-				"    </custom-style>");
+				"    <style>\n" +
+				"      body {\n" +
+				"        background: var(--lumo-shade-10pct);\n" +
+				"      }\n" +
+				"    </style>");
 	}
 }
