@@ -75,6 +75,7 @@ public class DefaultEntityPresenter<T extends AbstractEntity> {
 		entityPresenter.delete(e -> {
 			filteredDataProvider.refreshAll();
 			entityPresenter.close();
+			view.closeDialog();
 		});
 	}
 
