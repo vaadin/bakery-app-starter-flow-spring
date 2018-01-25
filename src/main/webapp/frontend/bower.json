@@ -7,29 +7,13 @@
     "Vaadin Ltd"
   ],
   "dependencies": {
-    "iron-flex-layout": "PolymerElements/iron-flex-layout#^2.0.0",
-    "iron-form": "PolymerElements/iron-form#^2.0.0",
-    "iron-media-query": "PolymerElements/iron-media-query#^2.0.0",
-    "polymer": "Polymer/polymer#^2.0.0",
-    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0",
-    "iron-icon": "^2.0.0",
-    "paper-toast": "^2.0.0",
-    "vaadin": "vaadin/vaadin#10.0.0-alpha14",
-    "vaadin-board": "vaadin/vaadin-board#2.0.0-alpha1",
-    "vaadin-grid": "vaadin/vaadin-grid#4.1.0-beta1",
-    "vaadin-charts": "vaadin/vaadin-charts#6.0.0-alpha10",
-    "vaadin-valo-theme": "vaadin/vaadin-valo-theme#2.0.0-alpha5",
-    "vaadin-tabs" : "^1.0.0"
+        "iron-form": "PolymerElements/iron-form#^2.0.0",
+            "paper-toast": "^2.0.0",
+        
+    "vaadin": "vaadin/vaadin#10.0.0-alpha14"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0"
   },
-  "private": true/*,
-  "resolutions": {
-    "vaadin-grid": "4.1.0-beta1",
-    "vaadin-charts": "6.0.0-alpha10",
-    "vaadin-board": "2.0.0-alpha1",
-    "vaadin-license-checker": "^2.0.0",
-    "vaadin-valo-theme": "2.0.0-alpha5"
-  }*/
+  "private": true
 }
