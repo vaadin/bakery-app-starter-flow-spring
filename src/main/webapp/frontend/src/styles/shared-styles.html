@@ -1,3 +1,68 @@
+<!-- Themes for dialogs -->
+<dom-module id="bakery-dialog-styles" theme-for="vaadin-dialog-overlay">
+<dom-module id="form-dialog-overlay-theme" theme-for="vaadin-dialog-overlay">
+  <template>
+    <style>
+      :host {
+        padding: var(--lumo-space-xs);
+      }
+
+      [part="overlay"] {
+        overflow: hidden;
+        max-width: 65em;
+        display: flex;
+      }
+
+      [part="content"] {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+      }
+
+      :host([theme="left"]) {
+        align-items: flex-start;
+      }
+
+      :host([theme$="right"]) {
+        align-items: flex-end;
+      }
+
+      :host([theme="middle"]) [part="overlay"] {
+        max-width: 60em;
+      }
+
+      :host([theme="left"]) [part="overlay"],
+      :host([theme="right"]) [part="overlay"] {
+        flex: 1;
+        max-width: 45em;
+      }
+
+      :host([theme="top-right"]) [part="overlay"] {
+        position: absolute;
+        top: var(--lumo-space-xs);
+      }
+
+      @media (max-width: 600px) {
+        :host {
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          padding: 0;
+        }
+
+        [part="overlay"] {
+          flex: 1;
+          width: 100%;
+          border-radius: 0 !important;
+          animation: none;
+        }
+      }
+    </style>
+  </template>
+</dom-module>
+
 <!-- Theme for the status selector, we need to theme the text-field instead of the combo-box -->
 <dom-module id="bakery-text-field-theme" theme-for="vaadin-text-field">
   <template>
