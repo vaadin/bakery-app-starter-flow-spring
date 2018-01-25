@@ -23,6 +23,10 @@
         flex: 1;
       }
 
+      ::slotted(vaadin-button) {
+        margin: var(--lumo-space-xs);
+      }
+
       @media (max-width: 600px) {
         :host ::slotted([slot=info]) {
           order: -1;
