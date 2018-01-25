@@ -59,7 +59,7 @@
         super.ready();
         const grid = this.$['storefront-grid'];
         const listener = () => {
-          if (!grid.loading) {
+          if (!grid.loading && window.performance.mark) {
             window.performance.mark('bakery-page-loaded');
             grid.removeEventListener('loading-changed', listener);
           }

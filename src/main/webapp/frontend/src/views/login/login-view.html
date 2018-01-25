@@ -200,7 +200,7 @@
       _measureLoadPerformance() {
         const banner = new Image();
         banner.onload = () => {
-          window.performance.mark('bakery-page-loaded');
+          window.performance.mark && window.performance.mark('bakery-page-loaded');
         };
 
         const info = this.shadowRoot.querySelector('.info');
