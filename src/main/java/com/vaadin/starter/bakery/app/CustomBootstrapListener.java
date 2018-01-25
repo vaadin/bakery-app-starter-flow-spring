@@ -58,7 +58,7 @@ public class CustomBootstrapListener implements BootstrapListener {
 		head.append("<!-- Add any global styles for body, document, etc. -->\n" +
 				"    <style>\n" +
 				"      body {\n" +
-				"        background: var(--lumo-shade-10pct);\n" +
+				"        background: var(--lumo-shade-5pct);\n" +
 				"      }\n" +
 				"    </style>");
 	}

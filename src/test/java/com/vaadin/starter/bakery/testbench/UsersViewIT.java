@@ -55,7 +55,7 @@ public class UsersViewIT extends AbstractIT {
 		usersView.getButtonsBar().getSaveButton().click();
 		PaperToastElement toast = $(PaperToastElement.class).onPage().id("_defaultToast");
 		Assert.assertTrue(form.isDisplayed());
-		Assert.assertEquals(CrudErrorMessage.REQUIRED_FIELDS_MISSING, toast.getText());
+		Assert.assertEquals(CrudErrorMessage.REQUIRED_FIELDS_MISSING, toast.getMessage());
 
 		// Good password
 		password.setValue("Abc123");
@@ -79,7 +79,7 @@ public class UsersViewIT extends AbstractIT {
 
 		PaperToastElement toast = $(PaperToastElement.class).onPage().id("_persistentToast");
 
-		Assert.assertEquals(MODIFY_LOCKED_USER_NOT_PERMITTED, toast.getText());
+		Assert.assertEquals(MODIFY_LOCKED_USER_NOT_PERMITTED, toast.getMessage());
 		Assert.assertTrue(toast.isOpened());
 	}
 
@@ -93,7 +93,7 @@ public class UsersViewIT extends AbstractIT {
 		page.getConfirmDialog().confirm();
 
 		PaperToastElement toast = $(PaperToastElement.class).onPage().id("_persistentToast");
-		Assert.assertEquals(MODIFY_LOCKED_USER_NOT_PERMITTED, toast.getText());
+		Assert.assertEquals(MODIFY_LOCKED_USER_NOT_PERMITTED, toast.getMessage());
 		Assert.assertTrue(toast.isOpened());
 	}
 }
