@@ -50,8 +50,8 @@ public class DefaultEntityPresenter<T extends AbstractEntity> {
 
 	private void open(T entity) {
 		view.getBinder().readBean(entity);
-		view.getButtons().setSaveDisabled(true);
-		view.getButtons().setDeleteDisabled(entity.isNew());
+		view.getForm().getButtons().setSaveDisabled(true);
+		view.getForm().getButtons().setDeleteDisabled(entity.isNew());
 		view.updateTitle(entity.isNew());
 		view.getDialog().setOpened(true);
 	}
@@ -80,6 +80,6 @@ public class DefaultEntityPresenter<T extends AbstractEntity> {
 	}
 
 	public void onValueChange(boolean isDirty) {
-		view.getButtons().setSaveDisabled(!isDirty);
+		view.getForm().getButtons().setSaveDisabled(!isDirty);
 	}
 }

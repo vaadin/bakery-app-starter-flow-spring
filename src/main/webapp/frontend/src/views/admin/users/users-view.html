@@ -1,5 +1,6 @@
 <link rel="import" href="../../../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../../../bower_components/vaadin-grid/src/vaadin-grid.html">
+<link rel="import" href="../../../../bower_components/vaadin-dialog/vaadin-dialog.html">
 <link rel="import" href="../../../../bower_components/vaadin-form-layout/src/vaadin-form-layout.html">
 <link rel="import" href="../../../../bower_components/vaadin-combo-box/src/vaadin-combo-box.html">
 <link rel="import" href="../../../../bower_components/vaadin-text-field/src/vaadin-text-field.html">
@@ -7,8 +8,6 @@
 
 <link rel="import" href="../../../components/search-bar.html">
 <link rel="import" href="../../../components/utils-mixin.html">
-<link rel="import" href="../../../components/form-dialog.html">
-<link rel="import" href="../../../components/form-buttons-bar.html">
 
 <link rel="import" href="../../../styles/shared-styles.html">
 
@@ -25,26 +24,7 @@
 
     <vaadin-grid id=grid theme="crud-grid"></vaadin-grid>
 
-    <!--  dialogs are tele-ported to body, hence you need to inline styles or use styled web components -->
-    <form-dialog id="dialog" theme="right">
-
-      <vaadin-form-layout style="flex: 1; overflow-y: auto; overflow-x: hidden; padding: 5px">
-        <h3 id="title"></h3>
-        <br>
-        <vaadin-text-field id="email" label="Email (login)" colspan="2"></vaadin-text-field>
-        <br>
-        <vaadin-text-field id="first" label="First Name" colspan="2"></vaadin-text-field>
-        <vaadin-text-field id="last" label="Last Name" colspan="2"></vaadin-text-field>
-        <br>
-        <vaadin-password-field id="password" label="Password" colspan="2"></vaadin-password-field>
-        <br>
-        <vaadin-combo-box id="role" label="Role" colspan="2"></vaadin-combo-box>
-      </vaadin-form-layout>
-
-      <form-buttons-bar id="buttons"></form-buttons-bar>
-
-      <template><!-- vaadin-dialog fails if not present (#43) --></template>
-    </form-dialog>
+    <vaadin-dialog id="dialog" theme="right"></vaadin-dialog>
   </template>
 
   <script>
@@ -68,14 +48,6 @@
           }
         };
         grid.addEventListener('loading-changed', listener);
-      }
-
-      static get properties() {
-        return {
-          desktopView: {
-            type: Boolean
-          }
-        };
       }
     }
 
