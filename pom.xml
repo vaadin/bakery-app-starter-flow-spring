@@ -378,14 +378,13 @@
                             </execution>
                         </executions>
                     </plugin>
-                    <!-- 
                     <plugin>
                         <groupId>com.coderplus.maven.plugins</groupId>
                         <artifactId>copy-rename-maven-plugin</artifactId>
                         <version>1.0</version>
                         <executions>
                           <execution>
-                           <phase>generate-resources</phase>
+                           <phase>test-compile</phase>
                             <id>copy</id>
                             <goals>
                               <goal>copy</goal>
@@ -406,7 +405,6 @@
                            </execution>
                           </executions>
                      </plugin>
-                     -->
                     <!-- (5): Copies the files compiled by polymer-build to a directory from where they can be
                               served when in production mode (root of the WAR) -->
                     <plugin>
