@@ -150,11 +150,10 @@
         };
       }
 
-      _onSelectedChanged(newValue,oldValue) {
-          if(oldValue !== undefined) {
-            this.$server.navigateTo(this.pages[newValue].link);
-          }
-        
+      _onSelectedChanged(newValue, oldValue) {
+        if (oldValue !== undefined) {
+          this.$server.navigateTo(this.pages[newValue].link);
+        }
       }
     }
 
