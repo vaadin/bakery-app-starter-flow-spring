@@ -9,8 +9,6 @@ Open http://localhost:8080/ to view the application.
 Default credentials are admin@vaadin.com/admin for admin access and
 barista@vaadin.com/barista for normal user access.
 
-Spring boot's developer tools is enabled by default. Live reload is supported and browser extensions can be found at http://livereload.com/extensions/.
-
 Note that when running in development mode, the application will not work in IE11.
 
 # Running Integration Tests and Linter
@@ -22,6 +20,45 @@ Integration tests are implemented using TestBench. The tests take tens of minute
 and make sure you have a valid TestBench license installed.
 
 Run linter to check frontend code by adding `-DrunLint` to build/run command.
+
+# Automatic Restart and Live Reload
+
+To activate spring-boot-devtools is needed to:
+1. Add spring-boot-devtools dependency
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-devtools</artifactId>
+    <optional>true</optional>
+    <scope>runtime</scope>
+</dependency>
+```
+2. Fork the process used to run the application by changing spring-boot-maven-plugin configuration
+```
+<plugin>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-maven-plugin</artifactId>
+    <version>${spring-boot.version}</version>
+    <configuration>
+        <fork>true</fork>
+    </configuration>
+</plugin>
+```
+3. Create and place into the `src/main/resources/META-INF` the following spring-devtools.properties
+```
+restart.include.flow=/flow.*\.jar
+restart.include.vaadin=/vaadin.*\.jar
+```
+4. Optionally you might want to avoid the data generator to be run on each single reload, therefore, make H2 database store entities in file-system instead of in memory by adding the following lines to the `src/main/resources/application.properties`
+```
+spring.datasource.url=jdbc:h2:file:~/bakery-test-data
+spring.jpa.hibernate.ddl-auto=update
+```
+To trigger the restart it is needed to update classpath.
+In Eclipse it can be done automatically after save modified file.
+In IntelliJ IDEA can be done manually `Build -> Build Project`
+
+Live reload is supported and browser extensions can be found at http://livereload.com/extensions/.
 
 # Running the Project in Production Mode
 
