@@ -20,9 +20,10 @@
         [part="overlay"] {
           width: 100%;
           border-radius: 0 !important;
-          flex: auto;
         }
       }
+
+
 
       [part="overlay"] {
         overflow: hidden;
@@ -37,6 +38,7 @@
         align-items: flex-end;
       }
 
+      :host([theme="middle"]) [part="overlay"],
       :host([theme="left"]) [part="overlay"],
       :host([theme="right"]) [part="overlay"] {
         flex: 1;
