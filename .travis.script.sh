@@ -5,6 +5,6 @@
 # TRAVIS_SECURE_ENV_VARS == true if encrypted variables, e.g. SONAR_HOST is available
 # TRAVIS_REPO_SLUG == the repository, e.g. vaadin/vaadin
 
-TESTBENCH=-Dvaadin.testbench.developer.license=$TESTBENCH_LICENSE
+TESTBENCH=-Dvaadin.proKey=$VAADIN_PRO_KEY
 
 mvn -B -e -V -Pit clean verify -DrunLint -Dvaadin.productionMode $TESTBENCH
