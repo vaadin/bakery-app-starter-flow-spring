@@ -217,6 +217,12 @@
         </dependency>
         <!-- End Spring -->
 
+        <!-- Compile scope is needed to run on WildFly -->
+        <dependency>
+            <groupId>org.reactivestreams</groupId>
+            <artifactId>reactive-streams</artifactId>
+        </dependency>
+
         <!-- Testing -->
         <dependency>
             <groupId>com.vaadin</groupId>
