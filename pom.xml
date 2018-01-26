@@ -209,12 +209,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <optional>true</optional>
-            <scope>runtime</scope>
-        </dependency>
         <!-- End Spring -->
 
         <!-- Compile scope is needed to run on WildFly -->
@@ -266,9 +260,6 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring-boot.version}</version>
-                    <configuration>
-                      <fork>true</fork>
-                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
