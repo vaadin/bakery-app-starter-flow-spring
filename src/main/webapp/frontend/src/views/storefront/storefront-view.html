@@ -38,8 +38,7 @@
 
     <vaadin-grid id="storefront-grid" theme="storefront-grid"></vaadin-grid>
 
-    <!--  dialogs are tele-ported to body, hence you need to inline styles or use styled web components -->
-    <form-dialog opened="[[editing]]">
+    <form-dialog opened="[[editing]]" theme="middle">
       <order-details-full id="order-details" desktop-view="[[desktopView]]"></order-details-full>
       <order-editor id="order-editor" desktop-view="[[desktopView]]"></order-editor>
       <template><!-- vaadin-dialog fails if not present (#43) --></template>
