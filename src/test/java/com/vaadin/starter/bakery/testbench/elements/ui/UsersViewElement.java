@@ -1,8 +1,8 @@
 package com.vaadin.starter.bakery.testbench.elements.ui;
 
-import com.vaadin.starter.bakery.testbench.elements.core.GridElement;
-import com.vaadin.starter.bakery.testbench.elements.core.PasswordFieldElement;
-import com.vaadin.starter.bakery.testbench.elements.core.TextFieldElement;
+import com.vaadin.flow.component.grid.testbench.GridElement;
+import com.vaadin.flow.component.textfield.testbench.PasswordFieldElement;
+import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elementsbase.Element;
 
@@ -15,19 +15,18 @@ public class UsersViewElement extends TestBenchElement implements HasCrudView {
 	}
 
 	public TextFieldElement getFirstField() {
-
-		return getField("first", TextFieldElement.class);
+		return getForm().$(TextFieldElement.class).id("first");
 	};
 
 	public TextFieldElement getLastField() {
-		return getField("last", TextFieldElement.class);
+		return getForm().$(TextFieldElement.class).id("last");
 	}
 
 	public TextFieldElement getEmailField() {
-		return getField("email", TextFieldElement.class);
+		return getForm().$(TextFieldElement.class).id("email");
 	}
 
 	public PasswordFieldElement getPasswordField() {
-		return getField("user-edit-password", PasswordFieldElement.class);
+		return getForm().$(PasswordFieldElement.class).id("user-edit-password");
 	}
 }

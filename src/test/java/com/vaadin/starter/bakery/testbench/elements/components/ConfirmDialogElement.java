@@ -7,6 +7,6 @@ import com.vaadin.testbench.elementsbase.Element;
 public class ConfirmDialogElement extends TestBenchElement {
 
 	public void confirm() {
-		executeScript("arguments[0]._ok()", this);
+		callFunction("_ok");
 	}
 }

@@ -1,6 +1,6 @@
 package com.vaadin.starter.bakery.testbench.elements.components;
 
-import com.vaadin.starter.bakery.testbench.elements.core.PaperTabElement;
+import com.vaadin.flow.component.tabs.testbench.TabElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.DashboardViewElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.LoginViewElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.ProductsViewElement;
@@ -24,12 +24,13 @@ public class BakeryNavigationElement extends TestBenchElement {
 	}
 
 	public LoginViewElement logout() {
-		$(PaperTabElement.class).last().click();
+		$(TabElement.class).last().click();
 		return $(LoginViewElement.class).onPage().waitForFirst();
 	}
 
 	private <T extends TestBenchElement> T navigateTo(String pageId, Class<T> landingPage) {
-		$(PaperTabElement.class).attribute("value", pageId).first().click();
+		// $(TabsElement.class).first().getTab(text)
+		$(TabElement.class).attribute("value", pageId).first().click();
 		return $(landingPage).onPage().waitForFirst();
 	}
 }

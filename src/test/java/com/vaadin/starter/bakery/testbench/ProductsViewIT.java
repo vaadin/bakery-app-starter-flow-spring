@@ -17,13 +17,13 @@ public class ProductsViewIT extends AbstractIT {
 	public void editProduct() {
 		ProductsViewElement productsPage = openProductsPage();
 
-		Assert.assertFalse(productsPage.getDialog().isOpened());
+		Assert.assertFalse(productsPage.getFormDialog().isOpen());
 
 		String url = getDriver().getCurrentUrl();
-		productsPage.getGridCell("Strawberry Bun").click();
+		productsPage.getGrid().getCell("Strawberry Bun").click();
 		Assert.assertTrue(getDriver().getCurrentUrl().length() > url.length());
 
-		Assert.assertTrue(productsPage.getDialog().isOpened());
+		Assert.assertTrue(productsPage.getFormDialog().isOpen());
 
 		String initialValue = productsPage.getPrice().getValue();
 
@@ -31,14 +31,14 @@ public class ProductsViewIT extends AbstractIT {
 
 		productsPage.getButtonsBar().getSaveButton().click();
 
-		Assert.assertFalse(productsPage.getDialog().isOpened());
+		Assert.assertFalse(productsPage.getFormDialog().isOpen());
 
 		Assert.assertTrue(getDriver().getCurrentUrl().endsWith("products"));
 
-		productsPage.getGridCell("Strawberry Bun").click();
+		productsPage.getGrid().getCell("Strawberry Bun").click();
 		Assert.assertEquals("123.45", productsPage.getPrice().getValue());
 
-		//Return initial value
+		// Return initial value
 		productsPage.getPrice().setValue(initialValue);
 
 		productsPage.getButtonsBar().getSaveButton().click();
