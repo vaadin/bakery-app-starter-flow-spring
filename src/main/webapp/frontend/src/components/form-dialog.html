@@ -36,7 +36,11 @@
         align-items: flex-end;
       }
 
-      :host([theme="middle"]) [part="overlay"],
+      :host([theme="middle"]) [part="overlay"] {
+        max-width: 60em;
+        animation: none;
+      }
+
       :host([theme="left"]) [part="overlay"],
       :host([theme="right"]) [part="overlay"] {
         flex: 1;
