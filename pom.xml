@@ -383,7 +383,7 @@
                                 <configuration>
                                     <transpileOutputDirectory>${frontend.directory}/build</transpileOutputDirectory>
                                     <bundle>true</bundle>
-                                    <!-- Using fragments to work around lumo oddities -->
+                                    <!-- Using fragments to work around issue https://github.com/vaadin/flow/pull/3400 -->
                                     <fragments>
                                         <fragment>
                                             <name>typography.html</name>
