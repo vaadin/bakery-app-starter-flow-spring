@@ -77,15 +77,15 @@
         </repository>
 
     </repositories>
-	<pluginRepositories>
-  	<pluginRepository>
-    	<id>plugin-snapshots-repo</id>
-    	<url>https://oss.sonatype.org/content/repositories/vaadin-snapshots</url>
-    	<snapshots>
-      		<enabled>true</enabled>
-    	</snapshots>
-  	</pluginRepository>
-	</pluginRepositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>plugin-snapshots-repo</id>
+            <url>https://oss.sonatype.org/content/repositories/vaadin-snapshots</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -190,8 +190,8 @@
                     <artifactId>tomcat-juli</artifactId>
                 </exclusion>
                 <exclusion>
-                	<groupId>org.apache.tomcat</groupId>
-                	<artifactId>tomcat-jdbc</artifactId>
+                    <groupId>org.apache.tomcat</groupId>
+                    <artifactId>tomcat-jdbc</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
