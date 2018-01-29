@@ -56,7 +56,6 @@
     <style>
       :host {
          width: 100%;
-         margin: auto;
          flex: auto;
       }
 
@@ -98,6 +97,15 @@
 
       :host([theme~="crud-grid"]) {
          max-width: calc(964px + var(--lumo-space-m));
+      }
+
+      #scroller {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        transform: translateY(0);
       }
     </style>
   </template>
