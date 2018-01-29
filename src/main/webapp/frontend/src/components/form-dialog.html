@@ -23,6 +23,8 @@
         }
       }
 
+
+
       [part="overlay"] {
         overflow: hidden;
         max-width: 65em;
@@ -36,6 +38,7 @@
         align-items: flex-end;
       }
 
+      :host([theme="middle"]) [part="overlay"],
       :host([theme="left"]) [part="overlay"],
       :host([theme="right"]) [part="overlay"] {
         flex: 1;
@@ -45,10 +48,6 @@
       :host([theme="top-right"]) [part="overlay"] {
         position: absolute;
         top: var(--lumo-space-xs);
-      }
-
-      :host([theme="top-right"]) [part="backdrop"] {
-        background: transparent;
       }
 
       [part="overlay"] {
