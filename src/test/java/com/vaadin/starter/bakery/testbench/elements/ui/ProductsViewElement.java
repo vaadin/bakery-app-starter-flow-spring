@@ -1,7 +1,7 @@
 package com.vaadin.starter.bakery.testbench.elements.ui;
 
-import com.vaadin.starter.bakery.testbench.elements.core.GridElement;
-import com.vaadin.starter.bakery.testbench.elements.core.TextFieldElement;
+import com.vaadin.flow.component.grid.testbench.GridElement;
+import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elementsbase.Element;
 
@@ -14,10 +14,10 @@ public class ProductsViewElement extends TestBenchElement implements HasApp, Has
 	}
 
 	public TextFieldElement getName() {
-		return getField("name", TextFieldElement.class);
+		return getForm().$(TextFieldElement.class).id("name");
 	};
 
 	public TextFieldElement getPrice() {
-		return getField("price", TextFieldElement.class);
+		return getForm().$(TextFieldElement.class).id("price");
 	}
 }
