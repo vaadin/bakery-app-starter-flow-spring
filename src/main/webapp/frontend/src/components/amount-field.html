@@ -19,6 +19,11 @@
         cursor: default;
         opacity: 0.1;
       }
+
+      vaadin-text-field {
+        --vaadin-text-field-default-width: 6em;
+        flex: auto;
+      }
     </style>
 
     <vaadin-text-field id="amount-field-amount" label="[[label]]" theme="center" pattern="\d*" part="text-field" prevent-invalid-input value=[[value]] readonly="true">
