@@ -23,7 +23,6 @@
         <vaadin.version>10.0.0.alpha14</vaadin.version>
         <testbench.version>6.0.0.alpha7</testbench.version>
 
-        <spring-boot.version>1.5.9.RELEASE</spring-boot.version>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Overrides the old version specified by the Spring Boot parent -->
         <selenium.version>3.6.0</selenium.version>
@@ -75,8 +74,8 @@
             <id>vaadin-tools</id>
             <url>https://tools.vaadin.com/nexus/content/repositories/vaadin-addons</url>
         </repository>
-
     </repositories>
+
     <pluginRepositories>
         <pluginRepository>
             <id>plugin-snapshots-repo</id>
@@ -85,7 +84,12 @@
                 <enabled>true</enabled>
             </snapshots>
         </pluginRepository>
+        <pluginRepository>
+            <id>spring-plugin-milestones</id>
+            <url>https://repo.spring.io/milestone</url>
+        </pluginRepository>
     </pluginRepositories>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -277,7 +281,6 @@
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
-                    <version>${spring-boot.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
