@@ -35,6 +35,7 @@ public class CustomBootstrapListener implements BootstrapListener {
 		head.prepend("<link rel=\"manifest\" href=\"manifest.json\">");
 
 		addFavIconTags(head);
+		addViewportTag(head);
 		injectInlineCustomStyles(head);
 	}
 
@@ -48,9 +49,12 @@ public class CustomBootstrapListener implements BootstrapListener {
 		head.append("<link rel=\"apple-touch-icon\" sizes=\"96x96\" href=\"icons/icon-96.png\">");
 	}
 
+	private void addViewportTag(Element head) {
+		String viewport = "width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes";
+		head.append("<meta name=\"viewport\" content=\"" + viewport + "\">");
+	}
+
 	private void injectInlineCustomStyles(Element head) {
-		head.append(
-				"<meta name=\"viewport\" content=\"width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes\">");
 		head.append("<!-- Add any global styles for body, document, etc. -->\n" +
 				"    <style>\n" +
 				"      body {\n" +

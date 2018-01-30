@@ -8,6 +8,8 @@ import com.vaadin.starter.bakery.testbench.elements.core.ButtonElement;
 import com.vaadin.starter.bakery.testbench.elements.core.GridElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement;
 
+import static org.hamcrest.CoreMatchers.endsWith;
+
 public class StorefrontViewIT extends AbstractIT {
 
 	private StorefrontViewElement openStorefrontPage() {
@@ -33,14 +35,14 @@ public class StorefrontViewIT extends AbstractIT {
 	public void editOrder() {
 		StorefrontViewElement storefrontPage = openStorefrontPage();
 
-		OrderCardElement firstOrder = storefrontPage.getFirstOrderCard();
+		OrderCardElement firstOrder = storefrontPage.getOrderCard(1);
 		Assert.assertNotNull(firstOrder);
 		firstOrder.click();
 		ButtonElement editBtn = firstOrder.getDetail().getEditButton();
 		editBtn.scrollIntoView();
 		editBtn.click();
 
-		Assert.assertTrue(getDriver().getCurrentUrl().endsWith("edit="));
+		Assert.assertThat(getDriver().getCurrentUrl(), endsWith("edit="));
 	}
 
 }
