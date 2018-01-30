@@ -394,7 +394,6 @@
                                     <transpileEs6SourceDirectory>${project.build.directory}/transpile</transpileEs6SourceDirectory>
                                     <copyOutputDirectory>${project.build.directory}/transpile</copyOutputDirectory>
                                     <bundle>true</bundle>
-                                    <!-- Using fragments to work around issue https://github.com/vaadin/flow/pull/3400 -->
                                 </configuration>
                             </execution>
                         </executions>
