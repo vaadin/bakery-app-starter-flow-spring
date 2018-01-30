@@ -373,20 +373,15 @@
                     <groupId>com.vaadin</groupId>
                     <artifactId>flow-server-production-mode</artifactId>
                 </dependency>
-                    </dependencies>
-        
+            </dependencies>
             <build>
                 <plugins>
-        
                     <!-- (3): Configures the frontend plugin to compile the web components 
                         source -->
                     <plugin>
                         <groupId>com.vaadin</groupId>
                         <artifactId>flow-maven-plugin</artifactId>
                         <version>1.0-SNAPSHOT</version>
-                        <dependencies>
-
-                        </dependencies>
                         <executions>
                             <execution>
                                 <goals>
@@ -398,7 +393,6 @@
                                     <transpileWorkingDirectory>${project.build.directory}/transpile</transpileWorkingDirectory>
                                     <transpileEs6SourceDirectory>${project.build.directory}/transpile</transpileEs6SourceDirectory>
                                     <copyOutputDirectory>${project.build.directory}/transpile</copyOutputDirectory>
-                                    
                                     <bundle>true</bundle>
                                     <!-- Using fragments to work around issue https://github.com/vaadin/flow/pull/3400 -->
                                 </configuration>
