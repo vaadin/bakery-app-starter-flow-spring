@@ -100,6 +100,16 @@
                 <artifactId>vaadin</artifactId>
                 <version>${vaadin.version}</version>
             </dependency>
+                          <dependency>
+                            <groupId>com.vaadin</groupId>
+                            <artifactId>flow-server</artifactId>
+                            <version>1.0-SNAPSHOT</version>
+                          </dependency>
+                          <dependency>
+                            <groupId>com.vaadin</groupId>
+                            <artifactId>vaadin-lumo-theme</artifactId>
+                            <version>1.0-SNAPSHOT</version>
+                          </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -374,132 +384,29 @@
                         <groupId>com.vaadin</groupId>
                         <artifactId>flow-maven-plugin</artifactId>
                         <version>1.0-SNAPSHOT</version>
+                        <dependencies>
+
+                        </dependencies>
                         <executions>
                             <execution>
                                 <goals>
                                     <goal>copy-production-files</goal>
-                                    <goal>transpile-production-files</goal>
+                                    <goal>package-for-production</goal>
                                 </goals>
                                 <configuration>
                                     <transpileOutputDirectory>${frontend.directory}/build</transpileOutputDirectory>
+                                    <transpileWorkingDirectory>${project.build.directory}/transpile</transpileWorkingDirectory>
+                                    <transpileEs6SourceDirectory>${project.build.directory}/transpile</transpileEs6SourceDirectory>
+                                    <copyOutputDirectory>${project.build.directory}/transpile</copyOutputDirectory>
+                                    
                                     <bundle>true</bundle>
                                     <!-- Using fragments to work around issue https://github.com/vaadin/flow/pull/3400 -->
-                                    <fragments>
-                                        <fragment>
-                                            <name>typography.html</name>
-                                            <files>
-                                                <file>bower_components/vaadin-lumo-styles/typography.html</file>
-                                            </files>
-                                        </fragment>
-                                        <fragment>
-                                            <name>sizing.html</name>
-                                            <files>
-                                                <file>bower_components/vaadin-lumo-styles/sizing.html</file>
-                                            </files>
-                                        </fragment>
-                                        <fragment>
-                                            <name>color.html</name>
-                                            <files>
-                                                <file>bower_components/vaadin-lumo-styles/color.html</file>
-                                            </files>
-                                        </fragment>
-                                        <fragment>
-                                            <name>spacing.html</name>
-                                            <files>
-                                                <file>bower_components/vaadin-lumo-styles/spacing.html</file>
-                                            </files>
-                                        </fragment>
-                                        <fragment>
-                                            <name>style.html</name>
-                                            <files>
-                                                <file>bower_components/vaadin-lumo-styles/style.html</file>
-                                            </files>
-                                        </fragment>
-                                        <fragment>
-                                            <name>icons.html</name>
-                                            <files>
-                                                <file>bower_components/vaadin-lumo-styles/icons.html</file>
-                                            </files>
-                                        </fragment>
-                                    </fragments>
                                 </configuration>
                             </execution>
                         </executions>
                     </plugin>
-                    <plugin>
-                        <groupId>com.coderplus.maven.plugins</groupId>
-                        <artifactId>copy-rename-maven-plugin</artifactId>
-                        <version>1.0</version>
-                        <executions>
-                            <execution>
-                                <phase>test-compile</phase>
-                                <id>copy</id>
-                                <goals>
-                                    <goal>copy</goal>
-                                </goals>
-                                <configuration>
-                                    <fileSets>
-                                        <fileSet>
-                                            <sourceFile>${frontend.directory}/images/login-banner.jpg</sourceFile>
-                                            <destinationFile>${frontend.directory}/build/frontend-es5/images/login-banner.jpg</destinationFile>
-                                        </fileSet>
-                                        <fileSet>
-                                            <sourceFile>${frontend.directory}/images/login-banner.jpg</sourceFile>
-                                            <destinationFile>${frontend.directory}/build/frontend-es6/images/login-banner.jpg</destinationFile>
-                                        </fileSet>
-                                        <fileSet>
-                                            <sourceFile>${frontend.directory}/build/frontend-es6/typography.html</sourceFile>
-                                            <destinationFile>${frontend.directory}/build/frontend-es6/bower_components/vaadin-lumo-styles/typography.html</destinationFile>
-                                        </fileSet>
-                                        <fileSet>
-                                            <sourceFile>${frontend.directory}/build/frontend-es6/sizing.html</sourceFile>
-                                            <destinationFile>${frontend.directory}/build/frontend-es6/bower_components/vaadin-lumo-styles/sizing.html</destinationFile>
-                                        </fileSet>
-                                        <fileSet>
-                                            <sourceFile>${frontend.directory}/build/frontend-es6/color.html</sourceFile>
-                                            <destinationFile>${frontend.directory}/build/frontend-es6/bower_components/vaadin-lumo-styles/color.html</destinationFile>
-                                        </fileSet>
-                                        <fileSet>
-                                            <sourceFile>${frontend.directory}/build/frontend-es6/spacing.html</sourceFile>
-                                            <destinationFile>${frontend.directory}/build/frontend-es6/bower_components/vaadin-lumo-styles/spacing.html</destinationFile>
-                                        </fileSet>
-                                        <fileSet>
-                                            <sourceFile>${frontend.directory}/build/frontend-es6/style.html</sourceFile>
-                                            <destinationFile>${frontend.directory}/build/frontend-es6/bower_components/vaadin-lumo-styles/style.html</destinationFile>
-                                        </fileSet>
-                                        <fileSet>
-                                            <sourceFile>${frontend.directory}/build/frontend-es6/icons.html</sourceFile>
-                                            <destinationFile>${frontend.directory}/build/frontend-es6/bower_components/vaadin-lumo-styles/icons.html</destinationFile>
-                                        </fileSet>
-                                        <fileSet>
-                                            <sourceFile>${frontend.directory}/build/frontend-es5/typography.html</sourceFile>
-                                            <destinationFile>${frontend.directory}/build/frontend-es5/bower_components/vaadin-lumo-styles/typography.html</destinationFile>
-                                        </fileSet>
-                                        <fileSet>
-                                            <sourceFile>${frontend.directory}/build/frontend-es5/sizing.html</sourceFile>
-                                            <destinationFile>${frontend.directory}/build/frontend-es5/bower_components/vaadin-lumo-styles/sizing.html</destinationFile>
-                                        </fileSet>
-                                        <fileSet>
-                                            <sourceFile>${frontend.directory}/build/frontend-es5/color.html</sourceFile>
-                                            <destinationFile>${frontend.directory}/build/frontend-es5/bower_components/vaadin-lumo-styles/color.html</destinationFile>
-                                        </fileSet>
-                                        <fileSet>
-                                            <sourceFile>${frontend.directory}/build/frontend-es5/spacing.html</sourceFile>
-                                            <destinationFile>${frontend.directory}/build/frontend-es5/bower_components/vaadin-lumo-styles/spacing.html</destinationFile>
-                                        </fileSet>
-                                        <fileSet>
-                                            <sourceFile>${frontend.directory}/build/frontend-es5/style.html</sourceFile>
-                                            <destinationFile>${frontend.directory}/build/frontend-es5/bower_components/vaadin-lumo-styles/style.html</destinationFile>
-                                        </fileSet>
-                                        <fileSet>
-                                            <sourceFile>${frontend.directory}/build/frontend-es5/icons.html</sourceFile>
-                                            <destinationFile>${frontend.directory}/build/frontend-es5/bower_components/vaadin-lumo-styles/icons.html</destinationFile>
-                                        </fileSet>
-                                    </fileSets>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
+
+
                     <!-- (5): Copies the files compiled by polymer-build to a directory from where they can be
                               served when in production mode (root of the WAR) -->
                     <plugin>
