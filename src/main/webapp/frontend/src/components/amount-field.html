@@ -27,9 +27,9 @@
       }
     </style>
 
-    <vaadin-text-field id="amount-field-amount" label="[[label]]" theme="center" pattern="\d*" part="text-field" prevent-invalid-input value=[[value]] readonly="true">
-      <iron-icon slot="prefix" id="minus" icon="vaadin:minus" on-click="minus" disabled$="[[!minusEnabled]]"></iron-icon>
-      <iron-icon slot="suffix" id="plus" icon="vaadin:plus" on-click="plus" disabled$="[[!plusEnabled]]"></iron-icon>
+    <vaadin-text-field id="input" label="[[label]]" theme="center" pattern="\d*" part="text-field" prevent-invalid-input value=[[value]] readonly="true">
+      <iron-icon slot="prefix" icon="vaadin:minus" on-click="_minus" disabled$="[[_minusDisabled(value, min, max, disabled, readOnly)]]"></iron-icon>
+      <iron-icon slot="suffix" icon="vaadin:plus" on-click="_plus" disabled$="[[_plusDisabled(value, min, max, disabled, readOnly)]]"></iron-icon>
     </vaadin-text-field>
   </template>
 
@@ -43,12 +43,19 @@
         return {
           value: {
             type: Number,
-            value: 1,
-            notify: true
+            value: 0,
+            notify: true,
+            observer: '_valueChanged'
           },
           min: {
             type: Number,
+            observer: '_minChanged',
             value: 0
+          },
+          max: {
+            type: Number,
+            observer: '_maxChanged',
+            value: Number.MAX_SAFE_INTEGER || (Math.pow(2, 53) - 1) /* MSIE fallback */
           },
           disabled: {
             type: Boolean,
@@ -62,14 +69,46 @@
             notify: true,
             reflectToAttribute: true
           },
-          max: {
-            type: Number,
-            value: Number.MAX_SAFE_INTEGER || (Math.pow(2, 53) - 1) /* MSIE fallback */
-          },
-          plusEnabled: {type: Boolean},
-          minusEnabled: {type: Boolean},
           label: String
         };
+      }
+
+      get _enabled() {
+        return !this.disabled && !this.readOnly;
+      }
+
+      _valueChanged(value) {
+        this.value = this.value || 0;
+      }
+
+      _minChanged(val) {
+        this.value = this.value < val ? val : this.value;
+      }
+
+      _maxChanged(val) {
+        this.value = this.value > val ? val : this.value;
+      }
+
+      _plus() {
+        !this._plusDisabled() && this.value++;
+        this.$.input.focus();
+      }
+
+      _minus() {
+        !this._minusDisabled() && this.value--;
+        this.$.input.focus();
+      }
+
+      _isEqual(value, boundry) {
+        return Math.max(this.min, Math.min(value, this.max)) === boundry;
+      }
+
+      _plusDisabled(value, min, max, disabled, readOnly) {
+        return !this._enabled || this.value >= this.max;
+      }
+
+      _minusDisabled(value, min, max, disabled, readOnly) {
+        return !this._enabled || this.value <= this.min;
       }
     }
 

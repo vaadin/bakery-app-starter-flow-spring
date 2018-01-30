@@ -1,98 +1,47 @@
 package com.vaadin.starter.bakery.ui.components;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.HtmlImport;
-import com.vaadin.flow.component.polymertemplate.EventHandler;
-import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
-import com.vaadin.flow.templatemodel.TemplateModel;
 
 @Tag("amount-field")
 @HtmlImport("src/components/amount-field.html")
-public class AmountField extends PolymerTemplate<AmountField.Model> implements HasValue<AmountField, Integer> {
-
-	public interface Model extends TemplateModel {
-
-		void setDisabled(boolean disabled);
-
-		void setValue(Integer value);
-
-		void setPlusEnabled(boolean enabled);
-
-		void setMinusEnabled(boolean enabled);
-
-		void setReadOnly(boolean readOnly);
-	}
+public class AmountField extends Component implements HasValue<AmountField, Integer> {
 
 	private static final int MIN = 1;
 	private static final int MAX = 15;
 
-	private Integer value;
-
-	private boolean disabled = true;
-
 	public AmountField() {
-		getModel().setDisabled(false);
-		getModel().setReadOnly(false);
-		updateCommands();
+		setMin(MIN);
+		setMax(MAX);
 	}
 
 	@Override
 	public void setValue(Integer value) {
-		this.value = value;
-		getModel().setValue(value);
-		updateCommands();
+		this.getElement().setProperty("value", value);
 	}
 
 	@Override
 	public Integer getValue() {
-		return this.value;
+		String val = this.getElement().getProperty("value");
+		return val == null ? 0 : Integer.parseInt(val);
 	}
 
 	public void setDisabled(boolean disabled) {
-		this.disabled = disabled;
-		getModel().setDisabled(disabled);
-		updateCommands();
+		this.getElement().setProperty("disabled", disabled);
 	}
 
-	@EventHandler
-	public void plus() {
-		change(1);
+	public void setMin(int value) {
+		this.getElement().setProperty("min", value);
 	}
 
-	@EventHandler
-	public void minus() {
-		change(-1);
-	}
-
-	private boolean isChangeable() {
-		return !isReadOnly() && !disabled;
-	}
-
-	private void change(int valueToSum) {
-		if (!isReadOnly()) {
-			Integer value = getValue();
-			if (value != null) {
-				value += valueToSum;
-				if (value >= MIN && value <= MAX) {
-					setValue(value);
-				}
-			}
-		}
-	}
-
-	private void updateCommands() {
-		Integer value = getValue();
-		boolean canAdd = value == null || value < MAX;
-		boolean canSubtract = value != null && value > MIN;
-		getModel().setPlusEnabled(isChangeable() && canAdd);
-		getModel().setMinusEnabled(isChangeable() && canSubtract);
+	public void setMax(int value) {
+		this.getElement().setProperty("max", value);
 	}
 
 	@Override
 	public void setReadOnly(boolean readOnly) {
-		HasValue.super.setReadOnly(readOnly);
-		getModel().setReadOnly(readOnly);
-		updateCommands();
+		this.getElement().setProperty("readOnly", readOnly);
 	}
 }
