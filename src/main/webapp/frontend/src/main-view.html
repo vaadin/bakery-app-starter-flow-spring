@@ -26,7 +26,7 @@
         flex-direction: column-reverse;
       }
 
-      :host ::slotted(*) {
+      app-container ::slotted(:not(app-navigation)) {
         flex: 1;
         align-items: center;
       }
