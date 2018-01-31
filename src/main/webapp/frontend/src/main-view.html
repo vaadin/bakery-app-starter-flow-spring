@@ -1,5 +1,4 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
-<link rel="import" href="styles/shared-styles.html">
 
 <!--  Ensure that all components not used in templates but
       created from server-side are bundled -->
@@ -12,14 +11,6 @@
 <link rel="import" href="views/admin/users/users-view.html">
 <link rel="import" href="views/admin/products/products-view.html">
 
-<!-- Ensure that flow renderers are bundled:
-      - at build time this this resolves to webapp/flow-component-renderer.html
-        (which is copied there from flow-server.jar by Maven)
-      - at run time this resolves to /flow-component-renderer.html
-        (which is provided by flow-server.jar)-->
-<link rel="import" href="../flow-component-renderer.html">
-<link rel="import" href="../flow-grid-component-renderer.html">
-
 <!-- Imports used in this page -->
 <link rel="import" href="components/app-container.html">
 <link rel="import" href="components/app-navigation.html">
@@ -27,9 +18,6 @@
 <dom-module id="main-view">
   <template>
     <style>
-      :host {
-      }
-
       app-container {
         color: var(--lumo-body-text-color);
         font-family: var(--lumo-font-family);
