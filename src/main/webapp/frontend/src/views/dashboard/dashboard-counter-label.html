@@ -9,6 +9,7 @@
         height: calc(18vh - 64px);
         min-height: 180px;
         padding: 10px;
+        display: block;
       }
 
       :host(.green) .count-digit {
@@ -28,14 +29,10 @@
       }
 
       .count-wrapper {
-        position: absolute;
         display: block;
-        top: 0;
-        height: 100%;
-        width: 100%;
-        left: 0;
         text-align: center;
-        padding-top: 32px;
+        padding-top: 12px;
+        margin-bottom: 18px;
       }
 
       .count-digit {
@@ -52,8 +49,11 @@
       }
 
       #chart-wrapper {
+        position: absolute;
+        top: 0;
+        left: 0;
         height: 120px;
-        display: block;
+        width: 100%;
       }
     </style>
 
