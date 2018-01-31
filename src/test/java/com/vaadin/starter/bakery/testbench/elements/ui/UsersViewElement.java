@@ -14,14 +14,6 @@ public class UsersViewElement extends TestBenchElement implements HasCrudView {
 		return $(GridElement.class).id("users-grid");
 	}
 
-	public TextFieldElement getFirstField() {
-		return getForm().$(TextFieldElement.class).id("first");
-	};
-
-	public TextFieldElement getLastField() {
-		return getForm().$(TextFieldElement.class).id("last");
-	}
-
 	public TextFieldElement getEmailField() {
 		return getForm().$(TextFieldElement.class).id("email");
 	}

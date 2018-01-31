@@ -13,10 +13,6 @@ public class ProductsViewElement extends TestBenchElement implements HasApp, Has
 		return $(GridElement.class).id("products-grid");
 	}
 
-	public TextFieldElement getName() {
-		return getForm().$(TextFieldElement.class).id("product-edit-name");
-	};
-
 	public TextFieldElement getPrice() {
 		return getForm().$(TextFieldElement.class).id("price");
 	}
