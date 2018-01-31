@@ -15,7 +15,11 @@ public class StorefrontViewElement extends TestBenchElement implements HasApp, H
 	}
 
 	public OrderCardElement getFirstOrderCard() {
-		return getGrid().$(OrderCardElement.class).first();
+		return getOrderCard(0);
+	}
+
+	public OrderCardElement getOrderCard(int index) {
+		return getGrid().$(OrderCardElement.class).get(index);
 	}
 
 	public OrderEditorElement getOrderEdit() {
