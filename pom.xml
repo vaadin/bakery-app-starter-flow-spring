@@ -104,16 +104,16 @@
                 <artifactId>vaadin</artifactId>
                 <version>${vaadin.version}</version>
             </dependency>
-                          <dependency>
-                            <groupId>com.vaadin</groupId>
-                            <artifactId>flow-server</artifactId>
-                            <version>1.0-SNAPSHOT</version>
-                          </dependency>
-                          <dependency>
-                            <groupId>com.vaadin</groupId>
-                            <artifactId>vaadin-lumo-theme</artifactId>
-                            <version>1.0-SNAPSHOT</version>
-                          </dependency>
+            <dependency>
+                <groupId>com.vaadin</groupId>
+                <artifactId>flow-server</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-lumo-theme</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
