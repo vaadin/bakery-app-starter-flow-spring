@@ -104,16 +104,16 @@
                 <artifactId>vaadin</artifactId>
                 <version>${vaadin.version}</version>
             </dependency>
-                          <dependency>
-                            <groupId>com.vaadin</groupId>
-                            <artifactId>flow-server</artifactId>
-                            <version>1.0-SNAPSHOT</version>
-                          </dependency>
-                          <dependency>
-                            <groupId>com.vaadin</groupId>
-                            <artifactId>vaadin-lumo-theme</artifactId>
-                            <version>1.0-SNAPSHOT</version>
-                          </dependency>
+            <dependency>
+                <groupId>com.vaadin</groupId>
+                <artifactId>flow-server</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-lumo-theme</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -403,8 +403,7 @@
                     </plugin>
 
 
-                    <!-- (5): Copies the files compiled by polymer-build to a directory from where they can be
-                              served when in production mode (root of the WAR) -->
+                    <!-- (4): Include bundled files in war. -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
