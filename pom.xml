@@ -403,8 +403,7 @@
                     </plugin>
 
 
-                    <!-- (5): Copies the files compiled by polymer-build to a directory from where they can be
-                              served when in production mode (root of the WAR) -->
+                    <!-- (4): Include bundled files in war. -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
