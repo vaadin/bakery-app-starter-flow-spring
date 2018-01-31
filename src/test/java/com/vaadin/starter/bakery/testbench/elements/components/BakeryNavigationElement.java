@@ -12,15 +12,15 @@ import com.vaadin.testbench.elementsbase.Element;
 public class BakeryNavigationElement extends TestBenchElement {
 
 	public DashboardViewElement navigateToDashboard() {
-		return navigateTo("dashboard", DashboardViewElement.class);
+		return navigateTo(1, DashboardViewElement.class);
 	}
 
 	public UsersViewElement navigateToUsers() {
-		return navigateTo("users", UsersViewElement.class);
+		return navigateTo(2, UsersViewElement.class);
 	}
 
 	public ProductsViewElement navigateToProducts() {
-		return navigateTo("products", ProductsViewElement.class);
+		return navigateTo(3, ProductsViewElement.class);
 	}
 
 	public LoginViewElement logout() {
@@ -28,8 +28,8 @@ public class BakeryNavigationElement extends TestBenchElement {
 		return $(LoginViewElement.class).onPage().waitForFirst();
 	}
 
-	private <T extends TestBenchElement> T navigateTo(String pageId, Class<T> landingPage) {
-		$(PaperTabElement.class).attribute("value", pageId).first().click();
+	private <T extends TestBenchElement> T navigateTo(int index, Class<T> landingPage) {
+		$(PaperTabElement.class).get(index).click();
 		return $(landingPage).onPage().waitForFirst();
 	}
 }
