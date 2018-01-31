@@ -67,7 +67,7 @@ class OrderPresenter {
 			if (view.isDesktopView()) {
 				registrations = Arrays.asList(orderCard.addEditListener(e -> navigateToOrder(id, true)),
 						orderCard.addCommentListener(e -> onOrderCardAddComment(orderCard, e.getMessage())),
-						orderCard.addCancelListener(e -> cancelOrder()));
+						orderCard.addCancelListener(e -> view.getGrid().deselectAll()));
 				orderCard.openCard(entity);
 				view.resizeGrid();
 			} else {
@@ -93,12 +93,8 @@ class OrderPresenter {
 		});
 	}
 
-	void cancelOrder() {
-		view.getGrid().getElement().setProperty("activeItem", null);
-	}
-
 	void navigateToOrder(Long id, boolean edit) {
-		cancelOrder();
+		view.getGrid().deselectAll();
 		view.navigateToEntity(id.toString(), edit);
 	}
 
