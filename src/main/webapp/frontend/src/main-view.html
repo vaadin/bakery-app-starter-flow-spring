@@ -21,46 +21,39 @@
 <link rel="import" href="../flow-grid-component-renderer.html">
 
 <!-- Imports used in this page -->
+<link rel="import" href="components/app-container.html">
 <link rel="import" href="components/app-navigation.html">
 
 <dom-module id="main-view">
   <template>
     <style>
       :host {
-        height: 100%;
-        display: flex;
-        flex-direction: column-reverse;
+      }
+
+      app-container {
         color: var(--lumo-body-text-color);
         font-family: var(--lumo-font-family);
-      }
-
-      app-navigation {
-        width: 100%;
-      }
-
-      #child-wrapper {
-        display: flex;
-        flex: 1;
         overflow: auto;
-        width: 100%;
         justify-content: center;
+        flex-direction: column-reverse;
       }
 
-      #child-wrapper > ::slotted(*) {
+      :host ::slotted(*) {
         flex: 1;
+        align-items: center;
       }
 
       @media (min-width: 600px) {
-        :host {
+        app-container {
           flex-direction: column;
         }
       }
     </style>
 
-    <app-navigation id="app-navigation"></app-navigation>
-    <div id="child-wrapper">
+    <app-container>
+      <app-navigation id="app-navigation"></app-navigation>
       <slot></slot>
-    </div>
+    </app-container>
   </template>
 
   <script>
