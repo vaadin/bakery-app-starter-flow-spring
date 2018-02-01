@@ -188,7 +188,7 @@
             </div>
           </vaadin-form-item>
 
-          <vaadin-form-item id="history" label-position="top" hidden="[[review]]">
+          <vaadin-form-item id="history" label-position="top">
             <label slot="label">History</label>
             <template is="dom-repeat" items="[[item.history]]" as="event">
               <div class="history-line">
@@ -200,7 +200,7 @@
             </template>
           </vaadin-form-item>
 
-          <vaadin-form-item id="comment" hidden="[[review]]">
+          <vaadin-form-item id="comment">
             <vaadin-text-field id="comment-field" placeholder="Add comment" class="full-width" on-keydown="_onCommentKeydown">
               <div slot="suffix" class="comment-suffix">
                 <vaadin-button id="send-comment" theme="tertiary">Send</vaadin-button>
@@ -214,12 +214,12 @@
 
 
     <buttons-bar id="footer" no-scroll$="[[noScroll]]">
-      <vaadin-button slot="left" id="back" none$="[[!review]]">Back</vaadin-button>
-      <vaadin-button slot="left" id="cancel" none$="[[review]]">Cancel</vaadin-button>
+      <vaadin-button slot="left" id="back">Back</vaadin-button>
+      <vaadin-button slot="left" id="cancel">Cancel</vaadin-button>
 
       <div slot="info" class="total">Total [[item.totalPrice]]</div>
 
-      <vaadin-button slot="right" id="save" theme="primary success" class="edit-button" none$="[[!review]]">Place Order ✓</vaadin-button>
+      <vaadin-button slot="right" id="save" theme="primary success" class="edit-button">Place Order ✓</vaadin-button>
       <vaadin-button slot="right" id="edit" theme="primary" class="edit-button" none$="[[review]]">
         <span>Edit order</span>
         <iron-icon icon="vaadin:edit"></iron-icon>
@@ -237,10 +237,6 @@
         return {
           item: {
             type: Object
-          },
-          review: {
-            type: Boolean,
-            value: false
           },
           desktopView: Boolean
         };
