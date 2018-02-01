@@ -19,7 +19,6 @@ import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.ui.events.CancelEvent;
 import com.vaadin.starter.bakery.ui.events.SaveEvent;
-import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
 import com.vaadin.starter.bakery.ui.utils.converters.CurrencyFormatter;
 import com.vaadin.starter.bakery.ui.utils.converters.LocalDateTimeConverter;
 import com.vaadin.starter.bakery.ui.utils.converters.LocalTimeConverter;
@@ -78,12 +77,22 @@ public class OrderDetailsFull extends PolymerTemplate<OrderDetailsFull.Model> {
 	}
 
 	public void display(Order order, boolean review) {
+		setReview(review);
 		this.order = order;
 		getModel().setItem(order);
 		if (!review) {
 			commentField.clear();
 		}
-		getModel().setReview(review);
+	}
+
+	private void setReview(boolean review) {
+		history.setVisible(!review);
+		comment.setVisible(!review);
+		cancel.setVisible(!review);
+		edit.setVisible(!review);
+
+		save.setVisible(review);
+		back.setVisible(review);
 	}
 
 	public interface Model extends TemplateModel {
@@ -100,8 +109,6 @@ public class OrderDetailsFull extends PolymerTemplate<OrderDetailsFull.Model> {
 		@Convert(value = OrderStateConverter.class, path = "history.newState")
 		@Convert(value = CurrencyFormatter.class, path = "totalPrice")
 		void setItem(Order order);
-
-		void setReview(boolean review);
 	}
 
 	public Registration addSaveListenter(ComponentEventListener<SaveEvent> listener) {
@@ -122,9 +129,5 @@ public class OrderDetailsFull extends PolymerTemplate<OrderDetailsFull.Model> {
 
 	public Registration addCancelListener(ComponentEventListener<CancelEvent> listener) {
 		return addListener(CancelEvent.class, listener);
-	}
-
-	public void setVisible(boolean visible) {
-		TemplateUtil.setVisible(this, visible);
 	}
 }
