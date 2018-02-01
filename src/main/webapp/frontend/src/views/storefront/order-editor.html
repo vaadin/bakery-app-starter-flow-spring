@@ -1,8 +1,6 @@
 <link rel="import" href="../../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../styles/shared-styles.html">
 <link rel="import" href="../../../bower_components/iron-icon/iron-icon.html">
-<link rel="import" href="../../../bower_components/iron-form/iron-form.html">
-<link rel="import" href="../../../bower_components/vaadin-valo-theme/icons.html">
+<link rel="import" href="../../../bower_components/vaadin-icons/vaadin-icons.html">
 <link rel="import" href="../../../bower_components/vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="../../../bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="../../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
@@ -14,6 +12,8 @@
 <link rel="import" href="../../components/utils-mixin.html">
 <link rel="import" href="order-item-editor.html">
 
+<link rel="import" href="../../styles/shared-styles.html">
+
 <dom-module id="order-editor">
   <template>
    <style include="shared-styles">
@@ -22,60 +22,56 @@
         flex-direction: column;
         box-sizing: border-box;
         height: 100%;
+        flex: auto;
       }
     </style>
 
     <div class="scrollable flex1" id="main">
       <h2 id="title"></h2>
 
-      <iron-form id="itemEditForm">
-        <form on-submit="_submitEditForm">
+      <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 4, 1)]]">
+        <vaadin-form-layout responsive-steps='[{"columns": 1, "labelsPosition": "top"}]'>
 
-          <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 4, 1)]]">
-            <vaadin-form-layout responsive-steps='[{"columns": 1, "labelsPosition": "top"}]'>
+          <vaadin-combo-box label="Status" id="status">
+          </vaadin-combo-box>
 
-              <vaadin-combo-box label="Status" id="status">
-              </vaadin-combo-box>
+          <vaadin-form-item>
+            <label slot="label">Due</label>
+            <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 1, 2)]]">
+              <vaadin-date-picker  id="due-date">
+              </vaadin-date-picker>
 
-              <vaadin-form-item>
-                <label slot="label">Due</label>
-                <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 1, 2)]]">
-                  <vaadin-date-picker  id="due-date">
-                  </vaadin-date-picker>
-
-                  <vaadin-combo-box id="due-time" allow-custom-value>
-                    <iron-icon slot="prefix" icon="vaadin:clock"></iron-icon>
-                  </vaadin-combo-box>
-                </vaadin-form-layout>
-
-              </vaadin-form-item>
-
-              <vaadin-combo-box id="pickup-location" class="full-width" value="[[pickupLocation]]">
-                <iron-icon slot="prefix" icon="vaadin:at"></iron-icon>
+              <vaadin-combo-box id="due-time" allow-custom-value>
+                <iron-icon slot="prefix" icon="vaadin:clock"></iron-icon>
               </vaadin-combo-box>
             </vaadin-form-layout>
 
-            <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 3, 1)]]" colspan="3">
+          </vaadin-form-item>
 
-              <vaadin-text-field id="customer-name" label="Customer" colspan="2">
-                <iron-icon slot="prefix" icon="vaadin:user"></iron-icon>
-              </vaadin-text-field>
+          <vaadin-combo-box id="pickup-location" class="full-width" value="[[pickupLocation]]">
+            <iron-icon slot="prefix" icon="vaadin:at"></iron-icon>
+          </vaadin-combo-box>
+        </vaadin-form-layout>
 
-              <vaadin-text-field id="customer-number" label="Phone number">
-                <iron-icon slot="prefix" icon="vaadin:phone"></iron-icon>
-              </vaadin-text-field>
+        <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 3, 1)]]" colspan="3">
 
-              <vaadin-text-field  id="customer-details" label="Additional Details" colspan="2"></vaadin-text-field>
+          <vaadin-text-field id="customer-name" label="Customer" colspan="2">
+            <iron-icon slot="prefix" icon="vaadin:user"></iron-icon>
+          </vaadin-text-field>
 
-              <vaadin-form-item colspan="3">
-                <label slot="label">Products</label>
-                <slot name="order-items-editor"></slot>
-              </vaadin-form-item>
+          <vaadin-text-field id="customer-number" label="Phone number">
+            <iron-icon slot="prefix" icon="vaadin:phone"></iron-icon>
+          </vaadin-text-field>
 
-            </vaadin-form-layout>
-          </vaadin-form-layout>
-        </form>
-      </iron-form>
+          <vaadin-text-field  id="customer-details" label="Additional Details" colspan="2"></vaadin-text-field>
+
+          <vaadin-form-item colspan="3">
+            <label slot="label">Products</label>
+            <slot name="order-items-editor"></slot>
+          </vaadin-form-item>
+
+        </vaadin-form-layout>
+      </vaadin-form-layout>
     </div>
 
     <buttons-bar id="footer" no-scroll$="[[noScroll]]">

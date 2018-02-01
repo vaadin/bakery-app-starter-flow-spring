@@ -1,6 +1,5 @@
 <link rel="import" href="../../../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../../../bower_components/vaadin-grid/vaadin-grid.html">
-
 <link rel="import" href="../../../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
 <link rel="import" href="../../../../bower_components/vaadin-combo-box/vaadin-combo-box.html">
 <link rel="import" href="../../../../bower_components/vaadin-text-field/vaadin-text-field.html">
@@ -61,7 +60,7 @@
         const grid = this.$['users-grid'];
         let partsLoaded = 0;
         const listener = () => {
-          if (!grid.loading && ++partsLoaded === 2) {
+          if (!grid.loading && ++partsLoaded === 2 && window.performance.mark) {
             // the 'loading-changed' event is fired separately for the headers (first)
             // and for the content (second). Waiting for the second time
             window.performance.mark('bakery-page-loaded');

@@ -4,12 +4,17 @@
 <dom-module id="form-dialog-overlay-theme" theme-for="vaadin-dialog-overlay">
   <template>
     <style>
+      :host {
+        padding: var(--lumo-space-xs);
+      }
+
       @media (max-width: 600px) {
         :host {
           top: 0;
           left: 0;
           right: 0;
           bottom: 0;
+          padding: 0;
         }
 
         [part="overlay"] {
@@ -31,6 +36,11 @@
         align-items: flex-end;
       }
 
+      :host([theme="middle"]) [part="overlay"] {
+        max-width: 60em;
+        animation: none;
+      }
+
       :host([theme="left"]) [part="overlay"],
       :host([theme="right"]) [part="overlay"] {
         flex: 1;
@@ -39,11 +49,7 @@
 
       :host([theme="top-right"]) [part="overlay"] {
         position: absolute;
-        top: 0;
-      }
-
-      :host([theme="top-right"]) [part="backdrop"] {
-        background: transparent;
+        top: var(--lumo-space-xs);
       }
 
       [part="overlay"] {
@@ -75,23 +81,12 @@
             theme: {
               type: String,
               observer: '_themeChanged'
-            },
-            // FIXME: set to false when https://github.com/vaadin/vaadin-overlay/pull/44 merged
-            noCloseOnOutsideClick: {
-              value: true
-            },
-            // FIXME: set to false when https://github.com/vaadin/vaadin-overlay/pull/44 merged
-            noCloseOnEsc: {
-              value: true
             }
           };
         }
 
         ready() {
           super.ready();
-
-          // FIXME: set to true when https://github.com/vaadin/vaadin-overlay/pull/46 merged
-          this.$.overlay.focusTrap = false;
 
           this._observer = new Polymer.FlattenedNodesObserver(this, info => {
             if (info.addedNodes.length) {

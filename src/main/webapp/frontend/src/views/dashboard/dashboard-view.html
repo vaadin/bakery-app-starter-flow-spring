@@ -15,7 +15,7 @@
       :host {
         display: block;
         width: 100%;
-        padding: var(--valo-space-s);
+        padding: var(--lumo-space-s);
         -webkit-overflow-scrolling: touch;
         overflow-y: scroll;
       }
@@ -113,7 +113,7 @@
         });
 
         Promise.all([this._chartsLoaded, this._gridLoaded]).then(() => {
-          window.performance.mark('bakery-page-loaded');
+          window.performance.mark && window.performance.mark('bakery-page-loaded');
         });
       }
     }
