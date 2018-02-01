@@ -35,7 +35,7 @@ public class StorefrontViewIT extends AbstractIT {
 	public void editOrder() {
 		StorefrontViewElement storefrontPage = openStorefrontPage();
 
-		OrderCardElement firstOrder = storefrontPage.getOrderCard(1);
+		OrderCardElement firstOrder = storefrontPage.getOrderCard(0);
 		Assert.assertNotNull(firstOrder);
 		firstOrder.click();
 		ButtonElement editBtn = firstOrder.getDetail().getEditButton();
