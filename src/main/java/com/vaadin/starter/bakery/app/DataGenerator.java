@@ -116,6 +116,13 @@ public class DataGenerator implements HasLogger {
 		LocalDate oldestDate = LocalDate.of(now.getYear() - yearsToInclude, 1, 1);
 		LocalDate newestDate = now.plusMonths(1L);
 
+		// Create first today's order
+		Order order = createOrder(productSupplier, pickupLocationSupplier, barista, baker, now);
+		order.setDueTime(LocalTime.of(8, 0));
+		order.setHistory(order.getHistory().subList(0, 1));
+		order.setItems(order.getItems().subList(0, 1));
+		orderRepo.save(order);
+
 		for (LocalDate dueDate = oldestDate; dueDate.isBefore(newestDate); dueDate = dueDate.plusDays(1)) {
 			// Create a slightly upwards trend - everybody wants to be
 			// successful
