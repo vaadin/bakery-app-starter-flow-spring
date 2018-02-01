@@ -16,6 +16,9 @@ public interface CrudService<T extends AbstractEntity> {
 	}
 
 	default void delete(User currentUser, T entity) {
+		if (entity == null) {
+			throw new EntityNotFoundException();
+		}
 		getRepository().delete(entity);
 	}
 

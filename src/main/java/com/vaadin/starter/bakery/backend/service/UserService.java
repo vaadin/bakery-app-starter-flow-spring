@@ -66,7 +66,7 @@ public class UserService implements FilterableCrudService<User> {
 	}
 
 	private void throwIfUserLocked(User entity) {
-		if (entity.isLocked()) {
+		if (entity != null && entity.isLocked()) {
 			throw new UserFriendlyDataException(MODIFY_LOCKED_USER_NOT_PERMITTED);
 		}
 	}

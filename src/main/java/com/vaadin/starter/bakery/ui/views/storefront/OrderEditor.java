@@ -39,7 +39,6 @@ import com.vaadin.starter.bakery.ui.components.DatePickerForBinder;
 import com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil;
 import com.vaadin.starter.bakery.ui.events.CancelEvent;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
-import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
 import com.vaadin.starter.bakery.ui.utils.converters.LocalTimeConverter;
 import com.vaadin.starter.bakery.ui.views.storefront.events.NewEditorEvent;
 import com.vaadin.starter.bakery.ui.views.storefront.events.ReviewEvent;
@@ -206,10 +205,5 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 
 	public void setCurrentUser(User currentUser) {
 		this.currentUser = currentUser;
-	}
-
-	@Override
-	public void setVisible(boolean visible) {
-		TemplateUtil.setVisible(this, visible);
 	}
 }
