@@ -66,22 +66,22 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 	@Id("status")
 	private ComboBoxForBinder<OrderState> status;
 
-	@Id("due-date")
+	@Id("dueDate")
 	private DatePickerForBinder date;
 
-	@Id("due-time")
+	@Id("dueTime")
 	private ComboBoxForBinder<LocalTime> time;
 
-	@Id("pickup-location")
+	@Id("pickupLocation")
 	private ComboBoxForBinder<PickupLocation> pickupLocation;
 
-	@Id("customer-name")
+	@Id("customerName")
 	private TextField customerName;
 
-	@Id("customer-number")
+	@Id("customerNumber")
 	private TextField customerNumber;
 
-	@Id("customer-details")
+	@Id("customerDetails")
 	private TextField customerDetails;
 
 	@Id("cancel")

@@ -23,7 +23,7 @@ public class DashboardCounterLabel extends PolymerTemplate<TemplateModel> {
 	@Id("count")
 	private Span count;
 
-	@Id("chart-wrapper")
+	@Id("chartWrapper")
 	private Div chartWrapper;
 
 	public void setOrdersCountData(OrdersCountData data) {

@@ -38,7 +38,7 @@ public class OrderCard extends PolymerTemplate<OrderCard.Model> {
 
 	private Long orderId;
 
-	@Id("order-details-brief")
+	@Id("orderDetailsBrief")
 	private OrderDetailsBrief orderDetailsBrief;
 	
 	private OrderDetailsFull orderDetailsFull;

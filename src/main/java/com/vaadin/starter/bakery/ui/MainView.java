@@ -45,7 +45,7 @@ import com.vaadin.starter.bakery.ui.views.admin.users.UsersView;
 public class MainView extends PolymerTemplate<TemplateModel>
 		implements RouterLayout, BeforeEnterObserver {
 
-	@Id("app-navigation")
+	@Id("appNavigation")
 	private AppNavigation appNavigation;
 
 	public MainView() {

@@ -44,7 +44,7 @@
       }
 
       #monthly-product-split,
-      #orders-grid {
+      #ordersGrid {
         margin: 12px 6px;
         border-radius: 4px;
         box-shadow: 0 2px 5px 0 rgba(23, 68, 128, 0.1);
@@ -56,30 +56,30 @@
 
     <vaadin-board>
       <vaadin-board-row>
-        <dashboard-counter-label id="today-count" class="green">
-          <vaadin-chart id="today-count-chart" class="counter"></vaadin-chart>
+        <dashboard-counter-label id="todayCount" class="green">
+          <vaadin-chart id="todayCountChart" class="counter"></vaadin-chart>
         </dashboard-counter-label>
-        <dashboard-counter-label id="not-available-count" class="red"></dashboard-counter-label>
-        <dashboard-counter-label id="new-count" class="blue"></dashboard-counter-label>
-        <dashboard-counter-label id="tomorrow-count" class="gray"></dashboard-counter-label>
+        <dashboard-counter-label id="notAvailableCount" class="red"></dashboard-counter-label>
+        <dashboard-counter-label id="newCount" class="blue"></dashboard-counter-label>
+        <dashboard-counter-label id="tomorrowCount" class="gray"></dashboard-counter-label>
       </vaadin-board-row>
       <vaadin-board-row>
         <div class="vaadin-board-cell">
-          <vaadin-chart id="deliveries-this-month" class="column-chart"></vaadin-chart>
+          <vaadin-chart id="deliveriesThisMonth" class="column-chart"></vaadin-chart>
         </div>
         <div class="vaadin-board-cell">
-          <vaadin-chart id="deliveries-this-year" class="column-chart"></vaadin-chart>
+          <vaadin-chart id="deliveriesThisYear" class="column-chart"></vaadin-chart>
         </div>
       </vaadin-board-row>
       <vaadin-board-row>
-        <vaadin-chart id="yearly-sales-graph" class="yearly-sales"></vaadin-chart>
+        <vaadin-chart id="yearlySalesGraph" class="yearly-sales"></vaadin-chart>
       </vaadin-board-row>
       <vaadin-board-row>
         <div class="vaadin-board-cell">
-          <vaadin-chart id="monthly-product-split" class="product-split-donut"></vaadin-chart >
+          <vaadin-chart id="monthlyProductSplit" class="product-split-donut"></vaadin-chart >
         </div>
         <div class="vaadin-board-cell">
-          <vaadin-grid id="orders-grid"></vaadin-grid>
+          <vaadin-grid id="ordersGrid"></vaadin-grid>
         </div>
       </vaadin-board-row>
     </vaadin-board>
@@ -104,12 +104,12 @@
 
         this._gridLoaded = new Promise((resolve, reject) => {
           const listener = () => {
-            if (!this.$['orders-grid'].loading) {
-              this.$['orders-grid'].removeEventListener('loading-changed', listener);
+            if (!this.$['ordersGrid'].loading) {
+              this.$['ordersGrid'].removeEventListener('loading-changed', listener);
               resolve();
             }
           };
-          this.$['orders-grid'].addEventListener('loading-changed', listener);
+          this.$['ordersGrid'].addEventListener('loading-changed', listener);
         });
 
         Promise.all([this._chartsLoaded, this._gridLoaded]).then(() => {

@@ -40,7 +40,7 @@ public class OrderDetailsBrief extends PolymerTemplate<OrderDetailsBrief.Model> 
 		void setItem(OrderSummary order);
 	}
 
-	@Id("time-place")
+	@Id("timePlace")
 	private Div timePlace;
 
 	public void setOrder(OrderSummary order) {

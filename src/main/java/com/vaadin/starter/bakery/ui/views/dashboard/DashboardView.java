@@ -59,34 +59,34 @@ public class DashboardView extends PolymerTemplate<TemplateModel> {
 
 	private final OrderService orderService;
 
-	@Id("today-count")
+	@Id("todayCount")
 	private DashboardCounterLabel todayCount;
 
-	@Id("not-available-count")
+	@Id("notAvailableCount")
 	private DashboardCounterLabel notAvailableCount;
 
-	@Id("new-count")
+	@Id("newCount")
 	private DashboardCounterLabel newCount;
 
-	@Id("tomorrow-count")
+	@Id("tomorrowCount")
 	private DashboardCounterLabel tomorrowCount;
 
-	@Id("deliveries-this-month")
+	@Id("deliveriesThisMonth")
 	private Chart deliveriesThisMonthChart;
 
-	@Id("deliveries-this-year")
+	@Id("deliveriesThisYear")
 	private Chart deliveriesThisYearChart;
 
-	@Id("yearly-sales-graph")
+	@Id("yearlySalesGraph")
 	private Chart yearlySalesGraph;
 
-	@Id("orders-grid")
+	@Id("ordersGrid")
 	private Grid<Order> grid;
 
-	@Id("monthly-product-split")
+	@Id("monthlyProductSplit")
 	private Chart monthlyProductSplit;
 
-	@Id("today-count-chart")
+	@Id("todayCountChart")
 	private Chart todayCountChart;
 
 	@Autowired
