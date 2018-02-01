@@ -60,7 +60,7 @@ public class OrderDetailsBrief extends PolymerTemplate<OrderDetailsBrief.Model> 
 			// Today or yesterday
 			result.add(createHeader("time", HOUR_FORMATTER.format(order.getDueTime())));
 			result.add(PLACE.apply(order));
-		} else if (now.get(WEEK_OF_YEAR_FIELD) == date.get(WEEK_OF_YEAR_FIELD)) {
+		} else if (now.getYear() == date.getYear() && now.get(WEEK_OF_YEAR_FIELD) == date.get(WEEK_OF_YEAR_FIELD)) {
 			// This week
 			result.add(createHeader("short-day", SHORT_DAY_FORMATTER.format(order.getDueDate())));
 			result.add(createTimeComponent("secondary-time", HOUR_FORMATTER.format(order.getDueTime())));
