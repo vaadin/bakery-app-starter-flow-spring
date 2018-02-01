@@ -11,7 +11,7 @@ import com.vaadin.flow.server.BootstrapPageResponse;
  *  <li>add links to favicons</li>
  *  <li>add a link to the web app manifest</li>
  *  <li>set the viewport</li>
- *  <li>define the global styles for the main document (initialize the Vaadin Valo theme)</li>
+ *  <li>define the global styles for the main document (initialize the Vaadin Lumo theme)</li>
  * </ul>
  */
 public class CustomBootstrapListener implements BootstrapListener {
@@ -56,12 +56,10 @@ public class CustomBootstrapListener implements BootstrapListener {
 
 	private void injectInlineCustomStyles(Element head) {
 		head.append("<!-- Add any global styles for body, document, etc. -->\n" +
-				"    <custom-style>\n" +
-				"      <style is=\"custom-style\" include=\"valo-color valo-typography\">\n" +
-				"        html {\n" +
-				"          background: var(--valo-shade-10pct);\n" +
-				"        }\n" +
-				"      </style>\n" +
-				"    </custom-style>");
+				"    <style>\n" +
+				"      body {\n" +
+				"        background: var(--lumo-shade-5pct);\n" +
+				"      }\n" +
+				"    </style>");
 	}
 }

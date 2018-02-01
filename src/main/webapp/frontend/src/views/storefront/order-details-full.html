@@ -1,15 +1,17 @@
 <link rel="import" href="../../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../styles/shared-styles.html">
 <link rel="import" href="../../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../../bower_components/vaadin-icons/vaadin-icons.html">
 <link rel="import" href="../../../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../../../bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="../../../bower_components/vaadin-form-layout/vaadin-form-item.html">
 <link rel="import" href="../../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
 <link rel="import" href="../../../bower_components/vaadin-text-field/vaadin-text-field.html">
+
 <link rel="import" href="../../components/buttons-bar.html">
 <link rel="import" href="../../components/utils-mixin.html">
-
 <link rel="import" href="order-status-badge.html">
+
+<link rel="import" href="../../styles/shared-styles.html">
 
 <dom-module id="order-details-full">
   <template>
@@ -19,6 +21,7 @@
         flex-direction: column;
         box-sizing: border-box;
         height: 100%;
+        flex: auto;
       }
 
       /*
@@ -54,18 +57,18 @@
 
       .dim,
       .secondary {
-        color: var(--valo-secondary-text-color);
+        color: var(--lumo-secondary-text-color);
       }
 
       .secondary {
-        font-size: var(--valo-font-size-xs);
-        line-height: var(--valo-font-size-xl);
+        font-size: var(--lumo-font-size-xs);
+        line-height: var(--lumo-font-size-xl);
       }
 
       .meta-row {
         display: flex;
         justify-content: space-between;
-        padding-bottom: var(--valo-space-s);
+        padding-bottom: var(--lumo-space-s);
       }
 
       .products {
@@ -75,9 +78,9 @@
       .products .td {
         text-align: center;
         vertical-align: middle;
-        padding: var(--valo-space-xs);
+        padding: var(--lumo-space-xs);
         border: none;
-        border-bottom: 1px solid var(--valo-contrast-10pct);
+        border-bottom: 1px solid var(--lumo-contrast-10pct);
       }
 
       .products .td.product-name {
@@ -96,16 +99,16 @@
       }
 
       .history-line {
-        margin: var(--valo-space-xs) 0;
+        margin: var(--lumo-space-xs) 0;
       }
 
       .comment {
-        font-size: var(--valo-font-size-s);
+        font-size: var(--lumo-font-size-s);
       }
 
       @media (min-width: 600px) {
         .main-row {
-          padding: var(--valo-space-l);
+          padding: var(--lumo-space-l);
           flex-basis: auto;
         }
       }
@@ -208,8 +211,8 @@
         </vaadin-form-layout>
       </vaadin-form-layout>
     </div>
-    
-    
+
+
     <buttons-bar id="footer" no-scroll$="[[noScroll]]">
       <vaadin-button slot="left" id="back" none$="[[!review]]">Back</vaadin-button>
       <vaadin-button slot="left" id="cancel" none$="[[review]]">Cancel</vaadin-button>

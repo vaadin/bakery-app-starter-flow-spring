@@ -20,7 +20,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Dependencies -->
-        <vaadin.version>10.0.0.alpha13</vaadin.version>
+        <vaadin.version>10.0.0.alpha14</vaadin.version>
         <testbench.version>6.0.0.alpha7</testbench.version>
 
         <failOnMissingWebXml>false</failOnMissingWebXml>
@@ -74,13 +74,19 @@
             <id>vaadin-tools</id>
             <url>https://tools.vaadin.com/nexus/content/repositories/vaadin-addons</url>
         </repository>
-
     </repositories>
 
     <pluginRepositories>
         <pluginRepository>
             <id>spring-plugin-milestones</id>
             <url>https://repo.spring.io/milestone</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>plugin-snapshots-repo</id>
+            <url>https://oss.sonatype.org/content/repositories/vaadin-snapshots</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </pluginRepository>
     </pluginRepositories>
 
@@ -97,6 +103,16 @@
                 <groupId>com.vaadin</groupId>
                 <artifactId>vaadin</artifactId>
                 <version>${vaadin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.vaadin</groupId>
+                <artifactId>flow-server</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-lumo-theme</artifactId>
+                <version>1.0-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -188,8 +204,8 @@
                     <artifactId>tomcat-juli</artifactId>
                 </exclusion>
                 <exclusion>
-                	<groupId>org.apache.tomcat</groupId>
-                	<artifactId>tomcat-jdbc</artifactId>
+                    <groupId>org.apache.tomcat</groupId>
+                    <artifactId>tomcat-jdbc</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -315,6 +331,16 @@
                         <artifactId>frontend-maven-plugin</artifactId>
                         <executions>
                             <execution>
+                                <id>install-node-and-yarn</id>
+                                <goals>
+                                    <goal>install-node-and-yarn</goal>
+                                    <goal>yarn</goal> <!-- runs 'install' by default -->
+                                </goals>
+                                <configuration>
+                                    <workingDirectory>${buildtools.directory}</workingDirectory>
+                                </configuration>
+                            </execution>
+                            <execution>
                                 <id>yarn run lint</id>
                                 <phase>compile</phase>
                                 <goals>
@@ -351,104 +377,33 @@
                     <artifactId>flow-server-production-mode</artifactId>
                 </dependency>
             </dependencies>
-
             <build>
                 <plugins>
-                    <!-- (3): Unpack those frontend project dependencies that are embedded into Flow and Flow components
-                         JARs so that they can be included into the production frontend build. This step will become
-                         unnecessary after switching to the flow-maven-plugin -->
+                    <!-- (3): Configures the frontend plugin to compile the web components 
+                        source -->
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <version>3.0.0</version>
+                        <groupId>com.vaadin</groupId>
+                        <artifactId>flow-maven-plugin</artifactId>
+                        <version>1.0-SNAPSHOT</version>
                         <executions>
                             <execution>
-                                <id>unpack-flow-component-renderer-html</id>
-                                <phase>process-sources</phase>
                                 <goals>
-                                    <goal>unpack</goal>
+                                    <goal>copy-production-files</goal>
+                                    <goal>package-for-production</goal>
                                 </goals>
                                 <configuration>
-                                    <artifactItems>
-                                        <!-- flow-component-renderer.html is a dependency of `ComponentTemplateRenderer` -->
-                                        <artifactItem>
-                                            <groupId>com.vaadin</groupId>
-                                            <artifactId>flow-server</artifactId>
-                                            <type>jar</type>
-                                            <overWrite>true</overWrite>
-                                            <includes>META-INF/resources/frontend/flow-component-renderer.html</includes>
-                                            <outputDirectory>${project.build.directory}</outputDirectory>
-                                        </artifactItem>
-
-                                        <!-- gridConnector.js and flow-grid-component-renderer.html are dependencies of `Grid<T>` -->
-                                        <artifactItem>
-                                            <groupId>com.vaadin</groupId>
-                                            <artifactId>vaadin-grid-flow</artifactId>
-                                            <type>jar</type>
-                                            <overWrite>true</overWrite>
-                                            <includes>META-INF/resources/frontend/gridConnector.js,META-INF/resources/frontend/flow-grid-component-renderer.html</includes>
-                                            <outputDirectory>${project.build.directory}</outputDirectory>
-                                        </artifactItem>
-                                    </artifactItems>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <!-- (4): copy the JAR-embedded frontend dependencies into the location where they can be picked up
-                         by the production frontend build -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-resources-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>copy-flow-component-renderer-html</id>
-                                <phase>process-sources</phase>
-                                <goals>
-                                    <goal>copy-resources</goal>
-                                </goals>
-                                <configuration>
-                                    <outputDirectory>${frontend.directory}</outputDirectory>
-                                    <resources>
-                                        <resource>
-                                            <directory>${project.build.directory}/META-INF/resources/frontend</directory>
-                                            <includes>flow-component-renderer.html,gridConnector.js,flow-grid-component-renderer.html</includes>
-                                        </resource>
-                                    </resources>
+                                    <transpileOutputDirectory>${frontend.directory}/build</transpileOutputDirectory>
+                                    <transpileWorkingDirectory>${project.build.directory}/transpile</transpileWorkingDirectory>
+                                    <transpileEs6SourceDirectory>${project.build.directory}/transpile</transpileEs6SourceDirectory>
+                                    <copyOutputDirectory>${project.build.directory}/transpile</copyOutputDirectory>
+                                    <bundle>true</bundle>
                                 </configuration>
                             </execution>
                         </executions>
                     </plugin>
 
-                    <!-- (5): Configures the frontend plugin to compile the web components source -->
-                    <plugin>
-                        <groupId>com.github.eirslett</groupId>
-                        <artifactId>frontend-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>install-node-and-yarn</id>
-                                <goals>
-                                    <goal>install-node-and-yarn</goal>
-                                    <goal>yarn</goal> <!-- runs 'install' by default -->
-                                </goals>
-                                <configuration>
-                                    <workingDirectory>${buildtools.directory}</workingDirectory>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>run-polymer-build</id>
-                                <goals>
-                                    <goal>yarn</goal>
-                                </goals>
-                                <configuration>
-                                    <workingDirectory>${buildtools.directory}</workingDirectory>
-                                    <arguments>${yarn.build.goal}</arguments>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
 
-                    <!-- (6): Copies the files compiled by polymer-build to a directory from where they can be
-                              served when in production mode (root of the WAR) -->
+                    <!-- (4): Include bundled files in war. -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>

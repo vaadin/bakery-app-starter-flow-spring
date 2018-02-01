@@ -1,5 +1,4 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
-<link rel="import" href="styles/shared-styles.html">
 
 <!--  Ensure that all components not used in templates but
       created from server-side are bundled -->
@@ -12,55 +11,37 @@
 <link rel="import" href="views/admin/users/users-view.html">
 <link rel="import" href="views/admin/products/products-view.html">
 
-<!-- Ensure that flow renderers are bundled:
-      - at build time this this resolves to webapp/flow-component-renderer.html
-        (which is copied there from flow-server.jar by Maven)
-      - at run time this resolves to /flow-component-renderer.html
-        (which is provided by flow-server.jar)-->
-<link rel="import" href="../flow-component-renderer.html">
-<link rel="import" href="../flow-grid-component-renderer.html">
-
 <!-- Imports used in this page -->
+<link rel="import" href="components/app-container.html">
 <link rel="import" href="components/app-navigation.html">
 
 <dom-module id="main-view">
   <template>
     <style>
-      :host {
-        height: 100%;
-        display: flex;
-        flex-direction: column-reverse;
-        color: var(--valo-body-text-color);
-        font-family: var(--valo-font-family);
-      }
-
-      app-navigation {
-        width: 100%;
-      }
-
-      #child-wrapper {
-        display: flex;
-        flex: 1;
+      app-container {
+        color: var(--lumo-body-text-color);
+        font-family: var(--lumo-font-family);
         overflow: auto;
-        width: 100%;
         justify-content: center;
+        flex-direction: column-reverse;
       }
 
-      #child-wrapper > ::slotted(*) {
+      :host ::slotted(*) {
         flex: 1;
+        align-items: center;
       }
 
       @media (min-width: 600px) {
-        :host {
+        app-container {
           flex-direction: column;
         }
       }
     </style>
 
-    <app-navigation id="app-navigation"></app-navigation>
-    <div id="child-wrapper">
+    <app-container>
+      <app-navigation id="app-navigation"></app-navigation>
       <slot></slot>
-    </div>
+    </app-container>
   </template>
 
   <script>

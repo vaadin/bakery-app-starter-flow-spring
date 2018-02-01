@@ -17,7 +17,7 @@
       :host {
         display: flex;
         flex-direction: column;
-        max-width: calc(964px + var(--valo-space-m)) !important; /* Allow selected order to be 16px wider */
+        max-width: calc(964px + var(--lumo-space-m)) !important; /* Allow selected order to be 16px wider */
       }
 
       :host([touch-scrolling]) {
@@ -38,8 +38,7 @@
 
     <vaadin-grid id="storefront-grid" theme="storefront-grid"></vaadin-grid>
 
-    <!--  dialogs are tele-ported to body, hence you need to inline styles or use styled web components -->
-    <form-dialog opened="[[editing]]">
+    <form-dialog opened="[[editing]]" theme="middle">
       <order-details-full id="order-details" desktop-view="[[desktopView]]"></order-details-full>
       <order-editor id="order-editor" desktop-view="[[desktopView]]"></order-editor>
       <template><!-- vaadin-dialog fails if not present (#43) --></template>
@@ -59,7 +58,7 @@
         super.ready();
         const grid = this.$['storefront-grid'];
         const listener = () => {
-          if (!grid.loading) {
+          if (!grid.loading && window.performance.mark) {
             window.performance.mark('bakery-page-loaded');
             grid.removeEventListener('loading-changed', listener);
           }
