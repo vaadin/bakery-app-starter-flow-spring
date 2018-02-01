@@ -46,9 +46,11 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 	}
 	
 	public void setupEventListeners() {
+		getGrid().getElement().addSynchronizedProperty("activeItem");
+
 		getGrid().addSelectionListener(e -> {
 			e.getFirstSelectedItem().ifPresent(entity -> navigateToEntity(entity.getId().toString()));
-			getGrid().deselectAll();
+			getGrid().getElement().setProperty("activeItem", null);
 		});
 
 		getButtons().addSaveListener(e -> getPresenter().save());

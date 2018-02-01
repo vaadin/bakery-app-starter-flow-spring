@@ -65,7 +65,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		this.presenter = presenter;
 		// required for the `isDesktopView()` method
 		getElement().synchronizeProperty("desktopView", "desktop-view-changed");
-		getGrid().getElement().synchronizeProperty("activeItem", "change");
+
 		searchBar.setActionText("New order");
 		searchBar.setCheckboxText("Show past orders");
 		searchBar.setPlaceHolder("Search");
