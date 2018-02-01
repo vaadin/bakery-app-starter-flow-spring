@@ -47,6 +47,7 @@ class OrderPresenter {
 	void init(StorefrontView view) {
 		this.entityPresenter.setView(view);
 		this.view = view;
+		view.getGrid().getElement().addSynchronizedProperty("activeItem");
 		view.getGrid().setDataProvider(dataProvider);
 		view.getOpenedOrderEditor().setCurrentUser(currentUser);
 		singleOrderPresenter.init(view);
