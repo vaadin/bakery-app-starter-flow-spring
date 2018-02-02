@@ -11,7 +11,7 @@ public class UsersViewElement extends TestBenchElement implements HasCrudView {
 
 	@Override
 	public GridElement getGrid() {
-		return $(GridElement.class).id("users-grid");
+		return $(GridElement.class).id("usersGrid");
 	}
 
 	public TextFieldElement getFirstField() {

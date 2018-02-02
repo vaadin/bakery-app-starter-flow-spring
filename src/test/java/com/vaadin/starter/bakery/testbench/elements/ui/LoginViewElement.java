@@ -19,7 +19,7 @@ public class LoginViewElement extends TestBenchElement {
 	}
 
 	public ButtonElement getSignIn() {
-		return $(ShadyButtonElement.class).id("button-submit");
+		return $(ShadyButtonElement.class).id("buttonSubmit");
 	}
 
 	public PasswordFieldElement getPassword() {

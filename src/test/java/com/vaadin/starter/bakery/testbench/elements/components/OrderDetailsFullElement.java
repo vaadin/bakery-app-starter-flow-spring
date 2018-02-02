@@ -8,7 +8,7 @@ import com.vaadin.testbench.elementsbase.Element;
 public class OrderDetailsFullElement extends TestBenchElement {
 
 	public ButtonElement getCancelButton() {
-		return $(ButtonElement.class).id("collapse-order-detail");
+		return $(ButtonElement.class).id("collapseOrderDetail");
 	}
 
 	public ButtonElement getEditButton() {
