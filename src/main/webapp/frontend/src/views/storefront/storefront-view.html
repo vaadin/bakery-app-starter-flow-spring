@@ -1,10 +1,10 @@
 <link rel="import" href="../../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../../bower_components/iron-media-query/iron-media-query.html">
-<link rel="import" href="../../../bower_components/vaadin-grid/src/vaadin-grid.html">
+<link rel="import" href="../../../bower_components/vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../../../bower_components/vaadin-dialog/vaadin-dialog.html">
 
 <link rel="import" href="../../components/search-bar.html">
 <link rel="import" href="../../components/utils-mixin.html">
-<link rel="import" href="../../components/form-dialog.html">
 
 <link rel="import" href="order-editor.html">
 <link rel="import" href="order-details-full.html">
@@ -36,13 +36,9 @@
 
     <search-bar id="search" show-checkbox></search-bar>
 
-    <vaadin-grid id="grid" theme="storefront-grid"></vaadin-grid>
+    <vaadin-grid id="grid" theme="storefront"></vaadin-grid>
 
-    <form-dialog opened="[[editing]]" theme="middle">
-      <order-details-full id="orderDetails" desktop-view="[[desktopView]]"></order-details-full>
-      <order-editor id="orderEditor" desktop-view="[[desktopView]]"></order-editor>
-      <template><!-- vaadin-dialog fails if not present (#43) --></template>
-    </form-dialog>
+    <vaadin-dialog id="dialog" theme="middle"></vaadin-dialog>
 
   </template>
 
