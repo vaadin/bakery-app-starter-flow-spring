@@ -40,19 +40,19 @@ import com.vaadin.starter.bakery.ui.views.admin.users.UsersView;
 
 @Tag("main-view")
 @HtmlImport("src/main-view.html")
-
-@HtmlImport("bower_components/vaadin-tabs/vaadin-tab.html")
-@HtmlImport("bower_components/vaadin-tabs/vaadin-tabs.html")
-@HtmlImport("bower_components/vaadin-grid/vaadin-grid.html")
+// Override elements with Lumo styled ones
 @HtmlImport("bower_components/vaadin-button/vaadin-button.html")
+@HtmlImport("bower_components/vaadin-checkbox/vaadin-checkbox.html")
+@HtmlImport("bower_components/vaadin-combo-box/vaadin-combo-box.html")
+@HtmlImport("bower_components/vaadin-date-picker/vaadin-date-picker.html")
+@HtmlImport("bower_components/vaadin-dialog/vaadin-dialog.html")
 @HtmlImport("bower_components/vaadin-form-layout/vaadin-form-item.html")
 @HtmlImport("bower_components/vaadin-form-layout/vaadin-form-layout.html")
-@HtmlImport("bower_components/vaadin-combo-box/vaadin-combo-box.html")
-@HtmlImport("bower_components/vaadin-text-field/vaadin-text-field.html")
-@HtmlImport("bower_components/vaadin-dialog/vaadin-dialog.html")
-@HtmlImport("bower_components/vaadin-date-picker/vaadin-date-picker.html")
-@HtmlImport("bower_components/vaadin-checkbox/vaadin-checkbox.html")
+@HtmlImport("bower_components/vaadin-grid/vaadin-grid.html")
+@HtmlImport("bower_components/vaadin-tabs/vaadin-tab.html")
+@HtmlImport("bower_components/vaadin-tabs/vaadin-tabs.html")
 @HtmlImport("bower_components/vaadin-text-field/vaadin-password-field.html")
+@HtmlImport("bower_components/vaadin-text-field/vaadin-text-field.html")
 
 @BodySize(height = "100vh", width = "100vw")
 @Theme(Lumo.class)
