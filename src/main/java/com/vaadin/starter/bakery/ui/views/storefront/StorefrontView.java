@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
@@ -76,6 +77,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		orderDetails = new OrderDetailsFull();
 		dialog.add(orderEditor);
 		dialog.add(orderDetails);
+		UI.getCurrent().getPage().executeJavaScript("$0.$.overlay.setAttribute('theme', 'middle')", dialog);
 
 		grid.setSelectionMode(Grid.SelectionMode.SINGLE);
 		Map<Order, OrderCard> components = new WeakHashMap<>();

@@ -4,6 +4,7 @@
 package com.vaadin.starter.bakery.ui.crud;
 
 import com.vaadin.flow.component.HasText;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
@@ -49,6 +50,9 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 
 	public CrudView(String entityName) {
 		this.entityName = entityName;
+
+		UI.getCurrent().getPage().executeJavaScript("$0.$.overlay.setAttribute('theme', 'right')",
+				getDialog().getElement());
 	}
 	
 	public void setupEventListeners() {
