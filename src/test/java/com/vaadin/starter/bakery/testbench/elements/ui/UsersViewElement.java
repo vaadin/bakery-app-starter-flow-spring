@@ -11,7 +11,7 @@ public class UsersViewElement extends TestBenchElement implements HasCrudView {
 
 	@Override
 	public GridElement getGrid() {
-		return $(GridElement.class).id("users-grid");
+		return $(GridElement.class).waitForFirst();
 	}
 
 	public TextFieldElement getFirstField() {
@@ -28,6 +28,6 @@ public class UsersViewElement extends TestBenchElement implements HasCrudView {
 	}
 
 	public PasswordFieldElement getPasswordField() {
-		return getField("user-edit-password", PasswordFieldElement.class);
+		return getField("userEditPassword", PasswordFieldElement.class);
 	}
 }

@@ -10,11 +10,11 @@ public class ProductsViewElement extends TestBenchElement implements HasApp, Has
 
 	@Override
 	public GridElement getGrid() {
-		return $(GridElement.class).id("products-grid");
+		return $(GridElement.class).waitForFirst();
 	}
 
 	public TextFieldElement getName() {
-		return getField("product-edit-name", TextFieldElement.class);
+		return getField("productEditName", TextFieldElement.class);
 	};
 
 	public TextFieldElement getPrice() {
