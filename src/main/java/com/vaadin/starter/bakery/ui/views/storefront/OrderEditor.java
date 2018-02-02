@@ -66,22 +66,22 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 	@Id("status")
 	private ComboBoxForBinder<OrderState> status;
 
-	@Id("due-date")
-	private DatePickerForBinder date;
+	@Id("dueDate")
+	private DatePickerForBinder dueDate;
 
-	@Id("due-time")
-	private ComboBoxForBinder<LocalTime> time;
+	@Id("dueTime")
+	private ComboBoxForBinder<LocalTime> dueTime;
 
-	@Id("pickup-location")
+	@Id("pickupLocation")
 	private ComboBoxForBinder<PickupLocation> pickupLocation;
 
-	@Id("customer-name")
+	@Id("customerName")
 	private TextField customerName;
 
-	@Id("customer-number")
+	@Id("customerNumber")
 	private TextField customerNumber;
 
-	@Id("customer-details")
+	@Id("customerDetails")
 	private TextField customerDetails;
 
 	@Id("cancel")
@@ -116,18 +116,18 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 					o.changeState(currentUser, s);
 				});
 
-		date.setRequired(true);
-		binder.bind(date, "dueDate");
+		dueDate.setRequired(true);
+		binder.bind(dueDate, "dueDate");
 
 		SortedSet<LocalTime> timeValues = IntStream.rangeClosed(8, 16).mapToObj(i -> LocalTime.of(i, 0))
 				.collect(Collectors.toCollection(TreeSet::new));
-		time.setItems(timeValues);
-		time.setItemLabelGenerator(localTimeConverter::toPresentation);
-		time.addCustomValueSetListener(e -> {
+		dueTime.setItems(timeValues);
+		dueTime.setItemLabelGenerator(localTimeConverter::toPresentation);
+		dueTime.addCustomValueSetListener(e -> {
 			timeValues.add(localTimeConverter.toModel(e.getDetail()));
-			time.setItems(timeValues);
+			dueTime.setItems(timeValues);
 		});
-		binder.bind(time, "dueTime");
+		binder.bind(dueTime, "dueTime");
 
 		pickupLocation.setItemLabelGenerator(createItemLabelGenerator(PickupLocation::getName));
 		pickupLocation.setDataProvider(locationProvider);

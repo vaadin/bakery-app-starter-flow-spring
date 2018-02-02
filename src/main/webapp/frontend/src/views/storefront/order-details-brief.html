@@ -15,7 +15,7 @@
         display: flex;
       }
 
-      #info-wrapper {
+      #infoWrapper {
         flex-direction: column-reverse;
         justify-content: flex-end;
       }
@@ -25,17 +25,17 @@
         width: 100px;
       }
 
-      #time-place {
+      #timePlace {
         width: 120px;
       }
 
-      #name-items {
+      #nameItems {
         flex: 1;
       }
 
       #place,
-      #secondary-time,
-      #full-day,
+      #secondaryTime,
+      #fullDay,
       #goods {
         color: var(--lumo-secondary-text-color);
       }
@@ -76,7 +76,7 @@
           padding: var(--lumo-space-l);
         }
 
-        #info-wrapper {
+        #infoWrapper {
           flex-direction: row;
         }
 
@@ -86,12 +86,12 @@
       }
     </style>
 
-    <div id="info-wrapper" class="flex">
+    <div id="infoWrapper" class="flex">
       <order-status-badge status="[[item.state]]"></order-status-badge>
-      <div id="time-place"></div>
+      <div id="timePlace"></div>
     </div>
 
-    <div id="name-items">
+    <div id="nameItems">
       <h3 id="name">[[item.customer.fullName]]</h3>
       <div id="goods">
         <template is="dom-repeat" items="[[item.items]]">

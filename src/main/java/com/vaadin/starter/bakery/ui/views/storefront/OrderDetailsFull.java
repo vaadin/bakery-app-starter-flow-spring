@@ -56,10 +56,10 @@ public class OrderDetailsFull extends PolymerTemplate<OrderDetailsFull.Model> {
 	@Id("comment")
 	private Element comment;
 
-	@Id("send-comment")
+	@Id("sendComment")
 	private Button sendComment;
 
-	@Id("comment-field")
+	@Id("commentField")
 	private TextField commentField;
 
 	public OrderDetailsFull() {

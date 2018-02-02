@@ -38,7 +38,7 @@ public class OrderItemEditor extends PolymerTemplate<TemplateModel> implements H
 	@Id("amount")
 	private AmountField amount;
 
-	@Id("product-price")
+	@Id("price")
 	private Div price;
 
 	@Id("comment")

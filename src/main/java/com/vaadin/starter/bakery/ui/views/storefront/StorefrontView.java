@@ -48,14 +48,14 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	@Id("search")
 	private SearchBar searchBar;
 
-	@Id("storefront-grid")
+	@Id("grid")
 	private Grid<Order> grid;
 
-	@Id("order-editor")
-	private OrderEditor openedOrderEditor;
+	@Id("orderEditor")
+	private OrderEditor orderEditor;
 
-	@Id("order-details")
-	private OrderDetailsFull openedOrderDetails;
+	@Id("orderDetails")
+	private OrderDetailsFull orderDetails;
 
 	private OrderPresenter presenter;
 
@@ -138,16 +138,16 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 
 	@Override
 	public boolean isDirty() {
-		return openedOrderEditor.hasChanges();
+		return orderEditor.hasChanges();
 	}
 
 	@Override
 	public void write(Order entity) throws ValidationException {
-		openedOrderEditor.write(entity);
+		orderEditor.write(entity);
 	}
 
 	public Stream<HasValue<?, ?>> validate() {
-		return openedOrderEditor.validate();
+		return orderEditor.validate();
 	}
 
 	boolean isDesktopView() {
@@ -163,11 +163,11 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	}
 
 	OrderEditor getOpenedOrderEditor() {
-		return openedOrderEditor;
+		return orderEditor;
 	}
 
 	OrderDetailsFull getOpenedOrderDetails() {
-		return openedOrderDetails;
+		return orderDetails;
 	}
 
 	Grid<Order> getGrid() {

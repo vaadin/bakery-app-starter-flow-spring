@@ -23,11 +23,11 @@ import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.data.entity.util.EntityUtil;
-import com.vaadin.starter.bakery.ui.components.SearchBar;
 import com.vaadin.starter.bakery.ui.MainView;
 import com.vaadin.starter.bakery.ui.components.ComboBoxForBinder;
 import com.vaadin.starter.bakery.ui.components.FormButtonsBar;
 import com.vaadin.starter.bakery.ui.components.FormDialog;
+import com.vaadin.starter.bakery.ui.components.SearchBar;
 import com.vaadin.starter.bakery.ui.crud.CrudView;
 import com.vaadin.starter.bakery.ui.crud.DefaultEntityPresenter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
@@ -39,13 +39,13 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 @Secured(Role.ADMIN)
 public class UsersView extends CrudView<User, TemplateModel> {
 
-	@Id("search-bar")
+	@Id("searchBar")
 	private SearchBar searchbar;
 
-	@Id("users-grid")
+	@Id("grid")
 	private Grid<User> grid;
 
-	@Id("dialog-editor")
+	@Id("dialog")
 	private FormDialog dialog;
 
 	@Id("buttons")
@@ -55,19 +55,19 @@ public class UsersView extends CrudView<User, TemplateModel> {
 	private H3 title;
 
 	@Id("first")
-	private TextField firstnameField;
+	private TextField first;
 
 	@Id("last")
-	private TextField lastnameField;
+	private TextField last;
 
 	@Id("email")
-	private TextField emailField;
+	private TextField email;
 
-	@Id("user-edit-password")
-	private PasswordField passwordField;
+	@Id("password")
+	private PasswordField password;
 
 	@Id("role")
-	private ComboBoxForBinder<String> roleField;
+	private ComboBoxForBinder<String> role;
 
 	private DefaultEntityPresenter<User> presenter;
 
@@ -81,21 +81,20 @@ public class UsersView extends CrudView<User, TemplateModel> {
 		setupGrid();
 
 		ListDataProvider<String> roleProvider = DataProvider.ofItems(Role.getAllRoles());
-		roleField.setItemLabelGenerator(s -> s != null ? s : "");
-		roleField.setDataProvider(roleProvider);
+		role.setItemLabelGenerator(s -> s != null ? s : "");
+		role.setDataProvider(roleProvider);
 
-		binder.bind(firstnameField, "firstName");
-		binder.bind(lastnameField, "lastName");
-		binder.bind(emailField, "email");
-		binder.bind(roleField, "role");
+		binder.bind(first, "firstName");
+		binder.bind(last, "lastName");
+		binder.bind(email, "email");
+		binder.bind(role, "role");
 
-		binder.forField(passwordField)
-				.withValidator(password -> {
-					return password.matches("^(|(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,})$");
+		binder.forField(password).withValidator(pass -> {
+			return pass.matches("^(|(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,})$");
 				}, "need 6 or more chars, mixing digits, lowercase and uppercase letters")
-				.bind(user -> passwordField.getEmptyValue(), (user, password) -> {
-					if (!passwordField.getEmptyValue().equals(password)) {
-						user.setPassword(passwordEncoder.encode(password));
+				.bind(user -> password.getEmptyValue(), (user, pass) -> {
+					if (!password.getEmptyValue().equals(pass)) {
+						user.setPassword(passwordEncoder.encode(pass));
 					}
 				});
 		presenter.init(this);

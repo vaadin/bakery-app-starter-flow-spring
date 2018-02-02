@@ -22,10 +22,10 @@ import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.util.EntityUtil;
-import com.vaadin.starter.bakery.ui.components.SearchBar;
 import com.vaadin.starter.bakery.ui.MainView;
 import com.vaadin.starter.bakery.ui.components.FormButtonsBar;
 import com.vaadin.starter.bakery.ui.components.FormDialog;
+import com.vaadin.starter.bakery.ui.components.SearchBar;
 import com.vaadin.starter.bakery.ui.crud.CrudView;
 import com.vaadin.starter.bakery.ui.crud.DefaultEntityPresenter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
@@ -38,13 +38,13 @@ import com.vaadin.starter.bakery.ui.utils.converters.CurrencyFormatter;
 @Secured(Role.ADMIN)
 public class ProductsView extends CrudView<Product, TemplateModel>  {
 
-	@Id("search-bar")
+	@Id("searchBar")
 	private SearchBar searchbar;
 
-	@Id("products-grid")
+	@Id("grid")
 	private Grid<Product> grid;
 
-	@Id("dialog-editor")
+	@Id("dialog")
 	private FormDialog dialog;
 
 	@Id("buttons")
@@ -57,11 +57,11 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 	@Id("title")
 	private H3 title;
 
-	@Id("product-edit-name")
-	private TextField nameField;
+	@Id("name")
+	private TextField name;
 
 	@Id("price")
-	private TextField priceField;
+	private TextField price;
 
 	private CurrencyFormatter currencyFormatter = new CurrencyFormatter();
 
@@ -72,9 +72,9 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 		setupEventListeners();
 		setupGrid();
 
-		binder.bind(nameField, "name");
-		binder.forField(priceField).withConverter(new PriceConverter()).bind("price");
-		priceField.addToPrefix(new Span(Currency.getInstance(BakeryConst.APP_LOCALE).getSymbol()));
+		binder.bind(name, "name");
+		binder.forField(price).withConverter(new PriceConverter()).bind("price");
+		price.addToPrefix(new Span(Currency.getInstance(BakeryConst.APP_LOCALE).getSymbol()));
 		
 		presenter.init(this);
 	}

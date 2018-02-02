@@ -20,16 +20,16 @@
       }
     </style>
 
-   <search-bar id="search-bar"></search-bar>
+   <search-bar id="searchBar"></search-bar>
 
-   <vaadin-grid id="products-grid" theme="crud-grid"></vaadin-grid>
+   <vaadin-grid id="grid" theme="crud-grid"></vaadin-grid>
 
     <!--  dialogs are tele-ported to body, hence you need to inline styles or use styled web components -->
-    <form-dialog id="dialog-editor" theme="right">
+    <form-dialog id="dialog" theme="right">
       <vaadin-form-layout style="flex: 1; overflow-y: auto; overflow-x: hidden; padding: 5px">
         <h3 id="title"></h3>
         <br>
-        <vaadin-text-field id="product-edit-name" label="Product name" colspan="2" required pattern=".*[^ ].*"
+        <vaadin-text-field id="name" label="Product name" colspan="2" required pattern=".*[^ ].*"
           error-message="Please enter a valid name"></vaadin-text-field>
         <br>
         <vaadin-text-field id="price" label="Unit price" colspan="2" on-focus="priceFocusGained"

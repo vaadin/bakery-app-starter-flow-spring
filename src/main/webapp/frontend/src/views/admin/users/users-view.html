@@ -21,12 +21,12 @@
       }
     </style>
     
-    <search-bar id="search-bar"></search-bar>
+    <search-bar id="searchBar"></search-bar>
 
-    <vaadin-grid id="users-grid" theme="crud-grid"></vaadin-grid>
+    <vaadin-grid id=grid theme="crud-grid"></vaadin-grid>
 
     <!--  dialogs are tele-ported to body, hence you need to inline styles or use styled web components -->
-    <form-dialog id="dialog-editor" theme="right">
+    <form-dialog id="dialog" theme="right">
 
       <vaadin-form-layout style="flex: 1; overflow-y: auto; overflow-x: hidden; padding: 5px">
         <h3 id="title"></h3>
@@ -36,7 +36,7 @@
         <vaadin-text-field id="first" label="First Name" colspan="2"></vaadin-text-field>
         <vaadin-text-field id="last" label="Last Name" colspan="2"></vaadin-text-field>
         <br>
-        <vaadin-password-field id="user-edit-password" label="Password" colspan="2"></vaadin-password-field>
+        <vaadin-password-field id="password" label="Password" colspan="2"></vaadin-password-field>
         <br>
         <vaadin-combo-box id="role" label="Role" colspan="2"></vaadin-combo-box>
       </vaadin-form-layout>
@@ -57,7 +57,7 @@
       // if there is no need for that
       ready() {
         super.ready();
-        const grid = this.$['users-grid'];
+        const grid = this.$.grid;
         let partsLoaded = 0;
         const listener = () => {
           if (!grid.loading && ++partsLoaded === 2 && window.performance.mark) {

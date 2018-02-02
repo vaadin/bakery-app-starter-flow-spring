@@ -19,14 +19,14 @@ public class LoginViewElement extends TestBenchElement {
 	}
 
 	public ButtonElement getSignIn() {
-		return $(ShadyButtonElement.class).id("button-submit");
+		return $(ShadyButtonElement.class).waitForFirst();
 	}
 
 	public PasswordFieldElement getPassword() {
-		return $(PasswordFieldElement.class).id("password");
+		return $(PasswordFieldElement.class).waitForFirst();
 	}
 
 	public TextFieldElement getLogin() {
-		return $(TextFieldElement.class).id("username");
+		return $(TextFieldElement.class).waitForFirst();
 	}
 }

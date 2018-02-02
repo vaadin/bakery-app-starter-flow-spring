@@ -36,11 +36,11 @@
 
     <search-bar id="search" show-checkbox></search-bar>
 
-    <vaadin-grid id="storefront-grid" theme="storefront-grid"></vaadin-grid>
+    <vaadin-grid id="grid" theme="storefront-grid"></vaadin-grid>
 
     <form-dialog opened="[[editing]]" theme="middle">
-      <order-details-full id="order-details" desktop-view="[[desktopView]]"></order-details-full>
-      <order-editor id="order-editor" desktop-view="[[desktopView]]"></order-editor>
+      <order-details-full id="orderDetails" desktop-view="[[desktopView]]"></order-details-full>
+      <order-editor id="orderEditor" desktop-view="[[desktopView]]"></order-editor>
       <template><!-- vaadin-dialog fails if not present (#43) --></template>
     </form-dialog>
 
@@ -56,7 +56,7 @@
       // if there is no need for that.
       ready() {
         super.ready();
-        const grid = this.$['storefront-grid'];
+        const grid = this.$.grid;
         const listener = () => {
           if (!grid.loading && window.performance.mark) {
             window.performance.mark('bakery-page-loaded');
