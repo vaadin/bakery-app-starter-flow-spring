@@ -28,6 +28,6 @@ public class UsersViewElement extends TestBenchElement implements HasCrudView {
 	}
 
 	public PasswordFieldElement getPasswordField() {
-		return getField("userEditPassword", PasswordFieldElement.class);
+		return getField("password", PasswordFieldElement.class);
 	}
 }

@@ -14,7 +14,7 @@ public class ProductsViewElement extends TestBenchElement implements HasApp, Has
 	}
 
 	public TextFieldElement getName() {
-		return getField("productEditName", TextFieldElement.class);
+		return getField("name", TextFieldElement.class);
 	};
 
 	public TextFieldElement getPrice() {

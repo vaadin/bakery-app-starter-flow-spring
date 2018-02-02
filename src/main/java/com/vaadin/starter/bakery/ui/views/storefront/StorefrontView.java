@@ -52,10 +52,10 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	private Grid<Order> grid;
 
 	@Id("orderEditor")
-	private OrderEditor openedOrderEditor;
+	private OrderEditor orderEditor;
 
 	@Id("orderDetails")
-	private OrderDetailsFull openedOrderDetails;
+	private OrderDetailsFull orderDetails;
 
 	private OrderPresenter presenter;
 
@@ -138,16 +138,16 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 
 	@Override
 	public boolean isDirty() {
-		return openedOrderEditor.hasChanges();
+		return orderEditor.hasChanges();
 	}
 
 	@Override
 	public void write(Order entity) throws ValidationException {
-		openedOrderEditor.write(entity);
+		orderEditor.write(entity);
 	}
 
 	public Stream<HasValue<?, ?>> validate() {
-		return openedOrderEditor.validate();
+		return orderEditor.validate();
 	}
 
 	boolean isDesktopView() {
@@ -163,11 +163,11 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	}
 
 	OrderEditor getOpenedOrderEditor() {
-		return openedOrderEditor;
+		return orderEditor;
 	}
 
 	OrderDetailsFull getOpenedOrderDetails() {
-		return openedOrderDetails;
+		return orderDetails;
 	}
 
 	Grid<Order> getGrid() {

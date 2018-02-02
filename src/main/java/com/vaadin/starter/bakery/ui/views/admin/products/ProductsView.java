@@ -57,11 +57,11 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 	@Id("title")
 	private H3 title;
 
-	@Id("productEditName")
-	private TextField nameField;
+	@Id("name")
+	private TextField name;
 
 	@Id("price")
-	private TextField priceField;
+	private TextField price;
 
 	private CurrencyFormatter currencyFormatter = new CurrencyFormatter();
 
@@ -72,9 +72,9 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 		setupEventListeners();
 		setupGrid();
 
-		binder.bind(nameField, "name");
-		binder.forField(priceField).withConverter(new PriceConverter()).bind("price");
-		priceField.addToPrefix(new Span(Currency.getInstance(BakeryConst.APP_LOCALE).getSymbol()));
+		binder.bind(name, "name");
+		binder.forField(price).withConverter(new PriceConverter()).bind("price");
+		price.addToPrefix(new Span(Currency.getInstance(BakeryConst.APP_LOCALE).getSymbol()));
 		
 		presenter.init(this);
 	}
