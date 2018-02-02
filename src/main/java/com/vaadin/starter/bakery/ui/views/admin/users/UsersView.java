@@ -23,11 +23,11 @@ import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.data.entity.util.EntityUtil;
-import com.vaadin.starter.bakery.ui.components.SearchBar;
 import com.vaadin.starter.bakery.ui.MainView;
 import com.vaadin.starter.bakery.ui.components.ComboBoxForBinder;
 import com.vaadin.starter.bakery.ui.components.FormButtonsBar;
 import com.vaadin.starter.bakery.ui.components.FormDialog;
+import com.vaadin.starter.bakery.ui.components.SearchBar;
 import com.vaadin.starter.bakery.ui.crud.CrudView;
 import com.vaadin.starter.bakery.ui.crud.DefaultEntityPresenter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
@@ -39,13 +39,13 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 @Secured(Role.ADMIN)
 public class UsersView extends CrudView<User, TemplateModel> {
 
-	@Id("search-bar")
+	@Id("searchBar")
 	private SearchBar searchbar;
 
-	@Id("users-grid")
+	@Id("grid")
 	private Grid<User> grid;
 
-	@Id("dialog-editor")
+	@Id("dialog")
 	private FormDialog dialog;
 
 	@Id("buttons")
@@ -63,7 +63,7 @@ public class UsersView extends CrudView<User, TemplateModel> {
 	@Id("email")
 	private TextField emailField;
 
-	@Id("user-edit-password")
+	@Id("userEditPassword")
 	private PasswordField passwordField;
 
 	@Id("role")

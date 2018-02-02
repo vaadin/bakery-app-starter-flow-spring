@@ -48,7 +48,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	@Id("search")
 	private SearchBar searchBar;
 
-	@Id("storefrontGrid")
+	@Id("grid")
 	private Grid<Order> grid;
 
 	@Id("orderEditor")
