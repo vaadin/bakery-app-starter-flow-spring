@@ -1,1 +1,0 @@
-{"csrfToken":"${seckey}","rpc":[{"type":"attachExistingElementById","node":5,"attachReqId":7,"attachAssignedId":7,"attachTagName":"BAKERY-NAVIGATION","attachId":"navigation"}],"syncId":0,"clientId":0,"wsver":"9.9.9.INTERNAL-DEBUG-BUILD"}

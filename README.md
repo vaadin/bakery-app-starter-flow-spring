@@ -86,10 +86,14 @@ Scalability tests can be run as follows
 
 3. Make sure the server is running at the given URL
 
-4. Start a test from the command line, e.g.:
-	 ```mvn -Pscalability gatling:execute -Dgatling.simulationClass=BaristaFlow```
+4. Download Gatling from https://gatling.io/download/
 
-5. Test results are stored into target folder, e.g.:
+5. Navigate to Gatling's bin folder in you terminal
+
+6. Start a test from the command line, e.g.: (where ```~/path/to``` is path to the folder where the project is)
+	 ```./gatling.sh -m -bdf ~/path/to/bakery-app-starter-flow-spring/src/test/resources/bodies -sf ~/path/to/bakery-app-starter-flow-spring/src/test/scala/ -rf ~/path/to/bakery-app-starter-flow-spring/target```
+
+7. Test results are stored into target folder, e.g.:
 	```target/gatling/BaristaFlow-1487784042461/index.html```
 
 # License
