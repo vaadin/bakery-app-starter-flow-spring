@@ -16,9 +16,9 @@ import com.vaadin.flow.theme.lumo.Lumo;
 @Tag("login-view")
 @HtmlImport("src/views/login/login-view.html")
 // Override elements with Lumo styled ones
-@HtmlImport("bower_components/vaadin-button/vaadin-button.html")
-@HtmlImport("bower_components/vaadin-text-field/vaadin-text-field.html")
-@HtmlImport("bower_components/vaadin-text-field/vaadin-password-field.html")
+@HtmlImport("bower_components/vaadin-button/theme/lumo/vaadin-button.html")
+@HtmlImport("bower_components/vaadin-text-field/theme/lumo/vaadin-text-field.html")
+@HtmlImport("bower_components/vaadin-text-field/theme/lumo/vaadin-password-field.html")
 @Route(value = "login")
 @PageTitle("###Bakery###")
 @Theme(Lumo.class)
