@@ -160,6 +160,10 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 		return binder.hasChanges() || items.hasChanges();
 	}
 
+	public void clear() {
+		binder.readBean(null);
+	}
+
 	private void updateDesktopViewOnItemsEdit() {
 		getElement().callFunction("_updateDesktopViewOnItemsEdit");
 	}

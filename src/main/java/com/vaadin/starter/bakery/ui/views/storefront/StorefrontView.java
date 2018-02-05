@@ -61,6 +61,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 
 	private OrderPresenter presenter;
 
+	private boolean editing = false;
+
 	@Autowired
 	public StorefrontView(OrderPresenter presenter, PickupLocationDataProvider locationProvider,
 			ProductDataProvider productDataProvider) {
@@ -117,12 +119,19 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 
 		getOpenedOrderDetails().addSaveListenter(e -> presenter.save());
 		getOpenedOrderDetails().addCancelListener(e -> presenter.cancel());
+		// Handle client-side closing dialog on escape
+		dialog.addOpenedChangeListener(e -> {
+			if (!e.getSource().isOpened() && this.isDirty()) {
+				presenter.cancel();
+			}
+		});
 		getOpenedOrderDetails().addBackListener(e -> presenter.back());
 		getOpenedOrderDetails().addEditListener(e -> presenter.edit());
 		getOpenedOrderDetails().addCommentListener(e -> presenter.addComment(e.getMessage()));
 	}
 
 	void setEditing(boolean editing) {
+		this.editing = editing;
 		if (editing) {
 			dialog.open();
 		} else {
@@ -185,6 +194,11 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 
 	Grid<Order> getGrid() {
 		return grid;
+	}
+
+	@Override
+	public void clear() {
+		orderEditor.clear();
 	}
 
 }
