@@ -3,9 +3,9 @@ package com.vaadin.starter.bakery.testbench;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.vaadin.flow.component.button.testbench.ButtonElement;
+import com.vaadin.flow.component.grid.testbench.GridElement;
 import com.vaadin.starter.bakery.testbench.elements.components.OrderCardElement;
-import com.vaadin.starter.bakery.testbench.elements.core.ButtonElement;
-import com.vaadin.starter.bakery.testbench.elements.core.GridElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement;
 
 import static org.hamcrest.CoreMatchers.endsWith;
@@ -21,7 +21,7 @@ public class StorefrontViewIT extends AbstractIT {
 		StorefrontViewElement storefrontPage = openStorefrontPage();
 
 		GridElement grid = storefrontPage.getGrid();
-		Assert.assertTrue(grid.getGridSize() >= 0);
+		Assert.assertTrue(grid.getRowCount() >= 0);
 
 		OrderCardElement firstOrder = storefrontPage.getFirstOrderCard();
 		Assert.assertNotNull(firstOrder);
@@ -39,7 +39,6 @@ public class StorefrontViewIT extends AbstractIT {
 		Assert.assertNotNull(firstOrder);
 		firstOrder.click();
 		ButtonElement editBtn = firstOrder.getDetail().getEditButton();
-		editBtn.scrollIntoView();
 		editBtn.click();
 
 		Assert.assertThat(getDriver().getCurrentUrl(), endsWith("edit="));
