@@ -7,12 +7,11 @@ import com.vaadin.testbench.elementsbase.Element;
 public class OrderCardElement extends TestBenchElement {
 
 	public boolean isOrderSelected() {
-		return getAttribute("selected") != null;
+		return hasAttribute("selected");
 	}
 
 	public OrderDetailsFullElement getDetail() {
 		return $(OrderDetailsFullElement.class).first();
 	}
-
 
 }

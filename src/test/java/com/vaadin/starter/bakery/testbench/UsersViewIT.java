@@ -2,15 +2,14 @@ package com.vaadin.starter.bakery.testbench;
 
 import static com.vaadin.starter.bakery.backend.service.UserService.MODIFY_LOCKED_USER_NOT_PERMITTED;
 
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
 
-import com.vaadin.starter.bakery.testbench.elements.core.FormLayoutElement;
+import com.vaadin.flow.component.formlayout.testbench.FormLayoutElement;
+import com.vaadin.flow.component.textfield.testbench.PasswordFieldElement;
+import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.starter.bakery.testbench.elements.core.PaperToastElement;
-import com.vaadin.starter.bakery.testbench.elements.core.PasswordFieldElement;
-import com.vaadin.starter.bakery.testbench.elements.core.TextFieldElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.UsersViewElement;
 import com.vaadin.starter.bakery.ui.utils.messages.CrudErrorMessage;
@@ -26,14 +25,14 @@ public class UsersViewIT extends AbstractIT {
 	public void updatePassword() throws InterruptedException {
 		UsersViewElement usersView = openTestPage();
 
-		Assert.assertFalse(usersView.getDialog().isOpened());
+		Assert.assertFalse(usersView.getFormDialog().isOpen());
 
-		WebElement bakerCell = usersView.getGridCell("baker@vaadin.com");
+		WebElement bakerCell = usersView.getGrid().getCell("baker@vaadin.com");
 		Assert.assertNotNull(bakerCell);
 
 		bakerCell.click();
 
-		Assert.assertTrue(usersView.getDialog().isOpened());
+		Assert.assertTrue(usersView.getFormDialog().isOpen());
 
 		FormLayoutElement form = usersView.getForm();
 		Assert.assertTrue(form.isDisplayed());
@@ -71,7 +70,7 @@ public class UsersViewIT extends AbstractIT {
 	public void tryToUpdateLockedEntity() {
 		UsersViewElement page = openTestPage();
 
-		page.getGridCell("barista@vaadin.com").click();
+		page.getGrid().getCell("barista@vaadin.com").click();
 
 		PasswordFieldElement field = page.getPasswordField();
 		field.setValue("Abc123");
@@ -87,7 +86,7 @@ public class UsersViewIT extends AbstractIT {
 	public void tryToDeleteLockedEntity() {
 		UsersViewElement page = openTestPage();
 
-		page.getGridCell("barista@vaadin.com").click();
+		page.getGrid().getCell("barista@vaadin.com").click();
 
 		page.getButtonsBar().getDeleteButton().click();
 		page.getConfirmDialog().confirm();
