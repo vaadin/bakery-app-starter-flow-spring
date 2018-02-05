@@ -1,9 +1,8 @@
 package com.vaadin.starter.bakery.testbench.elements.ui;
 
-import com.vaadin.starter.bakery.testbench.elements.components.ShadyButtonElement;
-import com.vaadin.starter.bakery.testbench.elements.core.ButtonElement;
-import com.vaadin.starter.bakery.testbench.elements.core.PasswordFieldElement;
-import com.vaadin.starter.bakery.testbench.elements.core.TextFieldElement;
+import com.vaadin.flow.component.button.testbench.ButtonElement;
+import com.vaadin.flow.component.textfield.testbench.PasswordFieldElement;
+import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elementsbase.Element;
 
@@ -19,7 +18,7 @@ public class LoginViewElement extends TestBenchElement {
 	}
 
 	public ButtonElement getSignIn() {
-		return $(ShadyButtonElement.class).waitForFirst();
+		return $(ButtonElement.class).waitForFirst();
 	}
 
 	public PasswordFieldElement getPassword() {
