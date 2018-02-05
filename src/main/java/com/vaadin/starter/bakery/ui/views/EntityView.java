@@ -24,9 +24,11 @@ public interface EntityView<T> extends HasNotifications {
 	 *            {@link Message}
 	 * @param onOk
 	 *            command to execute if the user presses 'ok' in the dialog
+	 * @param onCancel
+	 *            command to execute if the user presses 'cancel' in the dialog
 	 */
-	default void showConfirmationRequest(Message message, Runnable onOk) {
-		Message.confirm(message, onOk);
+	default void showConfirmationRequest(Message message, Runnable onOk, Runnable onCancel) {
+		Message.confirm(message, onOk, onCancel);
 	}
 
 	/**
@@ -50,12 +52,19 @@ public interface EntityView<T> extends HasNotifications {
 	boolean isDirty();
 
 	/**
+	 * Remove the reference to the entity and reset dirty status.
+	 */
+	void clear();
+
+	/**
 	 * Writes the changes from the entity dialog into the given entity instance
 	 * (see {@link com.vaadin.flow.data.binder.Binder#writeBean(Object)})
 	 *
-	 * @param entity the entity instance to save the changes into
-	 * @throws ValidationException if the values entered into the entity dialog
-	 * cannot be converted into entity properties
+	 * @param entity
+	 *            the entity instance to save the changes into
+	 * @throws ValidationException
+	 *             if the values entered into the entity dialog cannot be
+	 *             converted into entity properties
 	 */
 	void write(T entity) throws ValidationException;
 }

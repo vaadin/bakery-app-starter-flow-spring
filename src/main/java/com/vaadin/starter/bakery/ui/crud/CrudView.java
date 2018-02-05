@@ -63,6 +63,13 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 
 		getForm().getButtons().addSaveListener(e -> getPresenter().save());
 		getForm().getButtons().addCancelListener(e -> getPresenter().cancel());
+
+		getDialog().addOpenedChangeListener(e -> {
+			if (!e.getSource().isOpened()) {
+				getPresenter().cancel();
+			}
+		});
+
 		getForm().getButtons().addDeleteListener(e -> getPresenter().delete());
 
 		getSearchBar().addActionClickListener(e -> getPresenter().createNew());
@@ -89,6 +96,10 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 		navigateToEntity(null);
 	}
 
+	public void openDialog() {
+		getDialog().setOpened(true);
+	}
+
 	public void updateTitle(boolean newEntity) {
 		getForm().getTitle().setText((newEntity ? "New" : "Edit") + " " + entityName);
 	}
@@ -103,4 +114,8 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 		return getBinder().hasChanges();
 	}
 	
+	@Override
+	public void clear() {
+		getBinder().readBean(null);
+	}
 }

@@ -9,14 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
+import com.vaadin.flow.component.Focusable;
+import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.ui.crud.EntityPresenter;
-
-import com.vaadin.flow.component.Focusable;
-import com.vaadin.flow.component.HasValue;
 
 @SpringComponent
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -52,7 +51,7 @@ public class SingleOrderPresenter {
 	}
 
 	void cancel() {
-		entityPresenter.cancel(() -> close(false));
+		entityPresenter.cancel(() -> close(false), () -> view.setEditing(true));
 	}
 
 	void edit() {

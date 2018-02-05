@@ -37,7 +37,7 @@ public class DefaultEntityPresenter<T extends AbstractEntity> {
 	}
 
 	public void cancel() {
-		entityPresenter.cancel(view::closeDialog);
+		entityPresenter.cancel(view::closeDialog, view::openDialog);
 	}
 
 	public void createNew() {
@@ -53,7 +53,7 @@ public class DefaultEntityPresenter<T extends AbstractEntity> {
 		view.getForm().getButtons().setSaveDisabled(true);
 		view.getForm().getButtons().setDeleteDisabled(entity.isNew());
 		view.updateTitle(entity.isNew());
-		view.getDialog().setOpened(true);
+		view.openDialog();
 	}
 
 	public void save() {
@@ -82,4 +82,5 @@ public class DefaultEntityPresenter<T extends AbstractEntity> {
 	public void onValueChange(boolean isDirty) {
 		view.getForm().getButtons().setSaveDisabled(!isDirty);
 	}
+
 }
