@@ -40,7 +40,6 @@ import com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil;
 import com.vaadin.starter.bakery.ui.events.CancelEvent;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.starter.bakery.ui.utils.converters.LocalTimeConverter;
-import com.vaadin.starter.bakery.ui.views.storefront.events.NewEditorEvent;
 import com.vaadin.starter.bakery.ui.views.storefront.events.ReviewEvent;
 import com.vaadin.starter.bakery.ui.views.storefront.events.ValueChangeEvent;
 
@@ -148,7 +147,6 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 		items.addPriceChangeListener(e -> setTotalPrice(e.getTotalPrice()));
 
 		items.addListener(ValueChangeEvent.class, e -> review.setDisabled(!hasChanges()));
-		items.addListener(NewEditorEvent.class, e -> updateDesktopViewOnItemsEdit());
 		binder.addValueChangeListener(e -> {
 			if (e.getOldValue() != null) {
 				review.setDisabled(!hasChanges());
@@ -162,10 +160,6 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 
 	public void clear() {
 		binder.readBean(null);
-	}
-
-	private void updateDesktopViewOnItemsEdit() {
-		getElement().callFunction("_updateDesktopViewOnItemsEdit");
 	}
 
 	public void close() {
@@ -185,7 +179,6 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 		}
 
 		review.setDisabled(true);
-		updateDesktopViewOnItemsEdit();
 	}
 
 	public Stream<HasValue<?, ?>> validate() {

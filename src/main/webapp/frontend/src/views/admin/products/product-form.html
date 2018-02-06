@@ -6,7 +6,16 @@
 <dom-module id="product-form">
   <template>
 
-    <vaadin-form-layout style="flex: 1; overflow-y: auto; overflow-x: hidden; padding: 5px">
+    <style>
+       vaadin-form-layout {
+         flex: auto;
+         overflow-y: auto;
+         overflow-x: hidden;
+         padding: 5px
+       }
+    </style>
+
+    <vaadin-form-layout>
       <h3 id="title"></h3>
       <br>
       <vaadin-text-field id="product-edit-name" label="Product name" colspan="2" required pattern=".*[^ ].*"

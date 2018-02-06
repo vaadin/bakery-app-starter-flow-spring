@@ -9,13 +9,22 @@
 
 <dom-module id="user-form">
   <template>
-    <vaadin-form-layout style="flex: 1; overflow-y: auto; overflow-x: hidden; padding: 5px">
+    <style>
+       vaadin-form-layout {
+         flex: auto;
+         overflow-y: auto;
+         overflow-x: hidden;
+         padding: 5px
+       }
+    </style>
+
+    <vaadin-form-layout >
       <h3 id="title"></h3>
       <br>
       <vaadin-text-field id="email" label="Email (login)" colspan="2"></vaadin-text-field>
       <br>
-      <vaadin-text-field id="first" label="First Name" colspan="2"></vaadin-text-field>
-      <vaadin-text-field id="last" label="Last Name" colspan="2"></vaadin-text-field>
+      <vaadin-text-field id="first" label="First Name"></vaadin-text-field>
+      <vaadin-text-field id="last" label="Last Name"></vaadin-text-field>
       <br>
       <vaadin-password-field id="user-edit-password" label="Password" colspan="2"></vaadin-password-field>
       <br>
