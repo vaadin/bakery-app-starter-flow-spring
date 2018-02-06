@@ -60,23 +60,24 @@
       }
 
       /* a special grid theme for the bakery storefront view */
-      :host([theme~="storefront-grid"]) {
+      :host([theme~="orders-grid"]) {
         background: transparent;
       }
 
-      :host([theme~="storefront-grid"]) [part~="cell"]:not(:empty):not([details-cell]) {
+      :host([theme~="orders-grid"]) [part~="cell"]:not(:empty):not([details-cell]) {
         padding: 0;
       }
 
-      :host([theme~="storefront-grid"]) [part~="row"][selected] [part~="cell"] {
+      :host([theme~="orders-grid"]) [part~="row"][selected] [part~="cell"] {
         background: transparent !important;
       }
 
-      :host([theme~="storefront-grid"]) [part~="body-cell"] {
+      :host([theme~="orders-grid"]) [part~="body-cell"] {
         border-bottom: none;
         background: transparent;
       }
 
+      /* a special grid theme for the crud view grids */
       :host([theme~="crud-grid"]) {
          max-width: calc(964px + var(--lumo-space-m));
       }

@@ -11,11 +11,10 @@ import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.grid.GridSingleSelectionModel;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.data.binder.ValidationException;
-import com.vaadin.flow.data.selection.SingleSelectionListener;
+import com.vaadin.flow.data.selection.SelectionEvent;
 import com.vaadin.flow.renderer.ComponentTemplateRenderer;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
@@ -63,37 +62,21 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	public StorefrontView(OrderPresenter presenter) {
 
 		this.presenter = presenter;
-		// required for the `isDesktopView()` method
-		getElement().synchronizeProperty("desktopView", "desktop-view-changed");
 
 		searchBar.setActionText("New order");
 		searchBar.setCheckboxText("Show past orders");
 		searchBar.setPlaceHolder("Search");
 
 		grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-		Map<Order, OrderCard> components = new WeakHashMap<>();
 		grid.addColumn(new ComponentTemplateRenderer<>(order -> {
 			OrderCard orderCard = new OrderCard();
 			orderCard.setOrder(order);
 			orderCard.setHeader(presenter.getHeaderByOrderId(order.getId()));
-			components.put(order, orderCard);
+			orderCard.getElement().getClassList().add(BakeryConst.STOREFRONT_ORDER_CARD_STYLE);
 			return orderCard;
 		}));
-		SingleSelectionListener<Grid<Order>, Order> listener = e -> {
-			if (e.getOldValue() != null) {
-				OrderCard card = components.get(e.getOldValue());
-				if (card != null) {
-					presenter.onOrderCardCollapsed(card);
-				}
-			}
-			if (e.getValue() != null) {
-				OrderCard card = components.get(e.getValue());
-				if (card != null) {
-					presenter.onOrderCardExpanded(card);
-				}
-			}
-		};
-		((GridSingleSelectionModel<Order>) grid.getSelectionModel()).addSingleSelectionListener(listener);
+
+		grid.addSelectionListener(this::onOrdersGridSelectionChanged);
 		getModel().setEditing(false);
 		getSearchBar().addFilterChangeListener(
 				e -> presenter.filterChanged(getSearchBar().getFilter(), getSearchBar().isCheckboxChecked()));
@@ -150,14 +133,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		return orderEditor.validate();
 	}
 
-	boolean isDesktopView() {
-		return getElement().getProperty("desktopView", true);
-	}
-
-	void resizeGrid() {
-		grid.getElement().callFunction("notifyResize");
-	}
-
 	SearchBar getSearchBar() {
 		return searchBar;
 	}
@@ -172,6 +147,13 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 
 	Grid<Order> getGrid() {
 		return grid;
+	}
+
+	private void onOrdersGridSelectionChanged(SelectionEvent<Order> e) {
+		e.getFirstSelectedItem().ifPresent(order -> {
+			getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT + "/" + order.getId()));
+			getGrid().getElement().setProperty("activeItem", null);
+		});
 	}
 
 }
