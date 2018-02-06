@@ -52,7 +52,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	@Id("grid")
 	private Grid<Order> grid;
 
-	private final Dialog dialog = new Dialog();
+	@Id("dialog")
+	private Dialog dialog;
 
 	private final OrderEditor orderEditor;
 
@@ -114,8 +115,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		getOpenedOrderDetails().addSaveListenter(e -> presenter.save());
 		getOpenedOrderDetails().addCancelListener(e -> presenter.cancel());
 
-		dialog.addOpenedChangeListener(e -> {
-			if (!e.getSource().isOpened() && this.isDirty()) {
+		dialog.getElement().addEventListener("opened-changed", e -> {
+			if (!dialog.isOpened() && this.isDirty()) {
 				// Handle client-side closing dialog on escape
 				presenter.cancel();
 			} else {

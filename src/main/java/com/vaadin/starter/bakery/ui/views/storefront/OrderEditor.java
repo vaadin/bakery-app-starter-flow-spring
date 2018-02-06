@@ -99,7 +99,7 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 	@Autowired
 	public OrderEditor(PickupLocationDataProvider locationProvider, ProductDataProvider productDataProvider) {
 		items = new OrderItemsEditor(productDataProvider);
-		addToSlot(this, items, "order-items-editor");
+		addToSlot(this, "order-items-editor", items);
 
 		cancel.addClickListener(e -> fireEvent(new CancelEvent(this, false)));
 		review.addClickListener(e -> fireEvent(new ReviewEvent(this)));

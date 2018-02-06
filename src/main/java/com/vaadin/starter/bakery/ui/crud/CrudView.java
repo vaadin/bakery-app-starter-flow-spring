@@ -61,8 +61,8 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 		getForm().getButtons().addSaveListener(e -> getPresenter().save());
 		getForm().getButtons().addCancelListener(e -> getPresenter().cancel());
 
-		getDialog().addOpenedChangeListener(e -> {
-			if (!e.getSource().isOpened()) {
+		getDialog().getElement().addEventListener("opened-changed", e -> {
+			if (!getDialog().isOpened()) {
 				getPresenter().cancel();
 			} else {
 				// Set theme attribute to the dialog overlay

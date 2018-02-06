@@ -15,6 +15,7 @@ import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.ui.components.FormButtonsBar;
 import com.vaadin.starter.bakery.ui.crud.CrudView.CrudForm;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
+import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
 
 @Tag("product-form")
 @HtmlImport("src/views/admin/products/product-form.html")
@@ -36,7 +37,8 @@ public class ProductsForm<Product> extends PolymerTemplate<TemplateModel> implem
 	public void setBinder(BeanValidationBinder<Product> binder) {
 		binder.bind(nameField, "name");
 		binder.forField(priceField).withConverter(new PriceConverter()).bind("price");
-		priceField.addToPrefix(new Span(Currency.getInstance(BakeryConst.APP_LOCALE).getSymbol()));
+		TemplateUtil.addToSlot(priceField, "prefix",
+				new Span(Currency.getInstance(BakeryConst.APP_LOCALE).getSymbol()));
 	}
 
 	@Override
