@@ -52,7 +52,8 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	@Id("grid")
 	private Grid<Order> grid;
 
-	private final Dialog dialog = new Dialog();
+	@Id("dialog")
+	private Dialog dialog;
 
 	private final OrderEditor orderEditor;
 

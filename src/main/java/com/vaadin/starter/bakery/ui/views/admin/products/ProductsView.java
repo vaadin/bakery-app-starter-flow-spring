@@ -37,7 +37,8 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 	@Id("grid")
 	private Grid<Product> grid;
 
-	private Dialog dialog = new Dialog();
+	@Id("dialog")
+	private Dialog dialog;
 
 	private ProductsForm<Product> form = new ProductsForm<>();
 

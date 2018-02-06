@@ -25,14 +25,14 @@ public class UsersViewIT extends AbstractIT {
 	public void updatePassword() throws InterruptedException {
 		UsersViewElement usersView = openTestPage();
 
-		Assert.assertFalse(usersView.getFormDialog().isOpen());
+		Assert.assertFalse(usersView.getDialog().isOpen());
 
 		WebElement bakerCell = usersView.getGrid().getCell("baker@vaadin.com");
 		Assert.assertNotNull(bakerCell);
 
 		bakerCell.click();
 
-		Assert.assertTrue(usersView.getFormDialog().isOpen());
+		Assert.assertTrue(usersView.getDialog().isOpen());
 
 		FormLayoutElement form = usersView.getForm();
 		Assert.assertTrue(form.isDisplayed());
