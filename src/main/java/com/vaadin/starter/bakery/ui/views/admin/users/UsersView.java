@@ -37,8 +37,7 @@ public class UsersView extends CrudView<User, TemplateModel> {
 	@Id("grid")
 	private Grid<User> grid;
 
-	@Id("dialog")
-	private Dialog dialog;
+	private Dialog dialog = new Dialog();
 
 	private UserForm form = new UserForm();
 

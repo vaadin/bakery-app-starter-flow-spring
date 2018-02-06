@@ -50,9 +50,6 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 
 	public CrudView(String entityName) {
 		this.entityName = entityName;
-
-		UI.getCurrent().getPage().executeJavaScript("$0.$.overlay.setAttribute('theme', 'right')",
-				getDialog().getElement());
 	}
 	
 	public void setupEventListeners() {
@@ -67,6 +64,10 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 		getDialog().addOpenedChangeListener(e -> {
 			if (!e.getSource().isOpened()) {
 				getPresenter().cancel();
+			} else {
+				// Set theme attribute to the dialog overlay
+				UI.getCurrent().getPage().executeJavaScript("$0.$.overlay.setAttribute('theme', 'right')",
+						getDialog().getElement());
 			}
 		});
 

@@ -52,16 +52,13 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	@Id("grid")
 	private Grid<Order> grid;
 
-	@Id("dialog")
-	private Dialog dialog;
+	private Dialog dialog = new Dialog();
 
 	private OrderEditor orderEditor;
 
 	private OrderDetailsFull orderDetails;
 
 	private OrderPresenter presenter;
-
-	private boolean editing = false;
 
 	@Autowired
 	public StorefrontView(OrderPresenter presenter, PickupLocationDataProvider locationProvider,
@@ -79,7 +76,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		orderDetails = new OrderDetailsFull();
 		dialog.add(orderEditor);
 		dialog.add(orderDetails);
-		UI.getCurrent().getPage().executeJavaScript("$0.$.overlay.setAttribute('theme', 'middle')", dialog);
 
 		grid.setSelectionMode(Grid.SelectionMode.SINGLE);
 		Map<Order, OrderCard> components = new WeakHashMap<>();
@@ -119,10 +115,14 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 
 		getOpenedOrderDetails().addSaveListenter(e -> presenter.save());
 		getOpenedOrderDetails().addCancelListener(e -> presenter.cancel());
-		// Handle client-side closing dialog on escape
+
 		dialog.addOpenedChangeListener(e -> {
 			if (!e.getSource().isOpened() && this.isDirty()) {
+				// Handle client-side closing dialog on escape
 				presenter.cancel();
+			} else {
+				// Set theme attribute to the dialog overlay
+				UI.getCurrent().getPage().executeJavaScript("$0.$.overlay.setAttribute('theme', 'middle')", dialog);
 			}
 		});
 		getOpenedOrderDetails().addBackListener(e -> presenter.back());
@@ -131,7 +131,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	}
 
 	void setEditing(boolean editing) {
-		this.editing = editing;
 		if (editing) {
 			dialog.open();
 		} else {
