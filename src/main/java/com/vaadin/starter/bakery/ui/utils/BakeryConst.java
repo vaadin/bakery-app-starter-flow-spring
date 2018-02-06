@@ -35,4 +35,7 @@ public class BakeryConst {
 	public static final String[] ORDER_SORT_FIELDS = {"dueDate", "dueTime", "id"};
 	public static final Sort.Direction DEFAULT_SORT_DIRECTION = Sort.Direction.ASC;
 
+	public static final String DASHBOARD_ORDER_CARD_STYLE = "dashboard-order-card";
+	public static final String STOREFRONT_ORDER_CARD_STYLE = "storefront-order-card";
+
 }

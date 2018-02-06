@@ -12,11 +12,10 @@ import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.grid.GridSingleSelectionModel;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.data.binder.ValidationException;
-import com.vaadin.flow.data.selection.SingleSelectionListener;
+import com.vaadin.flow.data.selection.SelectionEvent;
 import com.vaadin.flow.renderer.ComponentTemplateRenderer;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
@@ -39,11 +38,8 @@ import com.vaadin.starter.bakery.ui.views.EntityView;
 @Route(value = BakeryConst.PAGE_STOREFRONT, layout = MainView.class)
 @RouteAlias(value = BakeryConst.PAGE_ROOT, layout = MainView.class)
 @PageTitle(BakeryConst.TITLE_STOREFRONT)
-public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
+public class StorefrontView extends PolymerTemplate<TemplateModel>
 		implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
-
-	public interface Model extends TemplateModel {
-	}
 
 	@Id("search")
 	private SearchBar searchBar;
@@ -65,9 +61,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		this.presenter = presenter;
 		this.orderEditor = orderEditor;
 
-		// required for the `isDesktopView()` method
-		getElement().synchronizeProperty("desktopView", "desktop-view-changed");
-
 		searchBar.setActionText("New order");
 		searchBar.setCheckboxText("Show past orders");
 		searchBar.setPlaceHolder("Search");
@@ -76,30 +69,15 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		dialog.add(orderDetails);
 
 		grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-		Map<Order, OrderCard> components = new WeakHashMap<>();
 		grid.addColumn(new ComponentTemplateRenderer<>(order -> {
 			OrderCard orderCard = new OrderCard();
 			orderCard.setOrder(order);
 			orderCard.setHeader(presenter.getHeaderByOrderId(order.getId()));
-			components.put(order, orderCard);
+			orderCard.getElement().getClassList().add(BakeryConst.STOREFRONT_ORDER_CARD_STYLE);
 			return orderCard;
 		}));
-		SingleSelectionListener<Grid<Order>, Order> listener = e -> {
-			if (e.getOldValue() != null) {
-				OrderCard card = components.get(e.getOldValue());
-				if (card != null) {
-					presenter.onOrderCardCollapsed(card);
-				}
-			}
-			if (e.getValue() != null) {
-				OrderCard card = components.get(e.getValue());
-				if (card != null) {
-					presenter.onOrderCardExpanded(card);
-				}
-			}
-		};
-		((GridSingleSelectionModel<Order>) grid.getSelectionModel()).addSingleSelectionListener(listener);
 		setOpened(false);
+		grid.addSelectionListener(this::onOrdersGridSelectionChanged);
 		getSearchBar().addFilterChangeListener(
 				e -> presenter.filterChanged(getSearchBar().getFilter(), getSearchBar().isCheckboxChecked()));
 		getSearchBar().addActionClickListener(e -> presenter.createNewOrder());
@@ -166,14 +144,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		return orderEditor.validate();
 	}
 
-	boolean isDesktopView() {
-		return getElement().getProperty("desktopView", true);
-	}
-
-	void resizeGrid() {
-		grid.getElement().callFunction("notifyResize");
-	}
-
 	SearchBar getSearchBar() {
 		return searchBar;
 	}
@@ -193,6 +163,13 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	@Override
 	public void clear() {
 		orderEditor.clear();
+	}
+
+	private void onOrdersGridSelectionChanged(SelectionEvent<Order> e) {
+		e.getFirstSelectedItem().ifPresent(order -> {
+			getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT + "/" + order.getId()));
+			getGrid().getElement().setProperty("activeItem", null);
+		});
 	}
 
 }
