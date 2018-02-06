@@ -4,7 +4,6 @@ import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_USERS;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.HtmlImport;
@@ -37,20 +36,20 @@ public class UsersView extends CrudView<User, TemplateModel> {
 	@Id("grid")
 	private Grid<User> grid;
 
-	private Dialog dialog = new Dialog();
+	private final Dialog dialog = new Dialog();
 
-	private UserForm form = new UserForm();
+	private final UserForm form;
 
-	private DefaultEntityPresenter<User> presenter;
+	private final DefaultEntityPresenter<User> presenter;
 
 	private final BeanValidationBinder<User> binder = new BeanValidationBinder<>(User.class);
 
 	@Autowired
-	public UsersView(DefaultEntityPresenter<User> presenter, PasswordEncoder passwordEncoder, User currentUser) {
+	public UsersView(DefaultEntityPresenter<User> presenter, UserForm form) {
 		super(EntityUtil.getName(User.class));
 		this.presenter = presenter;
+		this.form = form;
 
-		form.setPasswordEncoder(passwordEncoder);
 		form.setBinder(binder);
 		dialog.add(form);
 

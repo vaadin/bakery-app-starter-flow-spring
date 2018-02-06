@@ -11,6 +11,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
 import com.vaadin.flow.component.ComponentEventListener;
@@ -46,17 +47,15 @@ import com.vaadin.starter.bakery.ui.views.storefront.events.ValueChangeEvent;
 @Tag("order-editor")
 @HtmlImport("src/views/storefront/order-editor.html")
 @SpringComponent
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 
 	public interface Model extends TemplateModel {
-
 		void setOpened(boolean opened);
 
 		void setTotalPrice(String totalPrice);
 
 		void setStatus(String status);
-
 	}
 
 	@Id("title")

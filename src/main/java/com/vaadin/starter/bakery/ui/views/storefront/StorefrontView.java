@@ -52,19 +52,19 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	@Id("grid")
 	private Grid<Order> grid;
 
-	private Dialog dialog = new Dialog();
+	private final Dialog dialog = new Dialog();
 
-	private OrderEditor orderEditor;
+	private final OrderEditor orderEditor;
 
-	private OrderDetailsFull orderDetails;
+	private final OrderDetailsFull orderDetails = new OrderDetailsFull();
 
-	private OrderPresenter presenter;
+	private final OrderPresenter presenter;
 
 	@Autowired
-	public StorefrontView(OrderPresenter presenter, PickupLocationDataProvider locationProvider,
-			ProductDataProvider productDataProvider) {
-
+	public StorefrontView(OrderPresenter presenter, OrderEditor orderEditor) {
 		this.presenter = presenter;
+		this.orderEditor = orderEditor;
+
 		// required for the `isDesktopView()` method
 		getElement().synchronizeProperty("desktopView", "desktop-view-changed");
 
@@ -72,8 +72,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		searchBar.setCheckboxText("Show past orders");
 		searchBar.setPlaceHolder("Search");
 
-		orderEditor = new OrderEditor(locationProvider, productDataProvider);
-		orderDetails = new OrderDetailsFull();
 		dialog.add(orderEditor);
 		dialog.add(orderDetails);
 
