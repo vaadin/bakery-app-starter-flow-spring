@@ -1,5 +1,6 @@
 package com.vaadin.starter.bakery.ui.components;
 
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.shared.Registration;
@@ -21,7 +22,7 @@ public class ComboBoxForBinder<T> extends ComboBox<T> implements Focusable<Combo
 
 	@Override
 	public Registration addValueChangeListener(ValueChangeListener<ComboBox<T>, T> listener) {
-		return super.addValueChangeListener(e -> {
+		return super.addValueChangeListener((ValueChangeListener<ComboBox<T>, T>) e -> {
 			if (e.getValue() != null && !e.getValue().equals(lastSetValue)
 					|| e.getValue() == null && lastSetValue != null) {
 				listener.onComponentEvent(e);

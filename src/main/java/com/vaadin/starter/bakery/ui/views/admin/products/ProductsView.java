@@ -4,6 +4,7 @@ import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_PRODUCTS;
 
 import java.util.Currency;
 
+import com.vaadin.starter.bakery.ui.components.TextFieldWithPrefix;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 
@@ -61,7 +62,7 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 	private TextField name;
 
 	@Id("price")
-	private TextField price;
+	private TextFieldWithPrefix price;
 
 	private CurrencyFormatter currencyFormatter = new CurrencyFormatter();
 
