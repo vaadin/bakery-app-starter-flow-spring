@@ -4,6 +4,7 @@ import static com.vaadin.starter.bakery.backend.service.UserService.MODIFY_LOCKE
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
 import com.vaadin.flow.component.formlayout.testbench.FormLayoutElement;
@@ -22,7 +23,7 @@ public class UsersViewIT extends AbstractIT {
 	}
 
 	@Test
-	public void updatePassword() throws InterruptedException {
+	public void updatePassword() {
 		UsersViewElement usersView = openTestPage();
 
 		Assert.assertFalse(usersView.getFormDialog().isOpen());
@@ -44,6 +45,7 @@ public class UsersViewIT extends AbstractIT {
 		// Saving any field without changing password should save and close
 		TextFieldElement emailField = usersView.getEmailField();
 		emailField.setValue("foo@bar.com");
+		emailField.sendKeys(Keys.TAB);
 		usersView.getButtonsBar().getSaveButton().click();
 		Assert.assertFalse(form.isDisplayed());
 
@@ -51,6 +53,7 @@ public class UsersViewIT extends AbstractIT {
 		bakerCell.click();
 		emailField.setValue("baker@vaadin.com");
 		password.setValue("123");
+		password.sendKeys(Keys.TAB);
 		usersView.getButtonsBar().getSaveButton().click();
 		PaperToastElement toast = $(PaperToastElement.class).onPage().id("_defaultToast");
 		Assert.assertTrue(form.isDisplayed());
@@ -58,6 +61,7 @@ public class UsersViewIT extends AbstractIT {
 
 		// Good password
 		password.setValue("Abc123");
+		password.sendKeys(Keys.TAB);
 		usersView.getButtonsBar().getSaveButton().click();
 		Assert.assertFalse(form.isDisplayed());
 

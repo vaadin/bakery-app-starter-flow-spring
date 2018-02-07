@@ -1,6 +1,6 @@
 package com.vaadin.starter.bakery.ui.views.dashboard;
 
-import com.vaadin.addon.charts.model.DataSeriesItem;
+import com.vaadin.flow.component.charts.model.DataSeriesItem;
 
 public class DataSeriesItemWithRadius extends DataSeriesItem {
 

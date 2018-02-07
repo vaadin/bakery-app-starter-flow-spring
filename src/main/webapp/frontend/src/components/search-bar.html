@@ -197,7 +197,7 @@
         this._filtersChangeDebouncer = Polymer.Debouncer.debounce(
           this._filtersChangeDebouncer,
           Polymer.Async.timeOut.after(300),
-          () => this.dispatchEvent(new CustomEvent('filter-changed', {bubbles: true, composed: true})) );
+          () => this.dispatchEvent(new CustomEvent('filter-changed', {bubbles: true, composed: true})));
         Polymer.enqueueDebouncer(this._filtersChangeDebouncer);
       }
     }
