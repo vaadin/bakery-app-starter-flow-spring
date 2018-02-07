@@ -366,7 +366,7 @@
                     <plugin>
                         <groupId>com.vaadin</groupId>
                         <artifactId>flow-maven-plugin</artifactId>
-                        <version>1.0-SNAPSHOT</version>
+                        <version>1.0.0.alpha19</version>
                         <executions>
                             <execution>
                                 <goals>
