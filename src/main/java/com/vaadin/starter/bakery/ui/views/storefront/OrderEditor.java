@@ -147,11 +147,11 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 
 		items.addPriceChangeListener(e -> setTotalPrice(e.getTotalPrice()));
 
-		items.addListener(ValueChangeEvent.class, e -> review.setDisabled(!hasChanges()));
+		items.addListener(ValueChangeEvent.class, e -> review.setEnabled(hasChanges()));
 		items.addListener(NewEditorEvent.class, e -> updateDesktopViewOnItemsEdit());
 		binder.addValueChangeListener(e -> {
 			if (e.getOldValue() != null) {
-				review.setDisabled(!hasChanges());
+				review.setEnabled(hasChanges());
 			}
 		});
 	}
@@ -180,7 +180,7 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 			getModel().setStatus(order.getState().name());
 		}
 
-		review.setDisabled(true);
+		review.setEnabled(false);
 		updateDesktopViewOnItemsEdit();
 	}
 

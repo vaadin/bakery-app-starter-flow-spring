@@ -50,13 +50,8 @@
         border-bottom: 1px solid var(--lumo-shade-5pct);
       }
 
-      [part~="body-cell"] {
-        border-bottom: 1px solid var(--lumo-shade-5pct);
-      }
-
-      [part~="reorder-ghost"] {
-        top: 0;
-        left: 0;
+      :host(:not([theme~="no-row-borders"])) [part~="cell"]:not([part~="details-cell"]) {
+        border-top: 1px solid var(--lumo-shade-5pct);
       }
 
       /* a special grid theme for the bakery storefront view */
@@ -73,13 +68,13 @@
       }
 
       :host([theme~="orders-grid"]) [part~="body-cell"] {
-        border-bottom: none;
         background: transparent;
       }
 
       /* a special grid theme for the crud view grids */
       :host([theme~="crud-grid"]) {
-         max-width: calc(964px + var(--lumo-space-m));
+        max-width: calc(964px + var(--lumo-space-m));
+        background-color: var(--lumo-base-color);
       }
 
       #scroller {
@@ -125,7 +120,7 @@
       }
 
       iron-icon {
-        width: var(--lumo-size-xxxs);
+        width: var(--lumo-icon-size-s);
         height: var(--iron-icon-height, 24px);
         padding: 0;
       }

@@ -38,7 +38,6 @@ class OrderPresenter {
 	void init(StorefrontView view) {
 		this.entityPresenter.setView(view);
 		this.view = view;
-		view.getGrid().getElement().addSynchronizedProperty("activeItem");
 		view.getGrid().setDataProvider(dataProvider);
 		view.getOpenedOrderEditor().setCurrentUser(currentUser);
 		singleOrderPresenter.init(view);
@@ -70,7 +69,7 @@ class OrderPresenter {
 	}
 
 	void cancelOrder() {
-		view.getGrid().getElement().setProperty("activeItem", null);
+		view.getGrid().deselectAll();
 	}
 
 	void navigateToOrder(Long id, boolean edit) {
