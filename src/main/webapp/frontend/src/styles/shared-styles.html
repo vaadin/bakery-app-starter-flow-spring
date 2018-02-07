@@ -50,8 +50,8 @@
         border-bottom: 1px solid var(--lumo-shade-5pct);
       }
 
-      [part~="body-cell"] {
-        border-bottom: 1px solid var(--lumo-shade-5pct);
+      :host(:not([theme~="no-row-borders"])) [part~="cell"]:not([part~="details-cell"]) {
+        border-top: 1px solid var(--lumo-shade-5pct);
       }
 
       [part~="reorder-ghost"] {
@@ -73,7 +73,6 @@
       }
 
       :host([theme~="storefront-grid"]) [part~="body-cell"] {
-        border-bottom: none;
         background: transparent;
       }
 
