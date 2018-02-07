@@ -4,7 +4,6 @@ import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_PRODUCTS;
 
 import java.util.Currency;
 
-import com.vaadin.starter.bakery.ui.components.TextFieldWithPrefix;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 
@@ -62,7 +61,7 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 	private TextField name;
 
 	@Id("price")
-	private TextFieldWithPrefix price;
+	private TextField price;
 
 	private CurrencyFormatter currencyFormatter = new CurrencyFormatter();
 
@@ -75,8 +74,11 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 
 		binder.bind(name, "name");
 		binder.forField(price).withConverter(new PriceConverter()).bind("price");
-		price.addToPrefix(new Span(Currency.getInstance(BakeryConst.APP_LOCALE).getSymbol()));
-		
+
+		Span currencySymbol = new Span(Currency.getInstance(BakeryConst.APP_LOCALE).getSymbol());
+		currencySymbol.getElement().setAttribute("slot", "prefix");
+		price.getElement().appendChild(currencySymbol.getElement());
+
 		presenter.init(this);
 	}
 
