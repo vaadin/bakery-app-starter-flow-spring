@@ -8,6 +8,7 @@ import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.templatemodel.TemplateModel;
 
 @Tag("search-bar")
@@ -34,6 +35,7 @@ public class SearchBar extends PolymerTemplate<SearchBar.Model> {
 	private Button actionButton;
 
 	public SearchBar() {
+		textField.setValueChangeMode(ValueChangeMode.EAGER);
 		clearButton.addClickListener(e -> {
 			if (!textField.isEmpty()) {
 				textField.clear();

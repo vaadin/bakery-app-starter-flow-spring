@@ -58,8 +58,8 @@ public class OrderItemEditor extends PolymerTemplate<TemplateModel> implements H
 				this.amount.setDisabled(false);
 				this.amount.setValue(1);
 			}
-			if (this.comment.isDisabled()) {
-				this.comment.setDisabled(false);
+			if (!this.comment.isEnabled()) {
+				this.comment.setEnabled(true);
 			}
 			fireEvent(new ProductChangeEvent(this, e.getValue()));
 			this.setPrice();
@@ -94,8 +94,8 @@ public class OrderItemEditor extends PolymerTemplate<TemplateModel> implements H
 	public void setReadOnly(boolean readOnly) {
 		HasValue.super.setReadOnly(readOnly);
 		binder.setReadOnly(readOnly);
-		delete.setDisabled(readOnly);
-		comment.setDisabled(readOnly);
+		delete.setEnabled(!readOnly);
+		comment.setEnabled(!readOnly);
 	}
 
 	@Override
@@ -104,7 +104,7 @@ public class OrderItemEditor extends PolymerTemplate<TemplateModel> implements H
 		binder.setBean(value);
 		boolean noProductSelected = value == null || value.getProduct() == null;
 		amount.setDisabled(noProductSelected);
-		comment.setDisabled(noProductSelected);
+		comment.setEnabled(!noProductSelected);
 		this.setPrice();
 	}
 

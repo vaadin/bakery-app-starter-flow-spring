@@ -21,7 +21,7 @@ public class ComboBoxForBinder<T> extends ComboBox<T> implements Focusable<Combo
 
 	@Override
 	public Registration addValueChangeListener(ValueChangeListener<ComboBox<T>, T> listener) {
-		return super.addValueChangeListener(e -> {
+		return super.addValueChangeListener((ValueChangeListener<ComboBox<T>, T>) e -> {
 			if (e.getValue() != null && !e.getValue().equals(lastSetValue)
 					|| e.getValue() == null && lastSetValue != null) {
 				listener.onComponentEvent(e);
