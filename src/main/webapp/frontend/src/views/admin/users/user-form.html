@@ -1,0 +1,46 @@
+<link rel="import" href="../../../../bower_components/polymer/polymer-element.html">
+
+<link rel="import" href="../../../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
+<link rel="import" href="../../../../bower_components/vaadin-combo-box/vaadin-combo-box.html">
+<link rel="import" href="../../../../bower_components/vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../../../../bower_components/vaadin-text-field/vaadin-password-field.html">
+
+<link rel="import" href="../../../components/form-buttons-bar.html">
+
+<dom-module id="user-form">
+  <template>
+    <style>
+       vaadin-form-layout {
+         flex: auto;
+         overflow-y: auto;
+         overflow-x: hidden;
+         padding: 5px;
+       }
+    </style>
+
+    <vaadin-form-layout >
+      <h3 id="title"></h3>
+      <br>
+      <vaadin-text-field id="email" label="Email (login)" colspan="2"></vaadin-text-field>
+      <br>
+      <vaadin-text-field id="first" label="First Name"></vaadin-text-field>
+      <vaadin-text-field id="last" label="Last Name"></vaadin-text-field>
+      <br>
+      <vaadin-password-field id="password" label="Password" colspan="2"></vaadin-password-field>
+      <br>
+      <vaadin-combo-box id="role" label="Role" colspan="2"></vaadin-combo-box>
+    </vaadin-form-layout>
+
+    <form-buttons-bar id="buttons"></form-buttons-bar>
+  </template>
+
+  <script>
+    class UserForm extends Polymer.Element {
+      static get is() {
+        return 'user-form';
+      }
+    }
+
+    window.customElements.define(UserForm.is, UserForm);
+  </script>
+</dom-module>

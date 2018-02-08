@@ -19,19 +19,19 @@ import com.vaadin.starter.bakery.backend.service.UserService;
 public class PresenterFactory {
 
 	@Bean
-	@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public DefaultEntityPresenter<Product> productPresenter(ProductService crudService, User currentUser) {
 		return new DefaultEntityPresenter<>(new EntityPresenter<>(crudService, currentUser), crudService);
 	}
 
 	@Bean
-	@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public DefaultEntityPresenter<User> userPresenter(UserService crudService, User currentUser) {
 		return new DefaultEntityPresenter<>(new EntityPresenter<>(crudService, currentUser), crudService);
 	}
 
 	@Bean
-	@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public EntityPresenter<Order> orderEntityPresenter(OrderService crudService, User currentUser) {
 		return new EntityPresenter<>(crudService, currentUser);
 	}

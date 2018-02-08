@@ -1,4 +1,5 @@
 <link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../../../bower_components/vaadin-text-field/src/vaadin-text-field.html">
 <link rel="import" href="../../../bower_components/vaadin-button/src/vaadin-button.html">
 <link rel="import" href="../../../bower_components/vaadin-form-layout/src/vaadin-form-layout.html">
@@ -30,7 +31,12 @@
       }
     </style>
 
-    <vaadin-form-layout class="product" responsive-steps="[[_computeResponsiveSteps(desktopView, 18, 10)]]">
+    <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
+
+    <vaadin-form-layout class="product" responsive-steps='[
+      {"columns": 10, "labelsPosition": "top"},
+      {"minWidth": "600px", "columns": 18, "labelsPosition": "top"}]'>
+
       <vaadin-combo-box id="products" colspan="8" index="[[index]]"></vaadin-combo-box>
 
       <vaadin-button id="delete" colspan="2" class="delete self-start" index="[[index]]"
@@ -61,19 +67,8 @@
         };
       }
 
-      _computeResponsiveSteps(desktopView, desktopColumns, mobileColumns) {
-        return [{
-          columns: desktopView ? desktopColumns : mobileColumns,
-          labelsPosition: 'top'
-        }];
-      }
-
       _getConditional(desktopView, desktopColspan, mobileColspan) {
         return desktopView ? desktopColspan : mobileColspan;
-      }
-
-      updateDesktopView(desktopView) {
-        this.desktopView = desktopView;
       }
     }
 

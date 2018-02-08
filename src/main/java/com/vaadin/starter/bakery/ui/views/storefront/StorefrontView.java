@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridSingleSelectionModel;
 import com.vaadin.flow.component.polymertemplate.Id;
@@ -42,7 +43,6 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
 
 	public interface Model extends TemplateModel {
-		void setEditing(boolean editing);
 	}
 
 	@Id("search")
@@ -51,24 +51,29 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 	@Id("grid")
 	private Grid<Order> grid;
 
-	@Id("orderEditor")
-	private OrderEditor orderEditor;
+	@Id("dialog")
+	private Dialog dialog;
 
-	@Id("orderDetails")
-	private OrderDetailsFull orderDetails;
+	private final OrderEditor orderEditor;
 
-	private OrderPresenter presenter;
+	private final OrderDetailsFull orderDetails = new OrderDetailsFull();
+
+	private final OrderPresenter presenter;
 
 	@Autowired
-	public StorefrontView(OrderPresenter presenter) {
-
+	public StorefrontView(OrderPresenter presenter, OrderEditor orderEditor) {
 		this.presenter = presenter;
+		this.orderEditor = orderEditor;
+
 		// required for the `isDesktopView()` method
 		getElement().synchronizeProperty("desktopView", "desktop-view-changed");
 
 		searchBar.setActionText("New order");
 		searchBar.setCheckboxText("Show past orders");
 		searchBar.setPlaceHolder("Search");
+
+		dialog.add(orderEditor);
+		dialog.add(orderDetails);
 
 		grid.setSelectionMode(Grid.SelectionMode.SINGLE);
 		Map<Order, OrderCard> components = new WeakHashMap<>();
@@ -94,7 +99,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 			}
 		};
 		((GridSingleSelectionModel<Order>) grid.getSelectionModel()).addSingleSelectionListener(listener);
-		getModel().setEditing(false);
+		setOpened(false);
 		getSearchBar().addFilterChangeListener(
 				e -> presenter.filterChanged(getSearchBar().getFilter(), getSearchBar().isCheckboxChecked()));
 		getSearchBar().addActionClickListener(e -> presenter.createNewOrder());
@@ -108,13 +113,24 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 
 		getOpenedOrderDetails().addSaveListenter(e -> presenter.save());
 		getOpenedOrderDetails().addCancelListener(e -> presenter.cancel());
+
+		dialog.getElement().addEventListener("opened-changed", e -> {
+			if (!dialog.isOpened() && this.isDirty()) {
+				// Handle client-side closing dialog on escape
+				presenter.cancel();
+			}
+		});
 		getOpenedOrderDetails().addBackListener(e -> presenter.back());
 		getOpenedOrderDetails().addEditListener(e -> presenter.edit());
 		getOpenedOrderDetails().addCommentListener(e -> presenter.addComment(e.getMessage()));
 	}
 
-	void setEditing(boolean editing) {
-		getModel().setEditing(editing);
+	void setOpened(boolean opened) {
+		if (opened) {
+			dialog.open();
+		} else {
+			dialog.close();
+		}
 	}
 
 	@Override
@@ -172,6 +188,11 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 
 	Grid<Order> getGrid() {
 		return grid;
+	}
+
+	@Override
+	public void clear() {
+		orderEditor.clear();
 	}
 
 }

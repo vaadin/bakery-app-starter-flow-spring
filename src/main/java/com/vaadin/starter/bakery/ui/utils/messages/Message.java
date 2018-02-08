@@ -57,7 +57,7 @@ public class Message {
 	 * Show a confirmation dialog with the message.
 	 * When user clicks on OK button, onOk callback is executed.
 	 */
-	public static void confirm(Message message, Runnable onOk) {
+	public static void confirm(Message message, Runnable onOk, Runnable onCancel) {
 		ConfirmDialog confirmation = new ConfirmDialog();
 
 		confirmation.setMessage(message.getMessage());
@@ -69,7 +69,10 @@ public class Message {
 			onOk.run();
 			UI.getCurrent().remove(confirmation);
 		});
-		confirmation.addCancelClickListener(e -> UI.getCurrent().remove(confirmation));
+		confirmation.addCancelClickListener(e -> {
+			onCancel.run();
+			UI.getCurrent().remove(confirmation);
+		});
 
 		UI.getCurrent().add(confirmation);
 		confirmation.setOpened(true);

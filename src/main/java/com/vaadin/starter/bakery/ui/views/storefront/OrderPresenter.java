@@ -18,7 +18,7 @@ import com.vaadin.starter.bakery.ui.crud.EntityPresenter;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider;
 
 @SpringComponent
-@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 class OrderPresenter {
 
 	private OrderCardHeaderGenerator headersGenerator;
