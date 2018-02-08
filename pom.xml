@@ -87,6 +87,10 @@
             <id>spring-plugin-milestones</id>
             <url>https://repo.spring.io/milestone</url>
         </pluginRepository>
+        <pluginRepository>
+            <id>plugin-snapshots-repo</id>
+            <url>https://oss.sonatype.org/content/repositories/vaadin-snapshots</url>
+        </pluginRepository>
     </pluginRepositories>
 
     <dependencyManagement>
