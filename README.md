@@ -78,23 +78,27 @@ before running in the other mode.
 
 Scalability tests can be run as follows
 
-1. Configure the number of concurrent users and a suitable ramp up time in the end of the `src/test/scala/*.scala` files, e.g.:
+1. Build Bakery with production profile (e.g. ```mvn clean install -Pproduction -DskipTests```)
+
+2. Configure the number of concurrent users and a suitable ramp up time in the end of the `src/test/scala/*.scala` files, e.g.:
 	```setUp(scn.inject(rampUsers(300) over (300 seconds))).protocols(httpProtocol)```
 
-2. If you are not running on localhost, configure the baseUrl in the beginning of the `src/test/scala/*.scala` files, e.g.:
+3. If you are not running on localhost, configure the baseUrl in the beginning of the `src/test/scala/*.scala` files, e.g.:
 	```val baseUrl = "http://my.server.com"```
 
-3. Make sure the server is running at the given URL
+4. Make sure the server is running in the production mode (```-Dvaadin.productionMode```) at the given URL
 
-4. Download Gatling from https://gatling.io/download/
+5. Download Gatling from https://gatling.io/download/
 
-5. Navigate to Gatling's bin folder in you terminal
+6. Navigate to Gatling's bin folder in you terminal
 
-6. Start a test from the command line, e.g.: (where ```~/path/to``` is path to the folder where the project is)
+7. Start a test from the command line, e.g.: (where ```~/path/to``` is path to the folder where the project is)
 	 ```./gatling.sh -m -bdf ~/path/to/bakery-app-starter-flow-spring/src/test/resources/bodies -sf ~/path/to/bakery-app-starter-flow-spring/src/test/scala/ -rf ~/path/to/bakery-app-starter-flow-spring/target```
 
-7. Test results are stored into target folder, e.g.:
+8. Test results are stored into target folder, e.g.:
 	```target/gatling/BaristaFlow-1487784042461/index.html```
+	
+Note: If you run Bakery with in memory database, it will logically use more memory than when using against external database. It is recommend to run scalability tests for Bakery only after you have configured Bakery to use external database.
 
 # License
 A paid Pro or Prime subscription is required for creating a new software project from this starter. After its creation, results can be used, developed and distributed freely, but licenses for the used commercial components are required during development. The starter or its parts cannot be redistributed as a code example or template.
