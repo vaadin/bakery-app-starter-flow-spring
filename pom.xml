@@ -88,8 +88,8 @@
             <url>https://repo.spring.io/milestone</url>
         </pluginRepository>
         <pluginRepository>
-            <id>plugin-snapshots-repo</id>
-            <url>https://oss.sonatype.org/content/repositories/vaadin-snapshots</url>
+            <id>vaadin-prereleases</id>
+            <url>https://maven.vaadin.com/vaadin-prereleases</url>
         </pluginRepository>
     </pluginRepositories>
 
