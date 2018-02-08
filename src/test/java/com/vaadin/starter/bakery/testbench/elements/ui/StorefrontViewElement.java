@@ -8,6 +8,10 @@ import com.vaadin.testbench.elementsbase.Element;
 @Element("storefront-view")
 public class StorefrontViewElement extends TestBenchElement implements HasApp, HasCrudView {
 
+	@Element("order-editor")
+	public static class OrderEditorElement extends TestBenchElement {
+	}
+
 	@Override
 	public GridElement getGrid() {
 		return $(GridElement.class).waitForFirst();
@@ -19,5 +23,11 @@ public class StorefrontViewElement extends TestBenchElement implements HasApp, H
 
 	public OrderCardElement getOrderCard(int index) {
 		return getGrid().$(OrderCardElement.class).get(index);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Class<OrderEditorElement> getFormClass() {
+		return OrderEditorElement.class;
 	}
 }

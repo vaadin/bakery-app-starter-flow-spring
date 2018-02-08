@@ -51,7 +51,7 @@ public class SingleOrderPresenter {
 	}
 
 	void cancel() {
-		entityPresenter.cancel(() -> close(false), () -> view.setEditing(true));
+		entityPresenter.cancel(() -> close(false), () -> view.setOpened(true));
 	}
 
 	void edit() {
@@ -87,7 +87,7 @@ public class SingleOrderPresenter {
 	}
 
 	private void open(Order order, boolean edit) {
-		view.setEditing(true);
+		view.setOpened(true);
 		setElementsVisibility(edit);
 		if (edit) {
 			view.getOpenedOrderEditor().read(order);
@@ -103,7 +103,7 @@ public class SingleOrderPresenter {
 
 	private void close(boolean updated) {
 		view.getOpenedOrderEditor().close();
-		view.setEditing(false);
+		view.setOpened(false);
 		onClose.accept(entityPresenter.getEntity(), updated);
 		entityPresenter.close();
 	}

@@ -2,9 +2,6 @@ package com.vaadin.starter.bakery.ui.views.admin.products;
 
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_PRODUCTS;
 
-import java.util.Currency;
-
-import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 
@@ -34,8 +31,8 @@ import com.vaadin.starter.bakery.ui.utils.converters.CurrencyFormatter;
 @Secured(Role.ADMIN)
 public class ProductsView extends CrudView<Product, TemplateModel>  {
 
-	@Id("searchBar")
-	private SearchBar searchbar;
+	@Id("search")
+	private SearchBar search;
 
 	@Id("grid")
 	private Grid<Product> grid;
@@ -43,7 +40,7 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 	@Id("dialog")
 	private Dialog dialog;
 
-	private ProductsForm<Product> form = new ProductsForm<>();
+	private ProductForm form = new ProductForm();
 
 	private DefaultEntityPresenter<Product> presenter;
 
@@ -97,7 +94,7 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 
 	@Override
 	protected SearchBar getSearchBar() {
-		return searchbar;
+		return search;
 	}
 
 	@Override

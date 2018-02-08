@@ -30,8 +30,8 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 @Secured(Role.ADMIN)
 public class UsersView extends CrudView<User, TemplateModel> {
 
-	@Id("searchBar")
-	private SearchBar searchbar;
+	@Id("search")
+	private SearchBar search;
 
 	@Id("grid")
 	private Grid<User> grid;
@@ -87,7 +87,7 @@ public class UsersView extends CrudView<User, TemplateModel> {
 
 	@Override
 	public SearchBar getSearchBar() {
-		return searchbar;
+		return search;
 	}
 
 	@Override

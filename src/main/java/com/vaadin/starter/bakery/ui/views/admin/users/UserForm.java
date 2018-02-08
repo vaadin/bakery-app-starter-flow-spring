@@ -1,5 +1,6 @@
 package com.vaadin.starter.bakery.ui.views.admin.users;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,22 +37,23 @@ public class UserForm extends PolymerTemplate<TemplateModel> implements CrudForm
 	private FormButtonsBar buttons;
 
 	@Id("first")
-	private TextField firstnameField;
+	private TextField first;
 
 	@Id("last")
-	private TextField lastnameField;
+	private TextField last;
 
 	@Id("email")
-	private TextField emailField;
+	private TextField email;
 
-	@Id("user-edit-password")
-	private PasswordField passwordField;
+	@Id("password")
+	private PasswordField password;
 
 	@Id("role")
-	private ComboBoxForBinder<String> roleField;
+	private ComboBoxForBinder<String> role;
 
 	private final PasswordEncoder passwordEncoder;
 
+	@Autowired
 	public UserForm(PasswordEncoder passwordEncoder) {
 		this.passwordEncoder = passwordEncoder;
 	}
@@ -59,19 +61,19 @@ public class UserForm extends PolymerTemplate<TemplateModel> implements CrudForm
 	@Override
 	public void setBinder(BeanValidationBinder<User> binder) {
 		ListDataProvider<String> roleProvider = DataProvider.ofItems(Role.getAllRoles());
-		roleField.setItemLabelGenerator(s -> s != null ? s : "");
-		roleField.setDataProvider(roleProvider);
+		role.setItemLabelGenerator(s -> s != null ? s : "");
+		role.setDataProvider(roleProvider);
 
-		binder.bind(firstnameField, "firstName");
-		binder.bind(lastnameField, "lastName");
-		binder.bind(emailField, "email");
-		binder.bind(roleField, "role");
+		binder.bind(first, "firstName");
+		binder.bind(last, "lastName");
+		binder.bind(email, "email");
+		binder.bind(role, "role");
 
-		binder.forField(passwordField).withValidator(password -> {
-			return password.matches("^(|(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,})$");
+		binder.forField(password).withValidator(pass -> {
+			return pass.matches("^(|(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,})$");
 		}, "need 6 or more chars, mixing digits, lowercase and uppercase letters")
-				.bind(user -> passwordField.getEmptyValue(), (user, pass) -> {
-					if (!passwordField.getEmptyValue().equals(pass)) {
+				.bind(user -> password.getEmptyValue(), (user, pass) -> {
+					if (!password.getEmptyValue().equals(pass)) {
 						user.setPassword(passwordEncoder.encode(pass));
 					}
 				});
