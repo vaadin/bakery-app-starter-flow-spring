@@ -31,6 +31,7 @@
 
         <!-- Plugins -->
         <frontend.maven.plugin.version>1.6</frontend.maven.plugin.version>
+        <flow.maven.plugin.version>1.0.0.alpha19</flow.maven.plugin.version>
         <maven.war.plugin.version>3.1.0</maven.war.plugin.version>
         <maven.resources.plugin.version>3.0.2</maven.resources.plugin.version>
         <maven.clean.plugin.version>3.0.0</maven.clean.plugin.version>
@@ -85,13 +86,6 @@
         <pluginRepository>
             <id>spring-plugin-milestones</id>
             <url>https://repo.spring.io/milestone</url>
-        </pluginRepository>
-        <pluginRepository>
-            <id>plugin-snapshots-repo</id>
-            <url>https://oss.sonatype.org/content/repositories/vaadin-snapshots</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
         </pluginRepository>
     </pluginRepositories>
 
@@ -366,7 +360,7 @@
                     <plugin>
                         <groupId>com.vaadin</groupId>
                         <artifactId>flow-maven-plugin</artifactId>
-                        <version>1.0.0.alpha19</version>
+                        <version>${flow.maven.plugin.version}</version>
                         <executions>
                             <execution>
                                 <goals>
