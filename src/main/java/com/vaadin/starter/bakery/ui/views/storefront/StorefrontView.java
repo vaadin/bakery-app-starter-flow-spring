@@ -1,8 +1,6 @@
 package com.vaadin.starter.bakery.ui.views.storefront;
 
 import java.util.Collections;
-import java.util.Map;
-import java.util.WeakHashMap;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +16,8 @@ import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.data.selection.SelectionEvent;
 import com.vaadin.flow.renderer.ComponentTemplateRenderer;
 import com.vaadin.flow.router.BeforeEvent;
+import com.vaadin.flow.router.BeforeLeaveEvent;
+import com.vaadin.flow.router.BeforeLeaveObserver;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.PageTitle;
@@ -83,24 +83,13 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 		getSearchBar().addActionClickListener(e -> presenter.createNewOrder());
 
 		presenter.init(this);
-	}
-
-	void setupSingleOrderListeners(SingleOrderPresenter presenter) {
-		getOpenedOrderEditor().addCancelListener(e -> presenter.cancel());
-		getOpenedOrderEditor().addReviewListener(e -> presenter.review());
-
-		getOpenedOrderDetails().addSaveListenter(e -> presenter.save());
-		getOpenedOrderDetails().addCancelListener(e -> presenter.cancel());
 
 		dialog.getElement().addEventListener("opened-changed", e -> {
-			if (!dialog.isOpened() && this.isDirty()) {
+			if (!dialog.isOpened()) {
 				// Handle client-side closing dialog on escape
 				presenter.cancel();
 			}
 		});
-		getOpenedOrderDetails().addBackListener(e -> presenter.back());
-		getOpenedOrderDetails().addEditListener(e -> presenter.edit());
-		getOpenedOrderDetails().addCommentListener(e -> presenter.addComment(e.getMessage()));
 	}
 
 	void setOpened(boolean opened) {
@@ -168,8 +157,7 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 	private void onOrdersGridSelectionChanged(SelectionEvent<Order> e) {
 		e.getFirstSelectedItem().ifPresent(order -> {
 			getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT + "/" + order.getId()));
-			getGrid().getElement().setProperty("activeItem", null);
+			getGrid().deselect(order);
 		});
 	}
-
 }
