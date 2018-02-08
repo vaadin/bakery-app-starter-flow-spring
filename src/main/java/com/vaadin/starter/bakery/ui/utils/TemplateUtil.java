@@ -4,7 +4,7 @@ import com.vaadin.flow.component.Component;
 
 public class TemplateUtil {
 
-	public static void addToSlot(Component parent, Component child, String slotName) {
+	public static void addToSlot(Component parent, String slotName, Component child) {
 		setSlot(child, slotName);
 		parent.getElement().appendChild(child.getElement());
 	}

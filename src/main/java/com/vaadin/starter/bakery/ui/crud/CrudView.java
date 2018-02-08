@@ -4,6 +4,8 @@
 package com.vaadin.starter.bakery.ui.crud;
 
 import com.vaadin.flow.component.HasText;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
@@ -15,13 +17,20 @@ import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
 import com.vaadin.starter.bakery.ui.components.FormButtonsBar;
-import com.vaadin.starter.bakery.ui.components.FormDialog;
 import com.vaadin.starter.bakery.ui.components.SearchBar;
 import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
 import com.vaadin.starter.bakery.ui.views.EntityView;
 
 public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel> extends PolymerTemplate<T>
 		implements HasLogger, EntityView<E>, HasUrlParameter<Long> {
+
+	public interface CrudForm<E> {
+		FormButtonsBar getButtons();
+
+		HasText getTitle();
+
+		void setBinder(BeanValidationBinder<E> binder);
+	}
 
 	private final String entityName;
 	
@@ -31,15 +40,13 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 
 	protected abstract BeanValidationBinder<E> getBinder();
 
-	protected abstract FormButtonsBar getButtons();
+	protected abstract CrudForm<E> getForm();
 
-	protected abstract FormDialog getDialog();
+	protected abstract Dialog getDialog();
 
 	protected abstract SearchBar getSearchBar();
 
 	protected abstract Grid<E> getGrid();
-
-	protected abstract HasText getTitle();
 
 	public CrudView(String entityName) {
 		this.entityName = entityName;
@@ -51,9 +58,20 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 			getGrid().deselectAll();
 		});
 
-		getButtons().addSaveListener(e -> getPresenter().save());
-		getButtons().addCancelListener(e -> getPresenter().cancel());
-		getButtons().addDeleteListener(e -> getPresenter().delete());
+		getForm().getButtons().addSaveListener(e -> getPresenter().save());
+		getForm().getButtons().addCancelListener(e -> getPresenter().cancel());
+
+		getDialog().getElement().addEventListener("opened-changed", e -> {
+			if (!getDialog().isOpened()) {
+				getPresenter().cancel();
+			} else {
+				// Set theme attribute to the dialog overlay
+				UI.getCurrent().getPage().executeJavaScript("$0.$.overlay.setAttribute('theme', 'right')",
+						getDialog().getElement());
+			}
+		});
+
+		getForm().getButtons().addDeleteListener(e -> getPresenter().delete());
 
 		getSearchBar().addActionClickListener(e -> getPresenter().createNew());
 		getSearchBar()
@@ -79,8 +97,12 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 		navigateToEntity(null);
 	}
 
+	public void openDialog() {
+		getDialog().setOpened(true);
+	}
+
 	public void updateTitle(boolean newEntity) {
-		getTitle().setText((newEntity ? "New" : "Edit") + " " + entityName);
+		getForm().getTitle().setText((newEntity ? "New" : "Edit") + " " + entityName);
 	}
 
 	@Override
@@ -93,4 +115,8 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 		return getBinder().hasChanges();
 	}
 	
+	@Override
+	public void clear() {
+		getBinder().readBean(null);
+	}
 }

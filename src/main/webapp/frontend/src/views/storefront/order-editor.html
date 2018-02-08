@@ -16,20 +16,17 @@
 
 <dom-module id="order-editor">
   <template>
-   <style include="shared-styles">
-      :host {
-        display: flex;
-        flex-direction: column;
-        box-sizing: border-box;
-        height: 100%;
-        flex: auto;
-      }
+    <style include="shared-styles">
+      /* needed for linter */
     </style>
 
     <div class="scrollable flex1" id="main">
       <h2 id="title"></h2>
 
-      <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 4, 1)]]">
+      <vaadin-form-layout responsive-steps='[
+          {"columns": 1, "labelsPosition": "top"},
+          {"minWidth": "600px", "columns": 4, "labelsPosition": "top"}]'>
+
         <vaadin-form-layout responsive-steps='[{"columns": 1, "labelsPosition": "top"}]'>
 
           <vaadin-combo-box label="Status" id="status">
@@ -37,7 +34,10 @@
 
           <vaadin-form-item>
             <label slot="label">Due</label>
-            <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 1, 2)]]">
+            <vaadin-form-layout responsive-steps='[
+              {"columns": 1, "labelsPosition": "top"},
+              {"minWidth": "600px", "columns": 2, "labelsPosition": "top"}]'>
+
               <vaadin-date-picker  id="dueDate">
               </vaadin-date-picker>
 
@@ -53,7 +53,9 @@
           </vaadin-combo-box>
         </vaadin-form-layout>
 
-        <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 3, 1)]]" colspan="3">
+        <vaadin-form-layout  colspan="3" responsive-steps='[
+          {"columns": 1, "labelsPosition": "top"},
+          {"minWidth": "600px", "columns": 3, "labelsPosition": "top"}]'>
 
           <vaadin-text-field id="customerName" label="Customer" colspan="2">
             <iron-icon slot="prefix" icon="vaadin:user"></iron-icon>
@@ -90,10 +92,6 @@
 
       static get properties() {
         return {
-          desktopView: {
-            type: Boolean,
-            observer: '_updateDesktopViewOnItemsEdit'
-          },
           status: {
             type: String,
             observer: '_onStatusChange'
@@ -101,25 +99,9 @@
         };
       }
 
-      ready() {
-        super.ready();
-        this.$['status'].$.input.setAttribute('theme', 'status');
-      }
-
-      _updateDesktopViewOnItemsEdit() {
-        this.querySelectorAll('order-item-editor').forEach(item => item.updateDesktopView(this.desktopView));
-      }
-
       _onStatusChange() {
         const status = this.status ? this.status.toLowerCase() : this.status;
-        this.$['status'].$.input.setAttribute('status', status);
-      }
-
-      _computeResponsiveSteps(desktopView, desktopColumns, mobileColumns) {
-        return [{
-          columns: desktopView ? desktopColumns : mobileColumns,
-          labelsPosition: 'top'
-        }];
+        this.$.status.$.input.setAttribute('status', status);
       }
     }
 
