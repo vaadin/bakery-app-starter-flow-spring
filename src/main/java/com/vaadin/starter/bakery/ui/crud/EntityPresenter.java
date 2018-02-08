@@ -45,7 +45,6 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 		confirmIfNecessaryAndExecute(true, CONFIRM_DELETE, () -> {
 			executeOperation(() -> crudService.delete(currentUser, entity));
 			onSuccess.execute(entity);
-			entity = null;
 		}, () -> {
 		});
 	}
@@ -103,6 +102,7 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 
 	public void close() {
 		this.entity = null;
+		view.clear();
 	}
 
 	public void cancel(Runnable onConfirmed, Runnable onCancelled) {
