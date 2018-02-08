@@ -37,19 +37,19 @@ class BaristaFlow extends Simulation {
 
 	// Storefront from initial response
 	val appIdExtract        =  regex("""node":(\d+),+"type":"splice",+"feat":[0-9]*,+"index":[0-9]*,+"add":\[+"desktopView"""").saveAs("appId")
-	val gridIdExtract       =  regex("""node":(\d+),+"type":"put",+"key":"payload",+"feat":[0-9]*,+"value":\{+"type":"@id",+"payload":"storefront-grid"""").saveAs("gridId")
-	val dueDate0IdExtract    =  regex("""node":(\d+),+"type":"put",+"key":"payload",+"feat":[0-9]*,+"value":\{+"type":"@id",+"payload":"due-date"""").saveAs("dueDateId")
+	val gridIdExtract       =  regex("""node":(\d+),+"type":"put",+"key":"payload",+"feat":[0-9]*,+"value":\{+"type":"@id",+"payload":"grid"""").saveAs("gridId")
+	val dueDate0IdExtract   =  regex("""node":(\d+),+"type":"put",+"key":"payload",+"feat":[0-9]*,+"value":\{+"type":"@id",+"payload":"dueDate"""").saveAs("dueDateId")
 	val newButtonIdExtract  =  regex("""node":(\d+),+"type":"put",+"key":"payload",+"feat":[0-9]*,+"value":\{+"type":"@id",+"payload":"action"""").saveAs("newButtonId")
-	val customerIdExtract   =  regex("""node":(\d+),+"type":"put",+"key":"payload",+"feat":[0-9]*,+"value":\{+"type":"@id",+"payload":"customer-name"""").saveAs("customerId")
-	val phoneIdExtract      =  regex("""node":(\d+),+"type":"put",+"key":"payload",+"feat":[0-9]*,+"value":\{+"type":"@id",+"payload":"customer-number"""").saveAs("phoneId")
+	val customerIdExtract   =  regex("""node":(\d+),+"type":"put",+"key":"payload",+"feat":[0-9]*,+"value":\{+"type":"@id",+"payload":"customerName"""").saveAs("customerId")
+	val phoneIdExtract      =  regex("""node":(\d+),+"type":"put",+"key":"payload",+"feat":[0-9]*,+"value":\{+"type":"@id",+"payload":"customerNumber"""").saveAs("phoneId")
 	val reviewIdExtract     =  regex("""node":(\d+),+"type":"put",+"key":"payload",+"feat":[0-9]*,+"value":\{+"type":"@id",+"payload":"review"""").saveAs("reviewId")
 	val saveIdExtract       =  regex("""node":(\d+),+"type":"put",+"key":"payload",+"feat":[0-9]*,+"value":\{+"type":"@id",+"payload":"save"""").saveAs("saveId")
-	val saveStoreExtract    =  regex("""node":(\d+),+"type":"put",+"key":"payload",+"feat":[0-9]*,+"value":\{+"type":"@id",+"payload":"pickup-location"""").saveAs("storeId")
+	val saveStoreExtract    =  regex("""node":(\d+),+"type":"put",+"key":"payload",+"feat":[0-9]*,+"value":\{+"type":"@id",+"payload":"pickupLocation"""").saveAs("storeId")
+	val statusIdExtract     =  regex("""node":(\d+),+"type":"put",+"key":"payload",+"feat":[0-9]*,+"value":\{+"type":"@id",+"payload":"status"""").saveAs("statusId")
+	val dueTimeIdExtract    =  regex("""node":(\d+),+"type":"put",+"key":"payload",+"feat":[0-9]*,+"value":\{+"type":"@id",+"payload":"dueTime"""").saveAs("dueTimeId")
+	val dueDateIdExtract    =  regex("""node":(\d+),+"type":"put",+"key":"payload",+"feat":[0-9]*,+"value":\{+"type":"@id",+"payload":"dueDate"""").saveAs("dueDateId")
 
 	// Order dialog
-	val statusIdExtract    = regex("""node":(\d+),"type":"put","key":"value","feat":[0-9]*,"value":"New"""").saveAs("statusId")
-	val dueTimeIdExtract   = regex("""node":(\d+),"type":"put","key":"value","feat":[0-9]*,"value":"4:00\sp.m."""").saveAs("dueTimeId")
-	val dueDateIdExtract   = regex("""node":(\d+),"type":"put","key":"value","feat":[0-9]*,"value":"2018-[0-9]{2}-[0-9]{2}"""").saveAs("dueDateId")
 	val amountIdExtract    = regex("""node":(\d+),"type":"put","key":"tag","feat":[0-9]*,"value":"amount-field"}""").saveAs("amountId")
 	val productsIdExtract  = regex("""node":(\d+),"type":"put","key":"payload","feat":[0-9]*,"value":\{"type":"@id","payload":"products"\}""").saveAs("productsId")
 
@@ -58,12 +58,12 @@ class BaristaFlow extends Simulation {
 	val amount3IdExtract   = regex("""node":(\d+),"type":"put","key":"tag","feat":[0-9]*,"value":"amount-field"}""").saveAs("amount3Id")
 
   	// Dahshboard
-	val grid2IdExtract   = regex("""node":(\d+),"type":"put","key":"tag","feat":[0-9]*,"value":"vaadin-grid"""").saveAs("grid2Id")
-	val chart1IdExtract  = regex("""node":(\d+),"type":"put","key":"payload","feat":[0-9]*,"value":\{"type":"@id","payload":"today-count-chart"""").saveAs("chart1Id")
-	val chart2IdExtract  = regex("""node":(\d+),"type":"put","key":"payload","feat":[0-9]*,"value":\{"type":"@id","payload":"monthly-product-split"""").saveAs("chart2Id")
-	val chart3IdExtract  = regex("""node":(\d+),"type":"put","key":"payload","feat":[0-9]*,"value":\{"type":"@id","payload":"yearly-sales-graph"""").saveAs("chart3Id")
-	val chart4IdExtract  = regex("""node":(\d+),"type":"put","key":"payload","feat":[0-9]*,"value":\{"type":"@id","payload":"deliveries-this-year"""").saveAs("chart4Id")
-	val chart5IdExtract  = regex("""node":(\d+),"type":"put","key":"payload","feat":[0-9]*,"value":\{"type":"@id","payload":"deliveries-this-month"""").saveAs("chart5Id")
+//	val grid2IdExtract   = regex("""node":(\d+),"type":"put","key":"tag","feat":[0-9]*,"value":"vaadin-grid"""").saveAs("grid2Id")
+//	val chart1IdExtract  = regex("""node":(\d+),"type":"put","key":"payload","feat":[0-9]*,"value":\{"type":"@id","payload":"today-count-chart"""").saveAs("chart1Id")
+//	val chart2IdExtract  = regex("""node":(\d+),"type":"put","key":"payload","feat":[0-9]*,"value":\{"type":"@id","payload":"monthly-product-split"""").saveAs("chart2Id")
+//	val chart3IdExtract  = regex("""node":(\d+),"type":"put","key":"payload","feat":[0-9]*,"value":\{"type":"@id","payload":"yearly-sales-graph"""").saveAs("chart3Id")
+//	val chart4IdExtract  = regex("""node":(\d+),"type":"put","key":"payload","feat":[0-9]*,"value":\{"type":"@id","payload":"deliveries-this-year"""").saveAs("chart4Id")
+//	val chart5IdExtract  = regex("""node":(\d+),"type":"put","key":"payload","feat":[0-9]*,"value":\{"type":"@id","payload":"deliveries-this-month"""").saveAs("chart5Id")
 
 	val scn = scenario("BaristaNEW3")
 		.exec(http("Initial request")
@@ -91,6 +91,9 @@ class BaristaFlow extends Simulation {
 			.check(saveIdExtract)
 			.check(uIdExtract)
 			.check(saveStoreExtract)
+			.check(statusIdExtract)
+			.check(dueTimeIdExtract)
+			.check(dueDateIdExtract)
 			.check(syncIdExtract).check(clientIdExtract)
 		)
 		.pause(2)
@@ -114,14 +117,11 @@ class BaristaFlow extends Simulation {
 			.headers(headers_4)
 			.body(ElFileBody("BaristaNEW3_0009_request.txt"))
 			.check(syncIdExtract).check(clientIdExtract)
-			.check(statusIdExtract)
-			.check(dueTimeIdExtract)
 			.check(amountIdExtract)
 			.check(productsIdExtract)
 			.check(amount2IdExtract)
 			.check(products2IdExtract)
 			.check(amount3IdExtract)
-			.check(dueDateIdExtract)
 		)
 		.pause(5)
 
@@ -252,5 +252,5 @@ class BaristaFlow extends Simulation {
 //			.check(syncIdExtract).check(clientIdExtract))
 //		.pause(6)
 
-	setUp(scn.inject(rampUsers(1000) over (270))).protocols(httpProtocol)
+	setUp(scn.inject(rampUsers(1) over (1))).protocols(httpProtocol)
 }
