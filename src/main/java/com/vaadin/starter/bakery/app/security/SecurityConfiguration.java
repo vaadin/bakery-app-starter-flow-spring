@@ -126,13 +126,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				"/images/**",
 
 				// (development mode) static resources
-				"/frontend/bower_components/**",
-				"/frontend/images/**",
-				"/frontend/src/**",
-
-				// (development mode) resources from the framework jars
-				"/frontend/*.html",
-				"/frontend/*.js",
+				"/frontend/**",
 
 				// (development mode) webjars
 				"/webjars/**",
@@ -140,10 +134,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				// (development mode) H2 debugging console
 				"/h2-console/**",
 
-				// (production mode) static resources - for mvn spring-boot:run
-				"/frontend/build/**",
-
-				// (production mode) static resources - for .war deployments (e.g. Tomcat)
+				// (production mode) static resources
 				"/frontend-es5/**", "/frontend-es6/**");
 	}
 }
