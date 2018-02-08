@@ -23,11 +23,16 @@ public interface HasCrudView extends HasElementQuery {
 	}
 
 	default FormButtonsBarElement getButtonsBar() {
-		return $(DialogOverlayElement.class).first().$(FormButtonsBarElement.class).first();
+		// This does not work although DialogElement changes the context to
+		// the overlay in body:
+		// getDialog().$(FormButtonsBarElement.class).first();
+		//
+		// This neither works:
+		return $(DialogOverlayElement.class).onPage().first().$(FormButtonsBarElement.class).first();
 	}
 
 	default FormLayoutElement getForm() {
-		return $(DialogOverlayElement.class).first().$(FormLayoutElement.class).first();
+		return $(DialogOverlayElement.class).onPage().first().$(FormLayoutElement.class).first();
 	}
 
 }
