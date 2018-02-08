@@ -1,6 +1,6 @@
 <link rel="import" href="../../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../../bower_components/iron-media-query/iron-media-query.html">
-<link rel="import" href="../../../bower_components/vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../../../bower_components/vaadin-grid/src/vaadin-grid.html">
 
 <link rel="import" href="../../components/search-bar.html">
 <link rel="import" href="../../components/utils-mixin.html">
@@ -36,7 +36,7 @@
 
     <search-bar id="search" show-checkbox></search-bar>
 
-    <vaadin-grid id="grid" theme="storefront-grid"></vaadin-grid>
+    <vaadin-grid id="grid" theme="storefront-grid no-row-borders"></vaadin-grid>
 
     <form-dialog opened="[[editing]]" theme="middle">
       <order-details-full id="orderDetails" desktop-view="[[desktopView]]"></order-details-full>

@@ -2,9 +2,9 @@
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/vaadin-icons/vaadin-icons.html">
 <link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
-<link rel="import" href="../../bower_components/vaadin-button/vaadin-button.html">
-<link rel="import" href="../../bower_components/vaadin-checkbox/vaadin-checkbox.html">
-<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../../bower_components/vaadin-button/src/vaadin-button.html">
+<link rel="import" href="../../bower_components/vaadin-checkbox/src/vaadin-checkbox.html">
+<link rel="import" href="../../bower_components/vaadin-text-field/src/vaadin-text-field.html">
 
 <link rel="import" href="../styles/shared-styles.html">
 
@@ -197,7 +197,7 @@
         this._filtersChangeDebouncer = Polymer.Debouncer.debounce(
           this._filtersChangeDebouncer,
           Polymer.Async.timeOut.after(300),
-          () => this.dispatchEvent(new CustomEvent('filter-changed', {bubbles: true, composed: true})) );
+          () => this.dispatchEvent(new CustomEvent('filter-changed', {bubbles: true, composed: true})));
         Polymer.enqueueDebouncer(this._filtersChangeDebouncer);
       }
     }
