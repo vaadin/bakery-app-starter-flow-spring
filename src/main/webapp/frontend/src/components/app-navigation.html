@@ -29,7 +29,7 @@
         display: none;
       }
 
-      .navigation-label {
+      vaadin-tab > div {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -121,40 +121,15 @@
         ###Bakery###
       </div>
       <div class="tabsContainer">
-        <vaadin-tabs selected="{{pageNumber}}">
-          <template is="dom-repeat" items="[[pages]]">
-            <vaadin-tab>
-              <div class="navigation-label">
-                <iron-icon icon="vaadin:[[item.icon]]"></iron-icon>
-                <span>[[item.title]]</span>
-              </div>
-            </vaadin-tab>
-          </template>
-        </vaadin-tabs>
+        <vaadin-tabs id="tabs"></vaadin-tabs>
       </div>
     </div>
   </template>
 
   <script>
     class AppNavigation extends Polymer.Element {
-
       static get is() {
         return 'app-navigation';
-      }
-
-      static get properties() {
-        return {
-          pageNumber: {
-            observer: '_onSelectedChanged'
-          },
-          pages: Array
-        };
-      }
-
-      _onSelectedChanged(newValue, oldValue) {
-        if (oldValue !== undefined) {
-          this.$server.navigateTo(this.pages[newValue].link);
-        }
       }
     }
 
