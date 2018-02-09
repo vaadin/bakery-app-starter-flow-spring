@@ -25,19 +25,21 @@ public class AppNavigation extends PolymerTemplate<AppNavigation.Model> implemen
 	public interface Model extends TemplateModel {
 	}
 
-	private String logoutHref;
-	private String defaultHref;
-
 	@Id("tabs")
 	private Tabs tabs;
 
-	private List<String> links = new ArrayList<>();
-	private String current;
+	private List<String> hrefs = new ArrayList<>();
+	private String logoutHref;
+	private String defaultHref;
+	private String currentHref;
 
 	public void init(List<PageInfo> pages, String defaultHref, String logoutHref) {
+		this.logoutHref = logoutHref;
+		this.defaultHref = defaultHref;
+
 		for (PageInfo page : pages) {
 			Tab tab = new Tab(new Div(new IronIcon("vaadin", page.getIcon()), new Span(page.getTitle())));
-			links.add(page.getLink());
+			hrefs.add(page.getLink());
 			tabs.add(tab);
 		}
 
@@ -45,13 +47,14 @@ public class AppNavigation extends PolymerTemplate<AppNavigation.Model> implemen
 	}
 
 	private void navigate() {
-		String href = links.get(tabs.getSelectedIndex());
-		if (href != null && !href.equals(current)) {
+		int idx = tabs.getSelectedIndex();
+		if (idx >= 0 && idx < hrefs.size()) {
+			String href = hrefs.get(idx);
 			if (href.equals(logoutHref)) {
 				// The logout button is a 'normal' URL, not Flow-managed but
 				// handled by Spring Security.
 				UI.getCurrent().getPage().executeJavaScript("location.assign('logout')");
-			} else {
+			} else if (!href.equals(currentHref)) {
 				UI.getCurrent().navigateTo(href);
 			}
 		}
@@ -59,9 +62,9 @@ public class AppNavigation extends PolymerTemplate<AppNavigation.Model> implemen
 
 	@Override
 	public void afterNavigation(AfterNavigationEvent event) {
-		String path = event.getLocation().getFirstSegment().isEmpty() ? defaultHref
+		String href = event.getLocation().getFirstSegment().isEmpty() ? defaultHref
 				: event.getLocation().getFirstSegment();
-		current = path;
-		tabs.setSelectedIndex(links.indexOf(path));
+		currentHref = href;
+		tabs.setSelectedIndex(hrefs.indexOf(href));
 	}
 }
