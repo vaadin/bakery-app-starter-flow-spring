@@ -32,6 +32,7 @@ public class AppNavigation extends PolymerTemplate<AppNavigation.Model> implemen
 	private Tabs tabs;
 
 	private List<String> links = new ArrayList<>();
+	private String current;
 
 	public void init(List<PageInfo> pages, String defaultHref, String logoutHref) {
 		for (PageInfo page : pages) {
@@ -45,7 +46,7 @@ public class AppNavigation extends PolymerTemplate<AppNavigation.Model> implemen
 
 	private void navigate() {
 		String href = links.get(tabs.getSelectedIndex());
-		if (href != null) {
+		if (href != null && !href.equals(current)) {
 			if (href.equals(logoutHref)) {
 				// The logout button is a 'normal' URL, not Flow-managed but
 				// handled by Spring Security.
@@ -60,6 +61,7 @@ public class AppNavigation extends PolymerTemplate<AppNavigation.Model> implemen
 	public void afterNavigation(AfterNavigationEvent event) {
 		String path = event.getLocation().getFirstSegment().isEmpty() ? defaultHref
 				: event.getLocation().getFirstSegment();
+		current = path;
 		tabs.setSelectedIndex(links.indexOf(path));
 	}
 }
