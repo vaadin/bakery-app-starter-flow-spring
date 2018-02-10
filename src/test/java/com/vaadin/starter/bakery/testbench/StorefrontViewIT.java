@@ -4,12 +4,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.vaadin.flow.component.button.testbench.ButtonElement;
-import com.vaadin.flow.component.grid.testbench.GridElement;
-import com.vaadin.flow.component.html.testbench.H2Element;
 import com.vaadin.starter.bakery.testbench.elements.components.OrderCardElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement;
-
-import static org.hamcrest.CoreMatchers.endsWith;
+import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement.OrderEditorElement;
 
 public class StorefrontViewIT extends AbstractIT {
 
@@ -23,11 +20,19 @@ public class StorefrontViewIT extends AbstractIT {
 
 		OrderCardElement firstOrder = storefrontPage.getOrderCard(0);
 		Assert.assertNotNull(firstOrder);
+		int initialCount = Integer.parseInt(firstOrder.getGoodsCount(0));
+
 		firstOrder.click();
 		ButtonElement editBtn = storefrontPage.getOrderDetails().getEditButton();
 		editBtn.click();
 
-		Assert.assertTrue(storefrontPage.orderFormExists());
+		OrderEditorElement orderEditor = storefrontPage.getOrderEditor();
+		orderEditor.getOrderItemEditor(0).clickAmountFieldPlus(0);
+		orderEditor.review();
+		storefrontPage.getOrderDetails().getSaveButton().click();
+
+		int currentCount = Integer.parseInt(storefrontPage.getOrderCard(0).getGoodsCount(0));
+		Assert.assertEquals(initialCount + 1, currentCount);
 	}
 
 }

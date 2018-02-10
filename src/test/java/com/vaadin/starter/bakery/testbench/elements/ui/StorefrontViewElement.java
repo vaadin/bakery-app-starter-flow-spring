@@ -1,5 +1,6 @@
 package com.vaadin.starter.bakery.testbench.elements.ui;
 
+import com.vaadin.flow.component.button.testbench.ButtonElement;
 import com.vaadin.flow.component.grid.testbench.GridElement;
 import com.vaadin.starter.bakery.testbench.elements.components.OrderCardElement;
 import com.vaadin.starter.bakery.testbench.elements.components.OrderDetailsFullElement;
@@ -11,6 +12,13 @@ public class StorefrontViewElement extends TestBenchElement implements HasApp, H
 
 	@Element("order-editor")
 	public static class OrderEditorElement extends TestBenchElement {
+		public OrderItemEditorElement getOrderItemEditor(int index) {
+			return $(OrderItemEditorElement.class).get(index);
+		}
+
+		public void review() {
+			$(ButtonElement.class).id("review").click();
+		}
 	}
 
 	@Override
@@ -38,9 +46,5 @@ public class StorefrontViewElement extends TestBenchElement implements HasApp, H
 
 	public OrderDetailsFullElement getOrderDetails() {
 		return getDialog().$(OrderDetailsFullElement.class).first();
-	}
-
-	public boolean orderFormExists() {
-		return getDialog().$(OrderEditorElement.class).exists();
 	}
 }

@@ -15,4 +15,8 @@ public class OrderDetailsFullElement extends TestBenchElement {
 		return $(ButtonElement.class).id("edit");
 	}
 
+	public ButtonElement getSaveButton() {
+		return $(ButtonElement.class).id("save");
+	}
+
 }

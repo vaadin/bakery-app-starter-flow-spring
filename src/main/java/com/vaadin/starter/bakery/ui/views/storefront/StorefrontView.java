@@ -16,8 +16,6 @@ import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.data.selection.SelectionEvent;
 import com.vaadin.flow.renderer.ComponentTemplateRenderer;
 import com.vaadin.flow.router.BeforeEvent;
-import com.vaadin.flow.router.BeforeLeaveEvent;
-import com.vaadin.flow.router.BeforeLeaveObserver;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.PageTitle;
