@@ -20,8 +20,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Dependencies -->
-        <vaadin.version>10.0.0.alpha17</vaadin.version>
-        <testbench.version>6.0.0.alpha9</testbench.version>
+        <vaadin.version>10.0.0.alpha18</vaadin.version>
 
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Overrides the old version specified by the Spring Boot parent -->
@@ -50,7 +49,7 @@
         </repository>
 
         <repository>
-            <id>bintray</id>
+            <id>webjars-bintray</id>
             <url>https://dl.bintray.com/webjars/maven/</url>
         </repository>
 
@@ -64,11 +63,7 @@
         </repository>
 
         <repository>
-            <id>vaadin-addons</id>
-            <url>http://maven.vaadin.com/vaadin-addons</url>
-        </repository>
-
-        <repository>
+            <!-- for org.vaadin.artur:spring-data-provider -->
             <id>vaadin-tools</id>
             <url>https://tools.vaadin.com/nexus/content/repositories/vaadin-addons</url>
         </repository>
@@ -93,11 +88,6 @@
                 <version>${vaadin.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.vaadin</groupId>
-                <artifactId>vaadin</artifactId>
-                <version>${vaadin.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -138,8 +128,8 @@
             <artifactId>spring-data-provider</artifactId>
             <version>2.0.0.alpha3</version>
         </dependency>
-
         <!-- End of Vaadin -->
+
         <!-- Iron and paper elements -->
         <dependency>
             <groupId>org.webjars.bowergithub.polymerelements</groupId>
@@ -210,19 +200,17 @@
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-testbench-core</artifactId>
             <scope>test</scope>
-            <version>${testbench.version}</version>
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-components-testbench</artifactId>
             <scope>test</scope>
-            <version>1.0.0.alpha1</version>
         </dependency>
     </dependencies>
 
 
     <build>
-        <!-- The `pluginManagement` section allows listing plugin versions and other global
+        <!-- The `pluginManagement` section allows listing plugin versions and their global
              configuration in one place. -->
         <pluginManagement>
             <plugins>
@@ -230,6 +218,18 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-clean-plugin</artifactId>
                     <version>${maven.clean.plugin.version}</version>
+                    <!-- Clean up the flow-maven-plugin build output from the
+                         webapp folder where it's copied to for spring-boot:run -->
+                    <configuration>
+                        <filesets>
+                            <fileset>
+                                <directory>${webapp.directory}/frontend-es5</directory>
+                            </fileset>
+                            <fileset>
+                                <directory>${webapp.directory}/frontend-es6</directory>
+                            </fileset>
+                        </filesets>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -255,30 +255,10 @@
                         <yarnVersion>${yarn.version}</yarnVersion>
                     </configuration>
                 </plugin>
-                <plugin>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-maven-plugin</artifactId>
-                </plugin>
             </plugins>
         </pluginManagement>
 
         <plugins>
-            <!-- (1): Clean up the flow-maven-plugin build output from the
-                  webapp folder where it's copied to for spring-boot:run -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-clean-plugin</artifactId>
-                <configuration>
-                    <filesets>
-                        <fileset>
-                            <directory>${webapp.directory}/frontend-es5</directory>
-                        </fileset>
-                        <fileset>
-                            <directory>${webapp.directory}/frontend-es6</directory>
-                        </fileset>
-                    </filesets>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -295,7 +275,7 @@
                 </property>
             </activation>
 
-            <!-- (2): Make the package run in production mode when deployed as .war,
+            <!-- (1): Make the package run in production mode when deployed as .war,
                       without the need of setting extra properties on the server -->
             <dependencies>
                 <dependency>
@@ -306,7 +286,7 @@
 
             <build>
                 <plugins>
-                    <!-- (3): Run flow-maven-plugin to transpile and optimize frontend code -->
+                    <!-- (2): Run flow-maven-plugin to transpile and optimize frontend code -->
                     <plugin>
                         <groupId>com.vaadin</groupId>
                         <artifactId>flow-maven-plugin</artifactId>
@@ -320,7 +300,7 @@
                         </executions>
                     </plugin>
 
-                    <!-- (4): Copy the output of flow-maven-plugin into the webapp folder,
+                    <!-- (3): Copy the output of flow-maven-plugin into the webapp folder,
                          which is the root of the servlet context if the app starts via spring-boot:run -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -348,7 +328,7 @@
                         </executions>
                     </plugin>
 
-                    <!-- (5): Exclude the unprocessed frontend sources from the .war file -->
+                    <!-- (4): Exclude the unprocessed frontend sources from the .war file -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
@@ -357,7 +337,7 @@
                         </configuration>
                     </plugin>
 
-                    <!-- (6): Pass the 'production mode' setting to the spring boot app.
+                    <!-- (5): Pass the 'production mode' setting to the spring boot app.
                          NOTE: This forks the JVM. If there is a need to debug the production mode,
                                remove the jvmArguments parameter from pom.xml and add
                                '-Dvaadin.productionMode' to the `mvn spring-boot:run` command line -->
