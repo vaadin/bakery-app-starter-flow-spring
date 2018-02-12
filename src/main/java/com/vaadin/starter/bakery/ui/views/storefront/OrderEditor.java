@@ -1,7 +1,6 @@
 package com.vaadin.starter.bakery.ui.views.storefront;
 
 import static com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil.createItemLabelGenerator;
-import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
 import java.time.LocalTime;
 import java.util.SortedSet;
@@ -19,6 +18,7 @@ import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
@@ -86,6 +86,9 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 	@Id("review")
 	private Button review;
 
+	@Id("itemsContainer")
+	private Div itemsContainer;
+
 	private OrderItemsEditor items;
 
 	private User currentUser;
@@ -97,7 +100,8 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 	@Autowired
 	public OrderEditor(PickupLocationDataProvider locationProvider, ProductDataProvider productDataProvider) {
 		items = new OrderItemsEditor(productDataProvider);
-		addToSlot(this, "order-items-editor", items);
+
+		itemsContainer.add(items);
 
 		cancel.addClickListener(e -> fireEvent(new CancelEvent(this, false)));
 		review.addClickListener(e -> fireEvent(new ReviewEvent(this)));
