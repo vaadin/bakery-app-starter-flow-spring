@@ -1,12 +1,18 @@
 package com.vaadin.starter.bakery.ui.components;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import com.vaadin.flow.component.ClientDelegate;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.IronIcon;
+import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
+import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.templatemodel.TemplateModel;
@@ -14,45 +20,48 @@ import com.vaadin.starter.bakery.ui.entities.PageInfo;
 
 @Tag("app-navigation")
 @HtmlImport("src/components/app-navigation.html")
-public class AppNavigation extends PolymerTemplate<AppNavigation.Model> implements AfterNavigationObserver {
+public class AppNavigation extends PolymerTemplate<TemplateModel> implements AfterNavigationObserver {
 
-	public interface Model extends TemplateModel {
-		void setPageNumber(int page);
+	@Id("tabs")
+	private Tabs tabs;
 
-		void setPages(List<PageInfo> pages);
-	}
-
-	private List<PageInfo> pages;
+	private List<String> hrefs = new ArrayList<>();
 	private String logoutHref;
 	private String defaultHref;
+	private String currentHref;
 
 	public void init(List<PageInfo> pages, String defaultHref, String logoutHref) {
-		this.pages = pages;
-		this.defaultHref = defaultHref;
 		this.logoutHref = logoutHref;
-		getModel().setPages(pages);
+		this.defaultHref = defaultHref;
+
+		for (PageInfo page : pages) {
+			Tab tab = new Tab(new Div(new IronIcon("vaadin", page.getIcon()), new Span(page.getTitle())));
+			hrefs.add(page.getLink());
+			tabs.add(tab);
+		}
+
+		tabs.addSelectedChangeListener(e -> navigate());
 	}
 
-	@ClientDelegate
-	private void navigateTo(String href) {
-		if (href.equals(logoutHref)) {
-			// The logout button is a 'normal' URL, not Flow-managed but
-			// handled by Spring Security.
-			UI.getCurrent().getPage().executeJavaScript("location.assign('logout')");
-		} else {
-			UI.getCurrent().navigateTo(href);
+	private void navigate() {
+		int idx = tabs.getSelectedIndex();
+		if (idx >= 0 && idx < hrefs.size()) {
+			String href = hrefs.get(idx);
+			if (href.equals(logoutHref)) {
+				// The logout button is a 'normal' URL, not Flow-managed but
+				// handled by Spring Security.
+				UI.getCurrent().getPage().executeJavaScript("location.assign('logout')");
+			} else if (!href.equals(currentHref)) {
+				UI.getCurrent().navigateTo(href);
+			}
 		}
 	}
 
 	@Override
 	public void afterNavigation(AfterNavigationEvent event) {
-		String currentPath = event.getLocation().getFirstSegment().isEmpty() ? defaultHref
+		String href = event.getLocation().getFirstSegment().isEmpty() ? defaultHref
 				: event.getLocation().getFirstSegment();
-
-		for (int i = 0; i < pages.size(); i++) {
-			if (pages.get(i).getLink().equals(currentPath)) {
-				this.getModel().setPageNumber(i);
-			}
-		}
+		currentHref = href;
+		tabs.setSelectedIndex(hrefs.indexOf(href));
 	}
 }

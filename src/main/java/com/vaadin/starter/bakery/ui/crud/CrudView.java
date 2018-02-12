@@ -51,11 +51,14 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 	public CrudView(String entityName) {
 		this.entityName = entityName;
 	}
-	
+
+
 	public void setupEventListeners() {
 		getGrid().addSelectionListener(e -> {
-			e.getFirstSelectedItem().ifPresent(entity -> navigateToEntity(entity.getId().toString()));
-			getGrid().deselectAll();
+			e.getFirstSelectedItem().ifPresent(entity -> {
+				navigateToEntity(entity.getId().toString());
+				getGrid().deselectAll();
+			});
 		});
 
 		getForm().getButtons().addSaveListener(e -> getPresenter().save());
