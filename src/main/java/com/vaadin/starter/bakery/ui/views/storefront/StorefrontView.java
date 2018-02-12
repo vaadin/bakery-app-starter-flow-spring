@@ -116,7 +116,7 @@ public class StorefrontView extends PolymerTemplate<StorefrontView.Model>
 		getOpenedOrderDetails().addCancelListener(e -> presenter.cancel());
 
 		dialog.getElement().addEventListener("opened-changed", e -> {
-			if (!dialog.isOpened() && this.isDirty()) {
+			if (!dialog.isOpened()) {
 				// Handle client-side closing dialog on escape
 				presenter.cancel();
 			} else {
