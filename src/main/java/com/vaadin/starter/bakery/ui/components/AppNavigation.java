@@ -20,10 +20,7 @@ import com.vaadin.starter.bakery.ui.entities.PageInfo;
 
 @Tag("app-navigation")
 @HtmlImport("src/components/app-navigation.html")
-public class AppNavigation extends PolymerTemplate<AppNavigation.Model> implements AfterNavigationObserver {
-
-	public interface Model extends TemplateModel {
-	}
+public class AppNavigation extends PolymerTemplate<TemplateModel> implements AfterNavigationObserver {
 
 	@Id("tabs")
 	private Tabs tabs;
