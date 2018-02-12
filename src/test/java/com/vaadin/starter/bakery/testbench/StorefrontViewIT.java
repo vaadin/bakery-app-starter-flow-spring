@@ -24,7 +24,7 @@ public class StorefrontViewIT extends AbstractIT {
 
 		firstOrder.click();
 		ButtonElement editBtn = storefrontPage.getOrderDetails().getEditButton();
-		editBtn.click();
+		editBtn.getWrappedElement().click();
 
 		OrderEditorElement orderEditor = storefrontPage.getOrderEditor();
 		orderEditor.getOrderItemEditor(0).clickAmountFieldPlus(0);
