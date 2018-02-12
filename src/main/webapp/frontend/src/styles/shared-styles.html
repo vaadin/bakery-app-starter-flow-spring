@@ -1,3 +1,73 @@
+<!-- Themes for dialogs -->
+<dom-module id="bakery-dialog-overlay-theme" theme-for="vaadin-dialog-overlay">
+  <template>
+    <style>
+      :host {
+        padding: var(--lumo-space-xs);
+      }
+
+      [part="overlay"] {
+        overflow: hidden;
+        max-width: 65em;
+        display: flex;
+        animation: none !important;
+      }
+
+      [part="content"] {
+        width: 100%;
+        box-sizing: border-box;
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+      }
+
+      :host([theme="left"]) {
+        align-items: flex-start;
+      }
+
+      :host([theme$="right"]) {
+        align-items: flex-end;
+      }
+
+      :host([theme="left"]) [part="overlay"],
+      :host([theme="right"]) [part="overlay"] {
+        flex: 1;
+        max-width: 45em;
+      }
+
+      :host([theme="top-right"]) [part="overlay"] {
+        position: absolute;
+        top: var(--lumo-space-xs);
+      }
+
+      @media (max-width: 600px) {
+        :host([theme]) {
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          padding: 0;
+        }
+
+        :host([theme]) [part="overlay"] {
+          flex: 1;
+          width: 100%;
+          border-radius: 0 !important;
+        }
+      }
+
+      flow-component-renderer,
+      flow-component-renderer > div,
+      flow-component-renderer > div > * {
+        display: flex;
+        flex-direction: column;
+        flex: auto;
+      }
+    </style>
+  </template>
+</dom-module>
+
 <!-- Theme for the status selector, we need to theme the text-field instead of the combo-box -->
 <dom-module id="bakery-text-field-theme" theme-for="vaadin-text-field">
   <template>
@@ -55,23 +125,23 @@
       }
 
       /* a special grid theme for the bakery storefront view */
-      :host([theme~="storefront-grid"]) {
+      :host([theme~="storefront"]) {
         background: transparent;
       }
 
-      :host([theme~="storefront-grid"]) [part~="cell"]:not(:empty):not([details-cell]) {
+      :host([theme~="storefront"]) [part~="cell"]:not(:empty):not([details-cell]) {
         padding: 0;
       }
 
-      :host([theme~="storefront-grid"]) [part~="row"][selected] [part~="cell"] {
+      :host([theme~="storefront"]) [part~="row"][selected] [part~="cell"] {
         background: transparent !important;
       }
 
-      :host([theme~="storefront-grid"]) [part~="body-cell"] {
+      :host([theme~="storefront"]) [part~="body-cell"] {
         background: transparent;
       }
 
-      :host([theme~="crud-grid"]) {
+      :host([theme~="crud"]) {
         max-width: calc(964px + var(--lumo-space-m));
         background-color: var(--lumo-base-color);
       }

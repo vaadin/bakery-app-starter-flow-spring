@@ -9,6 +9,10 @@ import com.vaadin.testbench.elementsbase.Element;
 @Element("users-view")
 public class UsersViewElement extends TestBenchElement implements HasCrudView {
 
+	@Element("user-form")
+	public static class UserFormElement extends TestBenchElement {
+	}
+
 	@Override
 	public GridElement getGrid() {
 		return $(GridElement.class).waitForFirst();
@@ -20,5 +24,11 @@ public class UsersViewElement extends TestBenchElement implements HasCrudView {
 
 	public PasswordFieldElement getPasswordField() {
 		return getForm().$(PasswordFieldElement.class).id("password");
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Class<UserFormElement> getFormClass() {
+		return UserFormElement.class;
 	}
 }

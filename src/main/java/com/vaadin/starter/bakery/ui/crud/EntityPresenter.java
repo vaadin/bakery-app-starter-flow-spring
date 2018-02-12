@@ -45,7 +45,7 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 		confirmIfNecessaryAndExecute(true, CONFIRM_DELETE, () -> {
 			executeOperation(() -> crudService.delete(currentUser, entity));
 			onSuccess.execute(entity);
-			entity = null;
+		}, () -> {
 		});
 	}
 
@@ -102,17 +102,22 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 
 	public void close() {
 		this.entity = null;
+		view.clear();
 	}
 
-	public void cancel(Runnable onConfirmed) {
-		confirmIfNecessaryAndExecute(view.isDirty(), Message.UNSAVED_CHANGES.createMessage(entityName), onConfirmed);
+	public void cancel(Runnable onConfirmed, Runnable onCancelled) {
+		confirmIfNecessaryAndExecute(view.isDirty(), Message.UNSAVED_CHANGES.createMessage(entityName), () -> {
+			view.clear();
+			onConfirmed.run();
+		}, onCancelled);
 	}
 
-	private void confirmIfNecessaryAndExecute(boolean needsConfirmation, Message message, Runnable operation) {
+	private void confirmIfNecessaryAndExecute(boolean needsConfirmation, Message message, Runnable onConfirmed,
+			Runnable onCancelled) {
 		if (needsConfirmation) {
-			view.showConfirmationRequest(message, operation);
+			view.showConfirmationRequest(message, onConfirmed, onCancelled);
 		} else {
-			operation.run();
+			onConfirmed.run();
 		}
 	}
 
@@ -134,7 +139,6 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 
 	@FunctionalInterface
 	public interface CrudOperationListener<T> {
-
 		void execute(T entity);
 	}
 }

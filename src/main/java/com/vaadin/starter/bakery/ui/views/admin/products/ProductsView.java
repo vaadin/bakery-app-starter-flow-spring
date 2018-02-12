@@ -2,20 +2,14 @@ package com.vaadin.starter.bakery.ui.views.admin.products;
 
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_PRODUCTS;
 
-import java.util.Currency;
-
-import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 
-import com.vaadin.flow.component.HasText;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.polymertemplate.Id;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -24,8 +18,6 @@ import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.util.EntityUtil;
 import com.vaadin.starter.bakery.ui.MainView;
-import com.vaadin.starter.bakery.ui.components.FormButtonsBar;
-import com.vaadin.starter.bakery.ui.components.FormDialog;
 import com.vaadin.starter.bakery.ui.components.SearchBar;
 import com.vaadin.starter.bakery.ui.crud.CrudView;
 import com.vaadin.starter.bakery.ui.crud.DefaultEntityPresenter;
@@ -39,30 +31,20 @@ import com.vaadin.starter.bakery.ui.utils.converters.CurrencyFormatter;
 @Secured(Role.ADMIN)
 public class ProductsView extends CrudView<Product, TemplateModel>  {
 
-	@Id("searchBar")
-	private SearchBar searchbar;
+	@Id("search")
+	private SearchBar search;
 
 	@Id("grid")
 	private Grid<Product> grid;
 
 	@Id("dialog")
-	private FormDialog dialog;
+	private Dialog dialog;
 
-	@Id("buttons")
-	private FormButtonsBar buttons;
+	private ProductForm form = new ProductForm();
 
 	private DefaultEntityPresenter<Product> presenter;
 
 	private final BeanValidationBinder<Product> binder = new BeanValidationBinder<>(Product.class);
-
-	@Id("title")
-	private H3 title;
-
-	@Id("name")
-	private TextField name;
-
-	@Id("price")
-	private TextField price;
 
 	private CurrencyFormatter currencyFormatter = new CurrencyFormatter();
 
@@ -70,13 +52,10 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 	public ProductsView(DefaultEntityPresenter<Product> presenter) {
 		super(EntityUtil.getName(Product.class));
 		this.presenter = presenter;
+		form.setBinder(binder);
+		dialog.add(form);
 		setupEventListeners();
 		setupGrid();
-
-		binder.bind(name, "name");
-		binder.forField(price).withConverter(new PriceConverter()).bind("price");
-		TemplateUtil.addToSlot(price, new Span(Currency.getInstance(BakeryConst.APP_LOCALE).getSymbol()), "prefix");
-
 		presenter.init(this);
 	}
 
@@ -107,23 +86,19 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 		return binder;
 	}
 
-	@Override
-	protected FormButtonsBar getButtons() {
-		return buttons;
-	}
 
 	@Override
-	protected FormDialog getDialog() {
+	protected Dialog getDialog() {
 		return dialog;
 	}
 
 	@Override
 	protected SearchBar getSearchBar() {
-		return searchbar;
+		return search;
 	}
 
 	@Override
-	protected HasText getTitle() {
-		return title;
+	protected CrudForm<Product> getForm() {
+		return form;
 	}
 }

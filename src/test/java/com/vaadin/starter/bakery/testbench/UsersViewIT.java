@@ -26,14 +26,14 @@ public class UsersViewIT extends AbstractIT {
 	public void updatePassword() {
 		UsersViewElement usersView = openTestPage();
 
-		Assert.assertFalse(usersView.getFormDialog().isOpen());
+		Assert.assertFalse(usersView.getDialog().isOpen());
 
 		WebElement bakerCell = usersView.getGrid().getCell("baker@vaadin.com");
 		Assert.assertNotNull(bakerCell);
 
 		bakerCell.click();
 
-		Assert.assertTrue(usersView.getFormDialog().isOpen());
+		Assert.assertTrue(usersView.getDialog().isOpen());
 
 		FormLayoutElement form = usersView.getForm();
 		Assert.assertTrue(form.isDisplayed());
@@ -47,7 +47,8 @@ public class UsersViewIT extends AbstractIT {
 		emailField.setValue("foo@bar.com");
 		emailField.sendKeys(Keys.TAB);
 		usersView.getButtonsBar().getSaveButton().click();
-		Assert.assertFalse(form.isDisplayed());
+
+		Assert.assertFalse(usersView.getDialog().isOpen());
 
 		// Invalid password prevents closing form
 		bakerCell.click();
@@ -63,7 +64,7 @@ public class UsersViewIT extends AbstractIT {
 		password.setValue("Abc123");
 		password.sendKeys(Keys.TAB);
 		usersView.getButtonsBar().getSaveButton().click();
-		Assert.assertFalse(form.isDisplayed());
+		Assert.assertFalse(usersView.getDialog().isOpen());
 
 		// When reopening the form password field must be empty.
 		bakerCell.click();

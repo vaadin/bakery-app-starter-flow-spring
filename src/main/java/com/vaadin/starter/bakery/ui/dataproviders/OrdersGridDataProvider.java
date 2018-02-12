@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +26,7 @@ import com.vaadin.starter.bakery.ui.views.storefront.OrderFilter;
  * A singleton pageable order data provider.
  */
 @SpringComponent
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class OrdersGridDataProvider extends FilterablePageableDataProvider<Order, OrderFilter> {
 
 	private final OrderService orderService;

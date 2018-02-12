@@ -8,6 +8,10 @@ import com.vaadin.testbench.elementsbase.Element;
 @Element("products-view")
 public class ProductsViewElement extends TestBenchElement implements HasApp, HasCrudView {
 
+	@Element("product-form")
+	public static class ProductFormElement extends TestBenchElement {
+	}
+
 	@Override
 	public GridElement getGrid() {
 		return $(GridElement.class).waitForFirst();
@@ -15,5 +19,11 @@ public class ProductsViewElement extends TestBenchElement implements HasApp, Has
 
 	public TextFieldElement getPrice() {
 		return getForm().$(TextFieldElement.class).id("price");
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Class<ProductFormElement> getFormClass() {
+		return ProductFormElement.class;
 	}
 }

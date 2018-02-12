@@ -2,7 +2,10 @@ package com.vaadin.starter.bakery.testbench;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.openqa.selenium.Keys;
 
+import com.vaadin.flow.component.grid.testbench.GridElement;
+import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.ProductsViewElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement;
 
@@ -17,30 +20,34 @@ public class ProductsViewIT extends AbstractIT {
 	public void editProduct() {
 		ProductsViewElement productsPage = openProductsPage();
 
-		Assert.assertFalse(productsPage.getFormDialog().isOpen());
+		Assert.assertFalse(productsPage.getDialog().isOpen());
 
 		String url = getDriver().getCurrentUrl();
-		productsPage.getGrid().getCell("Strawberry Bun").click();
+		GridElement grid = productsPage.getGrid();
+		grid.getCell("Strawberry Bun").click();
 		Assert.assertTrue(getDriver().getCurrentUrl().length() > url.length());
 
-		Assert.assertTrue(productsPage.getFormDialog().isOpen());
+		Assert.assertTrue(productsPage.getDialog().isOpen());
 
-		String initialValue = productsPage.getPrice().getValue();
+		TextFieldElement price = productsPage.getPrice();
+		String initialValue = price.getValue();
 
-		productsPage.getPrice().setValue("123.45");
-
+		price.focus();
+		price.setValue("123.45");
+		price.sendKeys(Keys.TAB);
 		productsPage.getButtonsBar().getSaveButton().click();
 
-		Assert.assertFalse(productsPage.getFormDialog().isOpen());
+		Assert.assertFalse(productsPage.getDialog().isOpen());
 
 		Assert.assertTrue(getDriver().getCurrentUrl().endsWith("products"));
 
-		productsPage.getGrid().getCell("Strawberry Bun").click();
-		Assert.assertEquals("123.45", productsPage.getPrice().getValue());
+		grid.getCell("Strawberry Bun").click();
+		Assert.assertEquals("123.45", price.getValue());
 
 		// Return initial value
-		productsPage.getPrice().setValue(initialValue);
-
+		price.focus();
+		price.setValue(initialValue);
+		price.sendKeys(Keys.TAB);
 		productsPage.getButtonsBar().getSaveButton().click();
 	}
 

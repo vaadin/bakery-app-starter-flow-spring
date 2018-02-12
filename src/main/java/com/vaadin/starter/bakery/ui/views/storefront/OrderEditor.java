@@ -1,7 +1,6 @@
 package com.vaadin.starter.bakery.ui.views.storefront;
 
 import static com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil.createItemLabelGenerator;
-import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
 import java.time.LocalTime;
 import java.util.SortedSet;
@@ -11,6 +10,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
 import com.vaadin.flow.component.ComponentEventListener;
@@ -18,6 +18,7 @@ import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
@@ -40,24 +41,21 @@ import com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil;
 import com.vaadin.starter.bakery.ui.events.CancelEvent;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.starter.bakery.ui.utils.converters.LocalTimeConverter;
-import com.vaadin.starter.bakery.ui.views.storefront.events.NewEditorEvent;
 import com.vaadin.starter.bakery.ui.views.storefront.events.ReviewEvent;
 import com.vaadin.starter.bakery.ui.views.storefront.events.ValueChangeEvent;
 
 @Tag("order-editor")
 @HtmlImport("src/views/storefront/order-editor.html")
 @SpringComponent
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 
 	public interface Model extends TemplateModel {
-
 		void setOpened(boolean opened);
 
 		void setTotalPrice(String totalPrice);
 
 		void setStatus(String status);
-
 	}
 
 	@Id("title")
@@ -90,6 +88,9 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 	@Id("review")
 	private Button review;
 
+	@Id("itemsContainer")
+	private Div itemsContainer;
+
 	private OrderItemsEditor items;
 
 	private User currentUser;
@@ -101,7 +102,8 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 	@Autowired
 	public OrderEditor(PickupLocationDataProvider locationProvider, ProductDataProvider productDataProvider) {
 		items = new OrderItemsEditor(productDataProvider);
-		addToSlot(this, items, "order-items-editor");
+
+		itemsContainer.add(items);
 
 		cancel.addClickListener(e -> fireEvent(new CancelEvent(this, false)));
 		review.addClickListener(e -> fireEvent(new ReviewEvent(this)));
@@ -148,7 +150,6 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 		items.addPriceChangeListener(e -> setTotalPrice(e.getTotalPrice()));
 
 		items.addListener(ValueChangeEvent.class, e -> review.setEnabled(hasChanges()));
-		items.addListener(NewEditorEvent.class, e -> updateDesktopViewOnItemsEdit());
 		binder.addValueChangeListener(e -> {
 			if (e.getOldValue() != null) {
 				review.setEnabled(hasChanges());
@@ -160,8 +161,9 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 		return binder.hasChanges() || items.hasChanges();
 	}
 
-	private void updateDesktopViewOnItemsEdit() {
-		getElement().callFunction("_updateDesktopViewOnItemsEdit");
+	public void clear() {
+		binder.readBean(null);
+		items.setValue(null);
 	}
 
 	public void close() {
@@ -181,7 +183,6 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 		}
 
 		review.setEnabled(false);
-		updateDesktopViewOnItemsEdit();
 	}
 
 	public Stream<HasValue<?, ?>> validate() {

@@ -55,11 +55,14 @@ public class CustomBootstrapListener implements BootstrapListener {
 	}
 
 	private void injectInlineCustomStyles(Element head) {
+		// needs to be a <custom-style> because IE11 does not understand CSS Custom Properties
 		head.append("<!-- Add any global styles for body, document, etc. -->\n" +
-				"    <style>\n" +
-				"      body {\n" +
-				"        background: var(--lumo-shade-5pct);\n" +
-				"      }\n" +
-				"    </style>");
+				"    <custom-style>\n" +
+				"      <style is=\"custom-style\">\n" +
+				"        body {\n" +
+				"          background-color: var(--lumo-shade-5pct);\n" +
+				"        }\n" +
+				"      </style>\n" +
+				"    </custom-style>");
 	}
 }
