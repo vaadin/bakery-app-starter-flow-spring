@@ -61,9 +61,9 @@ class OrderPresenter {
 		dataProvider.setFilter(new OrderFilter(filter, showPrevious));
 	}
 
-	void onNavigation(Long id, boolean edit) {
+	void onNavigation(Long id) {
 		createNew = false;
-		entityPresenter.loadEntity(id, e -> open(e, edit));
+		entityPresenter.loadEntity(id, e -> open(e, false));
 	}
 
 	void createNewOrder() {
@@ -76,19 +76,19 @@ class OrderPresenter {
 	}
 
 	void edit() {
-		setElementsVisibility(true);
+		view.setDialogElementsVisibility(true);
 		view.getOpenedOrderEditor().read(entityPresenter.getEntity());
 	}
 
 	void back() {
-		setElementsVisibility(true);
+		view.setDialogElementsVisibility(true);
 	}
 
 	void review() {
 		HasValue<?, ?> firstErrorField = view.validate().findFirst().orElse(null);
 		if (firstErrorField == null) {
 			if (entityPresenter.writeEntity()) {
-				setElementsVisibility(false);
+				view.setDialogElementsVisibility(false);
 				view.getOpenedOrderDetails().display(entityPresenter.getEntity(), true);
 			}
 		} else if (firstErrorField instanceof Focusable) {
@@ -108,18 +108,14 @@ class OrderPresenter {
 	}
 
 	private void open(Order order, boolean edit) {
+		view.setDialogElementsVisibility(edit);
 		view.setOpened(true);
-		setElementsVisibility(edit);
+
 		if (edit) {
 			view.getOpenedOrderEditor().read(order);
 		} else {
 			view.getOpenedOrderDetails().display(order, false);
 		}
-	}
-
-	private void setElementsVisibility(boolean editing) {
-		view.getOpenedOrderDetails().setVisible(!editing);
-		view.getOpenedOrderEditor().setVisible(editing);
 	}
 
 	private void close(boolean updated) {
