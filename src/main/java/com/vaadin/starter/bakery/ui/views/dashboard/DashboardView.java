@@ -96,7 +96,6 @@ public class DashboardView extends PolymerTemplate<TemplateModel> {
 		grid.addColumn(new ComponentTemplateRenderer<>(order -> {
 			OrderCard orderCard = new OrderCard();
 			orderCard.setOrder(order);
-			orderCard.setHeader(null);
 			orderCard.getElement().getClassList().add(BakeryConst.DASHBOARD_ORDER_CARD_STYLE);
 			return orderCard;
 		}));

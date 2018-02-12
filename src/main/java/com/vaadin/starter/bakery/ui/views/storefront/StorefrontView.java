@@ -106,13 +106,6 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 		}
 	}
 
-	void navigateToEntity(String id, boolean edit) {
-		final String page = TemplateUtil.generateLocation(BakeryConst.PAGE_STOREFRONT, id);
-		final QueryParameters parameters = edit ? QueryParameters.simple(Collections.singletonMap("edit", ""))
-				: QueryParameters.empty();
-		getUI().ifPresent(ui -> ui.navigateTo(page, parameters));
-	}
-
 	void navigateToMainView() {
 		getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT));
 	}

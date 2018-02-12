@@ -61,22 +61,13 @@ class OrderPresenter {
 		dataProvider.setFilter(new OrderFilter(filter, showPrevious));
 	}
 
-	void onOrderCardExpanded(OrderCard orderCard) {
-		entityPresenter.loadEntity(orderCard.getOrderId(), entity -> {
-			final Long id = entity.getId();
-			navigateToOrder(id, false);
-		});
-	}
-
 	void onNavigation(Long id, boolean edit) {
+		createNew = false;
 		entityPresenter.loadEntity(id, e -> open(e, edit));
 	}
 
-	void navigateToOrder(Long id, boolean edit) {
-		view.navigateToEntity(id.toString(), edit);
-	}
-
 	void createNewOrder() {
+		createNew = true;
 		open(entityPresenter.createNew(), true);
 	}
 	
@@ -134,7 +125,8 @@ class OrderPresenter {
 	private void close(boolean updated) {
 		view.getOpenedOrderEditor().close();
 		view.setOpened(false);
-			
+
+
 		if (createNew) {
 			dataProvider.refreshAll();
 		} else {

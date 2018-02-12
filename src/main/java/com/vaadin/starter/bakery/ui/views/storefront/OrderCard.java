@@ -28,9 +28,7 @@ import com.vaadin.starter.bakery.ui.utils.converters.LongToStringConverter;
 import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
 
 /**
- * The component for expandable order cards for the list on the Storefront view.
- * When collapsed the order card shows brief order details, and switches to full
- * order details when expanded.
+ * The component displaying order cards for the list on the Storefront and Dashboard views.
  * <p>
  * In addition, it includes an optional header above the order card. It is used
  * to visually separate orders into groups. Technically all order cards are
