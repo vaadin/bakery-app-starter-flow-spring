@@ -1,7 +1,5 @@
 package com.vaadin.starter.bakery.backend.data.entity;
 
-import java.util.Objects;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.Email;
@@ -42,20 +40,6 @@ public class User extends AbstractEntity {
 
 	public User() {
 		// An empty constructor is needed for all beans
-	}
-
-	public User(String email, String firstName, String lastName, String password, String role) {
-		Objects.requireNonNull(email);
-		Objects.requireNonNull(firstName);
-		Objects.requireNonNull(lastName);
-		Objects.requireNonNull(password);
-		Objects.requireNonNull(role);
-
-		this.email = email;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.password = password;
-		this.role = role;
 	}
 
 	public String getPassword() {
