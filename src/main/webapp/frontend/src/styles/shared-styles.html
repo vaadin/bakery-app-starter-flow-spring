@@ -141,6 +141,10 @@
         background: transparent;
       }
 
+      :host([theme~="dashboard"]) [part~="cell"] ::slotted(vaadin-grid-cell-content) {
+        padding: 0;
+      }
+
       :host([theme~="crud"]) {
         max-width: calc(964px + var(--lumo-space-m));
         background-color: var(--lumo-base-color);
