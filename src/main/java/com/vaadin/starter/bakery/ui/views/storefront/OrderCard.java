@@ -22,7 +22,6 @@ import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.templatemodel.Convert;
 import com.vaadin.flow.templatemodel.Include;
 import com.vaadin.flow.templatemodel.TemplateModel;
-import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.OrderSummary;
 import com.vaadin.starter.bakery.ui.utils.converters.LongToStringConverter;
 import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
@@ -50,8 +49,6 @@ public class OrderCard extends PolymerTemplate<OrderCard.Model> {
 		void setItem(OrderSummary order);
 	}
 
-	private Long orderId;
-
 	@Id("timePlace")
 	private Div timePlace;
 
@@ -60,22 +57,9 @@ public class OrderCard extends PolymerTemplate<OrderCard.Model> {
 	}
 
 	public void setOrder(OrderSummary order) {
-		orderId = order.getId();
 		getModel().setItem(order);
 		timePlace.removeAll();
 		createComponents(order).forEach(timePlace::add);
-	}
-
-	public void updateOrder(Order fullOrder) {
-		setOrder(fullOrder);
-	}
-
-	public Long getOrderId() {
-		return orderId;
-	}
-
-	public void openCard(Order fullOrder) {
-		updateOrder(fullOrder);
 	}
 
 	public void setHeader(OrderCardHeader header) {
