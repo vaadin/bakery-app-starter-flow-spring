@@ -5,8 +5,6 @@ import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.polymertemplate.EventHandler;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
-import com.vaadin.flow.templatemodel.AllowClientUpdates;
-import com.vaadin.flow.templatemodel.ClientUpdateMode;
 import com.vaadin.flow.templatemodel.TemplateModel;
 
 @Tag("amount-field")
@@ -17,7 +15,6 @@ public class AmountField extends PolymerTemplate<AmountField.Model> implements H
 
 		void setDisabled(boolean disabled);
 
-		@AllowClientUpdates(ClientUpdateMode.ALLOW)
 		void setValue(Integer value);
 
 		void setPlusEnabled(boolean enabled);

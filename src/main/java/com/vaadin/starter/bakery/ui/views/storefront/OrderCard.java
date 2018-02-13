@@ -1,21 +1,19 @@
 package com.vaadin.starter.bakery.ui.views.storefront;
 
+import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
+
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.shared.Registration;
-import com.vaadin.flow.templatemodel.AllowClientUpdates;
-import com.vaadin.flow.templatemodel.ClientUpdateMode;
 import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.OrderSummary;
 import com.vaadin.starter.bakery.ui.events.CancelEvent;
 import com.vaadin.starter.bakery.ui.views.storefront.events.CommentEvent;
 import com.vaadin.starter.bakery.ui.views.storefront.events.EditEvent;
-
-import static com.vaadin.starter.bakery.ui.utils.TemplateUtil.addToSlot;
 
 /**
  * The component for expandable order cards for the list on the Storefront view.
@@ -34,7 +32,6 @@ public class OrderCard extends PolymerTemplate<OrderCard.Model> {
 	public interface Model extends TemplateModel {
 		void setSelected(boolean selected);
 
-		@AllowClientUpdates(ClientUpdateMode.ALLOW)
 		void setHeader(OrderCardHeader header);
 		void setDisplayHeader(boolean displayHeader);
 	}
