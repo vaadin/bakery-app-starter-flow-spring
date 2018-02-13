@@ -1,6 +1,6 @@
 <link rel="import" href="../../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../../styles/shared-styles.html">
+<link rel="import" href="order-status-badge.html">
 
 <dom-module id="order-card">
   <template>
@@ -16,7 +16,7 @@
         margin-right: auto;
       }
 
-      #wrapper {
+      .wrapper {
         background: var(--lumo-base-color);
         background-image: linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
         box-shadow: 0 3px 5px var(--lumo-shade-10pct);
@@ -24,6 +24,7 @@
         display: flex;
         padding: var(--lumo-space-l);
         cursor: pointer;
+        border-radius: var(--lumo-border-radius);
       }
 
       .main {
@@ -41,7 +42,8 @@
       }
 
       #infoWrapper {
-        flex-direction: column;
+        flex-direction: column-reverse;
+        justify-content: flex-end;
       }
 
       order-status-badge {
@@ -95,10 +97,19 @@
         flex: auto;
       }
 
+      @media (min-width: 600px) {
+        #infoWrapper {
+          flex-direction: row;
+        }
+
+        order-status-badge {
+          margin: 0;
+        }
+      }
+
       :host(.storefront-order-card) .content {
         max-width: 964px;
       }
-
     </style>
 
     <div class="content">
@@ -107,10 +118,10 @@
         <span class="secondary">[[header.secondary]]</span>
       </div>
 
-      <div id="wrapper">
+      <div class="wrapper">
         <div id="infoWrapper" class="flex">
-          <div id="timePlace"></div>
           <order-status-badge status="[[item.state]]"></order-status-badge>
+          <div id="timePlace"></div>
         </div>
         <div id="nameItems">
           <h3 id="name">[[item.customer.fullName]]</h3>
@@ -125,7 +136,6 @@
         </div>
       </div>
     </div>
-
   </template>
 
   <script>
@@ -136,8 +146,6 @@
 
       static get properties() {
         return {
-          displayHeader: Boolean,
-          header: Object,
           item: {
             type: Object
           }
