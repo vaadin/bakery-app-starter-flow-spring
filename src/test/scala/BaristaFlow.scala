@@ -7,8 +7,33 @@ import io.gatling.jdbc.Predef._
 
 class BaristaFlow extends Simulation {
 
+	def toInt(s: String): Option[Int] = {
+		try {
+			Some(s.toInt)
+		} catch {
+			case _: NumberFormatException => None
+		}
+	}
+
+	// The URL of the system under test
+	val baseUrl: String = System.getProperty("gatling.baseUrl", "http://localhost:8080")
+
+	// The total number of simulated user sessions
+	// NOTE: the number of concurrent sessions is lower because sessions start one by one
+	// with a given interval and some may finish before the last session starts.
+	val sessionCount: Int = toInt(System.getProperty("gatling.sessionCount", "")) match {
+		case Some(n) => n
+		case None => 100 // the default
+	}
+
+	// The interval (in milliseconds) between starting new user sessions
+	val sessionStartInterval: Int = toInt(System.getProperty("gatling.sessionStartInterval", "")) match {
+		case Some(n) => n
+		case None => 100 // the default
+	}
+
 	val httpProtocol = http
-		.baseURL("http://localhost:8080")
+		.baseURL(baseUrl)
 		.acceptHeader("*/*")
 		.acceptEncodingHeader("gzip, deflate")
 		.acceptLanguageHeader("en-US,en;q=0.5")
@@ -252,5 +277,5 @@ class BaristaFlow extends Simulation {
 //			.check(syncIdExtract).check(clientIdExtract))
 //		.pause(6)
 
-	setUp(scn.inject(rampUsers(1) over (1))).protocols(httpProtocol)
+	setUp(scn.inject(rampUsers(sessionCount) over sessionStartInterval)).protocols(httpProtocol)
 }

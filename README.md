@@ -76,29 +76,38 @@ before running in the other mode.
 
 # Running Scalability Tests
 
-Scalability tests can be run as follows
+The Bakery App Starter includes scalability tests. Once you have deployed a production build of Bakery you can run them to check how the app behaves under load. The scalability tests can be run completely on your local machine, but you might as well want to run locally only the test agents while the Bakery app under test is deployed to an environment that is close to your production.
 
-1. Build Bakery with production profile (e.g. ```mvn clean install -Pproduction -DskipTests```)
+In order to run the scalability tests locally:
 
-2. Configure the number of concurrent users and a suitable ramp up time in the end of the `src/test/scala/*.scala` files, e.g.:
-	```setUp(scn.inject(rampUsers(300) over (300 seconds))).protocols(httpProtocol)```
+1. Build and start Bakery in the production mode (e.g. ```mvn clean spring-boot:run -DskipTests -Dvaadin.productionMode```)
 
-3. If you are not running on localhost, configure the baseUrl in the beginning of the `src/test/scala/*.scala` files, e.g.:
-	```val baseUrl = "http://my.server.com"```
+1. Download Gatling from [https://gatling.io/download/](https://gatling.io/download/) and extract it to a folder of your choice. This example assumes that Gatling is extracted into the `/.gatling` folder inside the Bakery project root.
 
-4. Make sure the server is running in the production mode (```-Dvaadin.productionMode```) at the given URL
+1. Open terminal in the project root
 
-5. Download Gatling from https://gatling.io/download/
+1. Start a test from the command line:
 
-6. Navigate to Gatling's bin folder in you terminal
+    ````bash
+    .gatling/bin/gatling.sh --mute \
+        --bodies-folder src/test/resources/bodies \
+        --simulations-folder src/test/scala \
+        --results-folder target
+    ````
 
-7. Start a test from the command line, e.g.: (where ```~/path/to``` is path to the folder where the project is)
-	 ```./gatling.sh -m -bdf ~/path/to/bakery-app-starter-flow-spring/src/test/resources/bodies -sf ~/path/to/bakery-app-starter-flow-spring/src/test/scala/ -rf ~/path/to/bakery-app-starter-flow-spring/target```
+1. Test results are stored into target folder (e.g. to ```target/gatling/BaristaFlow-1487784042461/index.html```)
 
-8. Test results are stored into target folder, e.g.:
-	```target/gatling/BaristaFlow-1487784042461/index.html```
-	
-Note: If you run Bakery with in memory database, it will logically use more memory than when using against external database. It is recommend to run scalability tests for Bakery only after you have configured Bakery to use external database.
+1. By default the scalability test starts 100 user sessions at a 100 ms interval, all of which connect to a locally running Bakery app. These defaults can be overridden with the `gatling.sessionCount`, `gatling.sessionStartInterval` and `gatling.baseUrl` system properties. In order to set them use the `JAVA_OPTS` environment variable like so:
+
+    ````bash
+    JAVA_OPTS="-Dgatling.sessionCount=300 -Dgatling.sessionStartInterval=50" \
+    .gatling/bin/gatling.sh --mute \
+            --bodies-folder src/test/resources/bodies \
+            --simulations-folder src/test/scala \
+            --results-folder target
+    ````
+
+Note: If you run Bakery with an in-memory database (like H2, which is the default), it will logically use more memory than when using an external database (like PostgreSQL). It is recommend to run scalability tests for Bakery only after you have configured it to use an external database.
 
 # License
 A paid Pro or Prime subscription is required for creating a new software project from this starter. After its creation, results can be used, developed and distributed freely, but licenses for the used commercial components are required during development. The starter or its parts cannot be redistributed as a code example or template.
