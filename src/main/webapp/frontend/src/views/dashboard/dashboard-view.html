@@ -52,6 +52,11 @@
         min-height: 355px;
       }
 
+      vaadin-board-row.custom-board-row {
+        --vaadin-board-width-medium: 1440px;
+        --vaadin-board-width-small: 1024px;
+      }
+
     </style>
 
     <vaadin-board>
@@ -74,7 +79,7 @@
       <vaadin-board-row>
         <vaadin-chart id="yearlySalesGraph" class="yearly-sales"></vaadin-chart>
       </vaadin-board-row>
-      <vaadin-board-row>
+      <vaadin-board-row class="custom-board-row">
         <div class="vaadin-board-cell">
           <vaadin-chart id="monthlyProductSplit" class="product-split-donut"></vaadin-chart >
         </div>
