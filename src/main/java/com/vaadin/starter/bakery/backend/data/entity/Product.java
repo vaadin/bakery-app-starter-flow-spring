@@ -9,13 +9,13 @@ import javax.validation.constraints.Size;
 @Entity
 public class Product extends AbstractEntity {
 
-	@Size(max = 255, message = "The maximum length of a product name is 255 characters")
-	@NotBlank(message = "Name is required")
+	@Size(max = 255, message = "{bakery.name.max.length}")
+	@NotBlank(message = "{bakery.name.required}")
 	@Column(unique = true)
 	private String name;
 
 	// Real price * 100 as an int to avoid rounding errors
-	@Min(value = 0, message = "Price must be equal or higher than zero")
+	@Min(value = 1, message = "{bakery.price.required}")
 	private int price;
 
 	public String getName() {
