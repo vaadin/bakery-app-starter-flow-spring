@@ -89,7 +89,7 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 	@Id("itemsContainer")
 	private Div itemsContainer;
 
-	private OrderItemsEditor items;
+	private OrderItemsEditor itemsEditor;
 
 	private User currentUser;
 	
@@ -99,9 +99,9 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 
 	@Autowired
 	public OrderEditor(PickupLocationDataProvider locationProvider, ProductDataProvider productDataProvider) {
-		items = new OrderItemsEditor(productDataProvider);
+		itemsEditor = new OrderItemsEditor(productDataProvider);
 
-		itemsContainer.add(items);
+		itemsContainer.add(itemsEditor);
 
 		cancel.addClickListener(e -> fireEvent(new CancelEvent(this, false)));
 		review.addClickListener(e -> fireEvent(new ReviewEvent(this)));
@@ -138,12 +138,12 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 
 		binder.bind(customerDetails, "customer.details");
 
-		items.setRequiredIndicatorVisible(true);
-		binder.bind(items, "items");
+		itemsEditor.setRequiredIndicatorVisible(true);
+		binder.bind(itemsEditor, "items");
 
-		items.addPriceChangeListener(e -> setTotalPrice(e.getTotalPrice()));
+		itemsEditor.addPriceChangeListener(e -> setTotalPrice(e.getTotalPrice()));
 
-		items.addListener(ValueChangeEvent.class, e -> review.setEnabled(hasChanges()));
+		itemsEditor.addListener(ValueChangeEvent.class, e -> review.setEnabled(hasChanges()));
 		binder.addValueChangeListener(e -> {
 			if (e.getOldValue() != null) {
 				review.setEnabled(hasChanges());
@@ -152,12 +152,12 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 	}
 
 	public boolean hasChanges() {
-		return binder.hasChanges() || items.hasChanges();
+		return binder.hasChanges() || itemsEditor.hasChanges();
 	}
 
 	public void clear() {
 		binder.readBean(null);
-		items.setValue(null);
+		itemsEditor.setValue(null);
 	}
 
 	public void close() {
@@ -183,7 +183,7 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 		Stream<HasValue<?, ?>> errorFields = binder.validate().getFieldValidationErrors().stream()
 				.map(BindingValidationStatus::getField);
 
-		return Stream.concat(errorFields, items.validate());
+		return Stream.concat(errorFields, itemsEditor.validate());
 	}
 
 	public Registration addReviewListener(ComponentEventListener<ReviewEvent> listener) {

@@ -74,7 +74,7 @@ public class OrderItemEditor extends PolymerTemplate<TemplateModel> implements H
 		binder.forField(products).bind("product");
 		products.setRequired(true);
 
-		delete.addClickListener(e -> fireEvent(new DeleteEvent(this, totalPrice)));
+		delete.addClickListener(e -> fireEvent(new DeleteEvent(this)));
 		this.setPrice();
 	}
 
