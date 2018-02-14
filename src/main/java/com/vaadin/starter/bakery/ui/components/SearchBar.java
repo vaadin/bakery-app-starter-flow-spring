@@ -16,7 +16,7 @@ import com.vaadin.flow.templatemodel.TemplateModel;
 public class SearchBar extends PolymerTemplate<SearchBar.Model> {
 
 	public interface Model extends TemplateModel {
-		Boolean getCheckboxChecked();
+		boolean isCheckboxChecked();
 
 		void setCheckboxChecked(boolean checkboxChecked);
 
@@ -51,7 +51,7 @@ public class SearchBar extends PolymerTemplate<SearchBar.Model> {
 	}
 
 	public boolean isCheckboxChecked() {
-		return getModel().getCheckboxChecked();
+		return getModel().isCheckboxChecked();
 	}
 
 	public void setPlaceHolder(String placeHolder) {
