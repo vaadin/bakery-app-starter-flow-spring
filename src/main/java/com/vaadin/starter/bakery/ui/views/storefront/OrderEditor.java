@@ -125,10 +125,6 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 				.collect(Collectors.toCollection(TreeSet::new));
 		dueTime.setItems(timeValues);
 		dueTime.setItemLabelGenerator(localTimeConverter::toPresentation);
-		dueTime.addCustomValueSetListener(e -> {
-			timeValues.add(localTimeConverter.toModel(e.getDetail()));
-			dueTime.setItems(timeValues);
-		});
 		binder.bind(dueTime, "dueTime");
 
 		pickupLocation.setItemLabelGenerator(createItemLabelGenerator(PickupLocation::getName));
