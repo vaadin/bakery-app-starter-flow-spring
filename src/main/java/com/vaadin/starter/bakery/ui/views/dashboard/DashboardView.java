@@ -45,7 +45,7 @@ import com.vaadin.starter.bakery.ui.MainView;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
-import com.vaadin.starter.bakery.ui.views.storefront.OrderDetailsBrief;
+import com.vaadin.starter.bakery.ui.views.storefront.OrderCard;
 import com.vaadin.starter.bakery.ui.views.storefront.OrdersCountDataWithChart;
 
 @Tag("dashboard-view")
@@ -94,9 +94,10 @@ public class DashboardView extends PolymerTemplate<TemplateModel> {
 		this.orderService = orderService;
 
 		grid.addColumn(new ComponentTemplateRenderer<>(order -> {
-			OrderDetailsBrief item = new OrderDetailsBrief();
-			item.setOrder(order);
-			return item;
+			OrderCard orderCard = new OrderCard();
+			orderCard.setOrder(order);
+			orderCard.getElement().getClassList().add(BakeryConst.DASHBOARD_ORDER_CARD_STYLE);
+			return orderCard;
 		}));
 		grid.addSelectionListener(this::onOrdersGridSelectionChanged);
 
@@ -195,7 +196,7 @@ public class DashboardView extends PolymerTemplate<TemplateModel> {
 	private void onOrdersGridSelectionChanged(SelectionEvent<Order> e) {
 		e.getFirstSelectedItem().ifPresent(order -> {
 			getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT + "/" + order.getId()));
-			grid.deselect(order);
+			grid.getElement().setProperty("activeItem", null);
 		});
 	}
 

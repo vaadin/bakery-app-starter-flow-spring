@@ -7,12 +7,12 @@ import com.vaadin.testbench.elementsbase.Element;
 @Element("order-details-full")
 public class OrderDetailsFullElement extends TestBenchElement {
 
-	public ButtonElement getCancelButton() {
-		return $(ButtonElement.class).id("collapseOrderDetail");
-	}
-
 	public ButtonElement getEditButton() {
 		return $(ButtonElement.class).id("edit");
+	}
+
+	public ButtonElement getSaveButton() {
+		return $(ButtonElement.class).id("save");
 	}
 
 }

@@ -51,8 +51,6 @@ import com.vaadin.starter.bakery.ui.views.storefront.events.ValueChangeEvent;
 public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 
 	public interface Model extends TemplateModel {
-		void setOpened(boolean opened);
-
 		void setTotalPrice(String totalPrice);
 
 		void setStatus(String status);
