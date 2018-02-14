@@ -1,1 +1,0 @@
-{"csrfToken":"${seckey}","rpc":[{"type":"publishedEventHandler","node":${navigationId},"templateEventMethodName":"navigateTo","templateEventMethodArgs":["dashboard"]}],"syncId":${syncId},"clientId":${clientId}}
