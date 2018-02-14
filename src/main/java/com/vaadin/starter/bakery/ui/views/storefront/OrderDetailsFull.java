@@ -77,22 +77,12 @@ public class OrderDetailsFull extends PolymerTemplate<OrderDetailsFull.Model> {
 	}
 
 	public void display(Order order, boolean review) {
-		setReview(review);
+		getModel().setReview(review);
 		this.order = order;
 		getModel().setItem(order);
 		if (!review) {
 			commentField.clear();
 		}
-	}
-
-	private void setReview(boolean review) {
-		history.setVisible(!review);
-		comment.setVisible(!review);
-		cancel.setVisible(!review);
-		edit.setVisible(!review);
-
-		save.setVisible(review);
-		back.setVisible(review);
 	}
 
 	public interface Model extends TemplateModel {
@@ -109,6 +99,8 @@ public class OrderDetailsFull extends PolymerTemplate<OrderDetailsFull.Model> {
 		@Convert(value = OrderStateConverter.class, path = "history.newState")
 		@Convert(value = CurrencyFormatter.class, path = "totalPrice")
 		void setItem(Order order);
+
+		void setReview(boolean review);
 	}
 
 	public Registration addSaveListenter(ComponentEventListener<SaveEvent> listener) {
