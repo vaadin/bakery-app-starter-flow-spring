@@ -1,7 +1,6 @@
 <link rel="import" href="../../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../../styles/shared-styles.html">
-<link rel="import" href="order-details-brief.html">
+<link rel="import" href="order-status-badge.html">
 
 <dom-module id="order-card">
   <template>
@@ -17,16 +16,15 @@
         margin-right: auto;
       }
 
-      [selected].content {
-        padding: 0;
-      }
-
-      #wrapper {
+      .wrapper {
         background: var(--lumo-base-color);
         background-image: linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
         box-shadow: 0 3px 5px var(--lumo-shade-10pct);
         border-bottom: 1px solid var(--lumo-shade-10pct);
-        margin: calc(-1 * var(--lumo-space-s)) 0 var(--lumo-space-s); /* Last item has shadow visible */
+        display: flex;
+        padding: var(--lumo-space-l);
+        cursor: pointer;
+        border-radius: var(--lumo-border-radius);
       }
 
       .main {
@@ -43,42 +41,101 @@
         color: var(--lumo-secondary-text-color);
       }
 
+      #infoWrapper {
+        flex-direction: column-reverse;
+        justify-content: flex-end;
+      }
+
+      order-status-badge {
+        margin: var(--lumo-space-s) 0;
+        width: 100px;
+      }
+
+      #timePlace {
+        width: 120px;
+      }
+
+      #nameItems {
+        flex: 1;
+      }
+
+      #place,
+      #secondaryTime,
+      #fullDay,
+      #goods {
+        color: var(--lumo-secondary-text-color);
+      }
+
+      h3 {
+        margin: 0;
+      }
+
+      #goods {
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      #goods > div {
+        box-sizing: border-box;
+        width: 18em;
+        flex: auto;
+        padding-right: var(--lumo-space-l);
+      }
+
+      .goods-item {
+        display: flex;
+        align-items: baseline;
+        font-size: var(--lumo-font-size-s);
+        margin: var(--lumo-space-xs) 0;
+      }
+
+      .goods-item > .count {
+        margin-right: var(--lumo-space-s);
+      }
+
+      .goods-item > div {
+        flex: auto;
+      }
+
       @media (min-width: 600px) {
-        .content {
-          max-width: calc(964px + var(--lumo-space-m)) !important; /* Allow selected order to be 16px wider */
-          padding: 0 var(--lumo-space-s);
+        #infoWrapper {
+          flex-direction: row;
         }
 
-        #wrapper {
+        order-status-badge {
           margin: 0;
-          border-radius: var(--lumo-border-radius);
-          border-bottom: none;
-        }
-
-        .group-heading {
-          margin: var(--lumo-space-m) 0 var(--lumo-space-s);
         }
       }
 
-      [opened].group-heading {
-        padding-left: 8px;
+      :host(.storefront-order-card) .content {
+        max-width: 964px;
       }
     </style>
 
-    <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
-
-    <div class="content" selected$="[[selected]]">
-      <div class="group-heading" opened$="[[_showDetailsDesktop(selected, desktopView)]]" hidden$="[[!displayHeader]]">
-        <span class="main" theme$="[[_getMainFontSize(desktopView)]]">[[header.main]]</span>
-        <span class="secondary" theme$="[[_getSecondaryFontSize(desktopView)]]">[[header.secondary]]</span>
+    <div class="content">
+      <div class="group-heading" hidden$="[[!displayHeader]]">
+        <span class="main">[[header.main]]</span>
+        <span class="secondary">[[header.secondary]]</span>
       </div>
 
-      <div id="wrapper">
-        <order-details-brief id="orderDetailsBrief" hidden$="[[showDetail]]"></order-details-brief>
-        <slot name="order-details-full"></slot>
+      <div class="wrapper">
+        <div id="infoWrapper" class="flex">
+          <order-status-badge status="[[item.state]]"></order-status-badge>
+          <div id="timePlace"></div>
+        </div>
+        <div id="nameItems">
+          <h3 id="name">[[item.customer.fullName]]</h3>
+          <div id="goods">
+            <template is="dom-repeat" items="[[item.items]]">
+              <div class="goods-item">
+                <span class="count">[[item.quantity]]</span>
+                <div>[[item.product.name]]</div>
+              </div>
+            </template>
+          </div>
+        </div>
       </div>
     </div>
-
   </template>
 
   <script>
@@ -89,33 +146,10 @@
 
       static get properties() {
         return {
-          selected: {
-            type: Boolean,
-            value: false,
-            reflectToAttribute: true
-          },
-          desktopView: {
-            type: Boolean
-          },
-          showDetail: {
-            type: Boolean,
-            computed: '_showDetailsDesktop(selected, desktopView)'
-          },
-          displayHeader: Boolean,
-          header: Object
+          item: {
+            type: Object
+          }
         };
-      }
-
-      _getMainFontSize(desktop) {
-        return desktop ? 'l-text' : 'm-text';
-      }
-
-      _getSecondaryFontSize(desktop) {
-        return desktop ? 'm-text' : 's-text';
-      }
-
-      _showDetailsDesktop(selected, desktopView) {
-        return selected && desktopView;
       }
     }
 

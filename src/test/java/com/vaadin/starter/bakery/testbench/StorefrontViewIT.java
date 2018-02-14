@@ -4,11 +4,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.vaadin.flow.component.button.testbench.ButtonElement;
-import com.vaadin.flow.component.grid.testbench.GridElement;
 import com.vaadin.starter.bakery.testbench.elements.components.OrderCardElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement;
-
-import static org.hamcrest.CoreMatchers.endsWith;
+import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement.OrderEditorElement;
 
 public class StorefrontViewIT extends AbstractIT {
 
@@ -17,31 +15,24 @@ public class StorefrontViewIT extends AbstractIT {
 	}
 
 	@Test
-	public void orderCardExpandAndCollapse() {
-		StorefrontViewElement storefrontPage = openStorefrontPage();
-
-		GridElement grid = storefrontPage.getGrid();
-		Assert.assertTrue(grid.getRowCount() >= 0);
-
-		OrderCardElement firstOrder = storefrontPage.getFirstOrderCard();
-		Assert.assertNotNull(firstOrder);
-		Assert.assertFalse(firstOrder.isOrderSelected());
-
-		firstOrder.click();
-		Assert.assertTrue(firstOrder.isOrderSelected());
-	}
-
-	@Test
 	public void editOrder() {
 		StorefrontViewElement storefrontPage = openStorefrontPage();
 
 		OrderCardElement firstOrder = storefrontPage.getOrderCard(0);
 		Assert.assertNotNull(firstOrder);
-		firstOrder.click();
-		ButtonElement editBtn = firstOrder.getDetail().getEditButton();
-		editBtn.click();
+		int initialCount = Integer.parseInt(firstOrder.getGoodsCount(0));
 
-		Assert.assertThat(getDriver().getCurrentUrl(), endsWith("edit="));
+		firstOrder.click();
+		ButtonElement editBtn = storefrontPage.getOrderDetails().getEditButton();
+		editBtn.getWrappedElement().click();
+
+		OrderEditorElement orderEditor = storefrontPage.getOrderEditor();
+		orderEditor.getOrderItemEditor(0).clickAmountFieldPlus(0);
+		orderEditor.review();
+		storefrontPage.getOrderDetails().getSaveButton().click();
+
+		int currentCount = Integer.parseInt(storefrontPage.getOrderCard(0).getGoodsCount(0));
+		Assert.assertEquals(initialCount + 1, currentCount);
 	}
 
 }
