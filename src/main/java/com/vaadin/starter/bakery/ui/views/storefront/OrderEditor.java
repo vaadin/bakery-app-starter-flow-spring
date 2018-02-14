@@ -182,7 +182,7 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 	public Stream<HasValue<?, ?>> validate() {
 		Stream<HasValue<?, ?>> errorFields = binder.validate().getFieldValidationErrors().stream()
 				.map(BindingValidationStatus::getField);
-
+		
 		return Stream.concat(errorFields, itemsEditor.validate());
 	}
 

@@ -114,8 +114,7 @@ public class OrderItemsEditor extends Div implements HasValue<OrderItemsEditor, 
 
 	public Stream<HasValue<?, ?>> validate() {
 		return getChildren()
-				.filter(component -> component instanceof OrderItemEditor && !component.equals(empty))
-				.map(editor -> ((OrderItemEditor) editor).validate())
-				.flatMap(stream -> stream);
+				.filter(component -> items.size() == 0 || !component.equals(empty))
+				.map(editor -> ((OrderItemEditor) editor).validate()).flatMap(stream -> stream);
 	}
 }

@@ -1,5 +1,8 @@
 package com.vaadin.starter.bakery.ui.views.storefront;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -85,14 +88,16 @@ class OrderPresenter {
 	}
 
 	void review() {
-		HasValue<?, ?> firstErrorField = view.validate().findFirst().orElse(null);
-		if (firstErrorField == null) {
+		// Using collect instead of findFirst to assure all streams are
+		// traversed, and every validation updates its view
+		List<HasValue<?, ?>> fields = view.validate().collect(Collectors.toList());
+		if (fields.isEmpty()) {
 			if (entityPresenter.writeEntity()) {
 				view.setDialogElementsVisibility(false);
 				view.getOpenedOrderDetails().display(entityPresenter.getEntity(), true);
 			}
-		} else if (firstErrorField instanceof Focusable) {
-			((Focusable<?>) firstErrorField).focus();
+		} else if (fields.get(0) instanceof Focusable) {
+			((Focusable<?>) fields.get(0)).focus();
 		}
 	}
 
