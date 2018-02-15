@@ -4,7 +4,6 @@
 package com.vaadin.starter.bakery.ui.crud;
 
 import com.vaadin.flow.component.HasText;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
@@ -33,7 +32,7 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 	}
 
 	private final String entityName;
-	
+
 	protected abstract DefaultEntityPresenter<E> getPresenter();
 
 	protected abstract String getBasePage();
@@ -67,10 +66,6 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 		getDialog().getElement().addEventListener("opened-changed", e -> {
 			if (!getDialog().isOpened()) {
 				getPresenter().cancel();
-			} else {
-				// Set theme attribute to the dialog overlay
-				UI.getCurrent().getPage().executeJavaScript("$0.$.overlay.setAttribute('theme', 'right')",
-						getDialog().getElement());
 			}
 		});
 
@@ -117,7 +112,7 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 	public boolean isDirty() {
 		return getBinder().hasChanges();
 	}
-	
+
 	@Override
 	public void clear() {
 		getBinder().readBean(null);

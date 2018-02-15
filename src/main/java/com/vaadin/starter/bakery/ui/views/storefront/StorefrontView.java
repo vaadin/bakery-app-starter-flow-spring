@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.Tag;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
@@ -83,10 +82,6 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 			if (!dialog.isOpened()) {
 				// Handle client-side closing dialog on escape
 				presenter.cancel();
-			} else {
-				// Set theme attribute to the dialog overlay
-				UI.getCurrent().getPage().executeJavaScript("$0.$.overlay.setAttribute('theme', 'middle')",
-						dialog.getElement());
 			}
 		});
 	}

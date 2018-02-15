@@ -14,12 +14,12 @@
         flex-direction: column;
       }
     </style>
-    
+
     <search-bar id="search"></search-bar>
 
     <vaadin-grid id=grid theme="crud"></vaadin-grid>
 
-    <vaadin-dialog id="dialog" theme="right"></vaadin-dialog>
+    <vaadin-dialog id="dialog"></vaadin-dialog>
 
   </template>
 
@@ -29,10 +29,14 @@
         return 'users-view';
       }
 
-      // This method is overridden to measure the page load performance and can be safely removed
-      // if there is no need for that
       ready() {
         super.ready();
+
+        // There is no way for theming the dialog-overlay but using private API
+        this.$.dialog.$.overlay.setAttribute('theme', 'right');
+
+        // This method is overridden to measure the page load performance and can be safely removed
+        // if there is no need for that
         const grid = this.$.grid;
         let partsLoaded = 0;
         const listener = () => {
