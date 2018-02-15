@@ -12,6 +12,7 @@ target/
 
 # Testing
 .driver
+.gatling
 error-screenshots
 selenium_standalone_zips
 
@@ -20,8 +21,6 @@ selenium_standalone_zips
 
 # Frontend
 /build-tools/bin/
-/src/main/webapp/frontend/bower_components/
-/src/main/webapp/frontend/build/
 /build-tools/etc/
 /build-tools/lib/
 /build-tools/node/

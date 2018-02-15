@@ -1,0 +1,3 @@
+{"csrfToken":"${seckey}","rpc":[{"type":"mSync","node":${products2Id},"feature":1,"property":"selectedItem","value":null},{"type":"event","node":${products2Id},"event":"selected-item-changed"},{"type":"mSync","node":${products2Id},"feature":1,"property":"selectedItem","value":{"key":"2","label":"Vanilla Cracker"}},{"type":"event","node":${products2Id},"event":"selected-item-changed"},{"type":"mSync","node":${amount3Id},"feature":1,"property":"value","value":1}],"syncId":${syncId},"clientId":${clientId}}
+
+
