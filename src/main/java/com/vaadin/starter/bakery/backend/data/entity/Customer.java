@@ -10,16 +10,18 @@ import javax.validation.constraints.Size;
 public class Customer extends AbstractEntity {
 
 	@NotBlank
-	@Size(max = 255)
+	@Size(max = 255, message = "{bakery.field.max.length}")
 	private String fullName;
 
-	@Size(max = 255)
+	@NotBlank
+	@Size(max = 20, message = "{bakery.phone.number.invalid}")
 	// A simple phone number checker, allowing an optional international prefix
 	// plus a variable number of digits that could be separated by dashes or
 	// spaces
 	@Pattern(regexp = "^(\\+\\d+)?([ -]?\\d+){4,14}$", message = "{bakery.phone.number.invalid}")
 	private String phoneNumber;
 	
+	@Size(max = 255, message = "{bakery.field.max.length}")
 	private String details;
 
 	public String getFullName() {

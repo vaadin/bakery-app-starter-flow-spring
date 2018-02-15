@@ -31,7 +31,6 @@ public class OrderItemsEditor extends Div implements HasValue<OrderItemsEditor, 
 	@Override
 	public void setValue(List<OrderItem> items) {
 		this.items = items;
-
 		removeAll();
 		totalPrice = 0;
 		hasChanges = false;
@@ -50,14 +49,16 @@ public class OrderItemsEditor extends Div implements HasValue<OrderItemsEditor, 
 		editor.addProductChangeListener(e -> productChanged(e.getSource(), e.getProduct()));
 		editor.addCommentChangeListener(e -> setHasChanges(true));
 		editor.addDeleteListener(e -> {
-			if (empty != editor) {
-				OrderItem orderItem = editor.getValue();
+			OrderItemEditor orderItemEditor = e.getSource();
+			if (orderItemEditor != empty) {
+				remove(orderItemEditor);
+				OrderItem orderItem = orderItemEditor.getValue();
 				items.remove(orderItem);
-				remove(editor);
-				updateTotalPriceOnItemPriceChange(e.getTotalPrice(), 0);
+				updateTotalPriceOnItemPriceChange(orderItem.getTotalPrice(), 0);
 				setHasChanges(true);
 			}
 		});
+
 		editor.setValue(value);
 		return editor;
 	}
@@ -113,8 +114,7 @@ public class OrderItemsEditor extends Div implements HasValue<OrderItemsEditor, 
 
 	public Stream<HasValue<?, ?>> validate() {
 		return getChildren()
-				.filter(component -> component instanceof OrderItemEditor && !component.equals(empty))
-				.map(editor -> ((OrderItemEditor) editor).validate())
-				.flatMap(stream -> stream);
+				.filter(component -> items.size() == 0 || !component.equals(empty))
+				.map(editor -> ((OrderItemEditor) editor).validate()).flatMap(stream -> stream);
 	}
 }
