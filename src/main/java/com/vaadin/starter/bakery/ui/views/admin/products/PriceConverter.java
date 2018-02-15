@@ -18,11 +18,7 @@ class PriceConverter implements Converter<String, Integer> {
 	@Override
 	public Result<Integer> convertToModel(String presentationValue, ValueContext valueContext) {
 		try {
-			if (presentationValue == null || presentationValue.isEmpty()) {
-				return Result.error("Price is required");
-			} else {
-				return Result.ok((int) Math.round(df.parse(presentationValue).doubleValue() * 100));
-			}
+			return Result.ok((int) Math.round(df.parse(presentationValue).doubleValue() * 100));
 		} catch (ParseException e) {
 			return Result.error("Invalid value");
 		}
