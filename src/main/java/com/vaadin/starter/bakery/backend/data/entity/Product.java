@@ -2,6 +2,7 @@ package com.vaadin.starter.bakery.backend.data.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -15,7 +16,8 @@ public class Product extends AbstractEntity {
 	private String name;
 
 	// Real price * 100 as an int to avoid rounding errors
-	@Min(value = 1, message = "{bakery.price.required}")
+	@Min(value = 0, message = "{bakery.price.limits}")
+	@Max(value = 100000, message = "{bakery.price.limits}")
 	private int price;
 
 	public String getName() {
