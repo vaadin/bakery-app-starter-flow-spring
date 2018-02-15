@@ -1,21 +1,17 @@
 package com.vaadin.starter.bakery.testbench;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.slf4j.LoggerFactory;
 
 import com.vaadin.starter.bakery.testbench.elements.ui.LoginViewElement;
 import com.vaadin.testbench.ScreenshotOnFailureRule;
-import com.vaadin.testbench.TestBench;
 import com.vaadin.testbench.TestBenchDriverProxy;
-import com.vaadin.testbench.TestBenchTestCase;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 
-public abstract class AbstractIT extends TestBenchTestCase {
+public abstract class AbstractIT extends RunLocallyTestCase {
 
 	public static final String APP_URL = "http://localhost:8080/";
 
@@ -28,14 +24,10 @@ public abstract class AbstractIT extends TestBenchTestCase {
 	@Rule
 	public ScreenshotOnFailureRule screenshotOnFailure = new ScreenshotOnFailureRule(this, true);
 
-	@Before
-	public void setup() {
-		setDriver(createDriver());
+	@Override
+	public void setup() throws Exception {
+		super.setup();
 		getCommandExecutor().resizeViewPortTo(1024, 768);
-	}
-
-	protected WebDriver createDriver() {
-		return TestBench.createDriver(new ChromeDriver());
 	}
 
 	@Override

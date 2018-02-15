@@ -9,7 +9,11 @@ import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.ProductsViewElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement;
 
+import java.util.Random;
+
 public class ProductsViewIT extends AbstractIT {
+
+	private static Random r = new Random();
 
 	private ProductsViewElement openProductsPage() {
 		StorefrontViewElement storefront = openLoginView().login("admin@vaadin.com", "admin");
@@ -24,13 +28,18 @@ public class ProductsViewIT extends AbstractIT {
 
 		String url = getDriver().getCurrentUrl();
 		GridElement grid = productsPage.getGrid();
-		grid.getCell("Strawberry Bun").click();
+
+		String uniqueName = "Unique cake name " + r.nextInt();
+		String initialPrice = "98.76";
+		createProduct(productsPage, uniqueName, initialPrice);
+
+		grid.getCell(uniqueName).click();
 		Assert.assertTrue(getDriver().getCurrentUrl().length() > url.length());
 
 		Assert.assertTrue(productsPage.getDialog().isOpen());
 
 		TextFieldElement price = productsPage.getPrice();
-		String initialValue = price.getValue();
+		Assert.assertTrue(initialPrice.equals(price.getValue()));
 
 		price.focus();
 		price.setValue("123.45");
@@ -41,13 +50,30 @@ public class ProductsViewIT extends AbstractIT {
 
 		Assert.assertTrue(getDriver().getCurrentUrl().endsWith("products"));
 
-		grid.getCell("Strawberry Bun").click();
+		grid.getCell(uniqueName).click();
 		Assert.assertEquals("123.45", price.getValue());
 
 		// Return initial value
 		price.focus();
-		price.setValue(initialValue);
+		price.setValue(initialPrice);
 		price.sendKeys(Keys.TAB);
+		productsPage.getButtonsBar().getSaveButton().click();
+	}
+
+	private void createProduct(ProductsViewElement productsPage, String name, String price) {
+		productsPage.getSearchBar().getCreateNewButton().click();
+
+		Assert.assertTrue(productsPage.getDialog().isOpen());
+
+		TextFieldElement nameField = productsPage.getProductName();
+		TextFieldElement priceField = productsPage.getPrice();
+
+		nameField.focus();
+		nameField.setValue(name);
+
+		priceField.focus();
+		priceField.setValue(price);
+
 		productsPage.getButtonsBar().getSaveButton().click();
 	}
 
