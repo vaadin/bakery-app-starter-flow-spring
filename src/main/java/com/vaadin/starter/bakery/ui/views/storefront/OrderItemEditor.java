@@ -69,10 +69,12 @@ public class OrderItemEditor extends PolymerTemplate<TemplateModel> implements H
 		comment.addValueChangeListener(e -> fireEvent(new CommentChangeEvent(this, e.getValue())));
 
 		binder.forField(amount).bind("quantity");
+		amount.setRequiredIndicatorVisible(true);
 		binder.forField(comment).bind("comment");
 		binder.forField(products).bind("product");
+		products.setRequired(true);
 
-		delete.addClickListener(e -> fireEvent(new DeleteEvent(this, totalPrice)));
+		delete.addClickListener(e -> fireEvent(new DeleteEvent(this)));
 		this.setPrice();
 	}
 
