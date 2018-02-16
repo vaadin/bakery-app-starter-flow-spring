@@ -23,20 +23,16 @@
     <div class="scrollable flex1" id="main">
       <h2 id="title"></h2>
 
-      <vaadin-form-layout responsive-steps='[
-          {"columns": 1, "labelsPosition": "top"},
-          {"minWidth": "600px", "columns": 4, "labelsPosition": "top"}]'>
+      <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(1, 4)]]">
 
-        <vaadin-form-layout responsive-steps='[{"columns": 1, "labelsPosition": "top"}]'>
+        <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(1, 1)]]">
 
           <vaadin-combo-box label="Status" id="status">
           </vaadin-combo-box>
 
           <vaadin-form-item>
             <label slot="label">Due</label>
-            <vaadin-form-layout responsive-steps='[
-              {"columns": 1, "labelsPosition": "top"},
-              {"minWidth": "600px", "columns": 2, "labelsPosition": "top"}]'>
+            <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(1, 2)]]">
 
               <vaadin-date-picker  id="dueDate">
               </vaadin-date-picker>
@@ -53,9 +49,7 @@
           </vaadin-combo-box>
         </vaadin-form-layout>
 
-        <vaadin-form-layout  colspan="3" responsive-steps='[
-          {"columns": 1, "labelsPosition": "top"},
-          {"minWidth": "600px", "columns": 3, "labelsPosition": "top"}]'>
+        <vaadin-form-layout  colspan="3" responsive-steps="[[_computeResponsiveSteps(1, 3)]]">
 
           <vaadin-text-field id="customerName" label="Customer" colspan="2">
             <iron-icon slot="prefix" icon="vaadin:user"></iron-icon>
@@ -102,6 +96,13 @@
       _onStatusChange() {
         const status = this.status ? this.status.toLowerCase() : this.status;
         this.$.status.$.input.setAttribute('status', status);
+      }
+
+      _computeResponsiveSteps(mobileColumns, desktopColumns) {
+        return [
+          {"columns": mobileColumns, "labelsPosition": "top"},
+          {"minWidth": "600px", "columns": desktopColumns, "labelsPosition": "top"}
+        ];
       }
     }
 
