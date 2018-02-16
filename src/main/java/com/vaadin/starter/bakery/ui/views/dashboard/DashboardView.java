@@ -31,7 +31,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.data.selection.SelectionEvent;
-import com.vaadin.flow.renderer.ComponentTemplateRenderer;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.templatemodel.TemplateModel;
@@ -93,7 +93,7 @@ public class DashboardView extends PolymerTemplate<TemplateModel> {
 	public DashboardView(OrderService orderService, OrdersGridDataProvider orderDataProvider) {
 		this.orderService = orderService;
 
-		grid.addColumn(new ComponentTemplateRenderer<>(order -> {
+		grid.addColumn(new ComponentRenderer<>(order -> {
 			OrderCard orderCard = new OrderCard();
 			orderCard.setOrder(order);
 			orderCard.getElement().getClassList().add(BakeryConst.DASHBOARD_ORDER_CARD_STYLE);
