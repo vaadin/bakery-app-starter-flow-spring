@@ -31,7 +31,7 @@
 
     <vaadin-grid id="grid" theme="orders no-row-borders"></vaadin-grid>
 
-    <vaadin-dialog id="dialog" theme="middle"></vaadin-dialog>
+    <vaadin-dialog id="dialog"></vaadin-dialog>
 
   </template>
 
@@ -41,10 +41,14 @@
         return 'storefront-view';
       }
 
-      // This method is overriden to measure the page load performance and can be safely removed
-      // if there is no need for that.
       ready() {
         super.ready();
+
+        // There is no way for theming the dialog-overlay but using private API
+        this.$.dialog.$.overlay.setAttribute('theme', 'middle');
+
+        // This method is overriden to measure the page load performance and can be safely removed
+        // if there is no need for that.
         const grid = this.$.grid;
         const listener = () => {
           if (!grid.loading && window.performance.mark) {

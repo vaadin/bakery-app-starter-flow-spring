@@ -37,7 +37,11 @@ public class ProductForm extends PolymerTemplate<TemplateModel> implements CrudF
 	@Override
 	public void setBinder(BeanValidationBinder<Product> binder) {
 		binder.bind(name, "name");
+
 		binder.forField(price).withConverter(new PriceConverter()).bind("price");
+		price.setPattern("\\d+(\\.\\d?\\d?)?$");
+		price.setPreventInvalidInput(true);
+
 		TemplateUtil.addToSlot(price, "prefix",
 				new Span(Currency.getInstance(BakeryConst.APP_LOCALE).getSymbol()));
 	}
