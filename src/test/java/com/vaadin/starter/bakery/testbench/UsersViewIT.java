@@ -82,6 +82,7 @@ public class UsersViewIT extends AbstractIT {
 	private void createUser(UsersViewElement usersView, String email, String firstName, String lastName,
 							String password, String role) {
 		usersView.getSearchBar().getCreateNewButton().click();
+		Assert.assertTrue(usersView.getDialog().isOpen());
 
 		usersView.getEmailField().setValue(email);
 		usersView.getFirstName().setValue(firstName);
