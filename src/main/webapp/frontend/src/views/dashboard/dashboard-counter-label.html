@@ -8,7 +8,6 @@
         text-align: center;
         height: calc(18vh - 64px);
         min-height: 180px;
-        padding: 10px;
         display: block;
       }
 
@@ -26,6 +25,10 @@
 
       :host(.gray) .count-digit {
         color: rgba(45, 71, 105, 0.7);
+      }
+
+      .content {
+        padding: 10px;
       }
 
       .count-wrapper {
@@ -61,12 +64,14 @@
       <slot></slot>
     </div>
 
-    <div class="count-wrapper">
-      <span id="count" class="count-digit"></span>
-    </div>
+    <div class="content">
+      <div class="count-wrapper">
+        <span id="count" class="count-digit"></span>
+      </div>
 
-    <h4 id="title"></h4>
-    <div id="subtitle" class="subtitle"></div>
+      <h4 id="title"></h4>
+      <div id="subtitle" class="subtitle"></div>
+    </div>
   </template>
 
   <script>
