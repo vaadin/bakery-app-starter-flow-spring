@@ -13,21 +13,24 @@ import com.vaadin.flow.shared.Registration;
  */
 public class DatePickerForBinder extends DatePicker {
 
-	private LocalDate lastSetValue;
+	private LocalDate lastNotifiedValue;
+	private boolean setFromServer;
 
 	@Override
 	public void setValue(LocalDate value) {
 		super.setValue(value);
-		this.lastSetValue = value;
+		setFromServer = true;
 	}
 
 	@Override
 	public Registration addValueChangeListener(ValueChangeListener<DatePicker, LocalDate> listener) {
 		return super.addValueChangeListener(e -> {
-			if (e.getValue() != null && !e.getValue().equals(lastSetValue)
-					|| e.getValue() == null && lastSetValue != null) {
+			if (!setFromServer && (e.getValue() != null && !e.getValue().equals(lastNotifiedValue)
+					|| e.getValue() == null && lastNotifiedValue != null)) {
 				listener.onComponentEvent(e);
 			}
+			lastNotifiedValue = e.getValue();
+			setFromServer = false;
 		});
 	}
 }

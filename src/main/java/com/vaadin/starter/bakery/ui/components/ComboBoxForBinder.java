@@ -11,21 +11,24 @@ import com.vaadin.flow.shared.Registration;
  */
 public class ComboBoxForBinder<T> extends ComboBox<T> implements Focusable<ComboBox<T>> {
 
-	private T lastSetValue;
+	private T lastNotifiedValue;
+	private boolean setFromServer;
 
 	@Override
 	public void setValue(T value) {
 		super.setValue(value);
-		this.lastSetValue = value;
+		setFromServer = true;
 	}
 
 	@Override
 	public Registration addValueChangeListener(ValueChangeListener<ComboBox<T>, T> listener) {
 		return super.addValueChangeListener((ValueChangeListener<ComboBox<T>, T>) e -> {
-			if (e.getValue() != null && !e.getValue().equals(lastSetValue)
-					|| e.getValue() == null && lastSetValue != null) {
+			if (!setFromServer && (getValue() != null && !getValue().equals(lastNotifiedValue)
+					|| e.getValue() == null && lastNotifiedValue != null)) {
 				listener.onComponentEvent(e);
 			}
+			lastNotifiedValue = e.getValue();
+			setFromServer = false;
 		});
 	}
 }
