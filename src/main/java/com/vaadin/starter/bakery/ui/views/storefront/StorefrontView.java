@@ -13,7 +13,7 @@ import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.data.selection.SelectionEvent;
-import com.vaadin.flow.renderer.ComponentTemplateRenderer;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
@@ -63,7 +63,7 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 		dialog.add(orderDetails);
 
 		grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-		grid.addColumn(new ComponentTemplateRenderer<>(order -> {
+		grid.addColumn(new ComponentRenderer<>(order -> {
 			OrderCard orderCard = new OrderCard();
 			orderCard.setOrder(order);
 			orderCard.setHeader(presenter.getHeaderByOrderId(order.getId()));
