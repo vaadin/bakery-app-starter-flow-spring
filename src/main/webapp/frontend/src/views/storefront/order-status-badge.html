@@ -34,6 +34,11 @@
         padding: 2px 8px;
       }
 
+      :host([status="delivered"]) #wrapper span,
+      :host(:not([status="delivered"])) #wrapper iron-icon {
+        display: none;
+      }
+
       :host([small]) #wrapper {
         padding: 0 5px;
       }
@@ -49,7 +54,11 @@
       }
     </style>
 
-    <div id="wrapper" inner-h-t-m-l="{{_getContent(status)}}"></div>
+    <div id="wrapper">
+      <span>[[status]]</span>
+      <iron-icon icon="vaadin:check"></iron-icon>
+    </div>
+
   </template>
 
   <script>
@@ -69,19 +78,9 @@
       }
 
       _onStatusChanged(current) {
-        const lowercase = current ? current.toLowerCase() : current;
-        if (lowercase != current) {
-          this.status = lowercase;
-        }
+        this.status = current && current.toLowerCase();
       }
 
-      _getContent(status) {
-        if (status === 'delivered') {
-          return '<iron-icon icon="vaadin:check"></iron-icon>';
-        }
-
-        return status;
-      }
     }
 
     window.customElements.define(OrderStatusBadge.is, OrderStatusBadge);
