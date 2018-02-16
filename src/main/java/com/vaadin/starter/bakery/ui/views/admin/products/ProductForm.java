@@ -16,7 +16,6 @@ import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.ui.components.FormButtonsBar;
 import com.vaadin.starter.bakery.ui.crud.CrudView.CrudForm;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
-import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
 
 @Tag("product-form")
 @HtmlImport("src/views/admin/products/product-form.html")
@@ -42,8 +41,8 @@ public class ProductForm extends PolymerTemplate<TemplateModel> implements CrudF
 		price.setPattern("\\d+(\\.\\d?\\d?)?$");
 		price.setPreventInvalidInput(true);
 
-		TemplateUtil.addToSlot(price, "prefix",
-				new Span(Currency.getInstance(BakeryConst.APP_LOCALE).getSymbol()));
+		String currencySymbol = Currency.getInstance(BakeryConst.APP_LOCALE).getSymbol();
+		price.setPrefixComponent(new Span(currencySymbol));
 	}
 
 	@Override
