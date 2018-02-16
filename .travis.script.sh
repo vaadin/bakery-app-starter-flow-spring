@@ -7,4 +7,4 @@
 
 TESTBENCH=-Dvaadin.proKey=$VAADIN_PRO_KEY
 
-mvn -B -e -V -Pit clean verify -DrunLint -Dvaadin.productionMode $TESTBENCH -Dcom.vaadin.testbench.Parameters.runLocally=chrome
+mvn -B -e -V -Pit clean verify -DrunLint -Dvaadin.productionMode $TESTBENCH
