@@ -12,7 +12,7 @@
 
 <link rel="import" href="../../../styles/shared-styles.html">
 
-<dom-module id="order-details-full">
+<dom-module id="order-details">
   <template>
     <style include="shared-styles">
       :host {
@@ -221,9 +221,9 @@
   </template>
 
   <script>
-    class OrderDetailsFull extends window.ScrollShadowMixin(Polymer.Element) {
+    class OrderDetails extends window.ScrollShadowMixin(Polymer.Element) {
       static get is() {
-        return 'order-details-full';
+        return 'order-details';
       }
 
       static get properties() {
@@ -258,6 +258,6 @@
       }
     }
 
-    window.customElements.define(OrderDetailsFull.is, OrderDetailsFull);
+    window.customElements.define(OrderDetails.is, OrderDetails);
   </script>
 </dom-module>
