@@ -1,5 +1,6 @@
 package com.vaadin.starter.bakery.testbench;
 
+import com.vaadin.testbench.IPAddress;
 import com.vaadin.testbench.annotations.BrowserConfiguration;
 import com.vaadin.testbench.parallel.Browser;
 import com.vaadin.testbench.parallel.ParallelTest;
@@ -20,7 +21,7 @@ import java.util.List;
 
 public abstract class AbstractIT extends ParallelTest {
 
-	public static final String APP_URL = "http://localhost:8080/";
+	public String APP_URL = "http://localhost:8080/";
 
 	static {
 		// Prevent debug logging from Apache HTTP client
@@ -34,7 +35,9 @@ public abstract class AbstractIT extends ParallelTest {
 	@Override
 	public void setup() throws Exception {
 		super.setup();
-
+		if (getRunLocallyBrowser() == null) {
+			APP_URL = "http://" + IPAddress.findSiteLocalAddress() + ":8080/";
+		}
 		getCommandExecutor().resizeViewPortTo(1024, 768);
 	}
 
