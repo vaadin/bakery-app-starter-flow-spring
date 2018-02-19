@@ -119,10 +119,10 @@
         <span class="dim">Order #[[item.id]]</span>
       </div>
 
-      <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(1, 4)]]">
+      <vaadin-form-layout id="form1">
         <vaadin-form-item>
           <label slot="label">Due</label>
-          <vaadin-form-layout responsive-steps="[[_getDateResponsiveSteps()]]">
+          <vaadin-form-layout id="form2">
             <div class="date">
               <h3>[[item.dueDate.day]]</h3>
               <span class="dim">[[item.dueDate.weekday]]</span>
@@ -145,10 +145,10 @@
         </vaadin-form-item>
       </vaadin-form-layout>
 
-      <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(1, 4)]]">
+      <vaadin-form-layout id="form3">
         <div></div>
 
-        <vaadin-form-layout colspan="2" responsive-steps="[[_getOneColumnResponsiveSteps()]]">
+        <vaadin-form-layout id="form4" colspan="2">
           <template is="dom-if" if="[[item.customer.details]]">
             <vaadin-form-item label-position="top">
               <label slot="label">Additional details</label>
@@ -234,29 +234,27 @@
         };
       }
 
+      ready() {
+        super.ready();
+
+        this.$.form1.responsiveSteps = this.$.form3.responsiveSteps = [
+          {"columns": 1, "labelsPosition": "top"},
+          {"minWidth": "600px", "columns": 4, "labelsPosition": "top"}
+        ];
+
+        this.$.form2.responsiveSteps = [
+          {"columns": 1}, {"minWidth": "180px", "columns": 2}
+        ];
+
+        this.$.form4.responsiveSteps = [
+          {"columns": 1, "labelsPosition": "top"}
+        ];
+      }
+
       _onCommentKeydown(event) {
         if (event.key === 'Enter') {
           this.$['send-comment'].click();
         }
-      }
-
-      _computeResponsiveSteps(mobileColumns, desktopColumns) {
-        return [
-          {"columns": mobileColumns, "labelsPosition": "top"},
-          {"minWidth": "600px", "columns": desktopColumns, "labelsPosition": "top"}
-        ];
-      }
-
-      _getDateResponsiveSteps() {
-        return [
-          {"columns": 1}, {"minWidth": "180px", "columns": 2}
-        ];
-      }
-
-      _getOneColumnResponsiveSteps() {
-        return [
-          {"columns": 1, "labelsPosition": "top"}
-        ];
       }
     }
 

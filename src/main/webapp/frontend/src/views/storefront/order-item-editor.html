@@ -33,7 +33,7 @@
 
     <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
 
-    <vaadin-form-layout class="product" responsive-steps="[[_computeResponsiveSteps(10, 18)]]">
+    <vaadin-form-layout id="form1" class="product">
 
       <vaadin-combo-box id="products" colspan="8" index="[[index]]"></vaadin-combo-box>
 
@@ -65,16 +65,19 @@
         };
       }
 
+      ready() {
+        super.ready();
+
+        this.$.form1.responsiveSteps = [
+          {"columns": 10, "labelsPosition": "top"},
+          {"minWidth": "600px", "columns": 18, "labelsPosition": "top"}
+        ];
+      }
+
       _getConditional(desktopView, desktopColspan, mobileColspan) {
         return desktopView ? desktopColspan : mobileColspan;
       }
 
-      _computeResponsiveSteps(mobileColumns, desktopColumns) {
-        return [
-          {"columns": mobileColumns, "labelsPosition": "top"},
-          {"minWidth": "600px", "columns": desktopColumns, "labelsPosition": "top"}
-        ];
-      }
     }
 
     window.customElements.define(OrderItemEditor.is, OrderItemEditor);
