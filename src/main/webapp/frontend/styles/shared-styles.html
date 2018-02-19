@@ -102,6 +102,21 @@
   </template>
 </dom-module>
 
+<!-- Theme for icons inside text-field and buttons, 'vaadin:' icons have custom rules 
+  in lumo theme that make icons look wrong, by overriding width and height but not 
+  padding the look ok -->
+<dom-module id="bakery-text-buttons-theme-icons" theme-for="vaadin-text-field vaadin-button">
+  <template>
+    <style>
+      [part="input-field"] ::slotted(iron-icon[icon^="vaadin:"]) ,
+      :host ::slotted(iron-icon[icon^="vaadin:"]) {
+        width: var(--iron-icon-width, 24px);
+        height: var(--iron-icon-height, 24px);
+      }
+    </style>
+  </template>
+</dom-module>
+
 <!-- Theme for the vaadin-grid -->
 <dom-module id="bakery-grid-theme" theme-for="vaadin-grid">
   <template>
@@ -171,10 +186,6 @@
       *::after,
       ::slotted(*) {
         box-sizing: border-box;
-      }
-
-      iron-icon {
-        box-sizing: content-box;
       }
 
       :host([hidden]),
