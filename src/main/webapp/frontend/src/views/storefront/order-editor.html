@@ -23,20 +23,16 @@
     <div class="scrollable flex1" id="main">
       <h2 id="title"></h2>
 
-      <vaadin-form-layout responsive-steps='[
-          {"columns": 1, "labelsPosition": "top"},
-          {"minWidth": "600px", "columns": 4, "labelsPosition": "top"}]'>
+      <vaadin-form-layout id="form1">
 
-        <vaadin-form-layout responsive-steps='[{"columns": 1, "labelsPosition": "top"}]'>
+        <vaadin-form-layout id="form2">
 
           <vaadin-combo-box label="Status" id="status">
           </vaadin-combo-box>
 
           <vaadin-form-item>
             <label slot="label">Due</label>
-            <vaadin-form-layout responsive-steps='[
-              {"columns": 1, "labelsPosition": "top"},
-              {"minWidth": "600px", "columns": 2, "labelsPosition": "top"}]'>
+            <vaadin-form-layout id="form3">
 
               <vaadin-date-picker  id="dueDate">
               </vaadin-date-picker>
@@ -53,9 +49,7 @@
           </vaadin-combo-box>
         </vaadin-form-layout>
 
-        <vaadin-form-layout  colspan="3" responsive-steps='[
-          {"columns": 1, "labelsPosition": "top"},
-          {"minWidth": "600px", "columns": 3, "labelsPosition": "top"}]'>
+        <vaadin-form-layout id="form4" colspan="3">
 
           <vaadin-text-field id="customerName" label="Customer" colspan="2">
             <iron-icon slot="prefix" icon="vaadin:user"></iron-icon>
@@ -97,6 +91,29 @@
             observer: '_onStatusChange'
           }
         };
+      }
+
+      ready() {
+        super.ready();
+
+        this.$.form1.responsiveSteps = [
+          {columns: 1, labelsPosition: 'top'},
+          {minWidth: '600px', columns: 4, labelsPosition: 'top'}
+        ];
+
+        this.$.form2.responsiveSteps = [
+          {columns: 1, labelsPosition: 'top'}
+        ];
+
+        this.$.form3.responsiveSteps = [
+          {columns: 1, labelsPosition: 'top'},
+          {minWidth: '600px', columns: 2, labelsPosition: 'top'}
+        ];
+
+        this.$.form4.responsiveSteps = [
+          {columns: 1, labelsPosition: 'top'},
+          {minWidth: '600px', columns: 3, labelsPosition: 'top'}
+        ];
       }
 
       _onStatusChange() {
