@@ -1,7 +1,6 @@
 <link rel="import" href="../../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../../bower_components/vaadin-icons/vaadin-icons.html">
-<link rel="import" href="../../../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../../../bower_components/vaadin-button/src/vaadin-button.html">
 <link rel="import" href="../../../bower_components/vaadin-form-layout/src/vaadin-form-item.html">
 <link rel="import" href="../../../bower_components/vaadin-form-layout/src/vaadin-form-layout.html">
@@ -114,18 +113,16 @@
       }
     </style>
 
-    <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
-
     <div class="scrollable main-row" id="main">
       <div class="meta-row">
         <order-status-badge status="[[item.state]]"></order-status-badge>
         <span class="dim">Order #[[item.id]]</span>
       </div>
 
-      <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 4, 1)]]">
+      <vaadin-form-layout id="form1">
         <vaadin-form-item>
           <label slot="label">Due</label>
-          <vaadin-form-layout responsive-steps='[{"columns": 1}, {"minWidth": "180px", "columns": 2}]'>
+          <vaadin-form-layout id="form2">
             <div class="date">
               <h3>[[item.dueDate.day]]</h3>
               <span class="dim">[[item.dueDate.weekday]]</span>
@@ -148,10 +145,10 @@
         </vaadin-form-item>
       </vaadin-form-layout>
 
-      <vaadin-form-layout responsive-steps="[[_computeResponsiveSteps(desktopView, 4, 1)]]">
+      <vaadin-form-layout id="form3">
         <div></div>
 
-        <vaadin-form-layout colspan="2" responsive-steps='[{"columns": 1, "labelsPosition": "top"}]'>
+        <vaadin-form-layout id="form4" colspan="2">
           <template is="dom-if" if="[[item.customer.details]]">
             <vaadin-form-item label-position="top">
               <label slot="label">Additional details</label>
@@ -233,22 +230,31 @@
         return {
           item: {
             type: Object
-          },
-          desktopView: Boolean
+          }
         };
+      }
+
+      ready() {
+        super.ready();
+
+        this.$.form1.responsiveSteps = this.$.form3.responsiveSteps = [
+          {columns: 1, labelsPosition: 'top'},
+          {minWidth: '600px', columns: 4, labelsPosition: 'top'}
+        ];
+
+        this.$.form2.responsiveSteps = [
+          {columns: 1}, {minWidth: '180px', columns: 2}
+        ];
+
+        this.$.form4.responsiveSteps = [
+          {columns: 1, labelsPosition: 'top'}
+        ];
       }
 
       _onCommentKeydown(event) {
         if (event.key === 'Enter') {
           this.$['send-comment'].click();
         }
-      }
-
-      _computeResponsiveSteps(desktopView, desktopColumns, mobileColumns) {
-        return [{
-          columns: desktopView ? desktopColumns : mobileColumns,
-          labelsPosition: 'top'
-        }];
       }
     }
 
