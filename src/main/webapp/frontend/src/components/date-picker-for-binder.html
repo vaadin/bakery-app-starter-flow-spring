@@ -1,0 +1,22 @@
+<link rel="import" href="../../bower_components/vaadin-date-picker/src/vaadin-date-picker.html">
+
+<dom-module id="date-picker-for-binder">
+  <script>
+    {
+      class DatePickerForBinderElement extends Vaadin.DatePickerElement {
+
+        static get is() {
+          return 'date-picker-for-binder';
+        }
+
+        detached() {
+          // super.detached() modifies `invalid` attribute when value is empty
+          this.opened = false;
+        }
+      }
+
+      customElements.define(DatePickerForBinderElement.is, DatePickerForBinderElement);
+      window.Vaadin.DatePickerForBinderElement = DatePickerForBinderElement;
+    }
+  </script>
+</dom-module>
