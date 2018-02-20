@@ -47,7 +47,7 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 
 	private final OrderEditor orderEditor;
 
-	private final OrderDetailsFull orderDetails = new OrderDetailsFull();
+	private final OrderDetails orderDetails = new OrderDetails();
 
 	private final OrderPresenter presenter;
 
@@ -127,7 +127,7 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 		return orderEditor;
 	}
 
-	OrderDetailsFull getOpenedOrderDetails() {
+	OrderDetails getOpenedOrderDetails() {
 		return orderDetails;
 	}
 
