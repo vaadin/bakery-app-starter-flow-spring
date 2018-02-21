@@ -35,6 +35,9 @@ self.addEventListener('fetch', function(event) {
         })
     );
   } else {
+    if (request.cache === 'only-if-cached' && request.mode !== 'same-origin') {
+        return;
+    }
     event.respondWith(
       caches.match(request)
         .then(function(response) {
