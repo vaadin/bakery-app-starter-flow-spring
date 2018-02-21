@@ -51,20 +51,10 @@ public class OrderItemEditor extends PolymerTemplate<TemplateModel> implements H
 	private BeanValidationBinder<OrderItem> binder = new BeanValidationBinder<>(OrderItem.class);
 
 	public OrderItemEditor(ProductDataProvider productSource) {
-		amount.setEnabled(false);
-		delete.setEnabled(false);
-
 		products.setDataProvider(productSource);
 		products.addValueChangeListener(e -> {
-			if (amount.getValue() == null) {
-				amount.setEnabled(true);
-				amount.setValue(1);
-			}
-			if (!comment.isEnabled()) {
-				comment.setEnabled(true);
-			}
-			fireEvent(new ProductChangeEvent(this, e.getValue()));
 			setPrice();
+			fireEvent(new ProductChangeEvent(this, e.getValue()));
 		});
 
 		amount.addValueChangeListener(e -> setPrice());
@@ -92,14 +82,6 @@ public class OrderItemEditor extends PolymerTemplate<TemplateModel> implements H
 		if (oldValue != totalPrice) {
 			fireEvent(new PriceChangeEvent(this, oldValue, totalPrice));
 		}
-	}
-
-	@Override
-	public void setReadOnly(boolean readOnly) {
-		HasValue.super.setReadOnly(readOnly);
-		binder.setReadOnly(readOnly);
-		delete.setEnabled(!readOnly);
-		comment.setEnabled(!readOnly);
 	}
 
 	@Override
