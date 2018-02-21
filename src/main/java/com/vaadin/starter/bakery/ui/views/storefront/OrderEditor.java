@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import com.vaadin.flow.component.combobox.ComboBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -35,7 +36,6 @@ import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.PickupLocation;
 import com.vaadin.starter.bakery.backend.data.entity.User;
-import com.vaadin.starter.bakery.ui.components.ComboBoxForBinder;
 import com.vaadin.starter.bakery.ui.components.DatePickerForBinder;
 import com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil;
 import com.vaadin.starter.bakery.ui.events.CancelEvent;
@@ -60,16 +60,16 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 	private H2 title;
 
 	@Id("status")
-	private ComboBoxForBinder<OrderState> status;
+	private ComboBox<OrderState> status;
 
 	@Id("dueDate")
 	private DatePickerForBinder dueDate;
 
 	@Id("dueTime")
-	private ComboBoxForBinder<LocalTime> dueTime;
+	private ComboBox<LocalTime> dueTime;
 
 	@Id("pickupLocation")
-	private ComboBoxForBinder<PickupLocation> pickupLocation;
+	private ComboBox<PickupLocation> pickupLocation;
 
 	@Id("customerName")
 	private TextField customerName;
