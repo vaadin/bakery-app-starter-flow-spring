@@ -51,21 +51,23 @@ public class OrderItemEditor extends PolymerTemplate<TemplateModel> implements H
 	private BeanValidationBinder<OrderItem> binder = new BeanValidationBinder<>(OrderItem.class);
 
 	public OrderItemEditor(ProductDataProvider productSource) {
-		this.amount.setDisabled(true);
+		amount.setEnabled(false);
+		delete.setEnabled(false);
+
 		products.setDataProvider(productSource);
 		products.addValueChangeListener(e -> {
-			if (this.amount.getValue() == null) {
-				this.amount.setDisabled(false);
-				this.amount.setValue(1);
+			if (amount.getValue() == null) {
+				amount.setEnabled(true);
+				amount.setValue(1);
 			}
-			if (!this.comment.isEnabled()) {
-				this.comment.setEnabled(true);
+			if (!comment.isEnabled()) {
+				comment.setEnabled(true);
 			}
 			fireEvent(new ProductChangeEvent(this, e.getValue()));
-			this.setPrice();
+			setPrice();
 		});
 
-		amount.addValueChangeListener(e -> this.setPrice());
+		amount.addValueChangeListener(e -> setPrice());
 		comment.addValueChangeListener(e -> fireEvent(new CommentChangeEvent(this, e.getValue())));
 
 		binder.forField(amount).bind("quantity");
@@ -75,7 +77,7 @@ public class OrderItemEditor extends PolymerTemplate<TemplateModel> implements H
 		products.setRequired(true);
 
 		delete.addClickListener(e -> fireEvent(new DeleteEvent(this)));
-		this.setPrice();
+		setPrice();
 	}
 
 	private void setPrice() {
@@ -86,7 +88,7 @@ public class OrderItemEditor extends PolymerTemplate<TemplateModel> implements H
 		if (selectedAmount != null && product != null) {
 			totalPrice = selectedAmount * product.getPrice();
 		}
-		this.price.setText(FormattingUtils.formatAsCurrency(totalPrice));
+		price.setText(FormattingUtils.formatAsCurrency(totalPrice));
 		if (oldValue != totalPrice) {
 			fireEvent(new PriceChangeEvent(this, oldValue, totalPrice));
 		}
@@ -102,17 +104,18 @@ public class OrderItemEditor extends PolymerTemplate<TemplateModel> implements H
 
 	@Override
 	public void setValue(OrderItem value) {
-		this.orderItem = value;
+		orderItem = value;
 		binder.setBean(value);
 		boolean noProductSelected = value == null || value.getProduct() == null;
-		amount.setDisabled(noProductSelected);
+		amount.setEnabled(!noProductSelected);
+		delete.setEnabled(!noProductSelected);
 		comment.setEnabled(!noProductSelected);
-		this.setPrice();
+		setPrice();
 	}
 
 	@Override
 	public OrderItem getValue() {
-		return this.orderItem;
+		return orderItem;
 	}
 
 	public Stream<HasValue<?, ?>> validate() {
