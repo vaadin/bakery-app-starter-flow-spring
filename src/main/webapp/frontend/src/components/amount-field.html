@@ -27,91 +27,103 @@
       }
     </style>
 
-    <vaadin-text-field id="input" label="[[label]]" theme="center" pattern="\d*" part="text-field" prevent-invalid-input value=[[value]] readonly="true">
+    <vaadin-text-field id="input" part="text-field" theme="center"
+        label="[[label]]"
+        value=[[value]]
+        disabled=[[disabled]]
+        pattern$="[[pattern]]"
+        prevent-invalid-input
+        readonly="[[!editable]]">
       <iron-icon slot="prefix" icon="vaadin:minus" on-click="_minus" disabled$="[[_minusDisabled(value, min, max, disabled, readOnly)]]"></iron-icon>
       <iron-icon slot="suffix" icon="vaadin:plus" on-click="_plus" disabled$="[[_plusDisabled(value, min, max, disabled, readOnly)]]"></iron-icon>
     </vaadin-text-field>
   </template>
 
   <script>
-    class AmountField extends Polymer.Element {
-      static get is() {
-        return 'amount-field';
+    {
+      /**
+       * A pure Polymer Web Component for numeric fields.
+       */
+      class AmountField extends Polymer.Element {
+        static get is() {
+          return 'amount-field';
+        }
+
+        static get properties() {
+          return {
+            value: {
+              type: Number,
+              value: 0,
+              notify: true,
+              observer: '_valueChanged'
+            },
+            min: {
+              type: Number,
+              observer: '_minChanged',
+              value: 0
+            },
+            max: {
+              type: Number,
+              observer: '_maxChanged',
+              value: Number.MAX_SAFE_INTEGER || (Math.pow(2, 53) - 1) /* MSIE fallback */
+            },
+            disabled: {
+              type: Boolean,
+              value: false,
+              notify: true,
+              reflectToAttribute: true
+            },
+            editable: {
+              type: Boolean
+            },
+            pattern: {
+              type: String,
+              value: '\d*'
+            },
+            label: String
+          };
+        }
+
+        get _enabled() {
+          return !this.disabled && !this.readOnly;
+        }
+
+        _valueChanged(value) {
+          this.value = this.value || 0;
+        }
+
+        _minChanged(val) {
+          this.value = this.value < val ? val : this.value;
+        }
+
+        _maxChanged(val) {
+          this.value = this.value > val ? val : this.value;
+        }
+
+        _plus() {
+          !this._plusDisabled() && this.value++;
+          this.$.input.focus();
+        }
+
+        _minus() {
+          !this._minusDisabled() && this.value--;
+          this.$.input.focus();
+        }
+
+        _isEqual(value, boundry) {
+          return Math.max(this.min, Math.min(value, this.max)) === boundry;
+        }
+
+        _plusDisabled(value, min, max, disabled, readOnly) {
+          return !this._enabled || this.value >= this.max;
+        }
+
+        _minusDisabled(value, min, max, disabled, readOnly) {
+          return !this._enabled || this.value <= this.min;
+        }
       }
 
-      static get properties() {
-        return {
-          value: {
-            type: Number,
-            value: 0,
-            notify: true,
-            observer: '_valueChanged'
-          },
-          min: {
-            type: Number,
-            observer: '_minChanged',
-            value: 0
-          },
-          max: {
-            type: Number,
-            observer: '_maxChanged',
-            value: Number.MAX_SAFE_INTEGER || (Math.pow(2, 53) - 1) /* MSIE fallback */
-          },
-          disabled: {
-            type: Boolean,
-            value: false,
-            notify: true,
-            reflectToAttribute: true
-          },
-          readOnly: {
-            type: Boolean,
-            value: false,
-            notify: true,
-            reflectToAttribute: true
-          },
-          label: String
-        };
-      }
-
-      get _enabled() {
-        return !this.disabled && !this.readOnly;
-      }
-
-      _valueChanged(value) {
-        this.value = this.value || 0;
-      }
-
-      _minChanged(val) {
-        this.value = this.value < val ? val : this.value;
-      }
-
-      _maxChanged(val) {
-        this.value = this.value > val ? val : this.value;
-      }
-
-      _plus() {
-        !this._plusDisabled() && this.value++;
-        this.$.input.focus();
-      }
-
-      _minus() {
-        !this._minusDisabled() && this.value--;
-        this.$.input.focus();
-      }
-
-      _isEqual(value, boundry) {
-        return Math.max(this.min, Math.min(value, this.max)) === boundry;
-      }
-
-      _plusDisabled(value, min, max, disabled, readOnly) {
-        return !this._enabled || this.value >= this.max;
-      }
-
-      _minusDisabled(value, min, max, disabled, readOnly) {
-        return !this._enabled || this.value <= this.min;
-      }
+      window.customElements.define(AmountField.is, AmountField);
     }
-
-    window.customElements.define(AmountField.is, AmountField);
   </script>
 </dom-module>

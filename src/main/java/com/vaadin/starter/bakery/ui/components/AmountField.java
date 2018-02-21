@@ -9,14 +9,6 @@ import com.vaadin.flow.component.dependency.HtmlImport;
 @HtmlImport("src/components/amount-field.html")
 public class AmountField extends Component implements HasValue<AmountField, Integer> {
 
-	private static final int MIN = 1;
-	private static final int MAX = 15;
-
-	public AmountField() {
-		setMin(MIN);
-		setMax(MAX);
-	}
-
 	@Override
 	public void setValue(Integer value) {
 		this.getElement().setProperty("value", value);
@@ -28,8 +20,8 @@ public class AmountField extends Component implements HasValue<AmountField, Inte
 		return val == null ? 0 : Integer.parseInt(val);
 	}
 
-	public void setDisabled(boolean disabled) {
-		this.getElement().setProperty("disabled", disabled);
+	public void setEnabled(boolean enabled) {
+		this.getElement().setProperty("disabled", !enabled);
 	}
 
 	public void setMin(int value) {
@@ -40,8 +32,11 @@ public class AmountField extends Component implements HasValue<AmountField, Inte
 		this.getElement().setProperty("max", value);
 	}
 
-	@Override
-	public void setReadOnly(boolean readOnly) {
-		this.getElement().setProperty("readOnly", readOnly);
+	public void setEditable(boolean editable) {
+		this.getElement().setProperty("editable", editable);
+	}
+
+	public void setPattern(String pattern) {
+		this.getElement().setProperty("pattern", pattern);
 	}
 }
