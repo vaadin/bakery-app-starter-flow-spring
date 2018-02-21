@@ -60,10 +60,8 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 	}
 
 	private void setupGrid() {
-		final Grid.Column<Product> productNameColumn = grid.addColumn(Product::getName).setHeader("Product Name").setFlexGrow(10);
+		grid.addColumn(Product::getName).setHeader("Product Name").setFlexGrow(10);
 		grid.addColumn(p -> currencyFormatter.toPresentation(p.getPrice())).setHeader("Unit Price");
-
-		grid.getElement().addEventListener("animationend", e -> productNameColumn.setFlexGrow(10));
 	}
 
 	@Override
