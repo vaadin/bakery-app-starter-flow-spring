@@ -9,16 +9,18 @@ import org.springframework.context.annotation.Scope;
 
 import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.HasValue;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.ui.crud.EntityPresenter;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider;
+import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-class OrderPresenter {
+public class OrderPresenter {
 
 	private OrderCardHeaderGenerator headersGenerator;
 	private StorefrontView view;
@@ -64,9 +66,9 @@ class OrderPresenter {
 		dataProvider.setFilter(new OrderFilter(filter, showPrevious));
 	}
 
-	void onNavigation(Long id) {
+	void onNavigation(Long id, boolean edit) {
 		createNew = false;
-		entityPresenter.loadEntity(id, e -> open(e, false));
+		entityPresenter.loadEntity(id, e -> open(e, edit));
 	}
 
 	void createNewOrder() {
@@ -79,8 +81,7 @@ class OrderPresenter {
 	}
 
 	void edit() {
-		view.setDialogElementsVisibility(true);
-		view.getOpenedOrderEditor().read(entityPresenter.getEntity());
+		UI.getCurrent().navigateTo(BakeryConst.PAGE_STOREFRONT_EDIT + "/" + entityPresenter.getEntity().getId());
 	}
 
 	void back() {

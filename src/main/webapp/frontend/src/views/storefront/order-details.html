@@ -12,7 +12,7 @@
 
 <link rel="import" href="../../../styles/shared-styles.html">
 
-<dom-module id="order-details-full">
+<dom-module id="order-details">
   <template>
     <style include="shared-styles">
       :host {
@@ -212,18 +212,18 @@
 
       <div slot="info" class="total">Total [[item.totalPrice]]</div>
 
-      <vaadin-button slot="right" id="save" theme="primary success" class="edit-button" hidden="[[!review]]">Place Order ✓</vaadin-button>
-      <vaadin-button slot="right" id="edit" theme="primary" class="edit-button" hidden="[[review]]">
-        <span>Edit order</span>
-        <iron-icon icon="vaadin:edit"></iron-icon>
+      <vaadin-button slot="right" id="save" theme="primary success" hidden="[[!review]]">Place Order ✓</vaadin-button>
+      <vaadin-button slot="right" id="edit" theme="primary" hidden="[[review]]">
+        Edit order
+        <iron-icon icon="vaadin:edit" slot="suffix"></iron-icon>
       </vaadin-button>
     </buttons-bar>
   </template>
 
   <script>
-    class OrderDetailsFull extends window.ScrollShadowMixin(Polymer.Element) {
+    class OrderDetails extends window.ScrollShadowMixin(Polymer.Element) {
       static get is() {
-        return 'order-details-full';
+        return 'order-details';
       }
 
       static get properties() {
@@ -258,6 +258,6 @@
       }
     }
 
-    window.customElements.define(OrderDetailsFull.is, OrderDetailsFull);
+    window.customElements.define(OrderDetails.is, OrderDetails);
   </script>
 </dom-module>

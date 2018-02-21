@@ -4,8 +4,8 @@ import com.vaadin.flow.component.button.testbench.ButtonElement;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elementsbase.Element;
 
-@Element("order-details-full")
-public class OrderDetailsFullElement extends TestBenchElement {
+@Element("order-details")
+public class OrderDetailsElement extends TestBenchElement {
 
 	public ButtonElement getEditButton() {
 		return $(ButtonElement.class).id("edit");

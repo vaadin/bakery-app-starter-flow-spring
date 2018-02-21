@@ -10,6 +10,7 @@ public class BakeryConst {
 
 	public static final String PAGE_ROOT = "";
 	public static final String PAGE_STOREFRONT = "storefront";
+	public static final String PAGE_STOREFRONT_EDIT = "storefront/edit";
 	public static final String PAGE_DASHBOARD = "dashboard";
 	public static final String PAGE_USERS = "users";
 	public static final String PAGE_PRODUCTS = "products";

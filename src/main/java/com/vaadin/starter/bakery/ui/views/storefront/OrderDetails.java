@@ -32,9 +32,9 @@ import com.vaadin.starter.bakery.ui.views.storefront.events.EditEvent;
  * The component displaying a full (read-only) summary of an order, and a comment
  * field to add comments.
  */
-@Tag("order-details-full")
-@HtmlImport("src/views/storefront/order-details-full.html")
-public class OrderDetailsFull extends PolymerTemplate<OrderDetailsFull.Model> {
+@Tag("order-details")
+@HtmlImport("src/views/storefront/order-details.html")
+public class OrderDetails extends PolymerTemplate<OrderDetails.Model> {
 
 	private Order order;
 
@@ -62,7 +62,7 @@ public class OrderDetailsFull extends PolymerTemplate<OrderDetailsFull.Model> {
 	@Id("commentField")
 	private TextField commentField;
 
-	public OrderDetailsFull() {
+	public OrderDetails() {
 		sendComment.addClickListener(e -> {
 			String message = commentField.getValue();
 			message = message == null ? "" : message.trim();

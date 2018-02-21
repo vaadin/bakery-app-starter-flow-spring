@@ -12,8 +12,8 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.data.binder.ValidationException;
-import com.vaadin.flow.data.selection.SelectionEvent;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.data.selection.SelectionEvent;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
@@ -31,6 +31,7 @@ import com.vaadin.starter.bakery.ui.views.EntityView;
 @Tag("storefront-view")
 @HtmlImport("src/views/storefront/storefront-view.html")
 @Route(value = BakeryConst.PAGE_STOREFRONT, layout = MainView.class)
+@RouteAlias(value = BakeryConst.PAGE_STOREFRONT_EDIT, layout = MainView.class)
 @RouteAlias(value = BakeryConst.PAGE_ROOT, layout = MainView.class)
 @PageTitle(BakeryConst.TITLE_STOREFRONT)
 public class StorefrontView extends PolymerTemplate<TemplateModel>
@@ -47,7 +48,7 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 
 	private final OrderEditor orderEditor;
 
-	private final OrderDetailsFull orderDetails = new OrderDetailsFull();
+	private final OrderDetails orderDetails = new OrderDetails();
 
 	private final OrderPresenter presenter;
 
@@ -96,8 +97,9 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 
 	@Override
 	public void setParameter(BeforeEvent event, @OptionalParameter Long orderId) {
+		boolean editView = event.getLocation().getPath().contains(BakeryConst.PAGE_STOREFRONT_EDIT);
 		if (orderId != null) {
-			presenter.onNavigation(orderId);
+			presenter.onNavigation(orderId, editView);
 		}
 	}
 
@@ -127,7 +129,7 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 		return orderEditor;
 	}
 
-	OrderDetailsFull getOpenedOrderDetails() {
+	OrderDetails getOpenedOrderDetails() {
 		return orderDetails;
 	}
 

@@ -90,15 +90,15 @@
 
     <div class="row">
       <vaadin-text-field id="field" class="field" placeholder="[[fieldPlaceholder]]" value="{{fieldValue}}" focused="{{_fieldFocused}}" on-value-changed="_filterChanged">
-        <iron-icon icon="[[fieldIcon]]" slot="prefix"></iron-icon>
+        <iron-icon icon$="[[fieldIcon]]" slot="prefix"></iron-icon>
       </vaadin-text-field>
       <vaadin-checkbox class="checkbox" checked="{{checkboxChecked}}" focused="{{_checkboxFocused}}" hidden$="[[!_desktopView]]">[[checkboxText]]</vaadin-checkbox>
       <vaadin-button id="clear" class="extra-filter" theme="tertiary">
         [[clearText]]
       </vaadin-button>
       <vaadin-button id="action" class="extra-action" theme="primary">
-        <iron-icon icon="[[buttonIcon]]"></iron-icon>
-        <span>[[buttonText]]</span>
+        <iron-icon icon$="[[buttonIcon]]" slot="prefix"></iron-icon>
+        [[buttonText]]
       </vaadin-button>
     </div>
 
