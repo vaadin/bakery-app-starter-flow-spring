@@ -1,5 +1,6 @@
 package com.vaadin.starter.bakery.ui.views.admin.users;
 
+import com.vaadin.flow.component.combobox.ComboBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -20,7 +21,6 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.User;
-import com.vaadin.starter.bakery.ui.components.ComboBoxForBinder;
 import com.vaadin.starter.bakery.ui.components.FormButtonsBar;
 import com.vaadin.starter.bakery.ui.crud.CrudView.CrudForm;
 
@@ -49,7 +49,7 @@ public class UserForm extends PolymerTemplate<TemplateModel> implements CrudForm
 	private PasswordField password;
 
 	@Id("role")
-	private ComboBoxForBinder<String> role;
+	private ComboBox<String> role;
 
 	private final PasswordEncoder passwordEncoder;
 
