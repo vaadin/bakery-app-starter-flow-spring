@@ -60,14 +60,9 @@ public class UsersView extends CrudView<User, TemplateModel> {
 	}
 
 	private void setupGrid() {
-		final Grid.Column<User> emailColumn = grid.addColumn(User::getEmail).setWidth("270px").setHeader("Email").setFlexGrow(5);
-		final Grid.Column<User> userColumn = grid.addColumn(u -> u.getFirstName() + " " + u.getLastName()).setHeader("Name").setWidth("200px").setFlexGrow(5);
+		grid.addColumn(User::getEmail).setWidth("270px").setHeader("Email").setFlexGrow(5);
+		grid.addColumn(u -> u.getFirstName() + " " + u.getLastName()).setHeader("Name").setWidth("200px").setFlexGrow(5);
 		grid.addColumn(User::getRole).setHeader("Role").setWidth("150px");
-
-		grid.getElement().addEventListener("animationend", e -> {
-			emailColumn.setWidth("270px").setFlexGrow(5);
-			userColumn.setWidth("200px").setFlexGrow(5);
-		});
 	}
 
 	@Override
