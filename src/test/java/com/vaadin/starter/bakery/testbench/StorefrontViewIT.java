@@ -30,6 +30,7 @@ public class StorefrontViewIT extends AbstractIT {
 
 		OrderEditorElement orderEditor = storefrontPage.getOrderEditor();
 		orderEditor.getOrderItemEditor(0).clickAmountFieldPlus();
+
 		orderEditor.review();
 		storefrontPage.getOrderDetails().getSaveButton().click();
 
