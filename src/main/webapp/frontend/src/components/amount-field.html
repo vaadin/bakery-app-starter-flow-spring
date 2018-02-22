@@ -27,52 +27,103 @@
       }
     </style>
 
-    <vaadin-text-field id="amount-field-amount" label="[[label]]" theme="center" pattern="\d*" part="text-field" prevent-invalid-input value=[[value]] readonly="true">
-      <iron-icon slot="prefix" id="minus" icon="vaadin:minus" on-click="minus" disabled$="[[!minusEnabled]]"></iron-icon>
-      <iron-icon slot="suffix" id="plus" icon="vaadin:plus" on-click="plus" disabled$="[[!plusEnabled]]"></iron-icon>
+    <vaadin-text-field id="input" part="text-field" theme="align-center"
+        label="[[label]]"
+        value={{value}}
+        disabled=[[disabled]]
+        pattern$="[[pattern]]"
+        prevent-invalid-input
+        readonly="[[!editable]]">
+      <iron-icon slot="prefix" icon="vaadin:minus" on-click="_minus" disabled$="[[_minusDisabled(value, min, max, disabled, readOnly)]]"></iron-icon>
+      <iron-icon slot="suffix" icon="vaadin:plus" on-click="_plus" disabled$="[[_plusDisabled(value, min, max, disabled, readOnly)]]"></iron-icon>
     </vaadin-text-field>
   </template>
 
   <script>
-    class AmountField extends Polymer.Element {
-      static get is() {
-        return 'amount-field';
+    {
+      /**
+       * A pure Polymer Web Component for numeric fields.
+       */
+      class AmountField extends Polymer.Element {
+        static get is() {
+          return 'amount-field';
+        }
+
+        static get properties() {
+          return {
+            value: {
+              type: Number,
+              value: 0,
+              notify: true
+            },
+            min: {
+              type: Number,
+              observer: '_minChanged',
+              value: 0
+            },
+            max: {
+              type: Number,
+              observer: '_maxChanged',
+              value: Number.MAX_SAFE_INTEGER || (Math.pow(2, 53) - 1) /* MSIE fallback */
+            },
+            disabled: {
+              type: Boolean,
+              value: false,
+              notify: true,
+              reflectToAttribute: true
+            },
+            editable: {
+              type: Boolean
+            },
+            pattern: {
+              type: String,
+              value: '\d*'
+            },
+            label: String
+          };
+        }
+
+        get _enabled() {
+          return !this.disabled && !this.readOnly;
+        }
+
+        get _number() {
+          const val = parseInt(this.value);
+          return isNaN(val) ? this.min : val;
+        }
+
+        _minChanged(val) {
+          this.value = this._number < val ? val : this._number;
+        }
+
+        _maxChanged(val) {
+          this.value = this._number > val ? val : this._number;
+        }
+
+        _plus() {
+          !this._plusDisabled() && (this.value = this._number + 1);
+          this.$.input.focus();
+        }
+
+        _minus() {
+          !this._minusDisabled() && (this.value = this._number - 1);
+          this.$.input.focus();
+        }
+
+        _isEqual(value, other) {
+          return Math.max(this.min, Math.min(this._number, this.max)) === other;
+        }
+
+        _plusDisabled(value, min, max, disabled, readOnly) {
+          return !this._enabled || this._number >= this.max;
+        }
+
+        _minusDisabled(value, min, max, disabled, readOnly) {
+          return !this._enabled || this._number <= this.min;
+        }
       }
 
-      static get properties() {
-        return {
-          value: {
-            type: Number,
-            value: 1,
-            notify: true
-          },
-          min: {
-            type: Number,
-            value: 0
-          },
-          disabled: {
-            type: Boolean,
-            value: false,
-            notify: true,
-            reflectToAttribute: true
-          },
-          readOnly: {
-            type: Boolean,
-            value: false,
-            notify: true,
-            reflectToAttribute: true
-          },
-          max: {
-            type: Number,
-            value: Number.MAX_SAFE_INTEGER || (Math.pow(2, 53) - 1) /* MSIE fallback */
-          },
-          plusEnabled: {type: Boolean},
-          minusEnabled: {type: Boolean},
-          label: String
-        };
-      }
+      window.customElements.define(AmountField.is, AmountField);
     }
-
-    window.customElements.define(AmountField.is, AmountField);
   </script>
 </dom-module>
