@@ -54,8 +54,7 @@
             value: {
               type: Number,
               value: 0,
-              notify: true,
-              observer: '_valueChanged'
+              notify: true
             },
             min: {
               type: Number,
@@ -88,38 +87,39 @@
           return !this.disabled && !this.readOnly;
         }
 
-        _valueChanged(value) {
-          this.value = this.value || 0;
+        get _number() {
+          const val = parseInt(this.value);
+          return isNaN(val) ? this.min : val;
         }
 
         _minChanged(val) {
-          this.value = this.value < val ? val : this.value;
+          this.value = this._number < val ? val : this._number;
         }
 
         _maxChanged(val) {
-          this.value = this.value > val ? val : this.value;
+          this.value = this._number > val ? val : this._number;
         }
 
         _plus() {
-          !this._plusDisabled() && this.value++;
+          !this._plusDisabled() && (this.value = this._number + 1);
           this.$.input.focus();
         }
 
         _minus() {
-          !this._minusDisabled() && this.value--;
+          !this._minusDisabled() && (this.value = this._number - 1);
           this.$.input.focus();
         }
 
-        _isEqual(value, boundry) {
-          return Math.max(this.min, Math.min(value, this.max)) === boundry;
+        _isEqual(value, other) {
+          return Math.max(this.min, Math.min(this._number, this.max)) === other;
         }
 
         _plusDisabled(value, min, max, disabled, readOnly) {
-          return !this._enabled || this.value >= this.max;
+          return !this._enabled || this._number >= this.max;
         }
 
         _minusDisabled(value, min, max, disabled, readOnly) {
-          return !this._enabled || this.value <= this.min;
+          return !this._enabled || this._number <= this.min;
         }
       }
 
