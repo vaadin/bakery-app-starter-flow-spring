@@ -37,11 +37,12 @@
 
       <vaadin-combo-box id="products" colspan="8" index="[[index]]"></vaadin-combo-box>
 
-      <vaadin-button id="delete" colspan="2" class="delete self-start" index="[[index]]"
+      <amount-field class="self-start" id="amount" colspan="4" index="[[index]]" style="order: 1"
+        min="1" max="15" editable pattern="|1[0-5]?|[2-9]"></amount-field>
+
+      <vaadin-button class="delete self-start" id="delete" colspan="2" index="[[index]]"
                      style$="order: [[_getConditional(desktopView, 2, 0)]];">✕
       </vaadin-button>
-
-      <amount-field class="self-start" id="amount" colspan="4" min="1" max="15" index="[[index]]" style="order: 1"></amount-field>
 
       <div id="price" colspan="4" class="money" style="order: 1">[[price]]</div>
 

@@ -89,29 +89,6 @@
         color: var(--lumo-error-color);
         background: var(--lumo-error-color-10pct);
       }
-
-      :host([theme~="center"]) [part="value"] {
-        text-align: center;
-      }
-
-      :host([theme~="center"]) .vaadin-text-field-container {
-        width: auto;
-      }
-
-    </style>
-  </template>
-</dom-module>
-
-<!-- Theme for icons inside text-field and buttons, 'vaadin:' icons have custom rules 
-  in lumo theme that make icons look wrong, by overriding width and height but not 
-  padding the look ok -->
-<dom-module id="bakery-text-buttons-theme-icons" theme-for="vaadin-text-field vaadin-button">
-  <template>
-    <style>
-      [part="input-field"] ::slotted(iron-icon[icon^="vaadin:"]) ,
-      :host ::slotted(iron-icon[icon^="vaadin:"]) {
-        padding: 0 !important;
-      }
     </style>
   </template>
 </dom-module>

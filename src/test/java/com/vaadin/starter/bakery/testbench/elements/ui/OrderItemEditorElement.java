@@ -6,19 +6,19 @@ import com.vaadin.testbench.elementsbase.Element;
 @Element("order-item-editor")
 public class OrderItemEditorElement extends TestBenchElement {
 
-	public void clickAmountFieldPlus(int index) {
-		clickAmountFieldPlusOrMinus(index, 1);
+	public void clickAmountFieldPlus() {
+		clickAmountFieldPlusOrMinus(1);
 	}
 	
-	public void clickAmountFieldMinus(int index) {
-		clickAmountFieldPlusOrMinus(index, -1);
+	public void clickAmountFieldMinus() {
+		clickAmountFieldPlusOrMinus(-1);
 	}
 	
-	private void clickAmountFieldPlusOrMinus(int index, int value) {
+	private void clickAmountFieldPlusOrMinus(int value) {
 		if (value == 0) {
 			throw new IllegalArgumentException("Value should be -1 or 1");
 		}
-		final String buttonId = value < 0 ? "minus" : "plus";
-		$("amount-field").first().$("iron-icon").id(buttonId).click();
+		final int idx = value < 0 ? 0 : 1;
+		$("amount-field").first().$("iron-icon").get(idx).click();
 	}
 }

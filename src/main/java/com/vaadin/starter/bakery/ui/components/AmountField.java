@@ -1,98 +1,49 @@
 package com.vaadin.starter.bakery.ui.components;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasValue;
+import com.vaadin.flow.component.Synchronize;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.HtmlImport;
-import com.vaadin.flow.component.polymertemplate.EventHandler;
-import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
-import com.vaadin.flow.templatemodel.TemplateModel;
 
 @Tag("amount-field")
 @HtmlImport("src/components/amount-field.html")
-public class AmountField extends PolymerTemplate<AmountField.Model> implements HasValue<AmountField, Integer> {
-
-	public interface Model extends TemplateModel {
-
-		void setDisabled(boolean disabled);
-
-		void setValue(Integer value);
-
-		void setPlusEnabled(boolean enabled);
-
-		void setMinusEnabled(boolean enabled);
-
-		void setReadOnly(boolean readOnly);
-	}
-
-	private static final int MIN = 1;
-	private static final int MAX = 15;
-
-	private Integer value;
-
-	private boolean disabled = true;
-
-	public AmountField() {
-		getModel().setDisabled(false);
-		getModel().setReadOnly(false);
-		updateCommands();
-	}
+public class AmountField extends Component implements HasValue<AmountField, Integer> {
 
 	@Override
 	public void setValue(Integer value) {
-		this.value = value;
-		getModel().setValue(value);
-		updateCommands();
+		getElement().setProperty("value", value);
 	}
 
 	@Override
+	@Synchronize("value-changed")
 	public Integer getValue() {
-		return this.value;
-	}
-
-	public void setDisabled(boolean disabled) {
-		this.disabled = disabled;
-		getModel().setDisabled(disabled);
-		updateCommands();
-	}
-
-	@EventHandler
-	public void plus() {
-		change(1);
-	}
-
-	@EventHandler
-	public void minus() {
-		change(-1);
-	}
-
-	private boolean isChangeable() {
-		return !isReadOnly() && !disabled;
-	}
-
-	private void change(int valueToSum) {
-		if (!isReadOnly()) {
-			Integer value = getValue();
-			if (value != null) {
-				value += valueToSum;
-				if (value >= MIN && value <= MAX) {
-					setValue(value);
-				}
-			}
+		String val = getElement().getProperty("value");
+		try {
+			return Integer.parseInt(val);
+		} catch (NumberFormatException e) {
+			return 0;
 		}
 	}
 
-	private void updateCommands() {
-		Integer value = getValue();
-		boolean canAdd = value == null || value < MAX;
-		boolean canSubtract = value != null && value > MIN;
-		getModel().setPlusEnabled(isChangeable() && canAdd);
-		getModel().setMinusEnabled(isChangeable() && canSubtract);
+	public void setEnabled(boolean enabled) {
+		getElement().setProperty("disabled", !enabled);
 	}
 
-	@Override
-	public void setReadOnly(boolean readOnly) {
-		HasValue.super.setReadOnly(readOnly);
-		getModel().setReadOnly(readOnly);
-		updateCommands();
+	public void setMin(int value) {
+		getElement().setProperty("min", value);
 	}
+
+	public void setMax(int value) {
+		getElement().setProperty("max", value);
+	}
+
+	public void setEditable(boolean editable) {
+		getElement().setProperty("editable", editable);
+	}
+
+	public void setPattern(String pattern) {
+		getElement().setProperty("pattern", pattern);
+	}
+
 }
