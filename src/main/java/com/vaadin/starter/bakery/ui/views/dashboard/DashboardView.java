@@ -169,7 +169,6 @@ public class DashboardView extends PolymerTemplate<TemplateModel> {
 
 		configuration.getyAxis().setMin(0);
 		configuration.getyAxis().setMax(data.getOverall());
-		configuration.getyAxis().setLineWidth(0);
 		configuration.getyAxis().getLabels().setEnabled(false);
 
 		PlotOptionsSolidgauge opt = new PlotOptionsSolidgauge();
