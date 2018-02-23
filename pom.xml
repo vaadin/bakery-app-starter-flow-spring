@@ -133,6 +133,12 @@
             <artifactId>spring-data-provider</artifactId>
             <version>2.0.0.alpha3</version>
         </dependency>
+        <!-- temporary overrides until they are included in platform -->
+        <dependency>
+            <groupId>org.webjars.bowergithub.vaadin</groupId>
+            <artifactId>vaadin-text-field</artifactId>
+            <version>2.0.0-beta2</version>
+        </dependency>
         <!-- End of Vaadin -->
 
         <!-- Iron and paper elements -->
