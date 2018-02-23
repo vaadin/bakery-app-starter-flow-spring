@@ -61,8 +61,6 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 		searchBar.setCheckboxText("Show past orders");
 		searchBar.setPlaceHolder("Search");
 
-		dialog.add(orderDetails);
-
 		grid.setSelectionMode(Grid.SelectionMode.SINGLE);
 		grid.addColumn(new ComponentRenderer<>(order -> {
 			OrderCard orderCard = new OrderCard();
@@ -150,9 +148,7 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 	}
 
 	void setDialogElementsVisibility(boolean editing) {
-		if (editing) {
-			dialog.add(orderEditor);
-		}
+		dialog.add(editing ? orderEditor : orderDetails);
 		orderEditor.setVisible(editing);
 		orderDetails.setVisible(!editing);
 	}
