@@ -15,7 +15,11 @@ import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.UsersViewElement;
 import com.vaadin.starter.bakery.ui.utils.messages.CrudErrorMessage;
 
+import java.util.Random;
+
 public class UsersViewIT extends AbstractIT {
+
+	private static Random r = new Random();
 
 	private UsersViewElement openTestPage() {
 		StorefrontViewElement storefront = openLoginView().login("admin@vaadin.com", "admin");
@@ -28,7 +32,11 @@ public class UsersViewIT extends AbstractIT {
 
 		Assert.assertFalse(usersView.getDialog().isOpen());
 
-		WebElement bakerCell = usersView.getGrid().getCell("baker@vaadin.com");
+		String uniqueEmail = "e" + r.nextInt() + "@vaadin.com";
+
+		createUser(usersView, uniqueEmail, "Paul", "Irwin", "Vaadin10", "baker");
+
+		WebElement bakerCell = usersView.getGrid().getCell(uniqueEmail);
 		Assert.assertNotNull(bakerCell);
 
 		bakerCell.click();
@@ -44,7 +52,7 @@ public class UsersViewIT extends AbstractIT {
 
 		// Saving any field without changing password should save and close
 		TextFieldElement emailField = usersView.getEmailField();
-		emailField.setValue("foo@bar.com");
+		emailField.setValue("foo" + r.nextInt() + "@bar.com");
 		emailField.sendKeys(Keys.TAB);
 		usersView.getButtonsBar().getSaveButton().click();
 
@@ -52,7 +60,7 @@ public class UsersViewIT extends AbstractIT {
 
 		// Invalid password prevents closing form
 		bakerCell.click();
-		emailField.setValue("baker@vaadin.com");
+		emailField.setValue(uniqueEmail);
 		password.setValue("123");
 		password.sendKeys(Keys.TAB);
 		usersView.getButtonsBar().getSaveButton().click();
@@ -69,6 +77,20 @@ public class UsersViewIT extends AbstractIT {
 		// When reopening the form password field must be empty.
 		bakerCell.click();
 		Assert.assertEquals("", password.getAttribute("value"));
+	}
+
+	private void createUser(UsersViewElement usersView, String email, String firstName, String lastName,
+							String password, String role) {
+		usersView.getSearchBar().getCreateNewButton().click();
+		Assert.assertTrue(usersView.getDialog().isOpen());
+
+		usersView.getEmailField().setValue(email);
+		usersView.getFirstName().setValue(firstName);
+		usersView.getLastName().setValue(lastName);
+		usersView.getPasswordField().setValue(password);
+		usersView.getRole().selectByText(role);
+
+		usersView.getButtonsBar().getSaveButton().click();
 	}
 
 	@Test

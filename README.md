@@ -19,6 +19,14 @@ Integration tests are implemented using TestBench. The tests take tens of minute
 
 and make sure you have a valid TestBench license installed.
 
+Profile `it` adds the following parameters to run integration tests:
+```
+-Dwebdriver.chrome.driver=path_to_driver
+-Dcom.vaadin.testbench.Parameters.runLocally=chrome
+```
+
+if you would like to run a separate test make sure you have added these parameters to VM Options of JUnit run configuration
+
 Run linter to check frontend code by adding `-DrunLint` to build/run command.
 
 # Automatic Restart and Live Reload
