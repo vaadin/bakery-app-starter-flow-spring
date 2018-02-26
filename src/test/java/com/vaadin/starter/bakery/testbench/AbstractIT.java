@@ -1,23 +1,27 @@
 package com.vaadin.starter.bakery.testbench;
 
-import org.junit.Before;
+import com.vaadin.testbench.IPAddress;
+import com.vaadin.testbench.annotations.BrowserConfiguration;
+import com.vaadin.testbench.parallel.Browser;
+import com.vaadin.testbench.parallel.ParallelTest;
 import org.junit.Rule;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.LoggerFactory;
 
 import com.vaadin.starter.bakery.testbench.elements.ui.LoginViewElement;
 import com.vaadin.testbench.ScreenshotOnFailureRule;
-import com.vaadin.testbench.TestBench;
 import com.vaadin.testbench.TestBenchDriverProxy;
-import com.vaadin.testbench.TestBenchTestCase;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 
-public abstract class AbstractIT extends TestBenchTestCase {
+import java.util.ArrayList;
+import java.util.List;
 
-	public static final String APP_URL = "http://localhost:8080/";
+public abstract class AbstractIT extends ParallelTest {
+
+	public String APP_URL = "http://localhost:8080/";
 
 	static {
 		// Prevent debug logging from Apache HTTP client
@@ -28,14 +32,13 @@ public abstract class AbstractIT extends TestBenchTestCase {
 	@Rule
 	public ScreenshotOnFailureRule screenshotOnFailure = new ScreenshotOnFailureRule(this, true);
 
-	@Before
-	public void setup() {
-		setDriver(createDriver());
+	@Override
+	public void setup() throws Exception {
+		super.setup();
+		if (getRunLocallyBrowser() == null) {
+			APP_URL = "http://" + IPAddress.findSiteLocalAddress() + ":8080/";
+		}
 		getCommandExecutor().resizeViewPortTo(1024, 768);
-	}
-
-	protected WebDriver createDriver() {
-		return TestBench.createDriver(new ChromeDriver());
 	}
 
 	@Override
@@ -50,5 +53,14 @@ public abstract class AbstractIT extends TestBenchTestCase {
 	protected LoginViewElement openLoginView(WebDriver driver, String url) {
 		driver.get(url);
 		return $(LoginViewElement.class).waitForFirst();
+	}
+
+	// Is needed for running tests on hub
+	@BrowserConfiguration
+	public List<DesiredCapabilities> getBrowsersToTest() {
+		List<DesiredCapabilities> allBrowsers = new ArrayList<>();
+		allBrowsers.add(Browser.IE11.getDesiredCapabilities());
+		allBrowsers.add(Browser.CHROME.getDesiredCapabilities());
+		return allBrowsers;
 	}
 }
