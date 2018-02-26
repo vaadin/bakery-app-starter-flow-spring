@@ -7,12 +7,19 @@
   <template>
 
     <style>
-       vaadin-form-layout {
-         flex: auto;
-         overflow-y: auto;
-         overflow-x: hidden;
-         padding: 5px;
-       }
+      :host {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        flex: auto;
+      }
+
+      vaadin-form-layout {
+        flex: auto;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 5px;
+      }
     </style>
 
     <vaadin-form-layout>
