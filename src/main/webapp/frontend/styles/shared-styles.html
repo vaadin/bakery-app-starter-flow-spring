@@ -20,8 +20,6 @@
 
       [part="overlay"] {
         overflow: hidden;
-        max-width: 65em;
-        width: 100%;
         display: flex;
         animation: none !important;
       }
@@ -41,6 +39,11 @@
 
       :host([theme$="right"]) {
         align-items: flex-end;
+      }
+
+      :host([theme]) [part="overlay"] {
+        max-width: 65em;
+        width: 100%;
       }
 
       :host([theme="left"]) [part="overlay"],
