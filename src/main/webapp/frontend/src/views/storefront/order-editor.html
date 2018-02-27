@@ -17,7 +17,12 @@
 <dom-module id="order-editor">
   <template>
     <style include="shared-styles">
-      /* needed for linter */
+      :host {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        flex: auto;
+      }
     </style>
 
     <div class="scrollable flex1" id="main">

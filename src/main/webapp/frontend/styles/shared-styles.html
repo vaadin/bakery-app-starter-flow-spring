@@ -19,7 +19,6 @@
       }
 
       [part="overlay"] {
-        overflow: hidden;
         display: flex;
         animation: none !important;
         min-width: 300px;
@@ -74,9 +73,12 @@
         }
       }
 
+      /* dialog-flow introduces two wrappers that we need to flex */
       flow-component-renderer,
       flow-component-renderer > div {
-        height: 100%;
+        display: flex;
+        flex-direction: column;
+        flex: auto;
       }
     </style>
   </template>
