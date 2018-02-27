@@ -80,6 +80,11 @@ public class OrderPresenter {
 		entityPresenter.cancel(() -> close(false), () -> view.setOpened(true));
 	}
 
+	void closeSilently() {
+		entityPresenter.close();
+		view.setOpened(false);
+	}
+
 	void edit() {
 		UI.getCurrent().navigateTo(BakeryConst.PAGE_STOREFRONT_EDIT + "/" + entityPresenter.getEntity().getId());
 	}

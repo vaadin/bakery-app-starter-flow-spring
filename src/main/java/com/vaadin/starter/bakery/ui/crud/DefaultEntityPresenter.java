@@ -40,6 +40,11 @@ public class DefaultEntityPresenter<T extends AbstractEntity> {
 		entityPresenter.cancel(view::closeDialog, view::openDialog);
 	}
 
+    public void closeSilently() {
+        view.clear();
+        view.closeDialog();
+    }
+
 	public void createNew() {
 		open(entityPresenter.createNew());
 	}
