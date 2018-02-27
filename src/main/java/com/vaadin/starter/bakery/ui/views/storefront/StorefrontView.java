@@ -109,6 +109,7 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
     @Override
     public void beforeLeave(BeforeLeaveEvent event) {
 		if (event.getNavigationTarget() != this.getClass()) {
+			// Close overlay if it was not closed before navigation to another view
 			UI.getCurrent().getPage().executeJavaScript("document.getElementById('overlay') && (document.getElementById('overlay').opened = false)");
 		}
     }
