@@ -13,98 +13,33 @@
         display: block;
         box-shadow: 0 0 16px 2px var(--lumo-shade-20pct);
         z-index: 200;
+        --iron-icon-width: 16px;
       }
 
       .toolbar {
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
         background-color: var(--lumo-base-color);
-        height: 64px;
         align-items: center;
+        position: relative;
       }
 
       .branding {
         font-size: var(--lumo-font-size-m);
         line-height: normal;
         display: none;
-      }
-
-      vaadin-tab > div {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        color: var(--lumo-secondary-text-color);
-        text-decoration: none;
-        font-size: var(--lumo-font-size-s);
-      }
-
-      vaadin-tabs {
-         max-width: 100vw;
-      }
-
-      vaadin-tab {
-         max-width: calc(100vw / 5);
-         outline: none;
+        position: absolute;
+        left: 0;
+        padding-left: var(--lumo-space-m);
       }
 
       .navigation-tabs a {
         text-decoration: none;
       }
 
-      iron-icon {
-        margin-bottom: var(--lumo-space-xs);
-        --iron-icon-width: 16px;
-      }
-
-      vaadin-tab[selected] iron-icon {
-        color: var(--lumo-primary-color);
-      }
-
-      vaadin-tab[selected] span {
-        color: var(--lumo-body-text-color);
-      }
-
-      .tabsContainer {
-        display: flex;
-        flex: 1;
-        justify-content: center;
-        height: 100%;
-
-        /* 964px is the width of the storefront grid */
-        max-width: 964px;
-        margin-right: auto;
-      }
-
       @media (min-width: 600px) {
-        .toolbar {
-          padding: 0 var(--lumo-space-m);
-        }
-
-        .navigation-label {
-          padding: 0 var(--lumo-space-xs);
-        }
-
         .branding {
           display: block;
-        }
-      }
-
-      @media (min-width: 740px) {
-        .navigation-label {
-          padding: 0 var(--lumo-space-m);
-        }
-      }
-
-      @media (min-width: 981px) {
-        .branding {
-          flex: 1;
-
-          /* 964px is the width of the storefront grid */
-          max-width: calc((100% - 964px - var(--lumo-space-m)) / 2);
-        }
-
-        .navigation-label {
-          padding: 0 var(--lumo-space-l);
         }
       }
     </style>
@@ -113,9 +48,7 @@
       <div class="branding">
         ###Bakery###
       </div>
-      <div class="tabsContainer">
-        <vaadin-tabs id="tabs" theme="equal-width-tabs"></vaadin-tabs>
-      </div>
+      <vaadin-tabs id="tabs"></vaadin-tabs>
     </div>
   </template>
 
