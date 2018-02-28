@@ -53,6 +53,7 @@
 
       iron-icon {
         margin-bottom: var(--lumo-space-xs);
+        --iron-icon-width: 16px;
       }
 
       vaadin-tab[selected] iron-icon {
@@ -86,14 +87,6 @@
         .branding {
           display: block;
         }
-
-        vaadin-tab::before,
-        vaadin-tab::after {
-          width: 100% !important;
-          top: 0;
-          bottom: auto;
-          content: ' ';
-        }
       }
 
       @media (min-width: 740px) {
@@ -121,7 +114,7 @@
         ###Bakery###
       </div>
       <div class="tabsContainer">
-        <vaadin-tabs id="tabs"></vaadin-tabs>
+        <vaadin-tabs id="tabs" theme="equal-width-tabs"></vaadin-tabs>
       </div>
     </div>
   </template>
