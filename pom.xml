@@ -199,7 +199,13 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <!-- End Spring -->
-
+        <!-- Add JAXB explicitly as the java.xml.bind module is not included 
+             by default anymore in Java 9-->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.0</version>
+        </dependency>
         <!-- Compile scope is needed to run on WildFly -->
         <dependency>
             <groupId>org.reactivestreams</groupId>
