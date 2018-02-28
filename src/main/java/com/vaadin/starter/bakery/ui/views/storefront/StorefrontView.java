@@ -2,6 +2,7 @@ package com.vaadin.starter.bakery.ui.views.storefront;
 
 import java.util.stream.Stream;
 
+import com.vaadin.flow.component.UI;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.HasValue;
@@ -15,6 +16,8 @@ import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.selection.SelectionEvent;
 import com.vaadin.flow.router.BeforeEvent;
+import com.vaadin.flow.router.BeforeLeaveEvent;
+import com.vaadin.flow.router.BeforeLeaveObserver;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.PageTitle;
@@ -35,7 +38,7 @@ import com.vaadin.starter.bakery.ui.views.EntityView;
 @RouteAlias(value = BakeryConst.PAGE_ROOT, layout = MainView.class)
 @PageTitle(BakeryConst.TITLE_STOREFRONT)
 public class StorefrontView extends PolymerTemplate<TemplateModel>
-		implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
+		implements HasLogger, HasUrlParameter<Long>, EntityView<Order>, BeforeLeaveObserver {
 
 	@Id("search")
 	private SearchBar searchBar;
@@ -98,10 +101,20 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 		boolean editView = event.getLocation().getPath().contains(BakeryConst.PAGE_STOREFRONT_EDIT);
 		if (orderId != null) {
 			presenter.onNavigation(orderId, editView);
-		}
+		} else if (dialog.isOpened()) {
+		    presenter.closeSilently();
+        }
 	}
 
-	void navigateToMainView() {
+    @Override
+    public void beforeLeave(BeforeLeaveEvent event) {
+		if (event.getNavigationTarget() != this.getClass()) {
+			// Close overlay if it was not closed before navigation to another view
+			UI.getCurrent().getPage().executeJavaScript("document.getElementById('overlay') && (document.getElementById('overlay').opened = false)");
+		}
+    }
+
+    void navigateToMainView() {
 		getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT));
 	}
 
