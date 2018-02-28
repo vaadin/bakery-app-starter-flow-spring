@@ -17,7 +17,12 @@
 <dom-module id="order-editor">
   <template>
     <style include="shared-styles">
-      /* needed for linter */
+      :host {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        flex: auto;
+      }
     </style>
 
     <div class="scrollable flex1" id="main">
@@ -96,23 +101,21 @@
       ready() {
         super.ready();
 
+        // Not using attributes since Designer does not suppor single-quote attributes
         this.$.form1.responsiveSteps = [
           {columns: 1, labelsPosition: 'top'},
           {minWidth: '600px', columns: 4, labelsPosition: 'top'}
         ];
-
         this.$.form2.responsiveSteps = [
           {columns: 1, labelsPosition: 'top'}
         ];
-
         this.$.form3.responsiveSteps = [
           {columns: 1, labelsPosition: 'top'},
           {minWidth: '600px', columns: 2, labelsPosition: 'top'}
         ];
-
         this.$.form4.responsiveSteps = [
           {columns: 1, labelsPosition: 'top'},
-          {minWidth: '600px', columns: 3, labelsPosition: 'top'}
+          {minWidth: '500px', columns: 3, labelsPosition: 'top'}
         ];
       }
 
