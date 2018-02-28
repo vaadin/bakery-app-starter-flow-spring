@@ -24,13 +24,14 @@
         position: relative;
       }
 
+      vaadin-tab {
+        font-size: var(--lumo-font-size-xs);
+        padding-left: .75em;
+        padding-right: .75em;
+      }
+
       .branding {
-        font-size: var(--lumo-font-size-m);
-        line-height: normal;
         display: none;
-        position: absolute;
-        left: 0;
-        padding-left: var(--lumo-space-m);
       }
 
       .navigation-tabs a {
@@ -38,8 +39,21 @@
       }
 
       @media (min-width: 600px) {
+        vaadin-tab {
+          font-size: var(--lumo-font-size-m);
+          padding-left: 1em;
+          padding-right: 1em;
+        }
+      }
+
+      @media (min-width: 1000px) {
         .branding {
           display: block;
+          font-size: var(--lumo-font-size-m);
+          line-height: normal;
+          position: absolute;
+          left: 0;
+          padding-left: var(--lumo-space-m);
         }
       }
     </style>
