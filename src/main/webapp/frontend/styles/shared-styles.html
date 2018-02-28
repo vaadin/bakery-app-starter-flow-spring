@@ -148,6 +148,13 @@
         background: transparent;
       }
 
+      @media (max-width: 600px) {
+        :host([theme~="orders"]) [part~="cell"] ::slotted(vaadin-grid-cell-content) {
+          padding: 0;
+          --lumo-border-radius: 0;
+        }
+      }
+
       :host([theme~="dashboard"]) [part~="cell"] ::slotted(vaadin-grid-cell-content) {
         padding: 0;
       }
