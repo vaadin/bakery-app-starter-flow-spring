@@ -18,6 +18,7 @@ import ch.qos.logback.classic.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public abstract class AbstractIT extends ParallelTest {
 
@@ -59,8 +60,16 @@ public abstract class AbstractIT extends ParallelTest {
 	@BrowserConfiguration
 	public List<DesiredCapabilities> getBrowsersToTest() {
 		List<DesiredCapabilities> allBrowsers = new ArrayList<>();
-		allBrowsers.add(Browser.IE11.getDesiredCapabilities());
-		allBrowsers.add(Browser.CHROME.getDesiredCapabilities());
+		String browsers = System.getProperty("test.hub.browsers");
+		if (browsers != null) {
+			for (String browserName : browsers.split(",")) {
+				Browser browser = Browser.valueOf(
+						browserName.toUpperCase(Locale.ENGLISH).trim());
+				allBrowsers.add(browser.getDesiredCapabilities());
+			}
+		} else {
+			allBrowsers.add(Browser.CHROME.getDesiredCapabilities());
+		}
 		return allBrowsers;
 	}
 }
