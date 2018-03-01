@@ -20,14 +20,11 @@
       }
 
       .vaadin-board-cell {
-        /*
-         If a cell in a vaadin-board has margins or padding it needs to be wrapped into
-         a div to work around the IE11 flex box issue. See the Known Issues section at
-         https://vaadin.com/docs/v8/board/webcomponents-api/board-basic-use.html
-
-         This class is an indicator for such divs.
-        */
         padding: var(--lumo-space-s);
+      }
+
+      *::-ms-backdrop, .vaadin-board-cell {
+        padding: 0;
       }
 
       .column-chart {
