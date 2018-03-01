@@ -4,15 +4,12 @@
 package com.vaadin.starter.bakery.ui.crud;
 
 import com.vaadin.flow.component.HasText;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.router.BeforeEvent;
-import com.vaadin.flow.router.BeforeLeaveEvent;
-import com.vaadin.flow.router.BeforeLeaveObserver;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.templatemodel.TemplateModel;
@@ -24,7 +21,7 @@ import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
 import com.vaadin.starter.bakery.ui.views.EntityView;
 
 public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel> extends PolymerTemplate<T>
-		implements HasLogger, EntityView<E>, HasUrlParameter<Long>, BeforeLeaveObserver {
+		implements HasLogger, EntityView<E>, HasUrlParameter<Long> {
 
 	public interface CrudForm<E> {
 		FormButtonsBar getButtons();
@@ -93,14 +90,6 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 		} else if (getDialog().isOpened()) {
 		    getPresenter().closeSilently();
         }
-	}
-
-	@Override
-	public void beforeLeave(BeforeLeaveEvent event) {
-		if (event.getNavigationTarget() != this.getClass()) {
-			// Close overlay if it was not closed before navigation to another view
-			UI.getCurrent().getPage().executeJavaScript("document.getElementById('overlay') && (document.getElementById('overlay').opened = false)");
-		}
 	}
 
 	public void closeDialog() {
