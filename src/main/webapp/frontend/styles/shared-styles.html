@@ -102,6 +102,11 @@
 <dom-module id="bakery-grid-theme" theme-for="vaadin-grid">
   <template>
     <style>
+      :host {
+        width: 100%;
+        margin: auto;
+      }
+
       [part~="row"]:last-child [part~="header-cell"],
       [part~="header-cell"]:not(:empty):not([details-cell]) {
         padding-top: var(--lumo-space-l);
