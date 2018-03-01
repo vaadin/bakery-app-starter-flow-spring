@@ -41,10 +41,8 @@ public class CustomBootstrapListener implements BootstrapListener {
 
 	private void addFavIconTags(Element head) {
 		head.append("<link rel=\"shortcut icon\" href=\"icons/favicon.ico\">");
-		head.append("<link rel=\"icon\" sizes=\"512x512\" href=\"icons/icon-512.png\">");
 		head.append("<link rel=\"icon\" sizes=\"192x192\" href=\"icons/icon-192.png\">");
 		head.append("<link rel=\"icon\" sizes=\"96x96\" href=\"icons/icon-96.png\">");
-		head.append("<link rel=\"apple-touch-icon\" sizes=\"512x512\" href=\"icons/icon-512.png\">");
 		head.append("<link rel=\"apple-touch-icon\" sizes=\"192x192\" href=\"icons/icon-192.png\">");
 		head.append("<link rel=\"apple-touch-icon\" sizes=\"96x96\" href=\"icons/icon-96.png\">");
 	}
