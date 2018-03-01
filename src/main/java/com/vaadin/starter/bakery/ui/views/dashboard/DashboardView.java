@@ -194,7 +194,7 @@ public class DashboardView extends PolymerTemplate<TemplateModel> {
 
 	private void onOrdersGridSelectionChanged(SelectionEvent<Order> e) {
 		e.getFirstSelectedItem().ifPresent(order -> {
-			UI.getCurrent().navigateTo(BakeryConst.PAGE_STOREFRONT + "/" + order.getId());
+			UI.getCurrent().navigate(BakeryConst.PAGE_STOREFRONT + "/" + order.getId());
 			grid.getElement().setProperty("activeItem", null);
 		});
 	}

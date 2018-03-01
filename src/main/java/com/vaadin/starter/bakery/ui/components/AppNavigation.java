@@ -52,7 +52,7 @@ public class AppNavigation extends PolymerTemplate<TemplateModel> implements Aft
 				// handled by Spring Security.
 				UI.getCurrent().getPage().executeJavaScript("location.assign('logout')");
 			} else if (!href.equals(currentHref)) {
-				UI.getCurrent().navigateTo(href);
+				UI.getCurrent().navigate(href);
 			}
 		}
 	}
