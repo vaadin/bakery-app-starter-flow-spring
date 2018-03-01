@@ -13,105 +13,51 @@
         display: block;
         box-shadow: 0 0 16px 2px var(--lumo-shade-20pct);
         z-index: 200;
+        --iron-icon-width: 16px;
       }
 
       .toolbar {
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
         background-color: var(--lumo-base-color);
-        height: 64px;
         align-items: center;
-      }
-
-      .branding {
-        font-size: var(--lumo-font-size-m);
-        line-height: normal;
-        display: none;
-      }
-
-      vaadin-tab > div {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        color: var(--lumo-secondary-text-color);
-        text-decoration: none;
-        font-size: var(--lumo-font-size-s);
-      }
-
-      vaadin-tabs {
-         max-width: 100vw;
+        position: relative;
       }
 
       vaadin-tab {
-         max-width: calc(100vw / 5);
-         outline: none;
+        font-size: var(--lumo-font-size-xs);
+        padding-left: .75em;
+        padding-right: .75em;
+      }
+
+      vaadin-tabs {
+        overflow: hidden;
+      }
+
+      .branding {
+        display: none;
       }
 
       .navigation-tabs a {
         text-decoration: none;
       }
 
-      iron-icon {
-        margin-bottom: var(--lumo-space-xs);
-      }
-
-      vaadin-tab[selected] iron-icon {
-        color: var(--lumo-primary-color);
-      }
-
-      vaadin-tab[selected] span {
-        color: var(--lumo-body-text-color);
-      }
-
-      .tabsContainer {
-        display: flex;
-        flex: 1;
-        justify-content: center;
-        height: 100%;
-
-        /* 964px is the width of the storefront grid */
-        max-width: 964px;
-        margin-right: auto;
-      }
-
       @media (min-width: 600px) {
-        .toolbar {
-          padding: 0 var(--lumo-space-m);
+        vaadin-tab {
+          font-size: var(--lumo-font-size-m);
+          padding-left: 1em;
+          padding-right: 1em;
         }
+      }
 
-        .navigation-label {
-          padding: 0 var(--lumo-space-xs);
-        }
-
+      @media (min-width: 1000px) {
         .branding {
           display: block;
-        }
-
-        vaadin-tab::before,
-        vaadin-tab::after {
-          width: 100% !important;
-          top: 0;
-          bottom: auto;
-          content: ' ';
-        }
-      }
-
-      @media (min-width: 740px) {
-        .navigation-label {
-          padding: 0 var(--lumo-space-m);
-        }
-      }
-
-      @media (min-width: 981px) {
-        .branding {
-          flex: 1;
-
-          /* 964px is the width of the storefront grid */
-          max-width: calc((100% - 964px - var(--lumo-space-m)) / 2);
-        }
-
-        .navigation-label {
-          padding: 0 var(--lumo-space-l);
+          font-size: var(--lumo-font-size-m);
+          line-height: normal;
+          position: absolute;
+          left: 0;
+          padding-left: var(--lumo-space-m);
         }
       }
     </style>
@@ -120,9 +66,7 @@
       <div class="branding">
         ###Bakery###
       </div>
-      <div class="tabsContainer">
-        <vaadin-tabs id="tabs"></vaadin-tabs>
-      </div>
+      <vaadin-tabs id="tabs"></vaadin-tabs>
     </div>
   </template>
 
