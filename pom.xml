@@ -215,6 +215,13 @@
             <version>1.0.0.alpha11</version>
         </dependency>
 
+
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-grid-flow</artifactId>
+            <version>1.0.0.alpha13</version>
+        </dependency>
+
         <!-- temporary overrides until they are included in platform -->
         <dependency>
             <groupId>org.webjars.bowergithub.vaadin</groupId>
