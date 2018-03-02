@@ -1,5 +1,4 @@
 <link rel="import" href="../../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../../../bower_components/vaadin-grid/src/vaadin-grid.html">
 <link rel="import" href="../../../bower_components/vaadin-dialog/src/vaadin-dialog.html">
 
@@ -14,18 +13,8 @@
       :host {
         display: flex;
         flex-direction: column;
-        max-width: calc(964px + var(--lumo-space-m)) !important; /* Allow selected order to be 16px wider */
-      }
-
-      @media (min-width: 600px) {
-        :host {
-          max-width: none !important;
-          padding: 0 !important;
-        }
       }
     </style>
-
-    <iron-media-query query="(min-width: 600px)" query-matches="{{desktopView}}"></iron-media-query>
 
     <search-bar id="search" show-checkbox></search-bar>
 
@@ -59,14 +48,6 @@
         grid.addEventListener('loading-changed', listener);
       }
 
-      static get properties() {
-        return {
-          desktopView: {
-            type: Boolean,
-            notify: true
-          }
-        };
-      }
     }
 
     window.customElements.define(StorefrontView.is, StorefrontView);
