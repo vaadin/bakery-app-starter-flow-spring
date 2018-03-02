@@ -378,18 +378,6 @@
                             <warSourceExcludes>frontend/**,.gitignore</warSourceExcludes>
                         </configuration>
                     </plugin>
-
-                    <!-- (5): Pass the 'production mode' setting to the spring boot app.
-                         NOTE: This forks the JVM. If there is a need to debug the production mode,
-                               remove the jvmArguments parameter from pom.xml and add
-                               '-Dvaadin.productionMode' to the `mvn spring-boot:run` command line -->
-                    <plugin>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-maven-plugin</artifactId>
-                        <configuration>
-                            <jvmArguments>-Dvaadin.productionMode</jvmArguments>
-                        </configuration>
-                    </plugin>
                 </plugins>
             </build>
         </profile>
