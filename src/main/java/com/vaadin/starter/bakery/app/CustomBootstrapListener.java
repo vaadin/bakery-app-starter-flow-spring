@@ -36,7 +36,6 @@ public class CustomBootstrapListener implements BootstrapListener {
 
 		addFavIconTags(head);
 		addViewportTag(head);
-		injectInlineCustomStyles(head);
 	}
 
 	private void addFavIconTags(Element head) {
@@ -52,15 +51,4 @@ public class CustomBootstrapListener implements BootstrapListener {
 		head.append("<meta name=\"viewport\" content=\"" + viewport + "\">");
 	}
 
-	private void injectInlineCustomStyles(Element head) {
-		// needs to be a <custom-style> because IE11 does not understand CSS Custom Properties
-		head.append("<!-- Add any global styles for body, document, etc. -->\n" +
-				"    <custom-style>\n" +
-				"      <style is=\"custom-style\">\n" +
-				"        body {\n" +
-				"          background-color: var(--lumo-shade-5pct);\n" +
-				"        }\n" +
-				"      </style>\n" +
-				"    </custom-style>");
-	}
 }
