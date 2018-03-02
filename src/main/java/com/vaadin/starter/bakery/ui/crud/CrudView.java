@@ -80,7 +80,7 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 	}
 
 	protected void navigateToEntity(String id) {
-		getUI().ifPresent(ui -> ui.navigateTo(TemplateUtil.generateLocation(getBasePage(), id)));
+		getUI().ifPresent(ui -> ui.navigate(TemplateUtil.generateLocation(getBasePage(), id)));
 	}
 
 	@Override

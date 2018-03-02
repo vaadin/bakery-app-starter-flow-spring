@@ -104,7 +104,7 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 	}
 
     void navigateToMainView() {
-		getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT));
+		getUI().ifPresent(ui -> ui.navigate(BakeryConst.PAGE_STOREFRONT));
 	}
 
 	@Override
@@ -144,7 +144,7 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 
 	private void onOrdersGridSelectionChanged(SelectionEvent<Order> e) {
 		e.getFirstSelectedItem().ifPresent(order -> {
-			getUI().ifPresent(ui -> ui.navigateTo(BakeryConst.PAGE_STOREFRONT + "/" + order.getId()));
+			getUI().ifPresent(ui -> ui.navigate(BakeryConst.PAGE_STOREFRONT + "/" + order.getId()));
 			getGrid().deselect(order);
 		});
 	}
