@@ -105,7 +105,7 @@ public class UsersViewIT extends AbstractIT {
 
 		NotificationElement toast = $(NotificationElement.class).first();
 
-		Assert.assertEquals(MODIFY_LOCKED_USER_NOT_PERMITTED + "\nClose", toast.getText());
+		Assert.assertTrue(toast.getText().contains(MODIFY_LOCKED_USER_NOT_PERMITTED));
 		Assert.assertTrue(toast.isOpen());
 	}
 
@@ -119,7 +119,7 @@ public class UsersViewIT extends AbstractIT {
 		page.getConfirmDialog().confirm();
 
 		NotificationElement toast = $(NotificationElement.class).first();
-		Assert.assertEquals(MODIFY_LOCKED_USER_NOT_PERMITTED + "\nClose", toast.getText());
+		Assert.assertTrue(toast.getText().contains(MODIFY_LOCKED_USER_NOT_PERMITTED));
 		Assert.assertTrue(toast.isOpen());
 	}
 }
