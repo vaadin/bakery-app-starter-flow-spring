@@ -13,27 +13,23 @@
   <template>
     <style include="shared-styles">
       :host {
-        display: block;
         width: 100%;
-        padding: var(--lumo-space-s);
         -webkit-overflow-scrolling: touch;
-        overflow-y: scroll;
+        overflow: auto;
       }
 
       .vaadin-board-cell {
-        /*
-         If a cell in a vaadin-board has margins or padding it needs to be wrapped into
-         a div to work around the IE11 flex box issue. See the Known Issues section at
-         https://vaadin.com/docs/v8/board/webcomponents-api/board-basic-use.html
+        padding: var(--lumo-space-s);
+      }
 
-         This class is an indicator for such divs.
-        */
+      *::-ms-backdrop,
+      .vaadin-board-cell {
+        padding: 0;
       }
 
       .column-chart {
         box-shadow: 0 2px 5px 0 rgba(23, 68, 128, 0.1);
         border-radius: 4px;
-        margin: 12px 6px;
         height: calc(20vh - 64px) !important;
         min-height: 150px;
       }
@@ -45,7 +41,6 @@
 
       #monthlyProductSplit,
       #ordersGrid {
-        margin: 12px 6px;
         border-radius: 4px;
         box-shadow: 0 2px 5px 0 rgba(23, 68, 128, 0.1);
         height: calc(40vh - 64px) !important;

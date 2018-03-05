@@ -6,7 +6,6 @@ import java.util.List;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.HtmlImport;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.IronIcon;
 import com.vaadin.flow.component.polymertemplate.Id;
@@ -35,7 +34,8 @@ public class AppNavigation extends PolymerTemplate<TemplateModel> implements Aft
 		this.defaultHref = defaultHref;
 
 		for (PageInfo page : pages) {
-			Tab tab = new Tab(new Div(new IronIcon("vaadin", page.getIcon()), new Span(page.getTitle())));
+			Tab tab = new Tab(new IronIcon("vaadin", page.getIcon()), new Span(page.getTitle()));
+			tab.getElement().setAttribute("theme", "icon-on-top");
 			hrefs.add(page.getLink());
 			tabs.add(tab);
 		}
@@ -52,7 +52,7 @@ public class AppNavigation extends PolymerTemplate<TemplateModel> implements Aft
 				// handled by Spring Security.
 				UI.getCurrent().getPage().executeJavaScript("location.assign('logout')");
 			} else if (!href.equals(currentHref)) {
-				UI.getCurrent().navigateTo(href);
+				UI.getCurrent().navigate(href);
 			}
 		}
 	}

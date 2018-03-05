@@ -36,15 +36,12 @@ public class CustomBootstrapListener implements BootstrapListener {
 
 		addFavIconTags(head);
 		addViewportTag(head);
-		injectInlineCustomStyles(head);
 	}
 
 	private void addFavIconTags(Element head) {
 		head.append("<link rel=\"shortcut icon\" href=\"icons/favicon.ico\">");
-		head.append("<link rel=\"icon\" sizes=\"512x512\" href=\"icons/icon-512.png\">");
 		head.append("<link rel=\"icon\" sizes=\"192x192\" href=\"icons/icon-192.png\">");
 		head.append("<link rel=\"icon\" sizes=\"96x96\" href=\"icons/icon-96.png\">");
-		head.append("<link rel=\"apple-touch-icon\" sizes=\"512x512\" href=\"icons/icon-512.png\">");
 		head.append("<link rel=\"apple-touch-icon\" sizes=\"192x192\" href=\"icons/icon-192.png\">");
 		head.append("<link rel=\"apple-touch-icon\" sizes=\"96x96\" href=\"icons/icon-96.png\">");
 	}
@@ -54,15 +51,4 @@ public class CustomBootstrapListener implements BootstrapListener {
 		head.append("<meta name=\"viewport\" content=\"" + viewport + "\">");
 	}
 
-	private void injectInlineCustomStyles(Element head) {
-		// needs to be a <custom-style> because IE11 does not understand CSS Custom Properties
-		head.append("<!-- Add any global styles for body, document, etc. -->\n" +
-				"    <custom-style>\n" +
-				"      <style is=\"custom-style\">\n" +
-				"        body {\n" +
-				"          background-color: var(--lumo-shade-5pct);\n" +
-				"        }\n" +
-				"      </style>\n" +
-				"    </custom-style>");
-	}
 }

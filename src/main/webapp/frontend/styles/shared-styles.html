@@ -1,15 +1,4 @@
 
-<!-- Theme for vaadin-button -->
-<dom-module id="bakery-button-theme" theme-for="vaadin-button">
-  <template>
-    <style>
-      [part="label"]::before {
-        margin-right: 0;
-      }
-    </style>
-  </template>
-</dom-module>
-
 <!-- Themes for dialogs -->
 <dom-module id="bakery-dialog-overlay-theme" theme-for="vaadin-dialog-overlay">
   <template>
@@ -114,8 +103,8 @@
   <template>
     <style>
       :host {
-         width: 100%;
-         flex: auto;
+        width: 100%;
+        margin: auto;
       }
 
       [part~="row"]:last-child [part~="header-cell"],
@@ -148,6 +137,13 @@
         background: transparent;
       }
 
+      @media (max-width: 600px) {
+        :host([theme~="orders"]) [part~="cell"] ::slotted(vaadin-grid-cell-content) {
+          padding: 0;
+          --lumo-border-radius: 0;
+        }
+      }
+
       :host([theme~="dashboard"]) [part~="cell"] ::slotted(vaadin-grid-cell-content) {
         padding: 0;
       }
@@ -155,15 +151,6 @@
       :host([theme~="crud"]) {
         max-width: calc(964px + var(--lumo-space-m));
         background-color: var(--lumo-base-color);
-      }
-
-      #scroller {
-        position: absolute;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        transform: translateY(0);
       }
     </style>
   </template>

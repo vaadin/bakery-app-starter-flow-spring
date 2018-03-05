@@ -86,7 +86,7 @@ public class OrderPresenter {
 	}
 
 	void edit() {
-		UI.getCurrent().navigateTo(BakeryConst.PAGE_STOREFRONT_EDIT + "/" + entityPresenter.getEntity().getId());
+		UI.getCurrent().navigate(BakeryConst.PAGE_STOREFRONT_EDIT + "/" + entityPresenter.getEntity().getId());
 	}
 
 	void back() {
