@@ -74,7 +74,7 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 		} catch (OptimisticLockingFailureException e) {
 			consumeError(e, CrudErrorMessage.CONCURRENT_UPDATE, true);
 		} catch (EntityNotFoundException e) {
-			consumeError(e, String.format(CrudErrorMessage.ENTITY_NOT_FOUND, entityName), false);
+			consumeError(e, CrudErrorMessage.ENTITY_NOT_FOUND, false);
 		} catch (ConstraintViolationException e) {
 			consumeError(e, CrudErrorMessage.REQUIRED_FIELDS_MISSING, false);
 		}
