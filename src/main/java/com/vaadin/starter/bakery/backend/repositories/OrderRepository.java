@@ -22,13 +22,10 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 	Page<Order> findByDueDateAfter(LocalDate filterDate, Pageable pageable);
 
 	@EntityGraph(value = Order.ENTITY_GRAPTH_BRIEF, type = EntityGraphType.LOAD)
-	Page<Order> findByCustomerFullNameContainingIgnoreCaseOrStateIn(String searchQuery,
-			Collection<OrderState> orderStates, Pageable pageable);
+	Page<Order> findByCustomerFullNameContainingIgnoreCase(String searchQuery, Pageable pageable);
 
-	@Query("SELECT o FROM OrderInfo o join o.pickupLocation l join o.customer c WHERE (LOWER(o.customer.fullName) LIKE CONCAT('%', LOWER(?1), '%') OR o.state IN ?2) AND o.dueDate > ?3")
 	@EntityGraph(value = Order.ENTITY_GRAPTH_BRIEF, type = EntityGraphType.LOAD)
-	Page<Order> findByCustomerFullNameContainingIgnoreCaseOrStateInAndDueDateAfter(String searchQuery,
-			Collection<OrderState> orderStates, LocalDate dueDate, Pageable pageable);
+	Page<Order> findByCustomerFullNameContainingIgnoreCaseAndDueDateAfter(String searchQuery, LocalDate dueDate, Pageable pageable);
 
 	@Override
 	@EntityGraph(value = Order.ENTITY_GRAPTH_BRIEF, type = EntityGraphType.LOAD)
