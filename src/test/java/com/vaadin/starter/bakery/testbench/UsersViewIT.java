@@ -2,20 +2,20 @@ package com.vaadin.starter.bakery.testbench;
 
 import static com.vaadin.starter.bakery.backend.service.UserService.MODIFY_LOCKED_USER_NOT_PERMITTED;
 
+import java.util.Random;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
 import com.vaadin.flow.component.formlayout.testbench.FormLayoutElement;
+import com.vaadin.flow.component.notification.testbench.NotificationElement;
 import com.vaadin.flow.component.textfield.testbench.PasswordFieldElement;
 import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
-import com.vaadin.starter.bakery.testbench.elements.core.PaperToastElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.UsersViewElement;
 import com.vaadin.starter.bakery.ui.utils.messages.CrudErrorMessage;
-
-import java.util.Random;
 
 public class UsersViewIT extends AbstractIT {
 
@@ -64,9 +64,9 @@ public class UsersViewIT extends AbstractIT {
 		password.setValue("123");
 		password.sendKeys(Keys.TAB);
 		usersView.getButtonsBar().getSaveButton().click();
-		PaperToastElement toast = $(PaperToastElement.class).onPage().id("_defaultToast");
+		NotificationElement toast = $(NotificationElement.class).first();
 		Assert.assertTrue(form.isDisplayed());
-		Assert.assertEquals(CrudErrorMessage.REQUIRED_FIELDS_MISSING, toast.getMessage());
+		Assert.assertEquals(CrudErrorMessage.REQUIRED_FIELDS_MISSING, toast.getText());
 
 		// Good password
 		password.setValue("Abc123");
@@ -103,10 +103,10 @@ public class UsersViewIT extends AbstractIT {
 		field.setValue("Abc123");
 		page.getButtonsBar().getSaveButton().click();
 
-		PaperToastElement toast = $(PaperToastElement.class).onPage().id("_persistentToast");
+		NotificationElement toast = $(NotificationElement.class).first();
 
-		Assert.assertEquals(MODIFY_LOCKED_USER_NOT_PERMITTED, toast.getMessage());
-		Assert.assertTrue(toast.isOpened());
+		Assert.assertEquals(MODIFY_LOCKED_USER_NOT_PERMITTED + "\nClose", toast.getText());
+		Assert.assertTrue(toast.isOpen());
 	}
 
 	@Test
@@ -118,8 +118,8 @@ public class UsersViewIT extends AbstractIT {
 		page.getButtonsBar().getDeleteButton().click();
 		page.getConfirmDialog().confirm();
 
-		PaperToastElement toast = $(PaperToastElement.class).onPage().id("_persistentToast");
-		Assert.assertEquals(MODIFY_LOCKED_USER_NOT_PERMITTED, toast.getMessage());
-		Assert.assertTrue(toast.isOpened());
+		NotificationElement toast = $(NotificationElement.class).first();
+		Assert.assertEquals(MODIFY_LOCKED_USER_NOT_PERMITTED + "\nClose", toast.getText());
+		Assert.assertTrue(toast.isOpen());
 	}
 }
