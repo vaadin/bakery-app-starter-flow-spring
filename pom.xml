@@ -55,9 +55,8 @@
         </repository>
 
         <repository>
-            <!-- for org.vaadin.artur:spring-data-provider -->
-            <id>vaadin-tools</id>
-            <url>https://tools.vaadin.com/nexus/content/repositories/vaadin-addons</url>
+            <id>vaadin-addons</id>
+            <url>http://maven.vaadin.com/vaadin-addons</url>
         </repository>
     </repositories>
 
