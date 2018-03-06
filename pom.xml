@@ -6,6 +6,7 @@
     <artifactId>bakery-app-starter-flow-spring</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
+    <name>Bakery for Flow and Spring</name>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
