@@ -6,10 +6,11 @@
     <artifactId>bakery-app-starter-flow-spring</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
+    <name>Bakery for Flow and Spring</name>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.0.M7</version>
+        <version>2.0.0.RELEASE</version>
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
@@ -20,7 +21,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Dependencies -->
-        <vaadin.version>10.0.0.alpha22</vaadin.version>
+        <vaadin.version>10.0.0.beta1</vaadin.version>
 
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Overrides the old version specified by the Spring Boot parent -->
@@ -30,7 +31,7 @@
 
         <!-- Plugins -->
         <frontend.maven.plugin.version>1.6</frontend.maven.plugin.version>
-        <flow.maven.plugin.version>1.0.0.alpha23</flow.maven.plugin.version>
+        <flow.maven.plugin.version>1.0.0.beta2</flow.maven.plugin.version>
         <maven.war.plugin.version>3.1.0</maven.war.plugin.version>
         <maven.resources.plugin.version>3.0.2</maven.resources.plugin.version>
         <maven.clean.plugin.version>3.0.0</maven.clean.plugin.version>
@@ -54,15 +55,6 @@
         </repository>
 
         <repository>
-            <id>spring-milestones</id>
-            <name>Spring Milestones</name>
-            <url>https://repo.spring.io/milestone</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-
-        <repository>
             <!-- for org.vaadin.artur:spring-data-provider -->
             <id>vaadin-tools</id>
             <url>https://tools.vaadin.com/nexus/content/repositories/vaadin-addons</url>
@@ -70,10 +62,6 @@
     </repositories>
 
     <pluginRepositories>
-        <pluginRepository>
-            <id>spring-plugin-milestones</id>
-            <url>https://repo.spring.io/milestone</url>
-        </pluginRepository>
         <pluginRepository>
             <id>vaadin-prereleases</id>
             <url>https://maven.vaadin.com/vaadin-prereleases</url>
@@ -193,7 +181,6 @@
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
-            <version>2.3.0</version>
         </dependency>
         <!-- Compile scope is needed to run on WildFly -->
         <dependency>
