@@ -9,17 +9,17 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.ErrorParameter;
 import com.vaadin.flow.router.NotFoundException;
 import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.ParentLayout;
 import com.vaadin.flow.router.RouteNotFoundError;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.starter.bakery.ui.MainView;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
-@Route(value = BakeryConst.PAGE_NOTFOUND, layout = MainView.class)
+@ParentLayout(MainView.class)
 @PageTitle(BakeryConst.TITLE_NOT_FOUND)
-public class NotFoundView extends RouteNotFoundError {
+public class CustomRouteNotFoundError extends RouteNotFoundError {
 
-	public NotFoundView() {
+	public CustomRouteNotFoundError() {
 		RouterLink link = Component.from(
 				ElementFactory.createRouterLink("", "Go to the front page."),
 				RouterLink.class);

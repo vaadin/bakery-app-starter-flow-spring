@@ -73,11 +73,10 @@ public class OrderService implements CrudService<Order> {
 			Optional<LocalDate> optionalFilterDate, Pageable pageable) {
 		if (optionalFilter.isPresent() && !optionalFilter.get().isEmpty()) {
 			if (optionalFilterDate.isPresent()) {
-				return orderRepository.findByCustomerFullNameContainingIgnoreCaseOrStateInAndDueDateAfter(
-						optionalFilter.get(), matchingStates(optionalFilter.get()), optionalFilterDate.get(), pageable);
+				return orderRepository.findByCustomerFullNameContainingIgnoreCaseAndDueDateAfter(
+						optionalFilter.get(), optionalFilterDate.get(), pageable);
 			} else {
-				return orderRepository.findByCustomerFullNameContainingIgnoreCaseOrStateIn(optionalFilter.get(),
-						matchingStates(optionalFilter.get()), pageable);
+				return orderRepository.findByCustomerFullNameContainingIgnoreCase(optionalFilter.get(), pageable);
 			}
 		} else {
 			if (optionalFilterDate.isPresent()) {
@@ -91,12 +90,6 @@ public class OrderService implements CrudService<Order> {
 	@Transactional
 	public List<OrderSummary> findAnyMatchingStartingToday() {
 		return orderRepository.findByDueDateGreaterThanEqual(LocalDate.now());
-	}
-
-	private static Set<OrderState> matchingStates(String filter) {
-		return filter.isEmpty() ? Collections.emptySet()
-				: Arrays.stream(OrderState.values())
-						.filter(e -> e.toString().toLowerCase().contains(filter.toLowerCase())).collect(toSet());
 	}
 
 	public long countAnyMatchingAfterDueDate(Optional<String> optionalFilter, Optional<LocalDate> optionalFilterDate) {

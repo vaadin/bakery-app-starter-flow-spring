@@ -57,7 +57,7 @@ public class Order extends AbstractEntity implements OrderSummary {
 	private Customer customer;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-	@OrderColumn(name = "ORDERITEM_INDEX")
+	@OrderColumn
 	@JoinColumn
 	@BatchSize(size = 1000)
 	@NotEmpty
@@ -68,7 +68,7 @@ public class Order extends AbstractEntity implements OrderSummary {
 
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@OrderColumn(name = "INDEX")
+	@OrderColumn
 	@JoinColumn
 	private List<HistoryItem> history;
 
