@@ -19,8 +19,8 @@ public class CustomBootstrapListener implements BootstrapListener {
 	public void modifyBootstrapPage(BootstrapPageResponse response) {
 
 		// Add service worker
-		response.getDocument().body().appendElement("script").attr("src", "sw-register.js").attr("async", "true")
-				.attr("defer", "true");
+		response.getDocument().body().appendElement("script")
+				.text("if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js')");
 
 		final Element head = response.getDocument().head();
 

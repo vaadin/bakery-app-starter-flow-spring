@@ -117,7 +117,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 				// web application manifest
 				"/manifest.json",
-				"/sw-register.js",
 				"/sw.js",
 				"/offline-page.html",
 
