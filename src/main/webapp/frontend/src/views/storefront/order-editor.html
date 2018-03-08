@@ -7,6 +7,7 @@
 <link rel="import" href="../../../bower_components/vaadin-form-layout/src/vaadin-form-item.html">
 <link rel="import" href="../../../bower_components/vaadin-combo-box/src/vaadin-combo-box.html">
 <link rel="import" href="../../../bower_components/vaadin-date-picker/src/vaadin-date-picker.html">
+<link rel="import" href="../../../bower_components/vaadin-icons/vaadin-icons.html">
 
 <link rel="import" href="../../components/buttons-bar.html">
 <link rel="import" href="../../components/utils-mixin.html">
@@ -78,7 +79,10 @@
     <buttons-bar id="footer" no-scroll$="[[noScroll]]">
       <vaadin-button slot="left" id="cancel">Cancel</vaadin-button>
       <div slot="info" class="total">Total [[totalPrice]]</div>
-      <vaadin-button slot="right" id="review" theme="primary">Review Order →</vaadin-button>
+      <vaadin-button slot="right" id="review" theme="primary">
+        Review Order
+        <iron-icon icon="vaadin:arrow-right" slot="suffix"></iron-icon>
+      </vaadin-button>
     </buttons-bar>
   </template>
 
