@@ -2,6 +2,8 @@ package com.vaadin.starter.bakery.backend.data.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -37,6 +39,12 @@ public class User extends AbstractEntity {
 	private String photoUrl;
 
 	private boolean locked = false;
+
+	@PrePersist
+	@PreUpdate
+	private void prepareData(){
+		this.email = email == null ? null : email.toLowerCase();
+	}
 
 	public User() {
 		// An empty constructor is needed for all beans
