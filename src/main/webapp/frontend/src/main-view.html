@@ -143,8 +143,8 @@
       ready() {
         super.ready();
         this.online = window.navigator.onLine;
-        window.addEventListener('online',  () => this.online = true);
-        window.addEventListener('offline',  () => this.online = false);
+        window.addEventListener('online', () => this.online = true);
+        window.addEventListener('offline', () => this.online = false);
       }
     }
 
