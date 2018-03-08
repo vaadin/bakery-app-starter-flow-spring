@@ -8,7 +8,7 @@ import com.vaadin.starter.bakery.backend.data.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-	User findByEmail(String email);
+	User findByEmailIgnoreCase(String email);
 
 	Page<User> findBy(Pageable pageable);
 
