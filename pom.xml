@@ -21,7 +21,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Dependencies -->
-        <vaadin.version>10.0.0.beta1</vaadin.version>
+        <vaadin.version>10.0.0.beta2</vaadin.version>
 
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Overrides the old version specified by the Spring Boot parent -->
@@ -114,21 +114,6 @@
             <groupId>org.vaadin.artur</groupId>
             <artifactId>spring-data-provider</artifactId>
             <version>2.0.0.alpha3</version>
-        </dependency>
-        <dependency>
-            <groupId>org.webjars.bowergithub.vaadin</groupId>
-            <artifactId>vaadin-grid</artifactId>
-            <version>5.0.0-beta5</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.webjars.bowergithub.vaadin</groupId>
-                    <artifactId>vaadin-text-field</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.webjars.bowergithub.vaadin</groupId>
-                    <artifactId>vaadin-checkbox</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <!-- End of Vaadin -->
 
