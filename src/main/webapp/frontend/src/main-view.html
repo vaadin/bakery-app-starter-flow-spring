@@ -36,18 +36,40 @@
           flex-direction: column;
         }
       }
+
+      .offline[hidden] {
+        display: none !important;
+      }
     </style>
 
     <app-container>
       <app-navigation id="appNavigation"></app-navigation>
       <slot></slot>
     </app-container>
+
+    <div id="offline" class="offline" hidden$="[[online]]">
+    </div>
   </template>
 
   <script>
     class MainView extends Polymer.Element {
       static get is() {
         return 'main-view';
+      }
+
+      ready() {
+        super.ready();
+
+        // Reusing offline-page.html content in order not to duplicate
+        Polymer.importHref('offline-page.html', e => {
+          const doc = e.target.import;
+          this.$.offline.appendChild(doc.querySelector('style'));
+          this.$.offline.appendChild(doc.querySelector('.content'));
+        });
+
+        this.online = window.navigator.onLine;
+        window.addEventListener('online', () => this.online = true);
+        window.addEventListener('offline', () => this.online = false);
       }
     }
 
