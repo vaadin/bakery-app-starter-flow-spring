@@ -53,7 +53,7 @@ public class UsersViewIT extends AbstractIT {
 		// Saving any field without changing password should save and close
 		TextFieldElement emailField = usersView.getEmailField();
 		emailField.setValue("foo" + r.nextInt() + "@bar.com");
-		emailField.sendKeys(Keys.TAB);
+
 		usersView.getButtonsBar().getSaveButton().click();
 
 		Assert.assertFalse(usersView.getDialog().isOpen());
@@ -62,7 +62,7 @@ public class UsersViewIT extends AbstractIT {
 		bakerCell.click();
 		emailField.setValue(uniqueEmail);
 		password.setValue("123");
-		password.sendKeys(Keys.TAB);
+
 		usersView.getButtonsBar().getSaveButton().click();
 		NotificationElement toast = $(NotificationElement.class).first();
 		Assert.assertTrue(form.isDisplayed());
