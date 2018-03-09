@@ -1,14 +1,18 @@
-var staticCacheName = 'static';
-var version = 1;
+// Important: update the version each time you change any of the files listed below
+var version = 2;
+// define your offline-page and assets used by it
+var manifest = 'manifest.json';
+var offlinePage = 'offline-page.html';
+var offlineAssets = [
+  'images/offline-login-banner.jpg'
+]
 
 function updateCache() {
-  return caches.open(staticCacheName + version)
+  return caches.open('static' + version)
     .then(function(cache) {
-      return cache.addAll([
-        'offline-page.html',
-        'manifest.json',
-        'images/offline-login-banner.jpg'
-      ]);
+      cache.add(manifest);
+      cache.add(offlinePage);
+      cache.addAll(offlineAssets);
     });
 }
 
@@ -31,7 +35,7 @@ self.addEventListener('fetch', function(event) {
     event.respondWith(
       fetch(request)
         .catch(function() {
-          return caches.match('offline-page.html');
+          return caches.match(offlinePage);
         })
     );
   } else {
