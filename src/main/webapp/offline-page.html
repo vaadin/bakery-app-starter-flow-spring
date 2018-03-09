@@ -8,8 +8,7 @@
   <link rel="shortcut icon" href="icons/favicon.ico">
   <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
   <style>
-
-    body {
+    .page {
       font-family: -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI", Ubuntu, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
       font-size: 1rem;
       line-height: 1.625;
@@ -89,7 +88,7 @@
     }
   </style>
 </head>
-<body>
+<body class="page">
   <div class="offline">
     <div class="content">
       <div class="title">
@@ -106,9 +105,11 @@
   </div>
 
   <script>
-    window.addEventListener('online',  function() {
-      window.location.reload();
-    });
+    if (!window.Vaadin || !window.Vaadin.Flow) {
+      window.addEventListener('online',  function() {
+        window.location.reload();
+      });
+    }
   </script>
 </body>
 </html>
