@@ -23,6 +23,7 @@ import java.util.List;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.page.BodySize;
+import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -45,6 +46,7 @@ import com.vaadin.starter.bakery.ui.views.admin.users.UsersView;
 @HtmlImport("bower_components/vaadin-form-layout/theme/lumo/vaadin-form-layout.html")
 
 @BodySize(height = "100vh", width = "100vw")
+@Viewport("width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes")
 @Theme(Lumo.class)
 public class MainView extends PolymerTemplate<TemplateModel>
 		implements RouterLayout, BeforeEnterObserver {
