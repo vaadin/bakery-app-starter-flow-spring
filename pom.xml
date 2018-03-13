@@ -175,7 +175,7 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <!-- End Spring -->
-        <!-- Add JAXB explicitly as the java.xml.bind module is not included 
+        <!-- Add JAXB explicitly as the java.xml.bind module is not included
              by default anymore in Java 9-->
         <dependency>
             <groupId>javax.xml.bind</groupId>
@@ -283,6 +283,56 @@
                                     <goal>copy-production-files</goal>
                                     <goal>package-for-production</goal>
                                 </goals>
+                                <configuration>
+                                  <!-- Split app in fragments in order to make login-view smaller -->
+                                  <bundle>true</bundle>
+                                  <fragments>
+                                    <fragment>
+                                      <name>login-fragment</name>
+                                      <files>
+                                        <file>src/views/login/login-view.html</file>
+                                      </files>
+                                    </fragment>
+                                    <fragment>
+                                      <name>main-fragment</name>
+                                      <files>
+                                        <file>src/main-view.html</file>
+                                        <file>src/views/admin/users/users-view.html</file>
+                                        <file>src/views/admin/products/products-view.html</file>
+                                        <file>src/views/storefront/storefront-view.html</file>
+                                      </files>
+                                    </fragment>
+                                    <fragment>
+                                      <name>grid-fragment</name>
+                                      <files>
+                                        <file>gridConnector.js</file>
+                                        <file>flow-grid-component-renderer.html</file>
+                                        <file>vaadin-grid-flow-selection-column.html</file>
+                                        <file>bower_components/vaadin-grid/vaadin-grid.html</file>
+                                        <file>bower_components/vaadin-grid/vaadin-grid-column.html</file>
+                                        <file>bower_components/vaadin-grid/vaadin-grid-column-group.html</file>
+                                        <file>bower_components/vaadin-grid/vaadin-grid-tree-toggle.html</file>
+                                        <file>bower_components/vaadin-grid/vaadin-grid-sorter.html</file>
+                                        <file>bower_components/vaadin-grid/vaadin-grid-selection-column.html</file>
+                                        <file>bower_components/vaadin-grid/vaadin-grid-filter.html</file>
+                                        <file>bower_components/vaadin-grid/vaadin-grid-column.html</file>
+                                        <file>bower_components/vaadin-grid/vaadin-grid-column-group.html</file>
+                                        <file>ironListConnector.js</file>
+                                        <file>bower_components/iron-list/iron-list.html</file>
+                                        <file>bower_components/vaadin-grid/src/iron-list.html</file>
+                                      </files>
+                                    </fragment>
+                                    <fragment>
+                                      <name>dashboard-fragment</name>
+                                      <files>
+                                        <file>src/views/dashboard/dashboard-view.html</file>
+                                        <file>bower_components/vaadin-board/vaadin-board.html</file>
+                                        <file>bower_components/vaadin-board/vaadin-board-row.html</file>
+                                        <file>bower_components/vaadin-charts/vaadin-chart.html</file>
+                                      </files>
+                                    </fragment>
+                                  </fragments>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
