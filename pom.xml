@@ -284,7 +284,10 @@
                                     <goal>package-for-production</goal>
                                 </goals>
                                 <configuration>
-                                  <!-- Split app in fragments in order to make login-view smaller -->
+                                  <!-- Split app into fragments in order to make login-view smaller.
+                                       This way is still very manual, because flow does not merge
+                                       elements that are only used in one fragment into that fragment.
+                                   -->
                                   <bundle>true</bundle>
                                   <fragments>
                                     <fragment>
