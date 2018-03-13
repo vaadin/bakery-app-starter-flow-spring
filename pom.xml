@@ -298,16 +298,22 @@
                                       <files>
                                         <file>src/main-view.html</file>
                                         <file>src/views/admin/users/users-view.html</file>
+                                        <file>src/views/admin/users/user-form.html</file>
                                         <file>src/views/admin/products/products-view.html</file>
+                                        <file>src/views/admin/products/product-form.html</file>
                                         <file>src/views/storefront/storefront-view.html</file>
                                         <file>src/views/storefront/order-card.html</file>
+                                        <file>src/views/storefront/order-editor.html</file>
+                                        <file>src/views/storefront/order-details.html</file>
+                                        <file>src/views/storefront/order-item-editor.html</file>
+                                        <file>src/views/storefront/order-status-badge.html</file>
+                                        <file>src/views/errors/access-denied-view.html</file>
                                         <file>src/components/confirm-dialog.html</file>
                                         <file>src/components/amount-field.html</file>
                                         <file>src/components/app-navigation.html</file>
                                         <file>src/components/form-buttons-bar.html</file>
                                         <file>src/components/search-bar.html</file>
                                         <file>src/components/utils-mixin.html</file>
-                                        <file>src/views/errors/access-denied-view.html</file>
                                       </files>
                                     </fragment>
                                     <fragment>
