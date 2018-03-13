@@ -300,6 +300,9 @@
                                         <file>src/views/admin/users/users-view.html</file>
                                         <file>src/views/admin/products/products-view.html</file>
                                         <file>src/views/storefront/storefront-view.html</file>
+                                        <file>src/views/storefront/order-card.html</file>
+                                        <file>src/components/confirm-dialog.html</file>
+                                        <file>src/views/errors/access-denied-view.html</file>
                                       </files>
                                     </fragment>
                                     <fragment>
