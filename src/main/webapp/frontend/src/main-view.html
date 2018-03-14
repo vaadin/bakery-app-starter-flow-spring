@@ -56,8 +56,10 @@
       // Reusing offline-page.html content in order not to duplicate.
       // The page is requested using iron-ajax.
       _offlinePageChanged(doc) {
-        this.$.offline.appendChild(doc.querySelector('style'));
-        this.$.offline.appendChild(doc.querySelector('.content'));
+        if (doc) {
+          this.$.offline.appendChild(doc.querySelector('style'));
+          this.$.offline.appendChild(doc.querySelector('.content'));
+        }
       }
 
       ready() {
