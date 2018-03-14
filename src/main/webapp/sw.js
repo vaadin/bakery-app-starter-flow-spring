@@ -1,5 +1,5 @@
 // Important: update the version each time you change any of the files listed below
-var version = 3;
+var version = 4;
 // define your offline-page and assets used by it
 var manifest = 'manifest.json';
 var offlinePage = 'offline-page.html';
