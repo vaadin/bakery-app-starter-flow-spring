@@ -69,12 +69,6 @@
         window.addEventListener('online', () => this.online = true);
         window.addEventListener('offline', () => this.online = false);
       }
-
-      _updateOfflineContent() {
-        console.log(arguments);
-        this.$.offline.appendChild(doc.querySelector('style'));
-        this.$.offline.appendChild(doc.querySelector('.content'));
-      }
     }
 
     window.customElements.define(MainView.is, MainView);
