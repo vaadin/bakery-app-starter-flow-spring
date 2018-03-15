@@ -1,4 +1,5 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 
 <!-- Imports used in this page -->
 <link rel="import" href="components/app-container.html">
@@ -31,6 +32,8 @@
       }
     </style>
 
+    <iron-ajax auto url="offline-page.html" handle-as="document" last-response="{{offlinePage}}"></iron-ajax>
+
     <app-container>
       <app-navigation id="appNavigation"></app-navigation>
       <slot></slot>
@@ -46,15 +49,21 @@
         return 'main-view';
       }
 
-      ready() {
-        super.ready();
+      static get observers() {
+        return ['_offlinePageChanged(offlinePage)'];
+      }
 
-        // Reusing offline-page.html content in order not to duplicate
-        Polymer.importHref('offline-page.html', e => {
-          const doc = e.target.import;
+      // Reusing offline-page.html content in order not to duplicate.
+      // The page is requested using iron-ajax.
+      _offlinePageChanged(doc) {
+        if (doc) {
           this.$.offline.appendChild(doc.querySelector('style'));
           this.$.offline.appendChild(doc.querySelector('.content'));
-        });
+        }
+      }
+
+      ready() {
+        super.ready();
 
         this.online = window.navigator.onLine;
         window.addEventListener('online', () => this.online = true);
