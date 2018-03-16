@@ -41,9 +41,6 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 	@Id("dialog")
 	private Dialog dialog;
 
-	@Id("confirmation")
-	private ConfirmDialog confirmation;
-
 	private ProductForm form = new ProductForm();
 
 	private DefaultEntityPresenter<Product> presenter;
@@ -61,12 +58,6 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 		setupEventListeners();
 		setupGrid();
 		presenter.init(this);
-		confirmation.setOpened(false);
-	}
-
-	@Override
-	public ConfirmDialog getConfirmDialog() {
-		return confirmation;
 	}
 
 	private void setupGrid() {

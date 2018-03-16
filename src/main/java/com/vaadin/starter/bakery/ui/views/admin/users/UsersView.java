@@ -18,7 +18,6 @@ import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.data.entity.util.EntityUtil;
 import com.vaadin.starter.bakery.ui.MainView;
-import com.vaadin.starter.bakery.ui.components.ConfirmDialog;
 import com.vaadin.starter.bakery.ui.components.SearchBar;
 import com.vaadin.starter.bakery.ui.crud.CrudView;
 import com.vaadin.starter.bakery.ui.crud.DefaultEntityPresenter;
@@ -40,9 +39,6 @@ public class UsersView extends CrudView<User, TemplateModel> {
 	@Id("dialog")
 	private Dialog dialog;
 
-	@Id("confirmation")
-	private ConfirmDialog confirmation;
-
 	private final UserForm form;
 
 	private final DefaultEntityPresenter<User> presenter;
@@ -61,18 +57,12 @@ public class UsersView extends CrudView<User, TemplateModel> {
 		setupEventListeners();
 		setupGrid();
 		presenter.init(this);
-		confirmation.setOpened(false);
 	}
 
 	private void setupGrid() {
 		grid.addColumn(User::getEmail).setWidth("270px").setHeader("Email").setFlexGrow(5);
 		grid.addColumn(u -> u.getFirstName() + " " + u.getLastName()).setHeader("Name").setWidth("200px").setFlexGrow(5);
 		grid.addColumn(User::getRole).setHeader("Role").setWidth("150px");
-	}
-
-	@Override
-	public ConfirmDialog getConfirmDialog() {
-		return confirmation;
 	}
 
 	@Override
