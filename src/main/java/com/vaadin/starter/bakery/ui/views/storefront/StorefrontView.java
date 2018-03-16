@@ -24,6 +24,7 @@ import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.ui.MainView;
+import com.vaadin.starter.bakery.ui.components.ConfirmDialog;
 import com.vaadin.starter.bakery.ui.components.SearchBar;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.views.EntityView;
@@ -45,6 +46,8 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 
 	@Id("dialog")
 	private Dialog dialog;
+
+	private final ConfirmDialog confirmation = new ConfirmDialog();
 
 	private final OrderEditor orderEditor;
 
@@ -83,6 +86,14 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 				presenter.cancel();
 			}
 		});
+
+		confirmation.setOpened(false);
+		getElement().appendChild(confirmation.getElement());
+	}
+
+	@Override
+	public ConfirmDialog getConfirmDialog() {
+		return confirmation;
 	}
 
 	void setOpened(boolean opened) {

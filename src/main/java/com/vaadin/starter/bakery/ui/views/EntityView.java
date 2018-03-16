@@ -1,6 +1,7 @@
 package com.vaadin.starter.bakery.ui.views;
 
 import com.vaadin.flow.data.binder.ValidationException;
+import com.vaadin.starter.bakery.ui.components.ConfirmDialog;
 import com.vaadin.starter.bakery.ui.utils.messages.Message;
 
 /**
@@ -17,6 +18,11 @@ import com.vaadin.starter.bakery.ui.utils.messages.Message;
 public interface EntityView<T> extends HasNotifications {
 
 	/**
+	 * Returns confirmation dialog
+	 */
+	ConfirmDialog getConfirmDialog();
+
+	/**
 	 * Shows a confirmation request dialog with the given message.
 	 *
 	 * @param message
@@ -28,7 +34,15 @@ public interface EntityView<T> extends HasNotifications {
 	 *            command to execute if the user presses 'cancel' in the dialog
 	 */
 	default void showConfirmationRequest(Message message, Runnable onOk, Runnable onCancel) {
-		Message.confirm(message, onOk, onCancel);
+		getConfirmDialog().setMessage(message.getMessage());
+		getConfirmDialog().setCaption(message.getCaption());
+		getConfirmDialog().setCancelText(message.getCancelText());
+		getConfirmDialog().setOkText(message.getOkText());
+
+		getConfirmDialog().addOkClickListener(e -> onOk.run());
+		getConfirmDialog().addCancelClickListener(e -> onCancel.run());
+
+		getConfirmDialog().setOpened(true);
 	}
 
 	/**

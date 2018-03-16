@@ -18,7 +18,7 @@ public interface HasCrudView extends HasElementQuery {
 	}
 
 	default ConfirmDialogElement getConfirmDialog() {
-		return $(ConfirmDialogElement.class).onPage().first();
+		return $(ConfirmDialogElement.class).first();
 	}
 
 	default DialogElement getDialog() {

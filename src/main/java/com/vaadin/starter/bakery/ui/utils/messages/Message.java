@@ -1,8 +1,5 @@
 package com.vaadin.starter.bakery.ui.utils.messages;
 
-import com.vaadin.flow.component.UI;
-import com.vaadin.starter.bakery.ui.components.ConfirmDialog;
-
 public class Message {
 
 	public static final String CONFIRM_CAPTION_DELETE = "Confirm Delete";
@@ -53,28 +50,4 @@ public class Message {
 		Message createMessage(Object... parameters);
 	}
 
-	/**
-	 * Show a confirmation dialog with the message.
-	 * When user clicks on OK button, onOk callback is executed.
-	 */
-	public static void confirm(Message message, Runnable onOk, Runnable onCancel) {
-		ConfirmDialog confirmation = new ConfirmDialog();
-
-		confirmation.setMessage(message.getMessage());
-		confirmation.setCaption(message.getCaption());
-		confirmation.setCancelText(message.getCancelText());
-		confirmation.setOkText(message.getOkText());
-
-		confirmation.addOkClickListener(e -> {
-			onOk.run();
-			UI.getCurrent().remove(confirmation);
-		});
-		confirmation.addCancelClickListener(e -> {
-			onCancel.run();
-			UI.getCurrent().remove(confirmation);
-		});
-
-		UI.getCurrent().add(confirmation);
-		confirmation.setOpened(true);
-	}
 }

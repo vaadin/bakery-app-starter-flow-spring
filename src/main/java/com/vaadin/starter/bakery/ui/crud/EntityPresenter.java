@@ -97,6 +97,8 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 		} catch (ValidationException e) {
 			view.showError(CrudErrorMessage.REQUIRED_FIELDS_MISSING, false);
 			return false;
+		} catch (NullPointerException e) {
+			return false;
 		}
 	}
 
