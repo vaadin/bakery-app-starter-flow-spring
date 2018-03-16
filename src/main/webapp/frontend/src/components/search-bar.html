@@ -1,7 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/vaadin-icons/vaadin-icons.html">
-<link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../../bower_components/vaadin-button/src/vaadin-button.html">
 <link rel="import" href="../../bower_components/vaadin-checkbox/src/vaadin-checkbox.html">
 <link rel="import" href="../../bower_components/vaadin-text-field/src/vaadin-text-field.html">
@@ -31,24 +30,23 @@
         flex: 1 1 auto;
       }
 
-      .checkbox,
-      .extra-filter,
-      :host([show-extra-filters]) .extra-action {
+      .checkbox.desktop,
+      .clear-btn,
+      :host([show-extra-filters]) .action-btn {
         display: none;
       }
 
-      :host([show-checkbox]) .checkbox {
-        display: inline-block;
-        margin: 0 0 calc(-1 * var(--lumo-space-l));
-        transition: all .5s;
-      }
-
-      :host([show-checkbox][show-extra-filters]) .checkbox {
-        margin: 0;
-      }
-
-      :host([show-extra-filters]) .extra-filter {
+      :host([show-extra-filters]) .clear-btn {
         display: block;
+      }
+
+      :host([show-checkbox]) .checkbox.mobile {
+        transition: all 0.5s;
+        height: 0;
+      }
+
+      :host([show-checkbox][show-extra-filters]) .checkbox.mobile {
+        height: 2em;
       }
 
       .field {
@@ -68,41 +66,41 @@
           padding-right: var(--lumo-space-m);
         }
 
-        :host([show-checkbox]) .checkbox {
-          display: none;
-          margin: 0;
-        }
-
-        :host([show-checkbox][show-extra-filters]) .checkbox {
-          display: inline-block;
-        }
-
         :host::after {
           content: '';
           width: 100%;
           border-radius: 50%;
           background: transparent;
         }
+
+        :host([show-checkbox][show-extra-filters]) .checkbox.desktop {
+          display: block;
+        }
+
+        :host([show-checkbox][show-extra-filters]) .checkbox.mobile {
+          display: none;
+        }
       }
     </style>
 
-    <iron-media-query query="(min-width: 600px)" query-matches="{{_desktopView}}"></iron-media-query>
-
     <div class="row">
-      <vaadin-text-field id="field" class="field" placeholder="[[fieldPlaceholder]]" value="{{fieldValue}}" focused="{{_fieldFocused}}" on-value-changed="_filterChanged">
+      <vaadin-text-field id="field" class="field" placeholder="[[fieldPlaceholder]]" value="{{fieldValue}}"
+         on-focus="_onFieldFocus" on-blur="_onFieldBlur" on-value-changed="_filterChanged">
         <iron-icon icon$="[[fieldIcon]]" slot="prefix"></iron-icon>
       </vaadin-text-field>
-      <vaadin-checkbox class="checkbox" checked="{{checkboxChecked}}" focused="{{_checkboxFocused}}" hidden$="[[!_desktopView]]">[[checkboxText]]</vaadin-checkbox>
-      <vaadin-button id="clear" class="extra-filter" theme="tertiary">
+      <vaadin-checkbox class="checkbox desktop" checked="{{checkboxChecked}}"
+        on-focus="_onFieldFocus" on-blur="_onFieldBlur">[[checkboxText]]</vaadin-checkbox>
+      <vaadin-button id="clear" class="clear-btn" theme="tertiary">
         [[clearText]]
       </vaadin-button>
-      <vaadin-button id="action" class="extra-action" theme="primary">
+      <vaadin-button id="action" class="action-btn" theme="primary">
         <iron-icon icon$="[[buttonIcon]]" slot="prefix"></iron-icon>
         [[buttonText]]
       </vaadin-button>
     </div>
 
-    <vaadin-checkbox class="checkbox" checked="{{checkboxChecked}}" focused="{{_checkboxFocused}}" hidden$="[[_desktopView]]">[[checkboxText]]</vaadin-checkbox>
+    <vaadin-checkbox class="checkbox mobile" checked="{{checkboxChecked}}"
+       on-focus="_onFieldFocus" on-blur="_onFieldBlur">[[checkboxText]]</vaadin-checkbox>
 
   </template>
 
@@ -152,12 +150,6 @@
             value: false,
             reflectToAttribute: true
           },
-          _fieldFocused: {
-            type: Boolean
-          },
-          _checkboxFocused: {
-            type: Boolean
-          },
           _isSafari: {
             type: Boolean,
             value: function() {
@@ -169,16 +161,16 @@
 
       static get observers() {
         return [
-          '_setShowExtraFilters(fieldValue, checkboxChecked, _fieldFocused, _checkboxFocused)'
+          '_setShowExtraFilters(fieldValue, checkboxChecked, _focused)'
         ];
       }
 
-      _setShowExtraFilters(fieldValue, checkboxChecked, focused, checkboxFocused) {
+      _setShowExtraFilters(fieldValue, checkboxChecked, focused) {
         this._debouncer = Polymer.Debouncer.debounce(
           this._debouncer,
           // Set 1 millisecond wait to be able move from text field to checkbox with tab.
           Polymer.Async.timeOut.after(1), () => {
-            this.showExtraFilters = fieldValue || checkboxChecked || focused || checkboxFocused;
+            this.showExtraFilters = fieldValue || checkboxChecked || focused;
 
             // Safari has an issue with repainting shadow root element styles when a host attribute changes.
             // Need this workaround (toggle any inline css property on and off) until the issue gets fixed.
@@ -191,6 +183,14 @@
             }
           }
         );
+      }
+
+      _onFieldFocus(e) {
+        this._focused = true;
+      }
+
+      _onFieldBlur(e) {
+        this._focused = false;
       }
 
       _filterChanged() {
