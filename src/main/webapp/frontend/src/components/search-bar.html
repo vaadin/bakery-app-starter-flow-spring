@@ -30,7 +30,7 @@
         flex: 1 1 auto;
       }
 
-      .checkbox.desktop,
+      .checkbox,
       .clear-btn,
       :host([show-extra-filters]) .action-btn {
         display: none;
@@ -41,6 +41,7 @@
       }
 
       :host([show-checkbox]) .checkbox.mobile {
+        display: block;
         transition: all 0.5s;
         height: 0;
       }
