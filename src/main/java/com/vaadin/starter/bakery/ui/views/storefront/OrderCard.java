@@ -7,24 +7,8 @@ import static com.vaadin.starter.bakery.ui.utils.FormattingUtils.WEEKDAY_FULLNAM
 import static com.vaadin.starter.bakery.ui.utils.FormattingUtils.WEEK_OF_YEAR_FIELD;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Function;
 
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.HtmlContainer;
-import com.vaadin.flow.component.Tag;
-import com.vaadin.flow.component.dependency.HtmlImport;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.polymertemplate.Id;
-import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
-import com.vaadin.flow.templatemodel.Convert;
-import com.vaadin.flow.templatemodel.Include;
-import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.backend.data.entity.OrderSummary;
-import com.vaadin.starter.bakery.ui.utils.converters.LongToStringConverter;
-import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
 
 /**
  * The component displaying order cards for the list on the Storefront and Dashboard views.
