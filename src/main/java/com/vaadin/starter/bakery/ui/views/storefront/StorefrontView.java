@@ -12,7 +12,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.data.binder.ValidationException;
-import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.data.renderer.TemplateRenderer;
 import com.vaadin.flow.data.selection.SelectionEvent;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
@@ -27,6 +27,7 @@ import com.vaadin.starter.bakery.ui.MainView;
 import com.vaadin.starter.bakery.ui.components.ConfirmDialog;
 import com.vaadin.starter.bakery.ui.components.SearchBar;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
+import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
 import com.vaadin.starter.bakery.ui.views.EntityView;
 
 @Tag("storefront-view")
@@ -65,13 +66,20 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 		searchBar.setPlaceHolder("Search");
 
 		grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-		grid.addColumn(new ComponentRenderer<>(order -> {
-			OrderCard orderCard = new OrderCard();
-			orderCard.setOrder(order);
-			orderCard.setHeader(presenter.getHeaderByOrderId(order.getId()));
-			orderCard.getElement().getClassList().add(BakeryConst.STOREFRONT_ORDER_CARD_STYLE);
-			return orderCard;
-		}));
+
+		OrderStateConverter stateConverter = new OrderStateConverter();
+		grid.addColumn(TemplateRenderer.<Order> of(
+				OrderCard.ORDER_CARD_TEMPLATE)
+				.withProperty("header", order -> presenter.getHeaderByOrderId(order.getId()))
+				.withProperty("timePlace", order -> {
+					final StringBuilder components = new StringBuilder();
+					OrderCard.createComponents(order).forEach(c -> components.append(c.getElement().getOuterHTML()));
+					return components.toString();
+				})
+				.withProperty("state", order -> stateConverter.toPresentation(order.getState()))
+				.withProperty("items", Order::getItems)
+				.withProperty("customer", Order::getCustomer));
+
 		setOpened(false);
 		grid.addSelectionListener(this::onOrdersGridSelectionChanged);
 		getSearchBar().addFilterChangeListener(
