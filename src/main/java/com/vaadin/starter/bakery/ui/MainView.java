@@ -23,6 +23,7 @@ import java.util.List;
 
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.page.BodySize;
 import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.component.polymertemplate.Id;
@@ -51,6 +52,7 @@ import com.vaadin.starter.bakery.ui.views.admin.users.UsersView;
 
 @PageTitle("###Bakery###")
 @BodySize(height = "100vh", width = "100vw")
+@StyleSheet("styles/app.css")
 @Viewport(VIEWPORT)
 @Theme(Lumo.class)
 public class MainView extends PolymerTemplate<TemplateModel>
