@@ -7,27 +7,26 @@ import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
+import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.FilterableCrudService;
 
-public class DefaultEntityPresenter<T extends AbstractEntity> {
+public class CrudEntityPresenter<T extends AbstractEntity> extends EntityPresenter<T> {
 
-	private final ConfigurableFilterDataProvider<T, Void, String> filteredDataProvider;
-
-	private final EntityPresenter<T> entityPresenter;
+	private ConfigurableFilterDataProvider<T, Void, String> filteredDataProvider;
 
 	private CrudView<T, ?> view;
 
-	public DefaultEntityPresenter(EntityPresenter<T> entityPresenter, FilterableCrudService<T> crudService) {
-		this.entityPresenter = entityPresenter;
+	public CrudEntityPresenter(FilterableCrudService<T> crudService, User currentUser) {
+		super(crudService, currentUser);
+
 		DataProvider<T, String> dataProvider = new CallbackDataProvider<>(
 				query -> crudService.findAnyMatching(query.getFilter()).stream(),
 				query -> crudService.findAnyMatching(query.getFilter()).size());
-
 		filteredDataProvider = dataProvider.withConfigurableFilter();
 	}
 
-	public void init(CrudView<T, ?> view) {
-		entityPresenter.setView(view);
+	public void setView(CrudView<T, ?> view) {
+		super.setView(view);
 		this.view = view;
 		view.getGrid().setDataProvider(filteredDataProvider);
 	}
@@ -37,49 +36,51 @@ public class DefaultEntityPresenter<T extends AbstractEntity> {
 	}
 
 	public void cancel() {
-		entityPresenter.cancel(view::closeDialog, view::openDialog);
+		this.cancel(view::closeDialog, view::openDialog);
 	}
 
-    public void closeSilently() {
-        view.clear();
-        view.closeDialog();
-    }
-
-	public void createNew() {
-		open(entityPresenter.createNew());
+	public void closeSilently() {
+		view.clear();
+		view.closeDialog();
 	}
 
-	public void loadEntity(Long id, boolean edit) {
-		entityPresenter.loadEntity(id, this::open);
+	@Override
+	public T createNew() {
+		return open(super.createNew());
 	}
 
-	private void open(T entity) {
+	public void loadEntity(Long id) {
+		loadEntity(id, this::open);
+	}
+
+	private T open(T entity) {
 		view.getBinder().readBean(entity);
 		view.getForm().getButtons().setSaveDisabled(true);
 		view.getForm().getButtons().setDeleteDisabled(entity.isNew());
 		view.updateTitle(entity.isNew());
 		view.openDialog();
+		return entity;
 	}
 
 	public void save() {
-		if (entityPresenter.writeEntity()) {
-			final boolean isNew = entityPresenter.getEntity().isNew();
-			entityPresenter.save(e -> {
+		if (writeEntity()) {
+			final boolean isNew = getEntity().isNew();
+			super.save(e -> {
 				if (isNew) {
 					filteredDataProvider.refreshAll();
 				} else {
 					filteredDataProvider.refreshItem(e);
 				}
-				entityPresenter.close();
+				close();
 				view.closeDialog();
 			});
 		}
 	}
 
 	public void delete() {
-		entityPresenter.delete(e -> {
+		super.delete(e -> {
 			filteredDataProvider.refreshAll();
-			entityPresenter.close();
+			close();
 			view.closeDialog();
 		});
 	}
@@ -87,5 +88,4 @@ public class DefaultEntityPresenter<T extends AbstractEntity> {
 	public void onValueChange(boolean isDirty) {
 		view.getForm().getButtons().setSaveDisabled(!isDirty);
 	}
-
 }

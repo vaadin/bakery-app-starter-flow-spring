@@ -20,14 +20,14 @@ public class PresenterFactory {
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public DefaultEntityPresenter<Product> productPresenter(ProductService crudService, User currentUser) {
-		return new DefaultEntityPresenter<>(new EntityPresenter<>(crudService, currentUser), crudService);
+	public CrudEntityPresenter<Product> productPresenter(ProductService crudService, User currentUser) {
+		return new CrudEntityPresenter<>(crudService, currentUser);
 	}
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public DefaultEntityPresenter<User> userPresenter(UserService crudService, User currentUser) {
-		return new DefaultEntityPresenter<>(new EntityPresenter<>(crudService, currentUser), crudService);
+	public CrudEntityPresenter<User> userPresenter(UserService crudService, User currentUser) {
+		return new CrudEntityPresenter<>(crudService, currentUser);
 	}
 
 	@Bean

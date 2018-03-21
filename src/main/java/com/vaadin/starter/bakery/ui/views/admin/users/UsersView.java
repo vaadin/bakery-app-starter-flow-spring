@@ -19,8 +19,8 @@ import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.data.entity.util.EntityUtil;
 import com.vaadin.starter.bakery.ui.MainView;
 import com.vaadin.starter.bakery.ui.components.SearchBar;
+import com.vaadin.starter.bakery.ui.crud.CrudEntityPresenter;
 import com.vaadin.starter.bakery.ui.crud.CrudView;
-import com.vaadin.starter.bakery.ui.crud.DefaultEntityPresenter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
 @Tag("users-view")
@@ -41,12 +41,12 @@ public class UsersView extends CrudView<User, TemplateModel> {
 
 	private final UserForm form;
 
-	private final DefaultEntityPresenter<User> presenter;
+	private final CrudEntityPresenter<User> presenter;
 
 	private final BeanValidationBinder<User> binder = new BeanValidationBinder<>(User.class);
 
 	@Autowired
-	public UsersView(DefaultEntityPresenter<User> presenter, UserForm form) {
+	public UsersView(CrudEntityPresenter<User> presenter, UserForm form) {
 		super(EntityUtil.getName(User.class));
 		this.presenter = presenter;
 		this.form = form;
@@ -56,7 +56,7 @@ public class UsersView extends CrudView<User, TemplateModel> {
 
 		setupEventListeners();
 		setupGrid();
-		presenter.init(this);
+		presenter.setView(this);
 	}
 
 	private void setupGrid() {
@@ -71,7 +71,7 @@ public class UsersView extends CrudView<User, TemplateModel> {
 	}
 
 	@Override
-	protected DefaultEntityPresenter<User> getPresenter() {
+	protected CrudEntityPresenter<User> getPresenter() {
 		return presenter;
 	}
 
