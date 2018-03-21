@@ -34,8 +34,14 @@
       static get is() {
         return 'product-form';
       }
-    }
 
+      ready() {
+        super.ready();
+        this.$.form.addEventListener('change', e => {
+          this.$.buttons.$.save.disabled = false;
+        });
+      }
+    }
     window.customElements.define(ProductForm.is, ProductForm);
   </script>
 </dom-module>
