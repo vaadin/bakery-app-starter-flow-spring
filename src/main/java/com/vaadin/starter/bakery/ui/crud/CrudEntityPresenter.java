@@ -14,7 +14,7 @@ public class CrudEntityPresenter<T extends AbstractEntity> extends EntityPresent
 
 	private ConfigurableFilterDataProvider<T, Void, String> filteredDataProvider;
 
-	private CrudView<T, ?> view;
+	private CrudView<T, ?> crudView;
 
 	public CrudEntityPresenter(FilterableCrudService<T> crudService, User currentUser) {
 		super(crudService, currentUser);
@@ -27,7 +27,7 @@ public class CrudEntityPresenter<T extends AbstractEntity> extends EntityPresent
 
 	public void setView(CrudView<T, ?> view) {
 		super.setView(view);
-		this.view = view;
+		this.crudView = view;
 		view.getGrid().setDataProvider(filteredDataProvider);
 	}
 
@@ -36,12 +36,12 @@ public class CrudEntityPresenter<T extends AbstractEntity> extends EntityPresent
 	}
 
 	public void cancel() {
-		this.cancel(view::closeDialog, view::openDialog);
+		this.cancel(crudView::closeDialog, crudView::openDialog);
 	}
 
 	public void closeSilently() {
-		view.clear();
-		view.closeDialog();
+		crudView.clear();
+		crudView.closeDialog();
 	}
 
 	@Override
@@ -54,11 +54,11 @@ public class CrudEntityPresenter<T extends AbstractEntity> extends EntityPresent
 	}
 
 	private T open(T entity) {
-		view.getBinder().readBean(entity);
-		view.getForm().getButtons().setSaveDisabled(true);
-		view.getForm().getButtons().setDeleteDisabled(entity.isNew());
-		view.updateTitle(entity.isNew());
-		view.openDialog();
+		crudView.getBinder().readBean(entity);
+		crudView.getForm().getButtons().setSaveDisabled(true);
+		crudView.getForm().getButtons().setDeleteDisabled(entity.isNew());
+		crudView.updateTitle(entity.isNew());
+		crudView.openDialog();
 		return entity;
 	}
 
@@ -72,7 +72,7 @@ public class CrudEntityPresenter<T extends AbstractEntity> extends EntityPresent
 					filteredDataProvider.refreshItem(e);
 				}
 				close();
-				view.closeDialog();
+				crudView.closeDialog();
 			});
 		}
 	}
@@ -81,11 +81,11 @@ public class CrudEntityPresenter<T extends AbstractEntity> extends EntityPresent
 		super.delete(e -> {
 			filteredDataProvider.refreshAll();
 			close();
-			view.closeDialog();
+			crudView.closeDialog();
 		});
 	}
 
 	public void onValueChange(boolean isDirty) {
-		view.getForm().getButtons().setSaveDisabled(!isDirty);
+		crudView.getForm().getButtons().setSaveDisabled(!isDirty);
 	}
 }
