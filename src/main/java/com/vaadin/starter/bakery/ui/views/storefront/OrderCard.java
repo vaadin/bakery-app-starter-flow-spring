@@ -71,42 +71,71 @@ public class OrderCard extends PolymerTemplate<OrderCard.Model> {
 		getModel().setDisplayHeader(true);
 	}
 
-	private List<Component> createComponents(OrderSummary order) {
+	public static List<Component> createComponents(OrderSummary order) {
 		LocalDate now = LocalDate.now();
 		LocalDate date = order.getDueDate();
 		List<Component> result = new ArrayList<>(3);
 
-		Function<OrderSummary, Component> PLACE = o -> createTimeComponent("place", o.getPickupLocation().getName());
+		Function<OrderSummary, Component> PLACE = o -> createTimeComponent("oc-place", o.getPickupLocation().getName());
 
 		if (date.equals(now) || date.equals(now.minusDays(1))) {
 			// Today or yesterday
-			result.add(createHeader("time", HOUR_FORMATTER.format(order.getDueTime())));
+			result.add(createHeader("oc-time", HOUR_FORMATTER.format(order.getDueTime())));
 			result.add(PLACE.apply(order));
 		} else if (now.getYear() == date.getYear() && now.get(WEEK_OF_YEAR_FIELD) == date.get(WEEK_OF_YEAR_FIELD)) {
 			// This week
-			result.add(createHeader("short-day", SHORT_DAY_FORMATTER.format(order.getDueDate())));
-			result.add(createTimeComponent("secondary-time", HOUR_FORMATTER.format(order.getDueTime())));
+			result.add(createHeader("oc-short-day", SHORT_DAY_FORMATTER.format(order.getDueDate())));
+			result.add(createTimeComponent("oc-secondary-time", HOUR_FORMATTER.format(order.getDueTime())));
 			result.add(PLACE.apply(order));
 		} else {
 			// Other dates
-			result.add(createHeader("month", MONTH_AND_DAY_FORMATTER.format(order.getDueDate())));
-			result.add(createTimeComponent("full-day", WEEKDAY_FULLNAME_FORMATTER.format(order.getDueDate())));
+			result.add(createHeader("oc-month", MONTH_AND_DAY_FORMATTER.format(order.getDueDate())));
+			result.add(createTimeComponent("oc-full-day", WEEKDAY_FULLNAME_FORMATTER.format(order.getDueDate())));
 		}
 
 		return result;
 	}
 
-	private Component fillComponent(HtmlContainer c, String id, String text) {
-		c.setId(id);
+	private static Component fillComponent(HtmlContainer c, String id, String text) {
+		c.setClassName(id);
 		c.setText(text);
 		return c;
 	}
 
-	private Component createTimeComponent(String id, String text) {
+	private static Component createTimeComponent(String id, String text) {
 		return fillComponent(new Div(), id, text);
 	}
 
-	private Component createHeader(String id, String text) {
+	private static Component createHeader(String id, String text) {
 		return fillComponent(new H3(), id, text);
 	}
+
+
+	public static final String ORDER_CARD_TEMPLATE =
+			  "<div class=\"order-card\">"
+			+ "  <div class=\"oc-content\">\n"
+			+ "     <div class=\"oc-group-heading\" hidden$=\"[[!item.header]]\">\n"
+			+ "       <span class=\"oc-main\">[[item.header.main]]</span>\n"
+			+ "       <span class=\"oc-secondary\">[[item.header.secondary]]</span>\n"
+			+ "     </div>\n"
+			+ "     <div class=\"oc-wrapper\">\n"
+			+ "       <div class=\"oc-info-wrapper\">\n"
+			+ "         <order-status-badge class=\"oc-badge\" status=\"[[item.state]]\"></order-status-badge>\n"
+			+ "         <div class=\"oc-time-place\" inner-h-t-m-l=\"[[item.timePlace]]\"></div>\n"
+			+ "       </div>\n"
+			+ "       <div class=\"oc-name-items\">\n"
+			+ "         <h3 class=\"oc-name\">[[item.customer.fullName]]</h3>\n"
+			+ "         <div class=\"oc-goods\">\n"
+			+ "           <template is=\"dom-repeat\" items=\"[[item.items]]\">\n"
+			+ "             <div class=\"oc-goods-item\">\n"
+			+ "               <span class=\"count\">[[item.quantity]]</span>\n"
+			+ "               <div>[[item.product.name]]</div>\n"
+			+ "             </div>\n"
+			+ "           </template>\n"
+			+ "         </div>\n"
+			+ "       </div>\n"
+			+ "     </div>\n"
+			+ "  </div>"
+			+ "</div>";
+
 }
