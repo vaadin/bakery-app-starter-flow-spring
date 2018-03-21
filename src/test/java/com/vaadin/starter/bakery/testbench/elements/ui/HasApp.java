@@ -1,6 +1,6 @@
 package com.vaadin.starter.bakery.testbench.elements.ui;
 
-import com.vaadin.starter.bakery.testbench.elements.components.BakeryNavigationElement;
+import com.vaadin.starter.bakery.testbench.elements.components.AppNavigationElement;
 import com.vaadin.testbench.HasElementQuery;
 
 public interface HasApp extends HasElementQuery {
@@ -9,7 +9,7 @@ public interface HasApp extends HasElementQuery {
 		return $(MainViewElement.class).onPage().first();
 	}
 
-	default BakeryNavigationElement getMenu() {
+	default AppNavigationElement getMenu() {
 		return getApp().getMenu();
 	}
 

@@ -10,7 +10,7 @@ import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elementsbase.Element;
 
 @Element("app-navigation")
-public class BakeryNavigationElement extends TestBenchElement {
+public class AppNavigationElement extends TestBenchElement {
 
 	public DashboardViewElement navigateToDashboard() {
 		return navigateTo(1, DashboardViewElement.class);
