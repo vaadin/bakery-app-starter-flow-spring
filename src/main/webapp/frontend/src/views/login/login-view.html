@@ -41,7 +41,6 @@
         background-image: url(../../../images/login-banner.jpg);
         background-size: cover;
         background-position-x: center;
-        display: table;
         width: 100%;
         padding: var(--lumo-space-l);
       }
@@ -102,13 +101,25 @@
         max-width: 35em;
       }
 
-      @media (min-width: 600px) {
+      @media (max-height: 400px) {
+        .info__header {
+          margin-top: 0;
+        }
+
+        .login__header {
+          display: none;
+        }
+      }
+
+      @media (min-width: 750px) and (min-height: 400px) {
         .container {
           border-radius: 4px;
           max-width: 700px;
           max-height: 380px;
         }
+      }
 
+      @media (min-width: 550px) {
         .login__layout {
           flex-direction: row;
           align-items: flex-end;
