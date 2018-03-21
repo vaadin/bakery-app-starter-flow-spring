@@ -68,17 +68,13 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 		grid.setSelectionMode(Grid.SelectionMode.SINGLE);
 
 		OrderStateConverter stateConverter = new OrderStateConverter();
-		grid.addColumn(TemplateRenderer.<Order> of(
-				OrderCard.ORDER_CARD_TEMPLATE)
+		grid.addColumn(TemplateRenderer.<Order> of(OrderCard.ORDER_CARD_TEMPLATE)
 				.withProperty("header", order -> presenter.getHeaderByOrderId(order.getId()))
-				.withProperty("timePlace", order -> {
-					final StringBuilder components = new StringBuilder();
-					OrderCard.createComponents(order).forEach(c -> components.append(c.getElement().getOuterHTML()));
-					return components.toString();
-				})
+				.withProperty("timePlace", order -> OrderCard.createComponents(order))
 				.withProperty("state", order -> stateConverter.toPresentation(order.getState()))
 				.withProperty("items", Order::getItems)
-				.withProperty("customer", Order::getCustomer));
+				.withProperty("customer", Order::getCustomer)
+		);
 
 		setOpened(false);
 		grid.addSelectionListener(this::onOrdersGridSelectionChanged);

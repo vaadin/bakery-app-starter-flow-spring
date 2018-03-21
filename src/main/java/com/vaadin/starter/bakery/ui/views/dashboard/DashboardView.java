@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.ComponentEventListener;
@@ -30,7 +31,7 @@ import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
-import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.data.renderer.TemplateRenderer;
 import com.vaadin.flow.data.selection.SelectionEvent;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -93,12 +94,13 @@ public class DashboardView extends PolymerTemplate<TemplateModel> {
 	public DashboardView(OrderService orderService, OrdersGridDataProvider orderDataProvider) {
 		this.orderService = orderService;
 
-		grid.addColumn(new ComponentRenderer<>(order -> {
-			OrderCard orderCard = new OrderCard();
-			orderCard.setOrder(order);
-			orderCard.getElement().getClassList().add(BakeryConst.DASHBOARD_ORDER_CARD_STYLE);
-			return orderCard;
-		}));
+		OrderStateConverter stateConverter = new OrderStateConverter();
+		grid.addColumn(TemplateRenderer.<Order> of(OrderCard.ORDER_CARD_TEMPLATE)
+				.withProperty("timePlace", order -> OrderCard.createComponents(order))
+				.withProperty("state", order -> stateConverter.toPresentation(order.getState()))
+				.withProperty("items", Order::getItems)
+				.withProperty("customer", Order::getCustomer)
+		);
 		grid.addSelectionListener(this::onOrdersGridSelectionChanged);
 
 		grid.setDataProvider(orderDataProvider);
