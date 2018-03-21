@@ -34,82 +34,31 @@ import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
  * equivalent, but those that do have the header visible create a visual group
  * separation.
  */
-@Tag("order-card")
-@HtmlImport("src/views/storefront/order-card.html")
-public class OrderCard extends PolymerTemplate<OrderCard.Model> {
 
-	public interface Model extends TemplateModel {
-		void setHeader(OrderCardHeader header);
+public class OrderCard {
 
-		void setDisplayHeader(boolean displayHeader);
-
-		@Include({ "id", "state", "customer.fullName", "items.product.name", "items.quantity" })
-		@Convert(value = LongToStringConverter.class, path = "id")
-		@Convert(value = OrderStateConverter.class, path = "state")
-		void setItem(OrderSummary order);
-	}
-
-	@Id("timePlace")
-	private Div timePlace;
-
-	public OrderCard() {
-		getModel().setDisplayHeader(false);
-	}
-
-	public void setOrder(OrderSummary order) {
-		getModel().setItem(order);
-		timePlace.removeAll();
-		createComponents(order).forEach(timePlace::add);
-	}
-
-	public void setHeader(OrderCardHeader header) {
-		if (header == null) {
-			getModel().setDisplayHeader(false);
-			return;
-		}
-		getModel().setHeader(header);
-		getModel().setDisplayHeader(true);
-	}
-
-	public static List<Component> createComponents(OrderSummary order) {
+	public static OrderCardTimePlace createComponents(OrderSummary order) {
 		LocalDate now = LocalDate.now();
 		LocalDate date = order.getDueDate();
-		List<Component> result = new ArrayList<>(3);
-
-		Function<OrderSummary, Component> PLACE = o -> createTimeComponent("oc-place", o.getPickupLocation().getName());
+		OrderCardTimePlace result = new OrderCardTimePlace();
 
 		if (date.equals(now) || date.equals(now.minusDays(1))) {
 			// Today or yesterday
-			result.add(createHeader("oc-time", HOUR_FORMATTER.format(order.getDueTime())));
-			result.add(PLACE.apply(order));
+			result.setTime(HOUR_FORMATTER.format(order.getDueTime()));
+			result.setPlace(order.getPickupLocation().getName());
 		} else if (now.getYear() == date.getYear() && now.get(WEEK_OF_YEAR_FIELD) == date.get(WEEK_OF_YEAR_FIELD)) {
 			// This week
-			result.add(createHeader("oc-short-day", SHORT_DAY_FORMATTER.format(order.getDueDate())));
-			result.add(createTimeComponent("oc-secondary-time", HOUR_FORMATTER.format(order.getDueTime())));
-			result.add(PLACE.apply(order));
+			result.setShortDay(SHORT_DAY_FORMATTER.format(order.getDueDate()));
+			result.setSecondaryTime(HOUR_FORMATTER.format(order.getDueTime()));
+			result.setPlace(order.getPickupLocation().getName());
 		} else {
 			// Other dates
-			result.add(createHeader("oc-month", MONTH_AND_DAY_FORMATTER.format(order.getDueDate())));
-			result.add(createTimeComponent("oc-full-day", WEEKDAY_FULLNAME_FORMATTER.format(order.getDueDate())));
+			result.setMonth(MONTH_AND_DAY_FORMATTER.format(order.getDueDate()));
+			result.setFullDay(WEEKDAY_FULLNAME_FORMATTER.format(order.getDueDate()));
 		}
 
 		return result;
 	}
-
-	private static Component fillComponent(HtmlContainer c, String id, String text) {
-		c.setClassName(id);
-		c.setText(text);
-		return c;
-	}
-
-	private static Component createTimeComponent(String id, String text) {
-		return fillComponent(new Div(), id, text);
-	}
-
-	private static Component createHeader(String id, String text) {
-		return fillComponent(new H3(), id, text);
-	}
-
 
 	public static final String ORDER_CARD_TEMPLATE =
 			  "<div class=\"order-card\">"
@@ -121,7 +70,14 @@ public class OrderCard extends PolymerTemplate<OrderCard.Model> {
 			+ "     <div class=\"oc-wrapper\">\n"
 			+ "       <div class=\"oc-info-wrapper\">\n"
 			+ "         <order-status-badge class=\"oc-badge\" status=\"[[item.state]]\"></order-status-badge>\n"
-			+ "         <div class=\"oc-time-place\" inner-h-t-m-l=\"[[item.timePlace]]\"></div>\n"
+			+ "         <div class=\"oc-time-place\">"
+			+ "		      <h3 class=\"oc-time\">[[item.timePlace.time]]</h3>"
+			+ "	          <h3 class=\"oc-short-day\">[[item.timePlace.shortDay]]</h3>"
+			+ "	          <h3 class=\"oc-month\">[[item.timePlace.month]]</h3>"
+			+ "	          <div class=\"oc-secondary-time\">[[item.timePlace.secondaryTime]]</div>"
+			+ "    	      <div class=\"oc-full-day\">[[item.timePlace.fullDay]]</div>"
+			+ "	          <div class=\"oc-place\">[[item.timePlace.place]]</div>"
+			+ "         </div>\n"
 			+ "       </div>\n"
 			+ "       <div class=\"oc-name-items\">\n"
 			+ "         <h3 class=\"oc-name\">[[item.customer.fullName]]</h3>\n"

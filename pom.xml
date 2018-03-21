@@ -305,7 +305,6 @@
                                         <file>src/views/admin/products/products-view.html</file>
                                         <file>src/views/admin/products/product-form.html</file>
                                         <file>src/views/storefront/storefront-view.html</file>
-                                        <file>src/views/storefront/order-card.html</file>
                                         <file>src/views/storefront/order-editor.html</file>
                                         <file>src/views/storefront/order-details.html</file>
                                         <file>src/views/storefront/order-item-editor.html</file>
