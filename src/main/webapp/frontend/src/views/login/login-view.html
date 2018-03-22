@@ -28,17 +28,18 @@
       }
 
       .container {
-        height: 100%;
-        width: 100%;
+        margin: 0 auto;
+        box-shadow: 0 2px 5px 0 var(--lumo-shade-10pct);
         display: flex;
         flex-direction: column;
+        width: 100%;
+        height: 100%;
       }
 
       .info {
         background-image: url(../../../images/login-banner.jpg);
         background-size: cover;
         background-position-x: center;
-        display: table;
         width: 100%;
         padding: var(--lumo-space-l);
       }
@@ -79,6 +80,8 @@
 
       .login__button {
         margin-top: var(--lumo-space-m);
+        width: 100%;
+        max-width: 100%;
       }
 
       .error {
@@ -97,25 +100,26 @@
         max-width: 35em;
       }
 
-      @media (min-width: 1000px) {
+      @media (max-height: 400px) {
+        .info__header {
+          margin-top: 0;
+        }
+
+        .login__header {
+          display: none;
+        }
+      }
+
+      @media (min-width: 750px) and (min-height: 400px) {
         .container {
+          border-radius: 4px;
           max-width: 700px;
-          height: auto;
-          margin: 0 auto;
-          box-shadow: 0 2px 5px 0 var(--lumo-shade-10pct);
+          max-height: 380px;
+          overflow: hidden;
         }
+      }
 
-        .info {
-          border-top-left-radius: 4px;
-          border-top-right-radius: 4px;
-        }
-
-        .login {
-          border-bottom-left-radius: 4px;
-          border-bottom-right-radius: 4px;
-          flex: none;
-        }
-
+      @media (min-width: 550px) {
         .login__layout {
           flex-direction: row;
           align-items: flex-end;
@@ -129,6 +133,7 @@
           max-width: 7em;
         }
       }
+
     </style>
     <div class="container">
       <div class="info">
