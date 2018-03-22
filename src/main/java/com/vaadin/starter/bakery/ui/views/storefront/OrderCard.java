@@ -8,6 +8,8 @@ import static com.vaadin.starter.bakery.ui.utils.FormattingUtils.WEEK_OF_YEAR_FI
 
 import java.time.LocalDate;
 
+import com.vaadin.flow.data.renderer.TemplateRenderer;
+import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.OrderSummary;
 
 /**
@@ -21,7 +23,7 @@ import com.vaadin.starter.bakery.backend.data.entity.OrderSummary;
 
 public class OrderCard {
 
-	public static OrderCardTimePlace createComponents(OrderSummary order) {
+	public static OrderCardTimePlace createTimePlace(OrderSummary order) {
 		LocalDate now = LocalDate.now();
 		LocalDate date = order.getDueDate();
 		OrderCardTimePlace result = new OrderCardTimePlace();
@@ -44,7 +46,11 @@ public class OrderCard {
 		return result;
 	}
 
-	public static final String ORDER_CARD_TEMPLATE =
+	public static TemplateRenderer<Order> getTemplate() {
+		return TemplateRenderer.of(ORDER_CARD_TEMPLATE);
+	}
+
+	private static final String ORDER_CARD_TEMPLATE =
 			  "<div class='order-card'>"
 			+ "  <div class='oc-content'>\n"
 			+ "     <div class='oc-group-heading' hidden$='[[!item.header]]'>\n"

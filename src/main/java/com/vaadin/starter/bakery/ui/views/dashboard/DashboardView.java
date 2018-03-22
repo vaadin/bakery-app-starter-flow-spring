@@ -31,8 +31,6 @@ import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
-import com.vaadin.flow.data.renderer.TemplateRenderer;
-import com.vaadin.flow.data.selection.SelectionEvent;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.templatemodel.TemplateModel;
@@ -95,8 +93,8 @@ public class DashboardView extends PolymerTemplate<TemplateModel> {
 		this.orderService = orderService;
 
 		OrderStateConverter stateConverter = new OrderStateConverter();
-		grid.addColumn(TemplateRenderer.<Order>of(OrderCard.ORDER_CARD_TEMPLATE)
-				.withProperty("timePlace", order -> OrderCard.createComponents(order))
+		grid.addColumn(OrderCard.getTemplate()
+				.withProperty("timePlace", OrderCard::createTimePlace)
 				.withProperty("state", order -> stateConverter.toPresentation(order.getState()))
 				.withProperty("items", Order::getItems)
 				.withProperty("customer", Order::getCustomer)
