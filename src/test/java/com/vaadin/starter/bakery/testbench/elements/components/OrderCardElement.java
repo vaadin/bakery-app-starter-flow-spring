@@ -5,11 +5,17 @@ import com.vaadin.flow.component.html.testbench.SpanElement;
 import com.vaadin.testbench.annotations.Attribute;
 
 @Attribute(name = "class", contains = "order-card")
+
 public class OrderCardElement extends DivElement {
 
 	public String getGoodsCount(int index) {
 		SpanElement count = $(DivElement.class).attributeContains("class", "oc-goods-item").get(index)
 				.$(SpanElement.class).first();
 		return count.getText();
+	}
+
+	@Override
+	public void click() {
+		$(DivElement.class).attributeContains("class", "oc-wrapper").first().click();
 	}
 }
