@@ -43,7 +43,6 @@ import com.vaadin.starter.bakery.ui.MainView;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
-import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
 import com.vaadin.starter.bakery.ui.views.storefront.OrderCard;
 import com.vaadin.starter.bakery.ui.views.storefront.OrdersCountDataWithChart;
 
@@ -92,12 +91,8 @@ public class DashboardView extends PolymerTemplate<TemplateModel> {
 	public DashboardView(OrderService orderService, OrdersGridDataProvider orderDataProvider) {
 		this.orderService = orderService;
 
-		OrderStateConverter stateConverter = new OrderStateConverter();
 		grid.addColumn(OrderCard.getTemplate()
-				.withProperty("timePlace", OrderCard::create)
-				.withProperty("state", order -> stateConverter.toPresentation(order.getState()))
-				.withProperty("items", Order::getItems)
-				.withProperty("customer", Order::getCustomer)
+				.withProperty("order", OrderCard::create)
 				.withEventHandler("cardClick",
 						order -> UI.getCurrent().navigate(BakeryConst.PAGE_STOREFRONT + "/" + order.getId())));
 

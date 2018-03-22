@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
@@ -25,7 +26,6 @@ import com.vaadin.starter.bakery.ui.MainView;
 import com.vaadin.starter.bakery.ui.components.ConfirmDialog;
 import com.vaadin.starter.bakery.ui.components.SearchBar;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
-import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
 import com.vaadin.starter.bakery.ui.views.EntityView;
 
 @Tag("storefront-view")
@@ -65,15 +65,11 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 
 		grid.setSelectionMode(Grid.SelectionMode.NONE);
 
-		OrderStateConverter stateConverter = new OrderStateConverter();
 		grid.addColumn(OrderCard.getTemplate()
+				.withProperty("order", OrderCard::create)
 				.withProperty("header", order -> presenter.getHeaderByOrderId(order.getId()))
-				.withProperty("timePlace", OrderCard::create)
-				.withProperty("state", order -> stateConverter.toPresentation(order.getState()))
-				.withProperty("items", Order::getItems)
-				.withProperty("customer", Order::getCustomer)
-				.withEventHandler("cardClick", order -> getUI()
-						.ifPresent(ui -> ui.navigate(BakeryConst.PAGE_STOREFRONT + "/" + order.getId()))));
+				.withEventHandler("cardClick",
+						order -> UI.getCurrent().navigate(BakeryConst.PAGE_STOREFRONT + "/" + order.getId())));
 
 		setOpened(false);
 
