@@ -12,7 +12,6 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.data.binder.ValidationException;
-import com.vaadin.flow.data.selection.SelectionEvent;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
@@ -64,7 +63,7 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 		searchBar.setCheckboxText("Show past orders");
 		searchBar.setPlaceHolder("Search");
 
-		grid.setSelectionMode(Grid.SelectionMode.SINGLE);
+		grid.setSelectionMode(Grid.SelectionMode.NONE);
 
 		OrderStateConverter stateConverter = new OrderStateConverter();
 		grid.addColumn(OrderCard.getTemplate()
@@ -73,10 +72,11 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 				.withProperty("state", order -> stateConverter.toPresentation(order.getState()))
 				.withProperty("items", Order::getItems)
 				.withProperty("customer", Order::getCustomer)
-		);
+				.withEventHandler("cardClick", order -> getUI()
+						.ifPresent(ui -> ui.navigate(BakeryConst.PAGE_STOREFRONT + "/" + order.getId()))));
 
 		setOpened(false);
-		grid.addSelectionListener(this::onOrdersGridSelectionChanged);
+
 		getSearchBar().addFilterChangeListener(
 				e -> presenter.filterChanged(getSearchBar().getFilter(), getSearchBar().isCheckboxChecked()));
 		getSearchBar().addActionClickListener(e -> presenter.createNewOrder());
@@ -154,13 +154,6 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 	@Override
 	public void clear() {
 		orderEditor.clear();
-	}
-
-	private void onOrdersGridSelectionChanged(SelectionEvent<Order> e) {
-		e.getFirstSelectedItem().ifPresent(order -> {
-			getUI().ifPresent(ui -> ui.navigate(BakeryConst.PAGE_STOREFRONT + "/" + order.getId()));
-			getGrid().deselect(order);
-		});
 	}
 
 	void setDialogElementsVisibility(boolean editing) {

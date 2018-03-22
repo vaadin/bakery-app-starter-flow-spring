@@ -30,7 +30,6 @@ import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
-import com.vaadin.flow.data.selection.SelectionEvent;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.templatemodel.TemplateModel;
@@ -99,9 +98,10 @@ public class DashboardView extends PolymerTemplate<TemplateModel> {
 				.withProperty("state", order -> stateConverter.toPresentation(order.getState()))
 				.withProperty("items", Order::getItems)
 				.withProperty("customer", Order::getCustomer)
-		);
-		grid.addSelectionListener(this::onOrdersGridSelectionChanged);
+				.withEventHandler("cardClick",
+						order -> UI.getCurrent().navigate(BakeryConst.PAGE_STOREFRONT + "/" + order.getId())));
 
+		grid.setSelectionMode(Grid.SelectionMode.NONE);
 		grid.setDataProvider(orderDataProvider);
 
 		DashboardData data = orderService.getDashboardData(MonthDay.now().getMonthValue(), Year.now().getValue());
@@ -191,13 +191,6 @@ public class DashboardView extends PolymerTemplate<TemplateModel> {
 		background.setInnerRadius("100%");
 		background.setOuterRadius("110%");
 		pane.setBackground(background);
-	}
-
-	private void onOrdersGridSelectionChanged(SelectionEvent<Order> e) {
-		e.getFirstSelectedItem().ifPresent(order -> {
-			UI.getCurrent().navigate(BakeryConst.PAGE_STOREFRONT + "/" + order.getId());
-			grid.getElement().setProperty("activeItem", null);
-		});
 	}
 
 	private void populateDeliveriesCharts(DashboardData data) {

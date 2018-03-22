@@ -56,6 +56,7 @@ public class OrderCard {
 		LocalDate now = LocalDate.now();
 		LocalDate date = order.getDueDate();
 		OrderCard result = new OrderCard();
+
 		if (date.equals(now) || date.equals(now.minusDays(1))) {
 			// Today or yesterday
 			result.setTime(HOUR_FORMATTER.format(order.getDueTime()));

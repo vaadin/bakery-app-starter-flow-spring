@@ -19,8 +19,8 @@ import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.util.EntityUtil;
 import com.vaadin.starter.bakery.ui.MainView;
 import com.vaadin.starter.bakery.ui.components.SearchBar;
+import com.vaadin.starter.bakery.ui.crud.CrudEntityPresenter;
 import com.vaadin.starter.bakery.ui.crud.CrudView;
-import com.vaadin.starter.bakery.ui.crud.DefaultEntityPresenter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.utils.converters.CurrencyFormatter;
 
@@ -42,21 +42,21 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 
 	private ProductForm form = new ProductForm();
 
-	private DefaultEntityPresenter<Product> presenter;
+	private CrudEntityPresenter<Product> presenter;
 
 	private final BeanValidationBinder<Product> binder = new BeanValidationBinder<>(Product.class);
 
 	private CurrencyFormatter currencyFormatter = new CurrencyFormatter();
 
 	@Autowired
-	public ProductsView(DefaultEntityPresenter<Product> presenter) {
+	public ProductsView(CrudEntityPresenter<Product> presenter) {
 		super(EntityUtil.getName(Product.class));
 		this.presenter = presenter;
 		form.setBinder(binder);
 		dialog.add(form);
 		setupEventListeners();
 		setupGrid();
-		presenter.init(this);
+		presenter.setView(this);
 	}
 
 	private void setupGrid() {
@@ -70,7 +70,7 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 	}
 
 	@Override
-	protected DefaultEntityPresenter<Product> getPresenter() {
+	protected CrudEntityPresenter<Product> getPresenter() {
 		return presenter;
 	}
 
