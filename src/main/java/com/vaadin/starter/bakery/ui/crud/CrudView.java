@@ -34,7 +34,7 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 
 	private final String entityName;
 
-	protected abstract DefaultEntityPresenter<E> getPresenter();
+	protected abstract CrudEntityPresenter<E> getPresenter();
 
 	protected abstract String getBasePage();
 
@@ -96,7 +96,7 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 	@Override
 	public void setParameter(BeforeEvent event, @OptionalParameter Long id) {
 		if (id != null) {
-			getPresenter().loadEntity(id, true);
+			getPresenter().loadEntity(id);
 		} else if (getDialog().isOpened()) {
 		    getPresenter().closeSilently();
         }

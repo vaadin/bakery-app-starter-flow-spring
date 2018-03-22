@@ -25,7 +25,7 @@ public class OrderPresenter {
 	private OrderCardHeaderGenerator headersGenerator;
 	private StorefrontView view;
 
-	private final EntityPresenter<Order> entityPresenter;
+	private final EntityPresenter<Order, StorefrontView> entityPresenter;
 	private final OrdersGridDataProvider dataProvider;
 	private final User currentUser;
 	private final OrderService orderService;
@@ -33,7 +33,7 @@ public class OrderPresenter {
 
 	@Autowired
 	OrderPresenter(OrderService orderService, OrdersGridDataProvider dataProvider,
-			EntityPresenter<Order> entityPresenter, User currentUser) {
+			EntityPresenter<Order, StorefrontView> entityPresenter, User currentUser) {
 		this.orderService = orderService;
 		this.entityPresenter = entityPresenter;
 		this.dataProvider = dataProvider;
@@ -75,7 +75,7 @@ public class OrderPresenter {
 		createNew = true;
 		open(entityPresenter.createNew(), true);
 	}
-	
+
 	void cancel() {
 		entityPresenter.cancel(() -> close(false), () -> view.setOpened(true));
 	}

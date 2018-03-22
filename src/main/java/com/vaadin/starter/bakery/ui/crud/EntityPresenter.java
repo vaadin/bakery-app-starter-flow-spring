@@ -19,7 +19,7 @@ import com.vaadin.starter.bakery.ui.utils.messages.CrudErrorMessage;
 import com.vaadin.starter.bakery.ui.utils.messages.Message;
 import com.vaadin.starter.bakery.ui.views.EntityView;
 
-public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
+public class EntityPresenter<T extends AbstractEntity, V extends EntityView<T>> implements HasLogger {
 
 	private CrudService<T> crudService;
 
@@ -27,7 +27,7 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 
 	private User currentUser;
 
-	private EntityView<T> view;
+	private V view;
 
 	private T entity;
 
@@ -36,8 +36,12 @@ public class EntityPresenter<T extends AbstractEntity> implements HasLogger {
 		this.currentUser = currentUser;
 	}
 
-	public void setView(EntityView<T> view) {
+	public void setView(V view) {
 		this.view = view;
+	}
+
+	public V getView() {
+		return view;
 	}
 
 	public void delete(CrudOperationListener<T> onSuccess) {
