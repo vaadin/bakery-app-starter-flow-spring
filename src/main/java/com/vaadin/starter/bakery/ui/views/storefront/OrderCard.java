@@ -26,7 +26,7 @@ public class OrderCard {
 			+ "       <span class='oc-main'>[[item.header.main]]</span>\n"
 			+ "       <span class='oc-secondary'>[[item.header.secondary]]</span>\n"
 			+ "     </div>\n"
-			+ "     <div class='oc-wrapper'>\n"
+			+ "     <div class='oc-wrapper' on-click='cardClick'>\n"
 			+ "       <div class='oc-info-wrapper'>\n"
 			+ "         <order-status-badge class='oc-badge' status='[[item.order.state]]'></order-status-badge>\n"
 			+ "         <div class='oc-time-place'>"
