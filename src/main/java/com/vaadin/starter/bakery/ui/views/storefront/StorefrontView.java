@@ -12,7 +12,6 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.data.binder.ValidationException;
-import com.vaadin.flow.data.renderer.TemplateRenderer;
 import com.vaadin.flow.data.selection.SelectionEvent;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
@@ -68,9 +67,9 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 		grid.setSelectionMode(Grid.SelectionMode.SINGLE);
 
 		OrderStateConverter stateConverter = new OrderStateConverter();
-		grid.addColumn(TemplateRenderer.<Order> of(OrderCard.ORDER_CARD_TEMPLATE)
+		grid.addColumn(OrderCard.getTemplate()
 				.withProperty("header", order -> presenter.getHeaderByOrderId(order.getId()))
-				.withProperty("timePlace", order -> OrderCard.createComponents(order))
+				.withProperty("timePlace", OrderCard::create)
 				.withProperty("state", order -> stateConverter.toPresentation(order.getState()))
 				.withProperty("items", Order::getItems)
 				.withProperty("customer", Order::getCustomer)

@@ -9,7 +9,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.ComponentEventListener;
@@ -31,7 +30,6 @@ import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
-import com.vaadin.flow.data.renderer.TemplateRenderer;
 import com.vaadin.flow.data.selection.SelectionEvent;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -46,6 +44,7 @@ import com.vaadin.starter.bakery.ui.MainView;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
+import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
 import com.vaadin.starter.bakery.ui.views.storefront.OrderCard;
 import com.vaadin.starter.bakery.ui.views.storefront.OrdersCountDataWithChart;
 
@@ -95,8 +94,8 @@ public class DashboardView extends PolymerTemplate<TemplateModel> {
 		this.orderService = orderService;
 
 		OrderStateConverter stateConverter = new OrderStateConverter();
-		grid.addColumn(TemplateRenderer.<Order> of(OrderCard.ORDER_CARD_TEMPLATE)
-				.withProperty("timePlace", order -> OrderCard.createComponents(order))
+		grid.addColumn(OrderCard.getTemplate()
+				.withProperty("timePlace", OrderCard::create)
 				.withProperty("state", order -> stateConverter.toPresentation(order.getState()))
 				.withProperty("items", Order::getItems)
 				.withProperty("customer", Order::getCustomer)
