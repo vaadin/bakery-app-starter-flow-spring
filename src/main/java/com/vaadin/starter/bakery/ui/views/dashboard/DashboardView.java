@@ -92,7 +92,7 @@ public class DashboardView extends PolymerTemplate<TemplateModel> {
 		this.orderService = orderService;
 
 		grid.addColumn(OrderCard.getTemplate()
-				.withProperty("order", OrderCard::create)
+				.withProperty("orderCard", OrderCard::create)
 				.withEventHandler("cardClick",
 						order -> UI.getCurrent().navigate(BakeryConst.PAGE_STOREFRONT + "/" + order.getId())));
 

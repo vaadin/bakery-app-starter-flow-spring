@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.vaadin.flow.data.renderer.TemplateRenderer;
-import com.vaadin.starter.bakery.backend.data.entity.Customer;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.OrderSummary;
@@ -28,20 +27,20 @@ public class OrderCard {
 			+ "     </div>\n"
 			+ "     <div class='oc-wrapper' on-click='cardClick'>\n"
 			+ "       <div class='oc-info-wrapper'>\n"
-			+ "         <order-status-badge class='oc-badge' status='[[item.order.state]]'></order-status-badge>\n"
+			+ "         <order-status-badge class='oc-badge' status='[[item.orderCard.state]]'></order-status-badge>\n"
 			+ "         <div class='oc-time-place'>"
-			+ "           <h3 class='oc-time'>[[item.order.time]]</h3>"
-			+ "           <h3 class='oc-short-day'>[[item.order.shortDay]]</h3>"
-			+ "           <h3 class='oc-month'>[[item.order.month]]</h3>"
-			+ "           <div class='oc-secondary-time'>[[item.order.secondaryTime]]</div>"
-			+ "           <div class='oc-full-day'>[[item.order.fullDay]]</div>"
-			+ "           <div class='oc-place'>[[item.order.place]]</div>"
+			+ "           <h3 class='oc-time'>[[item.orderCard.time]]</h3>"
+			+ "           <h3 class='oc-short-day'>[[item.orderCard.shortDay]]</h3>"
+			+ "           <h3 class='oc-month'>[[item.orderCard.month]]</h3>"
+			+ "           <div class='oc-secondary-time'>[[item.orderCard.secondaryTime]]</div>"
+			+ "           <div class='oc-full-day'>[[item.orderCard.fullDay]]</div>"
+			+ "           <div class='oc-place'>[[item.orderCard.place]]</div>"
 			+ "         </div>\n"
 			+ "       </div>\n"
 			+ "       <div class='oc-name-items'>\n"
-			+ "         <h3 class='oc-name'>[[item.order.customer.fullName]]</h3>\n"
+			+ "         <h3 class='oc-name'>[[item.orderCard.fullName]]</h3>\n"
 			+ "         <div class='oc-goods'>\n"
-			+ "           <template is='dom-repeat' items='[[item.order.items]]'>\n"
+			+ "           <template is='dom-repeat' items='[[item.orderCard.items]]'>\n"
 			+ "             <div class='oc-goods-item'>\n"
 			+ "               <span class='count'>[[item.quantity]]</span>\n"
 			+ "               <div>[[item.product.name]]</div>\n"
@@ -58,7 +57,7 @@ public class OrderCard {
 		return new OrderCard(order);
 	}
 
-	private OrderStateConverter stateConverter = new OrderStateConverter();
+	private static OrderStateConverter stateConverter = new OrderStateConverter();
 
 	private boolean recent, inWeek;
 
@@ -77,31 +76,31 @@ public class OrderCard {
 	}
 
 	public String getTime() {
-		return recent ? HOUR_FORMATTER.format(order.getDueTime()) : "";
+		return recent ? HOUR_FORMATTER.format(order.getDueTime()) : null;
 	}
 
 	public String getShortDay() {
-		return inWeek ? SHORT_DAY_FORMATTER.format(order.getDueDate()) : "";
+		return inWeek ? SHORT_DAY_FORMATTER.format(order.getDueDate()) : null;
 	}
 
 	public String getSecondaryTime() {
-		return inWeek ? HOUR_FORMATTER.format(order.getDueTime()) : "";
+		return inWeek ? HOUR_FORMATTER.format(order.getDueTime()) : null;
 	}
 
 	public String getMonth() {
-		return recent || inWeek ? "" : MONTH_AND_DAY_FORMATTER.format(order.getDueDate());
+		return recent || inWeek ? null : MONTH_AND_DAY_FORMATTER.format(order.getDueDate());
 	}
 
 	public String getFullDay() {
-		return recent || inWeek ? "" : WEEKDAY_FULLNAME_FORMATTER.format(order.getDueDate());
+		return recent || inWeek ? null : WEEKDAY_FULLNAME_FORMATTER.format(order.getDueDate());
 	}
 
 	public String getState() {
 		return stateConverter.toPresentation(order.getState());
 	}
 
-	public Customer getCustomer() {
-		return order.getCustomer();
+	public String getFullName() {
+		return order.getCustomer().getFullName();
 	}
 
 	public List<OrderItem> getItems() {

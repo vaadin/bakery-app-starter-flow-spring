@@ -66,7 +66,7 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 		grid.setSelectionMode(Grid.SelectionMode.NONE);
 
 		grid.addColumn(OrderCard.getTemplate()
-				.withProperty("order", OrderCard::create)
+				.withProperty("orderCard", OrderCard::create)
 				.withProperty("header", order -> presenter.getHeaderByOrderId(order.getId()))
 				.withEventHandler("cardClick",
 						order -> UI.getCurrent().navigate(BakeryConst.PAGE_STOREFRONT + "/" + order.getId())));
