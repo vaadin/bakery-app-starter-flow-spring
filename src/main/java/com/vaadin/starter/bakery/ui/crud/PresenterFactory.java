@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.vaadin.starter.bakery.ui.crud;
 
@@ -14,6 +14,7 @@ import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.backend.service.ProductService;
 import com.vaadin.starter.bakery.backend.service.UserService;
+import com.vaadin.starter.bakery.ui.views.storefront.StorefrontView;
 
 @Configuration
 public class PresenterFactory {
@@ -32,7 +33,7 @@ public class PresenterFactory {
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public EntityPresenter<Order> orderEntityPresenter(OrderService crudService, User currentUser) {
+	public EntityPresenter<Order, StorefrontView> orderEntityPresenter(OrderService crudService, User currentUser) {
 		return new EntityPresenter<>(crudService, currentUser);
 	}
 
