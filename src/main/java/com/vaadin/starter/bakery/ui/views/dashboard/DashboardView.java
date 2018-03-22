@@ -9,7 +9,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.ComponentEventListener;
@@ -92,12 +91,8 @@ public class DashboardView extends PolymerTemplate<TemplateModel> {
 	public DashboardView(OrderService orderService, OrdersGridDataProvider orderDataProvider) {
 		this.orderService = orderService;
 
-		OrderStateConverter stateConverter = new OrderStateConverter();
 		grid.addColumn(OrderCard.getTemplate()
-				.withProperty("timePlace", OrderCard::createTimePlace)
-				.withProperty("state", order -> stateConverter.toPresentation(order.getState()))
-				.withProperty("items", Order::getItems)
-				.withProperty("customer", Order::getCustomer)
+				.withProperty("orderCard", OrderCard::create)
 				.withEventHandler("cardClick",
 						order -> UI.getCurrent().navigate(BakeryConst.PAGE_STOREFRONT + "/" + order.getId())));
 
