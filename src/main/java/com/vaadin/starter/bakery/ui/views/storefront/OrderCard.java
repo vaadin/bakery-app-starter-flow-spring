@@ -68,11 +68,11 @@ public class OrderCard {
 		LocalDate now = LocalDate.now();
 		LocalDate date = order.getDueDate();
 		recent = date.equals(now) || date.equals(now.minusDays(1));
-		inWeek = now.getYear() == date.getYear() && now.get(WEEK_OF_YEAR_FIELD) == date.get(WEEK_OF_YEAR_FIELD);
+		inWeek = !recent && now.getYear() == date.getYear() && now.get(WEEK_OF_YEAR_FIELD) == date.get(WEEK_OF_YEAR_FIELD);
 	}
 
 	public String getPlace() {
-		return order.getPickupLocation().getName();
+		return recent || inWeek ? order.getPickupLocation().getName() : null;
 	}
 
 	public String getTime() {
