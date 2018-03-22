@@ -15,10 +15,21 @@ import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.OrderSummary;
 import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
 
+/**
+ * Help class to get ready to use TemplateRenderer for displaying order card list on the Storefront and Dashboard grids.
+ * Using TemplateRenderer instead of ComponentRenderer optimizes the CPU and memory consumption.
+ * <p>
+ * In addition, component includes an optional header above the order card. It is used
+ * to visually separate orders into groups. Technically all order cards are
+ * equivalent, but those that do have the header visible create a visual group
+ * separation.
+ * <p>
+ * Component css styles are located at /src/main/webapp/frontend/styles/order-card-style.html
+ */
 public class OrderCard {
 	
 	public static TemplateRenderer<Order> getTemplate() {
-		return TemplateRenderer.<Order>of(
+		return TemplateRenderer.of(
 			  "<div class='order-card'>"
 			+ "  <div class='oc-content'>\n"
 			+ "     <div class='oc-group-heading' hidden$='[[!item.header]]'>\n"
