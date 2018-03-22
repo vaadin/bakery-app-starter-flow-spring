@@ -1,0 +1,115 @@
+<dom-module id="order-card">
+  <template>
+    <style>
+      .order-card {
+        display: block;
+      }
+
+      .oc-content {
+        display: block;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .oc-wrapper {
+        background: var(--lumo-base-color);
+        background-image: linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
+        box-shadow: 0 3px 5px var(--lumo-shade-10pct);
+        border-bottom: 1px solid var(--lumo-shade-10pct);
+        display: flex;
+        padding: var(--lumo-space-l);
+        cursor: pointer;
+        border-radius: var(--lumo-border-radius);
+      }
+
+      .oc-main {
+        color: var(--lumo-body-text-color);
+        margin-right: var(--lumo-space-s);
+        font-weight: bold;
+      }
+
+      .oc-group-heading {
+        margin: var(--lumo-space-l) var(--lumo-space-s) var(--lumo-space-m);
+      }
+
+      .oc-secondary {
+        color: var(--lumo-secondary-text-color);
+      }
+
+      .oc-info-wrapper {
+        display: flex;
+        flex-direction: column-reverse;
+        justify-content: flex-end;
+      }
+
+      .oc-badge {
+        margin: var(--lumo-space-s) 0;
+        width: 100px;
+      }
+
+      .oc-time-place {
+        width: 120px;
+      }
+
+      .oc-name-items {
+        flex: 1;
+      }
+
+      .oc-place,
+      .oc-secondary-time,
+      .oc-full-day,
+      .oc-goods {
+        color: var(--lumo-secondary-text-color);
+      }
+
+      .oc-time,
+      .oc-name,
+      .oc-short-day,
+      .oc-month {
+        margin: 0;
+      }
+
+      .oc-goods {
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      .oc-goods > div {
+        box-sizing: border-box;
+        width: 18em;
+        flex: auto;
+        padding-right: var(--lumo-space-l);
+      }
+
+      .oc-goods-item {
+        display: flex;
+        align-items: baseline;
+        font-size: var(--lumo-font-size-s);
+        margin: var(--lumo-space-xs) 0;
+      }
+
+      .oc-goods-item > .count {
+        margin-right: var(--lumo-space-s);
+      }
+
+      .oc-goods-item > div {
+        flex: auto;
+      }
+
+      @media (min-width: 600px) {
+        .oc-info-wrapper {
+          flex-direction: row;
+        }
+
+        .oc-badge {
+          margin: 0;
+        }
+
+        .oc-content {
+          max-width: 964px;
+        }
+      }
+    </style>
+  </template>
+</dom-module>

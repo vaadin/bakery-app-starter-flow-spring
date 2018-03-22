@@ -6,14 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.data.binder.ValidationException;
-import com.vaadin.flow.data.renderer.ComponentRenderer;
-import com.vaadin.flow.data.selection.SelectionEvent;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
@@ -64,16 +63,16 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 		searchBar.setCheckboxText("Show past orders");
 		searchBar.setPlaceHolder("Search");
 
-		grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-		grid.addColumn(new ComponentRenderer<>(order -> {
-			OrderCard orderCard = new OrderCard();
-			orderCard.setOrder(order);
-			orderCard.setHeader(presenter.getHeaderByOrderId(order.getId()));
-			orderCard.getElement().getClassList().add(BakeryConst.STOREFRONT_ORDER_CARD_STYLE);
-			return orderCard;
-		}));
+		grid.setSelectionMode(Grid.SelectionMode.NONE);
+
+		grid.addColumn(OrderCard.getTemplate()
+				.withProperty("orderCard", OrderCard::create)
+				.withProperty("header", order -> presenter.getHeaderByOrderId(order.getId()))
+				.withEventHandler("cardClick",
+						order -> UI.getCurrent().navigate(BakeryConst.PAGE_STOREFRONT + "/" + order.getId())));
+
 		setOpened(false);
-		grid.addSelectionListener(this::onOrdersGridSelectionChanged);
+
 		getSearchBar().addFilterChangeListener(
 				e -> presenter.filterChanged(getSearchBar().getFilter(), getSearchBar().isCheckboxChecked()));
 		getSearchBar().addActionClickListener(e -> presenter.createNewOrder());
@@ -151,13 +150,6 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 	@Override
 	public void clear() {
 		orderEditor.clear();
-	}
-
-	private void onOrdersGridSelectionChanged(SelectionEvent<Order> e) {
-		e.getFirstSelectedItem().ifPresent(order -> {
-			getUI().ifPresent(ui -> ui.navigate(BakeryConst.PAGE_STOREFRONT + "/" + order.getId()));
-			getGrid().deselect(order);
-		});
 	}
 
 	void setDialogElementsVisibility(boolean editing) {

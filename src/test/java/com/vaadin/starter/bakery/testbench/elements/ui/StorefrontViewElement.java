@@ -26,12 +26,9 @@ public class StorefrontViewElement extends TestBenchElement implements HasApp, H
 		return $(GridElement.class).waitForFirst();
 	}
 
-	public OrderCardElement getFirstOrderCard() {
-		return getOrderCard(0);
-	}
-
 	public OrderCardElement getOrderCard(int index) {
-		return getGrid().$(OrderCardElement.class).get(index);
+		// First visible grid cell has has 4th id
+		return getGrid().$(OrderCardElement.class).get(index + 4);
 	}
 
 	@SuppressWarnings("unchecked")
