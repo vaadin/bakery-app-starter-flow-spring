@@ -23,8 +23,6 @@ import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
  * to visually separate orders into groups. Technically all order cards are
  * equivalent, but those that do have the header visible create a visual group
  * separation.
- * <p>
- * Component css styles are located at /src/main/webapp/frontend/styles/order-card-style.html
  */
 public class OrderCard {
 
