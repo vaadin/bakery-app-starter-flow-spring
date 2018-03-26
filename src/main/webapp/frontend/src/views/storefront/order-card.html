@@ -9,14 +9,14 @@
         display: block;
       }
 
-      .oc-content {
+      .content {
         display: block;
         width: 100%;
         margin-left: auto;
         margin-right: auto;
       }
 
-      .oc-wrapper {
+      .wrapper {
         background: var(--lumo-base-color);
         background-image: linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
         box-shadow: 0 3px 5px var(--lumo-shade-10pct);
@@ -27,116 +27,116 @@
         border-radius: var(--lumo-border-radius);
       }
 
-      .oc-main {
+      .main {
         color: var(--lumo-body-text-color);
         margin-right: var(--lumo-space-s);
         font-weight: bold;
       }
 
-      .oc-group-heading {
+      .group-heading {
         margin: var(--lumo-space-l) var(--lumo-space-s) var(--lumo-space-m);
       }
 
-      .oc-secondary {
+      .secondary {
         color: var(--lumo-secondary-text-color);
       }
 
-      .oc-info-wrapper {
+      .info-wrapper {
         display: flex;
         flex-direction: column-reverse;
         justify-content: flex-end;
       }
 
-      .oc-badge {
+      .badge {
         margin: var(--lumo-space-s) 0;
         width: 100px;
       }
 
-      .oc-time-place {
+      .time-place {
         width: 120px;
       }
 
-      .oc-name-items {
+      .name-items {
         flex: 1;
       }
 
-      .oc-place,
-      .oc-secondary-time,
-      .oc-full-day,
-      .oc-goods {
+      .place,
+      .secondary-time,
+      .full-day,
+      .goods {
         color: var(--lumo-secondary-text-color);
       }
 
-      .oc-time,
-      .oc-name,
-      .oc-short-day,
-      .oc-month {
+      .time,
+      .name,
+      .short-day,
+      .month {
         margin: 0;
       }
 
-      .oc-goods {
+      .goods {
         display: flex;
         flex-wrap: wrap;
       }
 
-      .oc-goods > div {
+      .goods > div {
         box-sizing: border-box;
         width: 18em;
         flex: auto;
         padding-right: var(--lumo-space-l);
       }
 
-      .oc-goods-item {
+      .goods-item {
         display: flex;
         align-items: baseline;
         font-size: var(--lumo-font-size-s);
         margin: var(--lumo-space-xs) 0;
       }
 
-      .oc-goods-item > .count {
+      .goods-item > .count {
         margin-right: var(--lumo-space-s);
       }
 
-      .oc-goods-item > div {
+      .goods-item > div {
         flex: auto;
       }
 
       @media (min-width: 600px) {
-        .oc-info-wrapper {
+        .info-wrapper {
           flex-direction: row;
         }
 
-        .oc-badge {
+        .badge {
           margin: 0;
         }
 
-        .oc-content {
+        .content {
           max-width: 964px;
         }
       }
     </style>
-    <div class="oc-content">
-      <div class="oc-group-heading" hidden$="[[!header]]">
-        <span class="oc-main">[[header.main]]</span>
-        <span class="oc-secondary">[[header.secondary]]</span>
+    <div class="content">
+      <div class="group-heading" hidden$="[[!header]]">
+        <span class="main">[[header.main]]</span>
+        <span class="secondary">[[header.secondary]]</span>
       </div>
-      <div class="oc-wrapper" on-click="_cardClick">
-        <div class="oc-info-wrapper">
-          <order-status-badge class="oc-badge" status="[[orderCard.state]]"></order-status-badge>
-          <div class="oc-time-place">
-            <h3 class="oc-time">[[orderCard.time]]</h3>
-            <h3 class="oc-short-day">[[orderCard.shortDay]]</h3>
-            <h3 class="oc-month">[[orderCard.month]]</h3>
-            <div class="oc-secondary-time">[[orderCard.secondaryTime]]</div>
-            <div class="oc-full-day">[[orderCard.fullDay]]</div>
-            <div class="oc-place">[[orderCard.place]]</div>
+      <div class="wrapper" on-click="_cardClick">
+        <div class="info-wrapper">
+          <order-status-badge class="badge" status="[[orderCard.state]]"></order-status-badge>
+          <div class="time-place">
+            <h3 class="time">[[orderCard.time]]</h3>
+            <h3 class="short-day">[[orderCard.shortDay]]</h3>
+            <h3 class="month">[[orderCard.month]]</h3>
+            <div class="secondary-time">[[orderCard.secondaryTime]]</div>
+            <div class="full-day">[[orderCard.fullDay]]</div>
+            <div class="place">[[orderCard.place]]</div>
           </div>
         </div>
-        <div class="oc-name-items">
-          <h3 class="oc-name">[[orderCard.fullName]]</h3>
-          <div class="oc-goods">
+        <div class="name-items">
+          <h3 class="name">[[orderCard.fullName]]</h3>
+          <div class="goods">
             <template is="dom-repeat" items="[[orderCard.items]]">
-              <div class="oc-goods-item">
+              <div class="goods-item">
                 <span class="count">[[item.quantity]]</span>
                 <div>[[item.product.name]]</div>
               </div>
