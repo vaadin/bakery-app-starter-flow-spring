@@ -2,10 +2,9 @@ package com.vaadin.starter.bakery.testbench.elements.components;
 
 import com.vaadin.flow.component.html.testbench.DivElement;
 import com.vaadin.flow.component.html.testbench.SpanElement;
-import com.vaadin.testbench.annotations.Attribute;
+import com.vaadin.testbench.elementsbase.Element;
 
-@Attribute(name = "class", contains = "order-card")
-
+@Element("order-card")
 public class OrderCardElement extends DivElement {
 
 	public String getGoodsCount(int index) {
