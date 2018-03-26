@@ -33,7 +33,7 @@ public class OrderCard {
 				  "<order-card"
 				+ "  header='[[item.header]]'"
 				+ "  order-card='[[item.orderCard]]'"
-				+ "  on-click='cardClick'>"
+				+ "  on-card-click='cardClick'>"
 				+ "</order-card>");
 	}
 	
