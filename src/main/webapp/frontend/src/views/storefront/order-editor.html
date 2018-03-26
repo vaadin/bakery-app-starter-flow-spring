@@ -24,38 +24,57 @@
         flex-direction: column;
         flex: auto;
       }
+
+      /* https://github.com/vaadin/vaadin-form-layout/issues/63 */
+      vaadin-form-layout,
+      vaadin-form-item {
+        align-self: start;
+      }
+
+      .meta-row {
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: var(--lumo-space-s);
+      }
+
+      .dim {
+        color: var(--lumo-secondary-text-color);
+        text-align: right;
+      }
+
+      .status {
+        width: 10em;
+      }
     </style>
 
     <div class="scrollable flex1" id="main">
-      <h2 id="title"></h2>
+      <h2 id="title">New order</h2>
+
+      <div class="meta-row" id="metaContainer">
+        <vaadin-combo-box class="status" id="status"></vaadin-combo-box>
+        <span class="dim">Order #<span id="orderNumber"></span></span>
+      </div>
 
       <vaadin-form-layout id="form1">
 
-        <vaadin-form-layout id="form2">
+        <vaadin-form-item>
+          <label slot="label">Due</label>
+          <vaadin-form-layout id="form2">
 
-          <vaadin-combo-box label="Status" id="status">
-          </vaadin-combo-box>
+            <vaadin-date-picker id="dueDate">
+            </vaadin-date-picker>
 
-          <vaadin-form-item>
-            <label slot="label">Due</label>
-            <vaadin-form-layout id="form3">
-
-              <vaadin-date-picker id="dueDate">
-              </vaadin-date-picke>
-
-              <vaadin-combo-box id="dueTime">
-                <iron-icon slot="prefix" icon="vaadin:clock"></iron-icon>
-              </vaadin-combo-box>
-            </vaadin-form-layout>
-
-          </vaadin-form-item>
+            <vaadin-combo-box id="dueTime">
+              <iron-icon slot="prefix" icon="vaadin:clock"></iron-icon>
+            </vaadin-combo-box>
+          </vaadin-form-layout>
 
           <vaadin-combo-box id="pickupLocation" class="full-width">
             <iron-icon slot="prefix" icon="vaadin:at"></iron-icon>
           </vaadin-combo-box>
-        </vaadin-form-layout>
+        </vaadin-form-item>
 
-        <vaadin-form-layout id="form4" colspan="3">
+        <vaadin-form-layout id="form3" colspan="3">
 
           <vaadin-text-field id="customerName" label="Customer" colspan="2">
             <iron-icon slot="prefix" icon="vaadin:user"></iron-icon>
@@ -80,7 +99,7 @@
       <vaadin-button slot="left" id="cancel">Cancel</vaadin-button>
       <div slot="info" class="total">Total [[totalPrice]]</div>
       <vaadin-button slot="right" id="review" theme="primary">
-        Review Order
+        Review order
         <iron-icon icon="vaadin:arrow-right" slot="suffix"></iron-icon>
       </vaadin-button>
     </buttons-bar>
@@ -111,13 +130,10 @@
           {minWidth: '600px', columns: 4, labelsPosition: 'top'}
         ];
         this.$.form2.responsiveSteps = [
-          {columns: 1, labelsPosition: 'top'}
-        ];
-        this.$.form3.responsiveSteps = [
           {columns: 1, labelsPosition: 'top'},
           {minWidth: '600px', columns: 2, labelsPosition: 'top'}
         ];
-        this.$.form4.responsiveSteps = [
+        this.$.form3.responsiveSteps = [
           {columns: 1, labelsPosition: 'top'},
           {minWidth: '500px', columns: 3, labelsPosition: 'top'}
         ];
