@@ -25,12 +25,6 @@
         flex: auto;
       }
 
-      /* https://github.com/vaadin/vaadin-form-layout/issues/63 */
-      vaadin-form-layout,
-      vaadin-form-item {
-        align-self: start;
-      }
-
       .meta-row {
         display: flex;
         justify-content: space-between;
@@ -40,6 +34,8 @@
       .dim {
         color: var(--lumo-secondary-text-color);
         text-align: right;
+        white-space: nowrap;
+        line-height: 2.5em;
       }
 
       .status {
@@ -57,25 +53,18 @@
 
       <vaadin-form-layout id="form1">
 
-        <vaadin-form-item>
-          <label slot="label">Due</label>
-          <vaadin-form-layout id="form2">
-
-            <vaadin-date-picker id="dueDate">
-            </vaadin-date-picker>
-
-            <vaadin-combo-box id="dueTime">
-              <iron-icon slot="prefix" icon="vaadin:clock"></iron-icon>
-            </vaadin-combo-box>
-          </vaadin-form-layout>
-
-          <vaadin-combo-box id="pickupLocation" class="full-width">
+        <vaadin-form-layout id="form2">
+          <vaadin-date-picker label="Due"  id="dueDate">
+          </vaadin-date-picker>
+          <vaadin-combo-box id="dueTime">
+            <iron-icon slot="prefix" icon="vaadin:clock"></iron-icon>
+          </vaadin-combo-box>
+          <vaadin-combo-box id="pickupLocation" colspan="2">
             <iron-icon slot="prefix" icon="vaadin:at"></iron-icon>
           </vaadin-combo-box>
-        </vaadin-form-item>
+        </vaadin-form-layout>
 
         <vaadin-form-layout id="form3" colspan="3">
-
           <vaadin-text-field id="customerName" label="Customer" colspan="2">
             <iron-icon slot="prefix" icon="vaadin:user"></iron-icon>
           </vaadin-text-field>
@@ -90,8 +79,8 @@
             <label slot="label">Products</label>
           </vaadin-form-item>
           <div id="itemsContainer" colspan="3"></div>
-
         </vaadin-form-layout>
+
       </vaadin-form-layout>
     </div>
 
@@ -131,7 +120,7 @@
         ];
         this.$.form2.responsiveSteps = [
           {columns: 1, labelsPosition: 'top'},
-          {minWidth: '600px', columns: 2, labelsPosition: 'top'}
+          {minWidth: '360px', columns: 2, labelsPosition: 'top'}
         ];
         this.$.form3.responsiveSteps = [
           {columns: 1, labelsPosition: 'top'},
