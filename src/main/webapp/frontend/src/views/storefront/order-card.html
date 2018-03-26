@@ -120,7 +120,7 @@
         <span class="oc-main">[[header.main]]</span>
         <span class="oc-secondary">[[header.secondary]]</span>
       </div>
-      <div class="oc-wrapper" on-click="ddd">
+      <div class="oc-wrapper" on-click="_cardClick">
         <div class="oc-info-wrapper">
           <order-status-badge class="oc-badge" status="[[orderCard.state]]"></order-status-badge>
           <div class="oc-time-place">
@@ -151,6 +151,10 @@
     class OrderCard extends Polymer.Element {
       static get is() {
         return 'order-card';
+      }
+
+      _cardClick() {
+        this.dispatchEvent(new CustomEvent('card-click'));
       }
 
     }
