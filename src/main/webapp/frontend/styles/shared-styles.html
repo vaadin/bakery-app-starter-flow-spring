@@ -95,6 +95,11 @@
         color: var(--lumo-error-color);
         background: var(--lumo-error-color-10pct);
       }
+
+      :host([background="white"]) [part~="input-field"] {
+        color: var(--lumo-secondary-text-color);
+        background-color: var(--lumo-base-color);
+      }
     </style>
   </template>
 </dom-module>
