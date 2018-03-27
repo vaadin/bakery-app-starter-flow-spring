@@ -2,6 +2,7 @@ package com.vaadin.starter.bakery.ui.views.storefront;
 
 import java.util.stream.Stream;
 
+import com.vaadin.starter.bakery.backend.data.entity.util.EntityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.HasValue;
@@ -158,5 +159,10 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 		dialog.add(editing ? orderEditor : orderDetails);
 		orderEditor.setVisible(editing);
 		orderDetails.setVisible(!editing);
+	}
+
+	@Override
+	public String getEntityName() {
+		return EntityUtil.getName(Order.class);
 	}
 }

@@ -15,9 +15,7 @@ public class BakeryConst {
 	public static final String PAGE_USERS = "users";
 	public static final String PAGE_PRODUCTS = "products";
 	public static final String PAGE_LOGOUT = "logout";
-	public static final String PAGE_NOTFOUND = "404";
 	public static final String PAGE_DEFAULT = PAGE_STOREFRONT;
-	public static final String PAGE_ACCESS_DENIED = "access-denied";
 
 	public static final String ICON_STOREFRONT = "edit";
 	public static final String ICON_DASHBOARD = "clock";
@@ -35,9 +33,6 @@ public class BakeryConst {
 
 	public static final String[] ORDER_SORT_FIELDS = {"dueDate", "dueTime", "id"};
 	public static final Sort.Direction DEFAULT_SORT_DIRECTION = Sort.Direction.ASC;
-
-	public static final String DASHBOARD_ORDER_CARD_STYLE = "dashboard-order-card";
-	public static final String STOREFRONT_ORDER_CARD_STYLE = "storefront-order-card";
 
 	public static final String VIEWPORT = "width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes";
 

@@ -1,5 +1,6 @@
 package com.vaadin.starter.bakery.testbench;
 
+import com.vaadin.flow.component.notification.testbench.NotificationElement;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -33,6 +34,9 @@ public class StorefrontViewIT extends AbstractIT {
 
 		orderEditor.review();
 		storefrontPage.getOrderDetails().getSaveButton().click();
+
+		NotificationElement notification = $(NotificationElement.class).last();
+		Assert.assertTrue(notification.getText().contains("was updated"));
 
 		int currentCount = Integer.parseInt(storefrontPage.getOrderCard(0).getGoodsCount(0));
 		Assert.assertEquals(initialCount + 1, currentCount);
