@@ -66,6 +66,7 @@ public class CrudEntityPresenter<T extends AbstractEntity> extends EntityPresent
 			final boolean isNew = getEntity().isNew();
 			super.save(e -> {
 				if (isNew) {
+					getView().showNotification(getView().getEntityName() + " was created");
 					filteredDataProvider.refreshAll();
 				} else {
 					filteredDataProvider.refreshItem(e);

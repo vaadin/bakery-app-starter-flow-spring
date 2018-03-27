@@ -55,7 +55,6 @@ public class EntityPresenter<T extends AbstractEntity, V extends EntityView<T>> 
 
 	public void save(CrudOperationListener<T> onSuccess) {
 		if (executeOperation(() -> saveEntity())) {
-			view.showNotification(view.getEntityName() + " was created");
 			onSuccess.execute(entity);
 		}
 	}
