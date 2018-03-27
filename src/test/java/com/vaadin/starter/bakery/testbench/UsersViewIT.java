@@ -64,7 +64,7 @@ public class UsersViewIT extends AbstractIT {
 		password.setValue("123");
 
 		usersView.getButtonsBar().getSaveButton().click();
-		NotificationElement toast = $(NotificationElement.class).first();
+		NotificationElement toast = $(NotificationElement.class).last();
 		Assert.assertTrue(form.isDisplayed());
 		Assert.assertEquals(CrudErrorMessage.REQUIRED_FIELDS_MISSING, toast.getText());
 
@@ -103,7 +103,7 @@ public class UsersViewIT extends AbstractIT {
 		field.setValue("Abc123");
 		page.getButtonsBar().getSaveButton().click();
 
-		NotificationElement toast = $(NotificationElement.class).first();
+		NotificationElement toast = $(NotificationElement.class).last();
 
 		Assert.assertTrue(toast.getText().contains(MODIFY_LOCKED_USER_NOT_PERMITTED));
 		Assert.assertTrue(toast.isOpen());
@@ -118,7 +118,7 @@ public class UsersViewIT extends AbstractIT {
 		page.getButtonsBar().getDeleteButton().click();
 		page.getConfirmDialog().confirm();
 
-		NotificationElement toast = $(NotificationElement.class).first();
+		NotificationElement toast = $(NotificationElement.class).last();
 		Assert.assertTrue(toast.getText().contains(MODIFY_LOCKED_USER_NOT_PERMITTED));
 		Assert.assertTrue(toast.isOpen());
 	}
