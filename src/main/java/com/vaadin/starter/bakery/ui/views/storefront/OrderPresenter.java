@@ -108,9 +108,10 @@ public class OrderPresenter {
 		boolean isNew = entityPresenter.getEntity().isNew();
 		entityPresenter.save(e -> {
 			if (isNew) {
-				view.showNotification(view.getEntityName() + " was created");
+				view.showCreatedNotification();
 				dataProvider.refreshAll();
 			} else {
+				view.showUpdatedNotification();
 				dataProvider.refreshItem(e);
 			}
 			close();
