@@ -133,9 +133,10 @@ public class OrderPresenter {
 		view.getOpenedOrderEditor().close();
 		view.setOpened(false);
 
-
 		if (createNew) {
-			dataProvider.refreshAll();
+			if (updated) {
+				dataProvider.refreshAll();
+			}
 		} else {
 			view.navigateToMainView();
 			if (updated) {

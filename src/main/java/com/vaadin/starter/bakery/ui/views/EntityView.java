@@ -81,4 +81,6 @@ public interface EntityView<T> extends HasNotifications {
 	 *             converted into entity properties
 	 */
 	void write(T entity) throws ValidationException;
+
+	String getEntityName();
 }

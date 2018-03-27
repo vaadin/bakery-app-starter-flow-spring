@@ -129,4 +129,9 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 	public void clear() {
 		getBinder().readBean(null);
 	}
+
+	@Override
+	public String getEntityName() {
+		return entityName;
+	}
 }
