@@ -17,6 +17,6 @@ public class LocalTimeConverterTest extends FormattingTest {
 	public void formattingShoudBeLocaleIndependent() {
 		LocalTimeConverter converter = new LocalTimeConverter();
 		String result = converter.toPresentation(LocalTime.of(13, 9, 33));
-		assertEquals("1:09 p.m.", result);
+		assertEquals("1:09 PM", result);
 	}
 }

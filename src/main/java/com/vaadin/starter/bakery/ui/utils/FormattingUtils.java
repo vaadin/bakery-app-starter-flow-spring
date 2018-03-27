@@ -45,7 +45,7 @@ public class FormattingUtils {
 	/**
 	 * Formats hours with am/pm. E.g: 2:00 PM
 	 */
-	public static final DateTimeFormatter HOUR_FORMATTER = DateTimeFormatter.ofPattern("hh:mm a");
+	public static final DateTimeFormatter HOUR_FORMATTER = DateTimeFormatter.ofPattern("h:mm a");
 
 	/**
 	 * Returns the month name of the date, according to the application locale. 
