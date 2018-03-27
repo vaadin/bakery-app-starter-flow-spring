@@ -23,45 +23,16 @@ import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
  * to visually separate orders into groups. Technically all order cards are
  * equivalent, but those that do have the header visible create a visual group
  * separation.
- * <p>
- * Component css styles are located at /src/main/webapp/frontend/styles/order-card-style.html
  */
 public class OrderCard {
-	
+
 	public static TemplateRenderer<Order> getTemplate() {
 		return TemplateRenderer.of(
-			  "<div class='order-card'>"
-			+ "  <div class='oc-content'>\n"
-			+ "     <div class='oc-group-heading' hidden$='[[!item.header]]'>\n"
-			+ "       <span class='oc-main'>[[item.header.main]]</span>\n"
-			+ "       <span class='oc-secondary'>[[item.header.secondary]]</span>\n"
-			+ "     </div>\n"
-			+ "     <div class='oc-wrapper' on-click='cardClick'>\n"
-			+ "       <div class='oc-info-wrapper'>\n"
-			+ "         <order-status-badge class='oc-badge' status='[[item.orderCard.state]]'></order-status-badge>\n"
-			+ "         <div class='oc-time-place'>"
-			+ "           <h3 class='oc-time'>[[item.orderCard.time]]</h3>"
-			+ "           <h3 class='oc-short-day'>[[item.orderCard.shortDay]]</h3>"
-			+ "           <h3 class='oc-month'>[[item.orderCard.month]]</h3>"
-			+ "           <div class='oc-secondary-time'>[[item.orderCard.secondaryTime]]</div>"
-			+ "           <div class='oc-full-day'>[[item.orderCard.fullDay]]</div>"
-			+ "           <div class='oc-place'>[[item.orderCard.place]]</div>"
-			+ "         </div>\n"
-			+ "       </div>\n"
-			+ "       <div class='oc-name-items'>\n"
-			+ "         <h3 class='oc-name'>[[item.orderCard.fullName]]</h3>\n"
-			+ "         <div class='oc-goods'>\n"
-			+ "           <template is='dom-repeat' items='[[item.orderCard.items]]'>\n"
-			+ "             <div class='oc-goods-item'>\n"
-			+ "               <span class='count'>[[item.quantity]]</span>\n"
-			+ "               <div>[[item.product.name]]</div>\n"
-			+ "             </div>\n"
-			+ "           </template>\n"
-			+ "         </div>\n"
-			+ "       </div>\n"
-			+ "     </div>\n"
-			+ "  </div>"
-			+ "</div>");
+				  "<order-card"
+				+ "  header='[[item.header]]'"
+				+ "  order-card='[[item.orderCard]]'"
+				+ "  on-card-click='cardClick'>"
+				+ "</order-card>");
 	}
 	
 	public static OrderCard create(OrderSummary order) {
