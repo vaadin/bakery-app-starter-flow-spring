@@ -86,7 +86,8 @@
 
     <div class="row">
       <vaadin-text-field id="field" class="field" placeholder="[[fieldPlaceholder]]" value="{{fieldValue}}"
-         on-focus="_onFieldFocus" on-blur="_onFieldBlur" on-value-changed="_filterChanged">
+         on-focus="_onFieldFocus" on-blur="_onFieldBlur" on-value-changed="_filterChanged"
+         theme="white">
         <iron-icon icon$="[[fieldIcon]]" slot="prefix"></iron-icon>
       </vaadin-text-field>
       <vaadin-checkbox class="checkbox desktop" checked="{{checkboxChecked}}"

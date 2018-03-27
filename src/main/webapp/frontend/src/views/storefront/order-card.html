@@ -22,19 +22,18 @@
         box-shadow: 0 3px 5px var(--lumo-shade-10pct);
         border-bottom: 1px solid var(--lumo-shade-10pct);
         display: flex;
-        padding: var(--lumo-space-l);
+        padding: var(--lumo-space-l) var(--lumo-space-m);
         cursor: pointer;
-        border-radius: var(--lumo-border-radius);
       }
 
       .main {
-        color: var(--lumo-body-text-color);
+        color: var(--lumo-secondary-text-color);
         margin-right: var(--lumo-space-s);
         font-weight: bold;
       }
 
       .group-heading {
-        margin: var(--lumo-space-l) var(--lumo-space-s) var(--lumo-space-m);
+        margin: var(--lumo-space-l) var(--lumo-space-m) var(--lumo-space-s);
       }
 
       .secondary {
@@ -104,6 +103,10 @@
       @media (min-width: 600px) {
         .info-wrapper {
           flex-direction: row;
+        }
+
+        .wrapper {
+          border-radius: var(--lumo-border-radius);
         }
 
         .badge {
