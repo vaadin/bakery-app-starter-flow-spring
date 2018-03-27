@@ -2,7 +2,7 @@ package com.vaadin.starter.bakery.ui.views.storefront.events;
 
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
-import com.vaadin.starter.bakery.ui.views.storefront.OrderItemEditor;
+import com.vaadin.starter.bakery.ui.views.orderedit.OrderItemEditor;
 
 public class ProductChangeEvent extends ComponentEvent<OrderItemEditor> {
 

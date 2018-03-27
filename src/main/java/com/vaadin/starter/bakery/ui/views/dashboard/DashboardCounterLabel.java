@@ -8,7 +8,7 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.templatemodel.TemplateModel;
-import com.vaadin.starter.bakery.ui.views.storefront.OrdersCountData;
+import com.vaadin.starter.bakery.ui.views.storefront.beans.OrdersCountData;
 
 @Tag("dashboard-counter-label")
 @HtmlImport("src/views/dashboard/dashboard-counter-label.html")

@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 import com.vaadin.starter.bakery.backend.data.entity.Order;
+import com.vaadin.starter.bakery.ui.views.storefront.beans.OrderCardHeader;
 
 public class OrderCardHeaderGenerator {
 

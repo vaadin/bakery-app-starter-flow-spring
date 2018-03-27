@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery.ui.views.storefront;
+package com.vaadin.starter.bakery.ui.dataproviders;
 
 import java.util.stream.Stream;
 
@@ -11,7 +11,7 @@ import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.service.ProductService;
 
 @SpringComponent
-class ProductDataProvider extends AbstractBackEndDataProvider<Product, String> {
+public class ProductDataProvider extends AbstractBackEndDataProvider<Product, String> {
 
 	private final ProductService productService;
 

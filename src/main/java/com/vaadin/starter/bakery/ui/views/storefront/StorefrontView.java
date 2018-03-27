@@ -28,6 +28,8 @@ import com.vaadin.starter.bakery.ui.components.ConfirmDialog;
 import com.vaadin.starter.bakery.ui.components.SearchBar;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.views.EntityView;
+import com.vaadin.starter.bakery.ui.views.orderedit.OrderDetails;
+import com.vaadin.starter.bakery.ui.views.orderedit.OrderEditor;
 
 @Tag("storefront-view")
 @HtmlImport("src/views/storefront/storefront-view.html")
@@ -110,11 +112,11 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 		if (orderId != null) {
 			presenter.onNavigation(orderId, editView);
 		} else if (dialog.isOpened()) {
-		    presenter.closeSilently();
-        }
+			presenter.closeSilently();
+		}
 	}
 
-    void navigateToMainView() {
+	void navigateToMainView() {
 		getUI().ifPresent(ui -> ui.navigate(BakeryConst.PAGE_STOREFRONT));
 	}
 

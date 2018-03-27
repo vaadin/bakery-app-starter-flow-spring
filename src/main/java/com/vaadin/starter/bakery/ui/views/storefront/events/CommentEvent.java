@@ -1,7 +1,7 @@
 package com.vaadin.starter.bakery.ui.views.storefront.events;
 
 import com.vaadin.flow.component.ComponentEvent;
-import com.vaadin.starter.bakery.ui.views.storefront.OrderDetails;
+import com.vaadin.starter.bakery.ui.views.orderedit.OrderDetails;
 
 public class CommentEvent extends ComponentEvent<OrderDetails> {
 

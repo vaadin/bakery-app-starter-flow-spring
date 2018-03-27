@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery.ui.views.storefront;
+package com.vaadin.starter.bakery.ui.dataproviders;
 
 import java.util.List;
 import java.util.stream.Stream;
