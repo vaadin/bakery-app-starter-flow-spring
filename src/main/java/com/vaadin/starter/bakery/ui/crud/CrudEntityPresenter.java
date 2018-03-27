@@ -80,6 +80,7 @@ public class CrudEntityPresenter<T extends AbstractEntity> extends EntityPresent
 
 	public void delete() {
 		super.delete(e -> {
+			getView().showDeletedNotification();
 			filteredDataProvider.refreshAll();
 			close();
 			getView().closeDialog();

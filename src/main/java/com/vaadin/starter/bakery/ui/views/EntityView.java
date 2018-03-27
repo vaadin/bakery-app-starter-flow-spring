@@ -23,29 +23,6 @@ public interface EntityView<T> extends HasNotifications {
 	ConfirmDialog getConfirmDialog();
 
 	/**
-	 * Shows a confirmation request dialog with the given message.
-	 *
-	 * @param message
-	 *            the message with a request to ask a confirmation for (see
-	 *            {@link Message}
-	 * @param onOk
-	 *            command to execute if the user presses 'ok' in the dialog
-	 * @param onCancel
-	 *            command to execute if the user presses 'cancel' in the dialog
-	 */
-	default void showConfirmationRequest(Message message, Runnable onOk, Runnable onCancel) {
-		getConfirmDialog().setMessage(message.getMessage());
-		getConfirmDialog().setCaption(message.getCaption());
-		getConfirmDialog().setCancelText(message.getCancelText());
-		getConfirmDialog().setOkText(message.getOkText());
-
-		getConfirmDialog().addOkClickListener(e -> onOk.run());
-		getConfirmDialog().addCancelClickListener(e -> onCancel.run());
-
-		getConfirmDialog().setOpened(true);
-	}
-
-	/**
 	 * Shows an error notification with a given text.
 	 *
 	 * @param message a user-friendly error message
@@ -90,5 +67,9 @@ public interface EntityView<T> extends HasNotifications {
 
 	default void showUpdatedNotification() {
 		showNotification(getEntityName() + " was updated");
+	}
+
+	default void showDeletedNotification() {
+		showNotification(getEntityName() + " was deleted");
 	}
 }
