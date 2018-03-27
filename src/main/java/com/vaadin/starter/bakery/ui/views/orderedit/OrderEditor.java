@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery.ui.views.storefront;
+package com.vaadin.starter.bakery.ui.views.orderedit;
 
 import static com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil.createItemLabelGenerator;
 
@@ -39,6 +39,8 @@ import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.PickupLocation;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil;
+import com.vaadin.starter.bakery.ui.dataproviders.PickupLocationDataProvider;
+import com.vaadin.starter.bakery.ui.dataproviders.ProductDataProvider;
 import com.vaadin.starter.bakery.ui.events.CancelEvent;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.starter.bakery.ui.utils.converters.LocalTimeConverter;
@@ -46,7 +48,7 @@ import com.vaadin.starter.bakery.ui.views.storefront.events.ReviewEvent;
 import com.vaadin.starter.bakery.ui.views.storefront.events.ValueChangeEvent;
 
 @Tag("order-editor")
-@HtmlImport("src/views/storefront/order-editor.html")
+@HtmlImport("src/views/orderedit/order-editor.html")
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {

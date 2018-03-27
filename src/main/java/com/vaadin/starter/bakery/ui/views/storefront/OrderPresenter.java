@@ -16,7 +16,9 @@ import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.ui.crud.EntityPresenter;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider;
+import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider.OrderFilter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
+import com.vaadin.starter.bakery.ui.views.storefront.beans.OrderCardHeader;
 
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)

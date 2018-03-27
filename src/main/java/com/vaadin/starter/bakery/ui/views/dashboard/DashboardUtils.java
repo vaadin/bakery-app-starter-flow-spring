@@ -10,8 +10,8 @@ import com.vaadin.starter.bakery.backend.data.DeliveryStats;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.OrderSummary;
-import com.vaadin.starter.bakery.ui.views.storefront.OrdersCountData;
-import com.vaadin.starter.bakery.ui.views.storefront.OrdersCountDataWithChart;
+import com.vaadin.starter.bakery.ui.views.storefront.beans.OrdersCountData;
+import com.vaadin.starter.bakery.ui.views.storefront.beans.OrdersCountDataWithChart;
 
 public class DashboardUtils {
 

@@ -44,7 +44,7 @@ import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.starter.bakery.ui.views.storefront.OrderCard;
-import com.vaadin.starter.bakery.ui.views.storefront.OrdersCountDataWithChart;
+import com.vaadin.starter.bakery.ui.views.storefront.beans.OrdersCountDataWithChart;
 
 @Tag("dashboard-view")
 @HtmlImport("src/views/dashboard/dashboard-view.html")

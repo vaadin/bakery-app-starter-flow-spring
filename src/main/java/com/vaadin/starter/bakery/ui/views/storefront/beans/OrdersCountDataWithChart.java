@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery.ui.views.storefront;
+package com.vaadin.starter.bakery.ui.views.storefront.beans;
 
 public class OrdersCountDataWithChart extends OrdersCountData {
 
