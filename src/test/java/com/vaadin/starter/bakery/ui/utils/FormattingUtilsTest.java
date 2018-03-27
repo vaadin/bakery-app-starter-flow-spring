@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import org.junit.Test;
 
 import com.vaadin.starter.bakery.test.FormattingTest;
+import com.vaadin.starter.bakery.ui.utils.converters.LocalDateTimeConverter;
 
 public class FormattingUtilsTest extends FormattingTest {
 
@@ -62,6 +63,13 @@ public class FormattingUtilsTest extends FormattingTest {
 	public void getFullMonthNameShouldBeLocaleIndependent() {
 		String result = FormattingUtils.getFullMonthName(LocalDate.of(2003, 8, 22));
 		assertEquals("August", result);
+	}
+
+	@Test
+	public void timeConverterShouldFormatDateWithAmPm() {
+		LocalDateTimeConverter lt = new LocalDateTimeConverter();
+		String result = lt.toPresentation(LocalDateTime.of(2016, 11, 27, 22, 15, 33));
+		assertEquals("27.11.2016 10:15 PM", result);
 	}
 
 	private int getWeek(int year, int month, int day) {

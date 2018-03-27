@@ -13,6 +13,6 @@ public class LocalDateTimeConverterTest extends FormattingTest {
 	public void formattingShoudBeLocaleIndependent() {
 		LocalDateTimeConverter converter = new LocalDateTimeConverter();
 		String result = converter.toPresentation(LocalDateTime.of(2016, 11, 27, 22, 15, 33));
-		assertEquals("27.11.2016 10:15 p.m.", result);
+		assertEquals("27.11.2016 10:15 PM", result);
 	}
 }
