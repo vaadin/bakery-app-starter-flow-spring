@@ -166,6 +166,13 @@
         ];
       }
 
+      ready() {
+        super.ready();
+        // In iOS prevent body scrolling to avoid going out of the viewport
+        // when keyboard is opened
+        this.addEventListener('touchmove', e => e.preventDefault());
+      }
+
       _setShowExtraFilters(fieldValue, checkboxChecked, focused) {
         this._debouncer = Polymer.Debouncer.debounce(
           this._debouncer,

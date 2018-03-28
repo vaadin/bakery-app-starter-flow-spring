@@ -76,14 +76,8 @@
         window.addEventListener('resize', e => this._hideNav());
       }
 
-      _prevent(e) {
-        e.preventDefault();
-      }
-
       _hideNav() {
         this.navHidden = this.focused && window.innerHeight <= 600;
-        // In iOS prevent body scrolling to avoid search-bar going out of the viewport
-        document.body[this.navHidden ? 'addEventListener' : 'removeEventListener']('touchmove', this._prevent);
       }
     }
 
