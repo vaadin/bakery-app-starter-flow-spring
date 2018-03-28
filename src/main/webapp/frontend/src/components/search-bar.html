@@ -188,10 +188,12 @@
       }
 
       _onFieldFocus(e) {
+        e.target == this.$.field && this.dispatchEvent(new Event('search-focus', {bubbles: true, composed: true}));
         this._focused = true;
       }
 
       _onFieldBlur(e) {
+        e.target == this.$.field && this.dispatchEvent(new Event('search-blur', {bubbles: true, composed: true}));
         this._focused = false;
       }
 

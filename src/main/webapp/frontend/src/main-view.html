@@ -34,8 +34,8 @@
 
     <iron-ajax auto url="offline-page.html" handle-as="document" last-response="{{offlinePage}}"></iron-ajax>
 
-    <app-container>
-      <app-navigation id="appNavigation"></app-navigation>
+    <app-container id="appContainer">
+      <app-navigation id="appNavigation" hidden$="[[navHidden]]"></app-navigation>
       <slot></slot>
     </app-container>
 
@@ -65,9 +65,25 @@
       ready() {
         super.ready();
 
+        // This might be provided by flow in the future (#3778)
         this.online = window.navigator.onLine;
-        window.addEventListener('online', () => this.online = true);
-        window.addEventListener('offline', () => this.online = false);
+        window.addEventListener('online', e => this.online = true);
+        window.addEventListener('offline', e => this.online = false);
+
+        // In small devices we hide nav-bar when search is focused
+        this.addEventListener('search-focus', e => (this.focused = true, this._hideNav()));
+        this.addEventListener('search-blur', e => (this.focused = false, this._hideNav()));
+        window.addEventListener('resize', e => this._hideNav());
+      }
+
+      _prevent(e) {
+        e.preventDefault();
+      }
+
+      _hideNav() {
+        this.navHidden = this.focused && window.innerHeight <= 600;
+        // In iOS prevent body scrolling to avoid search-bar going out of the viewport
+        document.body[this.navHidden ? 'addEventListener' : 'removeEventListener']('touchmove', this._prevent);
       }
     }
 
