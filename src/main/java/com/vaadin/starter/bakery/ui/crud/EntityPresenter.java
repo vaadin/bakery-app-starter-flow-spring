@@ -133,17 +133,6 @@ public class EntityPresenter<T extends AbstractEntity, V extends EntityView<T>> 
 		}
 	}
 
-	/**
-	 * Sets message to a confirmation request dialog and shows it.
-	 *
-	 * @param message
-	 *            the message with a request to ask a confirmation for (see
-	 *            {@link Message}
-	 * @param onOk
-	 *            command to execute if the user presses 'ok' in the dialog
-	 * @param onCancel
-	 *            command to execute if the user presses 'cancel' in the dialog
-	 */
 	private void showConfirmationRequest(Message message, Runnable onOk, Runnable onCancel) {
 		view.getConfirmDialog().setMessage(message.getMessage());
 		view.getConfirmDialog().setCaption(message.getCaption());
