@@ -5,6 +5,7 @@ import java.util.function.UnaryOperator;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolationException;
 
+import com.vaadin.flow.shared.Registration;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;
 
@@ -31,6 +32,10 @@ public class EntityPresenter<T extends AbstractEntity, V extends EntityView<T>> 
 
 	private T entity;
 
+	private Registration okRegistration;
+
+	private Registration cancelRegistration;
+
 	public EntityPresenter(CrudService<T> crudService, User currentUser) {
 		this.crudService = crudService;
 		this.currentUser = currentUser;
@@ -47,8 +52,9 @@ public class EntityPresenter<T extends AbstractEntity, V extends EntityView<T>> 
 	public void delete(CrudOperationListener<T> onSuccess) {
 		Message CONFIRM_DELETE = Message.CONFIRM_DELETE.createMessage();
 		confirmIfNecessaryAndExecute(true, CONFIRM_DELETE, () -> {
-			executeOperation(() -> crudService.delete(currentUser, entity));
-			onSuccess.execute(entity);
+			 if (executeOperation(() -> crudService.delete(currentUser, entity))) {
+				 onSuccess.execute(entity);
+			 }
 		}, () -> {
 		});
 	}
@@ -121,10 +127,31 @@ public class EntityPresenter<T extends AbstractEntity, V extends EntityView<T>> 
 	private void confirmIfNecessaryAndExecute(boolean needsConfirmation, Message message, Runnable onConfirmed,
 			Runnable onCancelled) {
 		if (needsConfirmation) {
-			view.showConfirmationRequest(message, onConfirmed, onCancelled);
+			showConfirmationRequest(message, onConfirmed, onCancelled);
 		} else {
 			onConfirmed.run();
 		}
+	}
+
+	private void showConfirmationRequest(Message message, Runnable onOk, Runnable onCancel) {
+		view.getConfirmDialog().setMessage(message.getMessage());
+		view.getConfirmDialog().setCaption(message.getCaption());
+		view.getConfirmDialog().setCancelText(message.getCancelText());
+		view.getConfirmDialog().setOkText(message.getOkText());
+
+		if (okRegistration != null) {
+			okRegistration.remove();
+		}
+		if (cancelRegistration != null) {
+			cancelRegistration.remove();
+		}
+
+		okRegistration = view.getConfirmDialog()
+				.addOkClickListener(e -> onOk.run());
+		cancelRegistration = view.getConfirmDialog()
+				.addCancelClickListener(e -> onCancel.run());
+
+		view.getConfirmDialog().setOpened(true);
 	}
 
 	public boolean loadEntity(Long id, CrudOperationListener<T> onSuccess) {
