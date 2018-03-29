@@ -15,19 +15,19 @@
         z-index: 2;
         display: flex;
         flex-direction: column;
-        padding: 0 var(--lumo-space-s);
-        min-height: 56px;
         overflow: hidden;
+        padding: 0 var(--lumo-space-s);
         background-image: linear-gradient(var(--lumo-shade-20pct), var(--lumo-shade-20pct));
         background-color: var(--lumo-base-color);
         box-shadow: 0 0 16px 2px var(--lumo-shade-20pct);
         width: 100%;
+        flex: none;
       }
 
       .row {
         display: flex;
         align-items: center;
-        flex: 1 1 auto;
+        height: 3em;
       }
 
       .checkbox,
@@ -167,6 +167,13 @@
         ];
       }
 
+      ready() {
+        super.ready();
+        // In iOS prevent body scrolling to avoid going out of the viewport
+        // when keyboard is opened
+        this.addEventListener('touchmove', e => e.preventDefault());
+      }
+
       _setShowExtraFilters(fieldValue, checkboxChecked, focused) {
         this._debouncer = Polymer.Debouncer.debounce(
           this._debouncer,
@@ -188,10 +195,12 @@
       }
 
       _onFieldFocus(e) {
+        e.target == this.$.field && this.dispatchEvent(new Event('search-focus', {bubbles: true, composed: true}));
         this._focused = true;
       }
 
       _onFieldBlur(e) {
+        e.target == this.$.field && this.dispatchEvent(new Event('search-blur', {bubbles: true, composed: true}));
         this._focused = false;
       }
 
