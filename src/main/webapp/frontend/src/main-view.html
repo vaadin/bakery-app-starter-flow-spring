@@ -27,7 +27,7 @@
       }
 
       app-navigation[nav-hidden] {
-        height: 0px;
+        height: 0;
       }
 
       @media (min-width: 600px) {
@@ -81,15 +81,16 @@
 
         // In small devices we hide nav-bar when soft-keyboard is displayed.
         try {
-          // Do not execute this block if device does not support touch-events
+          // It's a touch device
           document.createEvent('TouchEvent');
-          // Hide the bar only in the case height is small enough (a timeout is needed in iOS)
-          const hideNav = () => setTimeout(() => this.navHidden = this.focused && window.innerHeight <= 600, 0);
+          // Hide the bar when height is small enough (a timeout is needed in iOS)
+          const hideNav = () => setTimeout(() => this.navHidden = this.focused && window.innerHeight <= 600);
           // search-bar notifies when input field is focused
           this.addEventListener('search-focus', e => (this.focused = true, hideNav()));
           this.addEventListener('search-blur', e => (this.focused = false, hideNav()));
           window.addEventListener('resize', e => hideNav());
-        } catch(e) {
+        } catch (e) {
+          // NOP: not a touch device
         }
       }
     }
