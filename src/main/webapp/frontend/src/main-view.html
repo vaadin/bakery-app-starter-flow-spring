@@ -70,14 +70,18 @@
         window.addEventListener('online', e => this.online = true);
         window.addEventListener('offline', e => this.online = false);
 
-        // In small devices we hide nav-bar when search is focused
-        this.addEventListener('search-focus', e => (this.focused = true, this._hideNav()));
-        this.addEventListener('search-blur', e => (this.focused = false, this._hideNav()));
-        window.addEventListener('resize', e => this._hideNav());
-      }
-
-      _hideNav() {
-        this.navHidden = this.focused && window.innerHeight <= 600;
+        // In small devices we hide nav-bar when soft-keyboard is displayed.
+        // There is no a reliable way for detecting when the keyboard is
+        // opened. This block is only executed on devices with touch events
+        // support, and when height is small enough
+        try {
+          document.createEvent('TouchEvent');
+          const hideNav = () => setTimeout(() => this.navHidden = this.focused && window.innerHeight <= 600, 500);
+          this.addEventListener('search-focus', e => (this.focused = true, hideNav()));
+          this.addEventListener('search-blur', e => (this.focused = false, hideNav()));
+          window.addEventListener('resize', e => hideNav());
+        } catch(e) {
+        }
       }
     }
 
