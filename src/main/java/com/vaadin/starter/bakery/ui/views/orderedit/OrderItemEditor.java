@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery.ui.views.storefront;
+package com.vaadin.starter.bakery.ui.views.orderedit;
 
 import java.util.stream.Stream;
 
@@ -19,6 +19,7 @@ import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.ui.components.AmountField;
+import com.vaadin.starter.bakery.ui.dataproviders.ProductDataProvider;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.starter.bakery.ui.views.storefront.events.CommentChangeEvent;
 import com.vaadin.starter.bakery.ui.views.storefront.events.DeleteEvent;
@@ -26,7 +27,7 @@ import com.vaadin.starter.bakery.ui.views.storefront.events.PriceChangeEvent;
 import com.vaadin.starter.bakery.ui.views.storefront.events.ProductChangeEvent;
 
 @Tag("order-item-editor")
-@HtmlImport("src/views/storefront/order-item-editor.html")
+@HtmlImport("src/views/orderedit/order-item-editor.html")
 public class OrderItemEditor extends PolymerTemplate<TemplateModel> implements HasValue<OrderItemEditor, OrderItem> {
 
 	@Id("products")

@@ -16,7 +16,9 @@ import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.ui.crud.EntityPresenter;
 import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider;
+import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider.OrderFilter;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
+import com.vaadin.starter.bakery.ui.views.storefront.beans.OrderCardHeader;
 
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -29,7 +31,6 @@ public class OrderPresenter {
 	private final OrdersGridDataProvider dataProvider;
 	private final User currentUser;
 	private final OrderService orderService;
-	private boolean createNew = false;
 
 	@Autowired
 	OrderPresenter(OrderService orderService, OrdersGridDataProvider dataProvider,
@@ -67,17 +68,15 @@ public class OrderPresenter {
 	}
 
 	void onNavigation(Long id, boolean edit) {
-		createNew = false;
 		entityPresenter.loadEntity(id, e -> open(e, edit));
 	}
 
 	void createNewOrder() {
-		createNew = true;
 		open(entityPresenter.createNew(), true);
 	}
 
 	void cancel() {
-		entityPresenter.cancel(() -> close(false), () -> view.setOpened(true));
+		entityPresenter.cancel(() -> close(), () -> view.setOpened(true));
 	}
 
 	void closeSilently() {
@@ -108,7 +107,18 @@ public class OrderPresenter {
 	}
 
 	void save() {
-		entityPresenter.save(e -> close(true));
+		boolean isNew = entityPresenter.getEntity().isNew();
+		entityPresenter.save(e -> {
+			if (isNew) {
+				view.showCreatedNotification();
+				dataProvider.refreshAll();
+			} else {
+				view.showUpdatedNotification();
+				dataProvider.refreshItem(e);
+			}
+			close();
+		});
+
 	}
 
 	void addComment(String comment) {
@@ -129,19 +139,10 @@ public class OrderPresenter {
 		}
 	}
 
-	private void close(boolean updated) {
+	private void close() {
 		view.getOpenedOrderEditor().close();
 		view.setOpened(false);
-
-
-		if (createNew) {
-			dataProvider.refreshAll();
-		} else {
-			view.navigateToMainView();
-			if (updated) {
-				dataProvider.refreshItem(entityPresenter.getEntity());
-			}
-		}
+		view.navigateToMainView();
 		entityPresenter.close();
 	}
 }

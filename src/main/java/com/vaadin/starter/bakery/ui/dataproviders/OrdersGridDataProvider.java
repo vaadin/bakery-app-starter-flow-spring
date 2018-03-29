@@ -1,5 +1,6 @@
 package com.vaadin.starter.bakery.ui.dataproviders;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -20,14 +21,35 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.service.OrderService;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
-import com.vaadin.starter.bakery.ui.views.storefront.OrderFilter;
 
 /**
  * A singleton pageable order data provider.
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class OrdersGridDataProvider extends FilterablePageableDataProvider<Order, OrderFilter> {
+public class OrdersGridDataProvider extends FilterablePageableDataProvider<Order, OrdersGridDataProvider.OrderFilter> {
+
+	public static class OrderFilter implements Serializable {
+		private String filter;
+		private boolean showPrevious;
+
+		public String getFilter() {
+			return filter;
+		}
+
+		public boolean isShowPrevious() {
+			return showPrevious;
+		}
+
+		public OrderFilter(String filter, boolean showPrevious) {
+			this.filter = filter;
+			this.showPrevious = showPrevious;
+		}
+
+		public static OrderFilter getEmptyFilter() {
+			return new OrderFilter("", false);
+		}
+	}
 
 	private final OrderService orderService;
 	private List<QuerySortOrder> defaultSortOrders;

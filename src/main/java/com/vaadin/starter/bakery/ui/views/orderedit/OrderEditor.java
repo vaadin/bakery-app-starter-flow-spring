@@ -1,4 +1,4 @@
-package com.vaadin.starter.bakery.ui.views.storefront;
+package com.vaadin.starter.bakery.ui.views.orderedit;
 
 import static com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil.createItemLabelGenerator;
 
@@ -22,6 +22,7 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.component.textfield.TextField;
@@ -38,6 +39,8 @@ import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.PickupLocation;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil;
+import com.vaadin.starter.bakery.ui.dataproviders.PickupLocationDataProvider;
+import com.vaadin.starter.bakery.ui.dataproviders.ProductDataProvider;
 import com.vaadin.starter.bakery.ui.events.CancelEvent;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.starter.bakery.ui.utils.converters.LocalTimeConverter;
@@ -45,7 +48,7 @@ import com.vaadin.starter.bakery.ui.views.storefront.events.ReviewEvent;
 import com.vaadin.starter.bakery.ui.views.storefront.events.ValueChangeEvent;
 
 @Tag("order-editor")
-@HtmlImport("src/views/storefront/order-editor.html")
+@HtmlImport("src/views/orderedit/order-editor.html")
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
@@ -58,6 +61,12 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 
 	@Id("title")
 	private H2 title;
+
+	@Id("metaContainer")
+	private Div metaContainer;
+
+	@Id("orderNumber")
+	private Span orderNumber;
 
 	@Id("status")
 	private ComboBox<OrderState> status;
@@ -92,7 +101,7 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 	private OrderItemsEditor itemsEditor;
 
 	private User currentUser;
-	
+
 	private BeanValidationBinder<Order> binder = new BeanValidationBinder<>(Order.class);
 
 	private final LocalTimeConverter localTimeConverter = new LocalTimeConverter();
@@ -170,7 +179,10 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 
 	public void read(Order order) {
 		binder.readBean(order);
-		title.setText(String.format("%s Order", order.isNew() ? "New" : "Edit"));
+
+		this.orderNumber.setText(order.isNew() ? "" : order.getId().toString());
+		title.setVisible(order.isNew());
+		metaContainer.setVisible(!order.isNew());
 
 		if (order.getState() != null) {
 			getModel().setStatus(order.getState().name());
@@ -182,14 +194,14 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 	public Stream<HasValue<?, ?>> validate() {
 		Stream<HasValue<?, ?>> errorFields = binder.validate().getFieldValidationErrors().stream()
 				.map(BindingValidationStatus::getField);
-		
+
 		return Stream.concat(errorFields, itemsEditor.validate());
 	}
 
 	public Registration addReviewListener(ComponentEventListener<ReviewEvent> listener) {
 		return addListener(ReviewEvent.class, listener);
 	}
-	
+
 	public Registration addCancelListener(ComponentEventListener<CancelEvent> listener) {
 		return addListener(CancelEvent.class, listener);
 	}

@@ -66,8 +66,10 @@ public class CrudEntityPresenter<T extends AbstractEntity> extends EntityPresent
 			final boolean isNew = getEntity().isNew();
 			super.save(e -> {
 				if (isNew) {
+					getView().showCreatedNotification();
 					filteredDataProvider.refreshAll();
 				} else {
+					getView().showUpdatedNotification();
 					filteredDataProvider.refreshItem(e);
 				}
 				close();
@@ -78,6 +80,7 @@ public class CrudEntityPresenter<T extends AbstractEntity> extends EntityPresent
 
 	public void delete() {
 		super.delete(e -> {
+			getView().showDeletedNotification();
 			filteredDataProvider.refreshAll();
 			close();
 			getView().closeDialog();

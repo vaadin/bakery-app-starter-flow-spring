@@ -2,6 +2,7 @@ package com.vaadin.starter.bakery.ui.views.storefront;
 
 import java.util.stream.Stream;
 
+import com.vaadin.starter.bakery.backend.data.entity.util.EntityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.HasValue;
@@ -27,6 +28,8 @@ import com.vaadin.starter.bakery.ui.components.ConfirmDialog;
 import com.vaadin.starter.bakery.ui.components.SearchBar;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.views.EntityView;
+import com.vaadin.starter.bakery.ui.views.orderedit.OrderDetails;
+import com.vaadin.starter.bakery.ui.views.orderedit.OrderEditor;
 
 @Tag("storefront-view")
 @HtmlImport("src/views/storefront/storefront-view.html")
@@ -109,11 +112,11 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 		if (orderId != null) {
 			presenter.onNavigation(orderId, editView);
 		} else if (dialog.isOpened()) {
-		    presenter.closeSilently();
-        }
+			presenter.closeSilently();
+		}
 	}
 
-    void navigateToMainView() {
+	void navigateToMainView() {
 		getUI().ifPresent(ui -> ui.navigate(BakeryConst.PAGE_STOREFRONT));
 	}
 
@@ -156,5 +159,10 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 		dialog.add(editing ? orderEditor : orderDetails);
 		orderEditor.setVisible(editing);
 		orderDetails.setVisible(!editing);
+	}
+
+	@Override
+	public String getEntityName() {
+		return EntityUtil.getName(Order.class);
 	}
 }

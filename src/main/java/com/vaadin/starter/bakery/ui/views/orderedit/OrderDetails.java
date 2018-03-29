@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.vaadin.starter.bakery.ui.views.storefront;
+package com.vaadin.starter.bakery.ui.views.orderedit;
 
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.HasClickListeners;
@@ -33,7 +33,7 @@ import com.vaadin.starter.bakery.ui.views.storefront.events.EditEvent;
  * field to add comments.
  */
 @Tag("order-details")
-@HtmlImport("src/views/storefront/order-details.html")
+@HtmlImport("src/views/orderedit/order-details.html")
 public class OrderDetails extends PolymerTemplate<OrderDetails.Model> {
 
 	private Order order;

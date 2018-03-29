@@ -44,7 +44,7 @@ import com.vaadin.starter.bakery.ui.dataproviders.OrdersGridDataProvider;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.starter.bakery.ui.views.storefront.OrderCard;
-import com.vaadin.starter.bakery.ui.views.storefront.OrdersCountDataWithChart;
+import com.vaadin.starter.bakery.ui.views.storefront.beans.OrdersCountDataWithChart;
 
 @Tag("dashboard-view")
 @HtmlImport("src/views/dashboard/dashboard-view.html")
@@ -93,6 +93,7 @@ public class DashboardView extends PolymerTemplate<TemplateModel> {
 
 		grid.addColumn(OrderCard.getTemplate()
 				.withProperty("orderCard", OrderCard::create)
+				.withProperty("header", order -> null)
 				.withEventHandler("cardClick",
 						order -> UI.getCurrent().navigate(BakeryConst.PAGE_STOREFRONT + "/" + order.getId())));
 
