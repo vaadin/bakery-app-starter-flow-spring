@@ -21,6 +21,15 @@
         align-items: center;
       }
 
+      app-navigation {
+        transition: all 0.5s;
+        height: 52px;
+      }
+
+      app-navigation[nav-hidden] {
+        height: 0px;
+      }
+
       @media (min-width: 600px) {
         app-container {
           flex-direction: column;
@@ -35,7 +44,7 @@
     <iron-ajax auto url="offline-page.html" handle-as="document" last-response="{{offlinePage}}"></iron-ajax>
 
     <app-container id="appContainer">
-      <app-navigation id="appNavigation" hidden$="[[navHidden]]"></app-navigation>
+      <app-navigation id="appNavigation" nav-hidden$="[[navHidden]]"></app-navigation>
       <slot></slot>
     </app-container>
 
@@ -71,12 +80,12 @@
         window.addEventListener('offline', e => this.online = false);
 
         // In small devices we hide nav-bar when soft-keyboard is displayed.
-        // There is no a reliable way for detecting when the keyboard is
-        // opened. This block is only executed on devices with touch events
-        // support, and when height is small enough
         try {
+          // Do not execute this block if device does not support touch-events
           document.createEvent('TouchEvent');
-          const hideNav = () => setTimeout(() => this.navHidden = this.focused && window.innerHeight <= 600, 500);
+          // Hide the bar only in the case height is small enough (a timeout is needed in iOS)
+          const hideNav = () => setTimeout(() => this.navHidden = this.focused && window.innerHeight <= 600, 0);
+          // search-bar notifies when input field is focused
           this.addEventListener('search-focus', e => (this.focused = true, hideNav()));
           this.addEventListener('search-blur', e => (this.focused = false, hideNav()));
           window.addEventListener('resize', e => hideNav());
