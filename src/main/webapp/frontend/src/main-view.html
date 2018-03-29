@@ -21,13 +21,15 @@
         align-items: center;
       }
 
-      app-navigation {
-        transition: all 0.5s;
-        height: 52px;
-      }
+      @media (max-height: 600px) {
+        app-navigation {
+          transition: all 0.5s;
+          height: 52px;
+        }
 
-      app-navigation[nav-hidden] {
-        height: 0;
+        app-navigation[nav-hidden] {
+          height: 0;
+        }
       }
 
       @media (min-width: 600px) {
