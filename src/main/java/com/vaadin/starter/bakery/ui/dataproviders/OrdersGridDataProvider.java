@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,6 +108,17 @@ public class OrdersGridDataProvider extends FilterablePageableDataProvider<Order
 	public void setPageObserver(Consumer<Page<Order>> pageObserver) {
 		this.pageObserver = pageObserver;
 	}
-	
-	
+
+	public int getOrderIndexWhenNoFilterApplied(Order order) {
+		if (order == null || order.getId() == null) {
+			return -1;
+		}
+		AtomicInteger index = new AtomicInteger(-1);
+		orderService.findAnyMatchingStartingToday().stream().filter(o -> {
+			index.incrementAndGet();
+			return order.getId().equals(o.getId());
+		}).findFirst();
+
+		return index.get();
+	}
 }
