@@ -112,6 +112,10 @@ public class OrderPresenter {
 			if (isNew) {
 				view.showCreatedNotification();
 				dataProvider.refreshAll();
+				// New Order button is available only when no filter applied
+				int orderIndex = dataProvider.getOrderIndexWhenNoFilterApplied(e);
+				// Use grid flow API when will be available instead of calling javascript method
+				view.getGrid().getElement().callFunction("scrollToIndex", orderIndex);
 			} else {
 				view.showUpdatedNotification();
 				dataProvider.refreshItem(e);
