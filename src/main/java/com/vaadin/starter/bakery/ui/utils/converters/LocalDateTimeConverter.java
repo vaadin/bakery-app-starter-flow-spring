@@ -5,21 +5,21 @@ import static com.vaadin.starter.bakery.ui.utils.FormattingUtils.FULL_DATE_FORMA
 
 import java.time.LocalDateTime;
 
-import com.vaadin.flow.templatemodel.ModelConverter;
+import com.vaadin.flow.templatemodel.ModelEncoder;
 
-public class LocalDateTimeConverter implements ModelConverter<LocalDateTime, String> {
+public class LocalDateTimeConverter implements ModelEncoder<LocalDateTime, String> {
 
 
 	private static final LocalTimeConverter TIME_FORMATTER = new LocalTimeConverter();
 
 	@Override
-	public String toPresentation(LocalDateTime modelValue) {
+	public String encode(LocalDateTime modelValue) {
 		return convertIfNotNull(modelValue,
-				v -> FULL_DATE_FORMATTER.format(v) + " " + TIME_FORMATTER.toPresentation(v.toLocalTime()));
+				v -> FULL_DATE_FORMATTER.format(v) + " " + TIME_FORMATTER.encode(v.toLocalTime()));
 	}
 
 	@Override
-	public LocalDateTime toModel(String presentationValue) {
+	public LocalDateTime decode(String presentationValue) {
 		throw new UnsupportedOperationException();
 	}
 }

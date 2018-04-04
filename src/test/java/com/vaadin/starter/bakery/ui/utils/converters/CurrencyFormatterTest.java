@@ -14,7 +14,7 @@ public class CurrencyFormatterTest extends FormattingTest {
 	@Test
 	public void formattingShoudBeLocaleIndependent() {
 		CurrencyFormatter formatter = new CurrencyFormatter();
-		String result = formatter.toPresentation(123456);
+		String result = formatter.encode(123456);
 		assertEquals("$1,234.56", result);
 	}
 }

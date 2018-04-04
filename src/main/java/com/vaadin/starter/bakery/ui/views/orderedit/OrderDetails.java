@@ -13,7 +13,7 @@ import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.dom.Element;
 import com.vaadin.flow.shared.Registration;
-import com.vaadin.flow.templatemodel.Convert;
+import com.vaadin.flow.templatemodel.Encode;
 import com.vaadin.flow.templatemodel.Include;
 import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
@@ -90,14 +90,14 @@ public class OrderDetails extends PolymerTemplate<OrderDetails.Model> {
 			"customer.fullName", "customer.phoneNumber", "customer.details", "items.product.name", "items.comment",
 			"items.quantity", "items.product.price", "history.message", "history.createdBy.firstName",
 			"history.timestamp", "history.newState", "totalPrice" })
-		@Convert(value = LongToStringConverter.class, path = "id")
-		@Convert(value = StorefrontLocalDateConverter.class, path = "dueDate")
-		@Convert(value = LocalTimeConverter.class, path = "dueTime")
-		@Convert(value = OrderStateConverter.class, path = "state")
-		@Convert(value = CurrencyFormatter.class, path = "items.product.price")
-		@Convert(value = LocalDateTimeConverter.class, path = "history.timestamp")
-		@Convert(value = OrderStateConverter.class, path = "history.newState")
-		@Convert(value = CurrencyFormatter.class, path = "totalPrice")
+		@Encode(value = LongToStringConverter.class, path = "id")
+		@Encode(value = StorefrontLocalDateConverter.class, path = "dueDate")
+		@Encode(value = LocalTimeConverter.class, path = "dueTime")
+		@Encode(value = OrderStateConverter.class, path = "state")
+		@Encode(value = CurrencyFormatter.class, path = "items.product.price")
+		@Encode(value = LocalDateTimeConverter.class, path = "history.timestamp")
+		@Encode(value = OrderStateConverter.class, path = "history.newState")
+		@Encode(value = CurrencyFormatter.class, path = "totalPrice")
 		void setItem(Order order);
 
 		void setReview(boolean review);
