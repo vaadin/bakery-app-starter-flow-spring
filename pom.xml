@@ -517,6 +517,8 @@
                         <configuration>
                             <trimStackTrace>false</trimStackTrace>
                             <systemPropertyVariables>
+                                <sauce.user>${sauce.user}</sauce.user>
+                                <sauce.sauceAccessKey>${sauce.sauceAccessKey}</sauce.sauceAccessKey>
                                 <sauce.options>${sauce.options}</sauce.options>
                             </systemPropertyVariables>
                         </configuration>
