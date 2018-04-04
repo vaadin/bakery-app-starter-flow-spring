@@ -21,7 +21,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Dependencies -->
-        <vaadin.version>10.0.0.beta4</vaadin.version>
+        <vaadin.version>10.0.0.beta3</vaadin.version>
 
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Overrides the old version specified by the Spring Boot parent -->
@@ -190,7 +190,8 @@
         <!-- Testing -->
         <dependency>
             <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-testbench</artifactId>
+	    <artifactId>vaadin-testbench</artifactId>
+	    <version>10.0.0.beta4</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
