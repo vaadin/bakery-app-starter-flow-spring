@@ -13,7 +13,7 @@
         color: var(--lumo-body-text-color);
         font-family: var(--lumo-font-family);
         overflow: auto;
-        flex-direction: column-reverse;
+        flex-direction: column;
       }
 
       app-container ::slotted(:not(app-navigation)) {
@@ -21,7 +21,7 @@
         align-items: center;
       }
 
-      @media (max-height: 600px) {
+      @media (max-width: 600px) {
         app-navigation {
           transition: all 0.5s;
           height: 52px;
@@ -30,11 +30,9 @@
         app-navigation[nav-hidden] {
           height: 0;
         }
-      }
 
-      @media (min-width: 600px) {
         app-container {
-          flex-direction: column;
+          flex-direction: column-reverse;
         }
       }
 
