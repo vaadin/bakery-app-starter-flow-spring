@@ -21,7 +21,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Dependencies -->
-        <vaadin.version>10.0.0.beta5</vaadin.version>
+        <vaadin.version>10.0.0.beta6</vaadin.version>
 
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Overrides the old version specified by the Spring Boot parent -->
@@ -327,7 +327,6 @@
                                       <name>grid-fragment</name>
                                       <files>
                                         <file>gridConnector.js</file>
-                                        <file>flow-grid-component-renderer.html</file>
                                         <file>vaadin-grid-flow-selection-column.html</file>
                                         <file>bower_components/vaadin-grid/vaadin-grid.html</file>
                                         <file>bower_components/vaadin-grid/vaadin-grid-column.html</file>
