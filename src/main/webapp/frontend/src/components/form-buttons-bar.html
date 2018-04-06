@@ -1,66 +1,28 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/vaadin-button/src/vaadin-button.html">
-
 <link rel="import" href="buttons-bar.html">
 
 <dom-module id="form-buttons-bar">
   <template>
-    <buttons-bar>
-      <vaadin-button id="save" slot="left" on-click="_save" theme="raised primary" disabled="[[saveDisabled]]">[[saveText]]</vaadin-button>
-      <vaadin-button id="cancel" slot="left" on-click="_cancel" theme="raised" disabled="[[cancelDisabled]]">[[cancelText]]</vaadin-button>
-      <vaadin-button id="delete" slot="right" on-click="_delete" theme="raised tertiary error" disabled="[[deleteDisabled]]">[[deleteText]]</vaadin-button>
-    </buttons-bar>
-  </template>
-
+<buttons-bar>
+ <vaadin-button id="save" slot="left" theme="raised primary">
+   Save
+ </vaadin-button>
+ <vaadin-button id="cancel" slot="left" theme="raised">
+   Cancel
+ </vaadin-button>
+ <vaadin-button id="delete" slot="right" theme="raised tertiary error">
+   Delete
+ </vaadin-button>
+</buttons-bar>
+</template>
   <script>
     {
       class FormButtonsBarElement extends Polymer.Element {
         static get is() {
           return 'form-buttons-bar';
         }
-
-        static get properties() {
-          return {
-            saveText: {
-              type: String,
-              value: 'Save'
-            },
-            cancelText: {
-              type: String,
-              value: 'Cancel'
-            },
-            deleteText: {
-              type: String,
-              value: 'Delete'
-            },
-            saveDisabled: {
-              type: Boolean
-            },
-            cancelDisabled: {
-              type: Boolean
-            },
-            deleteDisabled: {
-              type: Boolean
-            },
-          };
-        }
-
-        /** @event save */
-        _save() {
-          this.dispatchEvent(new CustomEvent('save'));
-        }
-
-        /** @event cancel */
-        _cancel() {
-          this.dispatchEvent(new CustomEvent('cancel'));
-        }
-
-        /** @event delete */
-        _delete() {
-          this.dispatchEvent(new CustomEvent('delete'));
-        }
       }
-
       window.customElements.define(FormButtonsBarElement.is, FormButtonsBarElement);
     }
   </script>
