@@ -3,43 +3,52 @@ package com.vaadin.starter.bakery.ui.components;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.DomEvent;
 import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.polymertemplate.Id;
+import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.shared.Registration;
+import com.vaadin.flow.templatemodel.TemplateModel;
 
 /**
  * Java wrapper of the polymer element `form-buttons-bar`
  */
 @Tag("form-buttons-bar")
 @HtmlImport("src/components/form-buttons-bar.html")
-public class FormButtonsBar extends Component {
+public class FormButtonsBar extends PolymerTemplate<TemplateModel> {
+
+	@Id("save")
+	private Button save;
+	@Id("cancel")
+	private Button cancel;
+	@Id("delete")
+	private Button delete;
 
 	public void setSaveText(String saveText) {
-		getElement().setProperty("saveText", saveText == null ? "" : saveText);
+		save.setText(saveText == null ? "" : saveText);
 	}
 
 	public void setCancelText(String cancelText) {
-		getElement().setProperty("cancelText", cancelText == null ? "" : cancelText);
+		cancel.setText(cancelText == null ? "" : cancelText);
 	}
 
 	public void setDeleteText(String deleteText) {
-		getElement().setProperty("deleteText", deleteText == null ? "" : deleteText);
+		delete.setText(deleteText == null ? "" : deleteText);
 	}
 
 	public void setSaveDisabled(boolean saveDisabled) {
-		getElement().setProperty("saveDisabled", saveDisabled);
+		save.setEnabled(!saveDisabled);
 	}
 
 	public void setCancelDisabled(boolean cancelDisabled) {
-		getElement().setProperty("cancelDisabled", cancelDisabled);
+		cancel.setEnabled(!cancelDisabled);
 	}
 
 	public void setDeleteDisabled(boolean deleteDisabled) {
-		getElement().setProperty("deleteDisabled", deleteDisabled);
+		delete.setEnabled(!deleteDisabled);
 	}
 
-	@DomEvent("save")
 	public static class SaveEvent extends ComponentEvent<FormButtonsBar> {
 		public SaveEvent(FormButtonsBar source, boolean fromClient) {
 			super(source, fromClient);
@@ -47,10 +56,9 @@ public class FormButtonsBar extends Component {
 	}
 
 	public Registration addSaveListener(ComponentEventListener<SaveEvent> listener) {
-		return addListener(SaveEvent.class, listener);
+		return save.addClickListener(e -> listener.onComponentEvent(new SaveEvent(this, true)));
 	}
 
-	@DomEvent("cancel")
 	public static class CancelEvent extends ComponentEvent<FormButtonsBar> {
 		public CancelEvent(FormButtonsBar source, boolean fromClient) {
 			super(source, fromClient);
@@ -58,10 +66,9 @@ public class FormButtonsBar extends Component {
 	}
 
 	public Registration addCancelListener(ComponentEventListener<CancelEvent> listener) {
-		return addListener(CancelEvent.class, listener);
+		return cancel.addClickListener(e -> listener.onComponentEvent(new CancelEvent(this, true)));
 	}
 
-	@DomEvent("delete")
 	public static class DeleteEvent extends ComponentEvent<FormButtonsBar> {
 		public DeleteEvent(FormButtonsBar source, boolean fromClient) {
 			super(source, fromClient);
@@ -69,6 +76,6 @@ public class FormButtonsBar extends Component {
 	}
 
 	public Registration addDeleteListener(ComponentEventListener<DeleteEvent> listener) {
-		return addListener(DeleteEvent.class, listener);
+		return delete.addClickListener(e -> listener.onComponentEvent(new DeleteEvent(this, true)));
 	}
 }
