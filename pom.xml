@@ -25,7 +25,7 @@
 
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Overrides the old version specified by the Spring Boot parent -->
-        <selenium.version>3.6.0</selenium.version>
+        <selenium.version>3.11.0</selenium.version>
         <!-- Override Hibernate version to get Java 8 date/time support -->
         <hibernate.version>5.2.12.Final</hibernate.version>
 
@@ -186,11 +186,16 @@
             <groupId>org.reactivestreams</groupId>
             <artifactId>reactive-streams</artifactId>
         </dependency>
-
         <!-- Testing -->
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-testbench</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-testbench-core</artifactId>
+            <version>6.0.0.beta5</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -448,7 +453,7 @@
                     <plugin>
                         <groupId>com.lazerycode.selenium</groupId>
                         <artifactId>driver-binary-downloader-maven-plugin</artifactId>
-                        <version>1.0.12</version>
+                        <version>1.0.17</version>
                         <configuration>
                             <!-- root directory that downloaded driver binaries will be stored
                                 in -->
@@ -470,7 +475,11 @@
         </profile>
 
         <profile>
-            <id>it-hub</id>
+            <id>it-saucelabs</id>
+            <properties>
+                <sauce.options>--tunnel-identifier ${maven.build.timestamp}</sauce.options>
+                <maven.build.timestamp.format>yyyy-MM-dd'T'HHmmss.SSSZ</maven.build.timestamp.format>
+            </properties>
             <build>
                 <plugins>
                     <plugin>
@@ -508,10 +517,43 @@
                         <configuration>
                             <trimStackTrace>false</trimStackTrace>
                             <systemPropertyVariables>
-                                <com.vaadin.testbench.Parameters.hubHostname>tb3-hub.intra.itmill.com
-                                </com.vaadin.testbench.Parameters.hubHostname>
+                                <sauce.user>${sauce.user}</sauce.user>
+                                <sauce.sauceAccessKey>${sauce.sauceAccessKey}</sauce.sauceAccessKey>
+                                <sauce.options>${sauce.options}</sauce.options>
+                                <com.vaadin.testbench.Parameters.gridBrowsers>${com.vaadin.testbench.Parameters.gridBrowsers}</com.vaadin.testbench.Parameters.gridBrowsers>
                             </systemPropertyVariables>
                         </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>com.saucelabs.maven.plugin</groupId>
+                        <artifactId>sauce-connect-plugin</artifactId>
+                        <version>2.1.23</version>
+                        <executions>
+                            <!-- Start Sauce Connect prior to running the integration tests -->
+                            <execution>
+                                <id>start-sauceconnect</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start-sauceconnect</goal>
+                                </goals>
+                            </execution>
+                            <!-- Stop the Sauce Connect process after the integration tests have
+                                finished -->
+                            <execution>
+                                <id>stop-sauceconnect</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop-sauceconnect</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>javax.xml.bind</groupId>
+                                <artifactId>jaxb-api</artifactId>
+                                <version>2.3.0</version>
+                            </dependency>
+                        </dependencies>
                     </plugin>
                 </plugins>
             </build>
