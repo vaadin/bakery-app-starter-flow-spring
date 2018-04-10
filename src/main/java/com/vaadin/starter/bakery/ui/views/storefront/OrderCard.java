@@ -78,7 +78,7 @@ public class OrderCard {
 	}
 
 	public String getState() {
-		return stateConverter.toPresentation(order.getState());
+		return stateConverter.encode(order.getState());
 	}
 
 	public String getFullName() {

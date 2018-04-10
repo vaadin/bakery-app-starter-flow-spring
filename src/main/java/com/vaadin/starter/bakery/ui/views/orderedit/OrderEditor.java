@@ -131,7 +131,7 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 		SortedSet<LocalTime> timeValues = IntStream.rangeClosed(8, 16).mapToObj(i -> LocalTime.of(i, 0))
 				.collect(Collectors.toCollection(TreeSet::new));
 		dueTime.setItems(timeValues);
-		dueTime.setItemLabelGenerator(localTimeConverter::toPresentation);
+		dueTime.setItemLabelGenerator(localTimeConverter::encode);
 		binder.bind(dueTime, "dueTime");
 
 		pickupLocation.setItemLabelGenerator(createItemLabelGenerator(PickupLocation::getName));
