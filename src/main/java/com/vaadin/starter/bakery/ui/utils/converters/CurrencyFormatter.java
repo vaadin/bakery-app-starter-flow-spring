@@ -11,11 +11,6 @@ public class CurrencyFormatter implements ModelEncoder<Integer, String> {
 		return DataProviderUtil.convertIfNotNull(modelValue, FormattingUtils::formatAsCurrency);
 	}
 
-//	@Override
-//	public Class<Integer> getModelType() {
-//		return Integer.TYPE;
-//	}
-
 	@Override
 	public Integer decode(String presentationValue) {
 		throw new UnsupportedOperationException();
