@@ -26,6 +26,6 @@ class PriceConverter implements Converter<String, Integer> {
 
 	@Override
 	public String convertToPresentation(Integer modelValue, ValueContext valueContext) {
-		return convertIfNotNull(modelValue, i -> df.format(BigDecimal.valueOf(i, 2)));
+		return convertIfNotNull(modelValue, i -> df.format(BigDecimal.valueOf(i, 2)), () -> "");
 	}
 }

@@ -68,7 +68,7 @@ public class FormattingUtilsTest extends FormattingTest {
 	@Test
 	public void timeConverterShouldFormatDateWithAmPm() {
 		LocalDateTimeConverter lt = new LocalDateTimeConverter();
-		String result = lt.toPresentation(LocalDateTime.of(2016, 11, 27, 22, 15, 33));
+		String result = lt.encode(LocalDateTime.of(2016, 11, 27, 22, 15, 33));
 		assertEquals("27.11.2016 10:15 PM", result);
 	}
 

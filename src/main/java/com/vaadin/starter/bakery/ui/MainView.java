@@ -23,7 +23,6 @@ import java.util.List;
 
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.HtmlImport;
-import com.vaadin.flow.component.page.BodySize;
 import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
@@ -34,8 +33,6 @@ import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.templatemodel.TemplateModel;
-import com.vaadin.flow.theme.Theme;
-import com.vaadin.flow.theme.lumo.Lumo;
 import com.vaadin.starter.bakery.app.security.SecurityUtils;
 import com.vaadin.starter.bakery.ui.components.AppNavigation;
 import com.vaadin.starter.bakery.ui.entities.PageInfo;
@@ -50,9 +47,7 @@ import com.vaadin.starter.bakery.ui.views.admin.users.UsersView;
 @HtmlImport("bower_components/vaadin-form-layout/theme/lumo/vaadin-form-layout.html")
 
 @PageTitle("###Bakery###")
-@BodySize(height = "100vh", width = "100vw")
 @Viewport(VIEWPORT)
-@Theme(Lumo.class)
 public class MainView extends PolymerTemplate<TemplateModel>
 		implements RouterLayout, BeforeEnterObserver, AfterNavigationObserver {
 

@@ -1,11 +1,11 @@
 package com.vaadin.starter.bakery.ui.utils.converters;
 
-import com.vaadin.flow.templatemodel.ModelConverter;
+import com.vaadin.flow.templatemodel.ModelEncoder;
 
-public class LongToStringConverter implements ModelConverter<Long, String> {
+public class LongToStringConverter implements ModelEncoder<Long, String> {
 
 	@Override
-	public String toPresentation(Long modelValue) {
+	public String encode(Long modelValue) {
 		if (modelValue == null) {
 			return null;
 		}
@@ -13,7 +13,7 @@ public class LongToStringConverter implements ModelConverter<Long, String> {
 	}
 
 	@Override
-	public Long toModel(String presentationValue) {
+	public Long decode(String presentationValue) {
 		if (presentationValue == null) {
 			return null;
 		}

@@ -95,6 +95,7 @@ public class UsersViewIT extends AbstractIT {
 		usersView.getRole().selectByText(role);
 
 		usersView.getButtonsBar().getSaveButton().click();
+		Assert.assertFalse(usersView.getDialog().isOpen());
 
 		NotificationElement notification = $(NotificationElement.class).last();
 		Assert.assertTrue(notification.getText().contains("was created"));
