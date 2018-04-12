@@ -1,6 +1,7 @@
 package com.vaadin.starter.bakery.testbench;
 
 import static com.vaadin.starter.bakery.backend.service.UserService.MODIFY_LOCKED_USER_NOT_PERMITTED;
+import static org.hamcrest.CoreMatchers.containsString;
 
 import java.util.Random;
 
@@ -59,7 +60,7 @@ public class UsersViewIT extends AbstractIT {
 		Assert.assertFalse(usersView.getDialog().isOpen());
 
 		NotificationElement notification = $(NotificationElement.class).last();
-		Assert.assertTrue(notification.getText().contains("was updated"));
+		Assert.assertThat(notification.getText(), containsString("was updated"));
 
 
 		// Invalid password prevents closing form
@@ -98,7 +99,7 @@ public class UsersViewIT extends AbstractIT {
 		Assert.assertFalse(usersView.getDialog().isOpen());
 
 		NotificationElement notification = $(NotificationElement.class).last();
-		Assert.assertTrue(notification.getText().contains("was created"));
+		Assert.assertThat(notification.getText(), containsString("was created"));
 	}
 
 	@Test
@@ -111,10 +112,10 @@ public class UsersViewIT extends AbstractIT {
 		field.setValue("Abc123");
 		page.getButtonsBar().getSaveButton().click();
 
-		NotificationElement toast = $(NotificationElement.class).last();
+		NotificationElement notification = $(NotificationElement.class).last();
 
-		Assert.assertTrue(toast.getText().contains(MODIFY_LOCKED_USER_NOT_PERMITTED));
-		Assert.assertTrue(toast.isOpen());
+		Assert.assertThat(notification.getText(), containsString(MODIFY_LOCKED_USER_NOT_PERMITTED));
+		Assert.assertTrue(notification.isOpen());
 	}
 
 	@Test
@@ -126,8 +127,8 @@ public class UsersViewIT extends AbstractIT {
 		page.getButtonsBar().getDeleteButton().click();
 		page.getConfirmDialog().confirm();
 
-		NotificationElement toast = $(NotificationElement.class).last();
-		Assert.assertTrue(toast.getText().contains(MODIFY_LOCKED_USER_NOT_PERMITTED));
-		Assert.assertTrue(toast.isOpen());
+		NotificationElement notification = $(NotificationElement.class).last();
+		Assert.assertThat(notification.getText(), containsString(MODIFY_LOCKED_USER_NOT_PERMITTED));
+		Assert.assertTrue(notification.isOpen());
 	}
 }
