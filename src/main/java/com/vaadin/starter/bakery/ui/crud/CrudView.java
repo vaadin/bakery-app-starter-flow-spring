@@ -15,7 +15,6 @@ import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
-import com.vaadin.starter.bakery.ui.components.ConfirmDialog;
 import com.vaadin.starter.bakery.ui.components.FormButtonsBar;
 import com.vaadin.starter.bakery.ui.components.SearchBar;
 import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
@@ -48,12 +47,8 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 
 	protected abstract Grid<E> getGrid();
 
-	protected final ConfirmDialog confirmation = new ConfirmDialog();
-
 	public CrudView(String entityName) {
 		this.entityName = entityName;
-		confirmation.setOpened(false);
-		getElement().appendChild(confirmation.getElement());
 	}
 
 
@@ -86,11 +81,6 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 
 	protected void navigateToEntity(String id) {
 		getUI().ifPresent(ui -> ui.navigate(TemplateUtil.generateLocation(getBasePage(), id)));
-	}
-
-	@Override
-	public ConfirmDialog getConfirmDialog() {
-		return confirmation;
 	}
 
 	@Override
