@@ -18,6 +18,7 @@ import com.vaadin.starter.bakery.backend.data.Role;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.util.EntityUtil;
 import com.vaadin.starter.bakery.ui.MainView;
+import com.vaadin.starter.bakery.ui.components.ConfirmDialog;
 import com.vaadin.starter.bakery.ui.components.SearchBar;
 import com.vaadin.starter.bakery.ui.crud.CrudEntityPresenter;
 import com.vaadin.starter.bakery.ui.crud.CrudView;
@@ -39,6 +40,9 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 
 	@Id("dialog")
 	private Dialog dialog;
+
+	@Id("confirm")
+	private ConfirmDialog confirmDialog;
 
 	private ProductForm form = new ProductForm();
 
@@ -98,5 +102,10 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 	@Override
 	protected CrudForm<Product> getForm() {
 		return form;
+	}
+
+	@Override
+	public ConfirmDialog getConfirmDialog() {
+		return confirmDialog;
 	}
 }
