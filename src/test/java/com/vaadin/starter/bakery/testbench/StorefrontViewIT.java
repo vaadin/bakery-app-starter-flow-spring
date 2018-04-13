@@ -1,10 +1,12 @@
 package com.vaadin.starter.bakery.testbench;
 
-import com.vaadin.flow.component.notification.testbench.NotificationElement;
+import static org.hamcrest.CoreMatchers.containsString;
+
 import org.junit.Assert;
 import org.junit.Test;
 
 import com.vaadin.flow.component.button.testbench.ButtonElement;
+import com.vaadin.flow.component.notification.testbench.NotificationElement;
 import com.vaadin.starter.bakery.testbench.elements.components.OrderCardElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement.OrderEditorElement;
@@ -27,7 +29,7 @@ public class StorefrontViewIT extends AbstractIT {
 		firstOrder.click();
 		ButtonElement editBtn = storefrontPage.getOrderDetails().getEditButton();
 		editBtn.getWrappedElement().click();
-		Assert.assertTrue(getDriver().getCurrentUrl().contains(BakeryConst.PAGE_STOREFRONT_EDIT));
+		Assert.assertThat(getDriver().getCurrentUrl(), containsString(BakeryConst.PAGE_STOREFRONT_EDIT));
 
 		OrderEditorElement orderEditor = storefrontPage.getOrderEditor();
 		orderEditor.getOrderItemEditor(0).clickAmountFieldPlus();
@@ -36,7 +38,7 @@ public class StorefrontViewIT extends AbstractIT {
 		storefrontPage.getOrderDetails().getSaveButton().click();
 
 		NotificationElement notification = $(NotificationElement.class).last();
-		Assert.assertTrue(notification.getText().contains("was updated"));
+		Assert.assertThat(notification.getText(), containsString("was updated"));
 
 		int currentCount = Integer.parseInt(storefrontPage.getOrderCard(0).getGoodsCount(0));
 		Assert.assertEquals(initialCount + 1, currentCount);
