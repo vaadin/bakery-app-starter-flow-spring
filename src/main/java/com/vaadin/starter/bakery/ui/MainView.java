@@ -26,8 +26,6 @@ import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
-import com.vaadin.flow.router.AfterNavigationEvent;
-import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
@@ -49,7 +47,7 @@ import com.vaadin.starter.bakery.ui.views.admin.users.UsersView;
 @PageTitle("###Bakery###")
 @Viewport(VIEWPORT)
 public class MainView extends PolymerTemplate<TemplateModel>
-		implements RouterLayout, BeforeEnterObserver, AfterNavigationObserver {
+		implements RouterLayout, BeforeEnterObserver {
 
 	@Id("appNavigation")
 	private AppNavigation appNavigation;
@@ -75,11 +73,5 @@ public class MainView extends PolymerTemplate<TemplateModel>
 		if (!SecurityUtils.isAccessGranted(event.getNavigationTarget())) {
 			event.rerouteToError(AccessDeniedException.class);
 		}
-	}
-
-	@Override
-	public void afterNavigation(AfterNavigationEvent event) {
-		// Workaround until flow notifies all components in the view (#3649)
-		appNavigation.afterNavigation(event);
 	}
 }
