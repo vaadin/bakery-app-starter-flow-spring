@@ -5,12 +5,18 @@ import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.starter.bakery.testbench.elements.components.SearchBarElement;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elementsbase.Element;
+import org.openqa.selenium.WebDriver;
 
 @Element("products-view")
 public class ProductsViewElement extends TestBenchElement implements HasApp, HasCrudView {
 
 	@Element("product-form")
 	public static class ProductFormElement extends TestBenchElement {
+	}
+
+	@Override
+	public WebDriver getRootContext() {
+		return getDriver();
 	}
 
 	@Override

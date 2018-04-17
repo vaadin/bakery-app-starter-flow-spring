@@ -26,6 +26,7 @@ import com.vaadin.starter.bakery.ui.utils.converters.CurrencyFormatter;
 
 @Tag("products-view")
 @HtmlImport("src/views/admin/products/products-view.html")
+@HtmlImport("src/components/confirm-dialog.html")
 @Route(value = PAGE_PRODUCTS, layout = MainView.class)
 @PageTitle(BakeryConst.TITLE_PRODUCTS)
 @Secured(Role.ADMIN)
@@ -36,9 +37,6 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 
 	@Id("grid")
 	private Grid<Product> grid;
-
-	@Id("dialog")
-	private Dialog dialog;
 
 	private ProductForm form = new ProductForm();
 
@@ -53,7 +51,9 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 		super(EntityUtil.getName(Product.class));
 		this.presenter = presenter;
 		form.setBinder(binder);
-		dialog.add(form);
+		getDialog().add(form);
+		getDialog().getElement().setProperty("theme", "right");
+
 		setupEventListeners();
 		setupGrid();
 		presenter.setView(this);
@@ -82,12 +82,6 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 	@Override
 	protected BeanValidationBinder<Product> getBinder() {
 		return binder;
-	}
-
-
-	@Override
-	protected Dialog getDialog() {
-		return dialog;
 	}
 
 	@Override

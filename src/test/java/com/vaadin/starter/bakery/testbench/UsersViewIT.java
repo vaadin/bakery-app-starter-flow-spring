@@ -5,6 +5,8 @@ import static org.hamcrest.CoreMatchers.containsString;
 
 import java.util.Random;
 
+import com.vaadin.testbench.ElementQuery;
+import com.vaadin.testbench.elementsbase.Element;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.Keys;
@@ -31,7 +33,7 @@ public class UsersViewIT extends AbstractIT {
 	public void updatePassword() {
 		UsersViewElement usersView = openTestPage();
 
-		Assert.assertFalse(usersView.getDialog().isOpen());
+		Assert.assertFalse(usersView.getDialog().isPresent());
 
 		String uniqueEmail = "e" + r.nextInt() + "@vaadin.com";
 
@@ -42,7 +44,7 @@ public class UsersViewIT extends AbstractIT {
 
 		bakerCell.click();
 
-		Assert.assertTrue(usersView.getDialog().isOpen());
+		Assert.assertTrue(usersView.getDialog().get().isOpen());
 
 		FormLayoutElement form = usersView.getForm();
 		Assert.assertTrue(form.isDisplayed());
@@ -57,27 +59,33 @@ public class UsersViewIT extends AbstractIT {
 
 		usersView.getButtonsBar().getSaveButton().click();
 
-		Assert.assertFalse(usersView.getDialog().isOpen());
+		Assert.assertFalse(usersView.getDialog().isPresent());
 
-		NotificationElement notification = $(NotificationElement.class).last();
+		NotificationElement notification = lastNotification();
 		Assert.assertThat(notification.getText(), containsString("was updated"));
 
 
 		// Invalid password prevents closing form
 		bakerCell.click();
+		emailField = usersView.getEmailField(); // Requery email field.
+		password = usersView.getPasswordField(); // Requery password field.
+
 		emailField.setValue(uniqueEmail);
 		password.setValue("123");
 
 		usersView.getButtonsBar().getSaveButton().click();
-		notification = $(NotificationElement.class).last();
+		notification = lastNotification();
+		form = usersView.getForm();
 		Assert.assertTrue(form.isDisplayed());
 		Assert.assertEquals(CrudErrorMessage.REQUIRED_FIELDS_MISSING, notification.getText());
+
+		password = usersView.getPasswordField(); // Requery password field.
 
 		// Good password
 		password.setValue("Abc123");
 		password.sendKeys(Keys.TAB);
 		usersView.getButtonsBar().getSaveButton().click();
-		Assert.assertFalse(usersView.getDialog().isOpen());
+		Assert.assertFalse(usersView.getDialog().isPresent());
 
 		// When reopening the form password field must be empty.
 		bakerCell.click();
@@ -87,7 +95,7 @@ public class UsersViewIT extends AbstractIT {
 	private void createUser(UsersViewElement usersView, String email, String firstName, String lastName,
 							String password, String role) {
 		usersView.getSearchBar().getCreateNewButton().click();
-		Assert.assertTrue(usersView.getDialog().isOpen());
+		Assert.assertTrue(usersView.getDialog().get().isOpen());
 
 		usersView.getEmailField().setValue(email);
 		usersView.getFirstName().setValue(firstName);
@@ -96,9 +104,9 @@ public class UsersViewIT extends AbstractIT {
 		usersView.getRole().selectByText(role);
 
 		usersView.getButtonsBar().getSaveButton().click();
-		Assert.assertFalse(usersView.getDialog().isOpen());
+		Assert.assertFalse(usersView.getDialog().isPresent());
 
-		NotificationElement notification = $(NotificationElement.class).last();
+		NotificationElement notification = lastNotification();
 		Assert.assertThat(notification.getText(), containsString("was created"));
 	}
 
@@ -112,7 +120,7 @@ public class UsersViewIT extends AbstractIT {
 		field.setValue("Abc123");
 		page.getButtonsBar().getSaveButton().click();
 
-		NotificationElement notification = $(NotificationElement.class).last();
+		NotificationElement notification = lastNotification();
 
 		Assert.assertThat(notification.getText(), containsString(MODIFY_LOCKED_USER_NOT_PERMITTED));
 		Assert.assertTrue(notification.isOpen());
@@ -125,10 +133,18 @@ public class UsersViewIT extends AbstractIT {
 		page.getGrid().getCell("barista@vaadin.com").click();
 
 		page.getButtonsBar().getDeleteButton().click();
-		page.getConfirmDialog().confirm();
+		page.getConfirmDialog().get().confirm();
 
-		NotificationElement notification = $(NotificationElement.class).last();
+		NotificationElement notification = lastNotification();
 		Assert.assertThat(notification.getText(), containsString(MODIFY_LOCKED_USER_NOT_PERMITTED));
 		Assert.assertTrue(notification.isOpen());
+	}
+
+	private NotificationElement lastNotification() {
+		ElementQuery<NotificationElement> query = new ElementQuery<>(NotificationElement.class,
+				NotificationElement.class.getAnnotation(Element.class).value())
+				.context(getDriver());
+
+		return query.last();
 	}
 }

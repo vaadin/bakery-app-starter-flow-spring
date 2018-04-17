@@ -4,6 +4,7 @@
 package com.vaadin.starter.bakery.ui.crud;
 
 import com.vaadin.flow.component.HasText;
+import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
@@ -15,12 +16,14 @@ import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
+import com.vaadin.starter.bakery.ui.components.EntityDialog;
 import com.vaadin.starter.bakery.ui.components.ConfirmDialog;
 import com.vaadin.starter.bakery.ui.components.FormButtonsBar;
 import com.vaadin.starter.bakery.ui.components.SearchBar;
 import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
 import com.vaadin.starter.bakery.ui.views.EntityView;
 
+@HtmlImport("bower_components/vaadin-dialog/src/vaadin-dialog.html")
 public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel> extends PolymerTemplate<T>
 		implements HasLogger, EntityView<E>, HasUrlParameter<Long> {
 
@@ -32,6 +35,10 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 		void setBinder(BeanValidationBinder<E> binder);
 	}
 
+	private final Dialog dialog = new EntityDialog();
+
+	private final ConfirmDialog confirmation = new ConfirmDialog();
+
 	private final String entityName;
 
 	protected abstract CrudEntityPresenter<E> getPresenter();
@@ -42,18 +49,13 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 
 	protected abstract CrudForm<E> getForm();
 
-	protected abstract Dialog getDialog();
-
 	protected abstract SearchBar getSearchBar();
 
 	protected abstract Grid<E> getGrid();
 
-	protected final ConfirmDialog confirmation = new ConfirmDialog();
-
 	public CrudView(String entityName) {
 		this.entityName = entityName;
 		confirmation.setOpened(false);
-		getElement().appendChild(confirmation.getElement());
 	}
 
 
@@ -100,6 +102,10 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 		} else if (getDialog().isOpened()) {
 		    getPresenter().closeSilently();
         }
+	}
+
+	public Dialog getDialog() {
+		return dialog;
 	}
 
 	public void closeDialog() {

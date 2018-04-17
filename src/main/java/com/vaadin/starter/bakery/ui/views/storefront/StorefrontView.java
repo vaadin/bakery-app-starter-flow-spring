@@ -3,6 +3,7 @@ package com.vaadin.starter.bakery.ui.views.storefront;
 import java.util.stream.Stream;
 
 import com.vaadin.starter.bakery.backend.data.entity.util.EntityUtil;
+import com.vaadin.starter.bakery.ui.components.EntityDialog;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.HasValue;
@@ -46,8 +47,7 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 	@Id("grid")
 	private Grid<Order> grid;
 
-	@Id("dialog")
-	private Dialog dialog;
+	private final Dialog dialog = new EntityDialog();
 
 	private final ConfirmDialog confirmation = new ConfirmDialog();
 
@@ -82,6 +82,7 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 
 		presenter.init(this);
 
+		dialog.getElement().setProperty("theme", "middle");
 		dialog.getElement().addEventListener("opened-changed", e -> {
 			if (!dialog.isOpened()) {
 				// Handle client-side closing dialog on escape
@@ -90,7 +91,6 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 		});
 
 		confirmation.setOpened(false);
-		getElement().appendChild(confirmation.getElement());
 	}
 
 	@Override

@@ -1,0 +1,52 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/vaadin-button/src/vaadin-button.html">
+<link rel="import" href="../../bower_components/vaadin-dialog/src/vaadin-dialog.html">
+
+<link rel="import" href="../../styles/shared-styles.html">
+
+<dom-module id="entity-dialog">
+  <template>
+    <style>
+      :host {
+        display: none;
+      }
+    </style>
+
+    <vaadin-dialog-overlay id="overlay"
+                           on-opened-changed="_onOverlayOpened"
+                           with-backdrop
+                           focus-trap>
+        <template>
+          <style>
+            [part="content"] {
+              padding: var(--lumo-space-s);
+            }
+          </style>
+        </template>
+    </vaadin-dialog-overlay>
+  </template>
+  <script>
+    {
+      class EntityDialogElement extends window.Vaadin.DialogElement {
+        static get is() {
+          return 'entity-dialog';
+        }
+
+        static get properties() {
+          return {
+            theme: {
+              type: String,
+              observer: '_setTheme'
+            }
+          }
+        }
+
+        _setTheme(value) {
+          this.$.overlay.setAttribute('theme', value);
+        }
+      }
+
+      window.customElements.define(EntityDialogElement.is, EntityDialogElement);
+    }
+  </script>
+</dom-module>
