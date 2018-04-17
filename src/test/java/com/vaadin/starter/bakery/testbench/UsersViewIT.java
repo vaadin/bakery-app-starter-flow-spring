@@ -89,6 +89,7 @@ public class UsersViewIT extends AbstractIT {
 
 		// When reopening the form password field must be empty.
 		bakerCell.click();
+		password = usersView.getPasswordField(); // Requery password field.
 		Assert.assertEquals("", password.getAttribute("value"));
 	}
 
