@@ -3,6 +3,7 @@
  */
 package com.vaadin.starter.bakery.ui.crud;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasText;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -39,6 +40,8 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 
 	private final ConfirmDialog confirmation = new ConfirmDialog();
 
+	private final CrudForm<E> form;
+
 	private final String entityName;
 
 	protected abstract CrudEntityPresenter<E> getPresenter();
@@ -47,17 +50,22 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 
 	protected abstract BeanValidationBinder<E> getBinder();
 
-	protected abstract CrudForm<E> getForm();
-
 	protected abstract SearchBar getSearchBar();
 
 	protected abstract Grid<E> getGrid();
 
-	public CrudView(String entityName) {
+	public CrudView(String entityName, CrudForm<E> form) {
 		this.entityName = entityName;
+		this.form = form;
 		confirmation.setOpened(false);
+
+        getDialog().add((Component) getForm());
+        getDialog().getElement().setProperty("theme", "right");
 	}
 
+    public CrudForm<E> getForm() {
+        return form;
+    }
 
 	public void setupEventListeners() {
 		getGrid().addSelectionListener(e -> {

@@ -35,20 +35,15 @@ public class UsersView extends CrudView<User, TemplateModel> {
 	@Id("grid")
 	private Grid<User> grid;
 
-	private final UserForm form;
-
 	private final CrudEntityPresenter<User> presenter;
 
 	private final BeanValidationBinder<User> binder = new BeanValidationBinder<>(User.class);
 
 	@Autowired
 	public UsersView(CrudEntityPresenter<User> presenter, UserForm form) {
-		super(EntityUtil.getName(User.class));
+		super(EntityUtil.getName(User.class), form);
 		this.presenter = presenter;
-		this.form = form;
 		form.setBinder(binder);
-		getDialog().add(form);
-		getDialog().getElement().setProperty("theme", "right");
 
 		setupEventListeners();
 		setupGrid();
@@ -84,10 +79,5 @@ public class UsersView extends CrudView<User, TemplateModel> {
 	@Override
 	protected BeanValidationBinder<User> getBinder() {
 		return binder;
-	}
-
-	@Override
-	protected CrudForm<User> getForm() {
-		return form;
 	}
 }

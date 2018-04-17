@@ -38,8 +38,6 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 	@Id("grid")
 	private Grid<Product> grid;
 
-	private ProductForm form = new ProductForm();
-
 	private CrudEntityPresenter<Product> presenter;
 
 	private final BeanValidationBinder<Product> binder = new BeanValidationBinder<>(Product.class);
@@ -47,12 +45,10 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 	private CurrencyFormatter currencyFormatter = new CurrencyFormatter();
 
 	@Autowired
-	public ProductsView(CrudEntityPresenter<Product> presenter) {
-		super(EntityUtil.getName(Product.class));
+	public ProductsView(CrudEntityPresenter<Product> presenter, ProductForm form) {
+		super(EntityUtil.getName(Product.class), form);
 		this.presenter = presenter;
 		form.setBinder(binder);
-		getDialog().add(form);
-		getDialog().getElement().setProperty("theme", "right");
 
 		setupEventListeners();
 		setupGrid();
@@ -87,10 +83,5 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 	@Override
 	protected SearchBar getSearchBar() {
 		return search;
-	}
-
-	@Override
-	protected CrudForm<Product> getForm() {
-		return form;
 	}
 }
