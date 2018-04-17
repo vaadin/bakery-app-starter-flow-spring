@@ -26,7 +26,6 @@ import com.vaadin.starter.bakery.ui.utils.converters.CurrencyFormatter;
 
 @Tag("products-view")
 @HtmlImport("src/views/admin/products/products-view.html")
-@HtmlImport("src/components/confirm-dialog.html")
 @Route(value = PAGE_PRODUCTS, layout = MainView.class)
 @PageTitle(BakeryConst.TITLE_PRODUCTS)
 @Secured(Role.ADMIN)
