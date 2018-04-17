@@ -59,12 +59,12 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 		this.form = form;
 		confirmation.setOpened(false);
 
-        getDialog().add((Component) getForm());
-        getDialog().getElement().setProperty("theme", "right");
+		getDialog().add((Component) getForm());
+		getDialog().getElement().setProperty("theme", "right");
 	}
 
     public CrudForm<E> getForm() {
-        return form;
+		return form;
     }
 
 	public void setupEventListeners() {
