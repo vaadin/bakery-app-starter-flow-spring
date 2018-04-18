@@ -7,7 +7,6 @@ import org.springframework.security.access.annotation.Secured;
 
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.HtmlImport;
-import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
@@ -37,11 +36,6 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 	@Id("grid")
 	private Grid<Product> grid;
 
-	@Id("dialog")
-	private Dialog dialog;
-
-	private ProductForm form = new ProductForm();
-
 	private CrudEntityPresenter<Product> presenter;
 
 	private final BeanValidationBinder<Product> binder = new BeanValidationBinder<>(Product.class);
@@ -49,11 +43,11 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 	private CurrencyFormatter currencyFormatter = new CurrencyFormatter();
 
 	@Autowired
-	public ProductsView(CrudEntityPresenter<Product> presenter) {
-		super(EntityUtil.getName(Product.class));
+	public ProductsView(CrudEntityPresenter<Product> presenter, ProductForm form) {
+		super(EntityUtil.getName(Product.class), form);
 		this.presenter = presenter;
 		form.setBinder(binder);
-		dialog.add(form);
+
 		setupEventListeners();
 		setupGrid();
 		presenter.setView(this);
@@ -84,19 +78,8 @@ public class ProductsView extends CrudView<Product, TemplateModel>  {
 		return binder;
 	}
 
-
-	@Override
-	protected Dialog getDialog() {
-		return dialog;
-	}
-
 	@Override
 	protected SearchBar getSearchBar() {
 		return search;
-	}
-
-	@Override
-	protected CrudForm<Product> getForm() {
-		return form;
 	}
 }

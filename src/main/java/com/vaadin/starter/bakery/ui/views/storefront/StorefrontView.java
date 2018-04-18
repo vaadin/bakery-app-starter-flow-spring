@@ -2,6 +2,7 @@ package com.vaadin.starter.bakery.ui.views.storefront;
 
 import java.util.stream.Stream;
 
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.starter.bakery.backend.data.entity.util.EntityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -9,7 +10,6 @@ import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.HtmlImport;
-import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
@@ -46,8 +46,7 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 	@Id("grid")
 	private Grid<Order> grid;
 
-	@Id("dialog")
-	private Dialog dialog;
+	private final Dialog dialog = new Dialog();
 
 	private final ConfirmDialog confirmation = new ConfirmDialog();
 
@@ -82,6 +81,10 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 
 		presenter.init(this);
 
+		// Workaround for https://github.com/vaadin/vaadin-dialog-flow/issues/28
+		dialog.getElement().addAttachListener(event ->
+				UI.getCurrent().getPage().executeJavaScript(
+						"$0.$.overlay.setAttribute('theme', 'middle');", dialog.getElement()));
 		dialog.getElement().addEventListener("opened-changed", e -> {
 			if (!dialog.isOpened()) {
 				// Handle client-side closing dialog on escape
@@ -90,7 +93,6 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 		});
 
 		confirmation.setOpened(false);
-		getElement().appendChild(confirmation.getElement());
 	}
 
 	@Override

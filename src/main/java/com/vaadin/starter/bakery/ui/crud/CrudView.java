@@ -3,7 +3,9 @@
  */
 package com.vaadin.starter.bakery.ui.crud;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasText;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
@@ -32,6 +34,12 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 		void setBinder(BeanValidationBinder<E> binder);
 	}
 
+	private final Dialog dialog = new Dialog();
+
+	private final ConfirmDialog confirmation = new ConfirmDialog();
+
+	private final CrudForm<E> form;
+
 	private final String entityName;
 
 	protected abstract CrudEntityPresenter<E> getPresenter();
@@ -40,22 +48,25 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 
 	protected abstract BeanValidationBinder<E> getBinder();
 
-	protected abstract CrudForm<E> getForm();
-
-	protected abstract Dialog getDialog();
-
 	protected abstract SearchBar getSearchBar();
 
 	protected abstract Grid<E> getGrid();
 
-	protected final ConfirmDialog confirmation = new ConfirmDialog();
-
-	public CrudView(String entityName) {
+	public CrudView(String entityName, CrudForm<E> form) {
 		this.entityName = entityName;
+		this.form = form;
 		confirmation.setOpened(false);
-		getElement().appendChild(confirmation.getElement());
+
+		dialog.add((Component) getForm());
+		// Workaround for https://github.com/vaadin/vaadin-dialog-flow/issues/28
+		dialog.getElement().addAttachListener(event ->
+				UI.getCurrent().getPage().executeJavaScript(
+						"$0.$.overlay.setAttribute('theme', 'right');", dialog.getElement()));
 	}
 
+    public CrudForm<E> getForm() {
+		return form;
+    }
 
 	public void setupEventListeners() {
 		getGrid().addSelectionListener(e -> {
@@ -100,6 +111,10 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 		} else if (getDialog().isOpened()) {
 		    getPresenter().closeSilently();
         }
+	}
+
+	public Dialog getDialog() {
+		return dialog;
 	}
 
 	public void closeDialog() {

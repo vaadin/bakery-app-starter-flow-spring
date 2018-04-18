@@ -24,7 +24,7 @@ public class ProductsViewIT extends AbstractIT {
 	public void editProduct() {
 		ProductsViewElement productsPage = openProductsPage();
 
-		Assert.assertFalse(productsPage.getDialog().isOpen());
+		Assert.assertFalse(productsPage.getDialog().isPresent());
 
 		String url = getDriver().getCurrentUrl();
 		GridElement grid = productsPage.getGrid();
@@ -36,21 +36,23 @@ public class ProductsViewIT extends AbstractIT {
 		grid.getCell(uniqueName).click();
 		Assert.assertTrue(getDriver().getCurrentUrl().length() > url.length());
 
-		Assert.assertTrue(productsPage.getDialog().isOpen());
+		Assert.assertTrue(productsPage.getDialog().get().isOpen());
 
 		TextFieldElement price = productsPage.getPrice();
-		Assert.assertTrue(initialPrice.equals(price.getValue()));
+		Assert.assertEquals(initialPrice, price.getValue());
 
 		price.focus();
 		price.setValue("123.45");
 		price.sendKeys(Keys.TAB);
 		productsPage.getButtonsBar().getSaveButton().click();
 
-		Assert.assertFalse(productsPage.getDialog().isOpen());
+		Assert.assertFalse(productsPage.getDialog().isPresent());
 
 		Assert.assertTrue(getDriver().getCurrentUrl().endsWith("products"));
 
 		grid.getCell(uniqueName).click();
+
+		price = productsPage.getPrice(); // Requery the price element.
 		Assert.assertEquals("123.45", price.getValue());
 
 		// Return initial value
@@ -63,7 +65,7 @@ public class ProductsViewIT extends AbstractIT {
 	private void createProduct(ProductsViewElement productsPage, String name, String price) {
 		productsPage.getSearchBar().getCreateNewButton().click();
 
-		Assert.assertTrue(productsPage.getDialog().isOpen());
+		Assert.assertTrue(productsPage.getDialog().get().isOpen());
 
 		TextFieldElement nameField = productsPage.getProductName();
 		TextFieldElement priceField = productsPage.getPrice();

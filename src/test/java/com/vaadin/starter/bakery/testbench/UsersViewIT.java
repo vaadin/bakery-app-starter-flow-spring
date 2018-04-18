@@ -31,7 +31,7 @@ public class UsersViewIT extends AbstractIT {
 	public void updatePassword() {
 		UsersViewElement usersView = openTestPage();
 
-		Assert.assertFalse(usersView.getDialog().isOpen());
+		Assert.assertFalse(usersView.getDialog().isPresent());
 
 		String uniqueEmail = "e" + r.nextInt() + "@vaadin.com";
 
@@ -42,7 +42,7 @@ public class UsersViewIT extends AbstractIT {
 
 		bakerCell.click();
 
-		Assert.assertTrue(usersView.getDialog().isOpen());
+		Assert.assertTrue(usersView.getDialog().get().isOpen());
 
 		FormLayoutElement form = usersView.getForm();
 		Assert.assertTrue(form.isDisplayed());
@@ -57,7 +57,7 @@ public class UsersViewIT extends AbstractIT {
 
 		usersView.getButtonsBar().getSaveButton().click();
 
-		Assert.assertFalse(usersView.getDialog().isOpen());
+		Assert.assertFalse(usersView.getDialog().isPresent());
 
 		NotificationElement notification = $(NotificationElement.class).last();
 		Assert.assertThat(notification.getText(), containsString("was updated"));
@@ -65,29 +65,37 @@ public class UsersViewIT extends AbstractIT {
 
 		// Invalid password prevents closing form
 		bakerCell.click();
+		emailField = usersView.getEmailField(); // Requery email field.
+		password = usersView.getPasswordField(); // Requery password field.
+
 		emailField.setValue(uniqueEmail);
 		password.setValue("123");
 
 		usersView.getButtonsBar().getSaveButton().click();
 		notification = $(NotificationElement.class).last();
-		Assert.assertTrue(form.isDisplayed());
 		Assert.assertEquals(CrudErrorMessage.REQUIRED_FIELDS_MISSING, notification.getText());
+
+		form = usersView.getForm();
+		Assert.assertTrue(form.isDisplayed());
+
+		password = usersView.getPasswordField(); // Requery password field.
 
 		// Good password
 		password.setValue("Abc123");
 		password.sendKeys(Keys.TAB);
 		usersView.getButtonsBar().getSaveButton().click();
-		Assert.assertFalse(usersView.getDialog().isOpen());
+		Assert.assertFalse(usersView.getDialog().isPresent());
 
 		// When reopening the form password field must be empty.
 		bakerCell.click();
+		password = usersView.getPasswordField(); // Requery password field.
 		Assert.assertEquals("", password.getAttribute("value"));
 	}
 
 	private void createUser(UsersViewElement usersView, String email, String firstName, String lastName,
 							String password, String role) {
 		usersView.getSearchBar().getCreateNewButton().click();
-		Assert.assertTrue(usersView.getDialog().isOpen());
+		Assert.assertTrue(usersView.getDialog().get().isOpen());
 
 		usersView.getEmailField().setValue(email);
 		usersView.getFirstName().setValue(firstName);
@@ -96,7 +104,7 @@ public class UsersViewIT extends AbstractIT {
 		usersView.getRole().selectByText(role);
 
 		usersView.getButtonsBar().getSaveButton().click();
-		Assert.assertFalse(usersView.getDialog().isOpen());
+		Assert.assertFalse(usersView.getDialog().isPresent());
 
 		NotificationElement notification = $(NotificationElement.class).last();
 		Assert.assertThat(notification.getText(), containsString("was created"));
@@ -125,7 +133,7 @@ public class UsersViewIT extends AbstractIT {
 		page.getGrid().getCell("barista@vaadin.com").click();
 
 		page.getButtonsBar().getDeleteButton().click();
-		page.getConfirmDialog().confirm();
+		page.getConfirmDialog().get().confirm();
 
 		NotificationElement notification = $(NotificationElement.class).last();
 		Assert.assertThat(notification.getText(), containsString(MODIFY_LOCKED_USER_NOT_PERMITTED));

@@ -1,6 +1,5 @@
 <link rel="import" href="../../../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../../../bower_components/vaadin-grid/src/vaadin-grid.html">
-<link rel="import" href="../../../../bower_components/vaadin-dialog/src/vaadin-dialog.html">
 
 <link rel="import" href="../../../components/search-bar.html">
 <link rel="import" href="../../../components/utils-mixin.html">
@@ -21,20 +20,12 @@
 
    <vaadin-grid id="grid" theme="crud"></vaadin-grid>
 
-   <vaadin-dialog id="dialog"></vaadin-dialog>
-
   </template>
 
   <script>
     class ProductsView extends Polymer.Element {
       static get is() {
         return 'products-view';
-      }
-
-      ready() {
-        super.ready();
-        // There is no way for theming the dialog-overlay but using private API
-        this.$.dialog.$.overlay.setAttribute('theme', 'right');
       }
     }
 

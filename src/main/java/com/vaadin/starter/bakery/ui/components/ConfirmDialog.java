@@ -1,17 +1,16 @@
 package com.vaadin.starter.bakery.ui.components;
 
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.DomEvent;
-import com.vaadin.flow.component.Synchronize;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.shared.Registration;
 
 @Tag("confirm-dialog")
 @HtmlImport("src/components/confirm-dialog.html")
-public class ConfirmDialog extends Component {
+public class ConfirmDialog extends Dialog {
 
 	public String getCaption() {
 		return getElement().getProperty("caption");
@@ -31,15 +30,6 @@ public class ConfirmDialog extends Component {
 
 	public void setCancelText(String cancelText) {
 		getElement().setProperty("cancelText", cancelText == null ? "" : cancelText);
-	}
-
-	@Synchronize(property = "opened", value = "opened-changed")
-	public boolean isOpened() {
-		return getElement().getProperty("opened", false);
-	}
-
-	public void setOpened(boolean opened) {
-		getElement().setProperty("opened", opened);
 	}
 
 	@DomEvent("cancel-click")

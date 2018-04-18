@@ -6,6 +6,7 @@ import com.vaadin.starter.bakery.testbench.elements.components.OrderCardElement;
 import com.vaadin.starter.bakery.testbench.elements.components.OrderDetailsElement;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elementsbase.Element;
+import org.openqa.selenium.WebDriver;
 
 @Element("storefront-view")
 public class StorefrontViewElement extends TestBenchElement implements HasApp, HasCrudView {
@@ -19,6 +20,11 @@ public class StorefrontViewElement extends TestBenchElement implements HasApp, H
 		public void review() {
 			$(ButtonElement.class).id("review").click();
 		}
+	}
+
+	@Override
+	public WebDriver getRootContext() {
+		return getDriver();
 	}
 
 	@Override
@@ -38,10 +44,10 @@ public class StorefrontViewElement extends TestBenchElement implements HasApp, H
 	}
 
 	public OrderEditorElement getOrderEditor() {
-		return getDialog().$(OrderEditorElement.class).first();
+		return getDialog().get().$(OrderEditorElement.class).first();
 	}
 
 	public OrderDetailsElement getOrderDetails() {
-		return getDialog().$(OrderDetailsElement.class).first();
+		return getDialog().get().$(OrderDetailsElement.class).first();
 	}
 }

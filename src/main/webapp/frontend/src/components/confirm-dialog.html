@@ -2,11 +2,26 @@
 <link rel="import" href="../../bower_components/vaadin-button/src/vaadin-button.html">
 <link rel="import" href="../../bower_components/vaadin-dialog/src/vaadin-dialog.html">
 
+<link rel="import" href="../../styles/shared-styles.html">
+
 <dom-module id="confirm-dialog">
   <template>
-    <vaadin-dialog id="dialog" opened="{{opened}}">
+    <style>
+      :host {
+        display: none;
+      }
+    </style>
+
+    <vaadin-dialog-overlay id="overlay"
+                           on-opened-changed="_onOverlayOpened"
+                           with-backdrop
+                           focus-trap>
       <template>
         <style>
+          [part="content"] {
+            padding: var(--lumo-space-s);
+          }
+
           #caption {
             font-size: 14px;
             text-align: center;
@@ -25,20 +40,22 @@
           }
         </style>
 
-        <p id="caption">[[caption]]</p>
-        <p id="message">[[message]]</p>
-        <div id="buttons">
-          <vaadin-button on-click="_ok" theme="raised tertiary error">[[okText]]</vaadin-button>
-          <div style="flex: 1"></div>
-          <vaadin-button on-click="_cancel" theme="raised tertiary" class="right">[[cancelText]]</vaadin-button>
+        <div>
+          <p id="caption">[[caption]]</p>
+          <p id="message">[[message]]</p>
+          <div id="buttons">
+            <vaadin-button on-click="_ok" theme="raised tertiary error">[[okText]]</vaadin-button>
+            <div style="flex: 1"></div>
+            <vaadin-button on-click="_cancel" theme="raised tertiary" class="right">[[cancelText]]</vaadin-button>
+          </div>
         </div>
       </template>
-    </vaadin-dialog>
+    </vaadin-dialog-overlay>
   </template>
 
   <script>
     {
-      class ConfirmationDialogElement extends Polymer.Element {
+      class ConfirmationDialogElement extends window.Vaadin.DialogElement {
         static get is() {
           return 'confirm-dialog';
         }
@@ -72,8 +89,8 @@
           // We need to unify opened-changed and cancel-event in one, because removing from UI in
           // server side, implies events after removal not being executed, and opened-changes is always
           // fired before cancel-click
-          this.$.dialog.$.overlay.addEventListener('vaadin-overlay-outside-click', () => this._cancel());
-          this.$.dialog.$.overlay.addEventListener('vaadin-overlay-escape-press', () => this._cancel());
+          this.$.overlay.addEventListener('vaadin-overlay-outside-click', () => this._cancel());
+          this.$.overlay.addEventListener('vaadin-overlay-escape-press', () => this._cancel());
         }
 
         /** @event cancel-click */

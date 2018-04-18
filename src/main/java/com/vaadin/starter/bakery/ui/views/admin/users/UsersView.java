@@ -7,7 +7,6 @@ import org.springframework.security.access.annotation.Secured;
 
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.HtmlImport;
-import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
@@ -36,23 +35,15 @@ public class UsersView extends CrudView<User, TemplateModel> {
 	@Id("grid")
 	private Grid<User> grid;
 
-	@Id("dialog")
-	private Dialog dialog;
-
-	private final UserForm form;
-
 	private final CrudEntityPresenter<User> presenter;
 
 	private final BeanValidationBinder<User> binder = new BeanValidationBinder<>(User.class);
 
 	@Autowired
 	public UsersView(CrudEntityPresenter<User> presenter, UserForm form) {
-		super(EntityUtil.getName(User.class));
+		super(EntityUtil.getName(User.class), form);
 		this.presenter = presenter;
-		this.form = form;
-
 		form.setBinder(binder);
-		dialog.add(form);
 
 		setupEventListeners();
 		setupGrid();
@@ -86,17 +77,7 @@ public class UsersView extends CrudView<User, TemplateModel> {
 	}
 
 	@Override
-	protected Dialog getDialog() {
-		return dialog;
-	}
-
-	@Override
 	protected BeanValidationBinder<User> getBinder() {
 		return binder;
-	}
-
-	@Override
-	protected CrudForm<User> getForm() {
-		return form;
 	}
 }
