@@ -10,7 +10,6 @@ import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.HtmlImport;
-import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;

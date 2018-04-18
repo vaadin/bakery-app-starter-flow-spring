@@ -142,10 +142,8 @@ public class UsersViewIT extends AbstractIT {
 	}
 
 	private NotificationElement lastNotification() {
-		ElementQuery<NotificationElement> query = new ElementQuery<>(NotificationElement.class,
+		return new ElementQuery<>(NotificationElement.class,
 				NotificationElement.class.getAnnotation(Element.class).value())
-				.context(getDriver());
-
-		return query.last();
+				.context(getDriver()).last();
 	}
 }
