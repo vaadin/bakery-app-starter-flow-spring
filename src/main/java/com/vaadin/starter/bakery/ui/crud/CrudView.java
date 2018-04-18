@@ -17,7 +17,6 @@ import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
 import com.vaadin.starter.bakery.ui.components.ConfirmDialog;
-import com.vaadin.starter.bakery.ui.components.EntityDialog;
 import com.vaadin.starter.bakery.ui.components.FormButtonsBar;
 import com.vaadin.starter.bakery.ui.components.SearchBar;
 import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
@@ -34,7 +33,7 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 		void setBinder(BeanValidationBinder<E> binder);
 	}
 
-	private final EntityDialog dialog = new EntityDialog();
+	private final Dialog dialog = new Dialog();
 
 	private final ConfirmDialog confirmation = new ConfirmDialog();
 
@@ -58,7 +57,10 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 		confirmation.setOpened(false);
 
 		dialog.add((Component) getForm());
-		dialog.setThemeOnAttach("right");
+		// Workaround for https://github.com/vaadin/vaadin-dialog-flow/issues/28
+		dialog.getElement().getNode().runWhenAttached(ui ->
+				ui.getPage().executeJavaScript("$0.$.overlay.setAttribute('theme', 'right');",
+						dialog.getElement()));
 	}
 
     public CrudForm<E> getForm() {

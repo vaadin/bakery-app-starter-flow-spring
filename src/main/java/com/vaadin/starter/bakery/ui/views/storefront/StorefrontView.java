@@ -2,8 +2,8 @@ package com.vaadin.starter.bakery.ui.views.storefront;
 
 import java.util.stream.Stream;
 
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.starter.bakery.backend.data.entity.util.EntityUtil;
-import com.vaadin.starter.bakery.ui.components.EntityDialog;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.HasValue;
@@ -46,7 +46,7 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 	@Id("grid")
 	private Grid<Order> grid;
 
-	private final EntityDialog dialog = new EntityDialog();
+	private final Dialog dialog = new Dialog();
 
 	private final ConfirmDialog confirmation = new ConfirmDialog();
 
@@ -81,7 +81,10 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 
 		presenter.init(this);
 
-		dialog.setThemeOnAttach("middle");
+		// Workaround for https://github.com/vaadin/vaadin-dialog-flow/issues/28
+		dialog.getElement().getNode().runWhenAttached(ui ->
+				ui.getPage().executeJavaScript("$0.$.overlay.setAttribute('theme', 'middle');",
+						dialog.getElement()));
 		dialog.getElement().addEventListener("opened-changed", e -> {
 			if (!dialog.isOpened()) {
 				// Handle client-side closing dialog on escape
