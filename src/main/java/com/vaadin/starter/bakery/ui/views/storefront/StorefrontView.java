@@ -82,9 +82,9 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 		presenter.init(this);
 
 		// Workaround for https://github.com/vaadin/vaadin-dialog-flow/issues/28
-		dialog.getElement().getNode().runWhenAttached(ui ->
-				ui.getPage().executeJavaScript("$0.$.overlay.setAttribute('theme', 'middle');",
-						dialog.getElement()));
+		dialog.getElement().addAttachListener(event ->
+				UI.getCurrent().getPage().executeJavaScript(
+						"$0.$.overlay.setAttribute('theme', 'middle');", dialog.getElement()));
 		dialog.getElement().addEventListener("opened-changed", e -> {
 			if (!dialog.isOpened()) {
 				// Handle client-side closing dialog on escape

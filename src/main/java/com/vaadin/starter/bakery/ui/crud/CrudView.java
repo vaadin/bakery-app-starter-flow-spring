@@ -5,6 +5,7 @@ package com.vaadin.starter.bakery.ui.crud;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasText;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
@@ -58,9 +59,9 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 
 		dialog.add((Component) getForm());
 		// Workaround for https://github.com/vaadin/vaadin-dialog-flow/issues/28
-		dialog.getElement().getNode().runWhenAttached(ui ->
-				ui.getPage().executeJavaScript("$0.$.overlay.setAttribute('theme', 'right');",
-						dialog.getElement()));
+		dialog.getElement().addAttachListener(event ->
+				UI.getCurrent().getPage().executeJavaScript(
+						"$0.$.overlay.setAttribute('theme', 'right');", dialog.getElement()));
 	}
 
     public CrudForm<E> getForm() {
