@@ -72,10 +72,11 @@ public class UsersViewIT extends AbstractIT {
 		password.setValue("123");
 
 		usersView.getButtonsBar().getSaveButton().click();
-		form = usersView.getForm();
-		Assert.assertTrue(form.isDisplayed());
 		notification = $(NotificationElement.class).last();
 		Assert.assertEquals(CrudErrorMessage.REQUIRED_FIELDS_MISSING, notification.getText());
+
+		form = usersView.getForm();
+		Assert.assertTrue(form.isDisplayed());
 
 		password = usersView.getPasswordField(); // Requery password field.
 
