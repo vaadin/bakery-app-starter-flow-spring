@@ -5,8 +5,6 @@ import static org.hamcrest.CoreMatchers.containsString;
 
 import java.util.Random;
 
-import com.vaadin.testbench.ElementQuery;
-import com.vaadin.testbench.elementsbase.Element;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.Keys;
@@ -61,7 +59,7 @@ public class UsersViewIT extends AbstractIT {
 
 		Assert.assertFalse(usersView.getDialog().isPresent());
 
-		NotificationElement notification = lastNotification();
+		NotificationElement notification = $(NotificationElement.class).last();
 		Assert.assertThat(notification.getText(), containsString("was updated"));
 
 
@@ -74,7 +72,7 @@ public class UsersViewIT extends AbstractIT {
 		password.setValue("123");
 
 		usersView.getButtonsBar().getSaveButton().click();
-		notification = lastNotification();
+		notification = $(NotificationElement.class).last();
 		form = usersView.getForm();
 		Assert.assertTrue(form.isDisplayed());
 		Assert.assertEquals(CrudErrorMessage.REQUIRED_FIELDS_MISSING, notification.getText());
@@ -107,7 +105,7 @@ public class UsersViewIT extends AbstractIT {
 		usersView.getButtonsBar().getSaveButton().click();
 		Assert.assertFalse(usersView.getDialog().isPresent());
 
-		NotificationElement notification = lastNotification();
+		NotificationElement notification = $(NotificationElement.class).last();
 		Assert.assertThat(notification.getText(), containsString("was created"));
 	}
 
@@ -121,7 +119,7 @@ public class UsersViewIT extends AbstractIT {
 		field.setValue("Abc123");
 		page.getButtonsBar().getSaveButton().click();
 
-		NotificationElement notification = lastNotification();
+		NotificationElement notification = $(NotificationElement.class).last();
 
 		Assert.assertThat(notification.getText(), containsString(MODIFY_LOCKED_USER_NOT_PERMITTED));
 		Assert.assertTrue(notification.isOpen());
@@ -136,14 +134,8 @@ public class UsersViewIT extends AbstractIT {
 		page.getButtonsBar().getDeleteButton().click();
 		page.getConfirmDialog().get().confirm();
 
-		NotificationElement notification = lastNotification();
+		NotificationElement notification = $(NotificationElement.class).last();
 		Assert.assertThat(notification.getText(), containsString(MODIFY_LOCKED_USER_NOT_PERMITTED));
 		Assert.assertTrue(notification.isOpen());
-	}
-
-	private NotificationElement lastNotification() {
-		return new ElementQuery<>(NotificationElement.class,
-				NotificationElement.class.getAnnotation(Element.class).value())
-				.context(getDriver()).last();
 	}
 }
