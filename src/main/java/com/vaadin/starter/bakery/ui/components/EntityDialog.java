@@ -1,9 +1,13 @@
 package com.vaadin.starter.bakery.ui.components;
 
-import com.vaadin.flow.component.Tag;
-import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dialog.Dialog;
 
-@Tag("entity-dialog")
-@HtmlImport("src/components/entity-dialog.html")
-public class EntityDialog extends Dialog {  }
+public class EntityDialog extends Dialog {
+
+    public void setThemeOnAttach(String theme) {
+        addAttachListener(e ->
+                UI.getCurrent().getPage().executeJavaScript("$0.$.overlay.setAttribute('theme', $1);",
+                        getElement(), theme));
+    }
+}

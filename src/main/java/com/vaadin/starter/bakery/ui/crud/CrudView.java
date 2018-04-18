@@ -5,7 +5,6 @@ package com.vaadin.starter.bakery.ui.crud;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasText;
-import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
@@ -17,14 +16,13 @@ import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
-import com.vaadin.starter.bakery.ui.components.EntityDialog;
 import com.vaadin.starter.bakery.ui.components.ConfirmDialog;
+import com.vaadin.starter.bakery.ui.components.EntityDialog;
 import com.vaadin.starter.bakery.ui.components.FormButtonsBar;
 import com.vaadin.starter.bakery.ui.components.SearchBar;
 import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
 import com.vaadin.starter.bakery.ui.views.EntityView;
 
-@HtmlImport("bower_components/vaadin-dialog/src/vaadin-dialog.html")
 public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel> extends PolymerTemplate<T>
 		implements HasLogger, EntityView<E>, HasUrlParameter<Long> {
 
@@ -36,7 +34,7 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 		void setBinder(BeanValidationBinder<E> binder);
 	}
 
-	private final Dialog dialog = new EntityDialog();
+	private final EntityDialog dialog = new EntityDialog();
 
 	private final ConfirmDialog confirmation = new ConfirmDialog();
 
@@ -59,8 +57,8 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 		this.form = form;
 		confirmation.setOpened(false);
 
-		getDialog().add((Component) getForm());
-		getDialog().getElement().setProperty("theme", "right");
+		dialog.add((Component) getForm());
+		dialog.setThemeOnAttach("right");
 	}
 
     public CrudForm<E> getForm() {

@@ -3,7 +3,6 @@ package com.vaadin.starter.bakery.testbench.elements.ui;
 import com.vaadin.flow.component.dialog.testbench.DialogElement;
 import com.vaadin.flow.component.formlayout.testbench.FormLayoutElement;
 import com.vaadin.flow.component.grid.testbench.GridElement;
-import com.vaadin.starter.bakery.testbench.elements.components.EntityDialogElement;
 import com.vaadin.starter.bakery.testbench.elements.components.ConfirmDialogElement;
 import com.vaadin.starter.bakery.testbench.elements.components.FormButtonsBarElement;
 import com.vaadin.starter.bakery.testbench.elements.core.FlowComponentRendererElement;
@@ -33,8 +32,8 @@ public interface HasCrudView extends HasElementQuery {
 	}
 
 	default Optional<DialogElement> getDialog() {
-		ElementQuery<EntityDialogElement> query = new ElementQuery<>(EntityDialogElement.class,
-				EntityDialogElement.class.getAnnotation(Element.class).value())
+		ElementQuery<DialogElement> query = new ElementQuery<>(DialogElement.class,
+				DialogElement.class.getAnnotation(Element.class).value())
 				.context(getRootContext());
 		return query.exists() ? Optional.of(query.first()) : Optional.empty();
 	}

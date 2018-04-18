@@ -47,7 +47,7 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 	@Id("grid")
 	private Grid<Order> grid;
 
-	private final Dialog dialog = new EntityDialog();
+	private final EntityDialog dialog = new EntityDialog();
 
 	private final ConfirmDialog confirmation = new ConfirmDialog();
 
@@ -82,7 +82,7 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 
 		presenter.init(this);
 
-		dialog.getElement().setProperty("theme", "middle");
+		dialog.setThemeOnAttach("middle");
 		dialog.getElement().addEventListener("opened-changed", e -> {
 			if (!dialog.isOpened()) {
 				// Handle client-side closing dialog on escape
