@@ -10,11 +10,15 @@ import com.vaadin.testbench.elementsbase.Element;
 public class LoginViewElement extends TestBenchElement {
 
 	public StorefrontViewElement login(String username, String password) {
+		return login(username, password, StorefrontViewElement.class);
+	}
+
+	public <E extends TestBenchElement> E login(String username, String password, Class<E> target) {
 		setUsername(username);
 		setPassword(password);
 		signIn();
 
-		return $(StorefrontViewElement.class).onPage().waitForFirst();
+		return $(target).onPage().waitForFirst();
 	}
 
 	private ButtonElement getSignIn() {

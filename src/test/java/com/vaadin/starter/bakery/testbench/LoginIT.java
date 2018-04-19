@@ -29,8 +29,7 @@ public class LoginIT extends AbstractIT {
 	@Test
 	public void loginToNotDefaultUrl() {
 		LoginViewElement loginView = openLoginView(getDriver(), APP_URL + "dashboard");
-		loginView.login("admin@vaadin.com", "admin");
-		DashboardViewElement dashboard = $(DashboardViewElement.class).onPage().waitForFirst();
+		DashboardViewElement dashboard = loginView.login("admin@vaadin.com", "admin", DashboardViewElement.class);
 		Assert.assertNotNull(dashboard);
 	}
 
