@@ -9,14 +9,10 @@ import com.vaadin.starter.bakery.testbench.elements.core.FlowComponentRendererEl
 import com.vaadin.testbench.ElementQuery;
 import com.vaadin.testbench.HasElementQuery;
 import com.vaadin.testbench.TestBenchElement;
-import com.vaadin.testbench.elementsbase.Element;
-import org.openqa.selenium.WebDriver;
 
 import java.util.Optional;
 
 public interface HasCrudView extends HasElementQuery {
-
-	WebDriver getRootContext();
 
 	<T extends TestBenchElement> Class<T> getFormClass();
 
@@ -25,16 +21,12 @@ public interface HasCrudView extends HasElementQuery {
 	}
 
 	default Optional<ConfirmDialogElement> getConfirmDialog() {
-		ElementQuery<ConfirmDialogElement> query = new ElementQuery<>(ConfirmDialogElement.class,
-				ConfirmDialogElement.class.getAnnotation(Element.class).value())
-				.context(getRootContext());
+		ElementQuery<ConfirmDialogElement> query = $(ConfirmDialogElement.class).onPage();
 		return query.exists() ? Optional.of(query.first()) : Optional.empty();
 	}
 
 	default Optional<DialogElement> getDialog() {
-		ElementQuery<DialogElement> query = new ElementQuery<>(DialogElement.class,
-				DialogElement.class.getAnnotation(Element.class).value())
-				.context(getRootContext());
+		ElementQuery<DialogElement> query = $(DialogElement.class).onPage();
 		return query.exists() ? Optional.of(query.first()) : Optional.empty();
 	}
 

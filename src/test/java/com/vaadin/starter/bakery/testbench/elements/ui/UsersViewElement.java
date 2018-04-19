@@ -7,18 +7,12 @@ import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.starter.bakery.testbench.elements.components.SearchBarElement;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elementsbase.Element;
-import org.openqa.selenium.WebDriver;
 
 @Element("users-view")
 public class UsersViewElement extends TestBenchElement implements HasCrudView {
 
 	@Element("user-form")
 	public static class UserFormElement extends TestBenchElement {
-	}
-
-	@Override
-	public WebDriver getRootContext() {
-		return getDriver();
 	}
 
 	@Override
