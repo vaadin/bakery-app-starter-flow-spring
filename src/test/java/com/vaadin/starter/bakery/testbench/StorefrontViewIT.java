@@ -40,7 +40,9 @@ public class StorefrontViewIT extends AbstractIT {
 		NotificationElement notification = $(NotificationElement.class).waitForFirst();
 		Assert.assertThat(notification.getText(), containsString("was updated"));
 
-		int currentCount = Integer.parseInt(storefrontPage.getOrderCard(0).getGoodsCount(0));
+		firstOrder = storefrontPage.getOrderCard(0);
+		Assert.assertNotNull(firstOrder);
+		int currentCount = Integer.parseInt(firstOrder.getGoodsCount(0));
 		Assert.assertEquals(initialCount + 1, currentCount);
 
 	}

@@ -10,22 +10,77 @@ import com.vaadin.testbench.elementsbase.Element;
 public class LoginViewElement extends TestBenchElement {
 
 	public StorefrontViewElement login(String username, String password) {
-		getLogin().setValue(username);
-		getPassword().setValue(password);
-		getSignIn().click();
+		setUsername(username);
+		setPassword(password);
+		signIn();
 
 		return $(StorefrontViewElement.class).onPage().waitForFirst();
 	}
 
-	public ButtonElement getSignIn() {
+	private ButtonElement getSignIn() {
 		return $(ButtonElement.class).waitForFirst();
 	}
 
-	public PasswordFieldElement getPassword() {
+	public void signIn() {
+		int retries = 0;
+		while (retries++ < 5) {
+			try {
+				getSignIn().click();
+				return;
+			} catch (Exception ex) {
+				System.out.println("Unable to sign in. Retrying due to: " + ex.getMessage());
+			}
+		}
+
+		System.out.println("Unable to sign in. Gave up.");
+	}
+
+	private PasswordFieldElement getPassword() {
 		return $(PasswordFieldElement.class).waitForFirst();
 	}
 
-	public TextFieldElement getLogin() {
+	public void setPassword(String password) {
+		int retries = 0;
+		while (retries++ < 5) {
+			try {
+				getPassword().setValue(password);
+				return;
+			} catch (Exception ex) {
+				System.out.println("Unable to type password. Retrying due to: " + ex.getMessage());
+			}
+		}
+
+		System.out.println("Unable to type password. Gave up.");
+	}
+
+	private TextFieldElement getUsername() {
 		return $(TextFieldElement.class).waitForFirst();
+	}
+
+	public void setUsername(String username) {
+		int retries = 0;
+		while (retries++ < 5) {
+			try {
+				getUsername().setValue(username);
+				return;
+			} catch (Exception ex) {
+				System.out.println("Unable to type username. Retrying due to: " + ex.getMessage());
+			}
+		}
+
+		throw new RuntimeException("Unable to type username. Gave up.");
+	}
+
+	public String getUsernameLabel() {
+		int retries = 0;
+		while (retries++ < 5) {
+			try {
+				return getUsername().getLabel();
+			} catch (Exception ex) {
+				System.out.println("Unable to get the username label. Retrying due to: " + ex.getMessage());
+			}
+		}
+
+		throw new RuntimeException("Unable to get the username label. Gave up.");
 	}
 }
