@@ -37,7 +37,7 @@ public class StorefrontViewIT extends AbstractIT {
 		orderEditor.review();
 		storefrontPage.getOrderDetails().getSaveButton().click();
 
-		NotificationElement notification = $(NotificationElement.class).last();
+		NotificationElement notification = $(NotificationElement.class).waitForFirst();
 		Assert.assertThat(notification.getText(), containsString("was updated"));
 
 		int currentCount = Integer.parseInt(storefrontPage.getOrderCard(0).getGoodsCount(0));
