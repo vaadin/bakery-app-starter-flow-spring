@@ -21,7 +21,7 @@ public class User extends AbstractEntity {
 
 	@NotNull
 	@Size(min = 4, max = 255)
-	private String password;
+	private String passwordHash;
 
 	@NotBlank
 	@Size(max = 255)
@@ -50,12 +50,12 @@ public class User extends AbstractEntity {
 		// An empty constructor is needed for all beans
 	}
 
-	public String getPassword() {
-		return password;
+	public String getPasswordHash() {
+		return passwordHash;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setPasswordHash(String passwordHash) {
+		this.passwordHash = passwordHash;
 	}
 
 	public String getFirstName() {

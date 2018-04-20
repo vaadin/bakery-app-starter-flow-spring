@@ -74,7 +74,7 @@ public class UserForm extends PolymerTemplate<TemplateModel> implements CrudForm
 		}, "need 6 or more chars, mixing digits, lowercase and uppercase letters")
 				.bind(user -> password.getEmptyValue(), (user, pass) -> {
 					if (!password.getEmptyValue().equals(pass)) {
-						user.setPassword(passwordEncoder.encode(pass));
+						user.setPasswordHash(passwordEncoder.encode(pass));
 					}
 				});
 	}
