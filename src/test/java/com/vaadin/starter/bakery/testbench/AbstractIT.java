@@ -32,13 +32,17 @@ public abstract class AbstractIT extends ParallelTest {
 	@Rule
 	public ScreenshotOnFailureRule screenshotOnFailure = new ScreenshotOnFailureRule(this, true);
 
+	public AbstractIT() {
+	    super();
+        setDesiredCapabilities(new DesiredCapabilities(Collections.singletonMap("moz:webdriverClick", false)));
+    }
+
 	@Override
 	public void setup() throws Exception {
 		super.setup();
 		if (getRunLocallyBrowser() == null) {
 			APP_URL = "http://" + IPAddress.findSiteLocalAddress() + ":8080/";
 		}
-		setDesiredCapabilities(new DesiredCapabilities(Collections.singletonMap("moz:webdriverClick", false)));
 	}
 
 	@Override
