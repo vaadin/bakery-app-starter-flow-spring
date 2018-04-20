@@ -2,6 +2,7 @@ package com.vaadin.starter.bakery.testbench;
 
 import org.junit.Rule;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.LoggerFactory;
 
 import com.vaadin.starter.bakery.testbench.elements.ui.LoginViewElement;
@@ -12,6 +13,8 @@ import com.vaadin.testbench.parallel.ParallelTest;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
+
+import java.util.Collections;
 
 public abstract class AbstractIT extends ParallelTest {
 
@@ -32,6 +35,7 @@ public abstract class AbstractIT extends ParallelTest {
 		if (getRunLocallyBrowser() == null) {
 			APP_URL = "http://" + IPAddress.findSiteLocalAddress() + ":8080/";
 		}
+		setDesiredCapabilities(new DesiredCapabilities(Collections.singletonMap("moz:webdriverClick", false)));
 	}
 
 	@Override
