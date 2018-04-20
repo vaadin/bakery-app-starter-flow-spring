@@ -349,13 +349,13 @@ public class DataGenerator implements HasLogger {
 				"https://randomuser.me/api/portraits/women/40.jpg", true));
 	}
 
-	private User createUser(String email, String firstName, String lastName, String password, String role,
+	private User createUser(String email, String firstName, String lastName, String passwordHash, String role,
 			String photoUrl, boolean locked) {
 		User user = new User();
 		user.setEmail(email);
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
-		user.setPassword(password);
+		user.setPasswordHash(passwordHash);
 		user.setRole(role);
 		user.setPhotoUrl(photoUrl);
 		user.setLocked(locked);
