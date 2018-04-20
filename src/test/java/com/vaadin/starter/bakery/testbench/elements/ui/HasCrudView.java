@@ -36,8 +36,8 @@ public interface HasCrudView extends HasElementQuery {
 	}
 
 	default FormLayoutElement getForm() {
-		return getDialog().get().$(FlowComponentRendererElement.class).waitForFirst()
-				.$(getFormClass()).first().$(FormLayoutElement.class).waitForFirst();
+		return getDialog().get().$(FlowComponentRendererElement.class).first()
+				.$(getFormClass()).first().$(FormLayoutElement.class).first();
 	}
 
 }

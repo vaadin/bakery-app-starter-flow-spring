@@ -5,6 +5,11 @@ import com.vaadin.flow.component.textfield.testbench.PasswordFieldElement;
 import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elementsbase.Element;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.util.function.Function;
 
 @Element("login-view")
 public class LoginViewElement extends TestBenchElement {
@@ -26,17 +31,10 @@ public class LoginViewElement extends TestBenchElement {
 	}
 
 	public void signIn() {
-		int retries = 0;
-		while (retries++ < 5) {
-			try {
-				getSignIn().click();
-				return;
-			} catch (Exception ex) {
-				System.out.println("Unable to sign in. Retrying due to: " + ex.getMessage());
-			}
-		}
-
-		System.out.println("Unable to sign in. Gave up.");
+		doUntilSuccessful(driver -> {
+			getSignIn().click();
+			return true;
+		});
 	}
 
 	private PasswordFieldElement getPassword() {
@@ -44,17 +42,10 @@ public class LoginViewElement extends TestBenchElement {
 	}
 
 	public void setPassword(String password) {
-		int retries = 0;
-		while (retries++ < 5) {
-			try {
-				getPassword().setValue(password);
-				return;
-			} catch (Exception ex) {
-				System.out.println("Unable to type password. Retrying due to: " + ex.getMessage());
-			}
-		}
-
-		System.out.println("Unable to type password. Gave up.");
+		doUntilSuccessful(driver -> {
+			getPassword().setValue(password);
+			return true;
+		});
 	}
 
 	private TextFieldElement getUsername() {
@@ -62,29 +53,19 @@ public class LoginViewElement extends TestBenchElement {
 	}
 
 	public void setUsername(String username) {
-		int retries = 0;
-		while (retries++ < 5) {
-			try {
-				getUsername().setValue(username);
-				return;
-			} catch (Exception ex) {
-				System.out.println("Unable to type username. Retrying due to: " + ex.getMessage());
-			}
-		}
-
-		throw new RuntimeException("Unable to type username. Gave up.");
+		doUntilSuccessful(driver -> {
+			getUsername().setValue(username);
+			return true;
+		});
 	}
 
 	public String getUsernameLabel() {
-		int retries = 0;
-		while (retries++ < 5) {
-			try {
-				return getUsername().getLabel();
-			} catch (Exception ex) {
-				System.out.println("Unable to get the username label. Retrying due to: " + ex.getMessage());
-			}
-		}
+		return getUsername().getLabel();
+	}
 
-		throw new RuntimeException("Unable to get the username label. Gave up.");
+	private void doUntilSuccessful(Function<WebDriver, Boolean> function) {
+		new WebDriverWait(getDriver(), 10)
+				.ignoring(StaleElementReferenceException.class)
+				.until(function::apply);
 	}
 }
