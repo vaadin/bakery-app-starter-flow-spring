@@ -5,6 +5,7 @@ import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.Notification.Position;
+import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
 /**
  * Interface for views showing notifications to users
@@ -26,7 +27,7 @@ public interface HasNotifications extends HasElement {
 			close.addClickListener(event -> notification.close());
 			notification.open();
 		} else {
-			Notification.show(message, 4000, Position.BOTTOM_STRETCH);
+			Notification.show(message, BakeryConst.NOTIFICATION_DURATION, Position.BOTTOM_STRETCH);
 		}
 	}
 }

@@ -1,5 +1,6 @@
 package com.vaadin.starter.bakery.testbench;
 
+import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import org.junit.Rule;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -24,6 +25,8 @@ public abstract class AbstractIT extends ParallelTest {
 		// Prevent debug logging from Apache HTTP client
 		Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
 		root.setLevel(Level.INFO);
+		// Let notifications persist longer during tests
+		BakeryConst.NOTIFICATION_DURATION = 10000;
 	}
 
 	@Rule
