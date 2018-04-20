@@ -15,8 +15,6 @@ import com.vaadin.testbench.parallel.ParallelTest;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 
-import java.util.Collections;
-
 public abstract class AbstractIT extends ParallelTest {
 
 	public String APP_URL = "http://localhost:8080/";
@@ -32,11 +30,6 @@ public abstract class AbstractIT extends ParallelTest {
 	@Rule
 	public ScreenshotOnFailureRule screenshotOnFailure = new ScreenshotOnFailureRule(this, true);
 
-	public AbstractIT() {
-	    super();
-        setDesiredCapabilities(new DesiredCapabilities(Collections.singletonMap("moz:webdriverClick", false)));
-    }
-
 	@Override
 	public void setup() throws Exception {
 		super.setup();
@@ -49,6 +42,13 @@ public abstract class AbstractIT extends ParallelTest {
 	public TestBenchDriverProxy getDriver() {
 		return (TestBenchDriverProxy) super.getDriver();
 	}
+
+	@Override
+    public void setDesiredCapabilities(DesiredCapabilities desiredCapabilities) {
+        DesiredCapabilities disableInteractivityCheck = new DesiredCapabilities();
+        disableInteractivityCheck.setCapability("moz:webdriverClick", false);
+	    super.setDesiredCapabilities(desiredCapabilities.merge(disableInteractivityCheck));
+    }
 
 	protected LoginViewElement openLoginView() {
 		return openLoginView(getDriver(), APP_URL);
