@@ -3,6 +3,7 @@ package com.vaadin.starter.bakery.testbench;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import org.junit.Rule;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.BrowserType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.LoggerFactory;
 
@@ -46,9 +47,11 @@ public abstract class AbstractIT extends ParallelTest {
 	@Override
 	public void setDesiredCapabilities(DesiredCapabilities desiredCapabilities) {
 		// Disable interactivity check in Firefox https://github.com/mozilla/geckodriver/#mozwebdriverclick
-		DesiredCapabilities disableInteractivityCheck = new DesiredCapabilities();
-		disableInteractivityCheck.setCapability("moz:webdriverClick", false);
-		super.setDesiredCapabilities(desiredCapabilities.merge(disableInteractivityCheck));
+		if (desiredCapabilities.getBrowserName().equals(BrowserType.FIREFOX)) {
+			desiredCapabilities.setCapability("moz:webdriverClick", false);
+		}
+
+		super.setDesiredCapabilities(desiredCapabilities);
 	}
 
 	protected LoginViewElement openLoginView() {
