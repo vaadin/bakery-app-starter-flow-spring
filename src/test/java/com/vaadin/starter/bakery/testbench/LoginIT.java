@@ -14,7 +14,7 @@ public class LoginIT extends AbstractIT {
 	@Test
 	public void loginWorks() {
 		LoginViewElement loginView = openLoginView();
-		assertEquals("Email", loginView.getLogin().getLabel());
+		assertEquals("Email", loginView.getUsernameLabel());
 		loginView.login("barista@vaadin.com", "barista");
 	}
 
@@ -29,10 +29,7 @@ public class LoginIT extends AbstractIT {
 	@Test
 	public void loginToNotDefaultUrl() {
 		LoginViewElement loginView = openLoginView(getDriver(), APP_URL + "dashboard");
-		loginView.getLogin().setValue("admin@vaadin.com");
-		loginView.getPassword().setValue("admin");
-		loginView.getSignIn().click();
-		DashboardViewElement dashboard = $(DashboardViewElement.class).onPage().waitForFirst();
+		DashboardViewElement dashboard = loginView.login("admin@vaadin.com", "admin", DashboardViewElement.class);
 		Assert.assertNotNull(dashboard);
 	}
 

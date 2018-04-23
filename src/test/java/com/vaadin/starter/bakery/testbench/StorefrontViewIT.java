@@ -12,6 +12,8 @@ import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement.OrderEditorElement;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
+import java.util.Random;
+
 public class StorefrontViewIT extends AbstractIT {
 
 	private StorefrontViewElement openStorefrontPage() {
@@ -22,11 +24,13 @@ public class StorefrontViewIT extends AbstractIT {
 	public void editOrder() {
 		StorefrontViewElement storefrontPage = openStorefrontPage();
 
-		OrderCardElement firstOrder = storefrontPage.getOrderCard(0);
-		Assert.assertNotNull(firstOrder);
-		int initialCount = Integer.parseInt(firstOrder.getGoodsCount(0));
+		int orderIndex = new Random().nextInt(10);
 
-		firstOrder.click();
+		OrderCardElement order = storefrontPage.getOrderCard(orderIndex);
+		Assert.assertNotNull(order);
+		int initialCount = Integer.parseInt(order.getGoodsCount(0));
+
+		order.click();
 		ButtonElement editBtn = storefrontPage.getOrderDetails().getEditButton();
 		editBtn.getWrappedElement().click();
 		Assert.assertThat(getDriver().getCurrentUrl(), containsString(BakeryConst.PAGE_STOREFRONT_EDIT));
@@ -40,7 +44,9 @@ public class StorefrontViewIT extends AbstractIT {
 		NotificationElement notification = $(NotificationElement.class).last();
 		Assert.assertThat(notification.getText(), containsString("was updated"));
 
-		int currentCount = Integer.parseInt(storefrontPage.getOrderCard(0).getGoodsCount(0));
+		order = storefrontPage.getOrderCard(orderIndex);
+		Assert.assertNotNull(order);
+		int currentCount = Integer.parseInt(order.getGoodsCount(0));
 		Assert.assertEquals(initialCount + 1, currentCount);
 
 	}

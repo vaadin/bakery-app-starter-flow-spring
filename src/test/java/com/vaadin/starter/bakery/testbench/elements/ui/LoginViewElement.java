@@ -10,22 +10,30 @@ import com.vaadin.testbench.elementsbase.Element;
 public class LoginViewElement extends TestBenchElement {
 
 	public StorefrontViewElement login(String username, String password) {
-		getLogin().setValue(username);
-		getPassword().setValue(password);
-		getSignIn().click();
-
-		return $(StorefrontViewElement.class).onPage().waitForFirst();
+		return login(username, password, StorefrontViewElement.class);
 	}
 
-	public ButtonElement getSignIn() {
-		return $(ButtonElement.class).waitForFirst();
+	public <E extends TestBenchElement> E login(String username, String password, Class<E> target) {
+		setUsername(username);
+		setPassword(password);
+		signIn();
+
+		return $(target).onPage().waitForFirst();
 	}
 
-	public PasswordFieldElement getPassword() {
-		return $(PasswordFieldElement.class).waitForFirst();
+	public void signIn() {
+		$(ButtonElement.class).waitForFirst().click();
 	}
 
-	public TextFieldElement getLogin() {
-		return $(TextFieldElement.class).waitForFirst();
+	public void setPassword(String password) {
+		$(PasswordFieldElement.class).waitForFirst().setValue(password);
+	}
+
+	public void setUsername(String username) {
+		$(TextFieldElement.class).waitForFirst().setValue(username);
+	}
+
+	public String getUsernameLabel() {
+		return $(TextFieldElement.class).waitForFirst().getLabel();
 	}
 }
