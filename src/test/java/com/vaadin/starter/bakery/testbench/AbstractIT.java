@@ -44,12 +44,12 @@ public abstract class AbstractIT extends ParallelTest {
 	}
 
 	@Override
-    public void setDesiredCapabilities(DesiredCapabilities desiredCapabilities) {
+	public void setDesiredCapabilities(DesiredCapabilities desiredCapabilities) {
 		// Disable interactivity check in Firefox https://github.com/mozilla/geckodriver/#mozwebdriverclick
 		DesiredCapabilities disableInteractivityCheck = new DesiredCapabilities();
 		disableInteractivityCheck.setCapability("moz:webdriverClick", false);
 		super.setDesiredCapabilities(desiredCapabilities.merge(disableInteractivityCheck));
-    }
+	}
 
 	protected LoginViewElement openLoginView() {
 		return openLoginView(getDriver(), APP_URL);
