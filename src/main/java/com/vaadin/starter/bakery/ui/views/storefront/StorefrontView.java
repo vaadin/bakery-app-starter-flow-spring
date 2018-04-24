@@ -46,7 +46,8 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 	@Id("grid")
 	private Grid<Order> grid;
 
-	private final Dialog dialog = new Dialog();
+	@Id("dialog")
+	private Dialog dialog;
 
 	private final ConfirmDialog confirmation = new ConfirmDialog();
 
@@ -73,18 +74,12 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 				.withEventHandler("cardClick",
 						order -> UI.getCurrent().navigate(BakeryConst.PAGE_STOREFRONT + "/" + order.getId())));
 
-		setOpened(false);
-
 		getSearchBar().addFilterChangeListener(
 				e -> presenter.filterChanged(getSearchBar().getFilter(), getSearchBar().isCheckboxChecked()));
 		getSearchBar().addActionClickListener(e -> presenter.createNewOrder());
 
 		presenter.init(this);
 
-		// Workaround for https://github.com/vaadin/vaadin-dialog-flow/issues/28
-		dialog.getElement().addAttachListener(event ->
-				UI.getCurrent().getPage().executeJavaScript(
-						"$0.$.overlay.setAttribute('theme', 'middle');", dialog.getElement()));
 		dialog.getElement().addEventListener("opened-changed", e -> {
 			if (!dialog.isOpened()) {
 				// Handle client-side closing dialog on escape
@@ -92,7 +87,7 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 			}
 		});
 
-		confirmation.setOpened(false);
+		getElement().appendChild(confirmation.getElement());
 	}
 
 	@Override

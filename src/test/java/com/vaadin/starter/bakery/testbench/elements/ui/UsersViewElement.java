@@ -9,7 +9,7 @@ import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elementsbase.Element;
 
 @Element("users-view")
-public class UsersViewElement extends TestBenchElement implements HasCrudView {
+public class UsersViewElement extends TestBenchElement implements HasCrudView, HasApp {
 
 	@Element("user-form")
 	public static class UserFormElement extends TestBenchElement {

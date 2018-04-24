@@ -4,6 +4,7 @@ import com.vaadin.flow.component.tabs.testbench.TabElement;
 import com.vaadin.flow.component.tabs.testbench.TabsElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.DashboardViewElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.LoginViewElement;
+import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.ProductsViewElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.UsersViewElement;
 import com.vaadin.testbench.TestBenchElement;
@@ -11,6 +12,10 @@ import com.vaadin.testbench.elementsbase.Element;
 
 @Element("app-navigation")
 public class AppNavigationElement extends TestBenchElement {
+
+	public StorefrontViewElement navigateToStorefront() {
+		return navigateTo(0, StorefrontViewElement.class);
+	}
 
 	public DashboardViewElement navigateToDashboard() {
 		return navigateTo(1, DashboardViewElement.class);

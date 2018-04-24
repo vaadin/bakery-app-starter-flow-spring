@@ -2,6 +2,7 @@ package com.vaadin.starter.bakery.testbench;
 
 import static org.hamcrest.CoreMatchers.containsString;
 
+import com.vaadin.starter.bakery.testbench.elements.ui.UsersViewElement;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -49,6 +50,45 @@ public class StorefrontViewIT extends AbstractIT {
 		int currentCount = Integer.parseInt(order.getGoodsCount(0));
 		Assert.assertEquals(initialCount + 1, currentCount);
 
+	}
+
+	@Test
+	public void testDialogs() {
+		StorefrontViewElement storefrontPage = openStorefrontPage();
+		openAllDialogs(storefrontPage);
+
+		UsersViewElement usersPage = storefrontPage.getMenu().navigateToUsers();
+		storefrontPage = usersPage.getMenu().navigateToStorefront();
+
+		openAllDialogs(storefrontPage);
+	}
+
+	private void openAllDialogs(StorefrontViewElement storefrontPage) {
+		storefrontPage.getSearchBar().getCreateNewButton().click();
+		Assert.assertTrue(storefrontPage.getDialog().get().isOpen());
+		storefrontPage.getOrderEditor().cancel();
+		Assert.assertFalse(storefrontPage.getDialog().get().isOpen());
+
+		storefrontPage.getSearchBar().getCreateNewButton().click();
+		Assert.assertTrue(storefrontPage.getDialog().get().isOpen());
+
+		storefrontPage.getOrderEditor().getCustomerNameField().setValue("New customer");
+		// outside click should try to close the dialog
+		storefrontPage.getMenu().click();
+		Assert.assertTrue(storefrontPage.getConfirmDialog().get().isOpen());
+		storefrontPage.getConfirmDialog().get().confirm();
+
+		Assert.assertFalse(storefrontPage.getConfirmDialog().get().isOpen());
+		Assert.assertFalse(storefrontPage.getDialog().get().isOpen());
+
+		OrderCardElement order = storefrontPage.getOrderCard(0);
+		Assert.assertNotNull(order);
+		order.click();
+
+		Assert.assertNotNull(storefrontPage.getOrderDetails());
+
+		storefrontPage.getMenu().click();
+		Assert.assertFalse(storefrontPage.getDialog().get().isOpen());
 	}
 
 }
