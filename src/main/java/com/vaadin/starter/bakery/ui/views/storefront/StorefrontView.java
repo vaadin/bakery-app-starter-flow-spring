@@ -73,8 +73,6 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 				.withEventHandler("cardClick",
 						order -> UI.getCurrent().navigate(BakeryConst.PAGE_STOREFRONT + "/" + order.getId())));
 
-		setOpened(false);
-
 		getSearchBar().addFilterChangeListener(
 				e -> presenter.filterChanged(getSearchBar().getFilter(), getSearchBar().isCheckboxChecked()));
 		getSearchBar().addActionClickListener(e -> presenter.createNewOrder());
@@ -85,14 +83,14 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 		dialog.getElement().addAttachListener(event ->
 				UI.getCurrent().getPage().executeJavaScript(
 						"$0.$.overlay.setAttribute('theme', 'middle');", dialog.getElement()));
+
 		dialog.getElement().addEventListener("opened-changed", e -> {
 			if (!dialog.isOpened()) {
 				// Handle client-side closing dialog on escape
 				presenter.cancel();
 			}
 		});
-
-		confirmation.setOpened(false);
+		UI.getCurrent().beforeClientResponse(this, e -> UI.getCurrent().add(dialog));
 	}
 
 	@Override

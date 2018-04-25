@@ -166,7 +166,6 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 
 	public void clear() {
 		binder.readBean(null);
-		itemsEditor.setValue(null);
 	}
 
 	public void close() {
