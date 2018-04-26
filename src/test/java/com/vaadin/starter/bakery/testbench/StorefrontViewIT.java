@@ -72,22 +72,16 @@ public class StorefrontViewIT extends AbstractIT {
 		storefrontPage.getSearchBar().getCreateNewButton().click();
 		Assert.assertTrue(storefrontPage.getDialog().get().isOpen());
 
-		storefrontPage.getOrderEditor().getCustomerNameField().setValue("New customer");
-		// outside click should try to close the dialog
-		storefrontPage.getMenu().click();
-		Assert.assertTrue(storefrontPage.getConfirmDialog().get().isOpen());
-		storefrontPage.getConfirmDialog().get().confirm();
-
-		Assert.assertFalse(storefrontPage.getConfirmDialog().get().isOpen());
+		storefrontPage.getOrderEditor().cancel();
 		Assert.assertFalse(storefrontPage.getDialog().get().isOpen());
 
 		OrderCardElement order = storefrontPage.getOrderCard(0);
 		Assert.assertNotNull(order);
 		order.click();
 
-		Assert.assertNotNull(storefrontPage.getOrderDetails());
+		Assert.assertTrue(storefrontPage.getOrderDetails().isDisplayed());
 
-		storefrontPage.getMenu().click();
+		storefrontPage.getOrderDetails().getCancelButton().click();
 		Assert.assertFalse(storefrontPage.getDialog().get().isOpen());
 	}
 
