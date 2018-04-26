@@ -3,17 +3,21 @@ package com.vaadin.starter.bakery.testbench;
 import static org.hamcrest.CoreMatchers.containsString;
 
 import com.vaadin.starter.bakery.testbench.elements.ui.UsersViewElement;
+import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import org.junit.Assert;
 import org.junit.Test;
 
 import com.vaadin.flow.component.button.testbench.ButtonElement;
 import com.vaadin.flow.component.notification.testbench.NotificationElement;
+import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.starter.bakery.testbench.elements.components.OrderCardElement;
+import com.vaadin.starter.bakery.testbench.elements.ui.OrderItemEditorElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement.OrderEditorElement;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
-
-import java.util.Random;
 
 public class StorefrontViewIT extends AbstractIT {
 
@@ -85,4 +89,40 @@ public class StorefrontViewIT extends AbstractIT {
 		Assert.assertFalse(storefrontPage.getDialog().get().isOpen());
 	}
 
+	@Test
+	public void testTextFieldValidation() {
+		StorefrontViewElement storefrontPage = openStorefrontPage();
+
+		int orderIndex = new Random().nextInt(10);
+
+		OrderCardElement order = storefrontPage.getOrderCard(orderIndex);
+		Assert.assertNotNull(order);
+		order.click();
+
+		ButtonElement editBtn = storefrontPage.getOrderDetails().getEditButton();
+		editBtn.getWrappedElement().click();
+
+		OrderEditorElement orderEditor = storefrontPage.getOrderEditor();
+		TextFieldElement customerNameField = orderEditor.getCustomerNameField();
+		testFieldOverflow(customerNameField);
+		testClearRequiredField(customerNameField);
+		testFieldOverflow(orderEditor.getCustomerDetailsField());
+
+		OrderItemEditorElement firstOrderItemEditor = orderEditor.getOrderItemEditor(0);
+		testFieldOverflow(firstOrderItemEditor.getCommentField());
+	}
+
+	private void testFieldOverflow(TextFieldElement textFieldElement) {
+		textFieldElement.setValue(IntStream.range(0, 256).mapToObj(i -> "A").collect(Collectors.joining()));
+		Assert.assertEquals("maximum length is 255 characters", getErrorMessage(textFieldElement));
+	}
+
+	private void testClearRequiredField(TextFieldElement textFieldElement) {
+		textFieldElement.setValue("");
+		Assert.assertEquals("must not be blank", getErrorMessage(textFieldElement));		
+	}
+	
+	private String getErrorMessage(TextFieldElement textFieldElement) {
+		return textFieldElement.getPropertyString("errorMessage");
+	}
 }

@@ -22,10 +22,16 @@ public class StorefrontViewElement extends TestBenchElement implements HasApp, H
 			return $(OrderItemEditorElement.class).get(index);
 		}
 
+		public void review() {
+			$(ButtonElement.class).id("review").click();
+		}
+
 		public TextFieldElement getCustomerNameField() {
 			return $(TextFieldElement.class).id("customerName");
 		}
 
+		public TextFieldElement getCustomerDetailsField() {
+			return $(TextFieldElement.class).id("customerDetails");
 		public void review() {
 			$(ButtonElement.class).id("review").click();
 		}

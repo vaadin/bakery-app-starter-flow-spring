@@ -1,5 +1,6 @@
 package com.vaadin.starter.bakery.testbench.elements.ui;
 
+import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elementsbase.Element;
 
@@ -12,6 +13,10 @@ public class OrderItemEditorElement extends TestBenchElement {
 	
 	public void clickAmountFieldMinus() {
 		clickAmountFieldPlusOrMinus(-1);
+	}
+	
+	public TextFieldElement getCommentField() {
+		return $(TextFieldElement.class).id("comment");
 	}
 	
 	private void clickAmountFieldPlusOrMinus(int value) {
