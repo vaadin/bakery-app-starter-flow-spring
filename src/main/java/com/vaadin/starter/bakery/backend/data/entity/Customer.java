@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 public class Customer extends AbstractEntity {
 
 	@NotBlank
-	@Size(max = 255, message = "{bakery.field.max.length}")
+	@Size(max = 255)
 	private String fullName;
 
 	@NotBlank
@@ -21,7 +21,7 @@ public class Customer extends AbstractEntity {
 	@Pattern(regexp = "^(\\+\\d+)?([ -]?\\d+){4,14}$", message = "{bakery.phone.number.invalid}")
 	private String phoneNumber;
 	
-	@Size(max = 255, message = "{bakery.field.max.length}")
+	@Size(max = 255)
 	private String details;
 
 	public String getFullName() {
