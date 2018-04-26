@@ -1,12 +1,15 @@
 package com.vaadin.starter.bakery.testbench.elements.ui;
 
 import com.vaadin.flow.component.button.testbench.ButtonElement;
+import com.vaadin.flow.component.dialog.testbench.DialogElement;
 import com.vaadin.flow.component.grid.testbench.GridElement;
 import com.vaadin.starter.bakery.testbench.elements.components.OrderCardElement;
 import com.vaadin.starter.bakery.testbench.elements.components.OrderDetailsElement;
 import com.vaadin.starter.bakery.testbench.elements.components.SearchBarElement;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elementsbase.Element;
+
+import java.util.Optional;
 
 @Element("storefront-view")
 public class StorefrontViewElement extends TestBenchElement implements HasApp, HasCrudView {
@@ -52,5 +55,10 @@ public class StorefrontViewElement extends TestBenchElement implements HasApp, H
 
 	public SearchBarElement getSearchBar() {
 		return $(SearchBarElement.class).first();
+	}
+
+	@Override
+	public Optional<DialogElement> getDialog() {
+		return Optional.of($(DialogElement.class).onPage().id("storefront-dialog"));
 	}
 }

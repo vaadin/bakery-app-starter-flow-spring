@@ -80,6 +80,7 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 		presenter.init(this);
 
 		// Workaround for https://github.com/vaadin/vaadin-dialog-flow/issues/28
+		dialog.setId("storefront-dialog");
 		dialog.getElement().addAttachListener(event ->
 				UI.getCurrent().getPage().executeJavaScript(
 						"$0.$.overlay.setAttribute('theme', 'middle');", dialog.getElement()));
