@@ -7,6 +7,10 @@ import com.vaadin.testbench.elementsbase.Element;
 @Element("order-details")
 public class OrderDetailsElement extends TestBenchElement {
 
+	public ButtonElement getCancelButton() {
+		return $(ButtonElement.class).id("cancel");
+	}
+
 	public ButtonElement getEditButton() {
 		return $(ButtonElement.class).id("edit");
 	}
