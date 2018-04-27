@@ -27,7 +27,11 @@ public interface HasCrudView extends HasElementQuery {
 
 	default Optional<DialogElement> getDialog() {
 		ElementQuery<DialogElement> query = $(DialogElement.class).onPage();
-		return query.exists() ? Optional.of(query.first()) : Optional.empty();
+		try {
+			return Optional.of(query.id("crud-dialog"));
+		} catch (Exception ex) {
+			return Optional.empty();
+		}
 	}
 
 	default FormButtonsBarElement getButtonsBar() {

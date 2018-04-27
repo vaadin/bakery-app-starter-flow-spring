@@ -57,6 +57,7 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 		this.form = form;
 		confirmation.setOpened(false);
 
+		dialog.setId("crud-dialog");
 		dialog.add((Component) getForm());
 		// Workaround for https://github.com/vaadin/vaadin-dialog-flow/issues/28
 		dialog.getElement().addAttachListener(event ->

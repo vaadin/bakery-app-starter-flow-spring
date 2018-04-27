@@ -51,4 +51,24 @@ public class StorefrontViewIT extends AbstractIT {
 
 	}
 
+	@Test
+	public void openAllDialogs() {
+		StorefrontViewElement storefrontPage = openStorefrontPage();
+		storefrontPage.getSearchBar().getCreateNewButton().click();
+		Assert.assertTrue(storefrontPage.getDialog().get().isOpen());
+		storefrontPage.getOrderEditor().cancel();
+		Assert.assertFalse(storefrontPage.getDialog().get().isOpen());
+
+		storefrontPage.getSearchBar().getCreateNewButton().click();
+		Assert.assertTrue(storefrontPage.getDialog().get().isOpen());
+		storefrontPage.getOrderEditor().cancel();
+		Assert.assertFalse(storefrontPage.getDialog().get().isOpen());
+
+		OrderCardElement order = storefrontPage.getOrderCard(0);
+		Assert.assertNotNull(order);
+		order.click();
+
+		Assert.assertNotNull(storefrontPage.getOrderDetails());
+	}
+
 }
