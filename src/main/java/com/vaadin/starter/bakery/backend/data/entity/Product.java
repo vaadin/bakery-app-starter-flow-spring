@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 public class Product extends AbstractEntity {
 
 	@NotBlank(message = "{bakery.name.required}")
-	@Size(max = 255, message = "{bakery.field.max.length}")
+	@Size(max = 255)
 	@Column(unique = true)
 	private String name;
 
