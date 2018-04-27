@@ -262,6 +262,8 @@
 
       _onCommentKeydown(event) {
         if (event.key === 'Enter') {
+          // In IE11 on button click commentField blur doesn't happen, and the value-change event is not fired
+          this.$.commentField.blur();
           this.$.sendComment.click();
         }
       }
