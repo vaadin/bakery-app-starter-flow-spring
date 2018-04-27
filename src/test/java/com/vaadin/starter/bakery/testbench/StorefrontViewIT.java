@@ -119,9 +119,9 @@ public class StorefrontViewIT extends AbstractIT {
 
 	private void testClearRequiredField(TextFieldElement textFieldElement) {
 		textFieldElement.setValue("");
-		Assert.assertEquals("must not be blank", getErrorMessage(textFieldElement));		
+		Assert.assertEquals("must not be blank", getErrorMessage(textFieldElement));
 	}
-	
+
 	private String getErrorMessage(TextFieldElement textFieldElement) {
 		return textFieldElement.getPropertyString("errorMessage");
 	}
