@@ -32,8 +32,6 @@ public class StorefrontViewElement extends TestBenchElement implements HasApp, H
 
 		public TextFieldElement getCustomerDetailsField() {
 			return $(TextFieldElement.class).id("customerDetails");
-		public void review() {
-			$(ButtonElement.class).id("review").click();
 		}
 
 		public void cancel() {
