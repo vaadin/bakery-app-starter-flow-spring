@@ -40,12 +40,14 @@ public class FormattingUtils {
 	/**
 	 * Full date format. E.g: 03.03.2001
 	 */
-	public static final DateTimeFormatter FULL_DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+	public static final DateTimeFormatter FULL_DATE_FORMATTER = DateTimeFormatter
+			.ofPattern("dd.MM.yyyy", BakeryConst.APP_LOCALE);
 
 	/**
 	 * Formats hours with am/pm. E.g: 2:00 PM
 	 */
-	public static final DateTimeFormatter HOUR_FORMATTER = DateTimeFormatter.ofPattern("h:mm a");
+	public static final DateTimeFormatter HOUR_FORMATTER = DateTimeFormatter
+			.ofPattern("h:mm a", BakeryConst.APP_LOCALE);
 
 	/**
 	 * Returns the month name of the date, according to the application locale. 
