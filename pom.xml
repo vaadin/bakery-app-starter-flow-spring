@@ -35,6 +35,7 @@
         <maven.war.plugin.version>3.1.0</maven.war.plugin.version>
         <maven.resources.plugin.version>3.0.2</maven.resources.plugin.version>
         <maven.clean.plugin.version>3.0.0</maven.clean.plugin.version>
+        <maven.surefire.plugin.version>2.21.0</maven.surefire.plugin.version>
 
         <!-- Frontend -->
         <node.version>v8.1.2</node.version>
@@ -246,6 +247,11 @@
                         <nodeVersion>${node.version}</nodeVersion>
                         <yarnVersion>${yarn.version}</yarnVersion>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven.surefire.plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
