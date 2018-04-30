@@ -139,4 +139,15 @@ public class UsersViewIT extends AbstractIT {
 		Assert.assertThat(notification.getText(), containsString(MODIFY_LOCKED_USER_NOT_PERMITTED));
 		Assert.assertTrue(notification.isOpen());
 	}
+	
+	
+	@Test
+	public void testCancelConfirmationMessage() {
+		UsersViewElement page = openTestPage();
+		page.getSearchBar().getCreateNewButton().click();
+		page.getFirstName().setValue("Some name");
+		page.getButtonsBar().getCancelButton().click();
+		Assert.assertEquals("There are unsaved modifications to the User. Discard changes?",
+				page.getConfirmDialog().get().getMessage());
+	}
 }

@@ -1,5 +1,7 @@
 package com.vaadin.starter.bakery.testbench;
 
+import java.util.Random;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.Keys;
@@ -8,8 +10,6 @@ import com.vaadin.flow.component.grid.testbench.GridElement;
 import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.ProductsViewElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement;
-
-import java.util.Random;
 
 public class ProductsViewIT extends AbstractIT {
 
@@ -60,6 +60,18 @@ public class ProductsViewIT extends AbstractIT {
 		price.setValue(initialPrice);
 		price.sendKeys(Keys.TAB);
 		productsPage.getButtonsBar().getSaveButton().click();
+	}
+
+	@Test
+	public void testCancelConfirmationMessage() {
+		ProductsViewElement productsPage = openProductsPage();
+
+		productsPage.getSearchBar().getCreateNewButton().click();
+		productsPage.getDialog().get();
+		productsPage.getProductName().setValue("Some name");
+		productsPage.getButtonsBar().getCancelButton().click();
+		Assert.assertEquals("There are unsaved modifications to the Product. Discard changes?",
+				productsPage.getConfirmDialog().get().getMessage());
 	}
 
 	private void createProduct(ProductsViewElement productsPage, String name, String price) {

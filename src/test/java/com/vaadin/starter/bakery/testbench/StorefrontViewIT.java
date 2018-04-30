@@ -13,6 +13,7 @@ import org.junit.Test;
 import com.vaadin.flow.component.button.testbench.ButtonElement;
 import com.vaadin.flow.component.notification.testbench.NotificationElement;
 import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
+import com.vaadin.starter.bakery.testbench.elements.components.ConfirmDialogElement;
 import com.vaadin.starter.bakery.testbench.elements.components.OrderCardElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.OrderItemEditorElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement;
@@ -110,6 +111,17 @@ public class StorefrontViewIT extends AbstractIT {
 
 		OrderItemEditorElement firstOrderItemEditor = orderEditor.getOrderItemEditor(0);
 		testFieldOverflow(firstOrderItemEditor.getCommentField());
+	}
+
+	@Test
+	public void testCancelConfirmationMessage() {
+		StorefrontViewElement storefrontPage = openStorefrontPage();
+		storefrontPage.getSearchBar().getCreateNewButton().click();
+		OrderEditorElement orderEditor = storefrontPage.getOrderEditor();
+		orderEditor.getCustomerDetailsField().setValue("new value");
+		orderEditor.cancel();
+		ConfirmDialogElement confirm = storefrontPage.getConfirmDialog().get();
+		Assert.assertEquals("There are unsaved modifications to the Order. Discard changes?", confirm.getMessage());
 	}
 
 	private void testFieldOverflow(TextFieldElement textFieldElement) {

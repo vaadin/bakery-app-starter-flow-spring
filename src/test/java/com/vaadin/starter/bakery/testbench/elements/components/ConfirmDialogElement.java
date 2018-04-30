@@ -9,4 +9,8 @@ public class ConfirmDialogElement extends DialogElement {
 	public void confirm() {
 		callFunction("_ok");
 	}
+	
+	public String getMessage() {
+		return getPropertyString("message");
+	}
 }
