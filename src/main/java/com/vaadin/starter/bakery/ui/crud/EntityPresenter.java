@@ -52,9 +52,9 @@ public class EntityPresenter<T extends AbstractEntity, V extends EntityView<T>> 
 	public void delete(CrudOperationListener<T> onSuccess) {
 		Message CONFIRM_DELETE = Message.CONFIRM_DELETE.createMessage();
 		confirmIfNecessaryAndExecute(true, CONFIRM_DELETE, () -> {
-			 if (executeOperation(() -> crudService.delete(currentUser, entity))) {
-				 onSuccess.execute(entity);
-			 }
+			if (executeOperation(() -> crudService.delete(currentUser, entity))) {
+				onSuccess.execute(entity);
+			}
 		}, () -> {
 		});
 	}
