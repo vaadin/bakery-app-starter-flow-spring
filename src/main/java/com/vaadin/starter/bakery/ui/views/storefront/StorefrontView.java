@@ -86,8 +86,6 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 				presenter.cancel();
 			}
 		});
-
-		getElement().appendChild(confirmation.getElement());
 	}
 
 	@Override
