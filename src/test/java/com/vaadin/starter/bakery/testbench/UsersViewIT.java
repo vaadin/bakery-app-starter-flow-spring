@@ -56,12 +56,11 @@ public class UsersViewIT extends AbstractIT {
 		emailField.setValue("foo" + r.nextInt() + "@bar.com");
 
 		usersView.getButtonsBar().getSaveButton().click();
-
 		Assert.assertFalse(usersView.getDialog().isPresent());
 
 		NotificationElement notification = $(NotificationElement.class).last();
+		Assert.assertTrue(notification.isOpen());
 		Assert.assertThat(notification.getText(), containsString("was updated"));
-
 
 		// Invalid password prevents closing form
 		bakerCell.click();
@@ -73,6 +72,7 @@ public class UsersViewIT extends AbstractIT {
 
 		usersView.getButtonsBar().getSaveButton().click();
 		notification = $(NotificationElement.class).last();
+		Assert.assertTrue(notification.isOpen());
 		Assert.assertEquals(CrudErrorMessage.REQUIRED_FIELDS_MISSING, notification.getText());
 
 		form = usersView.getForm();
@@ -81,6 +81,7 @@ public class UsersViewIT extends AbstractIT {
 		password = usersView.getPasswordField(); // Requery password field.
 
 		// Good password
+		password.focus();
 		password.setValue("Abc123");
 		password.sendKeys(Keys.TAB);
 		usersView.getButtonsBar().getSaveButton().click();
@@ -138,5 +139,16 @@ public class UsersViewIT extends AbstractIT {
 		NotificationElement notification = $(NotificationElement.class).last();
 		Assert.assertThat(notification.getText(), containsString(MODIFY_LOCKED_USER_NOT_PERMITTED));
 		Assert.assertTrue(notification.isOpen());
+	}
+	
+	
+	@Test
+	public void testCancelConfirmationMessage() {
+		UsersViewElement page = openTestPage();
+		page.getSearchBar().getCreateNewButton().click();
+		page.getFirstName().setValue("Some name");
+		page.getButtonsBar().getCancelButton().click();
+		Assert.assertEquals("There are unsaved modifications to the User. Discard changes?",
+				page.getConfirmDialog().get().getMessage());
 	}
 }
