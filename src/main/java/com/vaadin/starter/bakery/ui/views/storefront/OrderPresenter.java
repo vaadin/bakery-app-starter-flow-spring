@@ -117,10 +117,6 @@ public class OrderPresenter {
 				dataProvider.refreshItem(e);
 			}
 			close();
-		}, e -> {
-			if (isNew) {
-				e.setId(null);
-			}
 		});
 
 	}
