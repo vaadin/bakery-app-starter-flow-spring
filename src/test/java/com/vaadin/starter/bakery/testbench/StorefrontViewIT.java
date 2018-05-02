@@ -2,7 +2,6 @@ package com.vaadin.starter.bakery.testbench;
 
 import static org.hamcrest.CoreMatchers.containsString;
 
-import com.vaadin.starter.bakery.testbench.elements.ui.UsersViewElement;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -17,6 +16,7 @@ import com.vaadin.starter.bakery.testbench.elements.components.OrderCardElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.OrderItemEditorElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement.OrderEditorElement;
+import com.vaadin.starter.bakery.testbench.elements.ui.UsersViewElement;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
 public class StorefrontViewIT extends AbstractIT {

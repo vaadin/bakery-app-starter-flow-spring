@@ -5,11 +5,11 @@ import java.util.function.UnaryOperator;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolationException;
 
-import com.vaadin.flow.shared.Registration;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;
 
 import com.vaadin.flow.data.binder.ValidationException;
+import com.vaadin.flow.shared.Registration;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
 import com.vaadin.starter.bakery.backend.data.entity.User;
@@ -24,17 +24,11 @@ public class EntityPresenter<T extends AbstractEntity, V extends EntityView<T>> 
 
 	private CrudService<T> crudService;
 
-	private String entityName;
-
 	private User currentUser;
 
 	private V view;
 
-	private T entity;
-
-	private Registration okRegistration;
-
-	private Registration cancelRegistration;
+	private EntityPresenterState<T> state = new EntityPresenterState<T>();
 
 	public EntityPresenter(CrudService<T> crudService, User currentUser) {
 		this.crudService = crudService;
@@ -52,22 +46,22 @@ public class EntityPresenter<T extends AbstractEntity, V extends EntityView<T>> 
 	public void delete(CrudOperationListener<T> onSuccess) {
 		Message CONFIRM_DELETE = Message.CONFIRM_DELETE.createMessage();
 		confirmIfNecessaryAndExecute(true, CONFIRM_DELETE, () -> {
-			 if (executeOperation(() -> crudService.delete(currentUser, entity))) {
-				 onSuccess.execute(entity);
-			 }
+			if (executeOperation(() -> crudService.delete(currentUser, state.getEntity()))) {
+				onSuccess.execute(state.getEntity());
+			}
 		}, () -> {
 		});
 	}
 
 	public void save(CrudOperationListener<T> onSuccess) {
 		if (executeOperation(() -> saveEntity())) {
-			onSuccess.execute(entity);
+			onSuccess.execute(state.getEntity());
 		}
 	}
 
 	public boolean executeUpdate(UnaryOperator<T> updater) {
 		return executeOperation(() -> {
-			this.entity = updater.apply(getEntity());
+			state.updateEntity(updater.apply(getEntity()));
 		});
 	}
 
@@ -97,12 +91,12 @@ public class EntityPresenter<T extends AbstractEntity, V extends EntityView<T>> 
 	}
 
 	protected void saveEntity() {
-		this.entity = crudService.save(currentUser, entity);
+		state.updateEntity(crudService.save(currentUser, state.getEntity()));
 	}
 
 	public boolean writeEntity() {
 		try {
-			view.write(entity);
+			view.write(state.getEntity());
 			return true;
 		} catch (ValidationException e) {
 			view.showError(CrudErrorMessage.REQUIRED_FIELDS_MISSING, false);
@@ -113,12 +107,12 @@ public class EntityPresenter<T extends AbstractEntity, V extends EntityView<T>> 
 	}
 
 	public void close() {
-		this.entity = null;
+		state.clear();
 		view.clear();
 	}
 
 	public void cancel(Runnable onConfirmed, Runnable onCancelled) {
-		confirmIfNecessaryAndExecute(view.isDirty(), Message.UNSAVED_CHANGES.createMessage(entityName), () -> {
+		confirmIfNecessaryAndExecute(view.isDirty(), Message.UNSAVED_CHANGES.createMessage(state.getEntityName()), () -> {
 			view.clear();
 			onConfirmed.run();
 		}, onCancelled);
@@ -138,40 +132,79 @@ public class EntityPresenter<T extends AbstractEntity, V extends EntityView<T>> 
 		view.getConfirmDialog().setCaption(message.getCaption());
 		view.getConfirmDialog().setCancelText(message.getCancelText());
 		view.getConfirmDialog().setOkText(message.getOkText());
-
-		if (okRegistration != null) {
-			okRegistration.remove();
-		}
-		if (cancelRegistration != null) {
-			cancelRegistration.remove();
-		}
-
-		okRegistration = view.getConfirmDialog()
-				.addOkClickListener(e -> onOk.run());
-		cancelRegistration = view.getConfirmDialog()
-				.addCancelClickListener(e -> onCancel.run());
-
 		view.getConfirmDialog().setOpened(true);
+
+		final Registration okRegistration = view.getConfirmDialog()
+				.addOkClickListener(e -> onOk.run());
+		final Registration cancelRegistration = view.getConfirmDialog()
+				.addCancelClickListener(e -> onCancel.run());
+		state.updateRegistration(okRegistration, cancelRegistration);
 	}
 
 	public boolean loadEntity(Long id, CrudOperationListener<T> onSuccess) {
 		return executeOperation(() -> {
-			this.entity = crudService.load(id);
-			this.entityName = EntityUtil.getName(this.entity.getClass());
-			onSuccess.execute(entity);
+			state.updateEntity(crudService.load(id));
+			onSuccess.execute(state.getEntity());
 		});
 	}
 
 	public T createNew() {
-		return this.entity = crudService.createNew(currentUser);
+		state.updateEntity(crudService.createNew(currentUser));
+		return state.getEntity();
 	}
 
 	public T getEntity() {
-		return entity;
+		return state.getEntity();
 	}
 
 	@FunctionalInterface
 	public interface CrudOperationListener<T> {
 		void execute(T entity);
 	}
+	
+
+}
+
+/**
+ * Holds variables that change.
+ */
+class EntityPresenterState<T extends AbstractEntity> {
+	
+	private T entity;
+	private String entityName;
+	private Registration okRegistration;
+	private Registration cancelRegistration;
+
+	void updateEntity(T entity) {
+		this.entity = entity;
+		this.entityName = EntityUtil.getName(this.entity.getClass());
+	}
+	
+	void updateRegistration(Registration okRegistration,Registration cancelRegistration) {
+		clearRegistration(this.okRegistration);
+		clearRegistration(this.cancelRegistration);
+		this.okRegistration = okRegistration;
+		this.cancelRegistration = cancelRegistration;
+	}
+
+	void clear() {
+		this.entity = null;
+		this.entityName = null;
+		updateRegistration(okRegistration, cancelRegistration);
+	}
+	
+	private void clearRegistration(Registration registration) {
+		if(registration != null) {
+			registration.remove();
+		}
+	}
+
+	public T getEntity() {
+		return entity;
+	}
+
+	public String getEntityName() {
+		return entityName;
+	}
+	
 }
