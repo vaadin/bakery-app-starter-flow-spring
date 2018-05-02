@@ -72,6 +72,7 @@ public class UsersViewIT extends AbstractIT {
 
 		usersView.getButtonsBar().getSaveButton().click();
 		notification = $(NotificationElement.class).last();
+		Assert.assertTrue(notification.isOpen());
 		Assert.assertEquals(CrudErrorMessage.REQUIRED_FIELDS_MISSING, notification.getText());
 
 		form = usersView.getForm();
