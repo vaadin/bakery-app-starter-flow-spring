@@ -74,10 +74,6 @@ public class CrudEntityPresenter<T extends AbstractEntity> extends EntityPresent
 				}
 				close();
 				getView().closeDialog();
-			}, e -> {
-				if (isNew) {
-					e.setId(null);
-				}
 			});
 		}
 	}

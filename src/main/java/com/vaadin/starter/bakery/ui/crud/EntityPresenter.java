@@ -53,11 +53,9 @@ public class EntityPresenter<T extends AbstractEntity, V extends EntityView<T>> 
 		});
 	}
 
-	public void save(CrudOperationListener<T> onSuccess, CrudOperationListener<T> onFail) {
+	public void save(CrudOperationListener<T> onSuccess) {
 		if (executeOperation(() -> saveEntity())) {
 			onSuccess.execute(state.getEntity());
-		} else {
-			onFail.execute(state.getEntity());
 		}
 	}
 
