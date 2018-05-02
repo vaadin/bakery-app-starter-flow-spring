@@ -56,12 +56,11 @@ public class UsersViewIT extends AbstractIT {
 		emailField.setValue("foo" + r.nextInt() + "@bar.com");
 
 		usersView.getButtonsBar().getSaveButton().click();
-
 		Assert.assertFalse(usersView.getDialog().isPresent());
 
 		NotificationElement notification = $(NotificationElement.class).last();
+		Assert.assertTrue(notification.isOpen());
 		Assert.assertThat(notification.getText(), containsString("was updated"));
-
 
 		// Invalid password prevents closing form
 		bakerCell.click();
@@ -81,6 +80,7 @@ public class UsersViewIT extends AbstractIT {
 		password = usersView.getPasswordField(); // Requery password field.
 
 		// Good password
+		password.focus();
 		password.setValue("Abc123");
 		password.sendKeys(Keys.TAB);
 		usersView.getButtonsBar().getSaveButton().click();

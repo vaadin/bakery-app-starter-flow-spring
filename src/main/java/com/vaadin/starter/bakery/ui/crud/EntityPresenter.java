@@ -181,8 +181,8 @@ class EntityPresenterState<T extends AbstractEntity> {
 	}
 	
 	void updateRegistration(Registration okRegistration,Registration cancelRegistration) {
-		clearRegistration(okRegistration);
-		clearRegistration(cancelRegistration);
+		clearRegistration(this.okRegistration);
+		clearRegistration(this.cancelRegistration);
 		this.okRegistration = okRegistration;
 		this.cancelRegistration = cancelRegistration;
 	}
