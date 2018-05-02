@@ -107,9 +107,8 @@ public class OrderPresenter {
 	}
 
 	void save() {
-		boolean isNew = entityPresenter.getEntity().isNew();
 		entityPresenter.save(e -> {
-			if (isNew) {
+			if (entityPresenter.isNew()) {
 				view.showCreatedNotification();
 				dataProvider.refreshAll();
 			} else {
@@ -133,7 +132,7 @@ public class OrderPresenter {
 		view.setOpened(true);
 
 		if (edit) {
-			view.getOpenedOrderEditor().read(order);
+			view.getOpenedOrderEditor().read(order, entityPresenter.isNew());
 		} else {
 			view.getOpenedOrderDetails().display(order, false);
 		}

@@ -56,6 +56,7 @@ public class EntityPresenter<T extends AbstractEntity, V extends EntityView<T>> 
 	public void save(CrudOperationListener<T> onSuccess) {
 		if (executeOperation(() -> saveEntity())) {
 			onSuccess.execute(state.getEntity());
+			state.setNew(false);
 		}
 	}
 
@@ -90,7 +91,7 @@ public class EntityPresenter<T extends AbstractEntity, V extends EntityView<T>> 
 		view.showError(message, isPersistent);
 	}
 
-	protected void saveEntity() {
+	private void saveEntity() {
 		state.updateEntity(crudService.save(currentUser, state.getEntity()));
 	}
 
@@ -150,6 +151,7 @@ public class EntityPresenter<T extends AbstractEntity, V extends EntityView<T>> 
 
 	public T createNew() {
 		state.updateEntity(crudService.createNew(currentUser));
+		state.setNew(true);
 		return state.getEntity();
 	}
 
@@ -157,11 +159,14 @@ public class EntityPresenter<T extends AbstractEntity, V extends EntityView<T>> 
 		return state.getEntity();
 	}
 
+	public boolean isNew() {
+		return state.isNew();
+	}
+
 	@FunctionalInterface
 	public interface CrudOperationListener<T> {
 		void execute(T entity);
 	}
-	
 
 }
 
@@ -174,6 +179,8 @@ class EntityPresenterState<T extends AbstractEntity> {
 	private String entityName;
 	private Registration okRegistration;
 	private Registration cancelRegistration;
+
+	private boolean isNew = false;
 
 	void updateEntity(T entity) {
 		this.entity = entity;
@@ -190,6 +197,7 @@ class EntityPresenterState<T extends AbstractEntity> {
 	void clear() {
 		this.entity = null;
 		this.entityName = null;
+		this.isNew = false;
 		updateRegistration(okRegistration, cancelRegistration);
 	}
 	
@@ -206,5 +214,14 @@ class EntityPresenterState<T extends AbstractEntity> {
 	public String getEntityName() {
 		return entityName;
 	}
-	
+
+	public boolean isNew() {
+		return isNew;
+	}
+
+	public void setNew(boolean isNew) {
+		this.isNew = isNew;
+	}
+
+
 }
