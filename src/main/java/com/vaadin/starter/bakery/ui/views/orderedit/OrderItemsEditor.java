@@ -3,6 +3,7 @@ package com.vaadin.starter.bakery.ui.views.orderedit;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.vaadin.flow.component.ComponentEventListener;
@@ -22,7 +23,6 @@ public class OrderItemsEditor extends Div implements HasValueAndElement<Componen
 
 	private OrderItemEditor empty;
 
-	private List<OrderItem> items;
 
 	private ProductDataProvider productDataProvider;
 
@@ -63,7 +63,7 @@ public class OrderItemsEditor extends Div implements HasValueAndElement<Componen
 			if (orderItemEditor != empty) {
 				remove(orderItemEditor);
 				OrderItem orderItem = orderItemEditor.getValue();
-				items.remove(orderItem);
+				setValue(getValue().stream().filter(element -> element != orderItem).collect(Collectors.toList()));
 				updateTotalPriceOnItemPriceChange(orderItem.getTotalPrice(), 0);
 				setHasChanges(true);
 			}
@@ -90,8 +90,8 @@ public class OrderItemsEditor extends Div implements HasValueAndElement<Componen
 			createEmptyElement();
 			OrderItem orderItem = new OrderItem();
 			orderItem.setProduct(product);
-			items.add(orderItem);
 			item.setValue(orderItem);
+			setValue(Stream.concat(getValue().stream(),Stream.of(orderItem)).collect(Collectors.toList()));
 			fireEvent(new NewEditorEvent(this));
 		}
 	}
@@ -124,7 +124,7 @@ public class OrderItemsEditor extends Div implements HasValueAndElement<Componen
 
 	public Stream<HasValue<?, ?>> validate() {
 		return getChildren()
-				.filter(component -> items.size() == 0 || !component.equals(empty))
+				.filter(component -> fieldSupport.getValue().size() == 0 || !component.equals(empty))
 				.map(editor -> ((OrderItemEditor) editor).validate()).flatMap(stream -> stream);
 	}
 
