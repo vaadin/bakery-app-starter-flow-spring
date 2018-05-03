@@ -61,7 +61,7 @@ public class EntityPresenter<T extends AbstractEntity, V extends EntityView<T>> 
 
 	public boolean executeUpdate(UnaryOperator<T> updater) {
 		return executeOperation(() -> {
-			state.updateEntity(updater.apply(getEntity()));
+			state.updateEntity(updater.apply(getEntity()), isNew());
 		});
 	}
 
@@ -90,8 +90,8 @@ public class EntityPresenter<T extends AbstractEntity, V extends EntityView<T>> 
 		view.showError(message, isPersistent);
 	}
 
-	protected void saveEntity() {
-		state.updateEntity(crudService.save(currentUser, state.getEntity()));
+	private void saveEntity() {
+		state.updateEntity(crudService.save(currentUser, state.getEntity()), isNew());
 	}
 
 	public boolean writeEntity() {
@@ -143,13 +143,13 @@ public class EntityPresenter<T extends AbstractEntity, V extends EntityView<T>> 
 
 	public boolean loadEntity(Long id, CrudOperationListener<T> onSuccess) {
 		return executeOperation(() -> {
-			state.updateEntity(crudService.load(id));
+			state.updateEntity(crudService.load(id), false);
 			onSuccess.execute(state.getEntity());
 		});
 	}
 
 	public T createNew() {
-		state.updateEntity(crudService.createNew(currentUser));
+		state.updateEntity(crudService.createNew(currentUser), true);
 		return state.getEntity();
 	}
 
@@ -157,11 +157,14 @@ public class EntityPresenter<T extends AbstractEntity, V extends EntityView<T>> 
 		return state.getEntity();
 	}
 
+	public boolean isNew() {
+		return state.isNew();
+	}
+
 	@FunctionalInterface
 	public interface CrudOperationListener<T> {
 		void execute(T entity);
 	}
-	
 
 }
 
@@ -174,10 +177,12 @@ class EntityPresenterState<T extends AbstractEntity> {
 	private String entityName;
 	private Registration okRegistration;
 	private Registration cancelRegistration;
+	private boolean isNew = false;
 
-	void updateEntity(T entity) {
+	void updateEntity(T entity, boolean isNew) {
 		this.entity = entity;
 		this.entityName = EntityUtil.getName(this.entity.getClass());
+		this.isNew = isNew;
 	}
 	
 	void updateRegistration(Registration okRegistration,Registration cancelRegistration) {
@@ -190,7 +195,8 @@ class EntityPresenterState<T extends AbstractEntity> {
 	void clear() {
 		this.entity = null;
 		this.entityName = null;
-		updateRegistration(okRegistration, cancelRegistration);
+		this.isNew = false;
+		updateRegistration(null, null);
 	}
 	
 	private void clearRegistration(Registration registration) {
@@ -206,5 +212,9 @@ class EntityPresenterState<T extends AbstractEntity> {
 	public String getEntityName() {
 		return entityName;
 	}
-	
+
+	public boolean isNew() {
+		return isNew;
+	}
+
 }
