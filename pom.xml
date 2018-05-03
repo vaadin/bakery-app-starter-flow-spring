@@ -192,12 +192,6 @@
             <artifactId>vaadin-testbench</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-testbench-core</artifactId>
-            <version>6.0.0.beta7</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
 
