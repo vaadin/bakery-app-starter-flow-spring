@@ -1,7 +1,7 @@
 package com.vaadin.starter.bakery.ui.components;
 
+import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.HasClickListeners;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.HtmlImport;
@@ -70,7 +70,7 @@ public class SearchBar extends PolymerTemplate<SearchBar.Model> {
 		addListener(FilterChanged.class, listener);
 	}
 
-	public void addActionClickListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {
+	public void addActionClickListener(ComponentEventListener<ClickEvent<Button>> listener) {
 		actionButton.addClickListener(listener);
 	}
 }

@@ -2,7 +2,6 @@ package com.vaadin.starter.bakery.ui.views;
 
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.starter.bakery.ui.components.ConfirmDialog;
-import com.vaadin.starter.bakery.ui.utils.messages.Message;
 
 /**
  * A master / detail view for entities of the type <code>T</code>. The view
