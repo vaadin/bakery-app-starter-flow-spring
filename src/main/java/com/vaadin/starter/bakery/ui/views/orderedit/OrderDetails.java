@@ -3,8 +3,8 @@
  */
 package com.vaadin.starter.bakery.ui.views.orderedit;
 
+import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.HasClickListeners;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.HtmlImport;
@@ -111,7 +111,7 @@ public class OrderDetails extends PolymerTemplate<OrderDetails.Model> {
 		return addListener(EditEvent.class, listener);
 	}
 
-	public Registration addBackListener(ComponentEventListener<HasClickListeners.ClickEvent<Button>> listener) {
+	public Registration addBackListener(ComponentEventListener<ClickEvent<Button>> listener) {
 		return back.addClickListener(listener);
 	}
 
