@@ -40,9 +40,6 @@ import com.vaadin.starter.bakery.ui.views.admin.users.UsersView;
 
 @Tag("main-view")
 @HtmlImport("src/main-view.html")
-// Override elements with Lumo styled ones
-@HtmlImport("bower_components/vaadin-form-layout/theme/lumo/vaadin-form-item.html")
-@HtmlImport("bower_components/vaadin-form-layout/theme/lumo/vaadin-form-layout.html")
 
 @PageTitle("###Bakery###")
 @Viewport(VIEWPORT)
