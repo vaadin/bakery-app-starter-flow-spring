@@ -55,17 +55,16 @@ public class CrudEntityPresenter<T extends AbstractEntity> extends EntityPresent
 	private T open(T entity) {
 		getView().getBinder().readBean(entity);
 		getView().getForm().getButtons().setSaveDisabled(true);
-		getView().getForm().getButtons().setDeleteDisabled(entity.isNew());
-		getView().updateTitle(entity.isNew());
+		getView().getForm().getButtons().setDeleteDisabled(isNew());
+		getView().updateTitle(isNew());
 		getView().openDialog();
 		return entity;
 	}
 
 	public void save() {
 		if (writeEntity()) {
-			final boolean isNew = getEntity().isNew();
 			super.save(e -> {
-				if (isNew) {
+				if (isNew()) {
 					getView().showCreatedNotification();
 					filteredDataProvider.refreshAll();
 				} else {

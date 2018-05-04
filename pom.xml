@@ -31,7 +31,6 @@
 
         <!-- Plugins -->
         <frontend.maven.plugin.version>1.6</frontend.maven.plugin.version>
-        <flow.maven.plugin.version>1.0.0.beta6</flow.maven.plugin.version>
         <maven.war.plugin.version>3.1.0</maven.war.plugin.version>
         <maven.resources.plugin.version>3.0.2</maven.resources.plugin.version>
         <maven.clean.plugin.version>3.0.0</maven.clean.plugin.version>
@@ -193,12 +192,6 @@
             <artifactId>vaadin-testbench</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-testbench-core</artifactId>
-            <version>6.0.0.beta7</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
 
@@ -237,7 +230,6 @@
                 <plugin>
                     <groupId>com.vaadin</groupId>
                     <artifactId>flow-maven-plugin</artifactId>
-                    <version>${flow.maven.plugin.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>com.github.eirslett</groupId>
