@@ -36,7 +36,7 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 
 	private final Dialog dialog = new Dialog();
 
-	private final ConfirmDialog confirmation = new ConfirmDialog();
+	private ConfirmDialog confirmation;
 
 	private final CrudForm<E> form;
 
@@ -55,7 +55,6 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 	public CrudView(String entityName, CrudForm<E> form) {
 		this.entityName = entityName;
 		this.form = form;
-		confirmation.setOpened(false);
 
 		dialog.add((Component) getForm());
 		// Workaround for https://github.com/vaadin/vaadin-dialog-flow/issues/28
@@ -102,6 +101,11 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 	@Override
 	public ConfirmDialog getConfirmDialog() {
 		return confirmation;
+	}
+
+	@Override
+	public void setConfirmDialog(ConfirmDialog confirmDialog) {
+		this.confirmation = confirmDialog;
 	}
 
 	@Override
