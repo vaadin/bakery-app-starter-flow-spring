@@ -1,14 +1,13 @@
 package com.vaadin.starter.bakery.ui.components;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.DomEvent;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.HtmlImport;
-import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.shared.Registration;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.templatemodel.TemplateModel;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
@@ -16,12 +15,14 @@ import org.springframework.context.annotation.Scope;
 @HtmlImport("src/components/confirm-dialog.html")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @SpringComponent
-public class ConfirmDialog extends PolymerTemplate<ConfirmDialog.Model> {
+public class ConfirmDialog extends Component {
 
-	public interface Model extends TemplateModel {
-		boolean isOpened();
+	public ConfirmDialog() {
+		getElement().synchronizeProperty("opened", "opened-changed");
+	}
 
-		void setOpened(boolean opened);
+	public void setOpened(boolean value) {
+		getElement().setProperty("opened", value);
 	}
 
 	public String getCaption() {
@@ -66,9 +67,5 @@ public class ConfirmDialog extends PolymerTemplate<ConfirmDialog.Model> {
 	public Registration addOkClickListener(
 			ComponentEventListener<OkClickEvent> listener) {
 		return addListener(OkClickEvent.class, listener);
-	}
-
-	public void setOpened(boolean value) {
-		getModel().setOpened(value);
 	}
 }
