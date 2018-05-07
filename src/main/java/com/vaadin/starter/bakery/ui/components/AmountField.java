@@ -1,7 +1,6 @@
 package com.vaadin.starter.bakery.ui.components;
 
 import com.vaadin.flow.component.AbstractSinglePropertyField;
-import com.vaadin.flow.component.Synchronize;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.HtmlImport;
 
@@ -10,23 +9,7 @@ import com.vaadin.flow.component.dependency.HtmlImport;
 public class AmountField extends AbstractSinglePropertyField<AmountField, Integer> {
 
 	public AmountField() {
-        super("", null, true);
-	}
-
-	@Override
-	public void setValue(Integer value) {
-		getElement().setProperty("value", value);
-	}
-
-	@Override
-	@Synchronize("value-changed")
-	public Integer getValue() {
-		String val = getElement().getProperty("value");
-		try {
-			return Integer.parseInt(val);
-		} catch (NumberFormatException e) {
-			return 0;
-		}
+        super("value", null, true);
 	}
 
 	public void setEnabled(boolean enabled) {
