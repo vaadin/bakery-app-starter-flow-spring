@@ -35,11 +35,11 @@ public class CrudEntityPresenter<T extends AbstractEntity> extends EntityPresent
 	}
 
 	public void cancel() {
-		cancel(getView()::closeDialog, getView()::openDialog);
+		cancel(this::closeSilently, getView()::openDialog);
 	}
 
 	public void closeSilently() {
-		getView().clear();
+		close();
 		getView().closeDialog();
 	}
 
@@ -71,8 +71,7 @@ public class CrudEntityPresenter<T extends AbstractEntity> extends EntityPresent
 					getView().showUpdatedNotification();
 					filteredDataProvider.refreshItem(e);
 				}
-				close();
-				getView().closeDialog();
+				closeSilently();
 			});
 		}
 	}
@@ -81,8 +80,7 @@ public class CrudEntityPresenter<T extends AbstractEntity> extends EntityPresent
 		super.delete(e -> {
 			getView().showDeletedNotification();
 			filteredDataProvider.refreshAll();
-			close();
-			getView().closeDialog();
+			closeSilently();
 		});
 	}
 
