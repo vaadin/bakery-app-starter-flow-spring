@@ -6,35 +6,26 @@
 
 <dom-module id="confirm-dialog">
   <template>
-    <style>
-      :host {
-        display: none;
-      }
-
-      [part="content"] {
-        padding: var(--lumo-space-s);
-      }
-
-      #caption {
-        font-size: 14px;
-        text-align: center;
-        color: var(--lumo-body-text-color);
-      }
-
-      #message {
-        padding: 0 16px;
-        color: grey;
-      }
-
-      #buttons {
-        margin-top: 30px;
-        display: flex;
-        box-shadow: 0 -3px 3px -3px var(--lumo-shade-20pct);
-      }
-    </style>
-
     <vaadin-dialog opened="{{opened}}">
       <template>
+        <style>
+          #caption {
+            font-size: 14px;
+            text-align: center;
+            color: var(--lumo-body-text-color);
+          }
+
+          #message {
+            padding: 0 16px;
+            color: grey;
+          }
+
+          #buttons {
+            margin-top: 30px;
+            display: flex;
+            box-shadow: 0 -3px 3px -3px var(--lumo-shade-20pct);
+          }
+        </style>
         <div>
           <p id="caption">[[caption]]</p>
           <p id="message">[[message]]</p>

@@ -89,6 +89,7 @@ public class MainView extends PolymerTemplate<TemplateModel>
 			getElement().appendChild(content.getElement());
 		}
 
+		this.confirmDialog.setOpened(false);
 		if (content instanceof HasConfirmation) {
 			((HasConfirmation) content).setConfirmDialog(this.confirmDialog);
 		}
