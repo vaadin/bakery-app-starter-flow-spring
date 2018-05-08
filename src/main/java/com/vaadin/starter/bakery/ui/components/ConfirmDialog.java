@@ -1,16 +1,29 @@
 package com.vaadin.starter.bakery.ui.components;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.DomEvent;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.HtmlImport;
-import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.shared.Registration;
+import com.vaadin.flow.spring.annotation.SpringComponent;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 
 @Tag("confirm-dialog")
 @HtmlImport("src/components/confirm-dialog.html")
-public class ConfirmDialog extends Dialog {
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@SpringComponent
+public class ConfirmDialog extends Component {
+
+	public ConfirmDialog() {
+		getElement().synchronizeProperty("opened", "opened-changed");
+	}
+
+	public void setOpened(boolean value) {
+		getElement().setProperty("opened", value);
+	}
 
 	public String getCaption() {
 		return getElement().getProperty("caption");

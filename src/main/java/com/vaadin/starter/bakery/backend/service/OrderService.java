@@ -1,12 +1,9 @@
 package com.vaadin.starter.bakery.backend.service;
 
-import static java.util.stream.Collectors.toSet;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.YearMonth;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.LinkedHashMap;

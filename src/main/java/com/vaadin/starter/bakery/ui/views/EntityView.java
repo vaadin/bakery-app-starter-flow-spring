@@ -1,8 +1,6 @@
 package com.vaadin.starter.bakery.ui.views;
 
 import com.vaadin.flow.data.binder.ValidationException;
-import com.vaadin.starter.bakery.ui.components.ConfirmDialog;
-import com.vaadin.starter.bakery.ui.utils.messages.Message;
 
 /**
  * A master / detail view for entities of the type <code>T</code>. The view
@@ -15,12 +13,7 @@ import com.vaadin.starter.bakery.ui.utils.messages.Message;
  *
  * @param <T> the entity type
  */
-public interface EntityView<T> extends HasNotifications {
-
-	/**
-	 * Returns confirmation dialog
-	 */
-	ConfirmDialog getConfirmDialog();
+public interface EntityView<T> extends HasConfirmation, HasNotifications {
 
 	/**
 	 * Shows an error notification with a given text.

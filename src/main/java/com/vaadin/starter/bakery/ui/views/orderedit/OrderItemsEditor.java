@@ -1,11 +1,17 @@
 package com.vaadin.starter.bakery.ui.views.orderedit;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.HasValue;
+import com.vaadin.flow.component.HasValueAndElement;
+import com.vaadin.flow.component.AbstractField.ComponentValueChangeEvent;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.internal.AbstractFieldSupport;
 import com.vaadin.flow.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
@@ -13,11 +19,10 @@ import com.vaadin.starter.bakery.ui.dataproviders.ProductDataProvider;
 import com.vaadin.starter.bakery.ui.views.storefront.events.NewEditorEvent;
 import com.vaadin.starter.bakery.ui.views.storefront.events.TotalPriceChangeEvent;
 
-public class OrderItemsEditor extends Div implements HasValue<OrderItemsEditor, List<OrderItem>> {
+public class OrderItemsEditor extends Div implements HasValueAndElement<ComponentValueChangeEvent<OrderItemsEditor,List<OrderItem>>, List<OrderItem>> {
 
 	private OrderItemEditor empty;
 
-	private List<OrderItem> items;
 
 	private ProductDataProvider productDataProvider;
 
@@ -25,13 +30,17 @@ public class OrderItemsEditor extends Div implements HasValue<OrderItemsEditor, 
 
 	private boolean hasChanges = false;
 
+    private final AbstractFieldSupport<OrderItemsEditor,List<OrderItem>> fieldSupport;
+	
 	public OrderItemsEditor(ProductDataProvider productDataProvider) {
 		this.productDataProvider = productDataProvider;
+		this.fieldSupport = new AbstractFieldSupport<>(this, Collections.emptyList(),
+				Objects::equals, c ->  {}); 
 	}
 
 	@Override
 	public void setValue(List<OrderItem> items) {
-		this.items = items;
+		fieldSupport.setValue(items);
 		removeAll();
 		totalPrice = 0;
 		hasChanges = false;
@@ -54,7 +63,7 @@ public class OrderItemsEditor extends Div implements HasValue<OrderItemsEditor, 
 			if (orderItemEditor != empty) {
 				remove(orderItemEditor);
 				OrderItem orderItem = orderItemEditor.getValue();
-				items.remove(orderItem);
+				setValue(getValue().stream().filter(element -> element != orderItem).collect(Collectors.toList()));
 				updateTotalPriceOnItemPriceChange(orderItem.getTotalPrice(), 0);
 				setHasChanges(true);
 			}
@@ -66,13 +75,13 @@ public class OrderItemsEditor extends Div implements HasValue<OrderItemsEditor, 
 
 	@Override
 	public void setReadOnly(boolean readOnly) {
-		HasValue.super.setReadOnly(readOnly);
+		HasValueAndElement.super.setReadOnly(readOnly);
 		getChildren().forEach(e -> ((OrderItemEditor) e).setReadOnly(readOnly));
 	}
 
 	@Override
 	public List<OrderItem> getValue() {
-		return items;
+		return fieldSupport.getValue();
 	}
 
 	private void productChanged(OrderItemEditor item, Product product) {
@@ -81,8 +90,8 @@ public class OrderItemsEditor extends Div implements HasValue<OrderItemsEditor, 
 			createEmptyElement();
 			OrderItem orderItem = new OrderItem();
 			orderItem.setProduct(product);
-			items.add(orderItem);
 			item.setValue(orderItem);
+			setValue(Stream.concat(getValue().stream(),Stream.of(orderItem)).collect(Collectors.toList()));
 			fireEvent(new NewEditorEvent(this));
 		}
 	}
@@ -115,7 +124,13 @@ public class OrderItemsEditor extends Div implements HasValue<OrderItemsEditor, 
 
 	public Stream<HasValue<?, ?>> validate() {
 		return getChildren()
-				.filter(component -> items.size() == 0 || !component.equals(empty))
+				.filter(component -> fieldSupport.getValue().size() == 0 || !component.equals(empty))
 				.map(editor -> ((OrderItemEditor) editor).validate()).flatMap(stream -> stream);
+	}
+
+	@Override
+	public Registration addValueChangeListener(
+			ValueChangeListener<? super ComponentValueChangeEvent<OrderItemsEditor, List<OrderItem>>> listener) {
+		return fieldSupport.addValueChangeListener(listener);
 	}
 }
