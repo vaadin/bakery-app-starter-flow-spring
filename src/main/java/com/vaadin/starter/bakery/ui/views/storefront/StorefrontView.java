@@ -122,7 +122,7 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 
 	@Override
 	public boolean isDirty() {
-		return orderEditor.hasChanges();
+		return orderEditor.hasChanges() || orderDetails.isDirty();
 	}
 
 	@Override
@@ -152,6 +152,7 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 
 	@Override
 	public void clear() {
+		orderDetails.setDirty(false);
 		orderEditor.clear();
 	}
 

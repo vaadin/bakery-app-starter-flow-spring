@@ -62,6 +62,8 @@ public class OrderDetails extends PolymerTemplate<OrderDetails.Model> {
 	@Id("commentField")
 	private TextField commentField;
 
+	private boolean isDirty;
+
 	public OrderDetails() {
 		sendComment.addClickListener(e -> {
 			String message = commentField.getValue();
@@ -83,6 +85,15 @@ public class OrderDetails extends PolymerTemplate<OrderDetails.Model> {
 		if (!review) {
 			commentField.clear();
 		}
+		this.isDirty = review;
+	}
+
+	public boolean isDirty() {
+		return isDirty;
+	}
+
+	public void setDirty(boolean isDirty) {
+		this.isDirty = isDirty;
 	}
 
 	public interface Model extends TemplateModel {
