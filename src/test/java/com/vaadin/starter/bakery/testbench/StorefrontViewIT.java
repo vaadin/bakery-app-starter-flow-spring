@@ -37,7 +37,7 @@ public class StorefrontViewIT extends AbstractIT {
 
 		order.click();
 		ButtonElement editBtn = storefrontPage.getOrderDetails().getEditButton();
-		editBtn.getWrappedElement().click();
+		editBtn.click();
 		Assert.assertThat(getDriver().getCurrentUrl(), containsString(BakeryConst.PAGE_STOREFRONT_EDIT));
 
 		OrderEditorElement orderEditor = storefrontPage.getOrderEditor();
@@ -100,7 +100,7 @@ public class StorefrontViewIT extends AbstractIT {
 		order.click();
 
 		ButtonElement editBtn = storefrontPage.getOrderDetails().getEditButton();
-		editBtn.getWrappedElement().click();
+		editBtn.click();
 
 		OrderEditorElement orderEditor = storefrontPage.getOrderEditor();
 		TextFieldElement customerNameField = orderEditor.getCustomerNameField();
