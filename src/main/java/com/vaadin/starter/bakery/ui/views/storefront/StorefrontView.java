@@ -49,7 +49,7 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 	@Id("dialog")
 	private Dialog dialog;
 
-	private final ConfirmDialog confirmation = new ConfirmDialog();
+	private ConfirmDialog confirmation;
 
 	private final OrderEditor orderEditor;
 
@@ -86,12 +86,16 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 				presenter.cancel();
 			}
 		});
-		getElement().appendChild(confirmation.getElement());
 	}
 
 	@Override
 	public ConfirmDialog getConfirmDialog() {
 		return confirmation;
+	}
+
+	@Override
+	public void setConfirmDialog(ConfirmDialog confirmDialog) {
+		this.confirmation = confirmDialog;
 	}
 
 	void setOpened(boolean opened) {

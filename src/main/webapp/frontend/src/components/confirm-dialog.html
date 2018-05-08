@@ -6,22 +6,9 @@
 
 <dom-module id="confirm-dialog">
   <template>
-    <style>
-      :host {
-        display: none;
-      }
-    </style>
-
-    <vaadin-dialog-overlay id="overlay"
-                           on-opened-changed="_onOverlayOpened"
-                           with-backdrop
-                           focus-trap>
+    <vaadin-dialog opened="{{opened}}">
       <template>
         <style>
-          [part="content"] {
-            padding: var(--lumo-space-s);
-          }
-
           #caption {
             font-size: 14px;
             text-align: center;
@@ -39,7 +26,6 @@
             box-shadow: 0 -3px 3px -3px var(--lumo-shade-20pct);
           }
         </style>
-
         <div>
           <p id="caption">[[caption]]</p>
           <p id="message">[[message]]</p>
@@ -50,12 +36,12 @@
           </div>
         </div>
       </template>
-    </vaadin-dialog-overlay>
+    </vaadin-dialog>
   </template>
 
   <script>
     {
-      class ConfirmationDialogElement extends window.Vaadin.DialogElement {
+      class ConfirmationDialogElement extends Polymer.Element {
         static get is() {
           return 'confirm-dialog';
         }
@@ -74,40 +60,36 @@
             cancelText: {
               value: 'Cancel'
             },
-            callback: Function,
             opened: {
               type: Boolean,
               notify: true,
-              value: true
-            }
+              value: false,
+              observer: '_openedChanged'
+            },
+            ok: Boolean
           };
         }
 
-        ready() {
-          super.ready();
-
-          // We need to unify opened-changed and cancel-event in one, because removing from UI in
-          // server side, implies events after removal not being executed, and opened-changes is always
-          // fired before cancel-click
-          this.$.overlay.addEventListener('vaadin-overlay-outside-click', () => this._cancel());
-          this.$.overlay.addEventListener('vaadin-overlay-escape-press', () => this._cancel());
-        }
-
-        /** @event cancel-click */
         _cancel() {
-          delete this.callback;
-          this.dispatchEvent(new CustomEvent('cancel-click'));
           this.opened = false;
         }
 
-        /** @event ok-click */
         _ok() {
-          if (this.callback) {
-            this.callback();
-            delete this.callback;
-          }
-          this.dispatchEvent(new CustomEvent('ok-click'));
+          this.ok = true;
           this.opened = false;
+        }
+
+        _openedChanged(opened) {
+          if (opened) {
+            this.ok = false;
+            return;
+          }
+
+          if (this.ok) {
+            this.dispatchEvent(new CustomEvent('ok-click'));
+          } else {
+            this.dispatchEvent(new CustomEvent('cancel-click'));
+          }
         }
       }
 
