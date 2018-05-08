@@ -140,6 +140,7 @@ public class DashboardView extends PolymerTemplate<TemplateModel> {
 				.map(e -> new DataSeriesItem(e.getKey().getName(), e.getValue())).collect(Collectors.toList()));
 		PlotOptionsPie plotOptionsPie = new PlotOptionsPie();
 		plotOptionsPie.setInnerSize("60%");
+		plotOptionsPie.getDataLabels().setCrop(false);
 		deliveriesPerProductSeries.setPlotOptions(plotOptionsPie);
 		conf.addSeries(deliveriesPerProductSeries);
 	}
