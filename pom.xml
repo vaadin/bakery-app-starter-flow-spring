@@ -31,7 +31,6 @@
 
         <!-- Plugins -->
         <frontend.maven.plugin.version>1.6</frontend.maven.plugin.version>
-        <flow.maven.plugin.version>1.0.0.beta9</flow.maven.plugin.version>
         <maven.war.plugin.version>3.1.0</maven.war.plugin.version>
         <maven.resources.plugin.version>3.0.2</maven.resources.plugin.version>
         <maven.clean.plugin.version>3.0.0</maven.clean.plugin.version>
@@ -205,7 +204,7 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-clean-plugin</artifactId>
                     <version>${maven.clean.plugin.version}</version>
-                    <!-- Clean up the flow-maven-plugin build output from the
+                    <!-- Clean up the vaadin-maven-plugin build output from the
                          webapp folder where it's copied to for spring-boot:run -->
                     <configuration>
                         <filesets>
@@ -230,8 +229,7 @@
                 </plugin>
                 <plugin>
                     <groupId>com.vaadin</groupId>
-                    <artifactId>flow-maven-plugin</artifactId>
-                    <version>${flow.maven.plugin.version}</version>
+                    <artifactId>vaadin-maven-plugin</artifactId>
                 </plugin>
                 <plugin>
                     <groupId>com.github.eirslett</groupId>
@@ -278,10 +276,10 @@
 
             <build>
                 <plugins>
-                    <!-- (2): Run flow-maven-plugin to transpile and optimize frontend code -->
+                    <!-- (2): Run vaadin-maven-plugin to transpile and optimize frontend code -->
                     <plugin>
                         <groupId>com.vaadin</groupId>
-                        <artifactId>flow-maven-plugin</artifactId>
+                        <artifactId>vaadin-maven-plugin</artifactId>
                         <executions>
                             <execution>
                                 <goals>
@@ -357,7 +355,7 @@
                         </executions>
                     </plugin>
 
-                    <!-- (3): Copy the output of flow-maven-plugin into the webapp folder,
+                    <!-- (3): Copy the output of vaadin-maven-plugin into the webapp folder,
                          which is the root of the servlet context if the app starts via spring-boot:run -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
