@@ -101,10 +101,15 @@
 
       .goods-item > .count {
         margin-right: var(--lumo-space-s);
+        white-space: nowrap;
       }
 
       .goods-item > div {
         flex: auto;
+        word-break: break-all;
+        /* Non standard for WebKit */
+        word-break: break-word;
+        white-space: normal;
       }
 
       @media (min-width: 600px) {
