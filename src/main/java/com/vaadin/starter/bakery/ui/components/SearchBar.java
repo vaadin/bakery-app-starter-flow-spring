@@ -36,6 +36,7 @@ public class SearchBar extends PolymerTemplate<SearchBar.Model> {
 
 	public SearchBar() {
 		textField.setValueChangeMode(ValueChangeMode.EAGER);
+		textField.addListener(SearchValueChanged.class, e -> fireEvent(new FilterChanged(this, false)));
 		clearButton.addClickListener(e -> {
 			if (!textField.isEmpty()) {
 				textField.clear();
@@ -67,7 +68,7 @@ public class SearchBar extends PolymerTemplate<SearchBar.Model> {
 	}
 
 	public void addFilterChangeListener(ComponentEventListener<FilterChanged> listener) {
-		addListener(FilterChanged.class, listener);
+		this.addListener(FilterChanged.class, listener);
 	}
 
 	public void addActionClickListener(ComponentEventListener<ClickEvent<Button>> listener) {
