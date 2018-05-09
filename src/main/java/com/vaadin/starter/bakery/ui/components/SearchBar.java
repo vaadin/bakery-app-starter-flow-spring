@@ -38,9 +38,7 @@ public class SearchBar extends PolymerTemplate<SearchBar.Model> {
 		textField.setValueChangeMode(ValueChangeMode.EAGER);
 		textField.addListener(SearchValueChanged.class, e -> fireEvent(new FilterChanged(this, false)));
 		clearButton.addClickListener(e -> {
-			if (!textField.isEmpty()) {
-				textField.clear();
-			}
+			textField.clear();
 			getModel().setCheckboxChecked(false);
 		});
 
