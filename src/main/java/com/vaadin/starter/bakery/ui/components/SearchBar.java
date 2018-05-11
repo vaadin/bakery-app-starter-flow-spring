@@ -1,7 +1,10 @@
 package com.vaadin.starter.bakery.ui.components;
 
 import com.vaadin.flow.component.ClickEvent;
+import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.DebounceSettings;
+import com.vaadin.flow.component.DomEvent;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.HtmlImport;
@@ -9,6 +12,7 @@ import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.dom.DebouncePhase;
 import com.vaadin.flow.templatemodel.TemplateModel;
 
 @Tag("search-bar")
@@ -36,10 +40,9 @@ public class SearchBar extends PolymerTemplate<SearchBar.Model> {
 
 	public SearchBar() {
 		textField.setValueChangeMode(ValueChangeMode.EAGER);
+		textField.addListener(SearchValueChanged.class, e -> fireEvent(new FilterChanged(this, false)));
 		clearButton.addClickListener(e -> {
-			if (!textField.isEmpty()) {
-				textField.clear();
-			}
+			textField.clear();
 			getModel().setCheckboxChecked(false);
 		});
 
@@ -67,10 +70,23 @@ public class SearchBar extends PolymerTemplate<SearchBar.Model> {
 	}
 
 	public void addFilterChangeListener(ComponentEventListener<FilterChanged> listener) {
-		addListener(FilterChanged.class, listener);
+		this.addListener(FilterChanged.class, listener);
 	}
 
 	public void addActionClickListener(ComponentEventListener<ClickEvent<Button>> listener) {
 		actionButton.addClickListener(listener);
+	}
+
+	@DomEvent(value = "value-changed", debounce = @DebounceSettings(timeout = 300, phases = DebouncePhase.TRAILING))
+	public static class SearchValueChanged extends ComponentEvent<TextField> {
+		public SearchValueChanged(TextField source, boolean fromClient) {
+			super(source, fromClient);
+		}
+	}
+
+	public static class FilterChanged extends ComponentEvent<SearchBar> {
+		public FilterChanged(SearchBar source, boolean fromClient) {
+			super(source, fromClient);
+		}
 	}
 }
