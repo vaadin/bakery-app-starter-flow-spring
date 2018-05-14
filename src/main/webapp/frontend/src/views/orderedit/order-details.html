@@ -167,7 +167,7 @@
             </vaadin-form-item>
           </template>
 
-          <vaadin-form-item>
+          <vaadin-form-item class="products">
             <label slot="label">Products</label>
             <div class="table products">
               <template is="dom-repeat" items="[[item.items]]" as="item">
@@ -243,6 +243,10 @@
         return {
           item: {
             type: Object
+          },
+          hidden: {
+            type: Boolean,
+            observer: '_onHiddenChange'
           }
         };
       }
@@ -270,6 +274,17 @@
           this.$.commentField.blur();
           this.$.sendComment.click();
         }
+      }
+
+      // Workaround for https://github.com/vaadin/vaadin-form-layout/issues/66
+      _onHiddenChange(value) {
+        if (value) {
+          return;
+        }
+        this.$.form1.notifyResize();
+        this.$.form2.notifyResize();
+        this.$.form3.notifyResize();
+        this.$.form4.notifyResize();
       }
     }
 

@@ -57,12 +57,12 @@ public abstract class CrudView<E extends AbstractEntity, T extends TemplateModel
 		this.form = form;
 
 		dialog.add((Component) getForm());
-		// Workaround for https://github.com/vaadin/vaadin-dialog-flow/issues/28
 
-		dialog.setHeight("100%");
-		dialog.getElement().addAttachListener(event ->
-				UI.getCurrent().getPage().executeJavaScript(
-						"$0.$.overlay.setAttribute('theme', 'right');", dialog.getElement()));
+		// Workaround for https://github.com/vaadin/vaadin-dialog-flow/issues/28
+		dialog.getElement().addAttachListener(event -> UI.getCurrent().getPage().executeJavaScript(
+				"$0.$.overlay.setAttribute('theme', 'right');"
+						+ "$0.$.overlay.querySelector('flow-component-renderer').setAttribute('theme', 'dialog');",
+				dialog.getElement()));
 	}
 
     public CrudForm<E> getForm() {

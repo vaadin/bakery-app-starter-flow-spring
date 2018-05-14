@@ -1,6 +1,17 @@
 <link rel="import" href="../bower_components/polymer/lib/elements/custom-style.html">
 
 <!-- Themes for dialogs -->
+<custom-style>
+  <style>
+      flow-component-renderer[theme="dialog"],
+      flow-component-renderer[theme="dialog"] > div {
+        display: flex;
+        flex-direction: column;
+        flex: auto;
+      }
+  </style>
+</custom-style>
+
 <dom-module id="bakery-dialog-overlay-theme" theme-for="vaadin-dialog-overlay">
   <template>
     <style>
@@ -62,11 +73,6 @@
           width: 100%;
           border-radius: 0 !important;
         }
-      }
-
-      /* we need explicitly set height for wrappers inside dialog-flow */
-      [part="content"] ::slotted(flow-component-renderer) {
-        height: 100%;
       }
     </style>
   </template>
@@ -235,13 +241,6 @@
 
       .bold {
         font-weight: 600;
-      }
-
-      flow-component-renderer[order],
-      flow-component-renderer[order] > div {
-        display: flex;
-        flex-direction: column;
-        flex: auto;
       }
     </style>
   </template>

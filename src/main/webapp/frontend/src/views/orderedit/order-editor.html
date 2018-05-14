@@ -105,6 +105,10 @@
           status: {
             type: String,
             observer: '_onStatusChange'
+          },
+          hidden: {
+            type: Boolean,
+            observer: '_onHiddenChange'
           }
         };
       }
@@ -130,6 +134,16 @@
       _onStatusChange() {
         const status = this.status ? this.status.toLowerCase() : this.status;
         this.$.status.$.input.setAttribute('status', status);
+      }
+
+      // Workaround for https://github.com/vaadin/vaadin-form-layout/issues/66
+      _onHiddenChange(value) {
+        if (value) {
+          return;
+        }
+        this.$.form1.notifyResize();
+        this.$.form2.notifyResize();
+        this.$.form3.notifyResize();
       }
     }
 
