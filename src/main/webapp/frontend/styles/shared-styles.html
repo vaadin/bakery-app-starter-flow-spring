@@ -1,17 +1,6 @@
 <link rel="import" href="../bower_components/polymer/lib/elements/custom-style.html">
 
 <!-- Themes for dialogs -->
-<custom-style>
-  <style>
-      flow-component-renderer[theme="dialog"],
-      flow-component-renderer[theme="dialog"] > div {
-        display: flex;
-        flex-direction: column;
-        flex: auto;
-      }
-  </style>
-</custom-style>
-
 <dom-module id="bakery-dialog-overlay-theme" theme-for="vaadin-dialog-overlay">
   <template>
     <style>
@@ -241,6 +230,13 @@
 
       .bold {
         font-weight: 600;
+      }
+
+      flow-component-renderer[theme="dialog"],
+      flow-component-renderer[theme="dialog"] > div {
+        display: flex;
+        flex-direction: column;
+        flex: auto;
       }
     </style>
   </template>

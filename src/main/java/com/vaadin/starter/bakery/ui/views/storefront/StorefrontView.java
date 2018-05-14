@@ -46,7 +46,8 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 	@Id("grid")
 	private Grid<Order> grid;
 
-	private final Dialog dialog = new Dialog();
+	@Id("dialog")
+	private Dialog dialog;
 
 	private ConfirmDialog confirmation;
 
@@ -85,12 +86,6 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 				presenter.cancel();
 			}
 		});
-
-		dialog.add(orderEditor, orderDetails);
-		dialog.getElement().addAttachListener(event -> UI.getCurrent().getPage().executeJavaScript(
-				"$0.$.overlay.setAttribute('theme', 'middle');"
-						+ "$0.$.overlay.querySelector('flow-component-renderer').setAttribute('theme', 'dialog');",
-				dialog.getElement()));
 	}
 
 	@Override
@@ -158,6 +153,7 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 	}
 
 	void setDialogElementsVisibility(boolean editing) {
+		dialog.add(editing ? orderEditor: orderDetails);
 		orderEditor.setVisible(editing);
 		orderDetails.setVisible(!editing);
 	}

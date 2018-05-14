@@ -3,6 +3,7 @@ package com.vaadin.starter.bakery.testbench.elements.ui;
 import java.util.Optional;
 
 import com.vaadin.flow.component.button.testbench.ButtonElement;
+import com.vaadin.flow.component.dialog.testbench.DialogElement;
 import com.vaadin.flow.component.grid.testbench.GridElement;
 import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.starter.bakery.testbench.elements.components.OrderCardElement;
@@ -65,4 +66,8 @@ public class StorefrontViewElement extends TestBenchElement implements HasApp, H
 		return $(SearchBarElement.class).first();
 	}
 
+	@Override
+	public Optional<DialogElement> getDialog() {
+		return Optional.of($(DialogElement.class).waitForFirst());
+	}
 }
