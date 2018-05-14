@@ -65,8 +65,4 @@ public class StorefrontViewElement extends TestBenchElement implements HasApp, H
 		return $(SearchBarElement.class).first();
 	}
 
-	@Override
-	public Optional<DialogContentElement> getDialog() {
-		return Optional.of($(DialogContentElement.class).waitForFirst());
-	}
 }

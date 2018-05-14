@@ -71,13 +71,13 @@ public class StorefrontViewIT extends AbstractIT {
 		storefrontPage.getSearchBar().getCreateNewButton().click();
 		Assert.assertTrue(storefrontPage.getDialog().get().isOpen());
 		storefrontPage.getOrderEditor().cancel();
-		Assert.assertFalse(storefrontPage.getDialog().get().isOpen());
+		Assert.assertFalse(storefrontPage.getDialog().isPresent());
 
 		storefrontPage.getSearchBar().getCreateNewButton().click();
 		Assert.assertTrue(storefrontPage.getDialog().get().isOpen());
 
 		storefrontPage.getOrderEditor().cancel();
-		Assert.assertFalse(storefrontPage.getDialog().get().isOpen());
+		Assert.assertFalse(storefrontPage.getDialog().isPresent());
 
 		OrderCardElement order = storefrontPage.getOrderCard(0);
 		Assert.assertNotNull(order);
@@ -86,7 +86,7 @@ public class StorefrontViewIT extends AbstractIT {
 		Assert.assertTrue(storefrontPage.getOrderDetails().isDisplayed());
 
 		storefrontPage.getOrderDetails().getCancelButton().click();
-		Assert.assertFalse(storefrontPage.getDialog().get().isOpen());
+		Assert.assertFalse(storefrontPage.getDialog().isPresent());
 	}
 
 	@Test
