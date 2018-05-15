@@ -3,6 +3,7 @@ package com.vaadin.starter.bakery;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -17,7 +18,7 @@ import com.vaadin.starter.bakery.ui.MainView;
  * Spring boot web application initializer.
  */
 @SpringBootApplication(scanBasePackageClasses = { SecurityConfiguration.class, MainView.class, Application.class,
-		UserService.class })
+		UserService.class }, exclude = ErrorMvcAutoConfiguration.class)
 @EnableJpaRepositories(basePackageClasses = { UserRepository.class })
 @EntityScan(basePackageClasses = { User.class })
 public class Application extends SpringBootServletInitializer {
