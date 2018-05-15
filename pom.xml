@@ -7,6 +7,12 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Bakery for Flow and Spring</name>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.0.0.RELEASE</version>
+        <relativePath /> <!-- lookup parent from repository -->
+    </parent>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -16,7 +22,6 @@
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Dependencies -->
         <vaadin.version>10.0.0.beta10</vaadin.version>
-        <spring-boot.version>2.0.0.RELEASE</spring-boot.version>
 
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Overrides the old version specified by the Spring Boot parent -->
@@ -63,13 +68,6 @@
                 <groupId>com.vaadin</groupId>
                 <artifactId>vaadin-bom</artifactId>
                 <version>${vaadin.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
