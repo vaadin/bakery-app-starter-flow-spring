@@ -63,6 +63,11 @@
           border-radius: 0 !important;
         }
       }
+
+      /* we need explicitly set height for wrappers inside dialog-flow */
+      [part="content"] ::slotted(flow-component-renderer) {
+        height: 100%;
+      }
     </style>
   </template>
 </dom-module>
