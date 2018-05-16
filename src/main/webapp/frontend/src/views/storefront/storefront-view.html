@@ -55,10 +55,8 @@
         if (!e.detail.value) {
           return;
         }
-        var content = this.$.dialog.$.overlay.$.content.shadowRoot;
-        if (content) {
-          content.querySelector('flow-component-renderer').setAttribute('theme', 'dialog');
-        }
+        var content = this.$.dialog.$.overlay.content;
+        content.querySelector('flow-component-renderer').setAttribute('theme', 'dialog');
       }
     }
 
