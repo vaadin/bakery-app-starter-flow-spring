@@ -62,7 +62,7 @@ class BaristaFlow extends Simulation {
 
 	// Storefront from initial response
 	val gridIdExtract       =  regex("""node":(\d+),+"type":"put",+"key":"payload",+"feat":[0-9]*,+"value":\{+"type":"@id",+"payload":"grid"""").saveAs("gridId")
-	val dueDate0IdExtract   =  regex("""node":(\d+),+"type":"put",+"key":"payload",+"feat":[0-9]*,+"value":\{+"type":"@id",+"payload":"dueDate"""").saveAs("dueDateId")
+	val dialogIdExtract     =  regex("""node":(\d+),+"type":"put",+"key":"payload",+"feat":[0-9]*,+"value":\{+"type":"@id",+"payload":"dialog"""").saveAs("dialogId")
 	val newButtonIdExtract  =  regex("""node":(\d+),+"type":"put",+"key":"payload",+"feat":[0-9]*,+"value":\{+"type":"@id",+"payload":"action"""").saveAs("newButtonId")
 	val customerIdExtract   =  regex("""node":(\d+),+"type":"put",+"key":"payload",+"feat":[0-9]*,+"value":\{+"type":"@id",+"payload":"customerName"""").saveAs("customerId")
 	val phoneIdExtract      =  regex("""node":(\d+),+"type":"put",+"key":"payload",+"feat":[0-9]*,+"value":\{+"type":"@id",+"payload":"customerNumber"""").saveAs("phoneId")
@@ -76,10 +76,10 @@ class BaristaFlow extends Simulation {
 	// Order dialog
 	val amountIdExtract    = regex("""node":(\d+),"type":"put","key":"payload","feat":[0-9]*,"value":\{"type":"@id","payload":"amount"""").saveAs("amountId")
 	val productsIdExtract  = regex("""node":(\d+),"type":"put","key":"payload","feat":[0-9]*,"value":\{"type":"@id","payload":"products"""").saveAs("productsId")
+	val products2IdExtract = regex("""payload":"products.{2000,4000}node":(\d+),"type":"put","key":"payload","feat":[0-9]*,"value":\{"type":"@id","payload":"products"""").saveAs("products2Id")
+	val productsId1Extract2  = regex("""node":(\d+),"type":"put","key":"selectedItem","feat":[0-9],"value":\{"key":"1","label":"Strawberry Bun""").saveAs("products1Id2")
+	val productsId2Extract2  = regex("""node":(\d+),"type":"put","key":"selectedItem","feat":[0-9],"value":\{"key":"1","label":"Vanilla Cracker""").saveAs("products2Id2")
 
-	val amount2IdExtract   = regex("""node":(\d+),"type":"put","key":"payload","feat":[0-9]*,"value":\{"type":"@id","payload":"amount""").saveAs("amount2Id")
-	val products2IdExtract = regex("""node":(\d+),"type":"put","key":"payload","feat":[0-9]*,"value":\{"type":"@id","payload":"products"""").saveAs("products2Id")
-	val amount3IdExtract   = regex("""node":(\d+),"type":"put","key":"payload","feat":[0-9]*,"value":\{"type":"@id","payload":"amount""").saveAs("amount3Id")
 
 	val scn = scenario("BaristaFlow")
 		.exec(http("Initial request")
@@ -100,6 +100,7 @@ class BaristaFlow extends Simulation {
 			.check(uIdExtract)
 			.check(gridIdExtract)
 			.check(newButtonIdExtract)
+			.check(dialogIdExtract)
 			.check(syncIdExtract).check(clientIdExtract)
 		)
 		.pause(2)
@@ -118,11 +119,6 @@ class BaristaFlow extends Simulation {
 			.check(syncIdExtract).check(clientIdExtract)
 			.check(amountIdExtract)
 			.check(productsIdExtract)
-			.check(amount2IdExtract)
-			.check(products2IdExtract)
-			.check(amount3IdExtract)
-
-			.check(dueDate0IdExtract)
 			.check(customerIdExtract)
 			.check(phoneIdExtract)
 			.check(reviewIdExtract)
@@ -153,7 +149,6 @@ class BaristaFlow extends Simulation {
 			.body(ElFileBody("BaristaFlow_0036_request.txt"))
 			.check(syncIdExtract).check(clientIdExtract))
 		.pause(5,6)
-
 		.exec(http("Product CB1 opened")
 			.post(uidlUrl)
 			.headers(headers_4)
@@ -165,7 +160,7 @@ class BaristaFlow extends Simulation {
 			.headers(headers_4)
 			.body(ElFileBody("BaristaFlow_0037_request.txt"))
 			.check(syncIdExtract).check(clientIdExtract)
-			.check(amount2IdExtract)
+			.check(productsId1Extract2)
 			.check(products2IdExtract)
 		)
 		.pause(2)
@@ -175,7 +170,6 @@ class BaristaFlow extends Simulation {
 			.body(ElFileBody("BaristaFlow_0037b_request.txt"))
 			.check(syncIdExtract).check(clientIdExtract))
 		.pause(2)
-
 		.exec(http("Product CB2 opened")
 			.post(uidlUrl)
 			.headers(headers_4)
@@ -187,7 +181,8 @@ class BaristaFlow extends Simulation {
 			.headers(headers_4)
 			.body(ElFileBody("BaristaFlow_0038_request.txt"))
 			.check(syncIdExtract).check(clientIdExtract)
-			.check(amount3IdExtract)
+			.check(productsId1Extract2)
+			.check(productsId2Extract2)
 		)
 		.pause(2)
 		.exec(http("Product CB2 closed")
@@ -196,7 +191,6 @@ class BaristaFlow extends Simulation {
 			.body(ElFileBody("BaristaFlow_0038b_request.txt"))
 			.check(syncIdExtract).check(clientIdExtract))
 		.pause(5,7)
-
 		.exec(http("Select Store opened")
 			.post(uidlUrl)
 			.headers(headers_4)

@@ -90,29 +90,20 @@ In order to run the scalability tests locally:
 
 1. Build and start Bakery in the production mode (e.g. ```mvn clean spring-boot:run -DskipTests -Dvaadin.productionMode```)
 
-1. Download Gatling from [https://gatling.io/download/](https://gatling.io/download/) and extract it to a folder of your choice. This example assumes that Gatling is extracted into the `/.gatling` folder inside the Bakery project root.
-
 1. Open terminal in the project root
 
 1. Start a test from the command line:
 
     ```bash
-    .gatling/bin/gatling.sh --mute \
-        --bodies-folder src/test/resources/bodies \
-        --simulations-folder src/test/scala \
-        --results-folder target
+    mvn gatling:execute
     ```
 
 1. Test results are stored into target folder (e.g. to ```target/gatling/BaristaFlow-1487784042461/index.html```)
 
-1. By default the scalability test starts 100 user sessions at a 100 ms interval, all of which connect to a locally running Bakery app. These defaults can be overridden with the `gatling.sessionCount`, `gatling.sessionStartInterval` and `gatling.baseUrl` system properties. In order to set them use the `JAVA_OPTS` environment variable like so:
+1. By default the scalability test starts 100 user sessions at a 100 ms interval, all of which connect to a locally running Bakery app. These defaults can be overridden with the `gatling.sessionCount`, `gatling.sessionStartInterval` and `gatling.baseUrl` system properties. See an example execution for 300 users started within 50 s:
 
     ```bash
-    JAVA_OPTS="-Dgatling.sessionCount=300 -Dgatling.sessionStartInterval=50" \
-    .gatling/bin/gatling.sh --mute \
-            --bodies-folder src/test/resources/bodies \
-            --simulations-folder src/test/scala \
-            --results-folder target
+    mvn gatling:execute -Dgatling.sessionCount=300 -Dgatling.sessionStartInterval=50
     ```
 
 Note: If you run Bakery with an in-memory database (like H2, which is the default), it will logically use more memory than when using an external database (like PostgreSQL). It is recommend to run scalability tests for Bakery only after you have configured it to use an external database.
