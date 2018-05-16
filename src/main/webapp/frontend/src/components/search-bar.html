@@ -86,7 +86,7 @@
 
     <div class="row">
       <vaadin-text-field id="field" class="field" placeholder="[[fieldPlaceholder]]" value="{{fieldValue}}"
-         on-focus="_onFieldFocus" on-blur="_onFieldBlur" on-value-changed="_filterChanged"
+         on-focus="_onFieldFocus" on-blur="_onFieldBlur"
          theme="white">
         <iron-icon icon$="[[fieldIcon]]" slot="prefix"></iron-icon>
       </vaadin-text-field>
@@ -204,13 +204,6 @@
         this._focused = false;
       }
 
-      _filterChanged() {
-        this._filtersChangeDebouncer = Polymer.Debouncer.debounce(
-          this._filtersChangeDebouncer,
-          Polymer.Async.timeOut.after(300),
-          () => this.dispatchEvent(new CustomEvent('filter-changed', {bubbles: true, composed: true})));
-        Polymer.enqueueDebouncer(this._filtersChangeDebouncer);
-      }
     }
 
     window.customElements.define(SearchBar.is, SearchBar);

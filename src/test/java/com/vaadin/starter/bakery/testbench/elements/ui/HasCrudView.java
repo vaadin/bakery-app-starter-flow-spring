@@ -1,15 +1,15 @@
 package com.vaadin.starter.bakery.testbench.elements.ui;
 
+import java.util.Optional;
+
+import com.vaadin.flow.component.dialog.testbench.DialogElement;
 import com.vaadin.flow.component.formlayout.testbench.FormLayoutElement;
 import com.vaadin.flow.component.grid.testbench.GridElement;
 import com.vaadin.starter.bakery.testbench.elements.components.ConfirmDialogElement;
 import com.vaadin.starter.bakery.testbench.elements.components.FormButtonsBarElement;
-import com.vaadin.starter.bakery.testbench.elements.core.FlowComponentRendererElement;
 import com.vaadin.testbench.ElementQuery;
 import com.vaadin.testbench.HasElementQuery;
 import com.vaadin.testbench.TestBenchElement;
-
-import java.util.Optional;
 
 public interface HasCrudView extends HasElementQuery {
 
@@ -24,19 +24,17 @@ public interface HasCrudView extends HasElementQuery {
 		return query.exists() ? Optional.of(query.first()) : Optional.empty();
 	}
 
-	default Optional<DialogContentElement> getDialog() {
-		ElementQuery<DialogContentElement> query = $(DialogContentElement.class).onPage();
+	default Optional<DialogElement> getDialog() {
+		ElementQuery<DialogElement> query = $(DialogElement.class).onPage();
 		return query.exists() ? Optional.of(query.first()) : Optional.empty();
 	}
 
 	default FormButtonsBarElement getButtonsBar() {
-		return getDialog().get().$(FlowComponentRendererElement.class).first()
-				.$(getFormClass()).first().$(FormButtonsBarElement.class).first();
+		return getDialog().get().$(getFormClass()).first().$(FormButtonsBarElement.class).first();
 	}
 
 	default FormLayoutElement getForm() {
-		return getDialog().get().$(FlowComponentRendererElement.class).waitForFirst()
-				.$(getFormClass()).first().$(FormLayoutElement.class).waitForFirst();
+		return getDialog().get().$(getFormClass()).first().$(FormLayoutElement.class).waitForFirst();
 	}
 
 }

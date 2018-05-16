@@ -99,11 +99,7 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 	}
 
 	void setOpened(boolean opened) {
-		if (opened) {
-			dialog.open();
-		} else {
-			dialog.close();
-		}
+		dialog.setOpened(opened);
 	}
 
 	@Override
