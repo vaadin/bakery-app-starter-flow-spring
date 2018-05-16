@@ -153,7 +153,7 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 	}
 
 	void setDialogElementsVisibility(boolean editing) {
-		dialog.add(editing ? orderEditor: orderDetails);
+		dialog.add(editing ? orderEditor : orderDetails);
 		orderEditor.setVisible(editing);
 		orderDetails.setVisible(!editing);
 	}
