@@ -236,6 +236,13 @@
       .bold {
         font-weight: 600;
       }
+
+      flow-component-renderer[theme="dialog"],
+      flow-component-renderer[theme="dialog"] > div {
+        display: flex;
+        flex-direction: column;
+        flex: auto;
+      }
     </style>
   </template>
 </dom-module>
