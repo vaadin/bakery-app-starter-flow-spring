@@ -94,6 +94,8 @@ The Bakery App Starter includes scalability tests. Once you have deployed a prod
 
 In order to run the scalability tests locally:
 
+1. Make sure you are using Java 8 (Gatling Maven plugin does not yet work with Java 9+)
+
 1. Build and start Bakery in the production mode (e.g. ```mvn clean spring-boot:run -DskipTests -Dvaadin.productionMode```)
 
 1. Open terminal in the project root
@@ -106,7 +108,7 @@ In order to run the scalability tests locally:
 
 1. Test results are stored into target folder (e.g. to ```target/gatling/BaristaFlow-1487784042461/index.html```)
 
-1. By default the scalability test starts 100 user sessions at a 100 ms interval, all of which connect to a locally running Bakery app. These defaults can be overridden with the `gatling.sessionCount`, `gatling.sessionStartInterval` and `gatling.baseUrl` system properties. See an example execution for 300 users started within 50 s:
+1. By default the scalability test starts 100 user sessions at a 100 ms interval for one repeat, all of which connect to a locally running Bakery app. These defaults can be overridden with the `gatling.sessionCount`, `gatling.sessionStartInterval` `gatling.sessionRepeats`, and `gatling.baseUrl` system properties. See an example execution for 300 users started within 50 s:
 
     ```bash
     mvn -Pscalability gatling:execute -Dgatling.sessionCount=300 -Dgatling.sessionStartInterval=50
