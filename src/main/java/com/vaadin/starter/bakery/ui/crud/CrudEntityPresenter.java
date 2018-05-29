@@ -3,25 +3,20 @@
  */
 package com.vaadin.starter.bakery.ui.crud;
 
-import com.vaadin.flow.data.provider.CallbackDataProvider;
-import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
-import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.FilterableCrudService;
+import org.vaadin.artur.spring.dataprovider.FilterablePageableDataProvider;
 
 public class CrudEntityPresenter<T extends AbstractEntity> extends EntityPresenter<T, CrudView<T, ?>> {
 
-	private ConfigurableFilterDataProvider<T, Void, String> filteredDataProvider;
+	private FilterablePageableDataProvider<T, String> filteredDataProvider;
 
 
 	public CrudEntityPresenter(FilterableCrudService<T> crudService, User currentUser) {
 		super(crudService, currentUser);
 
-		DataProvider<T, String> dataProvider = new CallbackDataProvider<>(
-				query -> crudService.findAnyMatching(query.getFilter()).stream(),
-				query -> crudService.findAnyMatching(query.getFilter()).size());
-		filteredDataProvider = dataProvider.withConfigurableFilter();
+		filteredDataProvider = new CrudEntityDataProvider<>(crudService);
 	}
 
 	@Override
