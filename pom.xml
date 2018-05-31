@@ -110,7 +110,7 @@
         <dependency>
             <groupId>org.vaadin.artur</groupId>
             <artifactId>spring-data-provider</artifactId>
-            <version>2.0.0.alpha3</version>
+            <version>2.0.0</version>
         </dependency>
         <!-- End of Vaadin -->
 
