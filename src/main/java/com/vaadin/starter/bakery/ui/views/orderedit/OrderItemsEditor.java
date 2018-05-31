@@ -23,7 +23,6 @@ public class OrderItemsEditor extends Div implements HasValueAndElement<Componen
 
 	private OrderItemEditor empty;
 
-
 	private ProductDataProvider productDataProvider;
 
 	private int totalPrice = 0;
