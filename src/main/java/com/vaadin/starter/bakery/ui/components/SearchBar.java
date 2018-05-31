@@ -3,6 +3,7 @@ package com.vaadin.starter.bakery.ui.components;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.DebounceSettings;
 import com.vaadin.flow.component.DomEvent;
 import com.vaadin.flow.component.Tag;
@@ -40,7 +41,8 @@ public class SearchBar extends PolymerTemplate<SearchBar.Model> {
 
 	public SearchBar() {
 		textField.setValueChangeMode(ValueChangeMode.EAGER);
-		textField.addListener(SearchValueChanged.class, e -> fireEvent(new FilterChanged(this, false)));
+		ComponentUtil.addListener(textField, SearchValueChanged.class,
+				e -> fireEvent(new FilterChanged(this, false)));
 		clearButton.addClickListener(e -> {
 			textField.clear();
 			getModel().setCheckboxChecked(false);

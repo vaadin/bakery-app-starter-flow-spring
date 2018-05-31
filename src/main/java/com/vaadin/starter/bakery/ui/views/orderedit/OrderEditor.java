@@ -14,6 +14,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 
 import com.vaadin.flow.component.ComponentEventListener;
+import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.button.Button;
@@ -152,7 +153,7 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 
 		itemsEditor.addPriceChangeListener(e -> setTotalPrice(e.getTotalPrice()));
 
-		itemsEditor.addListener(ValueChangeEvent.class, e -> review.setEnabled(hasChanges()));
+		ComponentUtil.addListener(itemsEditor, ValueChangeEvent.class, e -> review.setEnabled(hasChanges()));
 		binder.addValueChangeListener(e -> {
 			if (e.getOldValue() != null) {
 				review.setEnabled(hasChanges());
