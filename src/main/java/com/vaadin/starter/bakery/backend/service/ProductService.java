@@ -1,6 +1,5 @@
 package com.vaadin.starter.bakery.backend.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,19 +23,17 @@ public class ProductService implements FilterableCrudService<Product> {
 		this.productRepository = productRepository;
 	}
 
-	public List<Product> findAnyMatching(Optional<String> filter) {
-		return findAnyMatching(filter, null);
-	}
-
-	public List<Product> findAnyMatching(Optional<String> filter, Pageable pageable) {
+	@Override
+	public Page<Product> findAnyMatching(Optional<String> filter, Pageable pageable) {
 		if (filter.isPresent()) {
 			String repositoryFilter = "%" + filter.get() + "%";
-			return productRepository.findByNameLikeIgnoreCase(repositoryFilter, pageable).getContent();
+			return productRepository.findByNameLikeIgnoreCase(repositoryFilter, pageable);
 		} else {
-			return find(pageable).getContent();
+			return find(pageable);
 		}
 	}
 
+	@Override
 	public long countAnyMatching(Optional<String> filter) {
 		if (filter.isPresent()) {
 			String repositoryFilter = "%" + filter.get() + "%";
