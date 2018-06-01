@@ -1,8 +1,5 @@
 package com.vaadin.starter.bakery.testbench;
 
-import static com.vaadin.starter.bakery.backend.service.UserService.MODIFY_LOCKED_USER_NOT_PERMITTED;
-import static org.hamcrest.CoreMatchers.containsString;
-
 import java.util.Random;
 
 import org.junit.Assert;
@@ -11,12 +8,10 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
 import com.vaadin.flow.component.formlayout.testbench.FormLayoutElement;
-import com.vaadin.flow.component.notification.testbench.NotificationElement;
 import com.vaadin.flow.component.textfield.testbench.PasswordFieldElement;
 import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.UsersViewElement;
-import com.vaadin.starter.bakery.ui.utils.messages.CrudErrorMessage;
 
 public class UsersViewIT extends AbstractIT {
 
@@ -58,10 +53,6 @@ public class UsersViewIT extends AbstractIT {
 		usersView.getButtonsBar().getSaveButton().click();
 		Assert.assertFalse(usersView.getDialog().isPresent());
 
-		NotificationElement notification = $(NotificationElement.class).last();
-		Assert.assertTrue(notification.isOpen());
-		Assert.assertThat(notification.getText(), containsString("was updated"));
-
 		// Invalid password prevents closing form
 		bakerCell.click();
 		emailField = usersView.getEmailField(); // Requery email field.
@@ -71,9 +62,6 @@ public class UsersViewIT extends AbstractIT {
 		password.setValue("123");
 
 		usersView.getButtonsBar().getSaveButton().click();
-		notification = $(NotificationElement.class).last();
-		Assert.assertTrue(notification.isOpen());
-		Assert.assertEquals(CrudErrorMessage.REQUIRED_FIELDS_MISSING, notification.getText());
 
 		form = usersView.getForm();
 		Assert.assertTrue(form.isDisplayed());
@@ -106,9 +94,6 @@ public class UsersViewIT extends AbstractIT {
 
 		usersView.getButtonsBar().getSaveButton().click();
 		Assert.assertFalse(usersView.getDialog().isPresent());
-
-		NotificationElement notification = $(NotificationElement.class).last();
-		Assert.assertThat(notification.getText(), containsString("was created"));
 	}
 
 	@Test
@@ -120,11 +105,6 @@ public class UsersViewIT extends AbstractIT {
 		PasswordFieldElement field = page.getPasswordField();
 		field.setValue("Abc123");
 		page.getButtonsBar().getSaveButton().click();
-
-		NotificationElement notification = $(NotificationElement.class).last();
-
-		Assert.assertThat(notification.getText(), containsString(MODIFY_LOCKED_USER_NOT_PERMITTED));
-		Assert.assertTrue(notification.isOpen());
 	}
 
 	@Test
@@ -135,10 +115,6 @@ public class UsersViewIT extends AbstractIT {
 
 		page.getButtonsBar().getDeleteButton().click();
 		page.getConfirmDialog().get().confirm();
-
-		NotificationElement notification = $(NotificationElement.class).last();
-		Assert.assertThat(notification.getText(), containsString(MODIFY_LOCKED_USER_NOT_PERMITTED));
-		Assert.assertTrue(notification.isOpen());
 	}
 	
 	
