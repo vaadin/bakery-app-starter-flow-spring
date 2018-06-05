@@ -36,7 +36,7 @@
         const grid = this.$.grid;
         let partsLoaded = 0;
         const listener = () => {
-          if (!grid.loading && ++partsLoaded === 2 && window.performance.mark) {
+          if (++partsLoaded === 2 && window.performance.mark) {
             // the 'loading-changed' event is fired separately for the headers (first)
             // and for the content (second). Waiting for the second time
             window.performance.mark('bakery-page-loaded');
