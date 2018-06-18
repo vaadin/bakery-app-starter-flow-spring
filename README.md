@@ -52,12 +52,7 @@ To activate spring-boot-devtools is needed to:
     </configuration>
 </plugin>
 ```
-3. Create and place into the `src/main/resources/META-INF` the following spring-devtools.properties
-```
-restart.include.flow=/flow.*\.jar
-restart.include.vaadin=/vaadin.*\.jar
-```
-4. Optionally you might want to avoid the data generator to be run on each single reload, therefore, make H2 database store entities in file-system instead of in memory by adding the following lines to the `src/main/resources/application.properties`
+3. Optionally you might want to avoid the data generator to be run on each single reload, therefore, make H2 database store entities in file-system instead of in memory by adding the following lines to the `src/main/resources/application.properties`
 ```
 spring.datasource.url=jdbc:h2:file:~/bakery-test-data
 spring.jpa.hibernate.ddl-auto=update
