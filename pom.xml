@@ -378,6 +378,13 @@
                             <warSourceExcludes>frontend/**,.gitignore</warSourceExcludes>
                         </configuration>
                     </plugin>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <jvmArguments>-Dvaadin.productionMode</jvmArguments>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
