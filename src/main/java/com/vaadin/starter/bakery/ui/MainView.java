@@ -23,6 +23,7 @@ import java.util.List;
 
 import com.vaadin.flow.component.HasElement;
 import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.component.polymertemplate.Id;
@@ -34,7 +35,6 @@ import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.app.security.SecurityUtils;
 import com.vaadin.starter.bakery.ui.components.AppNavigation;
-import com.vaadin.starter.bakery.ui.components.ConfirmDialog;
 import com.vaadin.starter.bakery.ui.entities.PageInfo;
 import com.vaadin.starter.bakery.ui.exceptions.AccessDeniedException;
 import com.vaadin.starter.bakery.ui.views.HasConfirmation;
@@ -56,8 +56,12 @@ public class MainView extends PolymerTemplate<TemplateModel>
 	private final ConfirmDialog confirmDialog;
 
 	@Autowired
-	public MainView(ConfirmDialog confirmDialog) {
-		this.confirmDialog = confirmDialog;
+	public MainView() {
+		this.confirmDialog = new ConfirmDialog();
+		confirmDialog.setConfirmable(true);
+		confirmDialog.setCancelable(true);
+		confirmDialog.setConfirmButtonTheme("raised tertiary error");
+		confirmDialog.setCancelButtonTheme("raised tertiary");
 
 		List<PageInfo> pages = new ArrayList<>();
 

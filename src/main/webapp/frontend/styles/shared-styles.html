@@ -4,7 +4,7 @@
 <dom-module id="bakery-dialog-overlay-theme" theme-for="vaadin-dialog-overlay">
   <template>
     <style>
-      :host {
+      :host([theme]) {
         padding: var(--lumo-space-xs);
       }
 
@@ -15,7 +15,7 @@
         outline: none;
       }
 
-      [part="content"] {
+      :host([theme]) [part="content"] {
         width: 100%;
         box-sizing: border-box;
         flex: 1 1 auto;

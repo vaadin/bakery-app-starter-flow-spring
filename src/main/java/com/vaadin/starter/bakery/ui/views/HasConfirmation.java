@@ -1,6 +1,6 @@
 package com.vaadin.starter.bakery.ui.views;
 
-import com.vaadin.starter.bakery.ui.components.ConfirmDialog;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 
 public interface HasConfirmation {
 
