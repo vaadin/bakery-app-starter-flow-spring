@@ -114,7 +114,7 @@ public class UsersViewIT extends AbstractIT {
 		page.getGrid().getCell("barista@vaadin.com").click();
 
 		page.getButtonsBar().getDeleteButton().click();
-		page.getConfirmDialog().get().confirm();
+		page.getConfirmDialog().get().getConfirmButton().click();
 	}
 	
 	
@@ -125,6 +125,6 @@ public class UsersViewIT extends AbstractIT {
 		page.getFirstName().setValue("Some name");
 		page.getButtonsBar().getCancelButton().click();
 		Assert.assertEquals("There are unsaved modifications to the User. Discard changes?",
-				page.getConfirmDialog().get().getMessage());
+				page.getConfirmDialog().get().getMessageText());
 	}
 }

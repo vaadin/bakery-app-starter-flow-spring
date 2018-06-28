@@ -58,7 +58,6 @@ public class MainView extends PolymerTemplate<TemplateModel>
 	@Autowired
 	public MainView() {
 		this.confirmDialog = new ConfirmDialog();
-		confirmDialog.setConfirmable(true);
 		confirmDialog.setCancelable(true);
 		confirmDialog.setConfirmButtonTheme("raised tertiary error");
 		confirmDialog.setCancelButtonTheme("raised tertiary");
