@@ -71,7 +71,7 @@ public class ProductsViewIT extends AbstractIT {
 		productsPage.getProductName().setValue("Some name");
 		productsPage.getButtonsBar().getCancelButton().click();
 		Assert.assertEquals("There are unsaved modifications to the Product. Discard changes?",
-				productsPage.getConfirmDialog().get().getMessage());
+				productsPage.getConfirmDialog().get().getMessageText());
 	}
 
 	private void createProduct(ProductsViewElement productsPage, String name, String price) {
