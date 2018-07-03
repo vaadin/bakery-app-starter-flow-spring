@@ -11,6 +11,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.InitialPageSettings;
 import com.vaadin.flow.server.PageConfigurator;
 import com.vaadin.flow.templatemodel.TemplateModel;
+import com.vaadin.starter.bakery.ui.components.BakeryCookieConsent;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
 @Tag("login-view")
@@ -21,6 +22,11 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
 @Viewport(BakeryConst.VIEWPORT)
 public class LoginView extends PolymerTemplate<LoginView.Model> implements PageConfigurator, AfterNavigationObserver {
+
+	
+	public LoginView() {
+		getElement().appendChild(new BakeryCookieConsent().getElement());
+	}
 
 	@Override
 	public void configurePage(InitialPageSettings settings) {

@@ -35,6 +35,7 @@ import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.app.security.SecurityUtils;
 import com.vaadin.starter.bakery.ui.components.AppNavigation;
+import com.vaadin.starter.bakery.ui.components.BakeryCookieConsent;
 import com.vaadin.starter.bakery.ui.entities.PageInfo;
 import com.vaadin.starter.bakery.ui.exceptions.AccessDeniedException;
 import com.vaadin.starter.bakery.ui.views.HasConfirmation;
@@ -77,6 +78,7 @@ public class MainView extends PolymerTemplate<TemplateModel>
 		appNavigation.init(pages, PAGE_DEFAULT, PAGE_LOGOUT);
 
 		getElement().appendChild(confirmDialog.getElement());
+		getElement().appendChild(new BakeryCookieConsent().getElement());
 	}
 
 	@Override
