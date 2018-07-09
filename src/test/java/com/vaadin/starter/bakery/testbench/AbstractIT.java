@@ -1,23 +1,27 @@
 package com.vaadin.starter.bakery.testbench;
 
-import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import org.junit.Rule;
+import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.BrowserType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.LoggerFactory;
 
+import com.vaadin.flow.component.cookieconsent.testbench.CookieConsentElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.LoginViewElement;
+import com.vaadin.starter.bakery.testbench.elements.ui.MainViewElement;
+import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.testbench.IPAddress;
 import com.vaadin.testbench.ScreenshotOnFailureRule;
 import com.vaadin.testbench.TestBenchDriverProxy;
+import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.parallel.ParallelTest;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 
-public abstract class AbstractIT extends ParallelTest {
 
+public abstract class AbstractIT<E extends TestBenchElement> extends ParallelTest {
 	public String APP_URL = "http://localhost:8080/";
 
 	static {
@@ -62,4 +66,14 @@ public abstract class AbstractIT extends ParallelTest {
 		driver.get(url);
 		return $(LoginViewElement.class).waitForFirst();
 	}
+	
+	protected abstract E openView();
+	
+	@Test
+	public void shouldShowCookieConsent() {
+		openView();
+		// throws NoSuchElementException if CookieConsentElement is not present.
+		$(MainViewElement.class).first().$(CookieConsentElement.class).first();
+	}
+
 }

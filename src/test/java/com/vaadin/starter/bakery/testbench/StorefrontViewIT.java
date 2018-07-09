@@ -19,15 +19,16 @@ import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement.Ord
 import com.vaadin.starter.bakery.testbench.elements.ui.UsersViewElement;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
-public class StorefrontViewIT extends AbstractIT {
+public class StorefrontViewIT extends AbstractIT<StorefrontViewElement> {
 
-	private StorefrontViewElement openStorefrontPage() {
+	@Override
+	protected StorefrontViewElement openView() {
 		return openLoginView().login("admin@vaadin.com", "admin");
 	}
 
 	@Test
 	public void editOrder() {
-		StorefrontViewElement storefrontPage = openStorefrontPage();
+		StorefrontViewElement storefrontPage = openView();
 
 		int orderIndex = new Random().nextInt(10);
 
@@ -58,7 +59,7 @@ public class StorefrontViewIT extends AbstractIT {
 
 	@Test
 	public void testDialogs() {
-		StorefrontViewElement storefrontPage = openStorefrontPage();
+		StorefrontViewElement storefrontPage = openView();
 		openAllDialogs(storefrontPage);
 
 		UsersViewElement usersPage = storefrontPage.getMenu().navigateToUsers();
@@ -91,7 +92,7 @@ public class StorefrontViewIT extends AbstractIT {
 
 	@Test
 	public void testTextFieldValidation() {
-		StorefrontViewElement storefrontPage = openStorefrontPage();
+		StorefrontViewElement storefrontPage = openView();
 
 		int orderIndex = new Random().nextInt(10);
 

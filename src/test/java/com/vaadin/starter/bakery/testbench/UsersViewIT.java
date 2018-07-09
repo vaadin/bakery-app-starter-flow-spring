@@ -13,18 +13,19 @@ import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.UsersViewElement;
 
-public class UsersViewIT extends AbstractIT {
+public class UsersViewIT extends AbstractIT<UsersViewElement> {
 
 	private static Random r = new Random();
 
-	private UsersViewElement openTestPage() {
+	@Override
+	protected UsersViewElement openView() {
 		StorefrontViewElement storefront = openLoginView().login("admin@vaadin.com", "admin");
 		return storefront.getMenu().navigateToUsers();
 	}
 
 	@Test
 	public void updatePassword() {
-		UsersViewElement usersView = openTestPage();
+		UsersViewElement usersView = openView();
 
 		Assert.assertFalse(usersView.getDialog().isPresent());
 
@@ -98,7 +99,7 @@ public class UsersViewIT extends AbstractIT {
 
 	@Test
 	public void tryToUpdateLockedEntity() {
-		UsersViewElement page = openTestPage();
+		UsersViewElement page = openView();
 
 		page.getGrid().getCell("barista@vaadin.com").click();
 
@@ -109,7 +110,7 @@ public class UsersViewIT extends AbstractIT {
 
 	@Test
 	public void tryToDeleteLockedEntity() {
-		UsersViewElement page = openTestPage();
+		UsersViewElement page = openView();
 
 		page.getGrid().getCell("barista@vaadin.com").click();
 
@@ -120,7 +121,7 @@ public class UsersViewIT extends AbstractIT {
 	
 	@Test
 	public void testCancelConfirmationMessage() {
-		UsersViewElement page = openTestPage();
+		UsersViewElement page = openView();
 		page.getSearchBar().getCreateNewButton().click();
 		page.getFirstName().setValue("Some name");
 		page.getButtonsBar().getCancelButton().click();
