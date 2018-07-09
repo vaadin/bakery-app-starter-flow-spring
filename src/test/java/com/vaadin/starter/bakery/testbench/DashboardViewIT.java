@@ -7,22 +7,23 @@ import com.vaadin.starter.bakery.testbench.elements.components.DashboardLCounter
 import com.vaadin.starter.bakery.testbench.elements.ui.DashboardViewElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement;
 
-public class DashboardViewIT extends AbstractIT {
+public class DashboardViewIT extends AbstractIT<DashboardViewElement> {
 
-	private DashboardViewElement openDashboardPage() {
+	@Override
+	protected DashboardViewElement openView() {
 		StorefrontViewElement storefront = openLoginView().login("admin@vaadin.com", "admin");
 		return storefront.getMenu().navigateToDashboard();
 	}
 
 	@Test
 	public void checkRowsCount() {
-		DashboardViewElement dashboardPage = openDashboardPage();
+		DashboardViewElement dashboardPage = openView();
 		Assert.assertEquals(4, dashboardPage.getBoard().getRows().size());
 	}
 
 	@Test
 	public void checkCounters() {
-		DashboardViewElement dashboardPage = openDashboardPage();
+		DashboardViewElement dashboardPage = openView();
 		int numLabels = dashboardPage.getBoard().getRows().get(0).$(DashboardLCounterLabelElement.class).all().size();
 		Assert.assertEquals(4, numLabels);
 	}
