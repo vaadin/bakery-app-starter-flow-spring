@@ -9,10 +9,10 @@ gulp.task('lint', ['lint:js', 'lint:html', 'lint:css']);
 
 gulp.task('lint:js', function() {
   return gulp.src([
-    '../src/main/webapp/frontend/*.js',
-    '!../src/main/webapp/frontend/gridConnector.js',
-    '../src/main/webapp/frontend/src/**/*.js',
-    '../src/main/webapp/frontend/test/**/*.js'
+    '../src/main/resources/static/frontend/*.js',
+    '!../src/main/resources/static/frontend/gridConnector.js',
+    '../src/main/resources/static/frontend/src/**/*.js',
+    '../src/main/resources/static/frontend/test/**/*.js'
   ])
     .pipe(eslint())
     .pipe(eslint.format())
@@ -21,11 +21,11 @@ gulp.task('lint:js', function() {
 
 gulp.task('lint:html', function() {
   return gulp.src([
-    '../src/main/webapp/frontend/*.html',
-    '!../src/main/webapp/frontend/flow-component-renderer.html',
-    '!../src/main/webapp/frontend/flow-grid-component-renderer.html',
-    '../src/main/webapp/frontend/src/**/*.html',
-    '../src/main/webapp/frontend/test/**/*.html'
+    '../src/main/resources/static/frontend/*.html',
+    '!../src/main/resources/static/frontend/flow-component-renderer.html',
+    '!../src/main/resources/static/frontend/flow-grid-component-renderer.html',
+    '../src/main/resources/static/frontend/src/**/*.html',
+    '../src/main/resources/static/frontend/test/**/*.html'
   ])
     .pipe(htmlExtract({
       sel: 'script, code-example code',
@@ -38,11 +38,11 @@ gulp.task('lint:html', function() {
 
 gulp.task('lint:css', function() {
   return gulp.src([
-    '../src/main/webapp/frontend/*.html',
-    '!../src/main/webapp/frontend/flow-component-renderer.html',
-    '!../src/main/webapp/frontend/flow-grid-component-renderer.html',
-    '../src/main/webapp/frontend/src/**/*.html',
-    '../src/main/webapp/frontend/test/**/*.html'
+    '../src/main/resources/static/frontend/*.html',
+    '!../src/main/resources/static/frontend/flow-component-renderer.html',
+    '!../src/main/resources/static/frontend/flow-grid-component-renderer.html',
+    '../src/main/resources/static/frontend/src/**/*.html',
+    '../src/main/resources/static/frontend/test/**/*.html'
   ])
     .pipe(htmlExtract({
       sel: 'style'
@@ -53,3 +53,4 @@ gulp.task('lint:css', function() {
       ]
     }));
 });
+
