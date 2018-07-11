@@ -1,20 +1,36 @@
 // Important: update the version each time you change any of the files listed below
-var version = 4;
+var version = 1;
 // define your offline-page and assets used by it
-var manifest = 'manifest.json';
 var offlinePage = 'offline-page.html';
-var offlineAssets = [
+var offlineAssets = [offlinePage, 'manifest.json',
   'images/offline-login-banner.jpg'
 ]
 
+const CACHE_NAME = 'static-v' + version;
+
 function updateCache() {
-  return caches.open('static' + version)
+  return caches.open(CACHE_NAME)
     .then(function(cache) {
-      cache.add(manifest);
-      cache.add(offlinePage);
       cache.addAll(offlineAssets);
     });
 }
+
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          if (CACHE_NAME !== cacheName) {
+            // If this cache name isn't present in the array of "expected" cache names,
+            // then delete it.
+            console.log('Deleting out of date cache:', cacheName);
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
+});
 
 self.addEventListener('install', function(event) {
   event.waitUntil(updateCache());
