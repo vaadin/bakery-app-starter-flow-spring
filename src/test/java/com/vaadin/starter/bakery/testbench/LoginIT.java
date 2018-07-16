@@ -41,7 +41,8 @@ public class LoginIT extends AbstractIT<LoginViewElement> {
 	@Override
 	@Test
 	public void shouldShowCookieConsent() {
-		openView().$(CookieConsentElement.class).first();
+		LoginViewElement loginView = openView();
+		Assert.assertEquals(1, loginView.$(CookieConsentElement.class).all().size());
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package com.vaadin.starter.bakery.testbench;
 
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
@@ -68,12 +69,11 @@ public abstract class AbstractIT<E extends TestBenchElement> extends ParallelTes
 	}
 	
 	protected abstract E openView();
-	
+
 	@Test
 	public void shouldShowCookieConsent() {
 		openView();
-		// throws NoSuchElementException if CookieConsentElement is not present.
-		$(MainViewElement.class).first().$(CookieConsentElement.class).first();
+		Assert.assertEquals(1, $(MainViewElement.class).first().$(CookieConsentElement.class).all().size());
 	}
 
 }
