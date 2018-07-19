@@ -11,18 +11,19 @@ import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.ProductsViewElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement;
 
-public class ProductsViewIT extends AbstractIT {
+public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 
 	private static Random r = new Random();
 
-	private ProductsViewElement openProductsPage() {
+	@Override
+	protected ProductsViewElement openView() {
 		StorefrontViewElement storefront = openLoginView().login("admin@vaadin.com", "admin");
 		return storefront.getMenu().navigateToProducts();
 	}
 
 	@Test
 	public void editProduct() {
-		ProductsViewElement productsPage = openProductsPage();
+		ProductsViewElement productsPage = openView();
 
 		Assert.assertFalse(productsPage.getDialog().isPresent());
 
@@ -64,7 +65,7 @@ public class ProductsViewIT extends AbstractIT {
 
 	@Test
 	public void testCancelConfirmationMessage() {
-		ProductsViewElement productsPage = openProductsPage();
+		ProductsViewElement productsPage = openView();
 
 		productsPage.getSearchBar().getCreateNewButton().click();
 		productsPage.getDialog().get();

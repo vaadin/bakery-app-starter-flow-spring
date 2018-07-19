@@ -5,11 +5,12 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.vaadin.flow.component.cookieconsent.testbench.CookieConsentElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.DashboardViewElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.LoginViewElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement;
 
-public class LoginIT extends AbstractIT {
+public class LoginIT extends AbstractIT<LoginViewElement> {
 
 	@Test
 	public void loginWorks() {
@@ -31,6 +32,22 @@ public class LoginIT extends AbstractIT {
 		LoginViewElement loginView = openLoginView(getDriver(), APP_URL + "dashboard");
 		DashboardViewElement dashboard = loginView.login("admin@vaadin.com", "admin", DashboardViewElement.class);
 		Assert.assertNotNull(dashboard);
+	}
+	
+	/*
+	 * Overridden because test is different in this case, since LoginView doesn't
+	 * have MainView
+	 */
+	@Override
+	@Test
+	public void shouldShowCookieConsent() {
+		LoginViewElement loginView = openView();
+		Assert.assertEquals(1, loginView.$(CookieConsentElement.class).all().size());
+	}
+
+	@Override
+	protected LoginViewElement openView() {
+		return openLoginView();
 	}
 
 }

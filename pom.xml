@@ -23,7 +23,7 @@
         <!-- Dependencies -->
         <vaadin.version>10.0.1</vaadin.version>
         <vaadin.confirmdialog.version>1.0.0.beta2</vaadin.confirmdialog.version>
-
+        <vaadin.cookieconsent.version>1.0.0.beta1</vaadin.cookieconsent.version>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Overrides the old version specified by the Spring Boot parent -->
         <selenium.version>3.11.0</selenium.version>
@@ -111,6 +111,11 @@
             <artifactId>vaadin-confirm-dialog-flow</artifactId>
             <version>${vaadin.confirmdialog.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-cookie-consent-flow</artifactId>
+            <version>${vaadin.cookieconsent.version}</version>
+        </dependency>
         <!-- End of Vaadin -->
 
         <!-- Other elements -->
@@ -187,6 +192,12 @@
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-confirm-dialog-testbench</artifactId>
             <version>${vaadin.confirmdialog.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-cookie-consent-testbench</artifactId>
+            <version>${vaadin.cookieconsent.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
