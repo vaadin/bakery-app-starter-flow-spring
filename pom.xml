@@ -43,6 +43,7 @@
         <node.version>v8.1.2</node.version>
         <yarn.version>v0.27.5</yarn.version>
         <buildtools.directory>build-tools</buildtools.directory>
+        <webapp.directory>src/main/webapp</webapp.directory>
     </properties>
 
     <repositories>
@@ -199,6 +200,23 @@
             <plugins>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>${maven.clean.plugin.version}</version>
+                    <!-- Clean up the vaadin-maven-plugin build output from the
+                         webapp folder where it's copied to for spring-boot:run -->
+                    <configuration>
+                        <filesets>
+                            <fileset>
+                                <directory>${webapp.directory}/frontend-es5</directory>
+                            </fileset>
+                            <fileset>
+                                <directory>${webapp.directory}/frontend-es6</directory>
+                            </fileset>
+                        </filesets>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>${maven.resources.plugin.version}</version>
                 </plugin>
@@ -330,18 +348,45 @@
                                       </files>
                                     </fragment>
                                   </fragments>
-                                  <transpileOutputDirectory>${project.build.directory}/classes/static</transpileOutputDirectory>
                                 </configuration>
                             </execution>
                         </executions>
                     </plugin>
 
-                    <!-- (3): Exclude the unprocessed frontend sources from the .war file -->
+                    <!-- (3): Copy the output of vaadin-maven-plugin into the webapp folder,
+                         which is the root of the servlet context if the app starts via spring-boot:run -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-frontend-build-for-spring-boot-run</id>
+                                <phase>process-test-resources</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${webapp.directory}</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${project.build.directory}/${project.build.finalName}</directory>
+                                            <includes>
+                                                <include>frontend-es5/**</include>
+                                                <include>frontend-es6/**</include>
+                                            </includes>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!-- (4): Exclude the unprocessed frontend sources from the .war file -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
                         <configuration>
-                            <warSourceExcludes>frontend/**</warSourceExcludes>
+                            <warSourceExcludes>frontend/**,.gitignore</warSourceExcludes>
                         </configuration>
                     </plugin>
                     <plugin>
