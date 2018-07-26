@@ -1,5 +1,6 @@
 package com.vaadin.starter.bakery.testbench;
 
+import com.vaadin.flow.component.cookieconsent.CookieConsent;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -21,6 +22,7 @@ import com.vaadin.testbench.parallel.ParallelTest;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 
+import java.util.List;
 
 public abstract class AbstractIT<E extends TestBenchElement> extends ParallelTest {
 	public String APP_URL = "http://localhost:8080/";
@@ -67,13 +69,23 @@ public abstract class AbstractIT<E extends TestBenchElement> extends ParallelTes
 		driver.get(url);
 		return $(LoginViewElement.class).waitForFirst();
 	}
-	
+
 	protected abstract E openView();
 
 	@Test
 	public void shouldShowCookieConsent() {
 		openView();
-		Assert.assertEquals(1, $(MainViewElement.class).first().$(CookieConsentElement.class).all().size());
+		final MainViewElement mainView = $(MainViewElement.class).first();
+		final List<CookieConsentElement> cookieConsentElements =
+			mainView.$(CookieConsentElement.class).all();
+		Assert.assertEquals(1, cookieConsentElements.size());
+		final CookieConsentElement cookieConsentElement =
+			cookieConsentElements.get(0);
+		Assert.assertEquals(
+			CookieConsentElement.DefaultValues.MESSAGE,
+			cookieConsentElement.getMessage());
+		Assert.assertEquals(CookieConsent.Position.BOTTOM,
+			cookieConsentElement.getPosition());
 	}
 
 }
