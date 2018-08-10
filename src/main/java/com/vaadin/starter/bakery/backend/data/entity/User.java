@@ -35,9 +35,6 @@ public class User extends AbstractEntity {
 	@Size(max = 255)
 	private String role;
 
-	@Size(max = 2083)
-	private String photoUrl;
-
 	private boolean locked = false;
 
 	@PrePersist
@@ -88,14 +85,6 @@ public class User extends AbstractEntity {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public String getPhotoUrl() {
-		return photoUrl;
-	}
-
-	public void setPhotoUrl(String photoUrl) {
-		this.photoUrl = photoUrl;
 	}
 
 	public boolean isLocked() {
