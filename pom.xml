@@ -23,7 +23,7 @@
         <!-- Dependencies -->
         <vaadin.version>10.0.2</vaadin.version>
         <vaadin.confirmdialog.version>1.0.0.beta2</vaadin.confirmdialog.version>
-        <vaadin.cookieconsent.version>1.0.0.beta2</vaadin.cookieconsent.version>
+        <vaadin.cookieconsent.version>1.0.0</vaadin.cookieconsent.version>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Overrides the old version specified by the Spring Boot parent -->
         <selenium.version>3.11.0</selenium.version>
