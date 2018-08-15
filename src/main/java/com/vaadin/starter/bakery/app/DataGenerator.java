@@ -326,38 +326,35 @@ public class DataGenerator implements HasLogger {
 	}
 
 	private User createBaker(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-		return userRepository.save(createUser("baker@vaadin.com", "Heidi", "Carter", passwordEncoder.encode("baker"),
-				Role.BAKER, "https://randomuser.me/api/portraits/women/76.jpg", false));
+		return userRepository.save(
+				createUser("baker@vaadin.com", "Heidi", "Carter", passwordEncoder.encode("baker"), Role.BAKER, false));
 	}
 
 	private User createBarista(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-		return userRepository
-				.save(createUser("barista@vaadin.com", "Malin", "Castro", passwordEncoder.encode("barista"),
-						Role.BARISTA, "https://randomuser.me/api/portraits/women/89.jpg", true));
+		return userRepository.save(createUser("barista@vaadin.com", "Malin", "Castro",
+				passwordEncoder.encode("barista"), Role.BARISTA, true));
 	}
 
 	private User createAdmin(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-		return userRepository.save(createUser("admin@vaadin.com", "Göran", "Rich", passwordEncoder.encode("admin"),
-				Role.ADMIN, "https://randomuser.me/api/portraits/men/34.jpg", true));
+		return userRepository.save(
+				createUser("admin@vaadin.com", "Göran", "Rich", passwordEncoder.encode("admin"), Role.ADMIN, true));
 	}
 
 	private void createDeletableUsers(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+		userRepository.save(
+				createUser("peter@vaadin.com", "Peter", "Bush", passwordEncoder.encode("peter"), Role.BARISTA, false));
 		userRepository
-				.save(createUser("peter@vaadin.com", "Peter", "Bush", passwordEncoder.encode("peter"), Role.BARISTA,
-				"https://randomuser.me/api/portraits/men/10.jpg", false));
-		userRepository.save(createUser("mary@vaadin.com", "Mary", "Ocon", passwordEncoder.encode("mary"), Role.BAKER,
-				"https://randomuser.me/api/portraits/women/40.jpg", true));
+				.save(createUser("mary@vaadin.com", "Mary", "Ocon", passwordEncoder.encode("mary"), Role.BAKER, true));
 	}
 
 	private User createUser(String email, String firstName, String lastName, String passwordHash, String role,
-			String photoUrl, boolean locked) {
+			boolean locked) {
 		User user = new User();
 		user.setEmail(email);
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
 		user.setPasswordHash(passwordHash);
 		user.setRole(role);
-		user.setPhotoUrl(photoUrl);
 		user.setLocked(locked);
 		return user;
 	}

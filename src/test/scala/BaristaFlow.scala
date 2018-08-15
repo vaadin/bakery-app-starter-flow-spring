@@ -1,4 +1,3 @@
-
 import scala.concurrent.duration._
 
 import io.gatling.core.Predef._
@@ -83,8 +82,8 @@ class BaristaFlow extends Simulation {
 	val amountIdExtract    = regex("""node":(\d+),"type":"put","key":"payload","feat":[0-9]*,"value":\{"type":"@id","payload":"amount"""").saveAs("amountId")
 	val productsIdExtract  = regex("""node":(\d+),"type":"put","key":"payload","feat":[0-9]*,"value":\{"type":"@id","payload":"products"""").saveAs("productsId")
 	val products2IdExtract = regex("""payload":"products.{2000,4000}node":(\d+),"type":"put","key":"payload","feat":[0-9]*,"value":\{"type":"@id","payload":"products"""").saveAs("products2Id")
-	val productsId1Extract2  = regex("""node":(\d+),"type":"put","key":"selectedItem","feat":[0-9],"value":\{"key":"1","label":"Strawberry Bun""").saveAs("products1Id2")
-	val productsId2Extract2  = regex("""node":(\d+),"type":"put","key":"selectedItem","feat":[0-9],"value":\{"key":"1","label":"Vanilla Cracker""").saveAs("products2Id2")
+	val productsId1Extract2  = regex("""node":(\d+),"type":"put","key":"selectedItem","feat":[0-9],"value":\{"key":"[0-9]","label":"Strawberry Bun""").saveAs("products1Id2")
+	val productsId2Extract2  = regex("""node":(\d+),"type":"put","key":"selectedItem","feat":[0-9],"value":\{"key":"[0-9]","label":"Vanilla Cracker""").saveAs("products2Id2")
 
 
 	val scn = scenario("BaristaFlow")
