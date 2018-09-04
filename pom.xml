@@ -21,9 +21,8 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Dependencies -->
-        <vaadin.version>10.0.5</vaadin.version>
-        <vaadin.confirmdialog.version>1.0.0</vaadin.confirmdialog.version>
-        <vaadin.cookieconsent.version>1.0.0</vaadin.cookieconsent.version>
+        <vaadin.version>11.0.0.beta3</vaadin.version>
+
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Overrides the old version specified by the Spring Boot parent -->
         <selenium.version>3.11.0</selenium.version>
@@ -111,16 +110,6 @@
             <artifactId>spring-data-provider</artifactId>
             <version>2.0.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-confirm-dialog-flow</artifactId>
-            <version>${vaadin.confirmdialog.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-cookie-consent-flow</artifactId>
-            <version>${vaadin.cookieconsent.version}</version>
-        </dependency>
         <!-- End of Vaadin -->
 
         <!-- Other elements -->
@@ -191,18 +180,6 @@
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-testbench</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-confirm-dialog-testbench</artifactId>
-            <version>${vaadin.confirmdialog.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-cookie-consent-testbench</artifactId>
-            <version>${vaadin.cookieconsent.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
