@@ -292,6 +292,7 @@
                                         <file>src/components/form-buttons-bar.html</file>
                                         <file>src/components/search-bar.html</file>
                                         <file>src/components/utils-mixin.html</file>
+                                        <file>textConnector.js</file>
                                       </files>
                                     </fragment>
                                     <fragment>
