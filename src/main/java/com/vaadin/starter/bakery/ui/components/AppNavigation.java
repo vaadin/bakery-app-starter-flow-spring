@@ -62,6 +62,9 @@ public class AppNavigation extends PolymerTemplate<TemplateModel> implements Aft
 		String href = event.getLocation().getFirstSegment().isEmpty() ? defaultHref
 				: event.getLocation().getFirstSegment();
 		currentHref = href;
-		tabs.setSelectedIndex(hrefs.indexOf(href));
+
+		if (hrefs.contains((href))) {
+			tabs.setSelectedIndex(hrefs.indexOf(href));
+		}
 	}
 }
