@@ -33,6 +33,7 @@ deploy:
 branches:
   only:
     - master
+    - /^platform-\d{2}$/
 cache:
   directories:
   - $HOME/.m2
