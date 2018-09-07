@@ -114,7 +114,6 @@
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-spring</artifactId>
-            <version>10.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.vaadin.artur</groupId>
