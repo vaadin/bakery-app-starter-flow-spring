@@ -3,6 +3,7 @@
  */
 package com.vaadin.starter.bakery.ui.crud;
 
+import com.vaadin.starter.bakery.app.security.CurrentUser;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.FilterableCrudService;
@@ -13,7 +14,7 @@ public class CrudEntityPresenter<T extends AbstractEntity> extends EntityPresent
 	private FilterablePageableDataProvider<T, String> filteredDataProvider;
 
 
-	public CrudEntityPresenter(FilterableCrudService<T> crudService, User currentUser) {
+	public CrudEntityPresenter(FilterableCrudService<T> crudService, CurrentUser currentUser) {
 		super(crudService, currentUser);
 
 		filteredDataProvider = new CrudEntityDataProvider<>(crudService);
