@@ -59,8 +59,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public CurrentUser currentUser(UserRepository userRepository) {
 		final String username = SecurityUtils.getUsername();
-		User user = username != null ? userRepository.findByEmailIgnoreCase(username) : null;
-	    return () -> user;
+		User user =
+			username != null ? userRepository.findByEmailIgnoreCase(username) :
+				null;
+		return () -> user;
 	}
 
 	/**
