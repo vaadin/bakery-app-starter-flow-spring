@@ -11,6 +11,7 @@ import org.springframework.dao.OptimisticLockingFailureException;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.shared.Registration;
 import com.vaadin.starter.bakery.app.HasLogger;
+import com.vaadin.starter.bakery.app.security.CurrentUser;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.data.entity.util.EntityUtil;
@@ -20,17 +21,19 @@ import com.vaadin.starter.bakery.ui.utils.messages.CrudErrorMessage;
 import com.vaadin.starter.bakery.ui.utils.messages.Message;
 import com.vaadin.starter.bakery.ui.views.EntityView;
 
-public class EntityPresenter<T extends AbstractEntity, V extends EntityView<T>> implements HasLogger {
+public class EntityPresenter<T extends AbstractEntity, V extends EntityView<T>>
+	implements HasLogger {
 
 	private CrudService<T> crudService;
 
-	private User currentUser;
+	private CurrentUser currentUser;
 
 	private V view;
 
 	private EntityPresenterState<T> state = new EntityPresenterState<T>();
 
-	public EntityPresenter(CrudService<T> crudService, User currentUser) {
+	public EntityPresenter(
+		CrudService<T> crudService, CurrentUser currentUser) {
 		this.crudService = crudService;
 		this.currentUser = currentUser;
 	}
@@ -46,7 +49,8 @@ public class EntityPresenter<T extends AbstractEntity, V extends EntityView<T>> 
 	public void delete(CrudOperationListener<T> onSuccess) {
 		Message CONFIRM_DELETE = Message.CONFIRM_DELETE.createMessage();
 		confirmIfNecessaryAndExecute(true, CONFIRM_DELETE, () -> {
-			if (executeOperation(() -> crudService.delete(currentUser, state.getEntity()))) {
+			if (executeOperation(() -> crudService.delete(currentUser.getUser(),
+				state.getEntity()))) {
 				onSuccess.execute(state.getEntity());
 			}
 		}, () -> {
@@ -69,39 +73,50 @@ public class EntityPresenter<T extends AbstractEntity, V extends EntityView<T>> 
 		try {
 			operation.run();
 			return true;
-		} catch (UserFriendlyDataException e) {
+		}
+		catch (UserFriendlyDataException e) {
 			// Commit failed because of application-level data constraints
 			consumeError(e, e.getMessage(), true);
-		} catch (DataIntegrityViolationException e) {
+		}
+		catch (DataIntegrityViolationException e) {
 			// Commit failed because of validation errors
-			consumeError(e, CrudErrorMessage.OPERATION_PREVENTED_BY_REFERENCES, true);
-		} catch (OptimisticLockingFailureException e) {
+			consumeError(
+				e, CrudErrorMessage.OPERATION_PREVENTED_BY_REFERENCES, true);
+		}
+		catch (OptimisticLockingFailureException e) {
 			consumeError(e, CrudErrorMessage.CONCURRENT_UPDATE, true);
-		} catch (EntityNotFoundException e) {
+		}
+		catch (EntityNotFoundException e) {
 			consumeError(e, CrudErrorMessage.ENTITY_NOT_FOUND, false);
-		} catch (ConstraintViolationException e) {
+		}
+		catch (ConstraintViolationException e) {
 			consumeError(e, CrudErrorMessage.REQUIRED_FIELDS_MISSING, false);
 		}
 		return false;
 	}
 
-	private void consumeError(Exception e, String message, boolean isPersistent) {
+	private void consumeError(
+		Exception e, String message, boolean isPersistent) {
 		getLogger().debug(message, e);
 		view.showError(message, isPersistent);
 	}
 
 	private void saveEntity() {
-		state.updateEntity(crudService.save(currentUser, state.getEntity()), isNew());
+		state.updateEntity(
+			crudService.save(currentUser.getUser(), state.getEntity()),
+			isNew());
 	}
 
 	public boolean writeEntity() {
 		try {
 			view.write(state.getEntity());
 			return true;
-		} catch (ValidationException e) {
+		}
+		catch (ValidationException e) {
 			view.showError(CrudErrorMessage.REQUIRED_FIELDS_MISSING, false);
 			return false;
-		} catch (NullPointerException e) {
+		}
+		catch (NullPointerException e) {
 			return false;
 		}
 	}
@@ -112,32 +127,38 @@ public class EntityPresenter<T extends AbstractEntity, V extends EntityView<T>> 
 	}
 
 	public void cancel(Runnable onConfirmed, Runnable onCancelled) {
-		confirmIfNecessaryAndExecute(view.isDirty(), Message.UNSAVED_CHANGES.createMessage(state.getEntityName()), () -> {
-			view.clear();
-			onConfirmed.run();
-		}, onCancelled);
+		confirmIfNecessaryAndExecute(
+			view.isDirty(),
+			Message.UNSAVED_CHANGES.createMessage(state.getEntityName()),
+			() -> {
+				view.clear();
+				onConfirmed.run();
+			}, onCancelled);
 	}
 
-	private void confirmIfNecessaryAndExecute(boolean needsConfirmation, Message message, Runnable onConfirmed,
-			Runnable onCancelled) {
+	private void confirmIfNecessaryAndExecute(
+		boolean needsConfirmation, Message message, Runnable onConfirmed,
+		Runnable onCancelled) {
 		if (needsConfirmation) {
 			showConfirmationRequest(message, onConfirmed, onCancelled);
-		} else {
+		}
+		else {
 			onConfirmed.run();
 		}
 	}
 
-	private void showConfirmationRequest(Message message, Runnable onOk, Runnable onCancel) {
+	private void showConfirmationRequest(
+		Message message, Runnable onOk, Runnable onCancel) {
 		view.getConfirmDialog().setText(message.getMessage());
 		view.getConfirmDialog().setHeader(message.getCaption());
 		view.getConfirmDialog().setCancelText(message.getCancelText());
 		view.getConfirmDialog().setConfirmText(message.getOkText());
 		view.getConfirmDialog().setOpened(true);
 
-		final Registration okRegistration = view.getConfirmDialog()
-				.addConfirmListener(e -> onOk.run());
-		final Registration cancelRegistration = view.getConfirmDialog()
-				.addCancelListener(e -> onCancel.run());
+		final Registration okRegistration =
+			view.getConfirmDialog().addConfirmListener(e -> onOk.run());
+		final Registration cancelRegistration =
+			view.getConfirmDialog().addCancelListener(e -> onCancel.run());
 		state.updateRegistration(okRegistration, cancelRegistration);
 	}
 
@@ -149,7 +170,7 @@ public class EntityPresenter<T extends AbstractEntity, V extends EntityView<T>> 
 	}
 
 	public T createNew() {
-		state.updateEntity(crudService.createNew(currentUser), true);
+		state.updateEntity(crudService.createNew(currentUser.getUser()), true);
 		return state.getEntity();
 	}
 
@@ -163,6 +184,7 @@ public class EntityPresenter<T extends AbstractEntity, V extends EntityView<T>> 
 
 	@FunctionalInterface
 	public interface CrudOperationListener<T> {
+
 		void execute(T entity);
 	}
 
@@ -172,7 +194,7 @@ public class EntityPresenter<T extends AbstractEntity, V extends EntityView<T>> 
  * Holds variables that change.
  */
 class EntityPresenterState<T extends AbstractEntity> {
-	
+
 	private T entity;
 	private String entityName;
 	private Registration okRegistration;
@@ -184,8 +206,9 @@ class EntityPresenterState<T extends AbstractEntity> {
 		this.entityName = EntityUtil.getName(this.entity.getClass());
 		this.isNew = isNew;
 	}
-	
-	void updateRegistration(Registration okRegistration,Registration cancelRegistration) {
+
+	void updateRegistration(
+		Registration okRegistration, Registration cancelRegistration) {
 		clearRegistration(this.okRegistration);
 		clearRegistration(this.cancelRegistration);
 		this.okRegistration = okRegistration;
@@ -198,9 +221,9 @@ class EntityPresenterState<T extends AbstractEntity> {
 		this.isNew = false;
 		updateRegistration(null, null);
 	}
-	
+
 	private void clearRegistration(Registration registration) {
-		if(registration != null) {
+		if (registration != null) {
 			registration.remove();
 		}
 	}
