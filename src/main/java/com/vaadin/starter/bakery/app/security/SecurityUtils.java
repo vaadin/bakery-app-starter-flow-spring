@@ -37,8 +37,13 @@ public final class SecurityUtils {
 	 */
 	public static String getUsername() {
 		SecurityContext context = SecurityContextHolder.getContext();
-		UserDetails userDetails = (UserDetails) context.getAuthentication().getPrincipal();
-		return userDetails.getUsername();
+		Object principal = context.getAuthentication().getPrincipal();
+		if(principal instanceof UserDetails) {
+			UserDetails userDetails = (UserDetails) context.getAuthentication().getPrincipal();
+			return userDetails.getUsername();
+		}
+		// Anonymous or no authentication.
+		return null;
 	}
 
 	/**
@@ -49,15 +54,19 @@ public final class SecurityUtils {
 	 * @return true if access is granted, false otherwise.
 	 */
 	public static boolean isAccessGranted(Class<?> securedClass) {
+		Authentication userAuthentication = SecurityContextHolder.getContext().getAuthentication();
+
+		// All views require authentication
+		if (!isUserLoggedIn(userAuthentication)) {
+			return false;
+		}
+
+		// Allow if no roles are required.
 		Secured secured = AnnotationUtils.findAnnotation(securedClass, Secured.class);
 		if (secured == null) {
 			return true;
 		}
 
-		Authentication userAuthentication = SecurityContextHolder.getContext().getAuthentication();
-		if (userAuthentication == null) {
-			return false;
-		}
 		List<String> allowedRoles = Arrays.asList(secured.value());
 		return userAuthentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
 				.anyMatch(allowedRoles::contains);
@@ -70,8 +79,12 @@ public final class SecurityUtils {
 	 */
 	public static boolean isUserLoggedIn() {
 		SecurityContext context = SecurityContextHolder.getContext();
-		return context.getAuthentication() != null
-				&& !(context.getAuthentication() instanceof AnonymousAuthenticationToken);
+		return isUserLoggedIn(SecurityContextHolder.getContext().getAuthentication());
+	}
+
+	private static boolean isUserLoggedIn(Authentication authentication) {
+		return authentication != null
+			&& !(authentication instanceof AnonymousAuthenticationToken);
 	}
 
 	/**

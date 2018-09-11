@@ -11,6 +11,7 @@ import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import com.vaadin.starter.bakery.app.security.CurrentUser;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.User;
 import com.vaadin.starter.bakery.backend.service.OrderService;
@@ -29,12 +30,12 @@ public class OrderPresenter {
 
 	private final EntityPresenter<Order, StorefrontView> entityPresenter;
 	private final OrdersGridDataProvider dataProvider;
-	private final User currentUser;
+	private final CurrentUser currentUser;
 	private final OrderService orderService;
 
 	@Autowired
 	OrderPresenter(OrderService orderService, OrdersGridDataProvider dataProvider,
-			EntityPresenter<Order, StorefrontView> entityPresenter, User currentUser) {
+			EntityPresenter<Order, StorefrontView> entityPresenter, CurrentUser currentUser) {
 		this.orderService = orderService;
 		this.entityPresenter = entityPresenter;
 		this.dataProvider = dataProvider;
@@ -48,7 +49,7 @@ public class OrderPresenter {
 		this.entityPresenter.setView(view);
 		this.view = view;
 		view.getGrid().setDataProvider(dataProvider);
-		view.getOpenedOrderEditor().setCurrentUser(currentUser);
+		view.getOpenedOrderEditor().setCurrentUser(currentUser.getUser());
 		view.getOpenedOrderEditor().addCancelListener(e -> cancel());
 		view.getOpenedOrderEditor().addReviewListener(e -> review());
 		view.getOpenedOrderDetails().addSaveListenter(e -> save());
@@ -121,7 +122,7 @@ public class OrderPresenter {
 	}
 
 	void addComment(String comment) {
-		if (entityPresenter.executeUpdate(e -> orderService.addComment(currentUser, e, comment))) {
+		if (entityPresenter.executeUpdate(e -> orderService.addComment(currentUser.getUser(), e, comment))) {
 			// You can only add comments when in view mode, so reopening in that state.
 			open(entityPresenter.getEntity(), false);
 		}
