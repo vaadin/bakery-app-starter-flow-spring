@@ -110,6 +110,11 @@
             <artifactId>spring-data-provider</artifactId>
             <version>2.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-app-layout-flow</artifactId>
+            <version>1.0.0.alpha1</version>
+        </dependency>
         <!-- End of Vaadin -->
 
         <!-- Other elements -->
@@ -184,8 +189,9 @@
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-app-layout-flow</artifactId>
+            <artifactId>vaadin-app-layout-testbench</artifactId>
             <version>1.0.0.alpha1</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
