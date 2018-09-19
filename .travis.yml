@@ -33,6 +33,7 @@ deploy:
 branches:
   only:
     - master
+    - /^platform-\d{2}$/
 cache:
   directories:
   - $HOME/.m2
@@ -42,4 +43,3 @@ cache:
 before_cache:
   # remove all build artifacts
   - rm -rf $HOME/.m2/repository/com/vaadin/starter/bakery
-  
