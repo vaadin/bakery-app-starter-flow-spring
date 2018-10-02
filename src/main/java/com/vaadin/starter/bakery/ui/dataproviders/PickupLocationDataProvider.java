@@ -8,13 +8,15 @@ import org.springframework.data.domain.PageRequest;
 import com.vaadin.flow.data.provider.AbstractBackEndDataProvider;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.starter.bakery.backend.data.entity.PickupLocation;
 import com.vaadin.starter.bakery.backend.service.PickupLocationService;
 
 /**
- * A singleton data provider which knows which pickup locations are available.
+ * A data provider which knows which pickup locations are available.
  */
 @SpringComponent
+@UIScope
 public class PickupLocationDataProvider extends AbstractBackEndDataProvider<PickupLocation, String> {
 
 	private transient PickupLocationService pickupLocationService;
