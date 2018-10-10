@@ -20,9 +20,8 @@ import static com.vaadin.starter.bakery.ui.utils.BakeryConst.VIEWPORT;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
-import java.util.function.Supplier;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.HasElement;
 import com.vaadin.flow.component.Tag;
@@ -35,6 +34,7 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLayout;
+import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.app.security.SecurityUtils;
 import com.vaadin.starter.bakery.ui.components.AppNavigation;
@@ -44,17 +44,18 @@ import com.vaadin.starter.bakery.ui.exceptions.AccessDeniedException;
 import com.vaadin.starter.bakery.ui.views.HasConfirmation;
 import com.vaadin.starter.bakery.ui.views.admin.products.ProductsView;
 import com.vaadin.starter.bakery.ui.views.admin.users.UsersView;
-import com.vaadin.starter.bakery.ui.views.dashboard.DashboardView;
 import com.vaadin.starter.bakery.ui.views.login.LoginView;
-import com.vaadin.starter.bakery.ui.views.storefront.StorefrontView;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Tag("main-view")
 @HtmlImport("src/main-view.html")
 
 @PageTitle("###Bakery###")
 @Viewport(VIEWPORT)
+@PWA(name = "Bakery App Starter", shortName = "###Bakery###", startPath = "login",
+		backgroundColor = "#227aef", themeColor = "#227aef",
+		manifestPath = "manifest.json",
+		offlinePath = "offline-page.html", offlineResources =
+		{"images/offline-login-banner.jpg"})
 public class MainView extends PolymerTemplate<TemplateModel>
 		implements RouterLayout, BeforeEnterObserver {
 
