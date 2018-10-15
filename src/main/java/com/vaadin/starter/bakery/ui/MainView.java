@@ -4,7 +4,8 @@ import com.vaadin.flow.component.HasElement;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AbstractAppRouterLayout;
 import com.vaadin.flow.component.applayout.AppLayout;
-import com.vaadin.flow.component.applayout.RoutingMenuItem;
+import com.vaadin.flow.component.applayout.AppLayoutMenu;
+import com.vaadin.flow.component.applayout.AppLayoutMenuItem;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -46,21 +47,21 @@ public class MainView extends AbstractAppRouterLayout implements BeforeEnterObse
 	}
 
 	@Override
-	protected void configure(AppLayout appLayout) {
+	protected void configure(AppLayout appLayout, AppLayoutMenu menu) {
 		appLayout.setBranding(new Span("###Bakery###").getElement());
 
 		if (SecurityUtils.isUserLoggedIn()) {
-			setMenuItem(appLayout, new RoutingMenuItem(VaadinIcon.EDIT.create(), TITLE_STOREFRONT, PAGE_STOREFRONT));
-			setMenuItem(appLayout, new RoutingMenuItem(VaadinIcon.CLOCK.create(), TITLE_DASHBOARD, PAGE_DASHBOARD));
+			setMenuItem(menu, new AppLayoutMenuItem(VaadinIcon.EDIT.create(), TITLE_STOREFRONT, PAGE_STOREFRONT));
+			setMenuItem(menu, new AppLayoutMenuItem(VaadinIcon.CLOCK.create(), TITLE_DASHBOARD, PAGE_DASHBOARD));
 
 			if (SecurityUtils.isAccessGranted(UsersView.class)) {
-				setMenuItem(appLayout, new RoutingMenuItem(VaadinIcon.USER.create(), TITLE_USERS, PAGE_USERS));
+				setMenuItem(menu, new AppLayoutMenuItem(VaadinIcon.USER.create(), TITLE_USERS, PAGE_USERS));
 			}
 			if (SecurityUtils.isAccessGranted(ProductsView.class)) {
-				setMenuItem(appLayout, new RoutingMenuItem(VaadinIcon.CALENDAR.create(), TITLE_PRODUCTS, PAGE_PRODUCTS));
+				setMenuItem(menu, new AppLayoutMenuItem(VaadinIcon.CALENDAR.create(), TITLE_PRODUCTS, PAGE_PRODUCTS));
 			}
 
-			setMenuItem(appLayout, new ActionMenuItem(VaadinIcon.ARROW_RIGHT.create(), TITLE_LOGOUT, e ->
+			setMenuItem(menu, new AppLayoutMenuItem(VaadinIcon.ARROW_RIGHT.create(), TITLE_LOGOUT, e ->
 					UI.getCurrent().getPage().executeJavaScript("location.assign('logout')")));
 		}
 		getElement().addEventListener("search-focus", e -> {
@@ -72,9 +73,9 @@ public class MainView extends AbstractAppRouterLayout implements BeforeEnterObse
 		});
 	}
 
-	private void setMenuItem(AppLayout appLayout, MenuItem menuItem) {
+	private void setMenuItem(AppLayoutMenu menu, AppLayoutMenuItem menuItem) {
 		menuItem.getElement().setAttribute("theme", "icon-on-top");
-		appLayout.addMenuItem(menuItem);
+		menu.addMenuItem(menuItem);
 	}
 
 	@Override

@@ -4,8 +4,8 @@
   <template>
     <style>
       :host {
-        --vaadin-app-layout-navbar-height: 52px;
         background-color: var(--lumo-shade-5pct) !important;
+        --vaadin-app-layout-navbar-background: var(--lumo-base-color);
       }
 
       [part="content"] {
@@ -15,12 +15,6 @@
       @media (max-height: 600px) {
         :host(.hide-navbar) [part="navbar"] {
           display: none;
-        }
-      }
-
-      @media (min-width: 700px) {
-        :host {
-          --vaadin-app-layout-navbar-height: 58px;
         }
       }
     }

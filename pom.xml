@@ -123,7 +123,7 @@
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-app-layout-flow</artifactId>
-            <version>1.0.0.alpha2</version>
+            <version>1.0.0.alpha3</version>
         </dependency>
         <!-- End of Vaadin -->
 
@@ -200,7 +200,7 @@
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-app-layout-testbench</artifactId>
-            <version>1.0.0.alpha2</version>
+            <version>1.0.0.alpha3</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
