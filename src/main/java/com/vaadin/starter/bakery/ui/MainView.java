@@ -48,7 +48,7 @@ public class MainView extends AbstractAppRouterLayout implements BeforeEnterObse
 
 	@Override
 	protected void configure(AppLayout appLayout, AppLayoutMenu menu) {
-		appLayout.setBranding(new Span("###Bakery###").getElement());
+		appLayout.setBranding(new Span("###Bakery###"));
 
 		if (SecurityUtils.isUserLoggedIn()) {
 			setMenuItem(menu, new AppLayoutMenuItem(VaadinIcon.EDIT.create(), TITLE_STOREFRONT, PAGE_STOREFRONT));
