@@ -1,5 +1,27 @@
 <link rel="import" href="../bower_components/polymer/lib/elements/custom-style.html">
 
+<dom-module id="bakery-app-layout-theme" theme-for="vaadin-app-layout">
+  <template>
+    <style>
+      :host {
+        background-color: var(--lumo-shade-5pct) !important;
+        --vaadin-app-layout-navbar-background: var(--lumo-base-color);
+      }
+
+      [part="content"] {
+        height: 100%;
+      }
+
+      @media (max-height: 600px) {
+        :host(.hide-navbar) [part="navbar"] {
+          display: none;
+        }
+      }
+    }
+    </style>
+  </template>
+</dom-module>
+
 <!-- Themes for dialogs -->
 <dom-module id="bakery-dialog-overlay-theme" theme-for="vaadin-dialog-overlay">
   <template>
@@ -219,12 +241,6 @@
         }
       }
 
-      @media (max-width: 600px) {
-        search-bar {
-          order: 1;
-        }
-      }
-
       .flex {
         display: flex;
       }
@@ -322,6 +338,20 @@
     	opacity: 0;
     	transition: opacity 500ms 300ms, width 300ms;
     	animation: none;
+    }
+
+    vaadin-app-layout vaadin-tab {
+      font-size: var(--lumo-font-size-xs);
+      padding-left: .75em;
+      padding-right: .75em;
+    }
+
+    @media (min-width: 700px) {
+      vaadin-app-layout vaadin-tab {
+        font-size: var(--lumo-font-size-m);
+        padding-left: 1em;
+        padding-right: 1em;
+      }
     }
   </style>
 </custom-style>

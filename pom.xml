@@ -120,6 +120,11 @@
             <artifactId>spring-data-provider</artifactId>
             <version>2.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-app-layout-flow</artifactId>
+            <version>1.0.0.alpha3</version>
+        </dependency>
         <!-- End of Vaadin -->
 
         <!-- Other elements -->
@@ -190,6 +195,12 @@
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-testbench</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-app-layout-testbench</artifactId>
+            <version>1.0.0.alpha3</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -286,7 +297,6 @@
                                     <fragment>
                                       <name>main-fragment</name>
                                       <files>
-                                        <file>src/main-view.html</file>
                                         <file>src/views/admin/users/users-view.html</file>
                                         <file>src/views/admin/users/user-form.html</file>
                                         <file>src/views/admin/products/products-view.html</file>
@@ -298,7 +308,6 @@
                                         <file>src/views/orderedit/order-details.html</file>
                                         <file>src/views/errors/access-denied-view.html</file>
                                         <file>src/components/amount-field.html</file>
-                                        <file>src/components/app-navigation.html</file>
                                         <file>src/components/form-buttons-bar.html</file>
                                         <file>src/components/search-bar.html</file>
                                         <file>src/components/utils-mixin.html</file>
