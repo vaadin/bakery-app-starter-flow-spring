@@ -23,11 +23,8 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 	}
 
 	@Test
-	@Ignore("Fails with Vaadin 12 snapshot, needs research")
 	public void editProduct() {
 		ProductsViewElement productsPage = openView();
-
-		Assert.assertFalse(productsPage.getDialog().isPresent());
 
 		String url = getDriver().getCurrentUrl();
 		GridElement grid = productsPage.getGrid();
@@ -36,24 +33,26 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 		String initialPrice = "98.76";
 		createProduct(productsPage, uniqueName, initialPrice);
 
-		grid.getCell(uniqueName).click();
+		int rowNum = grid.getCell(uniqueName).getRow();
+		productsPage.openRowForEditing(rowNum);
 		Assert.assertTrue(getDriver().getCurrentUrl().length() > url.length());
 
-		Assert.assertTrue(productsPage.getDialog().get().isOpen());
+		Assert.assertTrue(productsPage.isEditorOpen());
 
 		TextFieldElement price = productsPage.getPrice();
 		Assert.assertEquals(initialPrice, price.getValue());
 
 		price.focus();
 		price.setValue("123.45");
-		price.sendKeys(Keys.TAB);
-		productsPage.getButtonsBar().getSaveButton().click();
 
-		Assert.assertFalse(productsPage.getDialog().isPresent());
+		productsPage.getEditorSaveButton().click();
+
+		Assert.assertFalse(productsPage.isEditorOpen());
 
 		Assert.assertTrue(getDriver().getCurrentUrl().endsWith("products"));
 
-		grid.getCell(uniqueName).click();
+		rowNum = grid.getCell(uniqueName).getRow();
+		productsPage.openRowForEditing(rowNum);
 
 		price = productsPage.getPrice(); // Requery the price element.
 		Assert.assertEquals("123.45", price.getValue());
@@ -61,26 +60,31 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 		// Return initial value
 		price.focus();
 		price.setValue(initialPrice);
-		price.sendKeys(Keys.TAB);
-		productsPage.getButtonsBar().getSaveButton().click();
+
+		productsPage.getEditorSaveButton().click();
+		Assert.assertFalse(productsPage.isEditorOpen());
 	}
 
 	@Test
 	public void testCancelConfirmationMessage() {
 		ProductsViewElement productsPage = openView();
 
-		productsPage.getSearchBar().getCreateNewButton().click();
-		productsPage.getDialog().get();
+		productsPage.getNewItemButton().click();
+		Assert.assertTrue(productsPage.isEditorOpen());
 		productsPage.getProductName().setValue("Some name");
-		productsPage.getButtonsBar().getCancelButton().click();
-		Assert.assertEquals("There are unsaved modifications to the Product. Discard changes?",
-				productsPage.getConfirmDialog().get().getMessageText());
+		productsPage.getProductName().focus();
+		// We need to call sendKeys in order to fire value change event
+		// https://github.com/vaadin/vaadin-crud-flow/issues/78
+		productsPage.getProductName().sendKeys("a");
+		productsPage.getEditorCancelButton().click();
+		Assert.assertEquals("Unsaved changes",
+				productsPage.getDiscardConfirmDialog().getHeaderText());
 	}
 
 	private void createProduct(ProductsViewElement productsPage, String name, String price) {
 		productsPage.getSearchBar().getCreateNewButton().click();
 
-		Assert.assertTrue(productsPage.getDialog().get().isOpen());
+		Assert.assertTrue(productsPage.isEditorOpen());
 
 		TextFieldElement nameField = productsPage.getProductName();
 		TextFieldElement priceField = productsPage.getPrice();
@@ -91,7 +95,7 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 		priceField.focus();
 		priceField.setValue(price);
 
-		productsPage.getButtonsBar().getSaveButton().click();
+		productsPage.getEditorSaveButton().click();
 	}
 
 }

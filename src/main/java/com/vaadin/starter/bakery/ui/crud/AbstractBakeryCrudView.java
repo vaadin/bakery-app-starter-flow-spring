@@ -20,6 +20,9 @@ import java.util.function.Consumer;
 public abstract class AbstractBakeryCrudView<E extends AbstractEntity> extends Crud<E>
         implements HasUrlParameter<Long>, HasNotifications {
 
+    private static final String DISCARD_MESSAGE = "There are unsaved modifications to the %s. Discard changes?";
+    private static final String DELETE_MESSAGE = "Are you sure you want to delete the selected %s? This action cannot be undone.";
+
     private final Grid<E> grid;
 
     private final CrudEntityPresenter<E> entityPresenter;
@@ -31,8 +34,6 @@ public abstract class AbstractBakeryCrudView<E extends AbstractEntity> extends C
     public AbstractBakeryCrudView(Class<E> beanType, FilterableCrudService<E> service,
                                   Grid<E> grid, CrudEditor editor, CurrentUser currentUser) {
         super(beanType, grid, editor);
-        //setHeight("100%");
-
         this.grid = grid;
         grid.setSelectionMode(Grid.SelectionMode.NONE);
 
@@ -40,6 +41,8 @@ public abstract class AbstractBakeryCrudView<E extends AbstractEntity> extends C
         crudI18n.setNewItem("New " + beanType.getSimpleName());
         crudI18n.setEditItem("Edit " + beanType.getSimpleName());
         crudI18n.setEditLabel("Edit " + beanType.getSimpleName());
+        crudI18n.getConfirm().getCancel().setContent(String.format(DISCARD_MESSAGE, beanType.getSimpleName()));
+        crudI18n.getConfirm().getDelete().setContent(String.format(DELETE_MESSAGE, beanType.getSimpleName()));
         setI18n(crudI18n);
 
         CrudEntityDataProvider<E> dataProvider = new CrudEntityDataProvider<>(service);
@@ -58,14 +61,11 @@ public abstract class AbstractBakeryCrudView<E extends AbstractEntity> extends C
         setupCrudEventListeners(entityPresenter);
     }
 
-    public void setupCrudEventListeners(CrudEntityPresenter<E> entityPresenter) {
+    private void setupCrudEventListeners(CrudEntityPresenter<E> entityPresenter) {
         Consumer<E> onSuccess = entity -> navigateToEntity(null);
         Consumer<E> onFail = entity -> {
             // TODO: https://github.com/vaadin/vaadin-crud-flow/issues/76
-            // The following code actually is not executed
-            grid.getDataProvider().refreshAll();
-            getEditor().setItem(entity);
-            setOpened(true);
+            // Throw an exception whenever it is supported by component
         };
 
         addEditListener(e ->
