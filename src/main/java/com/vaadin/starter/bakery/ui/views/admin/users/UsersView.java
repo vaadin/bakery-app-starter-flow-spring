@@ -49,8 +49,8 @@ public class UsersView extends AbstractBakeryCrudView<User> {
 	private static BinderCrudEditor<User> createForm(PasswordEncoder passwordEncoder) {
 		TextField email = new TextField("Email (login)");
 		email.getElement().setAttribute("colspan", "2");
-		TextField first = new TextField("First Name");
-		TextField last = new TextField("Last Name");
+		TextField first = new TextField("First name");
+		TextField last = new TextField("Last name");
 		PasswordField password = new PasswordField("Password");
 		password.getElement().setAttribute("colspan", "2");
 		ComboBox<String> role = new ComboBox<>();

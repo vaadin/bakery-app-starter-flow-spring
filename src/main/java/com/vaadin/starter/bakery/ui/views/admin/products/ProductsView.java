@@ -47,9 +47,9 @@ public class ProductsView extends AbstractBakeryCrudView<Product> {
 	}
 
 	private static BinderCrudEditor<Product> createForm() {
-		TextField name = new TextField("Product Name");
+		TextField name = new TextField("Product name");
 		name.getElement().setAttribute("colspan", "2");
-		TextField price = new TextField("Unit Price");
+		TextField price = new TextField("Unit price");
 		price.getElement().setAttribute("colspan", "2");
 
 		FormLayout form = new FormLayout(name, price);
