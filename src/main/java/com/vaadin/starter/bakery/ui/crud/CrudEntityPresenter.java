@@ -16,11 +16,11 @@ import java.util.function.Consumer;
 
 public class CrudEntityPresenter<E extends AbstractEntity>	implements HasLogger {
 
-	private CrudService<E> crudService;
+	private final CrudService<E> crudService;
 
-	private CurrentUser currentUser;
+	private final CurrentUser currentUser;
 
-	private HasNotifications view;
+	private final HasNotifications view;
 
 	public CrudEntityPresenter(CrudService<E> crudService, CurrentUser currentUser, HasNotifications view) {
 		this.crudService = crudService;

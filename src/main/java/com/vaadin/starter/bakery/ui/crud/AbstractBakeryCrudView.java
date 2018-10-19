@@ -9,6 +9,7 @@ import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.starter.bakery.app.security.CurrentUser;
 import com.vaadin.starter.bakery.backend.data.entity.AbstractEntity;
+import com.vaadin.starter.bakery.backend.data.entity.util.EntityUtil;
 import com.vaadin.starter.bakery.backend.service.FilterableCrudService;
 import com.vaadin.starter.bakery.ui.components.SearchBar;
 import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
@@ -38,11 +39,13 @@ public abstract class AbstractBakeryCrudView<E extends AbstractEntity> extends C
         grid.setSelectionMode(Grid.SelectionMode.NONE);
 
         CrudI18n crudI18n = CrudI18n.createDefault();
-        crudI18n.setNewItem("New " + beanType.getSimpleName());
-        crudI18n.setEditItem("Edit " + beanType.getSimpleName());
-        crudI18n.setEditLabel("Edit " + beanType.getSimpleName());
-        crudI18n.getConfirm().getCancel().setContent(String.format(DISCARD_MESSAGE, beanType.getSimpleName()));
-        crudI18n.getConfirm().getDelete().setContent(String.format(DELETE_MESSAGE, beanType.getSimpleName()));
+        String entityName = EntityUtil.getName(beanType);
+        crudI18n.setNewItem("New " + entityName);
+        crudI18n.setEditItem("Edit " + entityName);
+        crudI18n.setEditLabel("Edit " + entityName);
+        crudI18n.getConfirm().getCancel().setContent(String.format(DISCARD_MESSAGE, entityName));
+        crudI18n.getConfirm().getDelete().setContent(String.format(DELETE_MESSAGE, entityName));
+        crudI18n.setDeleteItem("Delete");
         setI18n(crudI18n);
 
         CrudEntityDataProvider<E> dataProvider = new CrudEntityDataProvider<>(service);
@@ -53,7 +56,7 @@ public abstract class AbstractBakeryCrudView<E extends AbstractEntity> extends C
         entityPresenter = new CrudEntityPresenter<>(service, currentUser, this);
 
         SearchBar searchBar = new SearchBar();
-        searchBar.setActionText("New " + beanType.getSimpleName());
+        searchBar.setActionText("New " + entityName);
         searchBar.addFilterChangeListener(e -> dataProvider.setFilter(searchBar.getFilter()));
         searchBar.getActionButton().getElement().setAttribute("slot", "new");
 
