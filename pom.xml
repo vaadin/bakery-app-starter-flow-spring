@@ -122,8 +122,8 @@
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-app-layout-flow</artifactId>
-            <version>1.0.0.alpha3</version>
+            <artifactId>vaadin-crud-flow</artifactId>
+            <version>1.0.0.alpha6</version>
         </dependency>
         <!-- End of Vaadin -->
 
@@ -199,8 +199,8 @@
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-app-layout-testbench</artifactId>
-            <version>1.0.0.alpha3</version>
+            <artifactId>vaadin-crud-testbench</artifactId>
+            <version>1.0.0.alpha6</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -297,10 +297,6 @@
                                     <fragment>
                                       <name>main-fragment</name>
                                       <files>
-                                        <file>src/views/admin/users/users-view.html</file>
-                                        <file>src/views/admin/users/user-form.html</file>
-                                        <file>src/views/admin/products/products-view.html</file>
-                                        <file>src/views/admin/products/product-form.html</file>
                                         <file>src/views/storefront/storefront-view.html</file>
                                         <file>src/views/storefront/order-status-badge.html</file>
                                         <file>src/views/orderedit/order-item-editor.html</file>
