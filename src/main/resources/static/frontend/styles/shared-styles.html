@@ -85,6 +85,11 @@
           padding: 0;
         }
 
+        :host([theme]) [part="content"] {
+          display: flex;
+          flex-direction: column;
+        }
+
         :host([theme]) [part="overlay"] {
           flex: 1;
           border-radius: 0 !important;
