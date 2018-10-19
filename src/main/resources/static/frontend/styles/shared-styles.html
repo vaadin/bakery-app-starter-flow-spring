@@ -55,33 +55,24 @@
 <dom-module id="bakery-dialog-overlay-theme" theme-for="vaadin-dialog-overlay">
   <template>
     <style>
-      :host([theme]) {
+      :host([theme~="orders"]) {
         padding: var(--lumo-space-xs);
       }
 
-      [part="overlay"] {
+      :host([theme~="orders"]) [part="overlay"] {
         display: flex;
         animation: none !important;
         min-width: 300px;
         outline: none;
       }
 
-      :host([theme~="layout"]) {
-        align-items: flex-end;
-        /* Workaround */
-        max-width: 100% !important;
-        min-width: 0 !important;
+      :host([theme~="crud"]) [part="content"] {
+        padding: 0;
       }
 
-      :host([theme]) [part="content"],
-      :host([theme]) [part="overlay"] {
+      :host([theme~="orders"]) [part="content"],
+      :host([theme~="orders"]) [part="overlay"] {
         max-width: 65em;
-        width: 100%;
-      }
-
-      :host([theme~="layout"]) [part="overlay"] {
-        flex: 1;
-        max-width: 45em;
         width: 100%;
       }
 
@@ -267,6 +258,7 @@
         display: flex;
         flex-direction: column;
         flex: auto;
+        height: 100%;
       }
     </style>
   </template>
