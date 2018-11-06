@@ -58,9 +58,9 @@ public abstract class AbstractBakeryCrudView<E extends AbstractEntity> extends C
         SearchBar searchBar = new SearchBar();
         searchBar.setActionText("New " + entityName);
         searchBar.addFilterChangeListener(e -> dataProvider.setFilter(searchBar.getFilter()));
-        searchBar.getActionButton().getElement().setAttribute("slot", "new");
+        searchBar.getActionButton().getElement().setAttribute("new-button", true);
 
-        setFooter(searchBar);
+        setToolbar(searchBar);
         setupCrudEventListeners(entityPresenter);
     }
 
