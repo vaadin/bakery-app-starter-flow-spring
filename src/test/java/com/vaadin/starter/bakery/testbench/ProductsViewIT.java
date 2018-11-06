@@ -68,7 +68,7 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 	public void testCancelConfirmationMessage() {
 		ProductsViewElement productsPage = openView();
 
-		productsPage.getNewItemButton().click();
+		productsPage.getNewItemButton().get().click();
 		Assert.assertTrue(productsPage.isEditorOpen());
 		productsPage.getProductName().setValue("Some name");
 		productsPage.getProductName().focus();
