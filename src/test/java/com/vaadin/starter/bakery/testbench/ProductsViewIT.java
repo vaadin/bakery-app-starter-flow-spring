@@ -68,7 +68,7 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 	public void testCancelConfirmationMessage() {
 		ProductsViewElement productsPage = openView();
 
-		productsPage.getNewItemButton().click();
+		productsPage.getNewItemButton().get().click();
 		Assert.assertTrue(productsPage.isEditorOpen());
 		productsPage.getProductName().setValue("Some name");
 		productsPage.getProductName().focus();
@@ -76,7 +76,7 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 		// https://github.com/vaadin/vaadin-crud-flow/issues/78
 		productsPage.getProductName().sendKeys("a");
 		productsPage.getEditorCancelButton().click();
-		Assert.assertEquals("Unsaved changes",
+		Assert.assertEquals("Discard changes",
 				productsPage.getDiscardConfirmDialog().getHeaderText());
 	}
 
