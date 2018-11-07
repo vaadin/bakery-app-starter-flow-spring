@@ -46,11 +46,6 @@
 
     <repositories>
         <repository>
-            <id>staging-repo</id>
-            <url>https://nzpf5m2szfv9jcb.vaadin.com/nexus/content/repositories/prerelease-staging-2637</url>
-        </repository>
-
-        <repository>
             <id>vaadin-prereleases</id>
             <url>https://maven.vaadin.com/vaadin-prereleases/</url>
         </repository>
@@ -67,11 +62,6 @@
     </repositories>
 
     <pluginRepositories>
-        <pluginRepository>
-            <id>staging-repo</id>
-            <url>https://nzpf5m2szfv9jcb.vaadin.com/nexus/content/repositories/prerelease-staging-2637</url>
-        </pluginRepository>
-
         <pluginRepository>
             <id>vaadin-prereleases</id>
             <url>https://maven.vaadin.com/vaadin-prereleases</url>
