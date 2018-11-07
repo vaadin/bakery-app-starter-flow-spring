@@ -134,7 +134,7 @@ public class UsersViewIT extends AbstractIT<UsersViewElement> {
 		page.getFirstName().focus();
 		page.getFirstName().sendKeys("Some name");
 		page.getEditorCancelButton().click();
-		Assert.assertEquals("Unsaved changes",
+		Assert.assertEquals("Discard changes",
 				page.getDiscardConfirmDialog().getHeaderText());
 	}
 }
