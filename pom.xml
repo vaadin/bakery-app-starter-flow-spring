@@ -21,7 +21,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Dependencies -->
-        <vaadin.version>10.0.5</vaadin.version>
+        <vaadin.version>10.0.7</vaadin.version>
         <vaadin.confirmdialog.version>1.0.0</vaadin.confirmdialog.version>
         <vaadin.cookieconsent.version>1.0.0</vaadin.cookieconsent.version>
         <failOnMissingWebXml>false</failOnMissingWebXml>
@@ -315,7 +315,6 @@
                                         <file>src/components/form-buttons-bar.html</file>
                                         <file>src/components/search-bar.html</file>
                                         <file>src/components/utils-mixin.html</file>
-                                        <file>textConnector.js</file>
                                       </files>
                                     </fragment>
                                     <fragment>
