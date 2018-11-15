@@ -73,8 +73,7 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 		// https://github.com/vaadin/vaadin-crud-flow/issues/78
 		productsPage.getProductName().sendKeys("a");
 		productsPage.getEditorCancelButton().click();
-		Assert.assertEquals("Discard changes",
-				productsPage.getDiscardConfirmDialog().getHeaderText());
+		Assert.assertTrue(productsPage.getDiscardConfirmDialog().getMessageText().contains("Discard changes"));
 	}
 
 	private void createProduct(ProductsViewElement productsPage, String name, String price) {
