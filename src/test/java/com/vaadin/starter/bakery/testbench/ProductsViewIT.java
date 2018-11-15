@@ -4,9 +4,7 @@ import java.util.Random;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.openqa.selenium.Keys;
 
-import com.vaadin.flow.component.grid.testbench.GridElement;
 import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.ProductsViewElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement;
@@ -26,13 +24,12 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 		ProductsViewElement productsPage = openView();
 
 		String url = getDriver().getCurrentUrl();
-		GridElement grid = productsPage.getGrid();
 
 		String uniqueName = "Unique cake name " + r.nextInt();
 		String initialPrice = "98.76";
 		createProduct(productsPage, uniqueName, initialPrice);
 
-		int rowNum = grid.getCell(uniqueName).getRow();
+		int rowNum = productsPage.waitAndGetCellRow(uniqueName);
 		productsPage.openRowForEditing(rowNum);
 		Assert.assertTrue(getDriver().getCurrentUrl().length() > url.length());
 
@@ -50,7 +47,7 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 
 		Assert.assertTrue(getDriver().getCurrentUrl().endsWith("products"));
 
-		rowNum = grid.getCell(uniqueName).getRow();
+		rowNum = productsPage.waitAndGetCellRow(uniqueName);
 		productsPage.openRowForEditing(rowNum);
 
 		price = productsPage.getPrice(); // Requery the price element.

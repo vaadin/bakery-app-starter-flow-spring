@@ -31,7 +31,7 @@ public class UsersViewIT extends AbstractIT<UsersViewElement> {
 
 		createUser(usersView, uniqueEmail, "Paul", "Irwin", "Vaadin10", "baker");
 
-		int rowNum = usersView.getGrid().getCell(uniqueEmail).getRow();
+		int rowNum = usersView.waitAndGetCellRow(uniqueEmail);
 		usersView.openRowForEditing(rowNum);
 
 		Assert.assertTrue(usersView.isEditorOpen());
@@ -51,7 +51,7 @@ public class UsersViewIT extends AbstractIT<UsersViewElement> {
 		Assert.assertFalse(usersView.isEditorOpen());
 
 		// Invalid password prevents closing form
-		rowNum = usersView.getGrid().getCell(newEmail).getRow();
+		rowNum = usersView.waitAndGetCellRow(newEmail);
 		usersView.openRowForEditing(rowNum);
 
 		emailField = usersView.getEmailField(); // Requery email field.
@@ -74,7 +74,7 @@ public class UsersViewIT extends AbstractIT<UsersViewElement> {
 		Assert.assertFalse(usersView.isEditorOpen());
 
 		// When reopening the form password field must be empty.
-		rowNum = usersView.getGrid().getCell(uniqueEmail).getRow();
+		rowNum = usersView.waitAndGetCellRow(uniqueEmail);
 		usersView.openRowForEditing(rowNum);
 
 		password = usersView.getPasswordField(); // Requery password field.
