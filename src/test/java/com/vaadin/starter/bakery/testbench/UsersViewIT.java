@@ -1,5 +1,7 @@
 package com.vaadin.starter.bakery.testbench;
 
+import static org.hamcrest.CoreMatchers.containsString;
+
 import java.util.Random;
 
 import org.junit.Assert;
@@ -134,7 +136,7 @@ public class UsersViewIT extends AbstractIT<UsersViewElement> {
 		page.getFirstName().focus();
 		page.getFirstName().sendKeys("Some name");
 		page.getEditorCancelButton().click();
-		Assert.assertEquals("Discard changes",
-				page.getDiscardConfirmDialog().getHeaderText());
+
+		Assert.assertThat(page.getDiscardConfirmDialog().getMessageText(), containsString("Discard changes"));
 	}
 }
