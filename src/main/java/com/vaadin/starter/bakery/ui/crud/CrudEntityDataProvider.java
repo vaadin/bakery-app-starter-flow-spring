@@ -43,5 +43,9 @@ public class CrudEntityDataProvider<T extends AbstractEntity> extends Filterable
 		return (int) crudService.countAnyMatching(query.getFilter());
 	}
 
+	@Override
+	public Object getId(T item) {
+		return item.getId();
+	}
 }
 

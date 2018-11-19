@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -167,5 +168,24 @@ public class Order extends AbstractEntity implements OrderSummary {
 	@Override
 	public Integer getTotalPrice() {
 		return items.stream().map(i -> i.getTotalPrice()).reduce(0, Integer::sum);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		if (!super.equals(o)) return false;
+		Order order = (Order) o;
+		return Objects.equals(dueDate, order.dueDate) &&
+				Objects.equals(dueTime, order.dueTime) &&
+				Objects.equals(pickupLocation, order.pickupLocation) &&
+				Objects.equals(customer, order.customer) &&
+				Objects.equals(items, order.items) &&
+				state == order.state;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), dueDate, dueTime, pickupLocation, customer, items, state);
 	}
 }
