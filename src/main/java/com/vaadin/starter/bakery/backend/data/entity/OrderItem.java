@@ -5,6 +5,7 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Objects;
 
 @Entity
 public class OrderItem extends AbstractEntity {
@@ -46,5 +47,21 @@ public class OrderItem extends AbstractEntity {
 
 	public int getTotalPrice() {
 		return quantity == null || product == null ? 0 : quantity * product.getPrice();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		if (!super.equals(o)) return false;
+		OrderItem orderItem = (OrderItem) o;
+		return Objects.equals(product, orderItem.product) &&
+				Objects.equals(quantity, orderItem.quantity) &&
+				Objects.equals(comment, orderItem.comment);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), product, quantity, comment);
 	}
 }

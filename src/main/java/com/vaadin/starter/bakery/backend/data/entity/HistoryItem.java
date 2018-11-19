@@ -1,6 +1,7 @@
 package com.vaadin.starter.bakery.backend.data.entity;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -67,4 +68,20 @@ public class HistoryItem extends AbstractEntity {
 		this.createdBy = createdBy;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		if (!super.equals(o)) return false;
+		HistoryItem that = (HistoryItem) o;
+		return newState == that.newState &&
+				Objects.equals(message, that.message) &&
+				Objects.equals(timestamp, that.timestamp) &&
+				Objects.equals(createdBy, that.createdBy);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), newState, message, timestamp, createdBy);
+	}
 }
