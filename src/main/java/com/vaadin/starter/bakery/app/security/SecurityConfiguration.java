@@ -123,7 +123,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				"/robots.txt",
 
 				// web application manifest
-				"/manifest.json",
+				"/manifest.webmanifest",
 				"/sw.js",
 				"/offline-page.html",
 
