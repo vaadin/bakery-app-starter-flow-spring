@@ -23,16 +23,43 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 	}
 
 	@Test
-	public void editProduct() {
+	public void editProductTwice() {
 		ProductsViewElement productsPage = openView();
-
-		String url = getDriver().getCurrentUrl();
-		GridElement grid = productsPage.getGrid();
 
 		String uniqueName = "Unique cake name " + r.nextInt();
 		String initialPrice = "98.76";
 		createProduct(productsPage, uniqueName, initialPrice);
 
+		GridElement grid = productsPage.getGrid();
+		int rowNum = grid.getCell(uniqueName).getRow();
+		productsPage.openRowForEditing(rowNum);
+
+		Assert.assertTrue(productsPage.isEditorOpen());
+		String newValue = "New " + uniqueName;
+		productsPage.getProductName().setValue(newValue);
+		productsPage.getEditorSaveButton().click();
+		Assert.assertFalse(productsPage.isEditorOpen());
+		Assert.assertEquals(rowNum, grid.getCell(newValue).getRow());
+
+		productsPage.openRowForEditing(rowNum);
+		newValue = "The " + newValue;
+		productsPage.getProductName().setValue(newValue);
+		productsPage.getEditorSaveButton().click();
+		Assert.assertFalse(productsPage.isEditorOpen());
+		Assert.assertEquals(rowNum, grid.getCell(newValue).getRow());
+	}
+
+	@Test
+	public void editProduct() {
+		ProductsViewElement productsPage = openView();
+
+		String url = getDriver().getCurrentUrl();
+
+		String uniqueName = "Unique cake name " + r.nextInt();
+		String initialPrice = "98.76";
+		createProduct(productsPage, uniqueName, initialPrice);
+
+		GridElement grid = productsPage.getGrid();
 		int rowNum = grid.getCell(uniqueName).getRow();
 		productsPage.openRowForEditing(rowNum);
 		Assert.assertTrue(getDriver().getCurrentUrl().length() > url.length());
