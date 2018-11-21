@@ -1,7 +1,6 @@
 package com.vaadin.starter.bakery.backend.data.entity;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -67,4 +66,5 @@ public class HistoryItem extends AbstractEntity {
 	public void setCreatedBy(User createdBy) {
 		this.createdBy = createdBy;
 	}
+
 }

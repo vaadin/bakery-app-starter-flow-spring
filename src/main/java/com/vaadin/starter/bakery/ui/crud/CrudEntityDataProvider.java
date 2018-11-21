@@ -42,5 +42,6 @@ public class CrudEntityDataProvider<T extends AbstractEntity> extends Filterable
 	protected int sizeInBackEnd(Query<T, String> query) {
 		return (int) crudService.countAnyMatching(query.getFilter());
 	}
+
 }
 
