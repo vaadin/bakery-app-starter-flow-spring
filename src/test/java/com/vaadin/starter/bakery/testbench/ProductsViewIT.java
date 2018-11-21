@@ -6,8 +6,10 @@ import java.util.Random;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 
 import com.vaadin.flow.component.grid.testbench.GridElement;
+import com.vaadin.flow.component.grid.testbench.GridTHTDElement;
 import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.ProductsViewElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement;
@@ -33,7 +35,7 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 		String initialPrice = "98.76";
 		createProduct(productsPage, uniqueName, initialPrice);
 
-		int rowNum = grid.getCell(uniqueName).getRow();
+		int rowNum =waitUntil((ExpectedCondition<GridTHTDElement>) wd-> grid.getCell(uniqueName)).getRow();
 		productsPage.openRowForEditing(rowNum);
 		Assert.assertTrue(getDriver().getCurrentUrl().length() > url.length());
 
