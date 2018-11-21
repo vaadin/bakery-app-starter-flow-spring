@@ -33,7 +33,7 @@ public abstract class AbstractBakeryCrudView<E extends AbstractEntity> extends C
     protected abstract void setupGrid(Grid<E> grid);
 
     public AbstractBakeryCrudView(Class<E> beanType, FilterableCrudService<E> service,
-                                  Grid<E> grid, CrudEditor editor, CurrentUser currentUser) {
+                                  Grid<E> grid, CrudEditor<E> editor, CurrentUser currentUser) {
         super(beanType, grid, editor);
         this.grid = grid;
         grid.setSelectionMode(Grid.SelectionMode.NONE);

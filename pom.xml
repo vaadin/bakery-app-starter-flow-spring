@@ -21,7 +21,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Dependencies -->
-        <vaadin.version>12.0.0.beta1</vaadin.version>
+        <vaadin.version>12.0.0.beta2</vaadin.version>
 
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Overrides the old version specified by the Spring Boot parent -->
@@ -49,15 +49,9 @@
             <id>vaadin-prereleases</id>
             <url>https://maven.vaadin.com/vaadin-prereleases/</url>
         </repository>
-
         <repository>
             <id>vaadin-addons</id>
             <url>http://maven.vaadin.com/vaadin-addons</url>
-        </repository>
-        
-        <repository>
-            <id>vaadin-snapshots</id>
-            <url>https://oss.sonatype.org/content/repositories/vaadin-snapshots/</url>
         </repository>
     </repositories>
 
@@ -65,11 +59,6 @@
         <pluginRepository>
             <id>vaadin-prereleases</id>
             <url>https://maven.vaadin.com/vaadin-prereleases</url>
-        </pluginRepository>
-        
-        <pluginRepository>
-            <id>vaadin-snapshots</id>
-            <url>https://oss.sonatype.org/content/repositories/vaadin-snapshots/</url>
         </pluginRepository>
     </pluginRepositories>
 
