@@ -48,20 +48,4 @@ public class Customer extends AbstractEntity {
 	public void setDetails(String details) {
 		this.details = details;
 	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		if (!super.equals(o)) return false;
-		Customer customer = (Customer) o;
-		return Objects.equals(fullName, customer.fullName) &&
-				Objects.equals(phoneNumber, customer.phoneNumber) &&
-				Objects.equals(details, customer.details);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(super.hashCode(), fullName, phoneNumber, details);
-	}
 }

@@ -44,12 +44,18 @@ public class Product extends AbstractEntity {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		if (!super.equals(o)) return false;
-		Product product = (Product) o;
-		return Objects.equals(name, product.name) &&
-				Objects.equals(price, product.price);
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		if (!super.equals(o)) {
+			return false;
+		}
+		Product that = (Product) o;
+		return Objects.equals(name, that.name) &&
+				Objects.equals(price, that.price);
 	}
 
 	@Override

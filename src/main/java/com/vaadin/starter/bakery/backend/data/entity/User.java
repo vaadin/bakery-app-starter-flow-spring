@@ -98,20 +98,25 @@ public class User extends AbstractEntity {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		if (!super.equals(o)) return false;
-		User user = (User) o;
-		return locked == user.locked &&
-				Objects.equals(email, user.email) &&
-				Objects.equals(passwordHash, user.passwordHash) &&
-				Objects.equals(firstName, user.firstName) &&
-				Objects.equals(lastName, user.lastName) &&
-				Objects.equals(role, user.role);
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		if (!super.equals(o)) {
+			return false;
+		}
+		User that = (User) o;
+		return locked == that.locked &&
+				Objects.equals(email, that.email) &&
+				Objects.equals(firstName, that.firstName) &&
+				Objects.equals(lastName, that.lastName) &&
+				Objects.equals(role, that.role);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(super.hashCode(), email, passwordHash, firstName, lastName, role, locked);
+		return Objects.hash(super.hashCode(), email, firstName, lastName, role, locked);
 	}
 }
