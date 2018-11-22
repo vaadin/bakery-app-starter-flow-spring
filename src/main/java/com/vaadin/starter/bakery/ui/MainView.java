@@ -26,11 +26,11 @@ import static com.vaadin.starter.bakery.ui.utils.BakeryConst.*;
 
 
 @Viewport(VIEWPORT)
-@PWA(name = "Bakery App Starter", shortName = "###Bakery###", startPath = "login",
+@PWA(name = "Bakery App Starter", shortName = "###Bakery###",
+		startPath = "login",
 		backgroundColor = "#227aef", themeColor = "#227aef",
-		manifestPath = "manifest.json",
-		offlinePath = "offline-page.html", offlineResources =
-		{"images/offline-login-banner.jpg"})
+		offlinePath = "offline-page.html",
+		offlineResources = {"images/offline-login-banner.jpg"})
 public class MainView extends AbstractAppRouterLayout implements BeforeEnterObserver {
 
 	private final ConfirmDialog confirmDialog;
