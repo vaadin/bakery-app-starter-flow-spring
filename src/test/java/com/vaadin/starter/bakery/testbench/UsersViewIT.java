@@ -112,7 +112,10 @@ public class UsersViewIT extends AbstractIT<UsersViewElement> {
 
 		PasswordFieldElement field = page.getPasswordField();
 		field.setValue("Abc123");
+		page.getEmailField().setValue("barista123@vaadin.com");
 		page.getEditorSaveButton().click();
+
+		Assert.assertEquals(rowNum, page.getGrid().getCell("barista@vaadin.com").getRow());
 	}
 
 	@Test
@@ -126,8 +129,9 @@ public class UsersViewIT extends AbstractIT<UsersViewElement> {
 
 		page.getEditorDeleteButton().click();
 		page.getDeleteConfirmDialog().getConfirmButton().click();
+
+		Assert.assertEquals(rowNum, page.getGrid().getCell("barista@vaadin.com").getRow());
 	}
-	
 	
 	@Test
 	public void testCancelConfirmationMessage() {

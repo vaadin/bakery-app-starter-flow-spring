@@ -9,6 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Objects;
 
 @Entity(name="UserInfo")
 public class User extends AbstractEntity {
@@ -93,5 +94,29 @@ public class User extends AbstractEntity {
 
 	public void setLocked(boolean locked) {
 		this.locked = locked;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		if (!super.equals(o)) {
+			return false;
+		}
+		User that = (User) o;
+		return locked == that.locked &&
+				Objects.equals(email, that.email) &&
+				Objects.equals(firstName, that.firstName) &&
+				Objects.equals(lastName, that.lastName) &&
+				Objects.equals(role, that.role);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), email, firstName, lastName, role, locked);
 	}
 }

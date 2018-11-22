@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 
 import java.util.Random;
 
+import com.vaadin.flow.component.grid.testbench.GridElement;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -21,6 +22,31 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 	protected ProductsViewElement openView() {
 		StorefrontViewElement storefront = openLoginView().login("admin@vaadin.com", "admin");
 		return storefront.getMenu().navigateToProducts();
+	}
+
+	@Test
+	public void editProductTwice() {
+		ProductsViewElement productsPage = openView();
+
+		String uniqueName = "Unique cake name " + r.nextInt();
+		String initialPrice = "98.76";
+		int rowNum = createProduct(productsPage, uniqueName, initialPrice);
+		productsPage.openRowForEditing(rowNum);
+
+		Assert.assertTrue(productsPage.isEditorOpen());
+		String newValue = "New " + uniqueName;
+		productsPage.getProductName().setValue(newValue);
+		productsPage.getEditorSaveButton().click();
+		Assert.assertFalse(productsPage.isEditorOpen());
+		GridElement grid = productsPage.getGrid();
+		Assert.assertEquals(rowNum, grid.getCell(newValue).getRow());
+
+		productsPage.openRowForEditing(rowNum);
+		newValue = "The " + newValue;
+		productsPage.getProductName().setValue(newValue);
+		productsPage.getEditorSaveButton().click();
+		Assert.assertFalse(productsPage.isEditorOpen());
+		Assert.assertEquals(rowNum, grid.getCell(newValue).getRow());
 	}
 
 	@Test
