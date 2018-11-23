@@ -89,6 +89,11 @@
             <artifactId>vaadin-spring</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-login-flow</artifactId>
+            <version>1.0.0.alpha1</version>
+        </dependency>
+        <dependency>
             <groupId>org.vaadin.artur</groupId>
             <artifactId>spring-data-provider</artifactId>
             <version>2.0.1</version>
