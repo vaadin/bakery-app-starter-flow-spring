@@ -2,8 +2,8 @@ package com.vaadin.starter.bakery.ui.views.login;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.HtmlImport;
-import com.vaadin.flow.component.login.Login;
 import com.vaadin.flow.component.login.LoginI18n;
+import com.vaadin.flow.component.login.LoginOverlay;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.router.*;
@@ -21,12 +21,9 @@ import com.vaadin.starter.bakery.ui.views.storefront.StorefrontView;
 @Viewport(BakeryConst.VIEWPORT)
 public class LoginView extends VerticalLayout implements PageConfigurator, AfterNavigationObserver, BeforeEnterObserver {
 
-	private Login login = new Login();
+	private LoginOverlay login = new LoginOverlay();
 
 	public LoginView() {
-		setMargin(false);
-		setPadding(false);
-		setHeight("100%");
 		getElement().appendChild(new BakeryCookieConsent().getElement(), login.getElement());
 
 		LoginI18n i18n = LoginI18n.createDefault();
@@ -43,7 +40,8 @@ public class LoginView extends VerticalLayout implements PageConfigurator, After
 		i18n.getForm().setPassword("Password");
 		login.setI18n(i18n);
 		login.getElement().setAttribute("hide-forgot-password-button", true);
-		login.getElement().setAttribute("action", "login");
+		login.setAction("login");
+		login.setOpened(true);
 	}
 
 	@Override
@@ -67,11 +65,7 @@ public class LoginView extends VerticalLayout implements PageConfigurator, After
 
 	@Override
 	public void afterNavigation(AfterNavigationEvent event) {
-		if (event.getLocation().getQueryParameters().getParameters().containsKey("error")) {
-			login.getElement().setAttribute("error", true);
-		} else {
-			login.getElement().removeAttribute("error");
-		}
+		login.setError(event.getLocation().getQueryParameters().getParameters().containsKey("error"));
 	}
 
 	public interface Model extends TemplateModel {
