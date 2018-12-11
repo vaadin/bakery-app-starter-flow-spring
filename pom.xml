@@ -269,7 +269,7 @@
                                     <fragment>
                                       <name>login-fragment</name>
                                       <files>
-                                        <file>src/views/login/login-view.html</file>
+                                        <file>bower_components/vaadin-login/src/vaadin-login-overlay.html</file>
                                       </files>
                                     </fragment>
                                     <fragment>
