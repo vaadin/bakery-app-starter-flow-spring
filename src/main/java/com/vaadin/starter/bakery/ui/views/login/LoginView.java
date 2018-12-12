@@ -36,7 +36,7 @@ public class LoginView extends VerticalLayout implements PageConfigurator, After
 		i18n.setForm(new LoginI18n.Form());
 		i18n.getForm().setSubmit("Sign in");
 		i18n.getForm().setTitle("Sign in");
-		i18n.getForm().setUsername("Username");
+		i18n.getForm().setUsername("Email");
 		i18n.getForm().setPassword("Password");
 		login.setI18n(i18n);
 		login.getElement().setAttribute("hide-forgot-password-button", true);

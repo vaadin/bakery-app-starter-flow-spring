@@ -102,6 +102,12 @@
             <artifactId>vaadin-login-flow</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-login-testbench</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
         <!-- TODO Added to vaadin-login-flow. Remove this.-->
         <dependency>
             <groupId>org.webjars.bowergithub.vaadin</groupId>
