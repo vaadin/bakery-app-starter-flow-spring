@@ -108,12 +108,6 @@
             <version>1.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
-        <!-- TODO Added to vaadin-login-flow. Remove this.-->
-        <dependency>
-            <groupId>org.webjars.bowergithub.vaadin</groupId>
-            <artifactId>vaadin-overlay</artifactId>
-            <version>3.2.3</version>
-        </dependency>
         <dependency>
             <groupId>org.vaadin.artur</groupId>
             <artifactId>spring-data-provider</artifactId>
