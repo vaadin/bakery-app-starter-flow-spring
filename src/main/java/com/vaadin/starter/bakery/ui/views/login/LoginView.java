@@ -7,8 +7,6 @@ import com.vaadin.flow.component.login.LoginOverlay;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.router.*;
-import com.vaadin.flow.server.InitialPageSettings;
-import com.vaadin.flow.server.PageConfigurator;
 import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.app.security.SecurityUtils;
 import com.vaadin.starter.bakery.ui.components.BakeryCookieConsent;
@@ -19,7 +17,7 @@ import com.vaadin.starter.bakery.ui.views.storefront.StorefrontView;
 @PageTitle("###Bakery###")
 @HtmlImport("styles/shared-styles.html")
 @Viewport(BakeryConst.VIEWPORT)
-public class LoginView extends VerticalLayout implements PageConfigurator, AfterNavigationObserver, BeforeEnterObserver {
+public class LoginView extends VerticalLayout implements AfterNavigationObserver, BeforeEnterObserver {
 
 	private LoginOverlay login = new LoginOverlay();
 
@@ -39,19 +37,9 @@ public class LoginView extends VerticalLayout implements PageConfigurator, After
 		i18n.getForm().setUsername("Email");
 		i18n.getForm().setPassword("Password");
 		login.setI18n(i18n);
-		login.getElement().setAttribute("hide-forgot-password-button", true);
+		login.getElement().setAttribute("no-forgot-password", true);
 		login.setAction("login");
 		login.setOpened(true);
-	}
-
-	@Override
-	public void configurePage(InitialPageSettings settings) {
-		// Force login page to use Shady DOM to avoid problems with browsers and
-		// password managers not supporting shadow DOM
-		settings.addInlineWithContents(InitialPageSettings.Position.PREPEND,
-				"if(window.customElements) {" +
-						"window.customElements.forcePolyfill=true;" +
-						"window.ShadyDOM={force:true}};", InitialPageSettings.WrapMode.JAVASCRIPT);
 	}
 
 	@Override
