@@ -3,7 +3,6 @@ package com.vaadin.starter.bakery.testbench.elements.ui;
 import com.vaadin.flow.component.login.testbench.LoginElement;
 import com.vaadin.flow.component.login.testbench.LoginOverlayElement;
 import com.vaadin.flow.component.orderedlayout.testbench.VerticalLayoutElement;
-import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.testbench.TestBenchElement;
 
 public class LoginViewElement extends VerticalLayoutElement {
