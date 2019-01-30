@@ -1,6 +1,5 @@
 package com.vaadin.starter.bakery.testbench.elements.ui;
 
-import com.vaadin.flow.component.login.testbench.LoginElement;
 import com.vaadin.flow.component.login.testbench.LoginOverlayElement;
 import com.vaadin.flow.component.orderedlayout.testbench.VerticalLayoutElement;
 import com.vaadin.testbench.TestBenchElement;
@@ -14,7 +13,7 @@ public class LoginViewElement extends VerticalLayoutElement {
 	public <E extends TestBenchElement> E login(
 		String username, String password, Class<E> target) {
 
-		final LoginElement loginElement = getLoginElement();
+		final LoginOverlayElement loginElement = getLoginElement();
 		loginElement.getUsernameField().setValue(username);
 		loginElement.getPasswordField().setValue(password);
 		loginElement.getSubmitButton().click();
@@ -26,8 +25,8 @@ public class LoginViewElement extends VerticalLayoutElement {
 		return getLoginElement().getUsernameField().getLabel();
 	}
 
-	private LoginElement getLoginElement() {
-		return $(LoginOverlayElement.class).waitForFirst().getLogin();
+	private LoginOverlayElement getLoginElement() {
+		return $(LoginOverlayElement.class).waitForFirst();
 	}
 
 }
