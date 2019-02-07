@@ -4,6 +4,8 @@ import static org.hamcrest.CoreMatchers.containsString;
 
 import java.util.Random;
 
+import com.vaadin.flow.component.tabs.testbench.TabElement;
+import com.vaadin.testbench.TestBenchElement;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.Keys;
@@ -142,5 +144,18 @@ public class UsersViewIT extends AbstractIT<UsersViewElement> {
 		page.getEditorCancelButton().click();
 
 		Assert.assertThat(page.getDiscardConfirmDialog().getMessageText(), containsString("Discard changes"));
+	}
+
+	@Test
+	public void accessDenied() {
+		StorefrontViewElement storefront = openLoginView().login("admin@vaadin.com", "admin");
+		Assert.assertEquals(3, storefront.getMenu().$(TabElement.class).all().size());
+
+		driver.get(APP_URL + "users");
+		TestBenchElement accessDeniedPage = $("access-denied-view").waitForFirst();
+
+		Assert.assertEquals("Access to this page is denied",
+				accessDeniedPage.$("h1").first().getText());
+
 	}
 }

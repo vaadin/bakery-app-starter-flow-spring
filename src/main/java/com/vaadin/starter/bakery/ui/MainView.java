@@ -10,16 +10,14 @@ import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.page.Viewport;
-import com.vaadin.flow.router.BeforeEnterEvent;
-import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.starter.bakery.app.security.SecurityUtils;
 import com.vaadin.starter.bakery.ui.components.BakeryCookieConsent;
 import com.vaadin.starter.bakery.ui.components.OfflineBanner;
-import com.vaadin.starter.bakery.ui.exceptions.AccessDeniedException;
 import com.vaadin.starter.bakery.ui.views.HasConfirmation;
 import com.vaadin.starter.bakery.ui.views.admin.products.ProductsView;
 import com.vaadin.starter.bakery.ui.views.admin.users.UsersView;
+import com.vaadin.starter.bakery.ui.views.errors.AccessDeniedView;
 import com.vaadin.starter.bakery.ui.views.login.LoginView;
 
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.*;
@@ -31,7 +29,7 @@ import static com.vaadin.starter.bakery.ui.utils.BakeryConst.*;
 		backgroundColor = "#227aef", themeColor = "#227aef",
 		offlinePath = "offline-page.html",
 		offlineResources = {"images/offline-login-banner.jpg"})
-public class MainView extends AbstractAppRouterLayout implements BeforeEnterObserver {
+public class MainView extends AbstractAppRouterLayout {
 
 	private final ConfirmDialog confirmDialog;
 
@@ -79,21 +77,18 @@ public class MainView extends AbstractAppRouterLayout implements BeforeEnterObse
 	}
 
 	@Override
-	public void beforeEnter(BeforeEnterEvent event) {
+	public void showRouterLayoutContent(HasElement content) {
 		final boolean accessGranted =
-			SecurityUtils.isAccessGranted(event.getNavigationTarget());
+				SecurityUtils.isAccessGranted(content.getElement().getComponent().get().getClass());
 		if (!accessGranted) {
 			if (SecurityUtils.isUserLoggedIn()) {
-				event.rerouteToError(AccessDeniedException.class);
+				getAppLayout().setContent(new AccessDeniedView());
+				return;
 			}
 			else {
-				event.rerouteTo(LoginView.class);
+				UI.getCurrent().navigate(LoginView.class);
 			}
 		}
-	}
-
-	@Override
-	public void showRouterLayoutContent(HasElement content) {
 		super.showRouterLayoutContent(content);
 
 		this.confirmDialog.setOpened(false);
