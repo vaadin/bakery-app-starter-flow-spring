@@ -148,7 +148,7 @@ public class UsersViewIT extends AbstractIT<UsersViewElement> {
 
 	@Test
 	public void accessDenied() {
-		StorefrontViewElement storefront = openLoginView().login("admin@vaadin.com", "admin");
+		StorefrontViewElement storefront = openLoginView().login("barista@vaadin.com", "barista");
 		Assert.assertEquals(3, storefront.getMenu().$(TabElement.class).all().size());
 
 		driver.get(APP_URL + "users");

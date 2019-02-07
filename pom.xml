@@ -302,7 +302,6 @@
                                         <file>src/views/orderedit/order-item-editor.html</file>
                                         <file>src/views/orderedit/order-editor.html</file>
                                         <file>src/views/orderedit/order-details.html</file>
-                                        <file>src/views/errors/access-denied-view.html</file>
                                         <file>src/components/amount-field.html</file>
                                         <file>src/components/form-buttons-bar.html</file>
                                         <file>src/components/search-bar.html</file>
