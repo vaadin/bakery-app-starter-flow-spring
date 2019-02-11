@@ -10,6 +10,7 @@ import com.vaadin.flow.router.ErrorParameter;
 import com.vaadin.flow.router.HasErrorParameter;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.ParentLayout;
+import com.vaadin.flow.router.Route;
 import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.ui.MainView;
 import com.vaadin.starter.bakery.ui.exceptions.AccessDeniedException;
@@ -19,6 +20,7 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 @HtmlImport("src/views/errors/access-denied-view.html")
 @ParentLayout(MainView.class)
 @PageTitle(BakeryConst.TITLE_ACCESS_DENIED)
+@Route("access-denied")
 public class AccessDeniedView extends PolymerTemplate<TemplateModel> implements HasErrorParameter<AccessDeniedException> {
 
 	@Override
