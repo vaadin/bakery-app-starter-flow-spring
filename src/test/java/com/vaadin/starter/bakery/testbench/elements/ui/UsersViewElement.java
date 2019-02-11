@@ -26,4 +26,9 @@ public class UsersViewElement extends BakeryCrudViewElement {
 		return getForm().$(ComboBoxElement.class).first();
 	}
 
+	@Override
+	public void openRowForEditing(int row) {
+		openRowForEditing(row, 3);
+	}
+
 }
