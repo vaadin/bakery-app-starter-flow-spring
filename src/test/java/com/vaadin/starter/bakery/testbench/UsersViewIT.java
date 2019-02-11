@@ -164,7 +164,7 @@ public class UsersViewIT extends AbstractIT<UsersViewElement> {
 		TestBenchElement accessDeniedPage =
 			$("access-denied-view").waitForFirst();
 
-		Assert.assertEquals("Access to this page is denied",
-			accessDeniedPage.$("h1").first().getText());
+		Assert.assertEquals("Access denied",
+			accessDeniedPage.$("h3").first().getText());
 	}
 }
