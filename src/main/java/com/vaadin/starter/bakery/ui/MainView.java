@@ -1,5 +1,16 @@
 package com.vaadin.starter.bakery.ui;
 
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_DASHBOARD;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_PRODUCTS;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_STOREFRONT;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_USERS;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_DASHBOARD;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_LOGOUT;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_PRODUCTS;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_STOREFRONT;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_USERS;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.VIEWPORT;
+
 import com.vaadin.flow.component.HasElement;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AbstractAppRouterLayout;
@@ -10,19 +21,12 @@ import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.page.Viewport;
-import com.vaadin.flow.router.BeforeEnterEvent;
-import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.starter.bakery.app.security.SecurityUtils;
 import com.vaadin.starter.bakery.ui.components.BakeryCookieConsent;
-import com.vaadin.starter.bakery.ui.components.OfflineBanner;
-import com.vaadin.starter.bakery.ui.exceptions.AccessDeniedException;
 import com.vaadin.starter.bakery.ui.views.HasConfirmation;
 import com.vaadin.starter.bakery.ui.views.admin.products.ProductsView;
 import com.vaadin.starter.bakery.ui.views.admin.users.UsersView;
-import com.vaadin.starter.bakery.ui.views.login.LoginView;
-
-import static com.vaadin.starter.bakery.ui.utils.BakeryConst.*;
 
 
 @Viewport(VIEWPORT)
@@ -31,7 +35,7 @@ import static com.vaadin.starter.bakery.ui.utils.BakeryConst.*;
 		backgroundColor = "#227aef", themeColor = "#227aef",
 		offlinePath = "offline-page.html",
 		offlineResources = {"images/offline-login-banner.jpg"})
-public class MainView extends AbstractAppRouterLayout implements BeforeEnterObserver {
+public class MainView extends AbstractAppRouterLayout {
 
 	private final ConfirmDialog confirmDialog;
 
@@ -43,7 +47,6 @@ public class MainView extends AbstractAppRouterLayout implements BeforeEnterObse
 
 		getElement().appendChild(confirmDialog.getElement());
 		getElement().appendChild(new BakeryCookieConsent().getElement());
-		getElement().addAttachListener(e -> UI.getCurrent().add(new OfflineBanner()));
 	}
 
 	@Override
@@ -76,20 +79,6 @@ public class MainView extends AbstractAppRouterLayout implements BeforeEnterObse
 	private void setMenuItem(AppLayoutMenu menu, AppLayoutMenuItem menuItem) {
 		menuItem.getElement().setAttribute("theme", "icon-on-top");
 		menu.addMenuItem(menuItem);
-	}
-
-	@Override
-	public void beforeEnter(BeforeEnterEvent event) {
-		final boolean accessGranted =
-			SecurityUtils.isAccessGranted(event.getNavigationTarget());
-		if (!accessGranted) {
-			if (SecurityUtils.isUserLoggedIn()) {
-				event.rerouteToError(AccessDeniedException.class);
-			}
-			else {
-				event.rerouteTo(LoginView.class);
-			}
-		}
 	}
 
 	@Override
