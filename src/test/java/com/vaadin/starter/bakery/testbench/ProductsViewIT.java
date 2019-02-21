@@ -1,14 +1,12 @@
 package com.vaadin.starter.bakery.testbench;
 
-import static org.hamcrest.CoreMatchers.containsString;
-
 import java.util.Random;
 
-import com.vaadin.flow.component.grid.testbench.GridElement;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 
+import com.vaadin.flow.component.grid.testbench.GridElement;
 import com.vaadin.flow.component.grid.testbench.GridTHTDElement;
 import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.ProductsViewElement;
@@ -101,7 +99,7 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 		// https://github.com/vaadin/vaadin-crud-flow/issues/78
 		productsPage.getProductName().sendKeys("a");
 		productsPage.getEditorCancelButton().click();
-		Assert.assertThat(productsPage.getDiscardConfirmDialog().getMessageText(), containsString("Discard changes"));
+		Assert.assertEquals(productsPage.getDiscardConfirmDialog().getHeaderText(), "Discard changes");
 	}
 
 	private int createProduct(ProductsViewElement productsPage, String name, String price) {
