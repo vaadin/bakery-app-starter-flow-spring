@@ -4,6 +4,7 @@ import java.util.Random;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 
 import com.vaadin.flow.component.grid.testbench.GridElement;
@@ -33,7 +34,10 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 
 		Assert.assertTrue(productsPage.isEditorOpen());
 		String newValue = "New " + uniqueName;
-		productsPage.getProductName().setValue(newValue);
+		TextFieldElement nameField = productsPage.getProductName();
+		nameField.setValue("");
+		nameField.sendKeys(newValue, Keys.TAB);
+
 		productsPage.getEditorSaveButton().click();
 		Assert.assertFalse(productsPage.isEditorOpen());
 		GridElement grid = productsPage.getGrid();
@@ -41,7 +45,10 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 
 		productsPage.openRowForEditing(rowNum);
 		newValue = "The " + newValue;
-		productsPage.getProductName().setValue(newValue);
+		nameField = productsPage.getProductName();
+		nameField.setValue("");
+		nameField.sendKeys(newValue, Keys.TAB);
+
 		productsPage.getEditorSaveButton().click();
 		Assert.assertFalse(productsPage.isEditorOpen());
 		Assert.assertEquals(rowNum, grid.getCell(newValue).getRow());
@@ -65,8 +72,8 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 		TextFieldElement price = productsPage.getPrice();
 		Assert.assertEquals(initialPrice, price.getValue());
 
-		price.focus();
-		price.setValue("123.45");
+		price.setValue("");
+		price.sendKeys("123.45", Keys.TAB);
 
 		productsPage.getEditorSaveButton().click();
 
@@ -80,8 +87,8 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 		Assert.assertEquals("123.45", price.getValue());
 
 		// Return initial value
-		price.focus();
-		price.setValue(initialPrice);
+		price.setValue("");
+		price.sendKeys(initialPrice, Keys.TAB);
 
 		productsPage.getEditorSaveButton().click();
 		Assert.assertFalse(productsPage.isEditorOpen());
@@ -110,11 +117,9 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 		TextFieldElement nameField = productsPage.getProductName();
 		TextFieldElement priceField = productsPage.getPrice();
 
-		nameField.focus();
 		nameField.setValue(name);
 
-		priceField.focus();
-		priceField.setValue(price);
+		priceField.sendKeys(price, Keys.TAB);
 
 		productsPage.getEditorSaveButton().click();
 		Assert.assertFalse(productsPage.isEditorOpen());

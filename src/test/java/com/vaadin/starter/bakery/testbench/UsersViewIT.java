@@ -49,7 +49,8 @@ public class UsersViewIT extends AbstractIT<UsersViewElement> {
 		// Saving any field without changing password should save and close
 		TextFieldElement emailField = usersView.getEmailField();
 		String newEmail = "foo" + r.nextInt() + "@bar.com";
-		emailField.setValue(newEmail);
+		emailField.setValue("");
+		emailField.sendKeys(newEmail, Keys.TAB);
 
 		usersView.getEditorSaveButton().click();
 		Assert.assertFalse(usersView.isEditorOpen());
@@ -71,9 +72,7 @@ public class UsersViewIT extends AbstractIT<UsersViewElement> {
 		password = usersView.getPasswordField(); // Requery password field.
 
 		// Good password
-		password.focus();
-		password.setValue("Abc123");
-		password.sendKeys(Keys.TAB);
+		password.sendKeys("Abc123", Keys.TAB);
 		usersView.getEditorSaveButton().click();
 		Assert.assertFalse(usersView.isEditorOpen());
 
@@ -96,11 +95,7 @@ public class UsersViewIT extends AbstractIT<UsersViewElement> {
 		usersView.getLastName().setValue(lastName);
 		usersView.getPasswordField().setValue(password);
 
-		// TODO: Fix combo selection as soon as API updated
-		// https://github.com/vaadin/vaadin-components-testbench/issues/60
-		usersView.getRole().openPopup();
-		usersView.getRole().setFilter(role);
-		usersView.getRole().sendKeys(Keys.ENTER);
+		usersView.getRole().selectByText(role);
 
 		usersView.getEditorSaveButton().click();
 		Assert.assertFalse(usersView.isEditorOpen());
