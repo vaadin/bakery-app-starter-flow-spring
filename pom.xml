@@ -23,7 +23,6 @@
         <!-- Dependencies -->
         <vaadin.version>13.0.0</vaadin.version>
 
-        <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Overrides the old version specified by the Spring Boot parent -->
         <selenium.version>3.11.0</selenium.version>
 
