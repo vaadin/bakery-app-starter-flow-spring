@@ -49,8 +49,7 @@ public class UsersViewIT extends AbstractIT<UsersViewElement> {
 		// Saving any field without changing password should save and close
 		TextFieldElement emailField = usersView.getEmailField();
 		String newEmail = "foo" + r.nextInt() + "@bar.com";
-		emailField.setValue("");
-		emailField.sendKeys(newEmail, Keys.TAB);
+		emailField.setValue(newEmail);
 
 		usersView.getEditorSaveButton().click();
 		Assert.assertFalse(usersView.isEditorOpen());
@@ -72,7 +71,7 @@ public class UsersViewIT extends AbstractIT<UsersViewElement> {
 		password = usersView.getPasswordField(); // Requery password field.
 
 		// Good password
-		password.sendKeys("Abc123", Keys.TAB);
+		password.setValue("Abc123");
 		usersView.getEditorSaveButton().click();
 		Assert.assertFalse(usersView.isEditorOpen());
 
@@ -137,8 +136,7 @@ public class UsersViewIT extends AbstractIT<UsersViewElement> {
 	public void testCancelConfirmationMessage() {
 		UsersViewElement page = openView();
 		page.getSearchBar().getCreateNewButton().click();
-		page.getFirstName().focus();
-		page.getFirstName().sendKeys("Some name");
+		page.getFirstName().setValue("Some name");
 		page.getEditorCancelButton().click();
 
 		Assert.assertEquals(page.getDiscardConfirmDialog().getHeaderText(), "Discard changes");

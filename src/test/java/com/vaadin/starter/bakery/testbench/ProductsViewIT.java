@@ -35,8 +35,7 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 		Assert.assertTrue(productsPage.isEditorOpen());
 		String newValue = "New " + uniqueName;
 		TextFieldElement nameField = productsPage.getProductName();
-		nameField.setValue("");
-		nameField.sendKeys(newValue, Keys.TAB);
+		nameField.setValue(newValue);
 
 		productsPage.getEditorSaveButton().click();
 		Assert.assertFalse(productsPage.isEditorOpen());
@@ -46,8 +45,7 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 		productsPage.openRowForEditing(rowNum);
 		newValue = "The " + newValue;
 		nameField = productsPage.getProductName();
-		nameField.setValue("");
-		nameField.sendKeys(newValue, Keys.TAB);
+		nameField.setValue(newValue);
 
 		productsPage.getEditorSaveButton().click();
 		Assert.assertFalse(productsPage.isEditorOpen());
@@ -72,8 +70,7 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 		TextFieldElement price = productsPage.getPrice();
 		Assert.assertEquals(initialPrice, price.getValue());
 
-		price.setValue("");
-		price.sendKeys("123.45", Keys.TAB);
+		price.setValue("123.45");
 
 		productsPage.getEditorSaveButton().click();
 
@@ -87,8 +84,7 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 		Assert.assertEquals("123.45", price.getValue());
 
 		// Return initial value
-		price.setValue("");
-		price.sendKeys(initialPrice, Keys.TAB);
+		price.setValue(initialPrice);
 
 		productsPage.getEditorSaveButton().click();
 		Assert.assertFalse(productsPage.isEditorOpen());
@@ -101,10 +97,6 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 		productsPage.getNewItemButton().get().click();
 		Assert.assertTrue(productsPage.isEditorOpen());
 		productsPage.getProductName().setValue("Some name");
-		productsPage.getProductName().focus();
-		// We need to call sendKeys in order to fire value change event
-		// https://github.com/vaadin/vaadin-crud-flow/issues/78
-		productsPage.getProductName().sendKeys("a");
 		productsPage.getEditorCancelButton().click();
 		Assert.assertEquals(productsPage.getDiscardConfirmDialog().getHeaderText(), "Discard changes");
 	}
@@ -118,8 +110,7 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 		TextFieldElement priceField = productsPage.getPrice();
 
 		nameField.setValue(name);
-
-		priceField.sendKeys(price, Keys.TAB);
+		priceField.setValue(price);
 
 		productsPage.getEditorSaveButton().click();
 		Assert.assertFalse(productsPage.isEditorOpen());
