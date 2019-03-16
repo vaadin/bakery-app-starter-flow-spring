@@ -38,7 +38,7 @@ class BaristaFlow extends Simulation {
 	}
 
 	val httpProtocol = http
-		.baseURL(baseUrl)
+		.baseUrl(baseUrl)
 		.acceptHeader("*/*")
 		.acceptEncodingHeader("gzip, deflate")
 		.acceptLanguageHeader("en-US,en;q=0.5")
@@ -84,7 +84,14 @@ class BaristaFlow extends Simulation {
 	val products2IdExtract = regex("""payload":"products.{2000,4000}node":(\d+),"type":"put","key":"payload","feat":[0-9]*,"value":\{"type":"@id","payload":"products"""").saveAs("products2Id")
 	val productsId1Extract2  = regex("""node":(\d+),"type":"put","key":"selectedItem","feat":[0-9],"value":\{"key":"[0-9]","label":"Strawberry Bun""").saveAs("products1Id2")
 	val productsId2Extract2  = regex("""node":(\d+),"type":"put","key":"selectedItem","feat":[0-9],"value":\{"key":"[0-9]","label":"Vanilla Cracker""").saveAs("products2Id2")
+  val productsId3Extract = regex("""payload":"products.{2000,4000}payload":"products.{2000,4000}node":(\d+),"type":"put","key":"payload","feat":[0-9]*,"value":\{"type":"@id","payload":"products"""").saveAs("products3Id")
 
+	var rpcPrefix = """{"csrfToken":"${seckey}","rpc":["""
+	var rpcSuffix = """],"syncId":${syncId},"clientId":${clientId}}"""
+
+  def createRpc(s: String): String = {
+    rpcPrefix+s+rpcSuffix
+  }
 
 	val scn = scenario("BaristaFlow")
 		.repeat(sessionRepeats) {
@@ -114,14 +121,14 @@ class BaristaFlow extends Simulation {
 				.exec(http("First xhr, init grid")
 					.post(uidlUrl)
 					.headers(headers_4)
-					.body(ElFileBody("BaristaFlow_0004_request.txt"))
+					.body(StringBody(createRpc("""{"type":"publishedEventHandler","node":${gridId},"templateEventMethodName":"setDetailsVisible","templateEventMethodArgs":[null]},{"type":"publishedEventHandler","node":${gridId},"templateEventMethodName":"confirmUpdate","templateEventMethodArgs":[0]}"""))).asJson
 					.check(syncIdExtract).check(clientIdExtract))
 				.pause(4, 10)
 
 				.exec(http("Click new order")
 					.post(uidlUrl)
 					.headers(headers_4)
-					.body(ElFileBody("BaristaFlow_0009_request.txt"))
+					.body(StringBody(createRpc("""{"type":"event","node":${newButtonId},"event":"click","data":{"event.shiftKey":false,"event.metaKey":false,"event.detail":1,"event.ctrlKey":false,"event.clientX":1118,"event.clientY":92,"event.altKey":false,"event.button":0,"event.screenY":801,"event.screenX":4154}}"""))).asJson
 					.check(syncIdExtract).check(clientIdExtract)
 					.check(amountIdExtract)
 					.check(productsIdExtract)
@@ -138,81 +145,104 @@ class BaristaFlow extends Simulation {
 				.exec(http("Selection changes")
 					.post(uidlUrl)
 					.headers(headers_4)
-					.body(ElFileBody("BaristaFlow_0010_request.txt"))
+					.body(StringBody(createRpc("""{"type":"event","node":${dialogId},"event":"opened-changed"},{"type":"mSync","node":${statusId},"feature":1,"property":"filter","value":""},{"type":"mSync","node":${statusId},"feature":1,"property":"opened","value":false},{"type":"mSync","node":${dueTimeId},"feature":1,"property":"filter","value":""},{"type":"mSync","node":${dueTimeId},"feature":1,"property":"opened","value":false},{"type":"mSync","node":${dueDateId},"feature":1,"property":"opened","value":false}"""))).asJson
 					.check(syncIdExtract).check(clientIdExtract))
 				.pause(2)
 
 				.exec(http("Customer name")
 					.post(uidlUrl)
 					.headers(headers_4)
-					.body(ElFileBody("BaristaFlow_0027_request.txt"))
+					.body(StringBody(createRpc("""{"type":"mSync","node":${customerId},"feature":1,"property":"value","value":"dasdasd asdasdas"}"""))).asJson
 					.check(syncIdExtract).check(clientIdExtract))
 				.pause(5, 6)
 
 				.exec(http("Phone number")
 					.post(uidlUrl)
 					.headers(headers_4)
-					.body(ElFileBody("BaristaFlow_0036_request.txt"))
+					.body(StringBody(createRpc("""{"type":"mSync","node":${phoneId},"feature":1,"property":"value","value":"+358 123456"}"""))).asJson
 					.check(syncIdExtract).check(clientIdExtract))
 				.pause(5, 6)
-				.exec(http("Product CB1 opened")
+
+        // Product select 1
+        .exec(http("Product CB1 opened")
 					.post(uidlUrl)
 					.headers(headers_4)
-					.body(ElFileBody("BaristaFlow_0037_a_request.txt"))
+					.body(StringBody(createRpc("""{"type":"publishedEventHandler","node":${productsId},"templateEventMethodName":"setRequestedRange","templateEventMethodArgs":[0,50,""]},{"type":"mSync","node":${productsId},"feature":1,"property":"opened","value":true}"""))).asJson
 					.check(syncIdExtract).check(clientIdExtract))
-				.pause(4, 6)
+				.pause(1)
+				.exec(http("Product CB1 opened 2")
+					.post(uidlUrl)
+					.headers(headers_4)
+					.body(StringBody(createRpc("""{"type":"publishedEventHandler","node":${productsId},"templateEventMethodName":"confirmUpdate","templateEventMethodArgs":[1]}"""))).asJson
+					.check(syncIdExtract).check(clientIdExtract))
+				.pause(3, 5)
 				.exec(http("Select product")
 					.post(uidlUrl)
 					.headers(headers_4)
-					.body(ElFileBody("BaristaFlow_0037_request.txt"))
+					.body(StringBody(createRpc("""{"type":"mSync","node":${productsId},"feature":1,"property":"selectedItem","value":{"key":"1","label":"Strawberry Bun"}},{"type":"mSync","node":${productsId},"feature":1,"property":"value","value":"1"},{"type":"mSync","node":${productsId},"feature":1,"property":"opened","value":false}"""))).asJson
 					.check(syncIdExtract).check(clientIdExtract)
 					.check(productsId1Extract2)
 					.check(products2IdExtract)
 				)
-				.pause(2)
-				.exec(http("Product CB1 closed")
-					.post(uidlUrl)
-					.headers(headers_4)
-					.body(ElFileBody("BaristaFlow_0037b_request.txt"))
-					.check(syncIdExtract).check(clientIdExtract))
-				.pause(2)
-				.exec(http("Product CB2 opened")
-					.post(uidlUrl)
-					.headers(headers_4)
-					.body(ElFileBody("BaristaFlow_0038_a_request.txt"))
-					.check(syncIdExtract).check(clientIdExtract))
-				.pause(5, 7)
-				.exec(http("Select 2. product")
-					.post(uidlUrl)
-					.headers(headers_4)
-					.body(ElFileBody("BaristaFlow_0038_request.txt"))
-					.check(syncIdExtract).check(clientIdExtract)
-					.check(productsId1Extract2)
-					.check(productsId2Extract2)
-				)
-				.pause(2)
-				.exec(http("Product CB2 closed")
-					.post(uidlUrl)
-					.headers(headers_4)
-					.body(ElFileBody("BaristaFlow_0038b_request.txt"))
-					.check(syncIdExtract).check(clientIdExtract))
-				.pause(5, 7)
+        .pause(2)
+        .exec(http("Product CB1 closed")
+          .post(uidlUrl)
+          .headers(headers_4)
+          .body(StringBody(createRpc("""{"type":"mSync","node":${products1Id2},"feature":1,"property":"filter","value":""},{"type":"mSync","node":${products1Id2},"feature":1,"property":"opened","value":false},{"type":"mSync","node":${products2Id},"feature":1,"property":"filter","value":""},{"type":"mSync","node":${products2Id},"feature":1,"property":"opened","value":false}"""))).asJson
+          .check(syncIdExtract).check(clientIdExtract))
+        .pause(2)
+        // Product select 2
+
+        .exec(http("Product CB2 opened")
+        .post(uidlUrl)
+        .headers(headers_4)
+        .body(StringBody(createRpc("""{"type":"publishedEventHandler","node":${products2Id},"templateEventMethodName":"setRequestedRange","templateEventMethodArgs":[0,50,""]},{"type":"mSync","node":${products2Id},"feature":1,"property":"opened","value":true}"""))).asJson
+        .check(syncIdExtract).check(clientIdExtract))
+        .pause(1)
+        .exec(http("Product CB2 opened 2")
+          .post(uidlUrl)
+          .headers(headers_4)
+          .body(StringBody(createRpc("""{"type":"publishedEventHandler","node":${products2Id},"templateEventMethodName":"confirmUpdate","templateEventMethodArgs":[1]}"""))).asJson
+          .check(syncIdExtract).check(clientIdExtract))
+        .pause(3, 5)
+        .exec(http("Select product 2")
+          .post(uidlUrl)
+          .headers(headers_4)
+          .body(StringBody(createRpc("""{"type":"mSync","node":${products2Id},"feature":1,"property":"selectedItem","value":{"key":"2","label":"Vanilla Cracker"}},{"type":"mSync","node":${products2Id},"feature":1,"property":"value","value":"2"},{"type":"mSync","node":${products2Id},"feature":1,"property":"opened","value":false}"""))).asJson
+          .check(syncIdExtract).check(clientIdExtract)
+          .check(productsId2Extract2)
+          .check(productsId3Extract)
+        )
+        .pause(2)
+        .exec(http("Product CB2 closed")
+          .post(uidlUrl)
+          .headers(headers_4)
+          .body(StringBody(createRpc("""{"type":"mSync","node":${products2Id2},"feature":1,"property":"filter","value":""},{"type":"mSync","node":${products2Id2},"feature":1,"property":"opened","value":false},{"type":"mSync","node":${products3Id},"feature":1,"property":"filter","value":""},{"type":"mSync","node":${products3Id},"feature":1,"property":"opened","value":false}"""))).asJson
+          .check(syncIdExtract).check(clientIdExtract))
+        .pause(2)
+
 				.exec(http("Select Store opened")
 					.post(uidlUrl)
 					.headers(headers_4)
-					.body(ElFileBody("BaristaFlow_0043_a_request.txt"))
+					.body(StringBody(createRpc("""{"type":"publishedEventHandler","node":${storeId},"templateEventMethodName":"setRequestedRange","templateEventMethodArgs":[0,50,""]},{"type":"mSync","node":${storeId},"feature":1,"property":"opened","value":true}"""))).asJson
 					.check(syncIdExtract).check(clientIdExtract))
-				.pause(2)
+				.pause(1)
+        .exec(http("Select Store opened 2")
+          .post(uidlUrl)
+          .headers(headers_4)
+          .body(StringBody(createRpc("""{"type":"publishedEventHandler","node":${storeId},"templateEventMethodName":"confirmUpdate","templateEventMethodArgs":[1]}"""))).asJson
+          .check(syncIdExtract).check(clientIdExtract))
+        .pause(1)
 				.exec(http("Select Store selected and closed")
 					.post(uidlUrl)
 					.headers(headers_4)
-					.body(ElFileBody("BaristaFlow_0043_request.txt"))
+					.body(StringBody(createRpc("""{"type":"mSync","node":${storeId},"feature":1,"property":"selectedItem","value":{"key":"1","label":"Store"}},{"type":"mSync","node":${storeId},"feature":1,"property":"value","value":"1"},{"type":"mSync","node":${storeId},"feature":1,"property":"opened","value":false}"""))).asJson
 					.check(syncIdExtract).check(clientIdExtract))
 				.pause(2)
 				.exec(http("Click review order")
 					.post(uidlUrl)
 					.headers(headers_4)
-					.body(ElFileBody("BaristaFlow_0044_request.txt"))
+					.body(StringBody(createRpc("""{"type":"event","node":${reviewId},"event":"click","data":{"event.shiftKey":false,"event.metaKey":false,"event.detail":1,"event.ctrlKey":false,"event.clientX":1108,"event.clientY":759,"event.altKey":false,"event.button":0,"event.screenY":1468,"event.screenX":4144}}"""))).asJson
 					.check(syncIdExtract).check(clientIdExtract)
 					.check(regex("""Order placed"""))
 					.check(saveIdExtract)
@@ -221,12 +251,12 @@ class BaristaFlow extends Simulation {
 				.exec(http("Click place order")
 					.post(uidlUrl)
 					.headers(headers_4)
-					.body(ElFileBody("BaristaFlow_0045_request.txt"))
+					.body(StringBody(createRpc("""{"type":"event","node":${saveId},"event":"click","data":{"event.shiftKey":false,"event.metaKey":false,"event.detail":1,"event.ctrlKey":false,"event.clientX":1108,"event.clientY":759,"event.altKey":false,"event.button":0,"event.screenY":1468,"event.screenX":4144}}"""))).asJson
 					.check(syncIdExtract).check(clientIdExtract)
 					.check(regex("""Order was created"""))
 				)
 				.pause(2, 6)
 		}
 
-	setUp(scn.inject(rampUsers(sessionCount) over sessionStartInterval)).protocols(httpProtocol)
+  setUp(scn.inject(rampUsers(sessionCount) during (sessionStartInterval seconds))).protocols(httpProtocol)
 }
