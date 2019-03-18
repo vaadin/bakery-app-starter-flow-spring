@@ -33,9 +33,9 @@
         <maven.clean.plugin.version>3.0.0</maven.clean.plugin.version>
         <maven.surefire.plugin.version>2.21.0</maven.surefire.plugin.version>
 
-        <gatling.version>2.3.1</gatling.version>
-        <gatling-plugin.version>2.2.4</gatling-plugin.version>
-        <scala-maven-plugin.version>3.3.2</scala-maven-plugin.version>
+        <gatling.version>3.0.2</gatling.version>
+        <gatling-plugin.version>3.0.1</gatling-plugin.version>
+        <scala-maven-plugin.version>3.4.4</scala-maven-plugin.version>
 
         <!-- Frontend -->
         <node.version>v8.1.2</node.version>
