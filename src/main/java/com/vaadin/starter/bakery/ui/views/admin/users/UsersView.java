@@ -1,9 +1,16 @@
 package com.vaadin.starter.bakery.ui.views.admin.users;
 
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_USERS;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.crud.BinderCrudEditor;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
@@ -18,11 +25,6 @@ import com.vaadin.starter.bakery.backend.service.UserService;
 import com.vaadin.starter.bakery.ui.MainView;
 import com.vaadin.starter.bakery.ui.crud.AbstractBakeryCrudView;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_USERS;
 
 @Route(value = PAGE_USERS, layout = MainView.class)
 @PageTitle(BakeryConst.TITLE_USERS)
@@ -47,7 +49,7 @@ public class UsersView extends AbstractBakeryCrudView<User> {
 	}
 
 	private static BinderCrudEditor<User> createForm(PasswordEncoder passwordEncoder) {
-		TextField email = new TextField("Email (login)");
+		EmailField email = new EmailField("Email (login)");
 		email.getElement().setAttribute("colspan", "2");
 		TextField first = new TextField("First name");
 		TextField last = new TextField("Last name");

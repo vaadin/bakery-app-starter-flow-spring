@@ -4,11 +4,10 @@ import java.util.Random;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.openqa.selenium.Keys;
 
 import com.vaadin.flow.component.tabs.testbench.TabElement;
+import com.vaadin.flow.component.textfield.testbench.EmailFieldElement;
 import com.vaadin.flow.component.textfield.testbench.PasswordFieldElement;
-import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.UsersViewElement;
 import com.vaadin.testbench.TestBenchElement;
@@ -19,8 +18,7 @@ public class UsersViewIT extends AbstractIT<UsersViewElement> {
 
 	@Override
 	protected UsersViewElement openView() {
-		StorefrontViewElement storefront =
-			openLoginView().login("admin@vaadin.com", "admin");
+		StorefrontViewElement storefront = openLoginView().login("admin@vaadin.com", "admin");
 		return storefront.getMenu().navigateToUsers();
 	}
 
@@ -32,8 +30,7 @@ public class UsersViewIT extends AbstractIT<UsersViewElement> {
 
 		String uniqueEmail = "e" + r.nextInt() + "@vaadin.com";
 
-		createUser(
-			usersView, uniqueEmail, "Paul", "Irwin", "Vaadin10", "baker");
+		createUser(usersView, uniqueEmail, "Paul", "Irwin", "Vaadin10", "baker");
 
 		int rowNum = usersView.getGrid().getCell(uniqueEmail).getRow();
 		usersView.openRowForEditing(rowNum);
@@ -47,7 +44,7 @@ public class UsersViewIT extends AbstractIT<UsersViewElement> {
 		Assert.assertEquals("", password.getValue());
 
 		// Saving any field without changing password should save and close
-		TextFieldElement emailField = usersView.getEmailField();
+		EmailFieldElement emailField = usersView.getEmailField();
 		String newEmail = "foo" + r.nextInt() + "@bar.com";
 		emailField.setValue(newEmail);
 
@@ -83,9 +80,8 @@ public class UsersViewIT extends AbstractIT<UsersViewElement> {
 		Assert.assertEquals("", password.getAttribute("value"));
 	}
 
-	private void createUser(
-		UsersViewElement usersView, String email, String firstName,
-		String lastName, String password, String role) {
+	private void createUser(UsersViewElement usersView, String email, String firstName, String lastName,
+			String password, String role) {
 		usersView.getSearchBar().getCreateNewButton().click();
 		Assert.assertTrue(usersView.isEditorOpen());
 
@@ -112,8 +108,7 @@ public class UsersViewIT extends AbstractIT<UsersViewElement> {
 		page.getEmailField().setValue("barista123@vaadin.com");
 		page.getEditorSaveButton().click();
 
-		Assert.assertEquals(
-			rowNum, page.getGrid().getCell("barista@vaadin.com").getRow());
+		Assert.assertEquals(rowNum, page.getGrid().getCell("barista@vaadin.com").getRow());
 	}
 
 	@Test
@@ -128,8 +123,7 @@ public class UsersViewIT extends AbstractIT<UsersViewElement> {
 		page.getEditorDeleteButton().click();
 		page.getDeleteConfirmDialog().getConfirmButton().click();
 
-		Assert.assertEquals(
-			rowNum, page.getGrid().getCell("barista@vaadin.com").getRow());
+		Assert.assertEquals(rowNum, page.getGrid().getCell("barista@vaadin.com").getRow());
 	}
 
 	@Test
@@ -144,16 +138,12 @@ public class UsersViewIT extends AbstractIT<UsersViewElement> {
 
 	@Test
 	public void accessDenied() {
-		StorefrontViewElement storefront =
-			openLoginView().login("barista@vaadin.com", "barista");
-		Assert.assertEquals(
-			3, storefront.getMenu().$(TabElement.class).all().size());
+		StorefrontViewElement storefront = openLoginView().login("barista@vaadin.com", "barista");
+		Assert.assertEquals(3, storefront.getMenu().$(TabElement.class).all().size());
 
 		driver.get(APP_URL + "users");
-		TestBenchElement accessDeniedPage =
-			$("access-denied-view").waitForFirst();
+		TestBenchElement accessDeniedPage = $("access-denied-view").waitForFirst();
 
-		Assert.assertEquals("Access denied",
-			accessDeniedPage.$("h3").first().getText());
+		Assert.assertEquals("Access denied", accessDeniedPage.$("h3").first().getText());
 	}
 }

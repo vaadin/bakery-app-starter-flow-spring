@@ -1,21 +1,22 @@
 package com.vaadin.starter.bakery.testbench.elements.ui;
 
 import com.vaadin.flow.component.combobox.testbench.ComboBoxElement;
+import com.vaadin.flow.component.textfield.testbench.EmailFieldElement;
 import com.vaadin.flow.component.textfield.testbench.PasswordFieldElement;
 import com.vaadin.flow.component.textfield.testbench.TextFieldElement;
 
 public class UsersViewElement extends BakeryCrudViewElement {
 
-	public TextFieldElement getEmailField() {
-		return getForm().$(TextFieldElement.class).first();
+	public EmailFieldElement getEmailField() {
+		return getForm().$(EmailFieldElement.class).first();
 	}
 
 	public TextFieldElement getFirstName() {
-		return getForm().$(TextFieldElement.class).all().get(1);
+		return getForm().$(TextFieldElement.class).first();
 	}
 
 	public TextFieldElement getLastName() {
-		return getForm().$(TextFieldElement.class).all().get(2);
+		return getForm().$(TextFieldElement.class).last();
 	}
 
 	public PasswordFieldElement getPasswordField() {
