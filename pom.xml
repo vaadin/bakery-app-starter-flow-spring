@@ -21,7 +21,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Dependencies -->
-        <vaadin.version>13.0.2</vaadin.version>
+        <vaadin.version>14.0-SNAPSHOT</vaadin.version>
 
         <!-- Overrides the old version specified by the Spring Boot parent -->
         <selenium.version>3.11.0</selenium.version>
@@ -58,6 +58,22 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
+        <!-- Repository needed for the prerelease versions of Vaadin -->
+        <repository>
+            <id>vaadin-prereleases</id>
+            <url>https://maven.vaadin.com/vaadin-prereleases</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <!-- Repository needed for the snapshot versions of Vaadin -->
+        <repository>
+            <id>vaadin-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/vaadin-snapshots/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>        
     </repositories>
 
     <dependencyManagement>
@@ -69,6 +85,12 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!-- needed to have a es module fix in the connector-->
+            <dependency>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-grid-flow</artifactId>
+                <version>3.1-SNAPSHOT</version>
+            </dependency>            
         </dependencies>
     </dependencyManagement>
 
@@ -93,6 +115,26 @@
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>flow-server</artifactId>
+            <version>2.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>flow-client</artifactId>
+            <version>2.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>flow-data</artifactId>
+            <version>2.0-SNAPSHOT</version>
+        </dependency>    
+
+        <!-- <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin</artifactId>
+        </dependency> -->
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-spring</artifactId>
@@ -219,6 +261,19 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>com.vaadin</groupId>
+                <artifactId>flow-maven-plugin</artifactId>
+                <version>2.0-SNAPSHOT</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>validate</goal>
+                            <goal>build-frontend</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
@@ -230,108 +285,12 @@
                     <name>vaadin.productionMode</name>
                 </property>
             </activation>
-
-            <!-- (1): Make the package run in production mode when deployed as .war,
-                      without the need of setting extra properties on the server -->
             <dependencies>
                 <dependency>
                     <groupId>com.vaadin</groupId>
                     <artifactId>flow-server-production-mode</artifactId>
                 </dependency>
             </dependencies>
-
-            <build>
-                <plugins>
-                    <!-- (2): Run vaadin-maven-plugin to transpile and optimize frontend code -->
-                    <plugin>
-                        <groupId>com.vaadin</groupId>
-                        <artifactId>vaadin-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>copy-production-files</goal>
-                                    <goal>package-for-production</goal>
-                                </goals>
-                                <configuration>
-                                  <!-- Split app into fragments in order to make login-view smaller.
-                                       This way is still very manual, because flow does not merge
-                                       elements that are only used in one fragment into that fragment.
-                                   -->
-                                  <bundle>true</bundle>
-                                  <fragments>
-                                    <fragment>
-                                      <name>login-fragment</name>
-                                      <files>
-                                        <file>bower_components/vaadin-login/src/vaadin-login-overlay.html</file>
-                                      </files>
-                                    </fragment>
-                                    <fragment>
-                                      <name>main-fragment</name>
-                                      <files>
-                                        <file>src/views/storefront/storefront-view.html</file>
-                                        <file>src/views/storefront/order-status-badge.html</file>
-                                        <file>src/views/orderedit/order-item-editor.html</file>
-                                        <file>src/views/orderedit/order-editor.html</file>
-                                        <file>src/views/orderedit/order-details.html</file>
-                                        <file>src/views/errors/access-denied-view.html</file>
-                                        <file>src/components/amount-field.html</file>
-                                        <file>src/components/form-buttons-bar.html</file>
-                                        <file>src/components/search-bar.html</file>
-                                        <file>src/components/utils-mixin.html</file>
-                                      </files>
-                                    </fragment>
-                                    <fragment>
-                                      <name>grid-fragment</name>
-                                      <files>
-                                        <file>gridConnector.js</file>
-                                        <file>vaadin-grid-flow-selection-column.html</file>
-                                        <file>bower_components/vaadin-grid/vaadin-grid.html</file>
-                                        <file>bower_components/vaadin-grid/vaadin-grid-column.html</file>
-                                        <file>bower_components/vaadin-grid/vaadin-grid-column-group.html</file>
-                                        <file>bower_components/vaadin-grid/vaadin-grid-tree-toggle.html</file>
-                                        <file>bower_components/vaadin-grid/vaadin-grid-sorter.html</file>
-                                        <file>bower_components/vaadin-grid/vaadin-grid-selection-column.html</file>
-                                        <file>bower_components/vaadin-grid/vaadin-grid-filter.html</file>
-                                        <file>bower_components/vaadin-grid/vaadin-grid-column.html</file>
-                                        <file>bower_components/vaadin-grid/vaadin-grid-column-group.html</file>
-                                        <file>ironListConnector.js</file>
-                                        <file>bower_components/iron-list/iron-list.html</file>
-                                        <file>bower_components/vaadin-grid/src/iron-list.html</file>
-                                      </files>
-                                    </fragment>
-                                    <fragment>
-                                      <name>dashboard-fragment</name>
-                                      <files>
-                                        <file>src/views/dashboard/dashboard-view.html</file>
-                                        <file>bower_components/vaadin-board/vaadin-board.html</file>
-                                        <file>bower_components/vaadin-board/vaadin-board-row.html</file>
-                                        <file>bower_components/vaadin-charts/vaadin-chart.html</file>
-                                      </files>
-                                    </fragment>
-                                  </fragments>
-                                  <transpileOutputDirectory>${project.build.directory}/classes/static</transpileOutputDirectory>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-
-                    <!-- (3): Exclude the unprocessed frontend sources from the .war file -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-war-plugin</artifactId>
-                        <configuration>
-                            <warSourceExcludes>frontend/**</warSourceExcludes>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-maven-plugin</artifactId>
-                        <configuration>
-                            <jvmArguments>-Dvaadin.productionMode</jvmArguments>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
         </profile>
 
         <!-- Moving spring-boot start/stop into a separate profile speeds up regular builds.
