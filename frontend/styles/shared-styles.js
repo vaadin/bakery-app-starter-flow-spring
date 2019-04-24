@@ -1,6 +1,7 @@
-<link rel="import" href="../bower_components/polymer/lib/elements/custom-style.html">
+import '@polymer/polymer/lib/elements/custom-style.js';
+const $_documentContainer = document.createElement('template');
 
-<dom-module id="bakery-app-layout-theme" theme-for="vaadin-app-layout">
+$_documentContainer.innerHTML = `<dom-module id="bakery-app-layout-theme" theme-for="vaadin-app-layout">
   <template>
     <style>
       :host {
@@ -24,9 +25,7 @@
       }
     </style>
   </template>
-</dom-module>
-
-<dom-module id="bakery-login-theme" theme-for="vaadin-login-overlay-wrapper">
+</dom-module><dom-module id="bakery-login-theme" theme-for="vaadin-login-overlay-wrapper">
   <template>
     <style>
       [part="brand"] {
@@ -34,9 +33,7 @@
       }
     </style>
   </template>
-</dom-module>
-
-<dom-module id="bakery-crud-theme" theme-for="vaadin-crud">
+</dom-module><dom-module id="bakery-crud-theme" theme-for="vaadin-crud">
   <template>
     <style>
       :host {
@@ -63,10 +60,7 @@
       }
     </style>
   </template>
-</dom-module>
-
-<!-- Themes for dialogs -->
-<dom-module id="bakery-dialog-overlay-theme" theme-for="vaadin-dialog-overlay">
+</dom-module><dom-module id="bakery-dialog-overlay-theme" theme-for="vaadin-dialog-overlay">
   <template>
     <style>
       :host([theme~="orders"]) {
@@ -116,10 +110,7 @@
       }
     </style>
   </template>
-</dom-module>
-
-<!-- Theme for the status selector, we need to theme the text-field instead of the combo-box -->
-<dom-module id="bakery-text-field-theme" theme-for="vaadin-text-field">
+</dom-module><dom-module id="bakery-text-field-theme" theme-for="vaadin-text-field">
   <template>
     <style>
       :host([status="new"]) [part~="input-field"],
@@ -146,10 +137,7 @@
       }
     </style>
   </template>
-</dom-module>
-
-<!-- Theme for the vaadin-grid -->
-<dom-module id="bakery-grid-theme" theme-for="vaadin-grid">
+</dom-module><dom-module id="bakery-grid-theme" theme-for="vaadin-grid">
   <template>
     <style>
       :host {
@@ -198,10 +186,7 @@
       }
     </style>
   </template>
-</dom-module>
-
-<!-- shared styles for all views -->
-<dom-module id="shared-styles">
+</dom-module><dom-module id="shared-styles">
   <template>
     <style>
       *,
@@ -281,9 +266,7 @@
       }
     </style>
   </template>
-</dom-module>
-
-<custom-style>
+</dom-module><custom-style>
   <style>
     @keyframes v-progress-start {
       0% {
@@ -374,4 +357,17 @@
       }
     }
   </style>
-</custom-style>
+</custom-style>`;
+
+document.head.appendChild($_documentContainer.content);
+
+/* Themes for dialogs */
+/* Theme for the status selector, we need to theme the text-field instead of the combo-box */
+/* Theme for the vaadin-grid */
+/* shared styles for all views */
+/*
+  FIXME(polymer-modulizer): the above comments were extracted
+  from HTML and may be out of place here. Review them and
+  then delete this comment!
+*/
+;

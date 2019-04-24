@@ -1,19 +1,18 @@
-<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../../bower_components/iron-icon/iron-icon.html">
-<link rel="import" href="../../../bower_components/vaadin-icons/vaadin-icons.html">
-<link rel="import" href="../../../bower_components/vaadin-button/src/vaadin-button.html">
-<link rel="import" href="../../../bower_components/vaadin-form-layout/src/vaadin-form-item.html">
-<link rel="import" href="../../../bower_components/vaadin-form-layout/src/vaadin-form-layout.html">
-<link rel="import" href="../../../bower_components/vaadin-text-field/src/vaadin-text-field.html">
-
-<link rel="import" href="../../components/buttons-bar.html">
-<link rel="import" href="../../components/utils-mixin.html">
-<link rel="import" href="../storefront/order-status-badge.html">
-
-<link rel="import" href="../../../styles/shared-styles.html">
-
-<dom-module id="order-details">
-  <template>
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import '@polymer/iron-icon/iron-icon.js';
+import 'vaadin-icons/vaadin-icons.js';
+import 'vaadin-button/src/vaadin-button.js';
+import 'vaadin-form-layout/src/vaadin-form-item.js';
+import 'vaadin-form-layout/src/vaadin-form-layout.js';
+import 'vaadin-text-field/src/vaadin-text-field.js';
+import '../../components/buttons-bar.js';
+import '../../components/utils-mixin.js';
+import '../storefront/order-status-badge.js';
+import '../../../styles/shared-styles.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
+class OrderDetails extends window.ScrollShadowMixin(PolymerElement) {
+  static get template() {
+    return html`
     <style include="shared-styles">
       :host {
         display: flex;
@@ -198,7 +197,7 @@
               <div class="history-line">
                 <span class="bold">[[event.createdBy.firstName]]</span>
                 <span class="secondary">[[event.timestamp]]</span>
-                <order-status-badge status="[[event.newState]]" small></order-status-badge>
+                <order-status-badge status="[[event.newState]]" small=""></order-status-badge>
               </div>
               <div class="comment">[[event.message]]</div>
             </template>
@@ -217,7 +216,7 @@
     </div>
 
 
-    <buttons-bar id="footer" no-scroll$="[[noScroll]]">
+    <buttons-bar id="footer" no-scroll\$="[[noScroll]]">
       <vaadin-button slot="left" id="back" hidden="[[!review]]">Back</vaadin-button>
       <vaadin-button slot="left" id="cancel" hidden="[[review]]">Cancel</vaadin-button>
 
@@ -231,48 +230,45 @@
         <iron-icon icon="vaadin:edit" slot="suffix"></iron-icon>
       </vaadin-button>
     </buttons-bar>
-  </template>
+`;
+  }
 
-  <script>
-    class OrderDetails extends window.ScrollShadowMixin(Polymer.Element) {
-      static get is() {
-        return 'order-details';
+  static get is() {
+    return 'order-details';
+  }
+
+  static get properties() {
+    return {
+      item: {
+        type: Object
       }
+    };
+  }
 
-      static get properties() {
-        return {
-          item: {
-            type: Object
-          }
-        };
-      }
+  ready() {
+    super.ready();
 
-      ready() {
-        super.ready();
+    this.$.form1.responsiveSteps = this.$.form3.responsiveSteps = [
+      {columns: 1, labelsPosition: 'top'},
+      {minWidth: '600px', columns: 4, labelsPosition: 'top'}
+    ];
 
-        this.$.form1.responsiveSteps = this.$.form3.responsiveSteps = [
-          {columns: 1, labelsPosition: 'top'},
-          {minWidth: '600px', columns: 4, labelsPosition: 'top'}
-        ];
+    this.$.form2.responsiveSteps = [
+      {columns: 1}, {minWidth: '180px', columns: 2}
+    ];
 
-        this.$.form2.responsiveSteps = [
-          {columns: 1}, {minWidth: '180px', columns: 2}
-        ];
+    this.$.form4.responsiveSteps = [
+      {columns: 1, labelsPosition: 'top'}
+    ];
+  }
 
-        this.$.form4.responsiveSteps = [
-          {columns: 1, labelsPosition: 'top'}
-        ];
-      }
-
-      _onCommentKeydown(event) {
-        if (event.key === 'Enter' || event.keyCode == 13) {
-          // In IE11 on button click commentField blur doesn't happen, and the value-change event is not fired
-          this.$.commentField.blur();
-          this.$.sendComment.click();
-        }
-      }
+  _onCommentKeydown(event) {
+    if (event.key === 'Enter' || event.keyCode == 13) {
+      // In IE11 on button click commentField blur doesn't happen, and the value-change event is not fired
+      this.$.commentField.blur();
+      this.$.sendComment.click();
     }
+  }
+}
 
-    window.customElements.define(OrderDetails.is, OrderDetails);
-  </script>
-</dom-module>
+window.customElements.define(OrderDetails.is, OrderDetails);
