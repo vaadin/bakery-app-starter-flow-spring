@@ -285,7 +285,7 @@
                                     <fragment>
                                       <name>main-fragment</name>
                                       <files>
-                                        <file>src/views/storefront/ew.html</file>
+                                        <file>src/views/storefront/storefront-view.html</file>
                                         <file>src/views/storefront/order-status-badge.html</file>
                                         <file>src/views/orderedit/order-item-editor.html</file>
                                         <file>src/views/orderedit/order-editor.html</file>
