@@ -8,6 +8,7 @@ import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.ProductsViewElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.UsersViewElement;
 import com.vaadin.testbench.TestBenchElement;
+import org.openqa.selenium.By;
 
 public class AppNavigationElement extends TabsElement {
 
@@ -33,7 +34,7 @@ public class AppNavigationElement extends TabsElement {
 	}
 
 	private <T extends TestBenchElement> T navigateTo(int index, Class<T> landingPage) {
-		$(TabElement.class).get(index).click();
+		$(TabElement.class).get(index).findElement(By.tagName("a")).click();
 		return $(landingPage).onPage().waitForFirst();
 	}
 }
