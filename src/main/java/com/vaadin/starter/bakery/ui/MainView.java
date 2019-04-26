@@ -48,9 +48,10 @@ public class MainView extends AppLayout {
 		confirmDialog.setCancelButtonTheme("raised tertiary");
 
 		this.setDrawerOpened(false);
-		//this.addToNavbar(new DrawerToggle(), new Span("###Bakery###"));
-		//this.addToDrawer(createMenuTabs());
-		this.addToNavbar(new Span("###Bakery###"), createMenuTabs());
+		Span appName = new Span("###Bakery###");
+		appName.addClassName("hide-on-mobile");
+
+		this.addToNavbar(true, appName, createMenuTabs());
 		this.getElement().appendChild(confirmDialog.getElement(), new BakeryCookieConsent().getElement());
 
 		getElement().addEventListener("search-focus", e -> {

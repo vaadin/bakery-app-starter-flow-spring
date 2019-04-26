@@ -283,6 +283,36 @@
   </template>
 </dom-module>
 
+<dom-module id="app-layout-theme" theme-for="vaadin-app-layout">
+  <template>
+    <style>
+      [part=navbar] {
+        align-items: center;
+        justify-content: center;
+      }
+
+      [part=navbar]::after {
+        content: '';
+      }
+
+      [part=navbar] ::slotted(*:first-child),
+      [part=navbar]::after {
+        flex: 1 0 0.001px;
+      }
+
+      @media (max-width: 425px) {
+        [part=navbar] ::slotted(.hide-on-mobile) {
+          display: none;
+        }
+
+        [part=navbar]::after {
+          content: none;
+        }
+    }
+    </style>
+  </template>
+</dom-module>
+
 <custom-style>
   <style>
     @keyframes v-progress-start {
@@ -366,6 +396,24 @@
       padding-right: .75em;
     }
 
+    vaadin-app-layout vaadin-tab a:hover {
+      text-decoration: none;
+    }
+
+    vaadin-app-layout vaadin-tab:not([selected]) a {
+      color: var(--lumo-contrast-60pct);
+    }
+
+    vaadin-app-layout vaadin-tab iron-icon {
+      margin: 0 4px;
+      width: var(--lumo-icon-size-m);
+      height: var(--lumo-icon-size-m);
+      padding: .25rem;
+      box-sizing: border-box!important;
+    }
+
+
+
     @media (min-width: 700px) {
       vaadin-app-layout vaadin-tab {
         font-size: var(--lumo-font-size-m);
@@ -375,3 +423,4 @@
     }
   </style>
 </custom-style>
+
