@@ -286,26 +286,26 @@
 <dom-module id="app-layout-theme" theme-for="vaadin-app-layout">
   <template>
     <style>
-      [part=navbar] {
+      [part="navbar"] {
         align-items: center;
         justify-content: center;
       }
 
-      [part=navbar]::after {
+      [part="navbar"]::after {
         content: '';
       }
 
-      [part=navbar] ::slotted(*:first-child),
-      [part=navbar]::after {
+      [part="navbar"] ::slotted(*:first-child),
+      [part="navbar"]::after {
         flex: 1 0 0.001px;
       }
 
       @media (max-width: 425px) {
-        [part=navbar] ::slotted(.hide-on-mobile) {
+        [part="navbar"] ::slotted(.hide-on-mobile) {
           display: none;
         }
 
-        [part=navbar]::after {
+        [part="navbar"]::after {
           content: none;
         }
     }
