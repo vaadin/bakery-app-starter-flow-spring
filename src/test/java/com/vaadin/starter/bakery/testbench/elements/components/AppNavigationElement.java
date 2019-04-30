@@ -1,6 +1,7 @@
 package com.vaadin.starter.bakery.testbench.elements.components;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.html.testbench.AnchorElement;
 import com.vaadin.flow.component.tabs.testbench.TabElement;
 import com.vaadin.flow.component.tabs.testbench.TabsElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.DashboardViewElement;
@@ -40,6 +41,6 @@ public class AppNavigationElement extends TabsElement {
 	}
 
 	private static void clickLink(TabElement tab) {
-		tab.findElement(By.tagName("a")).click();
+		tab.$(AnchorElement.class).first().click();
 	}
 }
