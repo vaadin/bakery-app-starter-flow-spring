@@ -14,7 +14,6 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.app.security.SecurityUtils;
-import com.vaadin.starter.bakery.ui.components.BakeryCookieConsent;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.views.storefront.StorefrontView;
 
@@ -28,8 +27,7 @@ public class LoginView extends VerticalLayout
 	private LoginOverlay login = new LoginOverlay();
 
 	public LoginView() {
-		getElement().appendChild(
-			new BakeryCookieConsent().getElement(), login.getElement());
+		getElement().appendChild(login.getElement());
 
 		LoginI18n i18n = LoginI18n.createDefault();
 		i18n.setHeader(new LoginI18n.Header());
