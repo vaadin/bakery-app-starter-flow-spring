@@ -129,6 +129,8 @@
             <artifactId>vaadin-app-layout-flow</artifactId>
             <version>2.0.0.alpha2</version>
         </dependency>
+        <!-- Using tabs 3 for icons-on-top theme inside links support.
+            Should be removed when tabs 3 is on the platform. -->
         <dependency>
             <groupId>org.webjars.bowergithub.vaadin</groupId>
             <artifactId>vaadin-tabs</artifactId>
