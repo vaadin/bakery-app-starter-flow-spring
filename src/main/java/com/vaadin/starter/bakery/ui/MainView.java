@@ -22,7 +22,6 @@ import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.server.VaadinServlet;
 import com.vaadin.starter.bakery.app.security.SecurityUtils;
-import com.vaadin.starter.bakery.ui.components.BakeryCookieConsent;
 import com.vaadin.starter.bakery.ui.views.HasConfirmation;
 import com.vaadin.starter.bakery.ui.views.admin.products.ProductsView;
 import com.vaadin.starter.bakery.ui.views.admin.users.UsersView;
@@ -52,7 +51,7 @@ public class MainView extends AppLayout {
 		appName.addClassName("hide-on-mobile");
 
 		this.addToNavbar(true, appName, createMenuTabs());
-		this.getElement().appendChild(confirmDialog.getElement(), new BakeryCookieConsent().getElement());
+		this.getElement().appendChild(confirmDialog.getElement());
 
 		getElement().addEventListener("search-focus", e -> {
 			getElement().getClassList().add("hide-navbar");
