@@ -15,6 +15,7 @@ target/
 .gatling
 error-screenshots
 selenium_standalone_zips
+webdriver/
 
 # macOs
 .DS_Store
