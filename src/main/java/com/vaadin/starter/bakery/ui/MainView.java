@@ -1,9 +1,5 @@
 package com.vaadin.starter.bakery.ui;
 
-import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_DASHBOARD;
-import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_PRODUCTS;
-import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_STOREFRONT;
-import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_USERS;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_DASHBOARD;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_LOGOUT;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_PRODUCTS;
@@ -11,23 +7,30 @@ import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_STOREFRONT;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_USERS;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.VIEWPORT;
 
-import com.vaadin.flow.component.HasElement;
-import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.applayout.AbstractAppRouterLayout;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.applayout.AppLayout;
-import com.vaadin.flow.component.applayout.AppLayoutMenu;
-import com.vaadin.flow.component.applayout.AppLayoutMenuItem;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.page.Viewport;
+import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.tabs.TabVariant;
+import com.vaadin.flow.component.tabs.Tabs;
+import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
+import com.vaadin.flow.server.VaadinServlet;
 import com.vaadin.starter.bakery.app.security.SecurityUtils;
 import com.vaadin.starter.bakery.ui.components.BakeryCookieConsent;
 import com.vaadin.starter.bakery.ui.views.HasConfirmation;
 import com.vaadin.starter.bakery.ui.views.admin.products.ProductsView;
 import com.vaadin.starter.bakery.ui.views.admin.users.UsersView;
+import com.vaadin.starter.bakery.ui.views.dashboard.DashboardView;
+import com.vaadin.starter.bakery.ui.views.storefront.StorefrontView;
 
+import java.util.ArrayList;
+import java.util.List;
 
 @Viewport(VIEWPORT)
 @PWA(name = "Bakery App Starter", shortName = "###Bakery###",
@@ -35,59 +38,84 @@ import com.vaadin.starter.bakery.ui.views.admin.users.UsersView;
 		backgroundColor = "#227aef", themeColor = "#227aef",
 		offlinePath = "offline-page.html",
 		offlineResources = {"images/offline-login-banner.jpg"})
-public class MainView extends AbstractAppRouterLayout {
+public class MainView extends AppLayout {
 
-	private final ConfirmDialog confirmDialog;
+	private final ConfirmDialog confirmDialog = new ConfirmDialog();
 
 	public MainView() {
-		this.confirmDialog = new ConfirmDialog();
 		confirmDialog.setCancelable(true);
 		confirmDialog.setConfirmButtonTheme("raised tertiary error");
 		confirmDialog.setCancelButtonTheme("raised tertiary");
 
-		getElement().appendChild(confirmDialog.getElement());
-		getElement().appendChild(new BakeryCookieConsent().getElement());
-	}
+		this.setDrawerOpened(false);
+		Span appName = new Span("###Bakery###");
+		appName.addClassName("hide-on-mobile");
 
-	@Override
-	protected void configure(AppLayout appLayout, AppLayoutMenu menu) {
-		appLayout.setBranding(new Span("###Bakery###"));
+		this.addToNavbar(true, appName, createMenuTabs());
+		this.getElement().appendChild(confirmDialog.getElement(), new BakeryCookieConsent().getElement());
 
-		if (SecurityUtils.isUserLoggedIn()) {
-			setMenuItem(menu, new AppLayoutMenuItem(VaadinIcon.EDIT.create(), TITLE_STOREFRONT, PAGE_STOREFRONT));
-			setMenuItem(menu, new AppLayoutMenuItem(VaadinIcon.CLOCK.create(), TITLE_DASHBOARD, PAGE_DASHBOARD));
-
-			if (SecurityUtils.isAccessGranted(UsersView.class)) {
-				setMenuItem(menu, new AppLayoutMenuItem(VaadinIcon.USER.create(), TITLE_USERS, PAGE_USERS));
-			}
-			if (SecurityUtils.isAccessGranted(ProductsView.class)) {
-				setMenuItem(menu, new AppLayoutMenuItem(VaadinIcon.CALENDAR.create(), TITLE_PRODUCTS, PAGE_PRODUCTS));
-			}
-
-			setMenuItem(menu, new AppLayoutMenuItem(VaadinIcon.ARROW_RIGHT.create(), TITLE_LOGOUT, e ->
-					UI.getCurrent().getPage().executeJavaScript("location.assign('logout')")));
-		}
 		getElement().addEventListener("search-focus", e -> {
-			appLayout.getElement().getClassList().add("hide-navbar");
+			getElement().getClassList().add("hide-navbar");
 		});
 
 		getElement().addEventListener("search-blur", e -> {
-			appLayout.getElement().getClassList().remove("hide-navbar");
+			getElement().getClassList().remove("hide-navbar");
 		});
 	}
 
-	private void setMenuItem(AppLayoutMenu menu, AppLayoutMenuItem menuItem) {
-		menuItem.getElement().setAttribute("theme", "icon-on-top");
-		menu.addMenuItem(menuItem);
+	@Override
+	protected void afterNavigation() {
+		super.afterNavigation();
+		confirmDialog.setOpened(false);
+		if (getContent() instanceof HasConfirmation) {
+			((HasConfirmation) getContent()).setConfirmDialog(confirmDialog);
+		}
 	}
 
-	@Override
-	public void showRouterLayoutContent(HasElement content) {
-		super.showRouterLayoutContent(content);
+	private static Tabs createMenuTabs() {
+		final Tabs tabs = new Tabs();
+		tabs.setOrientation(Tabs.Orientation.HORIZONTAL);
+		tabs.add(getAvailableTabs());
+		return tabs;
+	}
 
-		this.confirmDialog.setOpened(false);
-		if (content instanceof HasConfirmation) {
-			((HasConfirmation) content).setConfirmDialog(this.confirmDialog);
+	private static Tab[] getAvailableTabs() {
+		final List<Tab> tabs = new ArrayList<>(4);
+		tabs.add(createTab(VaadinIcon.EDIT, TITLE_STOREFRONT,
+						StorefrontView.class));
+		tabs.add(createTab(VaadinIcon.CLOCK,TITLE_DASHBOARD, DashboardView.class));
+		if (SecurityUtils.isAccessGranted(UsersView.class)) {
+			tabs.add(createTab(VaadinIcon.USER,TITLE_USERS, UsersView.class));
 		}
+		if (SecurityUtils.isAccessGranted(ProductsView.class)) {
+			tabs.add(createTab(VaadinIcon.CALENDAR, TITLE_PRODUCTS, ProductsView.class));
+		}
+		final String contextPath = VaadinServlet.getCurrent().getServletContext().getContextPath();
+		final Tab logoutTab = createTab(createLogoutLink(contextPath));
+		tabs.add(logoutTab);
+		return tabs.toArray(new Tab[tabs.size()]);
+	}
+
+	private static Tab createTab(VaadinIcon icon, String title, Class<? extends Component> viewClass) {
+		return createTab(populateLink(new RouterLink(null,viewClass),icon,title));
+	}
+
+	private static Tab createTab(Component content) {
+		final Tab tab = new Tab();
+		tab.addThemeVariants(TabVariant.LUMO_ICON_ON_TOP);
+		tab.add(content);
+		return tab;
+	}
+
+	private static Anchor createLogoutLink(String contextPath) {
+		final Anchor a = populateLink(new Anchor(), VaadinIcon.ARROW_RIGHT, TITLE_LOGOUT);
+		a.setHref(contextPath + "/logout");
+		return a;
+	}
+
+	private static <T extends HasComponents> T populateLink(T a, VaadinIcon icon, String title) {
+		a.add(icon.create());
+		a.add(title);
+		return a;
 	}
 }
