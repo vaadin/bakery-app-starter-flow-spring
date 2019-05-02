@@ -134,7 +134,7 @@
         <dependency>
             <groupId>org.webjars.bowergithub.vaadin</groupId>
             <artifactId>vaadin-tabs</artifactId>
-            <version>3.0.0-alpha1</version>
+            <version>3.0.0</version>
         </dependency>
         <!-- End of Vaadin -->
 
