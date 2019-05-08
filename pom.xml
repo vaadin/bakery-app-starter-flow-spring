@@ -274,7 +274,7 @@
                     <!-- (2): Run vaadin-maven-plugin to transpile and optimize frontend code -->
                     <plugin>
                         <groupId>com.vaadin</groupId>
-                        <artifactId>flow-maven-plugin</artifactId>
+                        <artifactId>vaadin-maven-plugin</artifactId>
                         <executions>
                             <execution>
                                 <goals>
