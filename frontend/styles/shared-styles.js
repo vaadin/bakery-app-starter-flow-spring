@@ -1,7 +1,6 @@
-import '@polymer/polymer/lib/elements/custom-style.js';
-const $_documentContainer = document.createElement('template');
+<link rel="import" href="../bower_components/polymer/lib/elements/custom-style.html">
 
-$_documentContainer.innerHTML = `<dom-module id="bakery-app-layout-theme" theme-for="vaadin-app-layout">
+<dom-module id="bakery-app-layout-theme" theme-for="vaadin-app-layout">
   <template>
     <style>
       :host {
@@ -25,7 +24,9 @@ $_documentContainer.innerHTML = `<dom-module id="bakery-app-layout-theme" theme-
       }
     </style>
   </template>
-</dom-module><dom-module id="bakery-login-theme" theme-for="vaadin-login-overlay-wrapper">
+</dom-module>
+
+<dom-module id="bakery-login-theme" theme-for="vaadin-login-overlay-wrapper">
   <template>
     <style>
       [part="brand"] {
@@ -33,7 +34,9 @@ $_documentContainer.innerHTML = `<dom-module id="bakery-app-layout-theme" theme-
       }
     </style>
   </template>
-</dom-module><dom-module id="bakery-crud-theme" theme-for="vaadin-crud">
+</dom-module>
+
+<dom-module id="bakery-crud-theme" theme-for="vaadin-crud">
   <template>
     <style>
       :host {
@@ -60,7 +63,10 @@ $_documentContainer.innerHTML = `<dom-module id="bakery-app-layout-theme" theme-
       }
     </style>
   </template>
-</dom-module><dom-module id="bakery-dialog-overlay-theme" theme-for="vaadin-dialog-overlay">
+</dom-module>
+
+<!-- Themes for dialogs -->
+<dom-module id="bakery-dialog-overlay-theme" theme-for="vaadin-dialog-overlay">
   <template>
     <style>
       :host([theme~="orders"]) {
@@ -110,7 +116,10 @@ $_documentContainer.innerHTML = `<dom-module id="bakery-app-layout-theme" theme-
       }
     </style>
   </template>
-</dom-module><dom-module id="bakery-text-field-theme" theme-for="vaadin-text-field">
+</dom-module>
+
+<!-- Theme for the status selector, we need to theme the text-field instead of the combo-box -->
+<dom-module id="bakery-text-field-theme" theme-for="vaadin-text-field">
   <template>
     <style>
       :host([status="new"]) [part~="input-field"],
@@ -137,7 +146,10 @@ $_documentContainer.innerHTML = `<dom-module id="bakery-app-layout-theme" theme-
       }
     </style>
   </template>
-</dom-module><dom-module id="bakery-grid-theme" theme-for="vaadin-grid">
+</dom-module>
+
+<!-- Theme for the vaadin-grid -->
+<dom-module id="bakery-grid-theme" theme-for="vaadin-grid">
   <template>
     <style>
       :host {
@@ -186,7 +198,10 @@ $_documentContainer.innerHTML = `<dom-module id="bakery-app-layout-theme" theme-
       }
     </style>
   </template>
-</dom-module><dom-module id="shared-styles">
+</dom-module>
+
+<!-- shared styles for all views -->
+<dom-module id="shared-styles">
   <template>
     <style>
       *,
@@ -266,7 +281,39 @@ $_documentContainer.innerHTML = `<dom-module id="bakery-app-layout-theme" theme-
       }
     </style>
   </template>
-</dom-module><custom-style>
+</dom-module>
+
+<dom-module id="app-layout-theme" theme-for="vaadin-app-layout">
+  <template>
+    <style>
+      [part="navbar"] {
+        align-items: center;
+        justify-content: center;
+      }
+
+      [part="navbar"]::after {
+        content: '';
+      }
+
+      [part="navbar"] ::slotted(*:first-child),
+      [part="navbar"]::after {
+        flex: 1 0 0.001px;
+      }
+
+      @media (max-width: 425px) {
+        [part="navbar"] ::slotted(.hide-on-mobile) {
+          display: none;
+        }
+
+        [part="navbar"]::after {
+          content: none;
+        }
+    }
+    </style>
+  </template>
+</dom-module>
+
+<custom-style>
   <style>
     @keyframes v-progress-start {
       0% {
@@ -349,6 +396,24 @@ $_documentContainer.innerHTML = `<dom-module id="bakery-app-layout-theme" theme-
       padding-right: .75em;
     }
 
+    vaadin-app-layout vaadin-tab a:hover {
+      text-decoration: none;
+    }
+
+    vaadin-app-layout vaadin-tab:not([selected]) a {
+      color: var(--lumo-contrast-60pct);
+    }
+
+    vaadin-app-layout vaadin-tab iron-icon {
+      margin: 0 4px;
+      width: var(--lumo-icon-size-m);
+      height: var(--lumo-icon-size-m);
+      padding: .25rem;
+      box-sizing: border-box!important;
+    }
+
+
+
     @media (min-width: 700px) {
       vaadin-app-layout vaadin-tab {
         font-size: var(--lumo-font-size-m);
@@ -357,17 +422,5 @@ $_documentContainer.innerHTML = `<dom-module id="bakery-app-layout-theme" theme-
       }
     }
   </style>
-</custom-style>`;
+</custom-style>
 
-document.head.appendChild($_documentContainer.content);
-
-/* Themes for dialogs */
-/* Theme for the status selector, we need to theme the text-field instead of the combo-box */
-/* Theme for the vaadin-grid */
-/* shared styles for all views */
-/*
-  FIXME(polymer-modulizer): the above comments were extracted
-  from HTML and may be out of place here. Review them and
-  then delete this comment!
-*/
-;
