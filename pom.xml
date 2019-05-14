@@ -91,12 +91,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <!-- needed to have a es module fix in the connector-->
-            <dependency>
-                <groupId>com.vaadin</groupId>
-                <artifactId>vaadin-grid-flow</artifactId>
-                <version>3.1-SNAPSHOT</version>
-            </dependency>            
         </dependencies>
     </dependencyManagement>
 
@@ -145,6 +139,13 @@
             <version>2.0.0.rc1</version>
         </dependency>
 
+        <!-- needed to have a es module fix in the connector-->
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-grid-flow</artifactId>
+            <version>4.0.0.rc1</version>
+        </dependency>
+        
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-spring</artifactId>
