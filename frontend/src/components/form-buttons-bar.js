@@ -1,5 +1,5 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import 'vaadin-button/src/vaadin-button.js';
+import '@vaadin/vaadin-button/src/vaadin-button.js';
 import './buttons-bar.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 {

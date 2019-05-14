@@ -1,7 +1,7 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import 'vaadin-text-field/src/vaadin-text-field.js';
 import '@polymer/iron-icon/iron-icon.js';
-import 'vaadin-icons/vaadin-icons.js';
+import '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
+import '@vaadin/vaadin-icons/vaadin-icons.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 {
   /**

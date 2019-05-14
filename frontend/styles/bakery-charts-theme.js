@@ -1,5 +1,5 @@
 import '@polymer/polymer/polymer-element.js';
-import 'vaadin-charts/vaadin-chart-default-theme.js';
+import '@vaadin/vaadin-charts/vaadin-chart-default-theme.js';
 const $_documentContainer = document.createElement('template');
 
 $_documentContainer.innerHTML = `<dom-module id="bakery-charts-theme" theme-for="vaadin-chart">

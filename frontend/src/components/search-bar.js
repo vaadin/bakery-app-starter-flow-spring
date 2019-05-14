@@ -1,9 +1,9 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-icon/iron-icon.js';
-import 'vaadin-icons/vaadin-icons.js';
-import 'vaadin-button/src/vaadin-button.js';
-import 'vaadin-checkbox/src/vaadin-checkbox.js';
-import 'vaadin-text-field/src/vaadin-text-field.js';
+import '@vaadin/vaadin-icons/vaadin-icons.js';
+import '@vaadin/vaadin-button/src/vaadin-button.js';
+import '@vaadin/vaadin-checkbox/src/vaadin-checkbox.js';
+import '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
 import '../../styles/shared-styles.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';

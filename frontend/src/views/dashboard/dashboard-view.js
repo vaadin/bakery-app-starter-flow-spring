@@ -1,8 +1,8 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import 'vaadin-board/vaadin-board.js';
-import 'vaadin-board/vaadin-board-row.js';
-import 'vaadin-charts/vaadin-chart.js';
-import 'vaadin-grid/src/vaadin-grid.js';
+import '@vaadin/vaadin-board/vaadin-board.js';
+import '@vaadin/vaadin-board/vaadin-board-row.js';
+import '@vaadin/vaadin-charts/vaadin-chart.js';
+import '@vaadin/vaadin-grid/src/vaadin-grid.js';
 import '../../../styles/shared-styles.js';
 import '../../../styles/bakery-charts-theme.js';
 import '../storefront/order-card.js';

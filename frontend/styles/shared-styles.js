@@ -1,6 +1,6 @@
-<link rel="import" href="../bower_components/polymer/lib/elements/custom-style.html">
+import '@polymer/polymer/lib/elements/custom-style.js';
 
-<dom-module id="bakery-app-layout-theme" theme-for="vaadin-app-layout">
+$_documentContainer.innerHTML = `<dom-module id="bakery-app-layout-theme" theme-for="vaadin-app-layout">
   <template>
     <style>
       :host {
@@ -422,5 +422,6 @@
       }
     }
   </style>
-</custom-style>
+</custom-style>`;
 
+document.head.appendChild($_documentContainer.content);
