@@ -2,10 +2,10 @@ package com.vaadin.starter.bakery.ui.components;
 
 import com.vaadin.flow.component.AbstractSinglePropertyField;
 import com.vaadin.flow.component.Tag;
-import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.dependency.JsModule;
 
 @Tag("amount-field")
-@HtmlImport("src/components/amount-field.html")
+@JsModule("src/components/amount-field.js")
 public class AmountField extends AbstractSinglePropertyField<AmountField, Integer> {
 
 	public AmountField() {
