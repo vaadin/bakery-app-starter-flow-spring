@@ -15,7 +15,7 @@ Note that when running in development mode, the application will not work in IE1
 
 Integration tests are implemented using TestBench. The tests take tens of minutes to run and are therefore included in a separate profile. To run the tests, execute
 
-`mvn verify -Pit`
+`./mvnw verify -Pit`
 
 and make sure you have a valid TestBench license installed.
 
@@ -65,15 +65,15 @@ Live reload is supported and browser extensions can be found at http://livereloa
 
 # Running the Project in Production Mode
 
-`mvn spring-boot:run -Dvaadin.productionMode`
+`./mvnw spring-boot:run -Pproduction`
 
-The default mode when the application is built or started is 'development'. The 'production' mode is turned on by setting the `vaadin.productionMode` system property when building or starting the app.
+The default mode when the application is built or started is 'development'. The 'production' mode is turned on by enabling the `production` profile when building or starting the app.
 
 In the 'production' mode all frontend resources of the application are passed through the `polymer build` command, which minifies them and outputs two versions: for ES5- and ES6-supporting browsers. That adds extra time to the build process, but reduces the total download size for clients and allows running the app in browsers that do not support ES6 (e.g. in Internet Explorer 11).
 
 Note that if you switch between running in production mode and development mode, you need to do
 ```
-./mvnw clean
+mvn clean
 ```
 before running in the other mode.
 
@@ -91,7 +91,7 @@ In order to run the scalability tests locally:
 
 1. Make sure you are using Java 8 (Gatling Maven plugin does not yet work with Java 9+)
 
-1. Build and start Bakery in the production mode (e.g. ```./mvnw clean spring-boot:run -DskipTests -Dvaadin.productionMode```)
+1. Build and start Bakery in the production mode (e.g. ```./mvnw clean spring-boot:run -DskipTests -Pproduction```)
 
 1. Open terminal in the project root
 
