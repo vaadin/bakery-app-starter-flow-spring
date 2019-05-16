@@ -26,3 +26,8 @@ webdriver/
 /build-tools/lib/
 /build-tools/node/
 /build-tools/node_modules/
+
+# NPM
+node_modules
+package*.json
+webpack.config.js

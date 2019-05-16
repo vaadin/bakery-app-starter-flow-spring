@@ -10,7 +10,7 @@ import com.vaadin.flow.component.HasValueAndElement;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.internal.AbstractFieldSupport;
 import com.vaadin.flow.component.polymertemplate.Id;
@@ -31,7 +31,7 @@ import com.vaadin.starter.bakery.ui.views.storefront.events.PriceChangeEvent;
 import com.vaadin.starter.bakery.ui.views.storefront.events.ProductChangeEvent;
 
 @Tag("order-item-editor")
-@HtmlImport("src/views/orderedit/order-item-editor.html")
+@JsModule("src/views/orderedit/order-item-editor.js")
 public class OrderItemEditor extends PolymerTemplate<TemplateModel> implements HasValueAndElement<ComponentValueChangeEvent<OrderItemEditor,OrderItem>, OrderItem> {
 
 	@Id("products")

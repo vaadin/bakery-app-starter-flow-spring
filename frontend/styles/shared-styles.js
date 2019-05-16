@@ -1,6 +1,7 @@
-<link rel="import" href="../bower_components/polymer/lib/elements/custom-style.html">
+import '@polymer/polymer/lib/elements/custom-style.js';
+const $_documentContainer = document.createElement('template');
 
-<dom-module id="bakery-app-layout-theme" theme-for="vaadin-app-layout">
+$_documentContainer.innerHTML = `<dom-module id="bakery-app-layout-theme" theme-for="vaadin-app-layout">
   <template>
     <style>
       :host {
@@ -30,7 +31,7 @@
   <template>
     <style>
       [part="brand"] {
-        background-image: url(../images/login-banner.jpg);
+        background-image: url(../frontend/images/login-banner.jpg);
       }
     </style>
   </template>
@@ -422,5 +423,6 @@
       }
     }
   </style>
-</custom-style>
+</custom-style>`;
 
+document.head.appendChild($_documentContainer.content);

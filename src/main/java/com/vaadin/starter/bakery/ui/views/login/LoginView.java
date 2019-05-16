@@ -1,7 +1,7 @@
 package com.vaadin.starter.bakery.ui.views.login;
 
 import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.login.LoginOverlay;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -19,7 +19,7 @@ import com.vaadin.starter.bakery.ui.views.storefront.StorefrontView;
 
 @Route
 @PageTitle("###Bakery###")
-@HtmlImport("styles/shared-styles.html")
+@JsModule("styles/shared-styles.js")
 @Viewport(BakeryConst.VIEWPORT)
 public class LoginView extends VerticalLayout
 	implements AfterNavigationObserver, BeforeEnterObserver {
