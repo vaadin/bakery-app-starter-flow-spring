@@ -23,7 +23,6 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.starter.bakery.app.security.SecurityUtils;
-import com.vaadin.starter.bakery.ui.components.BakeryCookieConsent;
 import com.vaadin.starter.bakery.ui.views.HasConfirmation;
 import com.vaadin.starter.bakery.ui.views.admin.products.ProductsView;
 import com.vaadin.starter.bakery.ui.views.admin.users.UsersView;
@@ -46,7 +45,6 @@ public class MainView extends AbstractAppRouterLayout {
 		confirmDialog.setCancelButtonTheme("raised tertiary");
 
 		getElement().appendChild(confirmDialog.getElement());
-		getElement().appendChild(new BakeryCookieConsent().getElement());
 	}
 
 	@Override
