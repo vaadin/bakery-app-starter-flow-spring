@@ -21,7 +21,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Dependencies -->
-        <vaadin.version>14.0.0.alpha3</vaadin.version>
+        <vaadin.version>14.0.0.beta1</vaadin.version>
 
         <!-- Overrides the old version specified by the Spring Boot parent -->
         <selenium.version>3.11.0</selenium.version>
@@ -126,52 +126,20 @@
             <artifactId>vaadin</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>flow-server</artifactId>
-            <version>2.0.0.rc1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>flow-client</artifactId>
-            <version>2.0.0.rc1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>flow-html-components</artifactId>
-            <version>2.0.0.rc1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>flow-data</artifactId>
-            <version>2.0.0.rc1</version>
-        </dependency>
-
         <!-- needed to have a es module fix in the connector-->
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-grid-flow</artifactId>
-            <version>4.0.0.rc1</version>
         </dependency>
 
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-spring</artifactId>
-            <version>12.0.0.rc1</version>
         </dependency>
         <dependency>
             <groupId>org.vaadin.artur</groupId>
             <artifactId>spring-data-provider</artifactId>
             <version>2.0.1</version>
-        </dependency>
-        <!-- Using tabs 3 for icons-on-top theme inside links support.
-            Should be removed when tabs 3 is on the platform. -->
-        <dependency>
-            <groupId>org.webjars.bowergithub.vaadin</groupId>
-            <artifactId>vaadin-tabs</artifactId>
-            <version>3.0.0</version>
         </dependency>
         <!-- End of Vaadin -->
 
