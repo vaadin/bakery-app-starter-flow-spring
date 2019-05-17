@@ -83,7 +83,7 @@ public class MainView extends AppLayout {
 			}
 			return false;
 		}).findFirst();
-		tabToSelect.ifPresent(tab -> menu.setSelectedTab(((Tab)tab)));
+		tabToSelect.ifPresent(tab -> menu.setSelectedTab((Tab)tab));
 	}
 
 	private static Tabs createMenuTabs() {
