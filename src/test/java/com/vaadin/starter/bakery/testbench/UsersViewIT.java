@@ -1,6 +1,5 @@
 package com.vaadin.starter.bakery.testbench;
 
-import java.util.Collections;
 import java.util.Random;
 
 import org.junit.Assert;
@@ -48,7 +47,6 @@ public class UsersViewIT extends AbstractIT<UsersViewElement> {
 		EmailFieldElement emailField = usersView.getEmailField();
 		String newEmail = "foo" + r.nextInt() + "@bar.com";
 		emailField.setValue(newEmail);
-		emailField.dispatchEvent("change", Collections.singletonMap("bubbles",true));
 
 		usersView.getEditorSaveButton().click();
 		Assert.assertFalse(usersView.isEditorOpen());
@@ -63,7 +61,6 @@ public class UsersViewIT extends AbstractIT<UsersViewElement> {
 		emailField.setValue(uniqueEmail);
 		password.setValue("123");
 
-		usersView.getEditorSaveButton().dispatchEvent("change", Collections.singletonMap("bubbles",true));
 		usersView.getEditorSaveButton().click();
 
 		Assert.assertTrue(usersView.isEditorOpen());
@@ -72,7 +69,6 @@ public class UsersViewIT extends AbstractIT<UsersViewElement> {
 
 		// Good password
 		password.setValue("Abc123");
-		password.dispatchEvent("change", Collections.singletonMap("bubbles",true));
 		usersView.getEditorSaveButton().click();
 		Assert.assertFalse(usersView.isEditorOpen());
 

@@ -1,11 +1,9 @@
 package com.vaadin.starter.bakery.testbench;
 
-import java.util.Collections;
 import java.util.Random;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 
 import com.vaadin.flow.component.grid.testbench.GridElement;
@@ -37,7 +35,6 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 		String newValue = "New " + uniqueName;
 		TextFieldElement nameField = productsPage.getProductName();
 		nameField.setValue(newValue);
-		nameField.dispatchEvent("change", Collections.singletonMap("bubbles",true));
 
 		productsPage.getEditorSaveButton().click();
 		Assert.assertFalse(productsPage.isEditorOpen());
@@ -48,7 +45,6 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 		newValue = "The " + newValue;
 		nameField = productsPage.getProductName();
 		nameField.setValue(newValue);
-		nameField.dispatchEvent("change", Collections.singletonMap("bubbles",true));
 
 		productsPage.getEditorSaveButton().click();
 		Assert.assertFalse(productsPage.isEditorOpen());
@@ -74,7 +70,6 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 		Assert.assertEquals(initialPrice, price.getValue());
 
 		price.setValue("123.45");
-		price.dispatchEvent("change", Collections.singletonMap("bubbles",true));
 
 		productsPage.getEditorSaveButton().click();
 
@@ -90,7 +85,6 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 		// Return initial value
 		price.setValue(initialPrice);
 
-		price.dispatchEvent("change", Collections.singletonMap("bubbles",true));
 		productsPage.getEditorSaveButton().click();
 		Assert.assertFalse(productsPage.isEditorOpen());
 	}
@@ -117,7 +111,6 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 		nameField.setValue(name);
 		priceField.setValue(price);
 
-		priceField.dispatchEvent("change", Collections.singletonMap("bubbles",true));
 		productsPage.getEditorSaveButton().click();
 		Assert.assertFalse(productsPage.isEditorOpen());
 
