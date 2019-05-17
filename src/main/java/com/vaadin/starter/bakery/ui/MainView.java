@@ -18,6 +18,7 @@ import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.TabVariant;
 import com.vaadin.flow.component.tabs.Tabs;
+import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.server.VaadinServlet;
@@ -30,6 +31,7 @@ import com.vaadin.starter.bakery.ui.views.storefront.StorefrontView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Viewport(VIEWPORT)
 @PWA(name = "Bakery App Starter", shortName = "###Bakery###",
@@ -40,6 +42,7 @@ import java.util.List;
 public class MainView extends AppLayout {
 
 	private final ConfirmDialog confirmDialog = new ConfirmDialog();
+	private final Tabs menu;
 
 	public MainView() {
 		confirmDialog.setCancelable(true);
@@ -50,7 +53,9 @@ public class MainView extends AppLayout {
 		Span appName = new Span("###Bakery###");
 		appName.addClassName("hide-on-mobile");
 
-		this.addToNavbar(true, appName, createMenuTabs());
+		menu = createMenuTabs();
+
+		this.addToNavbar(true, appName, menu);
 		this.getElement().appendChild(confirmDialog.getElement());
 
 		getElement().addEventListener("search-focus", e -> {
@@ -69,6 +74,16 @@ public class MainView extends AppLayout {
 		if (getContent() instanceof HasConfirmation) {
 			((HasConfirmation) getContent()).setConfirmDialog(confirmDialog);
 		}
+
+		String target = RouteConfiguration.forSessionScope().getUrl(this.getContent().getClass());
+		Optional<Component> tabToSelect = menu.getChildren().filter(tab -> {
+			Component child = tab.getChildren().findFirst().get();
+			if (child instanceof RouterLink) {
+				return ((RouterLink) child).getHref().equals(target);
+			}
+			return false;
+		}).findFirst();
+		tabToSelect.ifPresent(tab -> menu.setSelectedTab(((Tab)tab)));
 	}
 
 	private static Tabs createMenuTabs() {
