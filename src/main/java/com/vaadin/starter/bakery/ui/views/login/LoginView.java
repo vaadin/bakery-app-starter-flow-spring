@@ -12,7 +12,6 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.app.security.SecurityUtils;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.views.storefront.StorefrontView;
@@ -60,11 +59,6 @@ public class LoginView extends VerticalLayout
 		login.setError(
 			event.getLocation().getQueryParameters().getParameters().containsKey(
 				"error"));
-	}
-
-	public interface Model extends TemplateModel {
-
-		void setError(boolean error);
 	}
 
 }
