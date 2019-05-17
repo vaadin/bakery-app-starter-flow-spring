@@ -11,7 +11,6 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
-import com.vaadin.flow.component.dependency.NpmPackage;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -38,12 +37,6 @@ import java.util.List;
 		backgroundColor = "#227aef", themeColor = "#227aef",
 		offlinePath = "offline-page.html",
 		offlineResources = {"images/offline-login-banner.jpg"})
-
-// TODO: Remove these after 14.0.0.beta1 which has updated components
-@NpmPackage(value="@vaadin/vaadin-crud", version="1.0.2")
-@NpmPackage (value="@vaadin/vaadin-confirm-dialog", version="1.1.1")
-@NpmPackage (value="@vaadin/vaadin-charts", version="6.2.2")
-@NpmPackage (value="@vaadin/vaadin-board", version="2.1.0")
 public class MainView extends AppLayout {
 
 	private final ConfirmDialog confirmDialog = new ConfirmDialog();
