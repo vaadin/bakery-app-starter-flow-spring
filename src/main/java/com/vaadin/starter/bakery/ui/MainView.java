@@ -78,10 +78,7 @@ public class MainView extends AppLayout {
 		String target = RouteConfiguration.forSessionScope().getUrl(this.getContent().getClass());
 		Optional<Component> tabToSelect = menu.getChildren().filter(tab -> {
 			Component child = tab.getChildren().findFirst().get();
-			if (child instanceof RouterLink) {
-				return ((RouterLink) child).getHref().equals(target);
-			}
-			return false;
+			return child instanceof RouterLink && ((RouterLink) child).getHref().equals(target);
 		}).findFirst();
 		tabToSelect.ifPresent(tab -> menu.setSelectedTab((Tab)tab));
 	}
