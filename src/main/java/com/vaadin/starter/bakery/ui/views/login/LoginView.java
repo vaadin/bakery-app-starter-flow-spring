@@ -4,7 +4,6 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.login.LoginOverlay;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
@@ -20,14 +19,10 @@ import com.vaadin.starter.bakery.ui.views.storefront.StorefrontView;
 @PageTitle("###Bakery###")
 @JsModule("styles/shared-styles.js")
 @Viewport(BakeryConst.VIEWPORT)
-public class LoginView extends VerticalLayout
+public class LoginView extends LoginOverlay
 	implements AfterNavigationObserver, BeforeEnterObserver {
 
-	private LoginOverlay login = new LoginOverlay();
-
 	public LoginView() {
-		getElement().appendChild(login.getElement());
-
 		LoginI18n i18n = LoginI18n.createDefault();
 		i18n.setHeader(new LoginI18n.Header());
 		i18n.getHeader().setTitle("###Bakery###");
@@ -39,10 +34,10 @@ public class LoginView extends VerticalLayout
 		i18n.getForm().setTitle("Sign in");
 		i18n.getForm().setUsername("Email");
 		i18n.getForm().setPassword("Password");
-		login.setI18n(i18n);
-		login.setForgotPasswordButtonVisible(false);
-		login.setAction("login");
-		login.setOpened(true);
+		setI18n(i18n);
+		setForgotPasswordButtonVisible(false);
+		setAction("login");
+		setOpened(true);
 	}
 
 	@Override
@@ -56,7 +51,7 @@ public class LoginView extends VerticalLayout
 
 	@Override
 	public void afterNavigation(AfterNavigationEvent event) {
-		login.setError(
+		setError(
 			event.getLocation().getQueryParameters().getParameters().containsKey(
 				"error"));
 	}
