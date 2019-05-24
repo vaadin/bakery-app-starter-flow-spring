@@ -7,4 +7,4 @@
 
 TESTBENCH=-Dvaadin.proKey=$VAADIN_PRO_KEY
 
-mvn -B -e -V -Pit clean verify -DrunLint -Pproduction -Dvaadin.bowerMode=false $TESTBENCH
+mvn -B -e -V clean verify -DrunLint -Pit,production -Dvaadin.bowerMode=false $TESTBENCH
