@@ -17,7 +17,7 @@ import com.vaadin.flow.dom.DebouncePhase;
 import com.vaadin.flow.templatemodel.TemplateModel;
 
 @Tag("search-bar")
-@JsModule("src/components/search-bar.js")
+@JsModule("./src/components/search-bar.js")
 public class SearchBar extends PolymerTemplate<SearchBar.Model> {
 
 	public interface Model extends TemplateModel {
