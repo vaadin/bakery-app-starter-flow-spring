@@ -17,7 +17,7 @@ import com.vaadin.starter.bakery.ui.views.storefront.StorefrontView;
 
 @Route
 @PageTitle("###Bakery###")
-@JsModule("styles/shared-styles.js")
+@JsModule("./styles/shared-styles.js")
 @Viewport(BakeryConst.VIEWPORT)
 public class LoginView extends LoginOverlay
 	implements AfterNavigationObserver, BeforeEnterObserver {

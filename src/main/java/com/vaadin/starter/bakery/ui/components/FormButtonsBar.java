@@ -14,7 +14,7 @@ import com.vaadin.flow.templatemodel.TemplateModel;
  * Java wrapper of the polymer element `form-buttons-bar`
  */
 @Tag("form-buttons-bar")
-@JsModule("src/components/form-buttons-bar.js")
+@JsModule("./src/components/form-buttons-bar.js")
 public class FormButtonsBar extends PolymerTemplate<TemplateModel> {
 
 	@Id("save")
