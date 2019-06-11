@@ -1,6 +1,6 @@
 # Running the Project in Development Mode
 
-`mvn install spring-boot:run`
+`mvn spring-boot:run`
 
 Wait for the application to start
 
@@ -65,7 +65,7 @@ Live reload is supported and browser extensions can be found at http://livereloa
 
 # Running the Project in Production Mode
 
-`mvn install spring-boot:run -Pproduction`
+`mvn spring-boot:run -Pproduction`
 
 The default mode when the application is built or started is 'development'. The 'production' mode is turned on by enabling the `production` profile when building or starting the app.
 
@@ -91,7 +91,7 @@ In order to run the scalability tests locally:
 
 1. Make sure you are using Java 8 (Gatling Maven plugin does not yet work with Java 9+)
 
-1. Build and start Bakery in the production mode (e.g. ```mvn clean install spring-boot:run -DskipTests -Pproduction```)
+1. Build and start Bakery in the production mode (e.g. ```mvn clean spring-boot:run -DskipTests -Pproduction```)
 
 1. Open terminal in the project root
 

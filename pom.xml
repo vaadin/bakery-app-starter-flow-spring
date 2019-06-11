@@ -264,8 +264,8 @@
                 </plugin>
                 <plugin>
                     <groupId>com.vaadin</groupId>
-                    <artifactId>vaadin-maven-plugin</artifactId>
-                    <version>${vaadin.version}</version>
+                    <artifactId>flow-maven-plugin</artifactId>
+                    <version>2.0-SNAPSHOT</version>
                 </plugin>
                 <plugin>
                     <groupId>com.github.eirslett</groupId>
@@ -291,11 +291,7 @@
             </plugin>
             <plugin>
                 <groupId>com.vaadin</groupId>
-                <artifactId>vaadin-maven-plugin</artifactId>
-                <!-- Configure the output folder so that spring-boot-maven-plugin gets the generated resources -->
-                <configuration>
-                    <webpackOutputDirectory>${project.build.outputDirectory}/META-INF/resources</webpackOutputDirectory>
-                </configuration>
+                <artifactId>flow-maven-plugin</artifactId>
                 <executions>
                     <execution>
                         <goals>
@@ -321,6 +317,22 @@
                     <artifactId>flow-server-production-mode</artifactId>
                 </dependency>
             </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.vaadin</groupId>
+                        <artifactId>flow-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>build-frontend</goal>
+                                </goals>
+                                <phase>compile</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
 
         <!-- Moving spring-boot start/stop into a separate profile speeds up regular builds.
