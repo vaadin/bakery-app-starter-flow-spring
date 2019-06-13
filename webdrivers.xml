@@ -21,6 +21,15 @@
                 </bitrate>
             </version>
         </driver>
+        <driver id="marionette">
+            <version id="0.20.0">
+                <bitrate thirtytwobit="true" sixtyfourbit="true">
+                    <filelocation>https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz</filelocation>
+                    <hash>bfff56be07f88c4560582cde64cfbbc51abaeffe</hash>
+                    <hashtype>sha1</hashtype>
+                </bitrate>
+            </version>
+        </driver>
     </linux>
     <osx>
         <driver id="googlechrome">
@@ -28,6 +37,15 @@
                 <bitrate sixtyfourbit="true">
                     <filelocation>https://chromedriver.storage.googleapis.com/75.0.3770.8/chromedriver_mac64.zip</filelocation>
                     <hash>ef91dc07f46dc06a1b07c4b3b8c84f4de7c98c9c</hash>
+                    <hashtype>sha1</hashtype>
+                </bitrate>
+            </version>
+        </driver>
+        <driver id="marionette">
+            <version id="0.20.0">
+                <bitrate thirtytwobit="true" sixtyfourbit="true">
+                    <filelocation>https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-macos.tar.gz</filelocation>
+                    <hash>02a5c93ccaf108b1282dc54350b6a3d860fa24d1</hash>
                     <hashtype>sha1</hashtype>
                 </bitrate>
             </version>

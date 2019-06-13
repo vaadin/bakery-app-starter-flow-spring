@@ -1,7 +1,7 @@
 package com.vaadin.starter.bakery.backend.data.entity;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class ProductTest {
 
@@ -15,9 +15,9 @@ public class ProductTest {
 		o2.setName("anothername");
 		o2.setPrice(123);
 
-		Assert.assertNotEquals(o1, o2);
+		Assertions.assertNotEquals(o1, o2);
 
 		o2.setName("name");
-		Assert.assertEquals(o1, o2);
+		Assertions.assertEquals(o1, o2);
 	}
 }

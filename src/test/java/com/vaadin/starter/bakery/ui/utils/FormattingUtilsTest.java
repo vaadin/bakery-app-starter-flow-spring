@@ -3,13 +3,13 @@
  */
 package com.vaadin.starter.bakery.ui.utils;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.vaadin.starter.bakery.test.FormattingTest;
 import com.vaadin.starter.bakery.ui.utils.converters.LocalDateTimeConverter;

@@ -1,9 +1,9 @@
 package com.vaadin.starter.bakery.testbench;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import com.vaadin.testbench.addons.junit5.extensions.unittest.VaadinTest;
 
 import com.vaadin.starter.bakery.testbench.elements.ui.DashboardViewElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.LoginViewElement;
@@ -11,31 +11,30 @@ import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement;
 
 public class LoginIT extends AbstractIT<LoginViewElement> {
 
-	@Test
+	@VaadinTest
 	public void loginWorks() {
 		LoginViewElement loginView = openLoginView();
 		assertEquals("Email", loginView.getUsernameLabel());
 		loginView.login("barista@vaadin.com", "barista");
 	}
 
-	@Test
+	@VaadinTest
 	public void logout() {
 		LoginViewElement loginView = openLoginView();
 		StorefrontViewElement storefront = loginView.login("barista@vaadin.com", "barista");
 		storefront.getMenu().logout();
-		Assert.assertTrue(getDriver().getCurrentUrl().endsWith("login"));
+		Assertions.assertTrue(getDriver().getCurrentUrl().endsWith("login"));
 	}
 
-	@Test
+	@VaadinTest
 	public void loginToNotDefaultUrl() {
 		LoginViewElement loginView = openLoginView(getDriver(), APP_URL + "dashboard");
 		DashboardViewElement dashboard = loginView.login("admin@vaadin.com", "admin", DashboardViewElement.class);
-		Assert.assertNotNull(dashboard);
+		Assertions.assertNotNull(dashboard);
 	}
 
 	@Override
 	protected LoginViewElement openView() {
 		return openLoginView();
 	}
-
 }

@@ -1,7 +1,7 @@
 package com.vaadin.starter.bakery.testbench;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import com.vaadin.testbench.addons.junit5.extensions.unittest.VaadinTest;
 
 import com.vaadin.starter.bakery.testbench.elements.components.DashboardLCounterLabelElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.DashboardViewElement;
@@ -15,17 +15,16 @@ public class DashboardViewIT extends AbstractIT<DashboardViewElement> {
 		return storefront.getMenu().navigateToDashboard();
 	}
 
-	@Test
+	@VaadinTest
 	public void checkRowsCount() {
 		DashboardViewElement dashboardPage = openView();
-		Assert.assertEquals(4, dashboardPage.getBoard().getRows().size());
+		Assertions.assertEquals(4, dashboardPage.getBoard().getRows().size());
 	}
 
-	@Test
+	@VaadinTest
 	public void checkCounters() {
 		DashboardViewElement dashboardPage = openView();
 		int numLabels = dashboardPage.getBoard().getRows().get(0).$(DashboardLCounterLabelElement.class).all().size();
-		Assert.assertEquals(4, numLabels);
+		Assertions.assertEquals(4, numLabels);
 	}
-
 }

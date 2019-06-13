@@ -3,11 +3,11 @@
  */
 package com.vaadin.starter.bakery.ui.view.storefront.converter;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDate;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.vaadin.starter.bakery.test.FormattingTest;
 import com.vaadin.starter.bakery.ui.views.storefront.converters.StorefrontDate;

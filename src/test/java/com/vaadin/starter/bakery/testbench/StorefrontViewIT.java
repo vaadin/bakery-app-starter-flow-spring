@@ -6,8 +6,9 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.Assertions;
+import com.vaadin.testbench.addons.junit5.extensions.unittest.VaadinTest;
 
 import com.vaadin.flow.component.button.testbench.ButtonElement;
 import com.vaadin.flow.component.notification.testbench.NotificationElement;
@@ -26,20 +27,20 @@ public class StorefrontViewIT extends AbstractIT<StorefrontViewElement> {
 		return openLoginView().login("admin@vaadin.com", "admin");
 	}
 
-	@Test
+	@VaadinTest
 	public void editOrder() {
 		StorefrontViewElement storefrontPage = openView();
 
 		int orderIndex = new Random().nextInt(10);
 
 		OrderCardElement order = storefrontPage.getOrderCard(orderIndex);
-		Assert.assertNotNull(order);
+		Assertions.assertNotNull(order);
 		int initialCount = Integer.parseInt(order.getGoodsCount(0));
 
 		order.click();
 		ButtonElement editBtn = storefrontPage.getOrderDetails().getEditButton();
 		editBtn.click();
-		Assert.assertThat(getDriver().getCurrentUrl(), containsString(BakeryConst.PAGE_STOREFRONT_EDIT));
+		MatcherAssert.assertThat(getDriver().getCurrentUrl(), containsString(BakeryConst.PAGE_STOREFRONT_EDIT));
 
 		OrderEditorElement orderEditor = storefrontPage.getOrderEditor();
 		orderEditor.getOrderItemEditor(0).clickAmountFieldPlus();
@@ -48,16 +49,16 @@ public class StorefrontViewIT extends AbstractIT<StorefrontViewElement> {
 		storefrontPage.getOrderDetails().getSaveButton().click();
 
 		NotificationElement notification = $(NotificationElement.class).last();
-		Assert.assertThat(notification.getText(), containsString("was updated"));
+		MatcherAssert.assertThat(notification.getText(), containsString("was updated"));
 
 		order = storefrontPage.getOrderCard(orderIndex);
-		Assert.assertNotNull(order);
+		Assertions.assertNotNull(order);
 		int currentCount = Integer.parseInt(order.getGoodsCount(0));
-		Assert.assertEquals(initialCount + 1, currentCount);
+		Assertions.assertEquals(initialCount + 1, currentCount);
 
 	}
 
-	@Test
+	@VaadinTest
 	public void testDialogs() {
 		StorefrontViewElement storefrontPage = openView();
 		openAllDialogs(storefrontPage);
@@ -70,34 +71,34 @@ public class StorefrontViewIT extends AbstractIT<StorefrontViewElement> {
 
 	private void openAllDialogs(StorefrontViewElement storefrontPage) {
 		storefrontPage.getSearchBar().getCreateNewButton().click();
-		Assert.assertTrue(storefrontPage.getDialog().get().isOpen());
+		Assertions.assertTrue(storefrontPage.getDialog().get().isOpen());
 		storefrontPage.getOrderEditor().cancel();
-		Assert.assertFalse(storefrontPage.getDialog().get().isOpen());
+		Assertions.assertFalse(storefrontPage.getDialog().get().isOpen());
 
 		storefrontPage.getSearchBar().getCreateNewButton().click();
-		Assert.assertTrue(storefrontPage.getDialog().get().isOpen());
+		Assertions.assertTrue(storefrontPage.getDialog().get().isOpen());
 
 		storefrontPage.getOrderEditor().cancel();
-		Assert.assertFalse(storefrontPage.getDialog().get().isOpen());
+		Assertions.assertFalse(storefrontPage.getDialog().get().isOpen());
 
 		OrderCardElement order = storefrontPage.getOrderCard(0);
-		Assert.assertNotNull(order);
+		Assertions.assertNotNull(order);
 		order.click();
 
-		Assert.assertTrue(storefrontPage.getOrderDetails().isDisplayed());
+		Assertions.assertTrue(storefrontPage.getOrderDetails().isDisplayed());
 
 		storefrontPage.getOrderDetails().getCancelButton().click();
-		Assert.assertFalse(storefrontPage.getDialog().get().isOpen());
+		Assertions.assertFalse(storefrontPage.getDialog().get().isOpen());
 	}
 
-	@Test
+	@VaadinTest
 	public void testTextFieldValidation() {
 		StorefrontViewElement storefrontPage = openView();
 
 		int orderIndex = new Random().nextInt(10);
 
 		OrderCardElement order = storefrontPage.getOrderCard(orderIndex);
-		Assert.assertNotNull(order);
+		Assertions.assertNotNull(order);
 		order.click();
 
 		ButtonElement editBtn = storefrontPage.getOrderDetails().getEditButton();
@@ -115,12 +116,12 @@ public class StorefrontViewIT extends AbstractIT<StorefrontViewElement> {
 
 	private void testFieldOverflow(TextFieldElement textFieldElement) {
 		textFieldElement.setValue(IntStream.range(0, 256).mapToObj(i -> "A").collect(Collectors.joining()));
-		Assert.assertEquals("maximum length is 255 characters", getErrorMessage(textFieldElement));
+		Assertions.assertEquals("maximum length is 255 characters", getErrorMessage(textFieldElement));
 	}
 
 	private void testClearRequiredField(TextFieldElement textFieldElement) {
 		textFieldElement.setValue("");
-		Assert.assertEquals("must not be blank", getErrorMessage(textFieldElement));
+		Assertions.assertEquals("must not be blank", getErrorMessage(textFieldElement));
 	}
 
 	private String getErrorMessage(TextFieldElement textFieldElement) {

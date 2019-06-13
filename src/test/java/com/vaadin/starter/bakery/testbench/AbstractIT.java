@@ -1,24 +1,22 @@
 package com.vaadin.starter.bakery.testbench;
 
-import org.junit.Rule;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.BrowserType;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.slf4j.LoggerFactory;
-
-import com.vaadin.starter.bakery.testbench.elements.ui.LoginViewElement;
-import com.vaadin.starter.bakery.ui.utils.BakeryConst;
-import com.vaadin.testbench.IPAddress;
-import com.vaadin.testbench.ScreenshotOnFailureRule;
-import com.vaadin.testbench.TestBenchDriverProxy;
-import com.vaadin.testbench.TestBenchElement;
-import com.vaadin.testbench.parallel.ParallelTest;
-
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
+import com.vaadin.starter.bakery.Application;
+import com.vaadin.starter.bakery.testbench.elements.ui.LoginViewElement;
+import com.vaadin.starter.bakery.ui.utils.BakeryConst;
+import com.vaadin.testbench.ElementQuery;
+import com.vaadin.testbench.TestBenchElement;
+import com.vaadin.testbench.addons.junit5.extensions.container.SpringBootConf;
+import com.vaadin.testbench.addons.junit5.extensions.unittest.VaadinTest;
+import com.vaadin.testbench.addons.junit5.pageobject.VaadinPageObject;
+import org.junit.jupiter.api.BeforeEach;
+import org.openqa.selenium.WebDriver;
+import org.slf4j.LoggerFactory;
 
-public abstract class AbstractIT<E extends TestBenchElement> extends ParallelTest {
-	public String APP_URL = "http://localhost:8080/";
+@VaadinTest
+@SpringBootConf(source = Application.class)
+public abstract class AbstractIT<E extends TestBenchElement> {
 
 	static {
 		// Prevent debug logging from Apache HTTP client
@@ -28,41 +26,35 @@ public abstract class AbstractIT<E extends TestBenchElement> extends ParallelTes
 		BakeryConst.NOTIFICATION_DURATION = 10000;
 	}
 
-	@Rule
-	public ScreenshotOnFailureRule screenshotOnFailure = new ScreenshotOnFailureRule(this, true);
+	String APP_URL;
+	VaadinPageObject pageObject;
 
-	@Override
-	public void setup() throws Exception {
-		super.setup();
-		if (getRunLocallyBrowser() == null) {
-			APP_URL = "http://" + IPAddress.findSiteLocalAddress() + ":8080/";
-		}
+	@BeforeEach
+	void setup(VaadinPageObject pageObject) {
+		this.pageObject = pageObject;
+		APP_URL = pageObject.url();
 	}
 
-	@Override
-	public TestBenchDriverProxy getDriver() {
-		return (TestBenchDriverProxy) super.getDriver();
+	protected <T extends TestBenchElement> ElementQuery<T> $(Class<T> type) {
+		return pageObject.$(type);
 	}
 
-	@Override
-	public void setDesiredCapabilities(DesiredCapabilities desiredCapabilities) {
-		// Disable interactivity check in Firefox https://github.com/mozilla/geckodriver/#mozwebdriverclick
-		if (desiredCapabilities.getBrowserName().equals(BrowserType.FIREFOX)) {
-			desiredCapabilities.setCapability("moz:webdriverClick", false);
-		}
-
-		super.setDesiredCapabilities(desiredCapabilities);
+	protected ElementQuery<TestBenchElement> $(String tag) {
+		return pageObject.$(tag);
 	}
 
-	protected LoginViewElement openLoginView() {
+	WebDriver getDriver() {
+		return pageObject.getDriver();
+	}
+
+	LoginViewElement openLoginView() {
 		return openLoginView(getDriver(), APP_URL);
 	}
 
-	protected LoginViewElement openLoginView(WebDriver driver, String url) {
+	LoginViewElement openLoginView(WebDriver driver, String url) {
 		driver.get(url);
 		return $(LoginViewElement.class).waitForFirst();
 	}
 
 	protected abstract E openView();
-
 }

@@ -1,7 +1,7 @@
 package com.vaadin.starter.bakery.backend.data.entity;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class UserTest {
 
@@ -21,9 +21,9 @@ public class UserTest {
 		o2.setLastName("last");
 		o2.setRole("role");
 
-		Assert.assertNotEquals(o1, o2);
+		Assertions.assertNotEquals(o1, o2);
 
 		o2.setFirstName("first");
-		Assert.assertEquals(o1, o2);
+		Assertions.assertEquals(o1, o2);
 	}
 }

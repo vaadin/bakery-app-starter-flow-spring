@@ -12,6 +12,7 @@ target/
 
 # Testing
 .driver
+src/test/resources/webdriver/
 .gatling
 error-screenshots
 selenium_standalone_zips
