@@ -292,10 +292,6 @@
             <plugin>
                 <groupId>com.vaadin</groupId>
                 <artifactId>vaadin-maven-plugin</artifactId>
-                <!-- Configure the output folder so that spring-boot-maven-plugin gets the generated resources -->
-                <configuration>
-                    <webpackOutputDirectory>${project.build.outputDirectory}/META-INF/resources</webpackOutputDirectory>
-                </configuration>
                 <executions>
                     <execution>
                         <goals>
