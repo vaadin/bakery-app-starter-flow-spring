@@ -245,6 +245,21 @@ class OrderDetails extends window.ScrollShadowMixin(PolymerElement) {
     };
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+
+    // TODO Remove this once https://github.com/vaadin/vaadin-overlay/issues/116 is fixed
+    const host = this.getRootNode().host;
+    if (window.ShadyCSS
+        && !window.ShadyCSS.nativeShadow
+        && host
+        && host.getRootNode().host
+        && host.getRootNode().host.localName === 'vaadin-dialog-overlay') {
+      !host.matches('.style-scope') && host.classList.add('style-scope');
+      !host.matches('.vaadin-dialog-overlay') && host.classList.add('vaadin-dialog-overlay');
+    }
+  }
+
   ready() {
     super.ready();
 
