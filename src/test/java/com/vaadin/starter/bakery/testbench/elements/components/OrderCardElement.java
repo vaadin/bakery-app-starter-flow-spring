@@ -2,7 +2,7 @@ package com.vaadin.starter.bakery.testbench.elements.components;
 
 import com.vaadin.flow.component.html.testbench.DivElement;
 import com.vaadin.flow.component.html.testbench.SpanElement;
-import com.vaadin.testbench.annotations.Element;
+import com.vaadin.testbench.elementsbase.Element;
 
 @Element("order-card")
 public class OrderCardElement extends DivElement {
