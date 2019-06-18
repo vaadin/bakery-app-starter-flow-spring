@@ -30,7 +30,7 @@
         <frontend.maven.plugin.version>1.6</frontend.maven.plugin.version>
         <maven.war.plugin.version>3.1.0</maven.war.plugin.version>
         <maven.resources.plugin.version>3.0.2</maven.resources.plugin.version>
-        <maven.clean.plugin.version>3.0.0</maven.clean.plugin.version>
+        <maven.clean.plugin.version>3.1.0</maven.clean.plugin.version>
         <maven.surefire.plugin.version>2.21.0</maven.surefire.plugin.version>
 
         <gatling.version>3.0.2</gatling.version>
@@ -285,6 +285,26 @@
         </pluginManagement>
 
         <plugins>
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>${maven.clean.plugin.version}</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                        <directory>${basedir}</directory>
+                        <includes>
+                            <include>package.json</include>
+                            <include>package-lock.json</include>
+                            <include>webpack.config.js</include>
+                        </includes>
+                        </fileset>
+                        <fileset>
+                            <directory>node_modules</directory>
+                            <includes><include>**</include></includes>
+                        </fileset>
+                    </filesets>
+                </configuration>
+  			</plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
