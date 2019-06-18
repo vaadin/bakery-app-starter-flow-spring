@@ -47,7 +47,7 @@ import com.vaadin.starter.bakery.ui.views.storefront.OrderCard;
 import com.vaadin.starter.bakery.ui.views.storefront.beans.OrdersCountDataWithChart;
 
 @Tag("dashboard-view")
-@JsModule("src/views/dashboard/dashboard-view.js")
+@JsModule("./src/views/dashboard/dashboard-view.js")
 @Route(value = BakeryConst.PAGE_DASHBOARD, layout = MainView.class)
 @PageTitle(BakeryConst.TITLE_DASHBOARD)
 public class DashboardView extends PolymerTemplate<TemplateModel> {

@@ -18,7 +18,7 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
 @ParentLayout(MainView.class)
 @PageTitle(BakeryConst.TITLE_NOT_FOUND)
-@JsModule("styles/shared-styles.js")
+@JsModule("./styles/shared-styles.js")
 public class CustomRouteNotFoundError extends RouteNotFoundError {
 
 	public CustomRouteNotFoundError() {

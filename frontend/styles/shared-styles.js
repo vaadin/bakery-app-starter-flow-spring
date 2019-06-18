@@ -31,7 +31,7 @@ $_documentContainer.innerHTML = `<dom-module id="bakery-app-layout-theme" theme-
   <template>
     <style>
       [part="brand"] {
-        background-image: url(../frontend/images/login-banner.jpg);
+        background-image: url(frontend/images/login-banner.jpg);
       }
     </style>
   </template>
