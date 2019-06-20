@@ -26,9 +26,9 @@ webdriver/
 /build-tools/lib/
 /build-tools/node/
 /build-tools/node_modules/
+/build-tools/yarn.lock
 
 # NPM
 node_modules
-package*.json
-webpack.config.js
-yarn.lock
+webpack.generated.js
+
