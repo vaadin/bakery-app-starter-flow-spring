@@ -2,6 +2,11 @@
 
 `./mvnw spring-boot:run`
 
+or on Windows
+
+`mvnw.cmd spring-boot:run`
+
+
 Wait for the application to start
 
 Open http://localhost:8080/ to view the application.
@@ -16,6 +21,10 @@ Note that when running in development mode, the application will not work in IE1
 Integration tests are implemented using TestBench. The tests take tens of minutes to run and are therefore included in a separate profile. To run the tests, execute
 
 `./mvnw verify -Pit`
+
+or on Windows
+
+`mvnw.cmd verify -Pit`
 
 and make sure you have a valid TestBench license installed.
 
@@ -67,14 +76,25 @@ Live reload is supported and browser extensions can be found at http://livereloa
 
 `./mvnw spring-boot:run -Pproduction`
 
+or on Windows
+
+`mvnw.cmd spring-boot:run -Pproduction`
+
 The default mode when the application is built or started is 'development'. The 'production' mode is turned on by enabling the `production` profile when building or starting the app.
 
 In the 'production' mode all frontend resources of the application are passed through the `polymer build` command, which minifies them and outputs two versions: for ES5- and ES6-supporting browsers. That adds extra time to the build process, but reduces the total download size for clients and allows running the app in browsers that do not support ES6 (e.g. in Internet Explorer 11).
 
 Note that if you switch between running in production mode and development mode, you need to do
 ```
-mvn clean
+./mvnw clean
 ```
+
+or on Windows
+```
+mvnw.cmd clean
+```
+
+
 before running in the other mode.
 
 # Running in Eclipse or IntelliJ
@@ -100,6 +120,10 @@ In order to run the scalability tests locally:
     ```bash
     ./mvnw -Pscalability gatling:test
     ```
+    or on Windows
+    ```
+    mvnw.cmd -Pscalability gatling:test
+    ```
 
 1. Test results are stored into target folder (e.g. to ```target/gatling/BaristaFlow-1487784042461/index.html```)
 
@@ -107,6 +131,10 @@ In order to run the scalability tests locally:
 
     ```bash
     ./mvnw -Pscalability gatling:test -Dgatling.sessionCount=300 -Dgatling.sessionStartInterval=50
+    ```
+    or on Windows
+    ```
+    mvnw.cmd -Pscalability gatling:test -Dgatling.sessionCount=300 -Dgatling.sessionStartInterval=50
     ```
 
 Note: If you run Bakery with an in-memory database (like H2, which is the default), it will logically use more memory than when using an external database (like PostgreSQL). It is recommend to run scalability tests for Bakery only after you have configured it to use an external database.
