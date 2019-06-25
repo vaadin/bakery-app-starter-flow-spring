@@ -32,7 +32,7 @@ import com.vaadin.starter.bakery.ui.views.orderedit.OrderDetails;
 import com.vaadin.starter.bakery.ui.views.orderedit.OrderEditor;
 
 @Tag("storefront-view")
-@JsModule("src/views/storefront/storefront-view.js")
+@JsModule("./src/views/storefront/storefront-view.js")
 @Route(value = BakeryConst.PAGE_STOREFRONT, layout = MainView.class)
 @RouteAlias(value = BakeryConst.PAGE_STOREFRONT_EDIT, layout = MainView.class)
 @RouteAlias(value = BakeryConst.PAGE_ROOT, layout = MainView.class)

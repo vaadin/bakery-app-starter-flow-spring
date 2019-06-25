@@ -17,7 +17,7 @@ import com.vaadin.starter.bakery.ui.exceptions.AccessDeniedException;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
 @Tag("access-denied-view")
-@JsModule("src/views/errors/access-denied-view.js")
+@JsModule("./src/views/errors/access-denied-view.js")
 @ParentLayout(MainView.class)
 @PageTitle(BakeryConst.TITLE_ACCESS_DENIED)
 @Route

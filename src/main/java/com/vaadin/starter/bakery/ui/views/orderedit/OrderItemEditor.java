@@ -31,7 +31,7 @@ import com.vaadin.starter.bakery.ui.views.storefront.events.PriceChangeEvent;
 import com.vaadin.starter.bakery.ui.views.storefront.events.ProductChangeEvent;
 
 @Tag("order-item-editor")
-@JsModule("src/views/orderedit/order-item-editor.js")
+@JsModule("./src/views/orderedit/order-item-editor.js")
 public class OrderItemEditor extends PolymerTemplate<TemplateModel> implements HasValueAndElement<ComponentValueChangeEvent<OrderItemEditor,OrderItem>, OrderItem> {
 
 	@Id("products")

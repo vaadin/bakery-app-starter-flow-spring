@@ -5,7 +5,7 @@ import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
 
 @Tag("amount-field")
-@JsModule("src/components/amount-field.js")
+@JsModule("./src/components/amount-field.js")
 public class AmountField extends AbstractSinglePropertyField<AmountField, Integer> {
 
 	public AmountField() {

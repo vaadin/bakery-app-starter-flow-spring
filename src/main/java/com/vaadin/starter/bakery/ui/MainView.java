@@ -23,6 +23,7 @@ import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.server.VaadinServlet;
 import com.vaadin.starter.bakery.app.security.SecurityUtils;
+import com.vaadin.starter.bakery.ui.components.OfflineBanner;
 import com.vaadin.starter.bakery.ui.views.HasConfirmation;
 import com.vaadin.starter.bakery.ui.views.admin.products.ProductsView;
 import com.vaadin.starter.bakery.ui.views.admin.users.UsersView;
@@ -45,6 +46,9 @@ public class MainView extends AppLayout {
 	private final Tabs menu;
 
 	public MainView() {
+		// Workaround for https://github.com/vaadin/flow/issues/5792
+		new OfflineBanner();
+
 		confirmDialog.setCancelable(true);
 		confirmDialog.setConfirmButtonTheme("raised tertiary error");
 		confirmDialog.setCancelButtonTheme("raised tertiary");

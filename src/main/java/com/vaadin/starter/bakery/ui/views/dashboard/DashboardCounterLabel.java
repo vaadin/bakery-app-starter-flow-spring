@@ -11,7 +11,7 @@ import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.ui.views.storefront.beans.OrdersCountData;
 
 @Tag("dashboard-counter-label")
-@JsModule("src/views/dashboard/dashboard-counter-label.js")
+@JsModule("./src/views/dashboard/dashboard-counter-label.js")
 public class DashboardCounterLabel extends PolymerTemplate<TemplateModel> {
 
 	@Id("title")

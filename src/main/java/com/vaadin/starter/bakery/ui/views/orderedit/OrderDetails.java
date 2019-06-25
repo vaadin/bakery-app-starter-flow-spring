@@ -33,7 +33,7 @@ import com.vaadin.starter.bakery.ui.views.storefront.events.EditEvent;
  * field to add comments.
  */
 @Tag("order-details")
-@JsModule("src/views/orderedit/order-details.js")
+@JsModule("./src/views/orderedit/order-details.js")
 public class OrderDetails extends PolymerTemplate<OrderDetails.Model> {
 
 	private Order order;
