@@ -1,10 +1,21 @@
+# Using Apache Maven
+To compile and run the project, you need to install [Apache Maven](https://maven.apache.org)
+
+The instructions below assume you have the `mvn` command available in you PATH. If you do not wish to install Maven, you can use the provided wrapper by replacing the `mvn` command with either `mvnw.cmd` (on Windows) or `./mvnw` (other operating systems).
+
+For instance, for running the project using the wrapper:
+- On Windows
+```sh
+mvnw.cmd spring-boot:run
+```
+- On other operating systems: 
+```sh
+./mvnw spring-boot:run
+```
+
 # Running the Project in Development Mode
 
-`./mvnw spring-boot:run`
-
-or on Windows
-
-`mvnw.cmd spring-boot:run`
+`mvn spring-boot:run`
 
 
 Wait for the application to start
@@ -20,16 +31,12 @@ Note that when running in development mode, the application will not work in IE1
 
 Integration tests are implemented using TestBench. The tests take tens of minutes to run and are therefore included in a separate profile. To run the tests, execute
 
-`./mvnw verify -Pit`
-
-or on Windows
-
-`mvnw.cmd verify -Pit`
+`mvn verify -Pit`
 
 and make sure you have a valid TestBench license installed.
 
 Profile `it` adds the following parameters to run integration tests:
-```
+```sh
 -Dwebdriver.chrome.driver=path_to_driver
 -Dcom.vaadin.testbench.Parameters.runLocally=chrome
 ```
@@ -42,7 +49,7 @@ Run linter to check frontend code by adding `-DrunLint` to build/run command.
 
 To activate spring-boot-devtools is needed to:
 1. Add spring-boot-devtools dependency
-```
+```xml
 <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-devtools</artifactId>
@@ -51,7 +58,7 @@ To activate spring-boot-devtools is needed to:
 </dependency>
 ```
 2. Fork the process used to run the application by changing spring-boot-maven-plugin configuration
-```
+```xml
 <plugin>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-maven-plugin</artifactId>
@@ -62,7 +69,7 @@ To activate spring-boot-devtools is needed to:
 </plugin>
 ```
 3. Optionally you might want to avoid the data generator to be run on each single reload, therefore, make H2 database store entities in file-system instead of in memory by adding the following lines to the `src/main/resources/application.properties`
-```
+```properties
 spring.datasource.url=jdbc:h2:file:~/bakery-test-data
 spring.jpa.hibernate.ddl-auto=update
 ```
@@ -74,26 +81,16 @@ Live reload is supported and browser extensions can be found at http://livereloa
 
 # Running the Project in Production Mode
 
-`./mvnw spring-boot:run -Pproduction`
-
-or on Windows
-
-`mvnw.cmd spring-boot:run -Pproduction`
+`mvn spring-boot:run -Pproduction`
 
 The default mode when the application is built or started is 'development'. The 'production' mode is turned on by enabling the `production` profile when building or starting the app.
 
 In the 'production' mode all frontend resources of the application are passed through the `polymer build` command, which minifies them and outputs two versions: for ES5- and ES6-supporting browsers. That adds extra time to the build process, but reduces the total download size for clients and allows running the app in browsers that do not support ES6 (e.g. in Internet Explorer 11).
 
 Note that if you switch between running in production mode and development mode, you need to do
+```sh
+mvn clean
 ```
-./mvnw clean
-```
-
-or on Windows
-```
-mvnw.cmd clean
-```
-
 
 before running in the other mode.
 
@@ -111,30 +108,22 @@ In order to run the scalability tests locally:
 
 1. Make sure you are using Java 8 (Gatling Maven plugin does not yet work with Java 9+)
 
-1. Build and start Bakery in the production mode (e.g. ```./mvnw clean spring-boot:run -DskipTests -Pproduction```)
+1. Build and start Bakery in the production mode (e.g. ```mvn clean spring-boot:run -DskipTests -Pproduction```)
 
 1. Open terminal in the project root
 
 1. Start a test from the command line:
 
-    ```bash
-    ./mvnw -Pscalability gatling:test
-    ```
-    or on Windows
-    ```
-    mvnw.cmd -Pscalability gatling:test
+    ```sh
+    mvn -Pscalability gatling:test
     ```
 
 1. Test results are stored into target folder (e.g. to ```target/gatling/BaristaFlow-1487784042461/index.html```)
 
 1. By default the scalability test starts 100 user sessions at a 100 ms interval for one repeat, all of which connect to a locally running Bakery app. These defaults can be overridden with the `gatling.sessionCount`, `gatling.sessionStartInterval` `gatling.sessionRepeats`, and `gatling.baseUrl` system properties. See an example execution for 300 users started within 50 s:
 
-    ```bash
-    ./mvnw -Pscalability gatling:test -Dgatling.sessionCount=300 -Dgatling.sessionStartInterval=50
-    ```
-    or on Windows
-    ```
-    mvnw.cmd -Pscalability gatling:test -Dgatling.sessionCount=300 -Dgatling.sessionStartInterval=50
+    ```sh
+    mvn -Pscalability gatling:test -Dgatling.sessionCount=300 -Dgatling.sessionStartInterval=50
     ```
 
 Note: If you run Bakery with an in-memory database (like H2, which is the default), it will logically use more memory than when using an external database (like PostgreSQL). It is recommend to run scalability tests for Bakery only after you have configured it to use an external database.
