@@ -68,8 +68,7 @@ public abstract class AbstractBakeryCrudView<E extends AbstractEntity> extends C
     private void setupCrudEventListeners(CrudEntityPresenter<E> entityPresenter) {
         Consumer<E> onSuccess = entity -> navigateToEntity(null);
         Consumer<E> onFail = entity -> {
-            // TODO: https://github.com/vaadin/vaadin-crud-flow/issues/76
-            // Throw an exception whenever it is supported by component
+            throw new RuntimeException("The operation could not be performed.");
         };
 
         addEditListener(e ->
