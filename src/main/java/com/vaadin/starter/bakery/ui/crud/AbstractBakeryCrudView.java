@@ -96,13 +96,7 @@ public abstract class AbstractBakeryCrudView<E extends AbstractEntity> extends C
             if (item != null && id.equals(item.getId())) {
                 return;
             }
-            entityPresenter.loadEntity(id, this::edit);
+            entityPresenter.loadEntity(id, entity -> edit(entity, EditMode.EXISTING_ITEM));
         }
-    }
-
-    private void edit(E entity) {
-        // TODO: Use component API after https://github.com/vaadin/vaadin-crud-flow/issues/68
-        getElement().callFunction("__edit", Json.instance().parse("{\"key\":\""
-                + grid.getDataCommunicator().getKeyMapper().key(entity) + "\"}"));
     }
 }
