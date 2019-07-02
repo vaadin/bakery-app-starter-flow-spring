@@ -96,6 +96,8 @@ public abstract class AbstractBakeryCrudView<E extends AbstractEntity> extends C
                 return;
             }
             entityPresenter.loadEntity(id, entity -> edit(entity, EditMode.EXISTING_ITEM));
+        } else {
+            setOpened(false);
         }
     }
 }
