@@ -38,7 +38,11 @@ $_documentContainer.innerHTML = `<dom-module id="bakery-app-layout-theme" theme-
         flex: 1 0 0.001px;
       }
 
-      @media (max-width: 425px) {
+      @media (max-width: 800px) {
+        [part="navbar"] ::slotted(vaadin-tabs) {
+          max-width : 100% !important;
+        }
+
         [part="navbar"] ::slotted(.hide-on-mobile) {
           display: none;
         }
@@ -407,7 +411,9 @@ $_documentContainer.innerHTML = `<dom-module id="bakery-app-layout-theme" theme-
       box-sizing: border-box!important;
     }
 
-
+    vaadin-app-layout vaadin-tabs {
+      max-width: 65%;
+    }
 
     @media (min-width: 700px) {
       vaadin-app-layout vaadin-tab {
