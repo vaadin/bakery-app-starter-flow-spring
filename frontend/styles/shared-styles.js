@@ -23,6 +23,30 @@ $_documentContainer.innerHTML = `<dom-module id="bakery-app-layout-theme" theme-
           display: none;
         }
       }
+
+      [part="navbar"] {
+        align-items: center;
+        justify-content: center;
+      }
+
+      [part="navbar"]::after {
+        content: '';
+      }
+
+      [part="navbar"] ::slotted(*:first-child),
+      [part="navbar"]::after {
+        flex: 1 0 0.001px;
+      }
+
+      @media (max-width: 425px) {
+        [part="navbar"] ::slotted(.hide-on-mobile) {
+          display: none;
+        }
+
+        [part="navbar"]::after {
+          content: none;
+        }
+      }
     </style>
   </template>
 </dom-module>
@@ -280,36 +304,6 @@ $_documentContainer.innerHTML = `<dom-module id="bakery-app-layout-theme" theme-
         flex: auto;
         height: 100%;
       }
-    </style>
-  </template>
-</dom-module>
-
-<dom-module id="app-layout-theme" theme-for="vaadin-app-layout">
-  <template>
-    <style>
-      [part="navbar"] {
-        align-items: center;
-        justify-content: center;
-      }
-
-      [part="navbar"]::after {
-        content: '';
-      }
-
-      [part="navbar"] ::slotted(*:first-child),
-      [part="navbar"]::after {
-        flex: 1 0 0.001px;
-      }
-
-      @media (max-width: 425px) {
-        [part="navbar"] ::slotted(.hide-on-mobile) {
-          display: none;
-        }
-
-        [part="navbar"]::after {
-          content: none;
-        }
-    }
     </style>
   </template>
 </dom-module>
