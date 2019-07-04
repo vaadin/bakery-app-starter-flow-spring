@@ -32,9 +32,12 @@ import { html } from '@polymer/polymer/lib/utils/html-tag.js';
       }
     </style>
 
-    <vaadin-text-field id="input" part="text-field" theme="align-center" label="[[label]]" value="{{value}}" disabled="[[disabled]]" pattern\$="[[pattern]]" prevent-invalid-input="" readonly="[[!editable]]">
-      <iron-icon slot="prefix" icon="vaadin:minus" on-click="_minus" disabled\$="[[_minusDisabled(value, min, max, disabled, readOnly)]]"></iron-icon>
-      <iron-icon slot="suffix" icon="vaadin:plus" on-click="_plus" disabled\$="[[_plusDisabled(value, min, max, disabled, readOnly)]]"></iron-icon>
+    <vaadin-text-field id="input" part="text-field" theme="align-center" label="[[label]]" value="{{value}}" disabled="[[disabled]]" 
+      pattern\$="[[pattern]]" prevent-invalid-input="" readonly="[[!editable]]">
+      <iron-icon slot="prefix" icon="vaadin:minus" on-click="_minus" disabled\$="[[_minusDisabled(value, min, max, disabled, readOnly)]]">
+      </iron-icon>
+      <iron-icon slot="suffix" icon="vaadin:plus" on-click="_plus" disabled\$="[[_plusDisabled(value, min, max, disabled, readOnly)]]">
+      </iron-icon>
     </vaadin-text-field>
 `;
     }
