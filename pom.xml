@@ -38,8 +38,8 @@
         <scala-maven-plugin.version>3.4.4</scala-maven-plugin.version>
 
         <!-- Frontend -->
-        <node.version>v8.1.2</node.version>
-        <yarn.version>v0.27.5</yarn.version>
+        <node.version>v8.16.0</node.version>
+        <yarn.version>v1.16.0</yarn.version>
         <buildtools.directory>build-tools</buildtools.directory>
     </properties>
 
@@ -520,7 +520,7 @@
                                 </configuration>
                             </execution>
                             <execution>
-                                <id>yarn run lint</id>
+                                <id>npm run lint</id>
                                 <phase>compile</phase>
                                 <goals>
                                     <goal>yarn</goal>

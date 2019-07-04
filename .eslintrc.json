@@ -1,7 +1,9 @@
 {
   "extends": "vaadin",
   "rules": {
-    "linebreak-style": 0
+    "linebreak-style": 0,
+    "object-curly-spacing": 0
+
   },
   "env": {
     "browser": true,
@@ -17,5 +19,8 @@
     "moment": false,
     "DateUtilsMixin": false,
     "ScrollShadowMixin": false
+  },
+  "parserOptions": {
+      "sourceType": "module"
   }
 }
