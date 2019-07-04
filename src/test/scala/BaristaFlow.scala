@@ -57,6 +57,13 @@ class BaristaFlow extends Simulation {
     )
   })
 
+  val initBaristaCredentials = exec((session) => {
+    session.setAll(
+      "username" -> "barista@vaadin.com",
+      "password" -> "barista"
+    )
+  })
+
   val url = "/"
   val uidlUrl = url + "?v-r=uidl&v-uiId=${uiId}"
 
@@ -64,6 +71,8 @@ class BaristaFlow extends Simulation {
   val syncIdExtract = regex("""syncId":([0-9]*)""").saveAs("syncId")
   val clientIdExtract = regex("""clientId":([0-9]*)""").saveAs("clientId")
   val xsrfTokenExtract = regex("""Vaadin-Security-Key":\s?"([^"]*)""").saveAs("seckey")
+
+  val loginOverlayExtract=regex("""node":(\d+),+"type":"put",+"key":"tag",+"feat":[0-9]*,+"value":"vaadin-login-overlay"""").saveAs("loginOverlay")
 
   // Storefront from initial response
   val confirmDialogIdExtract = regex("""node":(\d+),+"type":"put",+"key":"tag",+"feat":[0-9]*,+"value":"vaadin-confirm-dialog"""").saveAs("confirmId")
@@ -102,18 +111,33 @@ class BaristaFlow extends Simulation {
       exec(http("Initial request")
         .get(url)
         .headers(headers_0)
+        .check(loginOverlayExtract)
+        .check(uIdExtract)
         .check(xsrfTokenExtract)
       )
+        .exec(initBaristaCredentials)
         .exec(initSyncAndClientIds)
         .pause(8, 11)
-
+        .exec( http("Update login-form")
+          .post(uidlUrl)
+          .headers(headers_4)
+          .body(StringBody(
+            createRpc("""{"type":"mSync","node":${loginOverlay},"feature":1,"property":"title","value":"bakery14rc3"},{"type":"mSync","node":${loginOverlay},"feature":1,"property":"description","value":"admin@vaadin.com + admin\n${username}+ {password}"}"""))).asJson
+          .check(syncIdExtract).check(clientIdExtract)
+        )
+        .exec(http("Send credentials from login-form")
+          .post(uidlUrl)
+          .headers(headers_4)
+          .body(StringBody(
+            createRpc("""{"type":"event","node":${loginOverlay},"event":"login","data":{"event.detail.username":"${username}","event.detail.password":"${password}"}},{"type":"mSync","node":${loginOverlay},"feature":1,"property":"disabled","value":true}"""))).asJson
+          .check(syncIdExtract).check(clientIdExtract)
+        )
         .exec(http("Login")
           .post("/login")
           .headers(headers_0)
-          .formParam("username", "barista@vaadin.com")
-          .formParam("password", "barista")
-          .formParam("prefix", "undefined")
-          .formParam("suffix", "undefined")
+          .formParam("username", "${username}")
+          .formParam("password", "${password}")
+          .check(bodyString.saveAs("ReturnValues"))
           .check(uIdExtract)
           .check(gridIdExtract)
           .check(newButtonIdExtract)
@@ -121,10 +145,11 @@ class BaristaFlow extends Simulation {
           .check(confirmDialogIdExtract)
           .check(appLayoutIdExtract)
           .check(tabsIdExtract)
-          .check(syncIdExtract).check(clientIdExtract)
+          //After user has sign-in another token is issued
+          .check(xsrfTokenExtract)
         )
+        .exec(initSyncAndClientIds)
         .pause(2)
-
         .exec(http("First xhr, init grid")
           .post(uidlUrl)
           .headers(headers_4)
