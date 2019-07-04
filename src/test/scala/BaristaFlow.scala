@@ -22,7 +22,7 @@ class BaristaFlow extends Simulation {
   // with a given interval and some may finish before the last session starts.
   val sessionCount: Int = toInt(System.getProperty("gatling.sessionCount", "")) match {
     case Some(n) => n
-    case None => 50 // the default
+    case None => 100 // the default
   }
 
   // The interval (in milliseconds) between starting new user sessions
