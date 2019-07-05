@@ -40,7 +40,7 @@ $_documentContainer.innerHTML = `<dom-module id="bakery-app-layout-theme" theme-
 
       @media (max-width: 800px) {
         [part="navbar"] ::slotted(vaadin-tabs) {
-          max-width : 100% !important;
+          max-width: 100% !important;
         }
 
         [part="navbar"] ::slotted(.hide-on-mobile) {
