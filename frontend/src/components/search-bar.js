@@ -85,10 +85,12 @@ class SearchBar extends PolymerElement {
     </style>
 
     <div class="row">
-      <vaadin-text-field id="field" class="field" placeholder="[[fieldPlaceholder]]" value="{{fieldValue}}" on-focus="_onFieldFocus" on-blur="_onFieldBlur" theme="white">
+      <vaadin-text-field id="field" class="field" placeholder="[[fieldPlaceholder]]" value="{{fieldValue}}" on-focus="_onFieldFocus" 
+        on-blur="_onFieldBlur" theme="white">
         <iron-icon icon\$="[[fieldIcon]]" slot="prefix"></iron-icon>
       </vaadin-text-field>
-      <vaadin-checkbox class="checkbox desktop" checked="{{checkboxChecked}}" on-focus="_onFieldFocus" on-blur="_onFieldBlur">[[checkboxText]]</vaadin-checkbox>
+      <vaadin-checkbox class="checkbox desktop" checked="{{checkboxChecked}}" on-focus="_onFieldFocus" 
+        on-blur="_onFieldBlur">[[checkboxText]]</vaadin-checkbox>
       <vaadin-button id="clear" class="clear-btn" theme="tertiary">
         [[clearText]]
       </vaadin-button>
@@ -98,7 +100,8 @@ class SearchBar extends PolymerElement {
       </vaadin-button>
     </div>
 
-    <vaadin-checkbox class="checkbox mobile" checked="{{checkboxChecked}}" on-focus="_onFieldFocus" on-blur="_onFieldBlur">[[checkboxText]]</vaadin-checkbox>
+    <vaadin-checkbox class="checkbox mobile" checked="{{checkboxChecked}}" on-focus="_onFieldFocus" 
+      on-blur="_onFieldBlur">[[checkboxText]]</vaadin-checkbox>
 `;
   }
 
