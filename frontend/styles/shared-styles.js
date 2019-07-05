@@ -318,6 +318,7 @@ $_documentContainer.innerHTML = `<dom-module id="bakery-app-layout-theme" theme-
       0% {
         width: 0%;
       }
+
       100% {
         width: 50%;
       }
@@ -408,7 +409,7 @@ $_documentContainer.innerHTML = `<dom-module id="bakery-app-layout-theme" theme-
       width: var(--lumo-icon-size-m);
       height: var(--lumo-icon-size-m);
       padding: .25rem;
-      box-sizing: border-box!important;
+      box-sizing: border-box !important;
     }
 
     vaadin-app-layout vaadin-tabs {
