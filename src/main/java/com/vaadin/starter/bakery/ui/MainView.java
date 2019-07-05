@@ -59,7 +59,8 @@ public class MainView extends AppLayout {
 
 		menu = createMenuTabs();
 
-		this.addToNavbar(true, appName, menu);
+		this.addToNavbar(appName);
+		this.addToNavbar(true, menu);
 		this.getElement().appendChild(confirmDialog.getElement());
 
 		getElement().addEventListener("search-focus", e -> {
