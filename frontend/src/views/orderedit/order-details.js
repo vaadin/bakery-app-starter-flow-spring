@@ -204,7 +204,8 @@ class OrderDetails extends window.ScrollShadowMixin(PolymerElement) {
           </vaadin-form-item>
 
           <vaadin-form-item id="comment" hidden="[[review]]">
-            <vaadin-text-field id="commentField" placeholder="Add comment" class="full-width" on-keydown="_onCommentKeydown" maxlength="255">
+            <vaadin-text-field id="commentField" placeholder="Add comment" class="full-width" on-keydown="_onCommentKeydown" 
+              maxlength="255">
               <div slot="suffix" class="comment-suffix">
                 <vaadin-button id="sendComment" theme="tertiary">Send</vaadin-button>
               </div>

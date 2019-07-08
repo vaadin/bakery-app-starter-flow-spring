@@ -23,6 +23,34 @@ $_documentContainer.innerHTML = `<dom-module id="bakery-app-layout-theme" theme-
           display: none;
         }
       }
+
+      [part="navbar"] {
+        align-items: center;
+        justify-content: center;
+      }
+
+      [part="navbar"]::after {
+        content: '';
+      }
+
+      [part="navbar"] ::slotted(*:first-child),
+      [part="navbar"]::after {
+        flex: 1 0 0.001px;
+      }
+
+      @media (max-width: 800px) {
+        [part="navbar"] ::slotted(vaadin-tabs) {
+          max-width: 100% !important;
+        }
+
+        [part="navbar"] ::slotted(.hide-on-mobile) {
+          display: none;
+        }
+
+        [part="navbar"]::after {
+          content: none;
+        }
+      }
     </style>
   </template>
 </dom-module>
@@ -284,42 +312,13 @@ $_documentContainer.innerHTML = `<dom-module id="bakery-app-layout-theme" theme-
   </template>
 </dom-module>
 
-<dom-module id="app-layout-theme" theme-for="vaadin-app-layout">
-  <template>
-    <style>
-      [part="navbar"] {
-        align-items: center;
-        justify-content: center;
-      }
-
-      [part="navbar"]::after {
-        content: '';
-      }
-
-      [part="navbar"] ::slotted(*:first-child),
-      [part="navbar"]::after {
-        flex: 1 0 0.001px;
-      }
-
-      @media (max-width: 425px) {
-        [part="navbar"] ::slotted(.hide-on-mobile) {
-          display: none;
-        }
-
-        [part="navbar"]::after {
-          content: none;
-        }
-    }
-    </style>
-  </template>
-</dom-module>
-
 <custom-style>
   <style>
     @keyframes v-progress-start {
       0% {
         width: 0%;
       }
+
       100% {
         width: 50%;
       }
@@ -410,10 +409,12 @@ $_documentContainer.innerHTML = `<dom-module id="bakery-app-layout-theme" theme-
       width: var(--lumo-icon-size-m);
       height: var(--lumo-icon-size-m);
       padding: .25rem;
-      box-sizing: border-box!important;
+      box-sizing: border-box !important;
     }
 
-
+    vaadin-app-layout vaadin-tabs {
+      max-width: 65%;
+    }
 
     @media (min-width: 700px) {
       vaadin-app-layout vaadin-tab {

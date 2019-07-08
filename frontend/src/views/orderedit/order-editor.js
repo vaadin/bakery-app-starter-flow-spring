@@ -7,7 +7,6 @@ import '@vaadin/vaadin-form-layout/src/vaadin-form-layout.js';
 import '@vaadin/vaadin-form-layout/src/vaadin-form-item.js';
 import '@vaadin/vaadin-combo-box/src/vaadin-combo-box.js';
 import '@vaadin/vaadin-date-picker/src/vaadin-date-picker.js';
-import '@vaadin/vaadin-icons/vaadin-icons.js';
 import '../../components/buttons-bar.js';
 import '../../components/utils-mixin.js';
 import './order-item-editor.js';
