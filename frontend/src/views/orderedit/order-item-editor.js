@@ -5,7 +5,6 @@ import '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
 import '@vaadin/vaadin-button/src/vaadin-button.js';
 import '@vaadin/vaadin-form-layout/src/vaadin-form-layout.js';
 import '@vaadin/vaadin-combo-box/src/vaadin-combo-box.js';
-import '../../../styles/shared-styles.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class OrderItemEditor extends PolymerElement {
   static get template() {

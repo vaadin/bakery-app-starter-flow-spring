@@ -4,7 +4,6 @@ import '@vaadin/vaadin-dialog/src/vaadin-dialog.js';
 import '../../components/search-bar.js';
 import '../../components/utils-mixin.js';
 import './order-card.js';
-import '../../../styles/shared-styles.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class StorefrontView extends PolymerElement {
   static get template() {
