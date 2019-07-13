@@ -1,5 +1,4 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import '../../../styles/shared-styles.js';
 import './order-status-badge.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class OrderCard extends PolymerElement {
