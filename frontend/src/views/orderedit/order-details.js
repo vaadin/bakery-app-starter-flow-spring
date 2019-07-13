@@ -8,7 +8,7 @@ import '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
 import '../../components/buttons-bar.js';
 import '../../components/utils-mixin.js';
 import '../storefront/order-status-badge.js';
-import '../../../styles/shared-styles.js';
+
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class OrderDetails extends window.ScrollShadowMixin(PolymerElement) {
   static get template() {

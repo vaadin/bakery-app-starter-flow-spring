@@ -10,7 +10,7 @@ import '@vaadin/vaadin-date-picker/src/vaadin-date-picker.js';
 import '../../components/buttons-bar.js';
 import '../../components/utils-mixin.js';
 import './order-item-editor.js';
-import '../../../styles/shared-styles.js';
+
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class OrderEditor extends window.ScrollShadowMixin(PolymerElement) {
   static get template() {

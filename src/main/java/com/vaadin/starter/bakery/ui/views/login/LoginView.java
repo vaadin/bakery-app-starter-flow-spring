@@ -1,7 +1,7 @@
 package com.vaadin.starter.bakery.ui.views.login;
 
 import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.dependency.JsModule;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.login.LoginOverlay;
 import com.vaadin.flow.component.page.Viewport;
@@ -17,7 +17,15 @@ import com.vaadin.starter.bakery.ui.views.storefront.StorefrontView;
 
 @Route
 @PageTitle("###Bakery###")
-@JsModule("./styles/shared-styles.js")
+@CssImport(value = "./styles/theme-for-vaadin-chart.css", themeFor = "vaadin-chart", include = "vaadin-chart-default-theme")
+@CssImport(value = "./styles/theme-for-vaadin-app-layout.css", themeFor = "vaadin-app-layout")
+@CssImport(value = "./styles/theme-for-vaadin-crud.css", themeFor = "vaadin-crud")
+@CssImport(value = "./styles/theme-for-vaadin-dialog-overlay.css", themeFor = "vaadin-dialog-overlay")
+@CssImport(value = "./styles/theme-for-vaadin-grid.css", themeFor = "vaadin-grid")
+@CssImport(value = "./styles/theme-for-vaadin-login-overlay-wrapper.css", themeFor = "vaadin-login-overlay-wrapper")
+@CssImport(value = "./styles/theme-for-vaadin-text-field.css", themeFor = "vaadin-text-field")
+@CssImport(value = "./styles/module-shared-styles.css", id = "shared-styles")
+@CssImport(value = "./styles/shared-styles.css")
 @Viewport(BakeryConst.VIEWPORT)
 public class LoginView extends LoginOverlay
 	implements AfterNavigationObserver, BeforeEnterObserver {

@@ -1,0 +1,110 @@
+@keyframes v-progress-start {
+  0% {
+    width: 0%;
+  }
+
+  100% {
+    width: 50%;
+  }
+}
+
+.v-loading-indicator,
+.v-system-error,
+.v-reconnect-dialog {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border: none;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+.v-system-error,
+.v-reconnect-dialog {
+  display: flex;
+  right: 0;
+  bottom: 0;
+  background: var(--lumo-shade-40pct);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+}
+
+.v-system-error .caption,
+.v-system-error .message,
+.v-reconnect-dialog .text {
+  width: 30em;
+  max-width: 100%;
+  padding: var(--lumo-space-xl);
+  background: var(--lumo-base-color);
+  border-radius: 4px;
+  text-align: center;
+}
+
+.v-system-error .caption {
+  padding-bottom: var(--lumo-space-s);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.v-system-error .message {
+  pointer-events: all;
+  padding-top: var(--lumo-space-s);
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  color: grey;
+}
+
+.v-loading-indicator {
+  position: fixed !important;
+  width: 50%;
+  opacity: 0.6;
+  height: 4px;
+  background: var(--lumo-primary-color);
+  transition: none;
+  animation: v-progress-start 1000ms 200ms both;
+}
+
+.v-loading-indicator[style*="none"] {
+  display: block !important;
+  width: 100% !important;
+  opacity: 0;
+  transition: opacity 500ms 300ms, width 300ms;
+  animation: none;
+}
+
+vaadin-app-layout vaadin-tab {
+  font-size: var(--lumo-font-size-xs);
+  padding-left: .75em;
+  padding-right: .75em;
+}
+
+vaadin-app-layout vaadin-tab a:hover {
+  text-decoration: none;
+}
+
+vaadin-app-layout vaadin-tab:not([selected]) a {
+  color: var(--lumo-contrast-60pct);
+}
+
+vaadin-app-layout vaadin-tab iron-icon {
+  margin: 0 4px;
+  width: var(--lumo-icon-size-m);
+  height: var(--lumo-icon-size-m);
+  padding: .25rem;
+  box-sizing: border-box !important;
+}
+
+vaadin-app-layout vaadin-tabs {
+  max-width: 65%;
+}
+
+@media (min-width: 700px) {
+  vaadin-app-layout vaadin-tab {
+    font-size: var(--lumo-font-size-m);
+    padding-left: 1em;
+    padding-right: 1em;
+  }
+}
+

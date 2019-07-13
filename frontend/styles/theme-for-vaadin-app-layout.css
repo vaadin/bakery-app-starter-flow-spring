@@ -1,0 +1,47 @@
+:host {
+  background-color: var(--lumo-shade-5pct) !important;
+  --vaadin-app-layout-navbar-background: var(--lumo-base-color);
+}
+
+[part="content"] {
+  height: 100%;
+}
+
+[part="navbar"] {
+  z-index: 200;
+  box-shadow: 0 0 16px 2px var(--lumo-shade-20pct);
+}
+
+@media (max-height: 600px) {
+  :host(.hide-navbar) [part="navbar"] {
+    display: none;
+  }
+}
+
+[part="navbar"] {
+  align-items: center;
+  justify-content: center;
+}
+
+[part="navbar"]::after {
+  content: '';
+}
+
+[part="navbar"] ::slotted(*:first-child),
+[part="navbar"]::after {
+  flex: 1 0 0.001px;
+}
+
+@media (max-width: 800px) {
+  [part="navbar"] ::slotted(vaadin-tabs) {
+    max-width: 100% !important;
+  }
+
+  [part="navbar"] ::slotted(.hide-on-mobile) {
+    display: none;
+  }
+
+  [part="navbar"]::after {
+    content: none;
+  }
+}
