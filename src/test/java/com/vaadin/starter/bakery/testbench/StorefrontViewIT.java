@@ -42,7 +42,7 @@ public class StorefrontViewIT extends AbstractIT<StorefrontViewElement> {
 		Assert.assertThat(getDriver().getCurrentUrl(), containsString(BakeryConst.PAGE_STOREFRONT_EDIT));
 
 		OrderEditorElement orderEditor = storefrontPage.getOrderEditor();
-		orderEditor.getOrderItemEditor(0).clickAmountFieldPlus();
+		orderEditor.getOrderItemEditor(0).clickNumberFieldPlus();
 
 		orderEditor.review();
 		storefrontPage.getOrderDetails().getSaveButton().click();

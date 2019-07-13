@@ -7,23 +7,19 @@ import com.vaadin.testbench.elementsbase.Element;
 @Element("order-item-editor")
 public class OrderItemEditorElement extends TestBenchElement {
 
-	public void clickAmountFieldPlus() {
-		clickAmountFieldPlusOrMinus(1);
+	public void clickNumberFieldPlus() {
+		clickNumberFieldPlusOrMinus("increase-button");
 	}
 	
-	public void clickAmountFieldMinus() {
-		clickAmountFieldPlusOrMinus(-1);
+	public void clickNumberFieldMinus() {
+		clickNumberFieldPlusOrMinus("decrease-button");
 	}
 	
 	public TextFieldElement getCommentField() {
 		return $(TextFieldElement.class).id("comment");
 	}
 	
-	private void clickAmountFieldPlusOrMinus(int value) {
-		if (value == 0) {
-			throw new IllegalArgumentException("Value should be -1 or 1");
-		}
-		final int idx = value < 0 ? 0 : 1;
-		$("amount-field").first().$("iron-icon").get(idx).click();
+	private void clickNumberFieldPlusOrMinus(String selector) {
+		$("vaadin-number-field").first().$("div[part=" + selector + "]").first().click();
 	}
 }

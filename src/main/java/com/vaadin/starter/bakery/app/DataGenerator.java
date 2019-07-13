@@ -155,7 +155,7 @@ public class DataGenerator implements HasLogger {
 				product = productSupplier.get();
 			} while (containsProduct(items, product));
 			item.setProduct(product);
-			item.setQuantity(random.nextInt(10) + 1);
+			item.setQuantity((double)random.nextInt(10) + 1);
 			if (random.nextInt(5) == 0) {
 				if (random.nextBoolean()) {
 					item.setComment("Lactose free");

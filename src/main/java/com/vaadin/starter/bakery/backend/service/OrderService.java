@@ -134,14 +134,14 @@ public class OrderService implements CrudService<Order> {
 				// skip current month as it contains incomplete data
 				continue;
 			}
-			long count = (long) salesData[2];
+			double count = (double) salesData[2];
 			salesPerMonth[y][m] = count;
 		}
 
 		LinkedHashMap<Product, Integer> productDeliveries = new LinkedHashMap<>();
 		data.setProductDeliveries(productDeliveries);
 		for (Object[] result : orderRepository.countPerProduct(OrderState.DELIVERED, year, month)) {
-			int sum = ((Long) result[0]).intValue();
+			int sum = ((Double) result[0]).intValue();
 			Product p = (Product) result[1];
 			productDeliveries.put(p, sum);
 		}

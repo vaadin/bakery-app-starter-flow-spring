@@ -207,8 +207,8 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 		return addListener(CancelEvent.class, listener);
 	}
 
-	private void setTotalPrice(int totalPrice) {
-		getModel().setTotalPrice(FormattingUtils.formatAsCurrency(totalPrice));
+	private void setTotalPrice(Integer totalPrice) {
+		getModel().setTotalPrice(FormattingUtils.formatAsCurrency(totalPrice.intValue()));
 	}
 
 	public void setCurrentUser(User currentUser) {

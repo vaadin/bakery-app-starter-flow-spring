@@ -15,6 +15,7 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.internal.AbstractFieldSupport;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
+import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.BindingValidationStatus;
@@ -22,7 +23,6 @@ import com.vaadin.flow.shared.Registration;
 import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
-import com.vaadin.starter.bakery.ui.components.AmountField;
 import com.vaadin.starter.bakery.ui.dataproviders.ProductDataProvider;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.starter.bakery.ui.views.storefront.events.CommentChangeEvent;
@@ -41,7 +41,7 @@ public class OrderItemEditor extends PolymerTemplate<TemplateModel> implements H
 	private Button delete;
 
 	@Id("amount")
-	private AmountField amount;
+	private NumberField amount;
 
 	@Id("price")
 	private Div price;
@@ -77,7 +77,8 @@ public class OrderItemEditor extends PolymerTemplate<TemplateModel> implements H
 	
 	private void setPrice() {
 		int oldValue = totalPrice;
-		Integer selectedAmount = amount.getValue();
+		Integer selectedAmount = 
+		        amount.getValue() == null ? null : amount.getValue().intValue();
 		Product product = products.getValue();
 		totalPrice = 0;
 		if (selectedAmount != null && product != null) {
