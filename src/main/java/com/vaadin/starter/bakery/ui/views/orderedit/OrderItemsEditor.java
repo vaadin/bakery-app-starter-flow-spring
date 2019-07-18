@@ -17,6 +17,7 @@ import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.ui.dataproviders.ProductDataProvider;
 import com.vaadin.starter.bakery.ui.views.storefront.events.TotalPriceChangeEvent;
+
 public class OrderItemsEditor extends Div implements HasValueAndElement<ComponentValueChangeEvent<OrderItemsEditor,List<OrderItem>>, List<OrderItem>> {
 
 	private OrderItemEditor empty;
