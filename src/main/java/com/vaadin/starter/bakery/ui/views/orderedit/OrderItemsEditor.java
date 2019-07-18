@@ -6,17 +6,16 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.vaadin.flow.component.AbstractField.ComponentValueChangeEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.HasValueAndElement;
-import com.vaadin.flow.component.AbstractField.ComponentValueChangeEvent;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.internal.AbstractFieldSupport;
 import com.vaadin.flow.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.ui.dataproviders.ProductDataProvider;
-import com.vaadin.starter.bakery.ui.views.storefront.events.NewEditorEvent;
 import com.vaadin.starter.bakery.ui.views.storefront.events.TotalPriceChangeEvent;
 
 public class OrderItemsEditor extends Div implements HasValueAndElement<ComponentValueChangeEvent<OrderItemsEditor,List<OrderItem>>, List<OrderItem>> {
@@ -91,7 +90,6 @@ public class OrderItemsEditor extends Div implements HasValueAndElement<Componen
 			orderItem.setProduct(product);
 			item.setValue(orderItem);
 			setValue(Stream.concat(getValue().stream(),Stream.of(orderItem)).collect(Collectors.toList()));
-			fireEvent(new NewEditorEvent(this));
 		}
 	}
 
