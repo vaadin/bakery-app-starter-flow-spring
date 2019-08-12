@@ -1,17 +1,7 @@
 # Using Apache Maven
 To compile and run the project, you need to install [Apache Maven](https://maven.apache.org)
 
-The instructions below assume you have the `mvn` command available in you PATH. If you do not wish to install Maven, you can use the provided wrapper by replacing the `mvn` command with either `mvnw.cmd` (on Windows) or `./mvnw` (other operating systems).
-
-For instance, for running the project using the wrapper:
-- On Windows
-```sh
-mvnw.cmd spring-boot:run
-```
-- On other operating systems: 
-```sh
-./mvnw spring-boot:run
-```
+The instructions below assume you have the `mvn` command available in you PATH.
 
 # Running the Project in Development Mode
 
