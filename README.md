@@ -20,7 +20,7 @@ Integration tests are implemented using TestBench. The tests take tens of minute
 and make sure you have a valid TestBench license installed.
 
 Profile `it` adds the following parameters to run integration tests:
-```
+```sh
 -Dwebdriver.chrome.driver=path_to_driver
 -Dcom.vaadin.testbench.Parameters.runLocally=chrome
 ```
@@ -33,7 +33,7 @@ Run linter to check frontend code by adding `-DrunLint` to build/run command.
 
 To activate spring-boot-devtools is needed to:
 1. Add spring-boot-devtools dependency
-```
+```xml
 <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-devtools</artifactId>
@@ -42,7 +42,7 @@ To activate spring-boot-devtools is needed to:
 </dependency>
 ```
 2. Fork the process used to run the application by changing spring-boot-maven-plugin configuration
-```
+```xml
 <plugin>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-maven-plugin</artifactId>
@@ -53,7 +53,7 @@ To activate spring-boot-devtools is needed to:
 </plugin>
 ```
 3. Optionally you might want to avoid the data generator to be run on each single reload, therefore, make H2 database store entities in file-system instead of in memory by adding the following lines to the `src/main/resources/application.properties`
-```
+```properties
 spring.datasource.url=jdbc:h2:file:~/bakery-test-data
 spring.jpa.hibernate.ddl-auto=update
 ```
@@ -72,7 +72,7 @@ The default mode when the application is built or started is 'development'. The 
 In the 'production' mode all frontend resources of the application are passed through the `polymer build` command, which minifies them and outputs two versions: for ES5- and ES6-supporting browsers. That adds extra time to the build process, but reduces the total download size for clients and allows running the app in browsers that do not support ES6 (e.g. in Internet Explorer 11).
 
 Note that if you switch between running in production mode and development mode, you need to do
-```
+```sh
 mvn clean
 ```
 before running in the other mode.
@@ -97,7 +97,7 @@ In order to run the scalability tests locally:
 
 1. Start a test from the command line:
 
-    ```bash
+    ```sh
     mvn -Pscalability gatling:test
     ```
 
@@ -105,7 +105,7 @@ In order to run the scalability tests locally:
 
 1. By default the scalability test starts 100 user sessions at a 100 ms interval for one repeat, all of which connect to a locally running Bakery app. These defaults can be overridden with the `gatling.sessionCount`, `gatling.sessionStartInterval` `gatling.sessionRepeats`, and `gatling.baseUrl` system properties. See an example execution for 300 users started within 50 s:
 
-    ```bash
+    ```sh
     mvn -Pscalability gatling:test -Dgatling.sessionCount=300 -Dgatling.sessionStartInterval=50
     ```
 
