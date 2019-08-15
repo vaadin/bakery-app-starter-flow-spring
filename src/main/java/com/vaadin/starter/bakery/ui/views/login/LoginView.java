@@ -43,7 +43,7 @@ public class LoginView extends LoginOverlay
 	@Override
 	public void beforeEnter(BeforeEnterEvent event) {
 		if (SecurityUtils.isUserLoggedIn()) {
-			event.rerouteTo(StorefrontView.class);
+			event.forwardTo(StorefrontView.class);
 		}
 	}
 
