@@ -46,9 +46,6 @@ public class MainView extends AppLayout {
 	private final Tabs menu;
 
 	public MainView() {
-		// Workaround for https://github.com/vaadin/flow/issues/5792
-		new OfflineBanner();
-
 		confirmDialog.setCancelable(true);
 		confirmDialog.setConfirmButtonTheme("raised tertiary error");
 		confirmDialog.setCancelButtonTheme("raised tertiary");
