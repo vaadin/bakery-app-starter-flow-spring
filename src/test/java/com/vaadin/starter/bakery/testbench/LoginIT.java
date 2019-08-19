@@ -33,6 +33,15 @@ public class LoginIT extends AbstractIT<LoginViewElement> {
 		Assert.assertNotNull(dashboard);
 	}
 
+	@Test
+	public void openLoginAfterLoggedIn() {
+		loginToNotDefaultUrl();
+		// Navigating to /login after user is logged in will forward to storefront view
+		driver.get(APP_URL + "login");
+		$(StorefrontViewElement.class).onPage().waitForFirst();
+		Assert.assertTrue($(LoginViewElement.class).all().isEmpty());
+	}
+
 	@Override
 	protected LoginViewElement openView() {
 		return openLoginView();
