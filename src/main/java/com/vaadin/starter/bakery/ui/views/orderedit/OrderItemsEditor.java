@@ -12,25 +12,25 @@ import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.component.HasValueAndElement;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.internal.AbstractFieldSupport;
+import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.shared.Registration;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
-import com.vaadin.starter.bakery.ui.dataproviders.ProductDataProvider;
 import com.vaadin.starter.bakery.ui.views.storefront.events.TotalPriceChangeEvent;
 
 public class OrderItemsEditor extends Div implements HasValueAndElement<ComponentValueChangeEvent<OrderItemsEditor,List<OrderItem>>, List<OrderItem>> {
 
 	private OrderItemEditor empty;
 
-	private ProductDataProvider productDataProvider;
+	private DataProvider<Product, String> productDataProvider;
 
 	private int totalPrice = 0;
 
 	private boolean hasChanges = false;
 
-    private final AbstractFieldSupport<OrderItemsEditor,List<OrderItem>> fieldSupport;
+	private final AbstractFieldSupport<OrderItemsEditor,List<OrderItem>> fieldSupport;
 	
-	public OrderItemsEditor(ProductDataProvider productDataProvider) {
+	public OrderItemsEditor(DataProvider<Product, String> productDataProvider) {
 		this.productDataProvider = productDataProvider;
 		this.fieldSupport = new AbstractFieldSupport<>(this, Collections.emptyList(),
 				Objects::equals, c ->  {}); 
