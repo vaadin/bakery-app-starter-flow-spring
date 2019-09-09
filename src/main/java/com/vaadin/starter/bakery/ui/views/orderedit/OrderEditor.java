@@ -38,10 +38,12 @@ import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.PickupLocation;
+import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.backend.data.entity.User;
+import com.vaadin.starter.bakery.backend.service.PickupLocationService;
+import com.vaadin.starter.bakery.backend.service.ProductService;
+import com.vaadin.starter.bakery.ui.crud.CrudEntityDataProvider;
 import com.vaadin.starter.bakery.ui.dataproviders.DataProviderUtil;
-import com.vaadin.starter.bakery.ui.dataproviders.PickupLocationDataProvider;
-import com.vaadin.starter.bakery.ui.dataproviders.ProductDataProvider;
 import com.vaadin.starter.bakery.ui.events.CancelEvent;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.starter.bakery.ui.utils.converters.LocalTimeConverter;
@@ -108,7 +110,9 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 	private final LocalTimeConverter localTimeConverter = new LocalTimeConverter();
 
 	@Autowired
-	public OrderEditor(PickupLocationDataProvider locationProvider, ProductDataProvider productDataProvider) {
+	public OrderEditor(PickupLocationService locationService, ProductService productService) {
+		DataProvider<PickupLocation, String> locationDataProvider = new CrudEntityDataProvider<>(locationService);
+		DataProvider<Product, String> productDataProvider = new CrudEntityDataProvider<>(productService);
 		itemsEditor = new OrderItemsEditor(productDataProvider);
 
 		itemsContainer.add(itemsEditor);
@@ -136,7 +140,7 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 		binder.bind(dueTime, "dueTime");
 
 		pickupLocation.setItemLabelGenerator(createItemLabelGenerator(PickupLocation::getName));
-		pickupLocation.setDataProvider(locationProvider);
+		pickupLocation.setDataProvider(locationDataProvider);
 		binder.bind(pickupLocation, "pickupLocation");
 		pickupLocation.setRequired(false);
 

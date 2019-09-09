@@ -1,6 +1,5 @@
 package com.vaadin.starter.bakery.ui.views.login;
 
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.login.LoginOverlay;
@@ -37,15 +36,14 @@ public class LoginView extends LoginOverlay
 		setI18n(i18n);
 		setForgotPasswordButtonVisible(false);
 		setAction("login");
-		setOpened(true);
 	}
-
+	
 	@Override
 	public void beforeEnter(BeforeEnterEvent event) {
 		if (SecurityUtils.isUserLoggedIn()) {
-			// Needed manually to change the URL because of https://github.com/vaadin/flow/issues/4189
-			UI.getCurrent().getPage().getHistory().replaceState(null, "");
-			event.rerouteTo(StorefrontView.class);
+			event.forwardTo(StorefrontView.class);
+		} else {
+			setOpened(true);
 		}
 	}
 
