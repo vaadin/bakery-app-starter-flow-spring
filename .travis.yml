@@ -1,7 +1,7 @@
 language: java
-jdk: oraclejdk8
+jdk: openjdk8
 sudo: true
-dist: bionic
+dist: xenial
 
 # Make it possible to run tests on a local Chrome
 before_install:
