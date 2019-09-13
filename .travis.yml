@@ -7,9 +7,6 @@ dist: xenial
 before_install:
  - export CHROME_BIN=/usr/bin/google-chrome
 
-services:
-  - xvfb
-
 addons:
   apt:
     sources:
