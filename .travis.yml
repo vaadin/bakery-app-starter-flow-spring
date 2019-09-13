@@ -12,12 +12,7 @@ before_install:
  - export DBUS_SESSION_BUS_ADDRESS=/dev/null
 
 addons:
-  apt:
-    sources:
-     - google-chrome
-    packages:
-     - google-chrome-stable
-
+  chrome: stable
 
 install: true
 script: ./.travis.script.sh
