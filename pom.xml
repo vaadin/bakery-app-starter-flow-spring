@@ -473,7 +473,7 @@
                             <dependency>
                                 <groupId>com.saucelabs</groupId>
                                 <artifactId>ci-sauce</artifactId>
-                                <version>1.138</version>
+                                <version>1.144</version>
                             </dependency>
                             <dependency>
                                 <groupId>javax.xml.bind</groupId>
