@@ -291,7 +291,8 @@
             </plugin>
             <plugin>
                 <groupId>com.vaadin</groupId>
-                <artifactId>flow-maven-plugin</artifactId>
+                <artifactId>vaadin-maven-plugin</artifactId>
+                <version>${vaadin.version}</version>
                 <executions>
                     <execution>
                         <goals>
@@ -320,7 +321,8 @@
                 <plugins>
                     <plugin>
                         <groupId>com.vaadin</groupId>
-                        <artifactId>flow-maven-plugin</artifactId>
+                        <artifactId>vaadin-maven-plugin</artifactId>
+                        <version>${vaadin.version}</version>
                         <executions>
                             <execution>
                                 <goals>

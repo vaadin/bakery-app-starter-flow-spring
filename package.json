@@ -4,7 +4,8 @@
   "dependencies": {
     "@polymer/polymer": "3.2.0",
     "@webcomponents/webcomponentsjs": "^2.2.10",
-    "@vaadin/flow-deps": "./target/frontend"
+    "@vaadin/flow-deps": "./target/frontend",
+    "@vaadin/vaadin-shrinkwrap": "14.0.8"
   },
   "devDependencies": {
     "webpack": "4.30.0",
@@ -20,5 +21,5 @@
     "typescript": "3.5.3",
     "awesome-typescript-loader": "5.2.1"
   },
-  "vaadinAppPackageHash": "0ac6f4805d89ba1d1124c77c4d92fd483184561f9f8627ef58c1cbf07fe7ce2d"
+  "vaadinAppPackageHash": "576e95fd332553236a6de273e7a56479ab61ae713d3211f5d3d35c6e13148ca9"
 }
