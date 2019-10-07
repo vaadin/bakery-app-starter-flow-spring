@@ -7,4 +7,4 @@
 
 TESTBENCH=-Dvaadin.proKey=$VAADIN_PRO_KEY
 
-mvn -B -e -V -Pit clean verify -DrunLint -Dvaadin.productionMode $TESTBENCH
+xvfb-run  --server-args="-screen 0 1024x768x24" mvn -B -e -V -Pit clean verify -DrunLint -Dvaadin.productionMode $TESTBENCH
