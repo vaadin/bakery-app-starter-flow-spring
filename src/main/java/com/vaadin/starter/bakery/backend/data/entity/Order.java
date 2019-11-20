@@ -30,10 +30,12 @@ import com.vaadin.starter.bakery.backend.data.OrderState;
 @Entity(name = "OrderInfo") // "Order" is a reserved word
 @NamedEntityGraphs({@NamedEntityGraph(name = Order.ENTITY_GRAPTH_BRIEF, attributeNodes = {
 		@NamedAttributeNode("customer"),
-		@NamedAttributeNode("pickupLocation")
+		@NamedAttributeNode("pickupLocation"),
+		@NamedAttributeNode("items")
 }),@NamedEntityGraph(name = Order.ENTITY_GRAPTH_FULL, attributeNodes = {
 		@NamedAttributeNode("customer"),
 		@NamedAttributeNode("pickupLocation"),
+		@NamedAttributeNode("items"),
 		@NamedAttributeNode("history")
 })})
 @Table(indexes = @Index(columnList = "dueDate"))
@@ -56,7 +58,7 @@ public class Order extends AbstractEntity implements OrderSummary {
 	@OneToOne(cascade = CascadeType.ALL)
 	private Customer customer;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@OrderColumn
 	@JoinColumn
 	@BatchSize(size = 1000)
