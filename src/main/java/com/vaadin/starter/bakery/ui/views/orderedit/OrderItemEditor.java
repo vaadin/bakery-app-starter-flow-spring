@@ -15,6 +15,7 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.internal.AbstractFieldSupport;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
+import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.BindingValidationStatus;
@@ -23,7 +24,6 @@ import com.vaadin.flow.shared.Registration;
 import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.Product;
-import com.vaadin.starter.bakery.ui.components.AmountField;
 import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.starter.bakery.ui.views.storefront.events.CommentChangeEvent;
 import com.vaadin.starter.bakery.ui.views.storefront.events.DeleteEvent;
@@ -41,7 +41,7 @@ public class OrderItemEditor extends PolymerTemplate<TemplateModel> implements H
 	private Button delete;
 
 	@Id("amount")
-	private AmountField amount;
+	private IntegerField amount;
 
 	@Id("price")
 	private Div price;
