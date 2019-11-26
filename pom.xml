@@ -363,7 +363,8 @@
                             </execution>
                         </executions>
                         <configuration>
-                            <maxAttempts>120</maxAttempts>
+                            <wait>1000</wait>
+                            <maxAttempts>180</maxAttempts>
                         </configuration>
                     </plugin>
                     <plugin>
@@ -436,7 +437,8 @@
                             </execution>
                         </executions>
                         <configuration>
-                            <maxAttempts>120</maxAttempts>
+                            <wait>1000</wait>
+                            <maxAttempts>180</maxAttempts>
                         </configuration>
                     </plugin>
                     <plugin>
