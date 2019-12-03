@@ -21,7 +21,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Dependencies -->
-        <vaadin.version>14.1.0.rc1</vaadin.version>
+        <vaadin.version>14.1.0</vaadin.version>
 
         <!-- Overrides the old version specified by the Spring Boot parent -->
         <selenium.version>3.141.59</selenium.version>
@@ -44,6 +44,13 @@
     </properties>
 
     <repositories>
+        <repository>
+            <id>stable-staging</id>
+            <url>https://oss.sonatype.org/content/repositories/comvaadin-3406/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
         <repository>
             <id>central</id>
             <url>https://repo.maven.apache.org/maven2</url>
@@ -77,6 +84,13 @@
         </repository>
     </repositories>
     <pluginRepositories>
+        <pluginRepository>
+            <id>stable-staging</id>
+            <url>https://oss.sonatype.org/content/repositories/comvaadin-3406/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
         <pluginRepository>
             <id>central</id>
             <url>https://repo.maven.apache.org/maven2</url>
