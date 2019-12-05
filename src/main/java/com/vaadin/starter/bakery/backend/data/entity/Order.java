@@ -34,6 +34,7 @@ import com.vaadin.starter.bakery.backend.data.OrderState;
 }),@NamedEntityGraph(name = Order.ENTITY_GRAPTH_FULL, attributeNodes = {
 		@NamedAttributeNode("customer"),
 		@NamedAttributeNode("pickupLocation"),
+		@NamedAttributeNode("items"),
 		@NamedAttributeNode("history")
 })})
 @Table(indexes = @Index(columnList = "dueDate"))
