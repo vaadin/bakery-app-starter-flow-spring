@@ -1,7 +1,10 @@
 package com.vaadin.starter.bakery.testbench.elements.ui;
 
 import com.vaadin.flow.component.login.testbench.LoginOverlayElement;
+import com.vaadin.testbench.ElementQuery;
 import com.vaadin.testbench.TestBenchElement;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class LoginViewElement extends LoginOverlayElement {
 
@@ -16,7 +19,25 @@ public class LoginViewElement extends LoginOverlayElement {
 		getPasswordField().setValue(password);
 		getSubmitButton().click();
 
-		return $(target).onPage().waitForFirst();
+		ElementQuery<E> eq = $(target).onPage();
+		return waitForFirst(eq, target.getSimpleName());
+	}
+
+	// a workaround for slow first page load
+	// the default waitForFirst() method does not allow setting custom timeout
+	private <E extends TestBenchElement> E waitForFirst(ElementQuery<E> eq, String tagname) {
+		Object result = new WebDriverWait(getDriver(), 30).until(driver -> {
+			try {
+				return eq.first();
+			} catch (NoSuchElementException e) {
+				return null;
+			}
+		});
+		if (result == null) {
+			throw new NoSuchElementException("No element for class " + tagname + " found");
+		} else {
+			return (E) result;
+		}
 	}
 
 	public String getUsernameLabel() {
