@@ -314,6 +314,11 @@ $_documentContainer.innerHTML = `<dom-module id="bakery-app-layout-theme" theme-
 
 <custom-style>
   <style>
+    body {
+      width: 100vw;
+      height: 100vh;
+      margin: 0;
+    }
     @keyframes v-progress-start {
       0% {
         width: 0%;

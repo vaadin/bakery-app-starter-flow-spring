@@ -37,8 +37,16 @@ import com.vaadin.starter.bakery.ui.views.orderedit.OrderEditor;
 @RouteAlias(value = BakeryConst.PAGE_STOREFRONT_EDIT, layout = MainView.class)
 @RouteAlias(value = BakeryConst.PAGE_ROOT, layout = MainView.class)
 @PageTitle(BakeryConst.TITLE_STOREFRONT)
+
+// This is not being added to the import list even though
+// there are fields declared below. It is a regression as
+// described in https://github.com/vaadin/flow/issues/6653
+@JsModule("./src/views/orderedit/order-editor.js")
+@JsModule("./src/views/orderedit/order-details.js")
+
 public class StorefrontView extends PolymerTemplate<TemplateModel>
 		implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
+
 
 	@Id("search")
 	private SearchBar searchBar;
@@ -72,7 +80,15 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 				.withProperty("orderCard", OrderCard::create)
 				.withProperty("header", order -> presenter.getHeaderByOrderId(order.getId()))
 				.withEventHandler("cardClick",
-						order -> UI.getCurrent().navigate(BakeryConst.PAGE_STOREFRONT + "/" + order.getId())));
+						order -> {
+							String pathname = BakeryConst.PAGE_STOREFRONT + "/" + order.getId();
+							UI.getCurrent().navigate(pathname);
+
+							// workaround for https://github.com/vaadin/flow/issues/6665
+							UI.getCurrent().getPage().executeJs(
+									"window.history.pushState(null, document.title, $0)",
+									pathname);
+						}));
 
 		getSearchBar().addFilterChangeListener(
 				e -> presenter.filterChanged(getSearchBar().getFilter(), getSearchBar().isCheckboxChecked()));
@@ -108,7 +124,14 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 	}
 
 	void navigateToMainView() {
-		getUI().ifPresent(ui -> ui.navigate(BakeryConst.PAGE_STOREFRONT));
+		getUI().ifPresent(ui -> {
+			ui.navigate(BakeryConst.PAGE_STOREFRONT);
+
+			// workaround for https://github.com/vaadin/flow/issues/6665
+			UI.getCurrent().getPage().executeJs(
+					"window.history.pushState(null, document.title, $0)",
+					BakeryConst.PAGE_STOREFRONT);
+		});
 	}
 
 	@Override

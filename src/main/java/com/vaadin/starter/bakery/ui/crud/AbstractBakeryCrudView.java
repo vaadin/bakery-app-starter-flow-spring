@@ -85,7 +85,14 @@ public abstract class AbstractBakeryCrudView<E extends AbstractEntity> extends C
     }
 
     protected void navigateToEntity(String id) {
-        getUI().ifPresent(ui -> ui.navigate(TemplateUtil.generateLocation(getBasePage(), id)));
+        getUI().ifPresent(ui -> {
+            String pathname = TemplateUtil.generateLocation(getBasePage(), id);
+            ui.navigate(pathname);
+
+            // workaround for https://github.com/vaadin/flow/issues/6665
+            ui.getPage().executeJs(
+                    "window.history.pushState(null, document.title, $0)", pathname);
+        });
     }
 
     @Override
