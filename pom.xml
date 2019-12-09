@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.7.RELEASE</version>
+        <version>2.2.0.RELEASE</version>
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
@@ -21,7 +21,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <!-- Dependencies -->
-        <vaadin.version>15.0.0.alpha5</vaadin.version>
+        <vaadin.version>15.0.0.alpha7</vaadin.version>
 
         <!-- Overrides the old version specified by the Spring Boot parent -->
         <selenium.version>3.141.59</selenium.version>
@@ -155,7 +155,7 @@
         <dependency>
             <groupId>org.vaadin.artur</groupId>
             <artifactId>spring-data-provider</artifactId>
-            <version>2.0.1</version>
+            <version>2.1.0</version>
         </dependency>
         <!-- End of Vaadin -->
 
@@ -339,7 +339,8 @@
                             </execution>
                         </executions>
                         <configuration>
-                            <maxAttempts>120</maxAttempts>
+                            <wait>1000</wait>
+                            <maxAttempts>180</maxAttempts>
                         </configuration>
                     </plugin>
                     <plugin>
@@ -412,7 +413,8 @@
                             </execution>
                         </executions>
                         <configuration>
-                            <maxAttempts>120</maxAttempts>
+                            <wait>1000</wait>
+                            <maxAttempts>180</maxAttempts>
                         </configuration>
                     </plugin>
                     <plugin>
