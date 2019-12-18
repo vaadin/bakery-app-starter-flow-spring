@@ -1,10 +1,8 @@
 package com.vaadin.starter.bakery.ui;
 
-import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_DASHBOARD;
-import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_LOGOUT;
-import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_PRODUCTS;
-import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_STOREFRONT;
-import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_USERS;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
@@ -26,9 +24,11 @@ import com.vaadin.starter.bakery.ui.views.admin.users.UsersView;
 import com.vaadin.starter.bakery.ui.views.dashboard.DashboardView;
 import com.vaadin.starter.bakery.ui.views.storefront.StorefrontView;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_DASHBOARD;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_LOGOUT;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_PRODUCTS;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_STOREFRONT;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_USERS;
 
 public class MainView extends AppLayout {
 
@@ -112,6 +112,8 @@ public class MainView extends AppLayout {
 
 	private static Anchor createLogoutLink(String contextPath) {
 		final Anchor a = populateLink(new Anchor(), VaadinIcon.ARROW_RIGHT, TITLE_LOGOUT);
+		// inform vaadin-router that it should ignore this link
+		a.getElement().setAttribute("router-ignore", true);
 		a.setHref(contextPath + "/logout");
 		return a;
 	}
