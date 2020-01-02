@@ -36,7 +36,6 @@ import com.vaadin.starter.bakery.ui.views.orderedit.OrderEditor;
 @Route(value = BakeryConst.PAGE_STOREFRONT, layout = MainView.class)
 @RouteAlias(value = BakeryConst.PAGE_STOREFRONT_EDIT, layout = MainView.class)
 @RouteAlias(value = BakeryConst.PAGE_ROOT, layout = MainView.class)
-@PageTitle(BakeryConst.TITLE_STOREFRONT)
 
 // This is not being added to the import list even though
 // there are fields declared below. It is a regression as

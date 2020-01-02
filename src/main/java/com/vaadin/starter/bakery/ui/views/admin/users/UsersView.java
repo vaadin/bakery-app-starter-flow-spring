@@ -27,7 +27,6 @@ import com.vaadin.starter.bakery.ui.crud.AbstractBakeryCrudView;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
 @Route(value = PAGE_USERS, layout = MainView.class)
-@PageTitle(BakeryConst.TITLE_USERS)
 @Secured(Role.ADMIN)
 public class UsersView extends AbstractBakeryCrudView<User> {
 

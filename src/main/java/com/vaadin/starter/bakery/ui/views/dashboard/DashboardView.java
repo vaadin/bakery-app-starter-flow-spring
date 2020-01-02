@@ -49,7 +49,6 @@ import com.vaadin.starter.bakery.ui.views.storefront.beans.OrdersCountDataWithCh
 @Tag("dashboard-view")
 @JsModule("./src/views/dashboard/dashboard-view.js")
 @Route(value = BakeryConst.PAGE_DASHBOARD, layout = MainView.class)
-@PageTitle(BakeryConst.TITLE_DASHBOARD)
 public class DashboardView extends PolymerTemplate<TemplateModel> {
 
 	private static final String[] MONTH_LABELS = new String[] {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
