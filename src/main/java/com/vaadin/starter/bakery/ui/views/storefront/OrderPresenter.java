@@ -87,10 +87,6 @@ public class OrderPresenter {
 	void edit() {
 		String pathname = BakeryConst.PAGE_STOREFRONT_EDIT + "/" + entityPresenter.getEntity().getId();
 		UI.getCurrent().navigate(pathname);
-
-		// workaround for https://github.com/vaadin/flow/issues/6665
-		UI.getCurrent().getPage().executeJs(
-				"window.history.pushState(null, document.title, $0)", pathname);
 	}
 
 	void back() {
