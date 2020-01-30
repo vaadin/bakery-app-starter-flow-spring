@@ -19,25 +19,7 @@ public class LoginViewElement extends LoginOverlayElement {
 		getPasswordField().setValue(password);
 		getSubmitButton().click();
 
-		ElementQuery<E> eq = $(target).onPage();
-		return waitForFirst(eq, target.getSimpleName());
-	}
-
-	// a workaround for slow first page load
-	// the default waitForFirst() method does not allow setting custom timeout
-	private <E extends TestBenchElement> E waitForFirst(ElementQuery<E> eq, String tagname) {
-		Object result = new WebDriverWait(getDriver(), 30).until(driver -> {
-			try {
-				return eq.first();
-			} catch (NoSuchElementException e) {
-				return null;
-			}
-		});
-		if (result == null) {
-			throw new NoSuchElementException("No element for class " + tagname + " found");
-		} else {
-			return (E) result;
-		}
+		return $(target).onPage().waitForFirst();
 	}
 
 	public String getUsernameLabel() {

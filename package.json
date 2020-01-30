@@ -9,7 +9,7 @@
       "@vaadin/vaadin-grid": "5.5.0",
       "@vaadin/vaadin-icons": "4.3.1",
       "@vaadin/vaadin-split-layout": "4.1.1",
-      "@vaadin/vaadin-combo-box": "5.0.9",
+      "@vaadin/vaadin-combo-box": "5.0.10",
       "@vaadin/vaadin-cookie-consent": "1.1.2",
       "@vaadin/vaadin-upload": "4.2.2",
       "@vaadin/vaadin-dialog": "2.2.1",
@@ -37,7 +37,7 @@
       "@vaadin/vaadin-checkbox": "2.2.12",
       "@vaadin/vaadin-details": "1.0.1",
       "@polymer/iron-icon": "3.0.1",
-      "@vaadin/vaadin-time-picker": "2.0.4",
+      "@vaadin/vaadin-time-picker": "2.0.5",
       "@vaadin/vaadin-context-menu": "4.3.15",
       "@vaadin/vaadin-tabs": "3.0.5",
       "@vaadin/vaadin-radio-button": "1.2.4",
@@ -59,7 +59,7 @@
       "webpack-merge": "4.2.2",
       "webpack-dev-server": "3.9.0"
     },
-    "hash": "c4f67cce6c63ecb3ee333ef811e48218b7943c2bc86bd932ec823bb1510dc878"
+    "hash": "4ca9f2dfe6891b6e9eb24c992fffcea5ae6647aa21c1398f23702135f5fedde3"
   },
   "dependencies": {
     "@vaadin/router": "^1.6.0",
@@ -69,7 +69,7 @@
     "@vaadin/vaadin-grid": "5.5.0",
     "@vaadin/vaadin-icons": "4.3.1",
     "@vaadin/vaadin-split-layout": "4.1.1",
-    "@vaadin/vaadin-combo-box": "5.0.9",
+    "@vaadin/vaadin-combo-box": "5.0.10",
     "@vaadin/vaadin-cookie-consent": "1.1.2",
     "@vaadin/vaadin-upload": "4.2.2",
     "@vaadin/vaadin-dialog": "2.2.1",
@@ -97,7 +97,7 @@
     "@vaadin/vaadin-checkbox": "2.2.12",
     "@vaadin/vaadin-details": "1.0.1",
     "@polymer/iron-icon": "3.0.1",
-    "@vaadin/vaadin-time-picker": "2.0.4",
+    "@vaadin/vaadin-time-picker": "2.0.5",
     "@vaadin/vaadin-context-menu": "4.3.15",
     "@vaadin/vaadin-tabs": "3.0.5",
     "@vaadin/vaadin-radio-button": "1.2.4",
