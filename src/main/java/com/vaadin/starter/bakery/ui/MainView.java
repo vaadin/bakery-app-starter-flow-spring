@@ -1,5 +1,11 @@
 package com.vaadin.starter.bakery.ui;
 
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_DASHBOARD;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_LOGOUT;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_PRODUCTS;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_STOREFRONT;
+import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_USERS;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,12 +29,6 @@ import com.vaadin.starter.bakery.ui.views.admin.products.ProductsView;
 import com.vaadin.starter.bakery.ui.views.admin.users.UsersView;
 import com.vaadin.starter.bakery.ui.views.dashboard.DashboardView;
 import com.vaadin.starter.bakery.ui.views.storefront.StorefrontView;
-
-import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_DASHBOARD;
-import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_LOGOUT;
-import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_PRODUCTS;
-import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_STOREFRONT;
-import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_USERS;
 
 public class MainView extends AppLayout {
 

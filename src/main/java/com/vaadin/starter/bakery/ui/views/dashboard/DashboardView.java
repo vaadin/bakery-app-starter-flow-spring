@@ -95,11 +95,7 @@ public class DashboardView extends PolymerTemplate<TemplateModel> {
 				.withProperty("orderCard", OrderCard::create)
 				.withProperty("header", order -> null)
 				.withEventHandler("cardClick",
-						order -> {
-							String pathname = BakeryConst.PAGE_STOREFRONT + "/" + order.getId();
-							UI.getCurrent().navigate(pathname);
-						}));
-
+						order -> UI.getCurrent().navigate(BakeryConst.PAGE_STOREFRONT + "/" + order.getId())));
 		grid.setSelectionMode(Grid.SelectionMode.NONE);
 		grid.setDataProvider(orderDataProvider);
 

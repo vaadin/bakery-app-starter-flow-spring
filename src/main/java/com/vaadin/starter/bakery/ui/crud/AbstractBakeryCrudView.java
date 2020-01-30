@@ -85,10 +85,7 @@ public abstract class AbstractBakeryCrudView<E extends AbstractEntity> extends C
     }
 
     protected void navigateToEntity(String id) {
-        getUI().ifPresent(ui -> {
-            String pathname = TemplateUtil.generateLocation(getBasePage(), id);
-            ui.navigate(pathname);
-        });
+        getUI().ifPresent(ui -> ui.navigate(TemplateUtil.generateLocation(getBasePage(), id)));
     }
 
     @Override

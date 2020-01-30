@@ -74,10 +74,7 @@ public class StorefrontView extends PolymerTemplate<TemplateModel>
 				.withProperty("orderCard", OrderCard::create)
 				.withProperty("header", order -> presenter.getHeaderByOrderId(order.getId()))
 				.withEventHandler("cardClick",
-						order -> {
-							String pathname = BakeryConst.PAGE_STOREFRONT + "/" + order.getId();
-							UI.getCurrent().navigate(pathname);
-						}));
+						order -> UI.getCurrent().navigate(BakeryConst.PAGE_STOREFRONT + "/" + order.getId())));
 
 		getSearchBar().addFilterChangeListener(
 				e -> presenter.filterChanged(getSearchBar().getFilter(), getSearchBar().isCheckboxChecked()));

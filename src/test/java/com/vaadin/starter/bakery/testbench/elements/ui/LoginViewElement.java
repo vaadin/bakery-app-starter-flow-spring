@@ -1,10 +1,7 @@
 package com.vaadin.starter.bakery.testbench.elements.ui;
 
 import com.vaadin.flow.component.login.testbench.LoginOverlayElement;
-import com.vaadin.testbench.ElementQuery;
 import com.vaadin.testbench.TestBenchElement;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class LoginViewElement extends LoginOverlayElement {
 

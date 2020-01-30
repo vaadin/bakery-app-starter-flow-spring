@@ -85,8 +85,7 @@ public class OrderPresenter {
 	}
 
 	void edit() {
-		String pathname = BakeryConst.PAGE_STOREFRONT_EDIT + "/" + entityPresenter.getEntity().getId();
-		UI.getCurrent().navigate(pathname);
+		UI.getCurrent().navigate(BakeryConst.PAGE_STOREFRONT_EDIT + "/" + entityPresenter.getEntity().getId());
 	}
 
 	void back() {
