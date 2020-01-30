@@ -37,10 +37,8 @@ import com.vaadin.starter.bakery.ui.views.orderedit.OrderEditor;
 @RouteAlias(value = BakeryConst.PAGE_STOREFRONT_EDIT, layout = MainView.class)
 @RouteAlias(value = BakeryConst.PAGE_ROOT, layout = MainView.class)
 @PageTitle(BakeryConst.TITLE_STOREFRONT)
-
 public class StorefrontView extends PolymerTemplate<TemplateModel>
 		implements HasLogger, HasUrlParameter<Long>, EntityView<Order> {
-
 
 	@Id("search")
 	private SearchBar searchBar;

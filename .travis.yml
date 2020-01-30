@@ -30,7 +30,6 @@ branches:
   only:
     - master
     - /^platform-\d{2}$/
-    - ccdm
 cache:
   directories:
   - $HOME/.m2
