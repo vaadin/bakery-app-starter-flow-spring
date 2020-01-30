@@ -96,6 +96,7 @@ public class DashboardView extends PolymerTemplate<TemplateModel> {
 				.withProperty("header", order -> null)
 				.withEventHandler("cardClick",
 						order -> UI.getCurrent().navigate(BakeryConst.PAGE_STOREFRONT + "/" + order.getId())));
+
 		grid.setSelectionMode(Grid.SelectionMode.NONE);
 		grid.setDataProvider(orderDataProvider);
 
