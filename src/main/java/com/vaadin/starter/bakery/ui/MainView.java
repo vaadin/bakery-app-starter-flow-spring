@@ -5,7 +5,10 @@ import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_LOGOUT;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_PRODUCTS;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_STOREFRONT;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.TITLE_USERS;
-import static com.vaadin.starter.bakery.ui.utils.BakeryConst.VIEWPORT;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
@@ -14,32 +17,19 @@ import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.TabVariant;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.router.RouterLink;
-import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.server.VaadinServlet;
 import com.vaadin.starter.bakery.app.security.SecurityUtils;
-import com.vaadin.starter.bakery.ui.components.OfflineBanner;
 import com.vaadin.starter.bakery.ui.views.HasConfirmation;
 import com.vaadin.starter.bakery.ui.views.admin.products.ProductsView;
 import com.vaadin.starter.bakery.ui.views.admin.users.UsersView;
 import com.vaadin.starter.bakery.ui.views.dashboard.DashboardView;
 import com.vaadin.starter.bakery.ui.views.storefront.StorefrontView;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-@Viewport(VIEWPORT)
-@PWA(name = "Bakery App Starter", shortName = "###Bakery###",
-		startPath = "login",
-		backgroundColor = "#227aef", themeColor = "#227aef",
-		offlinePath = "offline-page.html",
-		offlineResources = {"images/offline-login-banner.jpg"})
 public class MainView extends AppLayout {
 
 	private final ConfirmDialog confirmDialog = new ConfirmDialog();
@@ -122,6 +112,8 @@ public class MainView extends AppLayout {
 
 	private static Anchor createLogoutLink(String contextPath) {
 		final Anchor a = populateLink(new Anchor(), VaadinIcon.ARROW_RIGHT, TITLE_LOGOUT);
+		// inform vaadin-router that it should ignore this link
+		a.getElement().setAttribute("router-ignore", true);
 		a.setHref(contextPath + "/logout");
 		return a;
 	}
