@@ -6,7 +6,7 @@
       "@vaadin/router": "^1.6.0",
       "@polymer/polymer": "3.2.0",
       "@vaadin/vaadin-crud": "1.1.0",
-      "@vaadin/vaadin-grid": "5.5.0",
+      "@vaadin/vaadin-grid": "5.5.1",
       "@vaadin/vaadin-icons": "4.3.1",
       "@vaadin/vaadin-split-layout": "4.1.1",
       "@vaadin/vaadin-combo-box": "5.0.10",
@@ -44,8 +44,8 @@
       "@vaadin/vaadin-lumo-styles": "1.5.0",
       "@vaadin/vaadin-material-styles": "1.2.3",
       "@vaadin/vaadin-rich-text-editor": "1.1.1",
-      "@vaadin/vaadin-core-shrinkwrap": "15.0.0-beta2",
-      "@vaadin/vaadin-shrinkwrap": "15.0.0-beta2"
+      "@vaadin/vaadin-core-shrinkwrap": "15.0.0-beta3",
+      "@vaadin/vaadin-shrinkwrap": "15.0.0-beta3"
     },
     "devDependencies": {
       "webpack-babel-multi-target-plugin": "2.3.3",
@@ -61,14 +61,13 @@
       "webpack-merge": "4.2.2",
       "webpack-dev-server": "3.9.0"
     },
-    "hash": "cd0a40f2ae8e3664cd17a50efe388d4fe1a5e67b947ac639de9e42fa07eca60f"
+    "hash": "55a1bd00c9824d489d884db9940c30be3e9f2c9d659caa1b7577ea947a9e4148"
   },
   "dependencies": {
     "@vaadin/router": "^1.6.0",
-    "@polymer/polymer": "3.2.0",
     "@vaadin/flow-frontend": "./target/flow-frontend",
     "@vaadin/vaadin-crud": "1.1.0",
-    "@vaadin/vaadin-grid": "5.5.0",
+    "@vaadin/vaadin-grid": "5.5.1",
     "@vaadin/vaadin-icons": "4.3.1",
     "@vaadin/vaadin-split-layout": "4.1.1",
     "@vaadin/vaadin-combo-box": "5.0.10",
@@ -106,8 +105,8 @@
     "@vaadin/vaadin-lumo-styles": "1.5.0",
     "@vaadin/vaadin-material-styles": "1.2.3",
     "@vaadin/vaadin-rich-text-editor": "1.1.1",
-    "@vaadin/vaadin-core-shrinkwrap": "15.0.0-beta2",
-    "@vaadin/vaadin-shrinkwrap": "15.0.0-beta2"
+    "@vaadin/vaadin-core-shrinkwrap": "15.0.0-beta3",
+    "@vaadin/vaadin-shrinkwrap": "15.0.0-beta3"
   },
   "devDependencies": {
     "webpack-babel-multi-target-plugin": "2.3.3",
