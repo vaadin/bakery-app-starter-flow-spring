@@ -44,8 +44,8 @@
       "@vaadin/vaadin-lumo-styles": "1.5.0",
       "@vaadin/vaadin-material-styles": "1.2.3",
       "@vaadin/vaadin-rich-text-editor": "1.1.1",
-      "@vaadin/vaadin-core-shrinkwrap": "15.0.0-beta3",
-      "@vaadin/vaadin-shrinkwrap": "15.0.0-beta3"
+      "@vaadin/vaadin-core-shrinkwrap": "15.0.0-beta4",
+      "@vaadin/vaadin-shrinkwrap": "15.0.0-beta4"
     },
     "devDependencies": {
       "webpack-babel-multi-target-plugin": "2.3.3",
@@ -61,7 +61,7 @@
       "webpack-merge": "4.2.2",
       "webpack-dev-server": "3.9.0"
     },
-    "hash": "55a1bd00c9824d489d884db9940c30be3e9f2c9d659caa1b7577ea947a9e4148"
+    "hash": "fed528f2ce2891834db4b7e0e3e7bc6cd3294fcdd18237d35115dad1b9d68e18"
   },
   "dependencies": {
     "@vaadin/router": "^1.6.0",
@@ -105,8 +105,9 @@
     "@vaadin/vaadin-lumo-styles": "1.5.0",
     "@vaadin/vaadin-material-styles": "1.2.3",
     "@vaadin/vaadin-rich-text-editor": "1.1.1",
-    "@vaadin/vaadin-core-shrinkwrap": "15.0.0-beta3",
-    "@vaadin/vaadin-shrinkwrap": "15.0.0-beta3"
+    "@vaadin/vaadin-core-shrinkwrap": "15.0.0-beta4",
+    "@vaadin/vaadin-shrinkwrap": "15.0.0-beta4",
+    "@polymer/polymer": "3.2.0"
   },
   "devDependencies": {
     "webpack-babel-multi-target-plugin": "2.3.3",
