@@ -25,7 +25,6 @@ import com.vaadin.starter.bakery.ui.views.storefront.StorefrontView;
 @CssImport(value = "./styles/theme-for-vaadin-text-field.css", themeFor = "vaadin-text-field")
 @CssImport(value = "./styles/module-shared-styles.css", id = "shared-styles")
 @CssImport(value = "./styles/shared-styles.css")
-@Viewport(BakeryConst.VIEWPORT)
 public class LoginView extends LoginOverlay
 	implements AfterNavigationObserver, BeforeEnterObserver {
 
