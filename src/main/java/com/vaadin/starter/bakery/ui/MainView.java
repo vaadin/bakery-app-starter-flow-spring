@@ -113,8 +113,8 @@ public class MainView extends AppLayout {
 	private static Anchor createLogoutLink(String contextPath) {
 		final Anchor a = populateLink(new Anchor(), VaadinIcon.ARROW_RIGHT, TITLE_LOGOUT);
 		// inform vaadin-router that it should ignore this link
-		a.getElement().setAttribute("router-ignore", true);
 		a.setHref(contextPath + "/logout");
+		a.getElement().setAttribute("router-ignore", true);
 		return a;
 	}
 
