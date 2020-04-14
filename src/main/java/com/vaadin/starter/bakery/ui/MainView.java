@@ -66,13 +66,17 @@ public class MainView extends AppLayout {
 		if (getContent() instanceof HasConfirmation) {
 			((HasConfirmation) getContent()).setConfirmDialog(confirmDialog);
 		}
-
-		String target = RouteConfiguration.forSessionScope().getUrl(this.getContent().getClass());
-		Optional<Component> tabToSelect = menu.getChildren().filter(tab -> {
-			Component child = tab.getChildren().findFirst().get();
-			return child instanceof RouterLink && ((RouterLink) child).getHref().equals(target);
-		}).findFirst();
-		tabToSelect.ifPresent(tab -> menu.setSelectedTab((Tab)tab));
+		RouteConfiguration configuration = RouteConfiguration.forSessionScope();
+		if (configuration.isRouteRegistered(this.getContent().getClass())) {
+			String target = configuration.getUrl(this.getContent().getClass());
+			Optional < Component > tabToSelect = menu.getChildren().filter(tab -> {
+				Component child = tab.getChildren().findFirst().get();
+				return child instanceof RouterLink && ((RouterLink) child).getHref().equals(target);
+			}).findFirst();
+			tabToSelect.ifPresent(tab -> menu.setSelectedTab((Tab) tab));
+		} else {
+			menu.setSelectedTab(null);
+		}
 	}
 
 	private static Tabs createMenuTabs() {
