@@ -9,7 +9,7 @@
       "@vaadin/vaadin-grid": "5.5.1",
       "@vaadin/vaadin-icons": "4.3.1",
       "@vaadin/vaadin-split-layout": "4.1.1",
-      "@vaadin/vaadin-combo-box": "5.0.10",
+      "@vaadin/vaadin-combo-box": "5.0.11",
       "@vaadin/vaadin-cookie-consent": "1.1.2",
       "@vaadin/vaadin-upload": "4.2.2",
       "@vaadin/vaadin-dialog": "2.2.1",
@@ -44,8 +44,8 @@
       "@vaadin/vaadin-lumo-styles": "1.5.0",
       "@vaadin/vaadin-material-styles": "1.2.3",
       "@vaadin/vaadin-rich-text-editor": "1.1.1",
-      "@vaadin/vaadin-core-shrinkwrap": "15.0.3",
-      "@vaadin/vaadin-shrinkwrap": "15.0.3"
+      "@vaadin/vaadin-core-shrinkwrap": "15.0.4",
+      "@vaadin/vaadin-shrinkwrap": "15.0.4"
     },
     "devDependencies": {
       "webpack-babel-multi-target-plugin": "2.3.3",
@@ -59,9 +59,11 @@
       "awesome-typescript-loader": "5.2.1",
       "typescript": "3.8.3",
       "webpack-merge": "4.2.2",
-      "webpack-dev-server": "3.10.3"
+      "webpack-dev-server": "3.10.3",
+      "terser": "4.6.7",
+      "progress-webpack-plugin": "0.0.24"
     },
-    "hash": "55f93aa93c410e4ea58ae26ff3a43a8708c56371050c24215a3a4b2e602cecc6"
+    "hash": "539c4d1e174a734882f6d3c86c108797e02f3ac0b45a591e643f60814741bd54"
   },
   "dependencies": {
     "@vaadin/router": "^1.6.0",
@@ -70,7 +72,7 @@
     "@vaadin/vaadin-grid": "5.5.1",
     "@vaadin/vaadin-icons": "4.3.1",
     "@vaadin/vaadin-split-layout": "4.1.1",
-    "@vaadin/vaadin-combo-box": "5.0.10",
+    "@vaadin/vaadin-combo-box": "5.0.11",
     "@vaadin/vaadin-cookie-consent": "1.1.2",
     "@vaadin/vaadin-upload": "4.2.2",
     "@vaadin/vaadin-dialog": "2.2.1",
@@ -105,8 +107,8 @@
     "@vaadin/vaadin-lumo-styles": "1.5.0",
     "@vaadin/vaadin-material-styles": "1.2.3",
     "@vaadin/vaadin-rich-text-editor": "1.1.1",
-    "@vaadin/vaadin-core-shrinkwrap": "15.0.3",
-    "@vaadin/vaadin-shrinkwrap": "15.0.3",
+    "@vaadin/vaadin-core-shrinkwrap": "15.0.4",
+    "@vaadin/vaadin-shrinkwrap": "15.0.4",
     "@polymer/polymer": "3.2.0"
   },
   "devDependencies": {
@@ -121,6 +123,8 @@
     "awesome-typescript-loader": "5.2.1",
     "typescript": "3.8.3",
     "webpack-merge": "4.2.2",
-    "webpack-dev-server": "3.10.3"
+    "webpack-dev-server": "3.10.3",
+    "terser": "4.6.7",
+    "progress-webpack-plugin": "0.0.24"
   }
 }
