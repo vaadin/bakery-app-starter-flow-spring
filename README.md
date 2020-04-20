@@ -115,3 +115,10 @@ Note: If you run Bakery with an in-memory database (like H2, which is the defaul
 A paid Pro or Prime subscription is required for creating a new software project from this starter. After its creation, results can be used, developed and distributed freely, but licenses for the used commercial components are required during development. The starter or its parts cannot be redistributed as a code example or template.
 
 For full terms, see LICENSE
+## Pro components
+Pro components used in the starter are :
+ - [Vaadin Crud](https://vaadin.com/components/vaadin-crud)
+ - [Vaadin Charts](https://vaadin.com/components/vaadin-charts)
+ - [Vaadin Confirm Dialog](https://vaadin.com/components/vaadin-confirm-dialog) 
+
+ Also the tests are created using [Testbench](https://vaadin.com/testbench) library.
