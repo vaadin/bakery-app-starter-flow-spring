@@ -39,7 +39,8 @@ import java.util.Optional;
 		startPath = "login",
 		backgroundColor = "#227aef", themeColor = "#227aef",
 		offlinePath = "offline-page.html",
-		offlineResources = {"images/offline-login-banner.jpg"})
+		offlineResources = {"images/offline-login-banner.jpg"},
+		enableInstallPrompt = false)
 public class MainView extends AppLayout {
 
 	private final ConfirmDialog confirmDialog = new ConfirmDialog();
