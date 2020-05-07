@@ -30,6 +30,7 @@ branches:
   only:
     - master
     - /^platform-\d{2}$/
+    - /^v\d{2}$/
 cache:
   directories:
   - $HOME/.m2
