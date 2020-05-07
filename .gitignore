@@ -32,3 +32,5 @@ webdriver/
 node_modules
 webpack.generated.js
 
+# PNPM
+pnpmfile.js
