@@ -15,11 +15,11 @@ Note that when running in development mode, the application will not work in IE1
 
 Integration tests are implemented using TestBench. The tests take tens of minutes to run and are therefore included in a separate profile. To run the tests, execute
 
-`mvn verify -Pit`
+`mvn verify -Pintegration-tests`
 
 and make sure you have a valid TestBench license installed.
 
-Profile `it` adds the following parameters to run integration tests:
+Profile `integration-tests` adds the following parameters to run integration tests:
 ```sh
 -Dwebdriver.chrome.driver=path_to_driver
 -Dcom.vaadin.testbench.Parameters.runLocally=chrome

@@ -280,7 +280,7 @@
         <!-- Moving spring-boot start/stop into a separate profile speeds up regular builds.
              Execute mvn verify -Pit to run integration tests -->
         <profile>
-            <id>it</id>
+            <id>integration-tests</id>
             <activation>
                 <property>
                     <name>it</name>
