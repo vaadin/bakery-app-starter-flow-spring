@@ -59,7 +59,11 @@ if (!devMode) {
         ],
         tagAssetsWithKey: true, // append a suffix to the file name
       }
-    }
+    },
+    // Do not transpile Highcharts.js which is ES5
+    exclude: [
+      /[\\/]node_modules[\\/]highcharts[\\/]/
+    ],
   });
 }
 
@@ -67,7 +71,14 @@ module.exports = merge(flowDefaults, {
   optimization: {
     // Split Vaadin components to vendor bundle
     splitChunks: {
-      chunks: 'all'
+      chunks: 'all',
+      // Extract Highcharts.js to its own bundle
+      cacheGroups: {
+        charts: {
+          test: /[\\/]node_modules[\\/]highcharts[\\/]/,
+          chunks: 'all'
+        }
+      }
     },
 
     // Extract and de-duplicate license comments
