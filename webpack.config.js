@@ -62,7 +62,7 @@ if (!devMode) {
     },
     // Do not transpile Highcharts.js which is ES5
     exclude: [
-      /[\\/]node_modules[\\/]highcharts[\\/]/
+      /node_modules\/highcharts/
     ],
   });
 }
