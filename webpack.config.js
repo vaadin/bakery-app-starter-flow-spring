@@ -4,9 +4,87 @@
  */
 const merge = require('webpack-merge');
 const flowDefaults = require('./webpack.generated.js');
+const {BabelMultiTargetPlugin} = require('webpack-babel-multi-target-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+
+const devMode = process.argv.find(v => v.indexOf('webpack-dev-server') >= 0);
+
+// Only apply time consuming optimizations for production
+if (!devMode) {
+  // Remove extra newlines in inlined HTML and CSS
+  flowDefaults.module.rules[0].use.push('uglify-template-string-loader');
+
+  // Configure Babel plugin to minify HTML and CSS
+  flowDefaults.plugins[1] = new BabelMultiTargetPlugin({
+    babel: {
+      plugins: [
+        // See https://github.com/cfware/babel-plugin-template-html-minifier
+        [
+          require('babel-plugin-template-html-minifier'),
+          {
+            modules: {
+              '@polymer/polymer/lib/utils/html-tag.js': ['html']
+            },
+            htmlMinifier: {
+              collapseWhitespace: true,
+              minifyCSS: true,
+              removeComments: true
+            }
+          }
+        ],
+
+        // workaround for Safari 10 scope issue (https://bugs.webkit.org/show_bug.cgi?id=159270)
+        "@babel/plugin-transform-block-scoping",
+
+        // Edge does not support spread '...' syntax in object literals (#7321)
+        "@babel/plugin-proposal-object-rest-spread",
+      ],
+
+      presetOptions: {
+        useBuiltIns: false // polyfills are provided from webcomponents-loader.js
+      }
+    },
+    targets: {
+      'es6': { // Evergreen browsers
+        browsers: [
+          // It guarantees that babel outputs pure es6 in bundle and in stats.json
+          // In the case of browsers no supporting certain feature it will be
+          // covered by the webcomponents-loader.js
+          'last 1 Chrome major versions'
+        ],
+      },
+      'es5': { // IE11
+        browsers: [
+          'ie 11'
+        ],
+        tagAssetsWithKey: true, // append a suffix to the file name
+      }
+    }
+  });
+}
 
 module.exports = merge(flowDefaults, {
+  optimization: {
+    // Split Vaadin components to vendor bundle
+    splitChunks: {
+      chunks: 'all'
+    },
 
+    // Extract and de-duplicate license comments
+    minimizer: [
+      new TerserPlugin({
+        extractComments: {
+          condition: /^\**!|@preserve|@license|@cc_on/i,
+          filename: (file) => {
+            return file.replace(/\.(\w+)($|\?)/, '.$1.LICENSE.txt$2');
+          },
+          banner: (licenseFile) => {
+            return `License information can be found in ${licenseFile}`;
+          },
+        },
+      }),
+    ],
+  }
 });
 
 /**
