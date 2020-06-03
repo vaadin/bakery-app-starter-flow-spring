@@ -119,6 +119,10 @@ $_documentContainer.innerHTML = `<dom-module id="bakery-app-layout-theme" theme-
         width: 100%;
       }
 
+      :host([theme~="orders"]) [part="content"] {
+		box-sizing: border-box !important;
+      }
+
       @media (max-width: 600px), (max-height: 600px) {
         :host([theme]) {
           top: 0;
