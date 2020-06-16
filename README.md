@@ -13,9 +13,9 @@ Note that when running in development mode, the application will not work in IE1
 
 # Running Integration Tests and Linter
 
-Integration tests are implemented using TestBench. The tests take tens of minutes to run and are therefore included in a separate profile. To run the tests, execute
+Integration tests are implemented using TestBench. The tests take tens of minutes to run and are therefore included in a separate profile. We recommend running tests with a production build to minimize the chance of development time toolchains affecting test stability. To run the tests, execute
 
-`mvn verify -Pit`
+`mvn verify -Pit,production`
 
 and make sure you have a valid TestBench license installed.
 
