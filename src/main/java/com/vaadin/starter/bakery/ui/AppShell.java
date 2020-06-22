@@ -11,7 +11,6 @@ import static com.vaadin.starter.bakery.ui.utils.BakeryConst.VIEWPORT;
 		startPath = "login",
 		backgroundColor = "#227aef", themeColor = "#227aef",
 		offlinePath = "offline-page.html",
-		offlineResources = {"images/offline-login-banner.jpg"},
-		enableInstallPrompt = false)
+		offlineResources = {"images/offline-login-banner.jpg"})
 public class AppShell implements AppShellConfigurator {
 }
