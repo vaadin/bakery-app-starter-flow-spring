@@ -11,7 +11,7 @@
       "@vaadin/vaadin-split-layout": "4.3.0-beta1",
       "@vaadin/vaadin-combo-box": "5.3.0-beta1",
       "@vaadin/vaadin-cookie-consent": "1.2.0-beta1",
-      "@vaadin/vaadin-core-shrinkwrap": "17.0.0-beta2",
+      "@vaadin/vaadin-core-shrinkwrap": "17.0.0-beta3",
       "@vaadin/vaadin-upload": "4.4.0-beta1",
       "@vaadin/vaadin-dialog": "2.5.0-beta1",
       "@vaadin/vaadin-select": "2.3.0",
@@ -22,7 +22,7 @@
       "@vaadin/vaadin-charts": "7.0.0-beta1",
       "@vaadin/vaadin-grid-pro": "2.2.0-beta1",
       "@vaadin/vaadin-progress-bar": "1.3.0-beta1",
-      "@vaadin/vaadin-shrinkwrap": "17.0.0-beta2",
+      "@vaadin/vaadin-shrinkwrap": "17.0.0-beta3",
       "@vaadin/vaadin-date-time-picker": "1.3.0-beta1",
       "@vaadin/vaadin-ordered-layout": "1.4.0-beta1",
       "@vaadin/vaadin-login": "1.2.0-beta1",
@@ -69,7 +69,7 @@
       "lit-html": "1.2.1",
       "@types/validator": "10.11.3"
     },
-    "hash": "9ce676f1e14fb2c0ed1bf35394edf92399f4543757212b11f13d63f8b9161436"
+    "hash": "8ba5cfb58fa687735cd93cc7189c8bf4ad2507a1679aa7132847b6bf89214341"
   },
   "dependencies": {
     "@vaadin/router": "1.7.2",
@@ -81,7 +81,7 @@
     "@vaadin/vaadin-split-layout": "4.3.0-beta1",
     "@vaadin/vaadin-combo-box": "5.3.0-beta1",
     "@vaadin/vaadin-cookie-consent": "1.2.0-beta1",
-    "@vaadin/vaadin-core-shrinkwrap": "17.0.0-beta2",
+    "@vaadin/vaadin-core-shrinkwrap": "17.0.0-beta3",
     "@vaadin/vaadin-upload": "4.4.0-beta1",
     "@vaadin/vaadin-dialog": "2.5.0-beta1",
     "@vaadin/vaadin-select": "2.3.0",
@@ -92,7 +92,7 @@
     "@vaadin/vaadin-charts": "7.0.0-beta1",
     "@vaadin/vaadin-grid-pro": "2.2.0-beta1",
     "@vaadin/vaadin-progress-bar": "1.3.0-beta1",
-    "@vaadin/vaadin-shrinkwrap": "17.0.0-beta2",
+    "@vaadin/vaadin-shrinkwrap": "17.0.0-beta3",
     "@vaadin/vaadin-date-time-picker": "1.3.0-beta1",
     "@vaadin/vaadin-ordered-layout": "1.4.0-beta1",
     "@vaadin/vaadin-login": "1.2.0-beta1",
