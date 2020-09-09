@@ -306,6 +306,7 @@
                             </execution>
                         </executions>
                         <configuration>
+                            <jmxPort>9011</jmxPort>
                             <wait>1000</wait>
                             <maxAttempts>180</maxAttempts>
                         </configuration>
