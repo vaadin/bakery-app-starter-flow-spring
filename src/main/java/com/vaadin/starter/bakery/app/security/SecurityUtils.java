@@ -111,7 +111,9 @@ public final class SecurityUtils {
 	 */
 	static boolean isFrameworkInternalRequest(HttpServletRequest request) {
 		final String parameterValue = request.getParameter(ApplicationConstants.REQUEST_TYPE_PARAMETER);
-		return parameterValue != null
+		String referer = request.getHeader("Referer");
+		boolean isServiceWorkInitiated = (referer!=null && referer.endsWith("sw.js"));
+		return isServiceWorkInitiated || parameterValue != null
 				&& Stream.of(RequestType.values()).anyMatch(r -> r.getIdentifier().equals(parameterValue));
 	}
 
