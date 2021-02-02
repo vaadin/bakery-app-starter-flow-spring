@@ -10,18 +10,18 @@
     "@vaadin/vaadin-split-layout": "4.3.0",
     "@vaadin/vaadin-combo-box": "5.4.7",
     "@vaadin/vaadin-cookie-consent": "1.2.0",
-    "@vaadin/vaadin-core-shrinkwrap": "14.4.6",
+    "@vaadin/vaadin-core-shrinkwrap": "14.4.7",
     "@vaadin/vaadin-upload": "4.4.1",
     "@vaadin/vaadin-dialog": "2.5.2",
     "@vaadin/vaadin-select": "2.4.0",
     "@vaadin/vaadin-app-layout": "2.2.0",
     "@vaadin/vaadin-item": "2.3.0",
     "@vaadin/vaadin-board": "2.2.0",
-    "@vaadin/vaadin-notification": "1.6.0",
+    "@vaadin/vaadin-notification": "1.6.1",
     "@vaadin/vaadin-charts": "6.3.1",
     "@vaadin/vaadin-grid-pro": "2.2.2",
     "@vaadin/vaadin-progress-bar": "1.3.0",
-    "@vaadin/vaadin-shrinkwrap": "14.4.6",
+    "@vaadin/vaadin-shrinkwrap": "14.4.7",
     "@vaadin/vaadin-date-time-picker": "1.4.0",
     "@vaadin/vaadin-ordered-layout": "1.4.0",
     "@vaadin/vaadin-login": "1.2.0",
@@ -58,7 +58,7 @@
     "webpack-merge": "4.2.2",
     "raw-loader": "3.1.0",
     "terser": "4.6.7",
-    "chokidar": "^3.4.0"
+    "chokidar": "^3.5.0"
   },
   "vaadin": {
     "dependencies": {
@@ -70,18 +70,18 @@
       "@vaadin/vaadin-split-layout": "4.3.0",
       "@vaadin/vaadin-combo-box": "5.4.7",
       "@vaadin/vaadin-cookie-consent": "1.2.0",
-      "@vaadin/vaadin-core-shrinkwrap": "14.4.6",
+      "@vaadin/vaadin-core-shrinkwrap": "14.4.7",
       "@vaadin/vaadin-upload": "4.4.1",
       "@vaadin/vaadin-dialog": "2.5.2",
       "@vaadin/vaadin-select": "2.4.0",
       "@vaadin/vaadin-app-layout": "2.2.0",
       "@vaadin/vaadin-item": "2.3.0",
       "@vaadin/vaadin-board": "2.2.0",
-      "@vaadin/vaadin-notification": "1.6.0",
+      "@vaadin/vaadin-notification": "1.6.1",
       "@vaadin/vaadin-charts": "6.3.1",
       "@vaadin/vaadin-grid-pro": "2.2.2",
       "@vaadin/vaadin-progress-bar": "1.3.0",
-      "@vaadin/vaadin-shrinkwrap": "14.4.6",
+      "@vaadin/vaadin-shrinkwrap": "14.4.7",
       "@vaadin/vaadin-date-time-picker": "1.4.0",
       "@vaadin/vaadin-ordered-layout": "1.4.0",
       "@vaadin/vaadin-login": "1.2.0",
@@ -118,8 +118,8 @@
       "terser": "4.6.7",
       "webpack-merge": "4.2.2",
       "webpack-dev-server": "3.11.0",
-      "chokidar": "^3.4.0"
+      "chokidar": "^3.5.0"
     },
-    "hash": "967744f310e4979c8f55f9cb739b28c380940e2d561b20e0b48a8b6a050eb603"
+    "hash": "715ea7386d30e8c3e50be0c7da69dc796af23a7b1f9304c7d38425a641189585"
   }
 }
