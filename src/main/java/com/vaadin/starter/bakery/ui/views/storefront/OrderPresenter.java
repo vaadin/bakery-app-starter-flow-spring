@@ -76,7 +76,7 @@ public class OrderPresenter {
 	}
 
 	void cancel() {
-		entityPresenter.cancel(() -> close(), () -> view.setOpened(true));
+		entityPresenter.cancel(this::close, () -> view.setOpened(true));
 	}
 
 	void closeSilently() {
@@ -85,7 +85,10 @@ public class OrderPresenter {
 	}
 
 	void edit() {
-		UI.getCurrent().navigate(BakeryConst.PAGE_STOREFRONT_EDIT + "/" + entityPresenter.getEntity().getId());
+        UI.getCurrent()
+                .navigate(BakeryConst.PAGE_STOREFRONT + "/"
+                        + entityPresenter.getEntity().getId() + "/"
+                        + BakeryConst.EDIT_SEGMENT);
 	}
 
 	void back() {
