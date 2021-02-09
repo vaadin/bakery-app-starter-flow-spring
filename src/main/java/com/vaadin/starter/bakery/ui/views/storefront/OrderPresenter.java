@@ -77,7 +77,7 @@ public class OrderPresenter {
 	}
 
 	void cancel() {
-		entityPresenter.cancel(this::close, () -> view.setOpened(true));
+            entityPresenter.cancel(this::close, () -> view.setOpened(true));
 	}
 
 	void closeSilently() {
