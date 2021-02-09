@@ -37,9 +37,8 @@ import static com.vaadin.starter.bakery.ui.utils.BakeryConst.ORDER_ID;
 
 @Tag("storefront-view")
 @JsModule("./src/views/storefront/storefront-view.js")
-@Route(value = BakeryConst.PAGE_STOREFRONT, layout = MainView.class)
-@RouteAlias(value = BakeryConst.PAGE_STOREFRONT_ORDER, layout = MainView.class)
-@RouteAlias(value = BakeryConst.PAGE_STOREFRONT_ORDER_EDIT, layout = MainView.class)
+@Route(value = BakeryConst.PAGE_STOREFRONT_ORDER_TEMPLATE, layout = MainView.class)
+@RouteAlias(value = BakeryConst.PAGE_STOREFRONT_ORDER_EDIT_TEMPLATE, layout = MainView.class)
 @RouteAlias(value = BakeryConst.PAGE_ROOT, layout = MainView.class)
 @PageTitle(BakeryConst.TITLE_STOREFRONT)
 public class StorefrontView extends PolymerTemplate<TemplateModel>
