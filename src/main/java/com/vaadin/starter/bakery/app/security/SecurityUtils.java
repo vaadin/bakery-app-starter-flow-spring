@@ -110,11 +110,10 @@ public final class SecurityUtils {
 	 * @return true if is an internal framework request. False otherwise.
 	 */
 	static boolean isFrameworkInternalRequest(HttpServletRequest request) {
-		final String parameterValue = request.getParameter(ApplicationConstants.REQUEST_TYPE_PARAMETER);
-		String referer = request.getHeader("Referer");
-		boolean isServiceWorkInitiated = (referer!=null && referer.endsWith("sw.js"));
-		return isServiceWorkInitiated || parameterValue != null
-				&& Stream.of(RequestType.values()).anyMatch(r -> r.getIdentifier().equals(parameterValue));
+		final String parameterValue = request
+				.getParameter(ApplicationConstants.REQUEST_TYPE_PARAMETER);
+		return parameterValue != null && Stream.of(RequestType.values())
+				.anyMatch(r -> r.getIdentifier().equals(parameterValue));
 	}
 
 }

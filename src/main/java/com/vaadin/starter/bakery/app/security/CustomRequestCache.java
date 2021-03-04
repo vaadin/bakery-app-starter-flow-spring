@@ -19,9 +19,12 @@ class CustomRequestCache extends HttpSessionRequestCache {
 	 */
 	@Override
 	public void saveRequest(HttpServletRequest request, HttpServletResponse response) {
-		if (!SecurityUtils.isFrameworkInternalRequest(request)) {
+		String referer = request.getHeader("Referer");
+		boolean isServiceWorkInitiated =
+				referer != null && referer.endsWith("sw.js");
+		if (!SecurityUtils.isFrameworkInternalRequest(request)
+				&& !isServiceWorkInitiated) {
 			super.saveRequest(request, response);
 		}
 	}
-
 }
