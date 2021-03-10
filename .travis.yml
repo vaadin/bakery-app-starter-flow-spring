@@ -6,6 +6,7 @@ dist: xenial
 # Make it possible to run tests on a local Chrome
 before_install:
  - export CHROME_BIN=/usr/bin/google-chrome
+ - export JAVA_OPTS=-Dwebdriver.chrome.whitelistedIps=
 
 addons:
   apt:
