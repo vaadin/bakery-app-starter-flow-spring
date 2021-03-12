@@ -1,7 +1,5 @@
 package com.vaadin.starter.bakery.testbench;
 
-import static org.hamcrest.CoreMatchers.containsString;
-
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -17,7 +15,9 @@ import com.vaadin.starter.bakery.testbench.elements.ui.OrderItemEditorElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement.OrderEditorElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.UsersViewElement;
-import com.vaadin.starter.bakery.ui.utils.BakeryConst;
+
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.Matchers.matchesPattern;
 
 public class StorefrontViewIT extends AbstractIT<StorefrontViewElement> {
 
@@ -39,7 +39,8 @@ public class StorefrontViewIT extends AbstractIT<StorefrontViewElement> {
 		order.click();
 		ButtonElement editBtn = storefrontPage.getOrderDetails().getEditButton();
 		editBtn.click();
-		Assert.assertThat(getDriver().getCurrentUrl(), containsString(BakeryConst.PAGE_STOREFRONT_EDIT));
+        Assert.assertThat(getDriver().getCurrentUrl(),
+				matchesPattern("^(.+)\\/(storefront)\\/[0-9]+\\/(edit)$"));
 
 		OrderEditorElement orderEditor = storefrontPage.getOrderEditor();
 		orderEditor.getOrderItemEditor(0).clickAmountFieldPlus();
