@@ -15,8 +15,6 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.vaadin.flow.server.HandlerHelper.RequestType;
-import com.vaadin.flow.shared.ApplicationConstants;
 import com.vaadin.starter.bakery.ui.views.errors.AccessDeniedView;
 import com.vaadin.starter.bakery.ui.views.errors.CustomRouteNotFoundError;
 import com.vaadin.starter.bakery.ui.views.login.LoginView;
@@ -98,23 +96,6 @@ public final class SecurityUtils {
 	private static boolean isUserLoggedIn(Authentication authentication) {
 		return authentication != null
 			&& !(authentication instanceof AnonymousAuthenticationToken);
-	}
-
-	/**
-	 * Tests if the request is an internal framework request. The test consists of
-	 * checking if the request parameter is present and if its value is consistent
-	 * with any of the request types know.
-	 *
-	 * @param request
-	 *            {@link HttpServletRequest}
-	 * @return true if is an internal framework request. False otherwise.
-	 */
-	static boolean isFrameworkInternalRequest(HttpServletRequest request) {
-		final String parameterValue = request.getParameter(ApplicationConstants.REQUEST_TYPE_PARAMETER);
-		String referer = request.getHeader("Referer");
-		boolean isServiceWorkInitiated = (referer!=null && referer.endsWith("sw.js"));
-		return isServiceWorkInitiated || parameterValue != null
-				&& Stream.of(RequestType.values()).anyMatch(r -> r.getIdentifier().equals(parameterValue));
 	}
 
 }

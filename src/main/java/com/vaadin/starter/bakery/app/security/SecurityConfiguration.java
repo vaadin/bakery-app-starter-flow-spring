@@ -1,5 +1,10 @@
 package com.vaadin.starter.bakery.app.security;
 
+import com.vaadin.flow.spring.security.VaadinWebSecurityConfigurerAdapter;
+import com.vaadin.starter.bakery.backend.data.entity.User;
+import com.vaadin.starter.bakery.backend.repositories.UserRepository;
+import com.vaadin.starter.bakery.ui.utils.BakeryConst;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
@@ -9,16 +14,10 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
-
-import com.vaadin.starter.bakery.backend.data.Role;
-import com.vaadin.starter.bakery.backend.data.entity.User;
-import com.vaadin.starter.bakery.backend.repositories.UserRepository;
-import com.vaadin.starter.bakery.ui.utils.BakeryConst;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
  * Configures spring security, doing the following:
@@ -30,7 +29,7 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
  */
 @EnableWebSecurity
 @Configuration
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class SecurityConfiguration extends VaadinWebSecurityConfigurerAdapter {
 
 	private static final String LOGIN_PROCESSING_URL = "/login";
 	private static final String LOGIN_FAILURE_URL = "/login?error";
@@ -79,54 +78,26 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	 */
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		// Not using Spring CSRF here to be able to use plain HTML for the login page
-		http.csrf().disable()
-
-				// Register our CustomRequestCache, that saves unauthorized access attempts, so
-				// the user is redirected after login.
-				.requestCache().requestCache(new CustomRequestCache())
-
-				// Restrict access to our application.
-				.and().authorizeRequests()
-
-				// Allow all flow internal requests.
-				.requestMatchers(SecurityUtils::isFrameworkInternalRequest).permitAll()
-
-				// Allow all requests by logged in users.
-				.anyRequest().hasAnyAuthority(Role.getAllRoles())
-
+		super.configure(http);
+		http.csrf().ignoringAntMatchers("/login");
 				// Configure the login page.
-				.and().formLogin().loginPage(LOGIN_URL).permitAll().loginProcessingUrl(LOGIN_PROCESSING_URL)
+		http.formLogin().loginPage(LOGIN_URL).permitAll().loginProcessingUrl(LOGIN_PROCESSING_URL)
 				.failureUrl(LOGIN_FAILURE_URL)
 
-				// Register the success handler that redirects users to the page they last tried
-				// to access
-				.successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
-
 				// Configure logout
-				.and().logout().logoutSuccessUrl(LOGOUT_SUCCESS_URL);
+				.and().logout().logoutSuccessUrl(LOGOUT_SUCCESS_URL).logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
 	}
 
-	/**
-	 * Allows access to static resources, bypassing Spring security.
-	 */
 	@Override
-	public void configure(WebSecurity web) {
-		web.ignoring().antMatchers(
-				// client-side JS code
-				"/VAADIN/**",
+    public void configure(WebSecurity web) {
+		super.configure(web);
+        web.ignoring().antMatchers(
 
 				// the standard favicon URI
 				"/favicon.ico",
 
 				// the robots exclusion standard
 				"/robots.txt",
-
-				// web application manifest
-				"/manifest.webmanifest",
-				"/sw.js",
-				"/sw-runtime-resources-precache.js",
-				"/offline-page.html",
 
 				// icons and images
 				"/icons/**",
@@ -135,5 +106,5 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				// (development mode) H2 debugging console
 				"/h2-console/**"
 		);
-	}
+    }
 }
