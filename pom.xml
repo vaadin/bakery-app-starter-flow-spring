@@ -24,7 +24,7 @@
         <vaadin.version>23.0.1</vaadin.version>
 
         <!-- Overrides the old version specified by the Spring Boot parent -->
-        <selenium.version>3.141.59</selenium.version>
+        <selenium.version>4.1.2</selenium.version>
 
         <!-- Plugins -->
         <frontend.maven.plugin.version>1.6</frontend.maven.plugin.version>
