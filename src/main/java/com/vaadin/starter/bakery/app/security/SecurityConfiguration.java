@@ -126,6 +126,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				"/manifest.webmanifest",
 				"/sw.js",
 				"/offline-page.html",
+				"/offline-stub.html",
+				"/sw-runtime-resources-precache.js",
 
 				// icons and images
 				"/icons/**",
