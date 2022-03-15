@@ -15,7 +15,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.vaadin.flow.server.ServletHelper.RequestType;
+import com.vaadin.flow.server.HandlerHelper.RequestType;
 import com.vaadin.flow.shared.ApplicationConstants;
 import com.vaadin.starter.bakery.ui.views.errors.AccessDeniedView;
 import com.vaadin.starter.bakery.ui.views.errors.CustomRouteNotFoundError;

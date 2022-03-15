@@ -20,6 +20,11 @@ webdriver/
 # macOs
 .DS_Store
 
+# The following files are generated/updated by vaadin-maven-plugin
+frontend/generated/
+pnpmfile.js
+vite.generated.ts
+
 # Frontend
 /build-tools/bin/
 /build-tools/etc/
