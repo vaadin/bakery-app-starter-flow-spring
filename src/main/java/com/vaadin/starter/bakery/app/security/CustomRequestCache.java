@@ -19,7 +19,7 @@ class CustomRequestCache extends HttpSessionRequestCache {
 	 */
 	@Override
 	public void saveRequest(HttpServletRequest request, HttpServletResponse response) {
-		if (!SecurityUtils.isFrameworkInternalRequest(request)) {
+		if (!SecurityUtils.isFrameworkInternalRequest(request) && !"/".equals(request.getRequestURI())) {
 			super.saveRequest(request, response);
 		}
 	}
