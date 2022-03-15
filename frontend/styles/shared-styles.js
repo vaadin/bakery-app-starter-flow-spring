@@ -393,6 +393,7 @@ $_documentContainer.innerHTML = `<dom-module id="bakery-app-layout-theme" theme-
       font-size: var(--lumo-font-size-xs);
       padding-left: .75em;
       padding-right: .75em;
+      cursor: pointer;
     }
 
     vaadin-app-layout vaadin-tab a:hover {

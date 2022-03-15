@@ -2,8 +2,9 @@ package com.vaadin.starter.bakery.ui.views.admin.users;
 
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_USERS;
 
+import javax.annotation.security.RolesAllowed;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -28,7 +29,7 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
 @Route(value = PAGE_USERS, layout = MainView.class)
 @PageTitle(BakeryConst.TITLE_USERS)
-@Secured(Role.ADMIN)
+@RolesAllowed(Role.ADMIN)
 public class UsersView extends AbstractBakeryCrudView<User> {
 
 	@Autowired

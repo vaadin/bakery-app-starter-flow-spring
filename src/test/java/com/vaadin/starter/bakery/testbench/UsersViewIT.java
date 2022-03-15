@@ -142,8 +142,8 @@ public class UsersViewIT extends AbstractIT<UsersViewElement> {
 		Assert.assertEquals(3, storefront.getMenu().$(TabElement.class).all().size());
 
 		driver.get(APP_URL + "users");
-		TestBenchElement accessDeniedPage = $("access-denied-view").waitForFirst();
+		TestBenchElement link404 = $("vaadin-app-layout > div > a").waitForFirst();
 
-		Assert.assertEquals("Access denied", accessDeniedPage.$("h3").first().getText());
+		Assert.assertEquals("Go to the front page.", link404.getText());
 	}
 }

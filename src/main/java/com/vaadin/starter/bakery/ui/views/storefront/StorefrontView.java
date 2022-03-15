@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import javax.annotation.security.PermitAll;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.HasValue;
@@ -41,6 +43,7 @@ import static com.vaadin.starter.bakery.ui.utils.BakeryConst.ORDER_ID;
 @RouteAlias(value = BakeryConst.PAGE_STOREFRONT_ORDER_EDIT_TEMPLATE, layout = MainView.class)
 @RouteAlias(value = BakeryConst.PAGE_ROOT, layout = MainView.class)
 @PageTitle(BakeryConst.TITLE_STOREFRONT)
+@PermitAll
 public class StorefrontView extends PolymerTemplate<TemplateModel>
 		implements HasLogger, BeforeEnterObserver, EntityView<Order> {
 
