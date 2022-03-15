@@ -147,8 +147,7 @@ $_documentContainer.innerHTML = `<dom-module id="bakery-app-layout-theme" theme-
   </template>
 </dom-module>
 
-<!-- Theme for the status selector, we need to theme the text-field instead of the combo-box -->
-<dom-module id="bakery-text-field-theme" theme-for="vaadin-text-field">
+<dom-module id="bakery-text-field-theme" theme-for="vaadin-combo-box">
   <template>
     <style>
       :host([status="new"]) [part~="input-field"],

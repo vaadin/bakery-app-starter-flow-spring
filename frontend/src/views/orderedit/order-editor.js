@@ -44,7 +44,7 @@ class OrderEditor extends window.ScrollShadowMixin(PolymerElement) {
       <h2 id="title">New order</h2>
 
       <div class="meta-row" id="metaContainer">
-        <vaadin-combo-box class="status" id="status"></vaadin-combo-box>
+        <vaadin-combo-box class="status" id="status" status$="[[__toLowerCase(status)]]"></vaadin-combo-box>
         <span class="dim">Order #<span id="orderNumber"></span></span>
       </div>
 
@@ -99,8 +99,7 @@ class OrderEditor extends window.ScrollShadowMixin(PolymerElement) {
   static get properties() {
     return {
       status: {
-        type: String,
-        observer: '_onStatusChange'
+        type: String
       }
     };
   }
@@ -123,9 +122,8 @@ class OrderEditor extends window.ScrollShadowMixin(PolymerElement) {
     ];
   }
 
-  _onStatusChange() {
-    const status = this.status ? this.status.toLowerCase() : this.status;
-    this.$.status.$.input.setAttribute('status', status);
+  __toLowerCase(status) {
+    return status ? status.toLowerCase() : '';
   }
 }
 
