@@ -147,7 +147,18 @@ $_documentContainer.innerHTML = `<dom-module id="bakery-app-layout-theme" theme-
   </template>
 </dom-module>
 
-<dom-module id="bakery-text-field-theme" theme-for="vaadin-combo-box">
+<dom-module id="bakery-text-field-theme" theme-for="vaadin-text-field">
+  <template>
+    <style>
+      :host([theme="white"]) [part~="input-field"] {
+        color: var(--lumo-secondary-text-color);
+        background-color: var(--lumo-base-color);
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="bakery-combo-box-theme" theme-for="vaadin-combo-box">
   <template>
     <style>
       :host([status="new"]) [part~="input-field"],
@@ -166,11 +177,6 @@ $_documentContainer.innerHTML = `<dom-module id="bakery-app-layout-theme" theme-
       :host([status="cancelled"]) [part~="input-field"] {
         color: var(--lumo-error-color);
         background: var(--lumo-error-color-10pct);
-      }
-
-      :host([theme="white"]) [part~="input-field"] {
-        color: var(--lumo-secondary-text-color);
-        background-color: var(--lumo-base-color);
       }
     </style>
   </template>
@@ -299,14 +305,6 @@ $_documentContainer.innerHTML = `<dom-module id="bakery-app-layout-theme" theme-
       .bold {
         font-weight: 600;
       }
-
-      flow-component-renderer[theme="dialog"],
-      flow-component-renderer[theme="dialog"] > div {
-        display: flex;
-        flex-direction: column;
-        flex: auto;
-        height: 100%;
-      }
     </style>
   </template>
 </dom-module>
@@ -404,7 +402,7 @@ $_documentContainer.innerHTML = `<dom-module id="bakery-app-layout-theme" theme-
       color: var(--lumo-contrast-60pct);
     }
 
-    vaadin-app-layout vaadin-tab iron-icon {
+    vaadin-app-layout vaadin-tab vaadin-icon {
       margin: 0 4px;
       width: var(--lumo-icon-size-m);
       height: var(--lumo-icon-size-m);

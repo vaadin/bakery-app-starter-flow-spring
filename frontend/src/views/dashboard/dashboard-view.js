@@ -57,7 +57,7 @@ class DashboardView extends PolymerElement {
     <vaadin-board>
       <vaadin-board-row>
         <dashboard-counter-label id="todayCount" class="green">
-          <vaadin-chart id="todayCountChart" class="counter"></vaadin-chart>
+          <vaadin-chart id="todayCountChart" class="counter" theme="classic"></vaadin-chart>
         </dashboard-counter-label>
         <dashboard-counter-label id="notAvailableCount" class="red"></dashboard-counter-label>
         <dashboard-counter-label id="newCount" class="blue"></dashboard-counter-label>
@@ -65,18 +65,18 @@ class DashboardView extends PolymerElement {
       </vaadin-board-row>
       <vaadin-board-row>
         <div class="vaadin-board-cell">
-          <vaadin-chart id="deliveriesThisMonth" class="column-chart"></vaadin-chart>
+          <vaadin-chart id="deliveriesThisMonth" class="column-chart" theme="classic"></vaadin-chart>
         </div>
         <div class="vaadin-board-cell">
-          <vaadin-chart id="deliveriesThisYear" class="column-chart"></vaadin-chart>
+          <vaadin-chart id="deliveriesThisYear" class="column-chart" theme="classic"></vaadin-chart>
         </div>
       </vaadin-board-row>
       <vaadin-board-row>
-        <vaadin-chart id="yearlySalesGraph" class="yearly-sales"></vaadin-chart>
+        <vaadin-chart id="yearlySalesGraph" class="yearly-sales" theme="classic"></vaadin-chart>
       </vaadin-board-row>
       <vaadin-board-row class="custom-board-row">
         <div class="vaadin-board-cell">
-          <vaadin-chart id="monthlyProductSplit" class="product-split-donut"></vaadin-chart>
+          <vaadin-chart id="monthlyProductSplit" class="product-split-donut" theme="classic"></vaadin-chart>
         </div>
         <div class="vaadin-board-cell">
           <vaadin-grid id="ordersGrid" theme="orders dashboard"></vaadin-grid>

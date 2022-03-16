@@ -21,7 +21,7 @@ class StorefrontView extends PolymerElement {
 
     <vaadin-grid id="grid" theme="orders no-row-borders"></vaadin-grid>
 
-    <vaadin-dialog id="dialog" theme="orders" on-opened-changed="_onDialogOpen"></vaadin-dialog>
+    <vaadin-dialog id="dialog" theme="orders"></vaadin-dialog>
 `;
   }
 
@@ -42,15 +42,6 @@ class StorefrontView extends PolymerElement {
       }
     };
     grid.addEventListener('loading-changed', listener);
-  }
-
-  // Workaround for styling the dialog content https://github.com/vaadin/vaadin-dialog-flow/issues/69
-  _onDialogOpen(e) {
-    if (!e.detail.value) {
-      return;
-    }
-    var content = this.$.dialog.$.overlay.content;
-    content.querySelector('flow-component-renderer').setAttribute('theme', 'dialog');
   }
 }
 

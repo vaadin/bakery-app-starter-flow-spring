@@ -138,6 +138,7 @@ public class DashboardView extends PolymerTemplate<TemplateModel> {
 		Configuration conf = monthlyProductSplit.getConfiguration();
 		conf.getChart().setType(ChartType.PIE);
 		conf.getChart().setBorderRadius(4);
+		conf.getChart().setStyledMode(true);
 		conf.setTitle("Products delivered in " + FormattingUtils.getFullMonthName(today));
 		DataSeries deliveriesPerProductSeries = new DataSeries(productDeliveries.entrySet().stream()
 				.map(e -> new DataSeriesItem(e.getKey().getName(), e.getValue())).collect(Collectors.toList()));
@@ -165,6 +166,7 @@ public class DashboardView extends PolymerTemplate<TemplateModel> {
 	private void initTodayCountSolidgaugeChart(OrdersCountDataWithChart data) {
 		Configuration configuration = todayCountChart.getConfiguration();
 		configuration.getChart().setType(ChartType.SOLIDGAUGE);
+		configuration.getChart().setStyledMode(true);
 		configuration.setTitle("");
 		configuration.getTooltip().setEnabled(false);
 
@@ -203,6 +205,7 @@ public class DashboardView extends PolymerTemplate<TemplateModel> {
 		yearConf.setTitle("Deliveries in " + today.getYear());
 		yearConf.getxAxis().setCategories(MONTH_LABELS);
 		yearConf.addSeries(new ListSeries("per Month", data.getDeliveriesThisYear()));
+		yearConf.getChart().setStyledMode(true);
 
 		// init the 'Deliveries in [this month]' chart
 		Configuration monthConf = deliveriesThisMonthChart.getConfiguration();
@@ -220,6 +223,7 @@ public class DashboardView extends PolymerTemplate<TemplateModel> {
 	private void configureColumnChart(Configuration conf) {
 		conf.getChart().setType(ChartType.COLUMN);
 		conf.getChart().setBorderRadius(4);
+		conf.getChart().setStyledMode(true);
 
 		conf.getxAxis().setTickInterval(1);
 		conf.getxAxis().setMinorTickLength(0);
@@ -234,6 +238,7 @@ public class DashboardView extends PolymerTemplate<TemplateModel> {
 		Configuration conf = yearlySalesGraph.getConfiguration();
 		conf.getChart().setType(ChartType.AREASPLINE);
 		conf.getChart().setBorderRadius(4);
+		conf.getChart().setStyledMode(true);
 
 		conf.setTitle("Sales last years");
 
