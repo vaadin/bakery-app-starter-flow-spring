@@ -39,8 +39,7 @@ public class StorefrontViewIT extends AbstractIT<StorefrontViewElement> {
 		order.click();
 		ButtonElement editBtn = storefrontPage.getOrderDetails().getEditButton();
 		editBtn.click();
-        Assert.assertThat(getDriver().getCurrentUrl(),
-				matchesPattern("^(.+)\\/(storefront)\\/[0-9]+\\/(edit)$"));
+		waitUntil(driver -> driver.getCurrentUrl().matches("^(.+)\\/(storefront)\\/[0-9]+\\/(edit)$"));
 
 		OrderEditorElement orderEditor = storefrontPage.getOrderEditor();
 		orderEditor.getOrderItemEditor(0).clickAmountFieldPlus();
