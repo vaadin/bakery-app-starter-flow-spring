@@ -27,7 +27,7 @@
         <selenium.version>4.1.2</selenium.version>
 
         <!-- Plugins -->
-        <frontend.maven.plugin.version>1.6</frontend.maven.plugin.version>
+        <frontend.maven.plugin.version>1.12.1</frontend.maven.plugin.version>
         <maven.war.plugin.version>3.1.0</maven.war.plugin.version>
         <maven.resources.plugin.version>3.0.2</maven.resources.plugin.version>
         <maven.clean.plugin.version>3.0.0</maven.clean.plugin.version>

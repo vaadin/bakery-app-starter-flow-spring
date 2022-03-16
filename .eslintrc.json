@@ -1,5 +1,5 @@
 {
-  "extends": "vaadin",
+  "extends": "./build-tools/node_modules/eslint-config-vaadin/index.js",
   "rules": {
     "linebreak-style": 0,
     "object-curly-spacing": 0

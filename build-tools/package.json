@@ -5,15 +5,15 @@
   "author": "Vaadin Ltd",
   "license": "SEE LICENSE IN http://vaadin.com/license/cvtl-1",
   "devDependencies": {
-    "eslint": "^5.0.0",
+    "eslint": "^8.11.0",
     "eslint-config-vaadin": "^0.2.7",
-    "eslint-plugin-html": "^4.0.0",
-    "gulp": "^3.9.1",
-    "gulp-eslint": "^5.0.0",
+    "eslint-plugin-html": "^6.2.0",
+    "gulp": "^4.0.2",
+    "gulp-eslint": "^6.0.0",
     "gulp-html-extract": "^0.3.0",
-    "gulp-stylelint": "^7.0.0",
-    "stylelint": "^9.0.0",
-    "stylelint-config-vaadin": "^0.1.4"
+    "gulp-stylelint": "^13.0.0",
+    "stylelint": "^14.6.0",
+    "stylelint-config-vaadin": "^0.3.0"
   },
   "scripts": {
     "lint": "gulp lint"

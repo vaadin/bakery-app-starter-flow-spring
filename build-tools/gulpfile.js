@@ -5,8 +5,6 @@ var eslint = require('gulp-eslint');
 var htmlExtract = require('gulp-html-extract');
 var stylelint = require('gulp-stylelint');
 
-gulp.task('lint', ['lint:js', 'lint:html', 'lint:css']);
-
 gulp.task('lint:js', function() {
   return gulp.src([
     'gulpfile.js',
@@ -45,3 +43,5 @@ gulp.task('lint:css', function() {
       ]
     }));
 });
+
+gulp.task('lint', gulp.series('lint:js', 'lint:html', 'lint:css'));
