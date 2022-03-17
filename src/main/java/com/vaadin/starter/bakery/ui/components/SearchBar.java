@@ -6,29 +6,19 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.DebounceSettings;
 import com.vaadin.flow.component.DomEvent;
+import com.vaadin.flow.component.Synchronize;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.JsModule;
-import com.vaadin.flow.component.polymertemplate.Id;
-import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
+import com.vaadin.flow.component.littemplate.LitTemplate;
+import com.vaadin.flow.component.template.Id;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.dom.DebouncePhase;
-import com.vaadin.flow.templatemodel.TemplateModel;
 
 @Tag("search-bar")
 @JsModule("./src/components/search-bar.js")
-public class SearchBar extends PolymerTemplate<SearchBar.Model> {
-
-	public interface Model extends TemplateModel {
-		boolean isCheckboxChecked();
-
-		void setCheckboxChecked(boolean checkboxChecked);
-
-		void setCheckboxText(String checkboxText);
-
-		void setButtonText(String actionText);
-	}
+public class SearchBar extends LitTemplate {
 
 	@Id("field")
 	private TextField textField;
@@ -41,11 +31,13 @@ public class SearchBar extends PolymerTemplate<SearchBar.Model> {
 
 	public SearchBar() {
 		textField.setValueChangeMode(ValueChangeMode.EAGER);
+
 		ComponentUtil.addListener(textField, SearchValueChanged.class,
 				e -> fireEvent(new FilterChanged(this, false)));
+
 		clearButton.addClickListener(e -> {
 			textField.clear();
-			getModel().setCheckboxChecked(false);
+			getElement().setProperty("checkboxChecked", false);
 		});
 
 		getElement().addPropertyChangeListener("checkboxChecked", e -> fireEvent(new FilterChanged(this, false)));
@@ -55,8 +47,9 @@ public class SearchBar extends PolymerTemplate<SearchBar.Model> {
 		return textField.getValue();
 	}
 
+	@Synchronize("checkbox-checked-changed")
 	public boolean isCheckboxChecked() {
-		return getModel().isCheckboxChecked();
+		return getElement().getProperty("checkboxChecked", false);
 	}
 
 	public void setPlaceHolder(String placeHolder) {
@@ -64,11 +57,11 @@ public class SearchBar extends PolymerTemplate<SearchBar.Model> {
 	}
 
 	public void setActionText(String actionText) {
-		getModel().setButtonText(actionText);
+		getElement().setProperty("buttonText", actionText);
 	}
 
 	public void setCheckboxText(String checkboxText) {
-		getModel().setCheckboxText(checkboxText);
+		getElement().setProperty("checkboxText", checkboxText);
 	}
 
 	public void addFilterChangeListener(ComponentEventListener<FilterChanged> listener) {
