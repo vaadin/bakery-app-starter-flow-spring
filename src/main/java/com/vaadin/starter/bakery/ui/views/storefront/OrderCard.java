@@ -9,15 +9,15 @@ import static com.vaadin.starter.bakery.ui.utils.FormattingUtils.WEEK_OF_YEAR_FI
 import java.time.LocalDate;
 import java.util.List;
 
-import com.vaadin.flow.data.renderer.TemplateRenderer;
+import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.OrderSummary;
 import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
 
 /**
- * Help class to get ready to use TemplateRenderer for displaying order card list on the Storefront and Dashboard grids.
- * Using TemplateRenderer instead of ComponentRenderer optimizes the CPU and memory consumption.
+ * Help class to get ready to use LitRenderer for displaying order card list on the Storefront and Dashboard grids.
+ * Using LitRenderer instead of ComponentRenderer optimizes the CPU and memory consumption.
  * <p>
  * In addition, component includes an optional header above the order card. It is used
  * to visually separate orders into groups. Technically all order cards are
@@ -26,12 +26,12 @@ import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
  */
 public class OrderCard {
 
-	public static TemplateRenderer<Order> getTemplate() {
-		return TemplateRenderer.of(
+	public static LitRenderer<Order> getTemplate() {
+		return LitRenderer.of(
 				  "<order-card"
-				+ "  header='[[item.header]]'"
-				+ "  order-card='[[item.orderCard]]'"
-				+ "  on-card-click='cardClick'>"
+				+ "  .header='${item.header}'"
+				+ "  .orderCard='${item.orderCard}'"
+				+ "  @card-click='${cardClick}'>"
 				+ "</order-card>");
 	}
 	
