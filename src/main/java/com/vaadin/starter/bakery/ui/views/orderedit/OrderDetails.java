@@ -3,30 +3,35 @@
  */
 package com.vaadin.starter.bakery.ui.views.orderedit;
 
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.JsModule;
-import com.vaadin.flow.component.polymertemplate.Id;
-import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
+import com.vaadin.flow.component.littemplate.LitTemplate;
+import com.vaadin.flow.component.template.Id;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.dom.Element;
 import com.vaadin.flow.shared.Registration;
-import com.vaadin.flow.templatemodel.Encode;
-import com.vaadin.flow.templatemodel.Include;
-import com.vaadin.flow.templatemodel.TemplateModel;
+import com.vaadin.starter.bakery.backend.data.entity.HistoryItem;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
+import com.vaadin.starter.bakery.backend.data.entity.Product;
 import com.vaadin.starter.bakery.ui.events.CancelEvent;
 import com.vaadin.starter.bakery.ui.events.SaveEvent;
 import com.vaadin.starter.bakery.ui.utils.converters.CurrencyFormatter;
 import com.vaadin.starter.bakery.ui.utils.converters.LocalDateTimeConverter;
 import com.vaadin.starter.bakery.ui.utils.converters.LocalTimeConverter;
-import com.vaadin.starter.bakery.ui.utils.converters.LongToStringConverter;
-import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
 import com.vaadin.starter.bakery.ui.views.storefront.converters.StorefrontLocalDateConverter;
 import com.vaadin.starter.bakery.ui.views.storefront.events.CommentEvent;
 import com.vaadin.starter.bakery.ui.views.storefront.events.EditEvent;
+
+import elemental.json.Json;
+import elemental.json.JsonArray;
+import elemental.json.JsonObject;
 
 /**
  * The component displaying a full (read-only) summary of an order, and a comment
@@ -34,7 +39,7 @@ import com.vaadin.starter.bakery.ui.views.storefront.events.EditEvent;
  */
 @Tag("order-details")
 @JsModule("./src/views/orderedit/order-details.js")
-public class OrderDetails extends PolymerTemplate<OrderDetails.Model> {
+public class OrderDetails extends LitTemplate {
 
 	private Order order;
 
@@ -79,13 +84,48 @@ public class OrderDetails extends PolymerTemplate<OrderDetails.Model> {
 	}
 
 	public void display(Order order, boolean review) {
-		getModel().setReview(review);
+		getElement().setProperty("review", review);
 		this.order = order;
-		getModel().setItem(order);
+
+		JsonObject item = beanToJson(order);
+
+		// Include formatted values to the JsonObject
+		item.put("formattedDueDate", beanToJson(new StorefrontLocalDateConverter().encode(order.getDueDate())));
+		item.put("formattedDueTime", new LocalTimeConverter().encode(order.getDueTime()));
+		item.put("formattedTotalPrice", new CurrencyFormatter().encode(order.getTotalPrice()));
+
+		JsonArray orderItems = item.getArray("items");
+		for (int i = 0; i < orderItems.length(); i++) {
+			JsonObject itemProduct = orderItems.getObject(i).getObject("product");
+			Product product = order.getItems().get(i).getProduct();
+			itemProduct.put("formattedPrice", new CurrencyFormatter().encode(product.getPrice()));
+		}
+
+		JsonArray orderHistory = item.getArray("history");
+		for (int i = 0; i < orderHistory.length(); i++) {
+			JsonObject itemHistory = orderHistory.getObject(i);
+			HistoryItem historyItem = order.getHistory().get(i);
+			itemHistory.put("formattedTimestamp", new LocalDateTimeConverter().encode(historyItem.getTimestamp()));
+		}
+		
+		getElement().setPropertyJson("item", item);
+
 		if (!review) {
 			commentField.clear();
 		}
 		this.isDirty = review;
+	}
+
+	// Workaround https://github.com/vaadin/flow/issues/13317
+	private JsonObject beanToJson(Object bean) {
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			objectMapper.registerModule(new JavaTimeModule());
+			return Json.parse(objectMapper.writeValueAsString(bean));
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public boolean isDirty() {
@@ -94,24 +134,6 @@ public class OrderDetails extends PolymerTemplate<OrderDetails.Model> {
 
 	public void setDirty(boolean isDirty) {
 		this.isDirty = isDirty;
-	}
-
-	public interface Model extends TemplateModel {
-		@Include({ "id", "dueDate.day", "dueDate.weekday", "dueDate.date", "dueTime", "state", "pickupLocation.name",
-			"customer.fullName", "customer.phoneNumber", "customer.details", "items.product.name", "items.comment",
-			"items.quantity", "items.product.price", "history.message", "history.createdBy.firstName",
-			"history.timestamp", "history.newState", "totalPrice" })
-		@Encode(value = LongToStringConverter.class, path = "id")
-		@Encode(value = StorefrontLocalDateConverter.class, path = "dueDate")
-		@Encode(value = LocalTimeConverter.class, path = "dueTime")
-		@Encode(value = OrderStateConverter.class, path = "state")
-		@Encode(value = CurrencyFormatter.class, path = "items.product.price")
-		@Encode(value = LocalDateTimeConverter.class, path = "history.timestamp")
-		@Encode(value = OrderStateConverter.class, path = "history.newState")
-		@Encode(value = CurrencyFormatter.class, path = "totalPrice")
-		void setItem(Order order);
-
-		void setReview(boolean review);
 	}
 
 	public Registration addSaveListenter(ComponentEventListener<SaveEvent> listener) {

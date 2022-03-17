@@ -1,10 +1,10 @@
-import { html, css, LitElement } from "lit";
-import "@polymer/iron-icon/iron-icon.js";
-import "@vaadin/icons/vaadin-icons.js";
-import "@vaadin/button/src/vaadin-button.js";
-import "@vaadin/checkbox/src/vaadin-checkbox.js";
-import "@vaadin/text-field/src/vaadin-text-field.js";
-import "../../styles/shared-styles.js";
+import { html, css, LitElement } from 'lit';
+import '@polymer/iron-icon/iron-icon.js';
+import '@vaadin/icons/vaadin-icons.js';
+import '@vaadin/button/src/vaadin-button.js';
+import '@vaadin/checkbox/src/vaadin-checkbox.js';
+import '@vaadin/text-field/src/vaadin-text-field.js';
+import '../../styles/shared-styles.js';
 
 class SearchBar extends LitElement {
   static get styles() {
@@ -131,7 +131,7 @@ class SearchBar extends LitElement {
   }
 
   static get is() {
-    return "search-bar";
+    return 'search-bar';
   }
   static get properties() {
     return {
@@ -153,7 +153,7 @@ class SearchBar extends LitElement {
       showCheckbox: {
         type: Boolean,
         reflect: true,
-        attribute: "show-checkbox",
+        attribute: 'show-checkbox',
       },
       checkboxText: {
         type: String,
@@ -167,7 +167,7 @@ class SearchBar extends LitElement {
       showExtraFilters: {
         type: Boolean,
         reflect: true,
-        attribute: "show-extra-filters",
+        attribute: 'show-extra-filters',
       },
       _focused: {
         type: Boolean,
@@ -177,21 +177,25 @@ class SearchBar extends LitElement {
 
   updated(changedProperties) {
     if (
-      changedProperties.has("fieldValue") ||
-      changedProperties.has("checkboxChecked") ||
-      changedProperties.has("_focused")
+      changedProperties.has('fieldValue') ||
+      changedProperties.has('checkboxChecked') ||
+      changedProperties.has('_focused')
     ) {
-      this._debounceSearch(this.fieldValue, this.checkboxChecked, this._focused);
+      this._debounceSearch(
+        this.fieldValue,
+        this.checkboxChecked,
+        this._focused
+      );
     }
 
     const notifyingProperties = [
       {
-        property: "fieldValue",
-        eventName: "field-value-changed",
+        property: 'fieldValue',
+        eventName: 'field-value-changed',
       },
       {
-        property: "checkboxChecked",
-        eventName: "checkbox-checked-changed",
+        property: 'checkboxChecked',
+        eventName: 'checkbox-checked-changed',
       },
     ];
 
@@ -212,15 +216,15 @@ class SearchBar extends LitElement {
 
   constructor() {
     super();
-    this.buttonIcon = "vaadin:plus";
-    this.fieldIcon = "vaadin:search";
-    this.clearText = "Clear search";
+    this.buttonIcon = 'vaadin:plus';
+    this.fieldIcon = 'vaadin:search';
+    this.clearText = 'Clear search';
     this.showExtraFilters = false;
     this.showCheckbox = false;
 
     // In iOS prevent body scrolling to avoid going out of the viewport
     // when keyboard is opened
-    this.addEventListener("touchmove", (e) => e.preventDefault());
+    this.addEventListener('touchmove', (e) => e.preventDefault());
 
     this._debounceSearch = debounce((fieldValue, checkboxChecked, focused) => {
       this.showExtraFilters = fieldValue || checkboxChecked || focused;
@@ -229,9 +233,9 @@ class SearchBar extends LitElement {
   }
 
   _onFieldFocus(e) {
-    if (e.currentTarget.id === "field") {
+    if (e.currentTarget.id === 'field') {
       this.dispatchEvent(
-        new Event("search-focus", { bubbles: true, composed: true })
+        new Event('search-focus', { bubbles: true, composed: true })
       );
     }
 
@@ -239,9 +243,9 @@ class SearchBar extends LitElement {
   }
 
   _onFieldBlur(e) {
-    if (e.currentTarget.id === "field") {
+    if (e.currentTarget.id === 'field') {
       this.dispatchEvent(
-        new Event("search-blur", { bubbles: true, composed: true })
+        new Event('search-blur', { bubbles: true, composed: true })
       );
     }
 
@@ -251,15 +255,14 @@ class SearchBar extends LitElement {
 
 customElements.define(SearchBar.is, SearchBar);
 
-
 function debounce(func, delay = 0) {
   let timeoutId;
-  
+
   return function() {
     clearTimeout(timeoutId);
-    
+
     timeoutId = setTimeout(() => {
-      func.apply(this, arguments);
+      func(...arguments);
     }, delay);
-  }
-};
+  };
+}

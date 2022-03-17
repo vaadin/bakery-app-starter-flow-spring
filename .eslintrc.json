@@ -15,10 +15,7 @@
   ],
   "globals": {
     "Polymer": false,
-    "Vaadin": false,
-    "moment": false,
-    "DateUtilsMixin": false,
-    "ScrollShadowMixin": false
+    "Vaadin": false
   },
   "parserOptions": {
       "sourceType": "module"

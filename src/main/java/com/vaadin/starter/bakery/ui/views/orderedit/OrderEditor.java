@@ -24,8 +24,8 @@ import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.polymertemplate.Id;
-import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
+import com.vaadin.flow.component.littemplate.LitTemplate;
+import com.vaadin.flow.component.template.Id;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.BindingValidationStatus;
@@ -34,7 +34,6 @@ import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.validator.BeanValidator;
 import com.vaadin.flow.shared.Registration;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.PickupLocation;
@@ -54,13 +53,7 @@ import com.vaadin.starter.bakery.ui.views.storefront.events.ValueChangeEvent;
 @JsModule("./src/views/orderedit/order-editor.js")
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
-
-	public interface Model extends TemplateModel {
-		void setTotalPrice(String totalPrice);
-
-		void setStatus(String status);
-	}
+public class OrderEditor extends LitTemplate {
 
 	@Id("title")
 	private H2 title;
@@ -123,7 +116,9 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 		status.setItemLabelGenerator(createItemLabelGenerator(OrderState::getDisplayName));
 		status.setDataProvider(DataProvider.ofItems(OrderState.values()));
 		status.addValueChangeListener(
-				e -> getModel().setStatus(DataProviderUtil.convertIfNotNull(e.getValue(), OrderState::name)));
+				e -> {
+					getElement().setProperty("status", DataProviderUtil.convertIfNotNull(e.getValue(), OrderState::name));
+				});
 		binder.forField(status)
 				.withValidator(new BeanValidator(Order.class, "state"))
 				.bind(Order::getState, (o, s) -> {
@@ -190,7 +185,7 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 		metaContainer.setVisible(!isNew);
 
 		if (order.getState() != null) {
-			getModel().setStatus(order.getState().name());
+			getElement().setProperty("status", order.getState().name());
 		}
 
 		review.setEnabled(false);
@@ -212,7 +207,7 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 	}
 
 	private void setTotalPrice(int totalPrice) {
-		getModel().setTotalPrice(FormattingUtils.formatAsCurrency(totalPrice));
+		getElement().getProperty("totalPrice", FormattingUtils.formatAsCurrency(totalPrice));
 	}
 
 	public void setCurrentUser(User currentUser) {
