@@ -1,10 +1,10 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-icon/iron-icon.js';
-import '@vaadin/vaadin-text-field/src/vaadin-integer-field.js';
-import '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
-import '@vaadin/vaadin-button/src/vaadin-button.js';
-import '@vaadin/vaadin-form-layout/src/vaadin-form-layout.js';
-import '@vaadin/vaadin-combo-box/src/vaadin-combo-box.js';
+import '@vaadin/integer-field/src/vaadin-integer-field.js';
+import '@vaadin/text-field/src/vaadin-text-field.js';
+import '@vaadin/button/src/vaadin-button.js';
+import '@vaadin/form-layout/src/vaadin-form-layout.js';
+import '@vaadin/combo-box/src/vaadin-combo-box.js';
 import '../../../styles/shared-styles.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class OrderItemEditor extends PolymerElement {

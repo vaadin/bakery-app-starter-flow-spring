@@ -1,6 +1,6 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-icon/iron-icon.js';
-import '@vaadin/vaadin-icons/vaadin-icons.js';
+import '@vaadin/icons/vaadin-icons.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class OrderStatusBadge extends PolymerElement {
   static get template() {

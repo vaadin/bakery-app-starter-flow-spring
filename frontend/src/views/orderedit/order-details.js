@@ -1,10 +1,10 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-icon/iron-icon.js';
-import '@vaadin/vaadin-icons/vaadin-icons.js';
-import '@vaadin/vaadin-button/src/vaadin-button.js';
-import '@vaadin/vaadin-form-layout/src/vaadin-form-item.js';
-import '@vaadin/vaadin-form-layout/src/vaadin-form-layout.js';
-import '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
+import '@vaadin/icons/vaadin-icons.js';
+import '@vaadin/button/src/vaadin-button.js';
+import '@vaadin/form-layout/src/vaadin-form-item.js';
+import '@vaadin/form-layout/src/vaadin-form-layout.js';
+import '@vaadin/text-field/src/vaadin-text-field.js';
 import '../../components/buttons-bar.js';
 import '../../components/utils-mixin.js';
 import '../storefront/order-status-badge.js';
