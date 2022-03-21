@@ -119,7 +119,7 @@ public class DashboardView extends LitTemplate {
 		ComponentEventListener<ChartLoadEvent> chartLoadListener = (event) -> {
 			nLoaded.addAndGet(1);
 			if (nLoaded.get() == nTotal) {
-				UI.getCurrent().getPage().executeJs("this._chartsLoadedResolve()");
+				UI.getCurrent().getPage().executeJs("$0._chartsLoadedResolve()", this);
 			}
 		};
 

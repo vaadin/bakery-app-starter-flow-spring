@@ -3,7 +3,6 @@ import '@vaadin/board/vaadin-board.js';
 import '@vaadin/board/vaadin-board-row.js';
 import '@vaadin/charts/vaadin-chart.js';
 import '@vaadin/grid/src/vaadin-grid.js';
-import '../../../styles/bakery-charts-theme.js';
 import '../storefront/order-card.js';
 import './dashboard-counter-label.js';
 import { sharedStyles } from '../../../styles/shared-styles.js';

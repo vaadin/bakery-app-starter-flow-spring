@@ -1,0 +1,4 @@
+:host([theme='white']) [part~='input-field'] {
+  color: var(--lumo-secondary-text-color);
+  background-color: var(--lumo-base-color);
+}

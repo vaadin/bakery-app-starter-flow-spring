@@ -1,0 +1,45 @@
+:host {
+  width: 100%;
+  margin: auto;
+}
+
+[part~='row']:last-child [part~='header-cell'],
+[part~='header-cell']:not(:empty):not([details-cell]) {
+  padding-top: var(--lumo-space-l);
+  padding-bottom: var(--lumo-space-m);
+
+  font-size: var(--lumo-font-size-s);
+  border-bottom: 1px solid var(--lumo-shade-5pct);
+}
+
+:host(:not([theme~='no-row-borders']))
+  [part~='cell']:not([part~='details-cell']) {
+  border-top: 1px solid var(--lumo-shade-5pct);
+}
+
+/* a special grid theme for the bakery storefront view */
+:host([theme~='orders']) {
+  background: transparent;
+}
+
+:host([theme~='orders']) [part~='cell']:not(:empty):not([details-cell]) {
+  padding: 0;
+}
+
+:host([theme~='orders']) [part~='row'][selected] [part~='cell'] {
+  background: transparent !important;
+}
+
+:host([theme~='orders']) [part~='body-cell'] {
+  background: transparent;
+}
+
+@media (max-width: 600px) {
+  :host([theme~='orders']) [part~='cell'] ::slotted(vaadin-grid-cell-content) {
+    padding: 0 !important;
+  }
+}
+
+:host([theme~='dashboard']) [part~='cell'] ::slotted(vaadin-grid-cell-content) {
+  padding: 0;
+}

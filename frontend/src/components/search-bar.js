@@ -4,7 +4,6 @@ import '@vaadin/icons/vaadin-icons.js';
 import '@vaadin/button/src/vaadin-button.js';
 import '@vaadin/checkbox/src/vaadin-checkbox.js';
 import '@vaadin/text-field/src/vaadin-text-field.js';
-import '../../styles/shared-styles.js';
 
 class SearchBar extends LitElement {
   static get styles() {

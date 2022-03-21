@@ -1,0 +1,17 @@
+:host([status='new']) [part~='input-field'],
+:host([status='confirmed']) [part~='input-field'] {
+  color: var(--lumo-primary-color);
+  background: var(--lumo-primary-color-10pct);
+}
+
+:host([status='ready']) [part~='input-field'],
+:host([status='delivered']) [part~='input-field'] {
+  color: var(--lumo-success-color);
+  background: var(--lumo-success-color-10pct);
+}
+
+:host([status='problem']) [part~='input-field'],
+:host([status='cancelled']) [part~='input-field'] {
+  color: var(--lumo-error-color);
+  background: var(--lumo-error-color-10pct);
+}

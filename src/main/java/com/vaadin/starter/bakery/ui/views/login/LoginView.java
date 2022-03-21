@@ -1,6 +1,5 @@
 package com.vaadin.starter.bakery.ui.views.login;
 
-import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.login.LoginOverlay;
 import com.vaadin.flow.router.AfterNavigationEvent;
@@ -14,7 +13,6 @@ import com.vaadin.starter.bakery.ui.views.storefront.StorefrontView;
 
 @Route
 @PageTitle("###Bakery###")
-@JsModule("./styles/shared-styles.js")
 public class LoginView extends LoginOverlay
 	implements AfterNavigationObserver, BeforeEnterObserver {
 
