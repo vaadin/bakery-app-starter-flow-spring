@@ -1,6 +1,6 @@
 import { html, css, LitElement } from 'lit';
-import '@vaadin/grid/src/vaadin-grid.js';
-import '@vaadin/dialog/src/vaadin-dialog.js';
+import '@vaadin/grid';
+import '@vaadin/dialog';
 import '../../components/search-bar.js';
 import './order-card.js';
 import { sharedStyles } from '../../../styles/shared-styles.js';

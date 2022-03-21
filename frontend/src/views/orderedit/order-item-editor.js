@@ -1,10 +1,10 @@
 import { html, css, LitElement } from 'lit';
 import '@polymer/iron-icon/iron-icon.js';
-import '@vaadin/integer-field/src/vaadin-integer-field.js';
-import '@vaadin/text-field/src/vaadin-text-field.js';
-import '@vaadin/button/src/vaadin-button.js';
-import '@vaadin/form-layout/src/vaadin-form-layout.js';
-import '@vaadin/combo-box/src/vaadin-combo-box.js';
+import '@vaadin/integer-field';
+import '@vaadin/text-field';
+import '@vaadin/button';
+import '@vaadin/form-layout';
+import '@vaadin/combo-box';
 import { sharedStyles } from '../../../styles/shared-styles.js';
 
 class OrderItemEditor extends LitElement {

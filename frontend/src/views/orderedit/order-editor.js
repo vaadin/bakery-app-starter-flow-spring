@@ -1,12 +1,12 @@
 import { html, css, LitElement } from 'lit';
 import '@polymer/iron-icon/iron-icon.js';
 import '@vaadin/icons/vaadin-icons.js';
-import '@vaadin/text-field/src/vaadin-text-field.js';
-import '@vaadin/button/src/vaadin-button.js';
-import '@vaadin/form-layout/src/vaadin-form-layout.js';
-import '@vaadin/form-layout/src/vaadin-form-item.js';
-import '@vaadin/combo-box/src/vaadin-combo-box.js';
-import '@vaadin/date-picker/src/vaadin-date-picker.js';
+import '@vaadin/text-field';
+import '@vaadin/button';
+import '@vaadin/form-layout';
+import '@vaadin/form-layout';
+import '@vaadin/combo-box';
+import '@vaadin/date-picker';
 import '../../components/buttons-bar.js';
 import { ScrollShadowMixin } from '../../components/utils-mixin.js';
 import './order-item-editor.js';

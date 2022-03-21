@@ -1,8 +1,8 @@
 import { html, css, LitElement } from 'lit';
-import '@vaadin/board/vaadin-board.js';
+import '@vaadin/board';
 import '@vaadin/board/vaadin-board-row.js';
-import '@vaadin/charts/vaadin-chart.js';
-import '@vaadin/grid/src/vaadin-grid.js';
+import '@vaadin/charts';
+import '@vaadin/grid';
 import '../storefront/order-card.js';
 import './dashboard-counter-label.js';
 import { sharedStyles } from '../../../styles/shared-styles.js';

@@ -1,9 +1,9 @@
 import { html, css, LitElement } from 'lit';
 import '@polymer/iron-icon/iron-icon.js';
-import '@vaadin/icons/vaadin-icons.js';
-import '@vaadin/button/src/vaadin-button.js';
-import '@vaadin/checkbox/src/vaadin-checkbox.js';
-import '@vaadin/text-field/src/vaadin-text-field.js';
+import '@vaadin/icons/vaadin-iconset.js';
+import '@vaadin/button';
+import '@vaadin/checkbox';
+import '@vaadin/text-field';
 
 class SearchBar extends LitElement {
   static get styles() {
@@ -106,8 +106,9 @@ class SearchBar extends LitElement {
           @checked-changed="${(e) => (this.checkboxChecked = e.detail.value)}"
           @focus="${this._onFieldFocus}"
           @blur="${this._onFieldBlur}"
-          >${this.checkboxText}</vaadin-checkbox
-        >
+          .label="${this.checkboxText}"
+        ></vaadin-checkbox>
+
         <vaadin-button id="clear" class="clear-btn" theme="tertiary">
           ${this.clearText}
         </vaadin-button>
@@ -124,8 +125,8 @@ class SearchBar extends LitElement {
         @checked-changed="${(e) => (this.checkboxChecked = e.detail.value)}"
         @focus="${this._onFieldFocus}"
         @blur="${this._onFieldBlur}"
-        >${this.checkboxText}</vaadin-checkbox
-      >
+        .label="${this.checkboxText}"
+      ></vaadin-checkbox>
     `;
   }
 
@@ -257,11 +258,8 @@ customElements.define(SearchBar.is, SearchBar);
 function debounce(func, delay = 0) {
   let timeoutId;
 
-  return function() {
+  return (...args) => {
     clearTimeout(timeoutId);
-
-    timeoutId = setTimeout(() => {
-      func(...arguments);
-    }, delay);
+    timeoutId = setTimeout(() => func(...args), delay);
   };
 }
