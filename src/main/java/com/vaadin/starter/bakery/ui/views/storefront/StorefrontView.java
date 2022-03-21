@@ -77,7 +77,7 @@ public class StorefrontView extends LitTemplate
 		grid.addColumn(OrderCard.getTemplate()
 				.withProperty("orderCard", OrderCard::create)
 				.withProperty("header", order -> presenter.getHeaderByOrderId(order.getId()))
-				.withEventHandler("cardClick",
+				.withFunction("cardClick",
 						order -> UI.getCurrent().navigate(BakeryConst.PAGE_STOREFRONT + "/" + order.getId())));
 
 		getSearchBar().addFilterChangeListener(

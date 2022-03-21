@@ -3,8 +3,6 @@ package com.vaadin.starter.bakery.testbench;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.BrowserType;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.vaadin.starter.bakery.testbench.elements.ui.LoginViewElement;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
@@ -43,16 +41,6 @@ public abstract class AbstractIT<E extends TestBenchElement> extends ParallelTes
 	@Override
 	public TestBenchDriverProxy getDriver() {
 		return (TestBenchDriverProxy) super.getDriver();
-	}
-
-	@Override
-	public void setDesiredCapabilities(DesiredCapabilities desiredCapabilities) {
-		// Disable interactivity check in Firefox https://github.com/mozilla/geckodriver/#mozwebdriverclick
-		if (desiredCapabilities.getBrowserName().equals(BrowserType.FIREFOX)) {
-			desiredCapabilities.setCapability("moz:webdriverClick", false);
-		}
-
-		super.setDesiredCapabilities(desiredCapabilities);
 	}
 
 	protected LoginViewElement openLoginView() {

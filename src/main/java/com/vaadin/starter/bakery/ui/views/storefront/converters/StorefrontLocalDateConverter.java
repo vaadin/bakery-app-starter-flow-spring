@@ -1,7 +1,5 @@
 package com.vaadin.starter.bakery.ui.views.storefront.converters;
 
-import com.vaadin.flow.templatemodel.ModelEncoder;
-
 import static com.vaadin.starter.bakery.ui.utils.FormattingUtils.MONTH_AND_DAY_FORMATTER;
 import static com.vaadin.starter.bakery.ui.utils.FormattingUtils.WEEKDAY_FULLNAME_FORMATTER;
 
@@ -10,9 +8,8 @@ import java.time.LocalDate;
 /**
  * Date converter specific for the way date is displayed in storefront.
  */
-public class StorefrontLocalDateConverter implements ModelEncoder<LocalDate, StorefrontDate> {
+public class StorefrontLocalDateConverter {
 
-	@Override
 	public StorefrontDate encode(LocalDate modelValue) {
 		StorefrontDate result = null;
 		if (modelValue != null) {
@@ -22,10 +19,5 @@ public class StorefrontLocalDateConverter implements ModelEncoder<LocalDate, Sto
 			result.setDate(modelValue.toString());
 		}
 		return result;
-	}
-
-	@Override
-	public LocalDate decode(StorefrontDate storefrontDate) {
-		throw new UnsupportedOperationException();
 	}
 }

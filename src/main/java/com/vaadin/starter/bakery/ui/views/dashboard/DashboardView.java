@@ -96,7 +96,7 @@ public class DashboardView extends LitTemplate {
 		grid.addColumn(OrderCard.getTemplate()
 				.withProperty("orderCard", OrderCard::create)
 				.withProperty("header", order -> null)
-				.withEventHandler("cardClick",
+				.withFunction("cardClick",
 						order -> UI.getCurrent().navigate(BakeryConst.PAGE_STOREFRONT + "/" + order.getId())));
 
 		grid.setSelectionMode(Grid.SelectionMode.NONE);
@@ -119,7 +119,7 @@ public class DashboardView extends LitTemplate {
 		ComponentEventListener<ChartLoadEvent> chartLoadListener = (event) -> {
 			nLoaded.addAndGet(1);
 			if (nLoaded.get() == nTotal) {
-				UI.getCurrent().getPage().executeJavaScript("$0._chartsLoadedResolve()", this);
+				UI.getCurrent().getPage().executeJs("this._chartsLoadedResolve()");
 			}
 		};
 

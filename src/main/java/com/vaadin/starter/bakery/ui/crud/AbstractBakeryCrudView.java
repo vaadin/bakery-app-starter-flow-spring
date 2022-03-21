@@ -14,7 +14,6 @@ import com.vaadin.starter.bakery.backend.service.FilterableCrudService;
 import com.vaadin.starter.bakery.ui.components.SearchBar;
 import com.vaadin.starter.bakery.ui.utils.TemplateUtil;
 import com.vaadin.starter.bakery.ui.views.HasNotifications;
-import elemental.json.Json;
 
 import java.util.function.Consumer;
 
@@ -23,8 +22,6 @@ public abstract class AbstractBakeryCrudView<E extends AbstractEntity> extends C
 
     private static final String DISCARD_MESSAGE = "There are unsaved modifications to the %s. Discard changes?";
     private static final String DELETE_MESSAGE = "Are you sure you want to delete the selected %s? This action cannot be undone.";
-
-    private final Grid<E> grid;
 
     private final CrudEntityPresenter<E> entityPresenter;
 
@@ -35,7 +32,6 @@ public abstract class AbstractBakeryCrudView<E extends AbstractEntity> extends C
     public AbstractBakeryCrudView(Class<E> beanType, FilterableCrudService<E> service,
                                   Grid<E> grid, CrudEditor<E> editor, CurrentUser currentUser) {
         super(beanType, grid, editor);
-        this.grid = grid;
         grid.setSelectionMode(Grid.SelectionMode.NONE);
 
         CrudI18n crudI18n = CrudI18n.createDefault();

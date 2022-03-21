@@ -16,9 +16,6 @@ import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement.OrderEditorElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.UsersViewElement;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.Matchers.matchesPattern;
-
 public class StorefrontViewIT extends AbstractIT<StorefrontViewElement> {
 
 	@Override
@@ -48,7 +45,7 @@ public class StorefrontViewIT extends AbstractIT<StorefrontViewElement> {
 		storefrontPage.getOrderDetails().getSaveButton().click();
 
 		NotificationElement notification = $(NotificationElement.class).last();
-		Assert.assertThat(notification.getText(), containsString("was updated"));
+		Assert.assertTrue(notification.getText().contains("was updated"));
 
 		order = storefrontPage.getOrderCard(orderIndex);
 		Assert.assertNotNull(order);

@@ -13,7 +13,6 @@ import com.vaadin.flow.data.renderer.LitRenderer;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.OrderItem;
 import com.vaadin.starter.bakery.backend.data.entity.OrderSummary;
-import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
 
 /**
  * Help class to get ready to use LitRenderer for displaying order card list on the Storefront and Dashboard grids.
@@ -38,8 +37,6 @@ public class OrderCard {
 	public static OrderCard create(OrderSummary order) {
 		return new OrderCard(order);
 	}
-
-	private static OrderStateConverter stateConverter = new OrderStateConverter();
 
 	private boolean recent, inWeek;
 
@@ -78,7 +75,7 @@ public class OrderCard {
 	}
 
 	public String getState() {
-		return stateConverter.encode(order.getState());
+		return order.getState().toString();
 	}
 
 	public String getFullName() {
