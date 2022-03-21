@@ -1,15 +1,13 @@
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
-{
-  class ButtonsBarElement extends PolymerElement {
-    static get template() {
-      return html`
-    <style>
+import { html, css, LitElement } from 'lit';
+
+class ButtonsBarElement extends LitElement {
+  static get styles() {
+    return css`
       :host {
         flex: none;
         display: flex;
         flex-wrap: wrap;
-        transition: box-shadow .2s;
+        transition: box-shadow 0.2s;
         justify-content: space-between;
         padding-top: var(--lumo-space-s);
         align-items: baseline;
@@ -20,7 +18,7 @@ import { html } from '@polymer/polymer/lib/utils/html-tag.js';
         box-shadow: none;
       }
 
-      :host ::slotted([slot=info]),
+      :host ::slotted([slot='info']),
       .info {
         text-align: right;
         flex: 1;
@@ -31,24 +29,26 @@ import { html } from '@polymer/polymer/lib/utils/html-tag.js';
       }
 
       @media (max-width: 600px) {
-        :host ::slotted([slot=info]) {
+        :host ::slotted([slot='info']) {
           order: -1;
           min-width: 100%;
           flex-basis: 100%;
         }
       }
-    </style>
-
-    <slot name="left"></slot>
-    <slot name="info"><div class="info"></div></slot>
-    <slot name="right"></slot>
-`;
-    }
-
-    static get is() {
-      return 'buttons-bar';
-    }
+    `;
   }
 
-  window.customElements.define(ButtonsBarElement.is, ButtonsBarElement);
+  render() {
+    return html`
+      <slot name="left"></slot>
+      <slot name="info"><div class="info"></div></slot>
+      <slot name="right"></slot>
+    `;
+  }
+
+  static get is() {
+    return 'buttons-bar';
+  }
 }
+
+customElements.define(ButtonsBarElement.is, ButtonsBarElement);

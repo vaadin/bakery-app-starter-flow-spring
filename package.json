@@ -2,7 +2,6 @@
   "name": "no-name",
   "license": "UNLICENSED",
   "dependencies": {
-    "@polymer/iron-ajax": "3.0.1",
     "@polymer/iron-icon": "3.0.1",
     "@polymer/iron-iconset-svg": "3.0.1",
     "@polymer/iron-list": "3.1.0",
@@ -148,7 +147,6 @@
   },
   "vaadin": {
     "dependencies": {
-      "@polymer/iron-ajax": "3.0.1",
       "@polymer/iron-icon": "3.0.1",
       "@polymer/iron-iconset-svg": "3.0.1",
       "@polymer/iron-list": "3.1.0",
@@ -287,7 +285,7 @@
       "workbox-precaching": "6.5.0",
       "workbox-webpack-plugin": "6.5.0"
     },
-    "hash": "4caf2dca709df50f0a052bfeda5c819f81ab69bd563f3d422d17bf3ca71f8480"
+    "hash": "50f198761303325b5ec897d34120a7e1d7d04fc97ba9d5defa8d4339839d3f66"
   },
   "overrides": {
     "@vaadin/bundles": "$@vaadin/bundles",
@@ -401,7 +399,6 @@
     "@vaadin/vaadin-grid-pro": "$@vaadin/vaadin-grid-pro",
     "@vaadin/vaadin-rich-text-editor": "$@vaadin/vaadin-rich-text-editor",
     "@polymer/polymer": "$@polymer/polymer",
-    "@polymer/iron-ajax": "$@polymer/iron-ajax",
     "construct-style-sheets-polyfill": "$construct-style-sheets-polyfill",
     "@vaadin/common-frontend": "$@vaadin/common-frontend",
     "lit": "$lit",

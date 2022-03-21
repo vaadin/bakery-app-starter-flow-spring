@@ -159,4 +159,4 @@ class OrderEditor extends ScrollShadowMixin(LitElement) {
   }
 }
 
-window.customElements.define(OrderEditor.is, OrderEditor);
+customElements.define(OrderEditor.is, OrderEditor);

@@ -93,4 +93,4 @@ class OrderItemEditor extends LitElement {
   }
 }
 
-window.customElements.define(OrderItemEditor.is, OrderItemEditor);
+customElements.define(OrderItemEditor.is, OrderItemEditor);

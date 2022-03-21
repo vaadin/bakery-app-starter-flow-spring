@@ -1,11 +1,10 @@
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, css, LitElement } from 'lit';
 import '@polymer/iron-icon/iron-icon.js';
 import '@vaadin/icons/vaadin-icons.js';
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
-class OrderStatusBadge extends PolymerElement {
-  static get template() {
-    return html`
-    <style>
+
+class OrderStatusBadge extends LitElement {
+  static get styles() {
+    return css`
       #wrapper {
         display: inline-block;
         border-radius: var(--lumo-border-radius);
@@ -16,27 +15,27 @@ class OrderStatusBadge extends PolymerElement {
         text-transform: capitalize;
       }
 
-      :host([status="ready"]) #wrapper {
+      :host([status='ready']) #wrapper {
         color: var(--lumo-success-color);
         background: var(--lumo-success-color-10pct);
       }
 
-      :host([status="new"]) #wrapper {
+      :host([status='new']) #wrapper {
         color: var(--lumo-primary-color);
         background: var(--lumo-primary-color-10pct);
       }
 
-      :host([status="problem"]) #wrapper {
+      :host([status='problem']) #wrapper {
         color: var(--lumo-error-color);
         background: var(--lumo-error-color-10pct);
       }
 
-      :host([status="delivered"]) #wrapper {
+      :host([status='delivered']) #wrapper {
         padding: 2px 8px;
       }
 
-      :host([status="delivered"]) #wrapper span,
-      :host(:not([status="delivered"])) #wrapper iron-icon {
+      :host([status='delivered']) #wrapper span,
+      :host(:not([status='delivered'])) #wrapper iron-icon {
         display: none;
       }
 
@@ -51,13 +50,16 @@ class OrderStatusBadge extends PolymerElement {
       :host([small]) iron-icon {
         --iron-icon-width: 8px;
       }
-    </style>
+    `;
+  }
 
-    <div id="wrapper">
-      <span>[[status]]</span>
-      <iron-icon icon="vaadin:check"></iron-icon>
-    </div>
-`;
+  render() {
+    return html`
+      <div id="wrapper">
+        <span>${this.__toLowerCase(this.status)}</span>
+        <iron-icon icon="vaadin:check"></iron-icon>
+      </div>
+    `;
   }
 
   static get is() {
@@ -68,15 +70,18 @@ class OrderStatusBadge extends PolymerElement {
     return {
       status: {
         type: String,
-        observer: '_onStatusChanged',
-        reflectToAttribute: true
-      },
+        reflect: true,
+        converter: {
+          fromAttribute: (value) => value.toUpperCase(),
+          toAttribute: (value) => value.toLowerCase()
+        }
+      }
     };
   }
 
-  _onStatusChanged(current) {
-    this.status = current && current.toLowerCase();
+  __toLowerCase(status) {
+    return status ? status.toLowerCase() : '';
   }
 }
 
-window.customElements.define(OrderStatusBadge.is, OrderStatusBadge);
+customElements.define(OrderStatusBadge.is, OrderStatusBadge);

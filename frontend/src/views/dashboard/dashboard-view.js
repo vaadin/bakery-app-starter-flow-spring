@@ -151,4 +151,4 @@ class DashboardView extends LitElement {
   }
 }
 
-window.customElements.define(DashboardView.is, DashboardView);
+customElements.define(DashboardView.is, DashboardView);

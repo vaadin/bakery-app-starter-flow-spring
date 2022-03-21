@@ -83,4 +83,4 @@ class DashboardCounterLabel extends LitElement {
   }
 }
 
-window.customElements.define(DashboardCounterLabel.is, DashboardCounterLabel);
+customElements.define(DashboardCounterLabel.is, DashboardCounterLabel);

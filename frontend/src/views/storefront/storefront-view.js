@@ -49,4 +49,4 @@ class StorefrontView extends LitElement {
   }
 }
 
-window.customElements.define(StorefrontView.is, StorefrontView);
+customElements.define(StorefrontView.is, StorefrontView);

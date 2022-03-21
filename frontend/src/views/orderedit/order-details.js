@@ -224,7 +224,7 @@ class OrderDetails extends ScrollShadowMixin(LitElement) {
                     <span class="bold">${event.createdBy.firstName}</span>
                     <span class="secondary">${event.formattedTimestamp}</span>
                     <order-status-badge
-                      status="${event.newState}"
+                      .status="${event.newState}"
                       small=""
                     ></order-status-badge>
                   </div>
@@ -334,4 +334,4 @@ class OrderDetails extends ScrollShadowMixin(LitElement) {
   }
 }
 
-window.customElements.define(OrderDetails.is, OrderDetails);
+customElements.define(OrderDetails.is, OrderDetails);
