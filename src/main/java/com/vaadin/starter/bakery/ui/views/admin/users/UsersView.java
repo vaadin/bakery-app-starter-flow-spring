@@ -66,7 +66,7 @@ public class UsersView extends AbstractBakeryCrudView<User> {
 
 		ListDataProvider<String> roleProvider = DataProvider.ofItems(Role.getAllRoles());
 		role.setItemLabelGenerator(s -> s != null ? s : "");
-		role.setDataProvider(roleProvider);
+		role.setItems(roleProvider);
 
 		binder.bind(first, "firstName");
 		binder.bind(last, "lastName");

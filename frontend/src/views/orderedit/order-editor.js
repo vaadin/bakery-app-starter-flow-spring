@@ -5,7 +5,7 @@ import '@vaadin/button';
 import '@vaadin/combo-box';
 import '@vaadin/date-picker';
 import '@vaadin/form-layout';
-import '@vaadin/form-layout';
+import '@vaadin/form-layout/vaadin-form-item.js';
 import '@vaadin/icon';
 import '@vaadin/icons';
 import '../../components/buttons-bar.js';
@@ -140,15 +140,17 @@ class OrderEditor extends ScrollShadowMixin(LitElement) {
   constructor() {
     super();
 
-    // Not using attributes since Designer does not suppor single-quote attributes
+    /** @type {{ minWidth: string | 0; columns: number; labelsPosition: "top" | "aside"; }[]} */
     this.form1responsiveSteps = [
       { columns: 1, labelsPosition: 'top' },
       { minWidth: '600px', columns: 4, labelsPosition: 'top' },
     ];
+    /** @type {{ minWidth: string | 0; columns: number; labelsPosition: "top" | "aside"; }[]} */
     this.form2responsiveSteps = [
       { columns: 1, labelsPosition: 'top' },
       { minWidth: '360px', columns: 2, labelsPosition: 'top' },
     ];
+    /** @type {{ minWidth: string | 0; columns: number; labelsPosition: "top" | "aside"; }[]} */
     this.form3responsiveSteps = [
       { columns: 1, labelsPosition: 'top' },
       { minWidth: '500px', columns: 3, labelsPosition: 'top' },

@@ -114,7 +114,7 @@ public class OrderEditor extends LitTemplate {
 		review.addClickListener(e -> fireEvent(new ReviewEvent(this)));
 
 		status.setItemLabelGenerator(createItemLabelGenerator(OrderState::getDisplayName));
-		status.setDataProvider(DataProvider.ofItems(OrderState.values()));
+		status.setItems(DataProvider.ofItems(OrderState.values()));
 		status.addValueChangeListener(
 				e -> {
 					getElement().setProperty("status", DataProviderUtil.convertIfNotNull(e.getValue(), OrderState::name));
@@ -135,7 +135,7 @@ public class OrderEditor extends LitTemplate {
 		binder.bind(dueTime, "dueTime");
 
 		pickupLocation.setItemLabelGenerator(createItemLabelGenerator(PickupLocation::getName));
-		pickupLocation.setDataProvider(locationDataProvider);
+		pickupLocation.setItems(locationDataProvider);
 		binder.bind(pickupLocation, "pickupLocation");
 		pickupLocation.setRequired(false);
 

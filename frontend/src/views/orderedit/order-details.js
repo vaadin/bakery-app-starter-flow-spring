@@ -4,7 +4,7 @@ import { when } from 'lit/directives/when.js';
 import '@vaadin/icons/vaadin-icons.js';
 import '@vaadin/button';
 import '@vaadin/form-layout';
-import '@vaadin/form-layout';
+import '@vaadin/form-layout/vaadin-form-item.js';
 import '@vaadin/icon';
 import '@vaadin/icons';
 import '@vaadin/text-field';
@@ -314,16 +314,17 @@ class OrderDetails extends ScrollShadowMixin(LitElement) {
   constructor() {
     super();
 
+    /** @type {{ minWidth: string | 0; columns: number; labelsPosition: "top" | "aside"; }[]} */
     this.form1responsiveSteps = this.form3responsiveSteps = [
       { columns: 1, labelsPosition: 'top' },
       { minWidth: '600px', columns: 4, labelsPosition: 'top' },
     ];
-
+    /** @type {{ minWidth: string | 0; columns: number; labelsPosition: "top" | "aside"; }[]} */
     this.form2responsiveSteps = [
       { columns: 1 },
       { minWidth: '180px', columns: 2 },
     ];
-
+    /** @type {{ minWidth: string | 0; columns: number; labelsPosition: "top" | "aside"; }[]} */
     this.form4responsiveSteps = [{ columns: 1, labelsPosition: 'top' }];
   }
 

@@ -56,7 +56,7 @@ public class OrderItemEditor extends LitTemplate implements HasValueAndElement<C
 	public OrderItemEditor(DataProvider<Product, String> productDataProvider) {
 		this.fieldSupport =  new AbstractFieldSupport<>(this, null,
 				Objects::equals, c ->  {});
-		products.setDataProvider(productDataProvider);
+		products.setItems(productDataProvider);
 		products.addValueChangeListener(e -> {
 			setPrice();
 			fireEvent(new ProductChangeEvent(this, e.getValue()));

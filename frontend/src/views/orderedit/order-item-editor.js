@@ -86,7 +86,9 @@ class OrderItemEditor extends LitElement {
   constructor() {
     super();
 
+    /** @type {{ minWidth: string | 0; columns: number; labelsPosition: "top" | "aside"; }[]} */
     this.form1responsiveSteps = [{ columns: 24 }];
+    /** @type {{ minWidth: string | 0; columns: number; labelsPosition: "top" | "aside"; }[]} */
     this.form2responsiveSteps = [
       { columns: 8, labelsPosition: 'top' },
       { minWidth: '500px', columns: 16, labelsPosition: 'top' },
