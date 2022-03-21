@@ -1,6 +1,6 @@
 import { html, css, LitElement } from 'lit';
-import '@polymer/iron-icon/iron-icon.js';
-import '@vaadin/icons/vaadin-icons.js';
+import '@vaadin/icon';
+import '@vaadin/icons';
 
 class OrderStatusBadge extends LitElement {
   static get styles() {
@@ -35,7 +35,7 @@ class OrderStatusBadge extends LitElement {
       }
 
       :host([status='delivered']) #wrapper span,
-      :host(:not([status='delivered'])) #wrapper iron-icon {
+      :host(:not([status='delivered'])) #wrapper vaadin-icon {
         display: none;
       }
 
@@ -43,12 +43,12 @@ class OrderStatusBadge extends LitElement {
         padding: 0 5px;
       }
 
-      iron-icon {
-        --iron-icon-width: 12px;
+      vaadin-icon {
+        width: 12px;
       }
 
-      :host([small]) iron-icon {
-        --iron-icon-width: 8px;
+      :host([small]) vaadin-icon {
+        width: 8px;
       }
     `;
   }
@@ -57,7 +57,7 @@ class OrderStatusBadge extends LitElement {
     return html`
       <div id="wrapper">
         <span>${this.__toLowerCase(this.status)}</span>
-        <iron-icon icon="vaadin:check"></iron-icon>
+        <vaadin-icon icon="vaadin:check"></vaadin-icon>
       </div>
     `;
   }

@@ -1,8 +1,8 @@
 import { html, css, LitElement } from 'lit';
-import '@polymer/iron-icon/iron-icon.js';
-import '@vaadin/icons/vaadin-iconset.js';
 import '@vaadin/button';
 import '@vaadin/checkbox';
+import '@vaadin/icon';
+import '@vaadin/icons';
 import '@vaadin/text-field';
 
 class SearchBar extends LitElement {
@@ -97,7 +97,7 @@ class SearchBar extends LitElement {
           @blur="${this._onFieldBlur}"
           theme="white"
         >
-          <iron-icon icon="${this.fieldIcon}" slot="prefix"></iron-icon>
+          <vaadin-icon icon="${this.fieldIcon}" slot="prefix"></vaadin-icon>
         </vaadin-text-field>
 
         <vaadin-checkbox
@@ -114,7 +114,7 @@ class SearchBar extends LitElement {
         </vaadin-button>
 
         <vaadin-button id="action" class="action-btn" theme="primary">
-          <iron-icon icon="${this.buttonIcon}" slot="prefix"></iron-icon>
+          <vaadin-icon icon="${this.buttonIcon}" slot="prefix"></vaadin-icon>
           ${this.buttonText}
         </vaadin-button>
       </div>

@@ -1,10 +1,11 @@
 import { html, css, LitElement } from 'lit';
-import '@polymer/iron-icon/iron-icon.js';
+import '@vaadin/button';
+import '@vaadin/combo-box';
+import '@vaadin/form-layout';
+import '@vaadin/icon';
+import '@vaadin/icons';
 import '@vaadin/integer-field';
 import '@vaadin/text-field';
-import '@vaadin/button';
-import '@vaadin/form-layout';
-import '@vaadin/combo-box';
 import { sharedStyles } from '../../../styles/shared-styles.js';
 
 class OrderItemEditor extends LitElement {
@@ -72,7 +73,7 @@ class OrderItemEditor extends LitElement {
         </vaadin-form-layout>
 
         <vaadin-button class="delete self-start" id="delete" colspan="2">
-          <iron-icon icon="vaadin:close-small"></iron-icon>
+          <vaadin-icon icon="vaadin:close-small"></vaadin-icon>
         </vaadin-button>
       </vaadin-form-layout>
     `;

@@ -1,11 +1,12 @@
 import { html, css, LitElement } from 'lit';
 import { map } from 'lit/directives/map.js';
 import { when } from 'lit/directives/when.js';
-import '@polymer/iron-icon/iron-icon.js';
 import '@vaadin/icons/vaadin-icons.js';
 import '@vaadin/button';
 import '@vaadin/form-layout';
 import '@vaadin/form-layout';
+import '@vaadin/icon';
+import '@vaadin/icons';
 import '@vaadin/text-field';
 import '../../components/buttons-bar.js';
 import { ScrollShadowMixin } from '../../components/utils-mixin.js';
@@ -270,7 +271,7 @@ class OrderDetails extends ScrollShadowMixin(LitElement) {
           theme="primary success"
           .hidden="${!this.review}"
         >
-          <iron-icon icon="vaadin:check" slot="suffix"></iron-icon>
+          <vaadin-icon icon="vaadin:check" slot="suffix"></vaadin-icon>
           Place order
         </vaadin-button>
         <vaadin-button
@@ -280,7 +281,7 @@ class OrderDetails extends ScrollShadowMixin(LitElement) {
           .hidden="${this.review}"
         >
           Edit order
-          <iron-icon icon="vaadin:edit" slot="suffix"></iron-icon>
+          <vaadin-icon icon="vaadin:edit" slot="suffix"></vaadin-icon>
         </vaadin-button>
       </buttons-bar>
     `;

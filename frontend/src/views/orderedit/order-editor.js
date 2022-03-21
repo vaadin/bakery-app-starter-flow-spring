@@ -1,12 +1,13 @@
 import { html, css, LitElement } from 'lit';
-import '@polymer/iron-icon/iron-icon.js';
 import '@vaadin/icons/vaadin-icons.js';
 import '@vaadin/text-field';
 import '@vaadin/button';
-import '@vaadin/form-layout';
-import '@vaadin/form-layout';
 import '@vaadin/combo-box';
 import '@vaadin/date-picker';
+import '@vaadin/form-layout';
+import '@vaadin/form-layout';
+import '@vaadin/icon';
+import '@vaadin/icons';
 import '../../components/buttons-bar.js';
 import { ScrollShadowMixin } from '../../components/utils-mixin.js';
 import './order-item-editor.js';
@@ -67,10 +68,10 @@ class OrderEditor extends ScrollShadowMixin(LitElement) {
           >
             <vaadin-date-picker label="Due" id="dueDate"> </vaadin-date-picker>
             <vaadin-combo-box id="dueTime">
-              <iron-icon slot="prefix" icon="vaadin:clock"></iron-icon>
+              <vaadin-icon slot="prefix" icon="vaadin:clock"></vaadin-icon>
             </vaadin-combo-box>
             <vaadin-combo-box id="pickupLocation" colspan="2">
-              <iron-icon slot="prefix" icon="vaadin:at"></iron-icon>
+              <vaadin-icon slot="prefix" icon="vaadin:at"></vaadin-icon>
             </vaadin-combo-box>
           </vaadin-form-layout>
 
@@ -80,11 +81,11 @@ class OrderEditor extends ScrollShadowMixin(LitElement) {
             .responsiveSteps="${this.form3responsiveSteps}"
           >
             <vaadin-text-field id="customerName" label="Customer" colspan="2">
-              <iron-icon slot="prefix" icon="vaadin:user"></iron-icon>
+              <vaadin-icon slot="prefix" icon="vaadin:user"></vaadin-icon>
             </vaadin-text-field>
 
             <vaadin-text-field id="customerNumber" label="Phone number">
-              <iron-icon slot="prefix" icon="vaadin:phone"></iron-icon>
+              <vaadin-icon slot="prefix" icon="vaadin:phone"></vaadin-icon>
             </vaadin-text-field>
 
             <vaadin-text-field
@@ -106,7 +107,7 @@ class OrderEditor extends ScrollShadowMixin(LitElement) {
         <div slot="info" class="total">Total ${this.totalPrice}</div>
         <vaadin-button slot="right" id="review" theme="primary">
           Review order
-          <iron-icon icon="vaadin:arrow-right" slot="suffix"></iron-icon>
+          <vaadin-icon icon="vaadin:arrow-right" slot="suffix"></vaadin-icon>
         </vaadin-button>
       </buttons-bar>
     `;
