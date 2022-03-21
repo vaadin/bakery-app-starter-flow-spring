@@ -1,28 +1,32 @@
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, css, LitElement } from 'lit';
 import '@vaadin/grid/src/vaadin-grid.js';
 import '@vaadin/dialog/src/vaadin-dialog.js';
 import '../../components/search-bar.js';
-import '../../components/utils-mixin.js';
 import './order-card.js';
-import '../../../styles/shared-styles.js';
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
-class StorefrontView extends PolymerElement {
-  static get template() {
+import { sharedStyles } from '../../../styles/shared-styles.js';
+
+class StorefrontView extends LitElement {
+  static get styles() {
+    return [
+      sharedStyles,
+      css`
+        :host {
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+        }
+      `,
+    ];
+  }
+
+  render() {
     return html`
-    <style include="shared-styles">
-      :host {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-      }
-    </style>
+      <search-bar id="search" show-checkbox=""></search-bar>
 
-    <search-bar id="search" show-checkbox=""></search-bar>
+      <vaadin-grid id="grid" theme="orders no-row-borders"></vaadin-grid>
 
-    <vaadin-grid id="grid" theme="orders no-row-borders"></vaadin-grid>
-
-    <vaadin-dialog id="dialog" theme="orders"></vaadin-dialog>
-`;
+      <vaadin-dialog id="dialog" theme="orders"></vaadin-dialog>
+    `;
   }
 
   static get is() {

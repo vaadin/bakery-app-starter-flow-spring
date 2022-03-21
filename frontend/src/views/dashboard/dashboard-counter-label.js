@@ -1,9 +1,8 @@
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
-class DashboardCounterLabel extends PolymerElement {
-  static get template() {
-    return html`
-    <style>
+import { html, css, LitElement } from 'lit';
+
+class DashboardCounterLabel extends LitElement {
+  static get styles() {
+    return css`
       :host {
         position: relative;
         text-align: center;
@@ -59,21 +58,24 @@ class DashboardCounterLabel extends PolymerElement {
         height: 120px;
         width: 100%;
       }
-    </style>
+    `;
+  }
 
-    <div class="chart-wrapper">
-      <slot></slot>
-    </div>
-
-    <div class="content">
-      <div class="count-wrapper">
-        <span id="count" class="count-digit">[[num]]</span>
+  render() {
+    return html`
+      <div class="chart-wrapper">
+        <slot></slot>
       </div>
 
-      <h4 id="title">[[title]]</h4>
-      <div id="subtitle" class="subtitle">[[subtitle]]</div>
-    </div>
-`;
+      <div class="content">
+        <div class="count-wrapper">
+          <span id="count" class="count-digit"></span>
+        </div>
+
+        <h4 id="title"></h4>
+        <div id="subtitle" class="subtitle"></div>
+      </div>
+    `;
   }
 
   static get is() {

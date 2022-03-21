@@ -5,14 +5,13 @@ import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.polymertemplate.Id;
-import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
-import com.vaadin.flow.templatemodel.TemplateModel;
+import com.vaadin.flow.component.littemplate.LitTemplate;
+import com.vaadin.flow.component.template.Id;
 import com.vaadin.starter.bakery.ui.views.storefront.beans.OrdersCountData;
 
 @Tag("dashboard-counter-label")
 @JsModule("./src/views/dashboard/dashboard-counter-label.js")
-public class DashboardCounterLabel extends PolymerTemplate<TemplateModel> {
+public class DashboardCounterLabel extends LitTemplate {
 
 	@Id("title")
 	private H4 title;

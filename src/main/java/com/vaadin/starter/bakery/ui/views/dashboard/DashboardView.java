@@ -30,11 +30,10 @@ import com.vaadin.flow.component.charts.model.PlotOptionsPie;
 import com.vaadin.flow.component.charts.model.PlotOptionsSolidgauge;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.polymertemplate.Id;
-import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
+import com.vaadin.flow.component.littemplate.LitTemplate;
+import com.vaadin.flow.component.template.Id;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.backend.data.DashboardData;
 import com.vaadin.starter.bakery.backend.data.DeliveryStats;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
@@ -53,7 +52,7 @@ import com.vaadin.starter.bakery.ui.views.storefront.beans.OrdersCountDataWithCh
 @Route(value = BakeryConst.PAGE_DASHBOARD, layout = MainView.class)
 @PageTitle(BakeryConst.TITLE_DASHBOARD)
 @PermitAll
-public class DashboardView extends PolymerTemplate<TemplateModel> {
+public class DashboardView extends LitTemplate {
 
 	private static final String[] MONTH_LABELS = new String[] {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
 			"Aug", "Sep", "Oct", "Nov", "Dec"};

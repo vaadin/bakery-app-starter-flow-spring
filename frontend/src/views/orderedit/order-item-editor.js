@@ -5,36 +5,39 @@ import '@vaadin/text-field/src/vaadin-text-field.js';
 import '@vaadin/button/src/vaadin-button.js';
 import '@vaadin/form-layout/src/vaadin-form-layout.js';
 import '@vaadin/combo-box/src/vaadin-combo-box.js';
-import '../../../styles/shared-styles.js';
+import { sharedStyles } from '../../../styles/shared-styles.js';
 
 class OrderItemEditor extends LitElement {
   static get styles() {
-    return css`
-      .product {
-        margin-bottom: 1em;
-      }
-
-      .delete {
-        min-width: 2em;
-        padding: 0;
-      }
-
-      @media (max-width: 700px) {
-        vaadin-form-layout {
-          --vaadin-form-layout-column-spacing: 1em;
+    return [
+      sharedStyles,
+      css`
+        .product {
+          margin-bottom: 1em;
         }
-      }
 
-      .money {
-        text-align: right;
-        line-height: 2.5em;
-      }
+        .delete {
+          min-width: 2em;
+          padding: 0;
+        }
 
-      /* Workaround for vertically distorted elements inside a flex container in IE11 */
-      .self-start {
-        align-self: flex-start;
-      }
-    `;
+        @media (max-width: 700px) {
+          vaadin-form-layout {
+            --vaadin-form-layout-column-spacing: 1em;
+          }
+        }
+
+        .money {
+          text-align: right;
+          line-height: 2.5em;
+        }
+
+        /* Workaround for vertically distorted elements inside a flex container in IE11 */
+        .self-start {
+          align-self: flex-start;
+        }
+      `,
+    ];
   }
 
   render() {
