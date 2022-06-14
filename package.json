@@ -138,7 +138,7 @@
     "loader-utils": "2.0.0",
     "typescript": "4.5.3",
     "webpack": "4.46.0",
-    "webpack-cli": "4.9.2",
+    "webpack-cli": "^4.10.0",
     "webpack-dev-server": "4.7.4",
     "webpack-merge": "4.2.2",
     "workbox-core": "6.5.0",
@@ -285,7 +285,7 @@
       "workbox-precaching": "6.5.0",
       "workbox-webpack-plugin": "6.5.0"
     },
-    "hash": "50f198761303325b5ec897d34120a7e1d7d04fc97ba9d5defa8d4339839d3f66"
+    "hash": "07d6b4f8e085da9e48b10f753c8a9e63b62d35980103fa5638ecc348b18c0691"
   },
   "overrides": {
     "@vaadin/bundles": "$@vaadin/bundles",
