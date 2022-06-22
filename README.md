@@ -1,6 +1,6 @@
 # Running the Project in Development Mode
 
-`mvn spring-boot:run`
+`mvn spring-boot:run` or just `mvn`
 
 Wait for the application to start
 
@@ -13,55 +13,29 @@ Note that when running in development mode, the application will not work in IE1
 
 # Running Integration Tests and Linter
 
-Integration tests are implemented using TestBench. The tests take tens of minutes to run and are therefore included in a separate profile. We recommend running tests with a production build to minimize the chance of development time toolchains affecting test stability. To run the tests, execute
+Integration tests are implemented using TestBench. The tests take a couple of minutes to run and are therefore included in a separate profile. We recommend running tests with a production build to minimize the chance of development time toolchains affecting test stability. To run the tests, execute
 
 `mvn verify -Pit,production`
 
 and make sure you have a valid TestBench license installed.
 
-Profile `it` adds the following parameters to run integration tests:
+Profile `it` adds the following parameter to run integration tests:
 ```sh
--Dwebdriver.chrome.driver=path_to_driver
 -Dcom.vaadin.testbench.Parameters.runLocally=chrome
 ```
 
 if you would like to run a separate test make sure you have added these parameters to VM Options of JUnit run configuration
 
-Run linter to check frontend code by adding `-DrunLint` to build/run command.
-
 # Automatic Restart and Live Reload
 
-To activate spring-boot-devtools is needed to:
-1. Add spring-boot-devtools dependency
-```xml
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-devtools</artifactId>
-    <optional>true</optional>
-    <scope>runtime</scope>
-</dependency>
-```
-2. Fork the process used to run the application by changing spring-boot-maven-plugin configuration
-```xml
-<plugin>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-maven-plugin</artifactId>
-    <version>${spring-boot.version}</version>
-    <configuration>
-        <fork>true</fork>
-    </configuration>
-</plugin>
-```
-3. Optionally you might want to avoid the data generator to be run on each single reload, therefore, make H2 database store entities in file-system instead of in memory by adding the following lines to the `src/main/resources/application.properties`
+1. Vaadin Dev Tools interacts `spring-boot-devtools` and is able to automatically reload the browser when code is changed.
+
+2. Optionally you might want to avoid the data generator to be run on each single reload, therefore, make H2 database store entities in file-system instead of in memory by adding the following lines to the `src/main/resources/application.properties`
 ```properties
 spring.datasource.url=jdbc:h2:file:~/bakery-test-data
 spring.jpa.hibernate.ddl-auto=update
 ```
-To trigger the restart it is needed to update classpath.
-In Eclipse it can be done automatically after save modified file.
-In IntelliJ IDEA can be done manually `Build -> Build Project`
 
-Live reload is supported and browser extensions can be found at http://livereload.com/extensions/.
 
 # Running the Project in Production Mode
 
@@ -69,21 +43,12 @@ Live reload is supported and browser extensions can be found at http://livereloa
 
 The default mode when the application is built or started is 'development'. The 'production' mode is turned on by enabling the `production` profile when building or starting the app.
 
-In the 'production' mode all frontend resources of the application are passed through the `polymer build` command, which minifies them and outputs two versions: for ES5- and ES6-supporting browsers. That adds extra time to the build process, but reduces the total download size for clients and allows running the app in browsers that do not support ES6 (e.g. in Internet Explorer 11).
-
-Note that if you switch between running in production mode and development mode, you need to do
-```sh
-mvn clean
-```
-before running in the other mode.
-
 # Running in Eclipse or IntelliJ
 As both IDEs support running Spring Boot applications you just have to import the project and select `com.vaadin.starter.bakery.Application` as main class if not done automatically. Using an IDE will also allow you to speed up development even more. Just check https://vaadin.com/blog/developing-without-server-restarts.
 
-## IntelliJ < 2018
-Unfortunately, up to IntelliJ 2017 dependencies scoped as `provided` in the Maven POM will not be loaded on startup. As a workaround you will have to remove the scope definition of `spring-boot-starter-tomcat` and `javax.servlet-api` from the pom.xml.
-
 # Running Scalability Tests
+
+*NOTE* SCALABILITY TESTS ARE BROKEN
 
 The Bakery App Starter includes scalability tests. Once you have deployed a production build of Bakery you can run them to check how the app behaves under load. The scalability tests can be run completely on your local machine, but you might as well want to run locally only the test agents while the Bakery app under test is deployed to an environment that is close to your production.
 
@@ -112,9 +77,12 @@ In order to run the scalability tests locally:
 Note: If you run Bakery with an in-memory database (like H2, which is the default), it will logically use more memory than when using an external database (like PostgreSQL). It is recommend to run scalability tests for Bakery only after you have configured it to use an external database.
 
 # License
-A paid Pro or Prime subscription is required for creating a new software project from this starter. After its creation, results can be used, developed and distributed freely, but licenses for the used commercial components are required during development. The starter or its parts cannot be redistributed as a code example or template.
+This is free and unencumbered software released into the public domain.
 
 For full terms, see LICENSE
+
+*NOTE* This project uses licensed components listed in the next section, thus licenses for those components are required during development.
+
 ## Pro components
 Pro components used in the starter are :
  - [Vaadin Crud](https://vaadin.com/components/vaadin-crud)
