@@ -28,8 +28,8 @@
         <selenium.version>4.2.1</selenium.version>
 
         <!-- Plugins -->
-        <gatling.version>3.0.2</gatling.version>
-        <gatling-plugin.version>3.0.1</gatling-plugin.version>
+        <gatling.version>3.3.0</gatling.version>
+        <gatling-plugin.version>3.1.2</gatling-plugin.version>
         <scala-maven-plugin.version>3.4.4</scala-maven-plugin.version>
     </properties>
 
@@ -120,6 +120,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
