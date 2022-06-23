@@ -1,32 +1,14 @@
-name: Flow Validation
+name: Verify
 on:
   push:
-    branches: [v23, v14, gh-actions]
+    branches: [v23, v14]
   workflow_dispatch:
-  pull_request_target:
-    types: [opened, synchronize, reopened]
+  pull_request:
 jobs:
-  build:
-    timeout-minutes: 20
+  verify:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions-cool/check-user-permission@v2
-        id: check
-        with:
-          require: 'write'
-      - name: Check Secrets
-        run: |
-          if [ "${{ steps.check.outputs.require-result }}" != "true" ]; then
-            echo "::error::!! NO USER PERMISSIONS FOR RUNNING VALIDATION: Check if the PR is from an external contributor !!"
-            exit 1
-          fi
-          if [ -z "${{secrets.TB_LICENSE}}" ]; then
-            echo "::error::!! ERROR NO TB_LICENSE: Check that this repo has a valid TB_LICENSE secret !!"
-            exit 1
-          fi
       - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
@@ -36,7 +18,8 @@ jobs:
           distribution: 'temurin'
       - name: Set TB License
         run: |
-          TBL=${{secrets.TB_LICENSE}}
+          TBL=${{ secrets.TB_LICENSE }}
+          [ -z "$TBL" ] && echo "No TB license provided" && exit 1
           mkdir -p ~/.vaadin/
           echo '{"username":"'`echo $TBL | cut -d / -f1`'","proKey":"'`echo $TBL | cut -d / -f2`'"}' > ~/.vaadin/proKey          
       - uses: actions/cache@v3
@@ -55,5 +38,3 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action@v1
         with:
           files: "**/target/*-reports/TEST*.xml"
-          check_run_annotations: all tests, skipped tests
-          # check_run_annotations_branch: master, 9.0
