@@ -50,7 +50,7 @@ jobs:
       - uses: nanasess/setup-chromedriver@master          
       - name: Verify
         run: |
-          mvn -B -V -ntp verify -Pit,production
+          mvn -B -V -ntp verify -Dheadless -Pit,production
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
         with:

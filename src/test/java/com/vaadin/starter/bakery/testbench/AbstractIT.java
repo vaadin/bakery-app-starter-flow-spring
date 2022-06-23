@@ -3,6 +3,8 @@ package com.vaadin.starter.bakery.testbench;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 import com.vaadin.starter.bakery.testbench.elements.ui.LoginViewElement;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
@@ -27,7 +29,14 @@ public abstract class AbstractIT<E extends TestBenchElement> extends ParallelTes
 
 	@Override
 	public void setup() throws Exception {
-		super.setup();
+		if ("chrome".equals(getDesiredCapabilities().getBrowserName())
+				&& Boolean.getBoolean("headless")) {
+			ChromeOptions chromeOptions = new ChromeOptions();
+			chromeOptions.setHeadless(true);
+			setDriver(new ChromeDriver(chromeOptions));
+		} else {
+			super.setup();
+		}
 		if (getRunLocallyBrowser() == null) {
 			APP_URL = "http://" + IPAddress.findSiteLocalAddress() + ":8080/";
 		}
