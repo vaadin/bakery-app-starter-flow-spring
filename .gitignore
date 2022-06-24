@@ -21,6 +21,7 @@ webdriver/
 .DS_Store
 
 # Frontend
+frontend/generated/
 /build-tools/bin/
 /build-tools/etc/
 /build-tools/lib/
