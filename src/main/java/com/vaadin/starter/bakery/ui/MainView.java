@@ -135,7 +135,7 @@ public class MainView extends AppLayout {
 	}
 
 	private static Tab createTab(VaadinIcon icon, String title, Class<? extends Component> viewClass) {
-		return createTab(populateLink(new RouterLink(null, viewClass), icon, title));
+		return createTab(populateLink(new RouterLink("", viewClass), icon, title));
 	}
 
 	private static Tab createTab(Component content) {
