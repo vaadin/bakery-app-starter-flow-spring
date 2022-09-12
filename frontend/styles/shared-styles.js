@@ -1,5 +1,6 @@
-import '@polymer/polymer/lib/elements/custom-style.js';
-const $_documentContainer = document.createElement('template');
+import { html, LitElement, css } from "lit-element";
+import "@polymer/polymer/lib/elements/custom-style.js";
+const $_documentContainer = document.createElement("template");
 
 $_documentContainer.innerHTML = `<dom-module id="bakery-app-layout-theme" theme-for="vaadin-app-layout">
   <template>

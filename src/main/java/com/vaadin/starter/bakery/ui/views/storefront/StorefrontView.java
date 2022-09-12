@@ -13,15 +13,12 @@ import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.polymertemplate.Id;
-import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
-import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.app.HasLogger;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.util.EntityUtil;
@@ -34,6 +31,8 @@ import com.vaadin.starter.bakery.ui.views.orderedit.OrderEditor;
 
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.EDIT_SEGMENT;
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.ORDER_ID;
+import com.vaadin.flow.component.littemplate.LitTemplate;
+import com.vaadin.flow.component.template.Id;
 
 @Tag("storefront-view")
 @JsModule("./src/views/storefront/storefront-view.js")
@@ -41,7 +40,7 @@ import static com.vaadin.starter.bakery.ui.utils.BakeryConst.ORDER_ID;
 @RouteAlias(value = BakeryConst.PAGE_STOREFRONT_ORDER_EDIT_TEMPLATE, layout = MainView.class)
 @RouteAlias(value = BakeryConst.PAGE_ROOT, layout = MainView.class)
 @PageTitle(BakeryConst.TITLE_STOREFRONT)
-public class StorefrontView extends PolymerTemplate<TemplateModel>
+public class StorefrontView extends LitTemplate
 		implements HasLogger, BeforeEnterObserver, EntityView<Order> {
 
 	@Id("search")

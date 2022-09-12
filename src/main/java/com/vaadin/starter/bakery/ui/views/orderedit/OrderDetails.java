@@ -8,14 +8,11 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.JsModule;
-import com.vaadin.flow.component.polymertemplate.Id;
-import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.dom.Element;
 import com.vaadin.flow.shared.Registration;
 import com.vaadin.flow.templatemodel.Encode;
 import com.vaadin.flow.templatemodel.Include;
-import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.ui.events.CancelEvent;
 import com.vaadin.starter.bakery.ui.events.SaveEvent;
@@ -27,6 +24,8 @@ import com.vaadin.starter.bakery.ui.utils.converters.OrderStateConverter;
 import com.vaadin.starter.bakery.ui.views.storefront.converters.StorefrontLocalDateConverter;
 import com.vaadin.starter.bakery.ui.views.storefront.events.CommentEvent;
 import com.vaadin.starter.bakery.ui.views.storefront.events.EditEvent;
+import com.vaadin.flow.component.littemplate.LitTemplate;
+import com.vaadin.flow.component.template.Id;
 
 /**
  * The component displaying a full (read-only) summary of an order, and a comment
@@ -34,7 +33,7 @@ import com.vaadin.starter.bakery.ui.views.storefront.events.EditEvent;
  */
 @Tag("order-details")
 @JsModule("./src/views/orderedit/order-details.js")
-public class OrderDetails extends PolymerTemplate<OrderDetails.Model> {
+public class OrderDetails extends LitTemplate {
 
 	private Order order;
 
@@ -96,7 +95,7 @@ public class OrderDetails extends PolymerTemplate<OrderDetails.Model> {
 		this.isDirty = isDirty;
 	}
 
-	public interface Model extends TemplateModel {
+	public interface Model {
 		@Include({ "id", "dueDate.day", "dueDate.weekday", "dueDate.date", "dueTime", "state", "pickupLocation.name",
 			"customer.fullName", "customer.phoneNumber", "customer.details", "items.product.name", "items.comment",
 			"items.quantity", "items.product.price", "history.message", "history.createdBy.firstName",
@@ -132,5 +131,18 @@ public class OrderDetails extends PolymerTemplate<OrderDetails.Model> {
 
 	public Registration addCancelListener(ComponentEventListener<CancelEvent> listener) {
 		return addListener(CancelEvent.class, listener);
+	}
+
+	private Model getModel() {
+		return new Model() {
+			@Override
+			public void setItem(Order item) {
+			}
+
+			@Override
+			public void setReview(boolean review) {
+				getElement().setProperty("review", review);
+			}
+		};
 	}
 }

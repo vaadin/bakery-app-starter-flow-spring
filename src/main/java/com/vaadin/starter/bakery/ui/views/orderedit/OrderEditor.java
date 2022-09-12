@@ -24,8 +24,6 @@ import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.polymertemplate.Id;
-import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.BindingValidationStatus;
@@ -34,7 +32,6 @@ import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.validator.BeanValidator;
 import com.vaadin.flow.shared.Registration;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.starter.bakery.backend.data.OrderState;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.backend.data.entity.PickupLocation;
@@ -49,14 +46,16 @@ import com.vaadin.starter.bakery.ui.utils.FormattingUtils;
 import com.vaadin.starter.bakery.ui.utils.converters.LocalTimeConverter;
 import com.vaadin.starter.bakery.ui.views.storefront.events.ReviewEvent;
 import com.vaadin.starter.bakery.ui.views.storefront.events.ValueChangeEvent;
+import com.vaadin.flow.component.littemplate.LitTemplate;
+import com.vaadin.flow.component.template.Id;
 
 @Tag("order-editor")
 @JsModule("./src/views/orderedit/order-editor.js")
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
+public class OrderEditor extends LitTemplate {
 
-	public interface Model extends TemplateModel {
+	public interface Model {
 		void setTotalPrice(String totalPrice);
 
 		void setStatus(String status);
@@ -217,5 +216,19 @@ public class OrderEditor extends PolymerTemplate<OrderEditor.Model> {
 
 	public void setCurrentUser(User currentUser) {
 		this.currentUser = currentUser;
+	}
+
+	private Model getModel() {
+		return new Model() {
+			@Override
+			public void setTotalPrice(String totalPrice) {
+				getElement().setProperty("totalPrice", totalPrice);
+			}
+
+			@Override
+			public void setStatus(String status) {
+				getElement().setProperty("status", status);
+			}
+		};
 	}
 }

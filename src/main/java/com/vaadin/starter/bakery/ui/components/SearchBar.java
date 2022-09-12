@@ -9,18 +9,17 @@ import com.vaadin.flow.component.DomEvent;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.JsModule;
-import com.vaadin.flow.component.polymertemplate.Id;
-import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.dom.DebouncePhase;
-import com.vaadin.flow.templatemodel.TemplateModel;
+import com.vaadin.flow.component.littemplate.LitTemplate;
+import com.vaadin.flow.component.template.Id;
 
 @Tag("search-bar")
 @JsModule("./src/components/search-bar.js")
-public class SearchBar extends PolymerTemplate<SearchBar.Model> {
+public class SearchBar extends LitTemplate {
 
-	public interface Model extends TemplateModel {
+	public interface Model {
 		boolean isCheckboxChecked();
 
 		void setCheckboxChecked(boolean checkboxChecked);
@@ -94,5 +93,29 @@ public class SearchBar extends PolymerTemplate<SearchBar.Model> {
 		public FilterChanged(SearchBar source, boolean fromClient) {
 			super(source, fromClient);
 		}
+	}
+
+	private Model getModel() {
+		return new Model() {
+			@Override
+			public void setCheckboxChecked(boolean checkboxChecked) {
+				getElement().setProperty("checkboxChecked", checkboxChecked);
+			}
+
+			@Override
+			public boolean isCheckboxChecked() {
+				return getElement().getProperty("checkboxChecked", false);
+			}
+
+			@Override
+			public void setCheckboxText(String checkboxText) {
+				getElement().setProperty("checkboxText", checkboxText);
+			}
+
+			@Override
+			public void setButtonText(String buttonText) {
+				getElement().setProperty("buttonText", buttonText);
+			}
+		};
 	}
 }
