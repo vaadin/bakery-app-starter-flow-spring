@@ -4,9 +4,16 @@ on:
     branches: [v23]
   workflow_dispatch:
   pull_request:
+permissions:
+  contents: read
 jobs:
   verify:
     runs-on: ubuntu-latest
+    permissions:
+      # for EnricoMi/publish-unit-test-result-action
+      issues: read
+      checks: write
+      pull-requests: write 
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v3
