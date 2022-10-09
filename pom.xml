@@ -25,7 +25,9 @@
         <vaadin.version>23.2.3</vaadin.version>
 
         <!-- Overrides the old version specified by the Spring Boot parent -->
-        <selenium.version>4.2.1</selenium.version>
+        <selenium.version>4.4.0</selenium.version>
+        <!-- selenium is so much verbose -->
+        <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
 
         <!-- Plugins -->
         <gatling.version>3.3.0</gatling.version>
