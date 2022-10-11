@@ -48,7 +48,7 @@ public class OrderPresenter {
 	void init(StorefrontView view) {
 		this.entityPresenter.setView(view);
 		this.view = view;
-		view.getGrid().setDataProvider(dataProvider);
+		view.getGrid().setItems(dataProvider);
 		view.getOpenedOrderEditor().setCurrentUser(currentUser.getUser());
 		view.getOpenedOrderEditor().addCancelListener(e -> cancel());
 		view.getOpenedOrderEditor().addReviewListener(e -> review());

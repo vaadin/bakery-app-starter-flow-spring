@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Currency;
 
-import javax.annotation.security.RolesAllowed;
+import jakarta.annotation.security.RolesAllowed;
 
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_PRODUCTS;
 

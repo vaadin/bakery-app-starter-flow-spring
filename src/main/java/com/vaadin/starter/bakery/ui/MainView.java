@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
@@ -63,7 +63,7 @@ public class MainView extends AppLayout {
 			if (e.getSelectedTab() == null) {
 				return;
 			}
-			
+
 			e.getSelectedTab().getId().ifPresent(id -> {
 				if ("logout-tab".equals(id)) {
 					UI.getCurrent().getPage().setLocation(LOGOUT_SUCCESS_URL);

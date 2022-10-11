@@ -53,7 +53,7 @@ public class OrdersGridDataProvider extends FilterablePageableDataProvider<Order
 	private final OrderService orderService;
 	private List<QuerySortOrder> defaultSortOrders;
 	private Consumer<Page<Order>> pageObserver;
-	
+
 	@Autowired
 	public OrdersGridDataProvider(OrderService orderService) {
 		this.orderService = orderService;
