@@ -53,13 +53,9 @@ As both IDEs support running Spring Boot applications you just have to import th
 
 # Running Scalability Tests
 
-*NOTE* SCALABILITY TESTS ARE BROKEN
-
 The Bakery App Starter includes scalability tests. Once you have deployed a production build of Bakery you can run them to check how the app behaves under load. The scalability tests can be run completely on your local machine, but you might as well want to run locally only the test agents while the Bakery app under test is deployed to an environment that is close to your production.
 
 In order to run the scalability tests locally:
-
-1. Make sure you are using Java 8 (Gatling Maven plugin does not yet work with Java 9+)
 
 1. Build and start Bakery in the production mode (e.g. ```mvn clean spring-boot:run -DskipTests -Pproduction```)
 

@@ -1,0 +1,1 @@
+{"csrfToken":"#{seckey}","rpc":[{"type":"mSync","node":#{loginOverlay},"feature":1,"property":"disabled","value":true},{"type":"event","node":#{loginOverlay},"event":"login","data":{"event.detail.username":"barista@vaadin.com","event.detail.password":"barista"}}],"syncId":#{syncId},"clientId":#{clientId}}

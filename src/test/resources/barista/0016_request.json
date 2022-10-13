@@ -1,0 +1,1 @@
+{"csrfToken":"#{seckey}","rpc":[{"type":"event","node":#{newButtonId},"event":"click","data":{"event.shiftKey":false,"event.metaKey":false,"event.detail":1,"event.ctrlKey":false,"event.clientX":1026,"event.clientY":74,"event.altKey":false,"event.button":0,"event.screenY":171,"event.screenX":2337}}],"syncId":#{syncId},"clientId":#{clientId}}

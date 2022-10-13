@@ -1,0 +1,1 @@
+{"csrfToken":"#{seckey}","rpc":[{"type":"publishedEventHandler","node":1,"templateEventMethodName":"connectClient","templateEventMethodArgs":["flow-container-root-2521314","ROOT-2521314","login","",null],"promise":0}],"syncId":0,"clientId":0}
