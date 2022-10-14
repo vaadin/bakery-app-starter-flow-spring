@@ -100,7 +100,7 @@ public class DashboardView extends LitTemplate {
 						order -> UI.getCurrent().navigate(BakeryConst.PAGE_STOREFRONT + "/" + order.getId())));
 
 		grid.setSelectionMode(Grid.SelectionMode.NONE);
-		// grid.setDataProvider(orderDataProvider);
+		grid.setDataProvider(orderDataProvider);
 
 		DashboardData data = orderService.getDashboardData(MonthDay.now().getMonthValue(), Year.now().getValue());
 		populateYearlySalesChart(data);
