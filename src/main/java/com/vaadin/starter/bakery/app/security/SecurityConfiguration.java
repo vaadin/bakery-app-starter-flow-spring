@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
  * Configures spring security, doing the following:
@@ -50,16 +51,10 @@ public class SecurityConfiguration extends VaadinWebSecurity {
 	 */
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers(
-				// the robots exclusion standard
-				"/robots.txt",
-
-				// icons and images
-				"/icons/**", "/images/**",
-
-				// (development mode) H2 debugging console
-				"/h2-console/**").permitAll();
-
+		http.authorizeHttpRequests().requestMatchers(new AntPathRequestMatcher("/robots.txt")).permitAll();
+		http.authorizeHttpRequests().requestMatchers(new AntPathRequestMatcher("/icons/**")).permitAll();
+		http.authorizeHttpRequests().requestMatchers(new AntPathRequestMatcher("/images/**")).permitAll();
+		http.authorizeHttpRequests().requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll();
 		super.configure(http);
 		setLoginView(http, LoginView.class);
 	}
