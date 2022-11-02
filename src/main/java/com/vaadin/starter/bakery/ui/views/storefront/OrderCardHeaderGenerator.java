@@ -1,5 +1,6 @@
 package com.vaadin.starter.bakery.ui.views.storefront;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -9,19 +10,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import com.vaadin.flow.function.SerializableBiPredicate;
+import com.vaadin.flow.function.SerializablePredicate;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
 import com.vaadin.starter.bakery.ui.views.storefront.beans.OrderCardHeader;
 
-public class OrderCardHeaderGenerator {
+public class OrderCardHeaderGenerator implements Serializable {
 
-	private class HeaderWrapper {
-		private Predicate<LocalDate> matcher;
+	private class HeaderWrapper implements Serializable {
+		private SerializablePredicate<LocalDate> matcher;
 
 		private OrderCardHeader header;
 
 		private Long selected;
 
-		public HeaderWrapper(Predicate<LocalDate> matcher, OrderCardHeader header) {
+		public HeaderWrapper(SerializablePredicate<LocalDate> matcher, OrderCardHeader header) {
 			this.matcher = matcher;
 			this.header = header;
 		}
@@ -43,7 +46,7 @@ public class OrderCardHeaderGenerator {
 		}
 	}
 
-	private final DateTimeFormatter HEADER_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("EEE, MMM d");
+	private static final DateTimeFormatter HEADER_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("EEE, MMM d");
 
 	private final Map<Long, OrderCardHeader> ordersWithHeaders = new HashMap<>();
 	private List<HeaderWrapper> headerChain = new ArrayList<>();

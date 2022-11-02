@@ -1,0 +1,45 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bakery-database
+  labels:
+    app: bakery-database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bakery-database
+  template:
+    metadata:
+      labels:
+        app: bakery-database
+    spec:
+      volumes:
+        - name: bakery-database-storage
+          persistentVolumeClaim:
+            claimName: bakery-database-pv-claim
+      containers:
+        - image: postgres
+          name: postgres
+          env:
+            - name: POSTGRES_DB
+              value: bakery
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: bakery-database-config
+                  key: postgres_user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: bakery-database-config
+                  key: postgres_password
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          ports:
+            - containerPort: 5432
+              name: postgres
+          volumeMounts:
+            - name: bakery-database-storage
+              mountPath: /var/lib/postgresql/data

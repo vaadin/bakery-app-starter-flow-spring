@@ -15,6 +15,7 @@ import org.vaadin.artur.spring.dataprovider.FilterablePageableDataProvider;
 import com.vaadin.flow.data.provider.Query;
 import com.vaadin.flow.data.provider.QuerySortOrder;
 import com.vaadin.flow.data.provider.QuerySortOrderBuilder;
+import com.vaadin.flow.function.SerializableConsumer;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.starter.bakery.backend.data.entity.Order;
@@ -50,9 +51,9 @@ public class OrdersGridDataProvider extends FilterablePageableDataProvider<Order
 		}
 	}
 
-	private final OrderService orderService;
+	private final transient OrderService orderService;
 	private List<QuerySortOrder> defaultSortOrders;
-	private Consumer<Page<Order>> pageObserver;
+	private SerializableConsumer<Page<Order>> pageObserver;
 	
 	@Autowired
 	public OrdersGridDataProvider(OrderService orderService) {
@@ -103,7 +104,7 @@ public class OrdersGridDataProvider extends FilterablePageableDataProvider<Order
 		return Optional.of(LocalDate.now().minusDays(1));
 	}
 
-	public void setPageObserver(Consumer<Page<Order>> pageObserver) {
+	public void setPageObserver(SerializableConsumer<Page<Order>> pageObserver) {
 		this.pageObserver = pageObserver;
 	}
 

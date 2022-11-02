@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.vaadin.flow.demo</groupId>
     <artifactId>bakery-app-starter-flow-spring</artifactId>
@@ -11,7 +11,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.7.0</version>
-        <relativePath /> <!-- lookup parent from repository -->
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <properties>
@@ -22,7 +22,7 @@
         <failOnMissingWebXml>false</failOnMissingWebXml>
 
         <!-- Dependencies -->
-        <vaadin.version>23.2.5</vaadin.version>
+        <vaadin.version>23.3-SNAPSHOT</vaadin.version>
 
         <!-- Overrides the old version specified by the Spring Boot parent -->
         <selenium.version>4.2.1</selenium.version>
@@ -31,6 +31,10 @@
         <gatling.version>3.3.0</gatling.version>
         <gatling-plugin.version>3.1.2</gatling-plugin.version>
         <scala-maven-plugin.version>3.4.4</scala-maven-plugin.version>
+
+
+        <jkube.namespace>vaadintest</jkube.namespace>
+        <jkube.enricher.jkube-service.type>LoadBalancer</jkube.enricher.jkube-service.type>
     </properties>
 
     <repositories>
@@ -174,6 +178,26 @@
             <artifactId>jaxb-api</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>azure-kit-starter</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>uk.q3c.util</groupId>
+            <artifactId>serialization-tracer</artifactId>
+            <version>0.7.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.esotericsoftware</groupId>
+            <artifactId>kryo</artifactId>
+            <version>5.3.0</version>
+        </dependency>
+
         <!-- Testing -->
         <dependency>
             <groupId>com.vaadin</groupId>
@@ -212,6 +236,57 @@
     </build>
 
     <profiles>
+        <profile>
+            <id>local-cluster</id>
+            <properties>
+                <jkube.namespace>bakery</jkube.namespace>
+                <jkube.enricher.jkube-service.type>LoadBalancer</jkube.enricher.jkube-service.type>
+                <deployment.hazelcast-service>azure-kit-hazelcast-service</deployment.hazelcast-service>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.eclipse.jkube</groupId>
+                        <artifactId>kubernetes-maven-plugin</artifactId>
+                        <version>1.9.1</version>
+                        <configuration>
+                            <environment>app</environment>
+                            <resources>
+                                <env>
+                                    <VAADIN_AZURE_HAZELCAST_KUBERNETES_NAMESPACE>${jkube.namespace}
+                                    </VAADIN_AZURE_HAZELCAST_KUBERNETES_NAMESPACE>
+                                    <VAADIN_AZURE_HAZELCAST_KUBERNETES_SERVICENAME>azure-kit-hazelcast-service
+                                    </VAADIN_AZURE_HAZELCAST_KUBERNETES_SERVICENAME>
+                                </env>
+                                <imagePullPolicy>Never</imagePullPolicy>
+                                <replicas>4</replicas>
+                            </resources>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>pgsql</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.postgresql</groupId>
+                    <artifactId>postgresql</artifactId>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.eclipse.jkube</groupId>
+                        <artifactId>kubernetes-maven-plugin</artifactId>
+                        <version>1.9.1</version>
+                        <configuration>
+                            <environment>app,pgsql</environment>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <profile>
             <!-- Production mode is activated using -Pproduction -->
             <id>production</id>
@@ -290,7 +365,8 @@
                         <configuration>
                             <trimStackTrace>false</trimStackTrace>
                             <systemPropertyVariables>
-                                <com.vaadin.testbench.Parameters.runLocally>chrome</com.vaadin.testbench.Parameters.runLocally>
+                                <com.vaadin.testbench.Parameters.runLocally>chrome
+                                </com.vaadin.testbench.Parameters.runLocally>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>
@@ -345,7 +421,9 @@
                                 <sauce.user>${sauce.user}</sauce.user>
                                 <sauce.sauceAccessKey>${sauce.sauceAccessKey}</sauce.sauceAccessKey>
                                 <sauce.options>${sauce.options}</sauce.options>
-                                <com.vaadin.testbench.Parameters.gridBrowsers>${com.vaadin.testbench.Parameters.gridBrowsers}</com.vaadin.testbench.Parameters.gridBrowsers>
+                                <com.vaadin.testbench.Parameters.gridBrowsers>
+                                    ${com.vaadin.testbench.Parameters.gridBrowsers}
+                                </com.vaadin.testbench.Parameters.gridBrowsers>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>

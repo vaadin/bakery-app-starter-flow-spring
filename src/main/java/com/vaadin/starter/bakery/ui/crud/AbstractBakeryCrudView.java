@@ -4,6 +4,7 @@ import com.vaadin.flow.component.crud.Crud;
 import com.vaadin.flow.component.crud.CrudEditor;
 import com.vaadin.flow.component.crud.CrudI18n;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.function.SerializableConsumer;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
@@ -62,8 +63,8 @@ public abstract class AbstractBakeryCrudView<E extends AbstractEntity> extends C
     }
 
     private void setupCrudEventListeners(CrudEntityPresenter<E> entityPresenter) {
-        Consumer<E> onSuccess = entity -> navigateToEntity(null);
-        Consumer<E> onFail = entity -> {
+        SerializableConsumer<E> onSuccess = entity -> navigateToEntity(null);
+        SerializableConsumer<E> onFail = entity -> {
             throw new RuntimeException("The operation could not be performed.");
         };
 

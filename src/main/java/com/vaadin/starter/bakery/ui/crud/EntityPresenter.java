@@ -1,5 +1,6 @@
 package com.vaadin.starter.bakery.ui.crud;
 
+import java.io.Serializable;
 import java.util.function.UnaryOperator;
 
 import javax.persistence.EntityNotFoundException;
@@ -21,9 +22,9 @@ import com.vaadin.starter.bakery.ui.utils.messages.Message;
 import com.vaadin.starter.bakery.ui.views.EntityView;
 
 public class EntityPresenter<T extends AbstractEntity, V extends EntityView<T>>
-	implements HasLogger {
+	implements HasLogger, Serializable {
 
-	private CrudService<T> crudService;
+	private transient CrudService<T> crudService;
 
 	private CurrentUser currentUser;
 
@@ -192,7 +193,7 @@ public class EntityPresenter<T extends AbstractEntity, V extends EntityView<T>>
 /**
  * Holds variables that change.
  */
-class EntityPresenterState<T extends AbstractEntity> {
+class EntityPresenterState<T extends AbstractEntity> implements Serializable {
 
 	private T entity;
 	private String entityName;

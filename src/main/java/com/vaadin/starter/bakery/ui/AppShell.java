@@ -1,6 +1,7 @@
 package com.vaadin.starter.bakery.ui;
 
 import com.vaadin.flow.component.page.AppShellConfigurator;
+import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
@@ -14,5 +15,6 @@ import static com.vaadin.starter.bakery.ui.utils.BakeryConst.VIEWPORT;
 		backgroundColor = "#227aef", themeColor = "#227aef",
 		offlinePath = "offline-page.html",
 		offlineResources = {"images/offline-login-banner.jpg"})
+@Push
 public class AppShell implements AppShellConfigurator {
 }

@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: azure-kit-hazelcast-service
+spec:
+  ports:
+    - name: hazelcast
+      port: 5701
+  type: LoadBalancer

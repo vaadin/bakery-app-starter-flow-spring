@@ -12,11 +12,12 @@ import org.springframework.dao.OptimisticLockingFailureException;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolationException;
+import java.io.Serializable;
 import java.util.function.Consumer;
 
-public class CrudEntityPresenter<E extends AbstractEntity>	implements HasLogger {
+public class CrudEntityPresenter<E extends AbstractEntity>	implements HasLogger, Serializable {
 
-	private final CrudService<E> crudService;
+	private final transient CrudService<E> crudService;
 
 	private final CurrentUser currentUser;
 

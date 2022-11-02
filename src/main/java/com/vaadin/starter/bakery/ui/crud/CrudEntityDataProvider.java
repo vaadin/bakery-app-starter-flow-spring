@@ -14,7 +14,7 @@ import com.vaadin.flow.data.provider.QuerySortOrderBuilder;
 
 public class CrudEntityDataProvider<T extends AbstractEntity> extends FilterablePageableDataProvider<T, String> {
 
-	private final FilterableCrudService<T> crudService;
+	private final transient FilterableCrudService<T> crudService;
 	private List<QuerySortOrder> defaultSortOrders;
 
 	public CrudEntityDataProvider(FilterableCrudService<T> crudService) {

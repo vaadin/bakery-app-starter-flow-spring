@@ -1,5 +1,6 @@
 package com.vaadin.starter.bakery.ui.views.storefront;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,7 +24,7 @@ import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_STOREFRONT_ORD
 
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class OrderPresenter {
+public class OrderPresenter implements Serializable {
 
 	private OrderCardHeaderGenerator headersGenerator;
 	private StorefrontView view;
@@ -31,7 +32,7 @@ public class OrderPresenter {
 	private final EntityPresenter<Order, StorefrontView> entityPresenter;
 	private final OrdersGridDataProvider dataProvider;
 	private final CurrentUser currentUser;
-	private final OrderService orderService;
+	private final transient OrderService orderService;
 
 	@Autowired
 	OrderPresenter(OrderService orderService, OrdersGridDataProvider dataProvider,

@@ -1,0 +1,48 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bakery-app-starter-flow-spring
+spec:
+  replicas: 4
+  revisionHistoryLimit: 2
+  template:
+    metadata:
+      name: bakery-app-starter-flow-spring
+    spec:
+      containers:
+      - env:
+        - name: KUBERNETES_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: HOSTNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: VAADIN_AZURE_HAZELCAST_KUBERNETES_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: VAADIN_AZURE_HAZELCAST_KUBERNETES_SERVICENAME
+          value: azure-kit-hazelcast-service
+        - name: SPRING_DATASOURCE_DRIVERCLASSNAME
+          value: org.postgresql.Driver
+        - name: SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT
+          value: org.hibernate.dialect.PostgreSQLDialect
+        - name: SPRING_DATASOURCE_URL
+          value: "jdbc:postgresql://bakery-database:5432/bakery"
+        - name: SPRING_JPA_HIBERNATE_DDLAUTO
+          value: update
+        - name: SPRING_DATASOURCE_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: bakery-database-config
+              key: postgres_user
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: bakery-database-config
+              key: postgres_password
+        image: demo/bakery-app-starter-flow-spring:latest
+        imagePullPolicy: Never

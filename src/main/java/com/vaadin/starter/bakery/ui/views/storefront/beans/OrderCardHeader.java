@@ -1,6 +1,8 @@
 package com.vaadin.starter.bakery.ui.views.storefront.beans;
 
-public class OrderCardHeader {
+import java.io.Serializable;
+
+public class OrderCardHeader implements Serializable {
 
 	private String main;
 	private String secondary;

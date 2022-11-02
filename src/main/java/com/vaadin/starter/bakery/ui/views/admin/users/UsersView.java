@@ -4,6 +4,8 @@ import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_USERS;
 
 import javax.annotation.security.RolesAllowed;
 
+import java.io.Serializable;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -32,56 +34,79 @@ import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 @RolesAllowed(Role.ADMIN)
 public class UsersView extends AbstractBakeryCrudView<User> {
 
-	@Autowired
-	public UsersView(UserService service, CurrentUser currentUser, PasswordEncoder passwordEncoder) {
-		super(User.class, service, new Grid<>(), createForm(passwordEncoder), currentUser);
-	}
+    @Autowired
+    public UsersView(UserService service, CurrentUser currentUser, PasswordEncoder passwordEncoder) {
+        super(User.class, service, new Grid<>(), createForm(new SerializablePasswordEncoder(passwordEncoder)), currentUser);
+    }
 
-	@Override
-	public void setupGrid(Grid<User> grid) {
-		grid.addColumn(User::getEmail).setWidth("270px").setHeader("Email").setFlexGrow(5);
-		grid.addColumn(u -> u.getFirstName() + " " + u.getLastName()).setHeader("Name").setWidth("200px").setFlexGrow(5);
-		grid.addColumn(User::getRole).setHeader("Role").setWidth("150px");
-	}
+    @Override
+    public void setupGrid(Grid<User> grid) {
+        grid.addColumn(User::getEmail).setWidth("270px").setHeader("Email").setFlexGrow(5);
+        grid.addColumn(u -> u.getFirstName() + " " + u.getLastName()).setHeader("Name").setWidth("200px").setFlexGrow(5);
+        grid.addColumn(User::getRole).setHeader("Role").setWidth("150px");
+    }
 
-	@Override
-	protected String getBasePage() {
-		return PAGE_USERS;
-	}
+    @Override
+    protected String getBasePage() {
+        return PAGE_USERS;
+    }
 
-	private static BinderCrudEditor<User> createForm(PasswordEncoder passwordEncoder) {
-		EmailField email = new EmailField("Email (login)");
-		email.getElement().setAttribute("colspan", "2");
-		TextField first = new TextField("First name");
-		TextField last = new TextField("Last name");
-		PasswordField password = new PasswordField("Password");
-		password.getElement().setAttribute("colspan", "2");
-		ComboBox<String> role = new ComboBox<>();
-		role.getElement().setAttribute("colspan", "2");
-		role.setLabel("Role");
+    private static BinderCrudEditor<User> createForm(PasswordEncoder passwordEncoder) {
+        EmailField email = new EmailField("Email (login)");
+        email.getElement().setAttribute("colspan", "2");
+        TextField first = new TextField("First name");
+        TextField last = new TextField("Last name");
+        PasswordField password = new PasswordField("Password");
+        password.getElement().setAttribute("colspan", "2");
+        ComboBox<String> role = new ComboBox<>();
+        role.getElement().setAttribute("colspan", "2");
+        role.setLabel("Role");
 
-		FormLayout form = new FormLayout(email, first, last, password, role);
+        FormLayout form = new FormLayout(email, first, last, password, role);
 
-		BeanValidationBinder<User> binder = new BeanValidationBinder<>(User.class);
+        BeanValidationBinder<User> binder = new BeanValidationBinder<>(User.class);
 
-		ListDataProvider<String> roleProvider = DataProvider.ofItems(Role.getAllRoles());
-		role.setItemLabelGenerator(s -> s != null ? s : "");
-		role.setItems(roleProvider);
+        ListDataProvider<String> roleProvider = DataProvider.ofItems(Role.getAllRoles());
+        role.setItemLabelGenerator(s -> s != null ? s : "");
+        role.setItems(roleProvider);
 
-		binder.bind(first, "firstName");
-		binder.bind(last, "lastName");
-		binder.bind(email, "email");
-		binder.bind(role, "role");
+        binder.bind(first, "firstName");
+        binder.bind(last, "lastName");
+        binder.bind(email, "email");
+        binder.bind(role, "role");
 
-		binder.forField(password)
-				.withValidator(pass -> pass.matches("^(|(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,})$"),
-				"need 6 or more chars, mixing digits, lowercase and uppercase letters")
-				.bind(user -> password.getEmptyValue(), (user, pass) -> {
-					if (!password.getEmptyValue().equals(pass)) {
-						user.setPasswordHash(passwordEncoder.encode(pass));
-					}
-				});
+        binder.forField(password)
+                .withValidator(pass -> pass.matches("^(|(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,})$"),
+                        "need 6 or more chars, mixing digits, lowercase and uppercase letters")
+                .bind(user -> password.getEmptyValue(), (user, pass) -> {
+                    if (!password.getEmptyValue().equals(pass)) {
+                        user.setPasswordHash(passwordEncoder.encode(pass));
+                    }
+                });
 
-		return new BinderCrudEditor<User>(binder, form);
-	}
+        return new BinderCrudEditor<User>(binder, form);
+    }
+
+    private static class SerializablePasswordEncoder implements PasswordEncoder, Serializable {
+        private transient PasswordEncoder passwordEncoder;
+
+        public SerializablePasswordEncoder(PasswordEncoder passwordEncoder) {
+            this.passwordEncoder = passwordEncoder;
+        }
+
+        @Override
+        public String encode(CharSequence rawPassword) {
+            return passwordEncoder.encode(rawPassword);
+        }
+
+        @Override
+        public boolean matches(CharSequence rawPassword, String encodedPassword) {
+            return passwordEncoder.matches(rawPassword, encodedPassword);
+        }
+
+        @Override
+        public boolean upgradeEncoding(String encodedPassword) {
+            return passwordEncoder.upgradeEncoding(encodedPassword);
+        }
+    }
 }

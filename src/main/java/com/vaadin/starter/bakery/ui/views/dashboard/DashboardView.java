@@ -57,7 +57,7 @@ public class DashboardView extends LitTemplate {
 	private static final String[] MONTH_LABELS = new String[] {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
 			"Aug", "Sep", "Oct", "Nov", "Dec"};
 
-	private final OrderService orderService;
+	private final transient OrderService orderService;
 
 	@Id("todayCount")
 	private DashboardCounterLabel todayCount;
@@ -116,10 +116,24 @@ public class DashboardView extends LitTemplate {
 	private void measurePageLoadPerformance() {
 		final int nTotal = 5; // the total number of charts on the page
 		AtomicInteger nLoaded = new AtomicInteger();
+
+		/*
 		ComponentEventListener<ChartLoadEvent> chartLoadListener = (event) -> {
 			nLoaded.addAndGet(1);
 			if (nLoaded.get() == nTotal) {
 				UI.getCurrent().getPage().executeJs("$0._chartsLoadedResolve()", this);
+			}
+		};
+		 */
+
+		ComponentEventListener<ChartLoadEvent> chartLoadListener = new ComponentEventListener<ChartLoadEvent>() {
+			@Override
+			public void onComponentEvent(ChartLoadEvent event) {
+				nLoaded.addAndGet(1);
+				if (nLoaded.get() == nTotal) {
+					UI.getCurrent().getPage().executeJs("$0._chartsLoadedResolve()", this);
+				}
+
 			}
 		};
 

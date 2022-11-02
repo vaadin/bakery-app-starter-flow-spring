@@ -1,0 +1,32 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: hazelcast-cluster-role
+rules:
+  - apiGroups:
+      - ""
+      # Access to apps API is only required to support automatic cluster state management
+      # when persistence (hot-restart) is enabled.
+      - apps
+    resources:
+      - endpoints
+      - pods
+      - nodes
+      - services
+      # Access to statefulsets resource is only required to support automatic cluster state management
+      # when persistence (hot-restart) is enabled.
+      - statefulsets
+    verbs:
+      - get
+      - list
+      # Watching resources is only required to support automatic cluster state management
+      # when persistence (hot-restart) is enabled.
+      - watch
+  - apiGroups:
+      - "discovery.k8s.io"
+    resources:
+      - endpointslices
+    verbs:
+      - get
+      - list
