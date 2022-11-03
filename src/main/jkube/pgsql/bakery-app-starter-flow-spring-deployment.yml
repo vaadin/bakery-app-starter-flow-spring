@@ -44,5 +44,3 @@ spec:
             configMapKeyRef:
               name: bakery-database-config
               key: postgres_password
-        image: demo/bakery-app-starter-flow-spring:latest
-        imagePullPolicy: Never

@@ -4,7 +4,7 @@
 
 Type `kubectl create namespace bakery` to create the `bakery` namespace.
 If you want to use a different namespace remember to modify
-the `jkube.namespace` property in `local-cluster` profile in the project POM
+the `jkube.namespace` property in `cluster` profile in the project POM
 file.
 
 ## Build the application for production with postgresql for persistence.
@@ -14,7 +14,7 @@ driver addition.
 It also builds the docker image tagged
 as `demo/bakery-app-starter-flow-spring:latest`
 
-`mvn -Pproduction,local-cluster,pgsql package k8s:build`
+`mvn -Pproduction,cluster,pgsql package k8s:build`
 
 ## Kind only: load the docker image
 
@@ -26,7 +26,7 @@ If using `kind`, local docker image must be loaded into the cluster.
 
 To create and apply kubernetes manifest type
 
-`mvn -Pproduction,local-cluster,pgsql k8s:resource k8s:apply`
+`mvn -Pproduction,cluster,pgsql k8s:resource k8s:apply`
 
 All resources should be deployed on the cluster and the application should be
 accessible through the load balancer.
@@ -139,3 +139,61 @@ typing `kubectl -n bakery delete pod PODNAME`.
 Change the filter, an offline notification may appear or just a loading
 indicator on the top of the page, but you should be able to work on the
 application without page reloads or being logged out.
+
+## Deploy on Azure
+
+To deploy the application on Azure AKS you may first load the docker image into
+Azure container registry (ACR).
+
+To do this build the image with the addition `-Djkube.docker.registry` property
+pointing to the Azure ACR registry and then push it.
+
+`mvn -Pproduction,cluster,pgsql package k8s:build k8s:push -Djkube.docker.registry=myrepo.azurecr.io`
+
+To push images on Azure ACR you need to be authenticated.
+Authentication detail can be added into `$HOME/.m2/settings.xml` file, in
+a `<server>` section.
+Server `id` must be the same as the one used in the `jkube.docker.registry`
+property.
+
+```
+<server>
+    <id>myrepo.azurecr.io</id>
+    <username>azurerepousr</username>
+    <password>***********</password>
+</server>
+```
+
+You can get credentials using Azure CLI
+
+```
+az login
+az acr credential show --name <acr registry nam>
+```
+
+Output will be similar to the following
+
+```
+{
+  "passwords": [
+    {
+      "name": "password",
+      "value": "**********************"
+    },
+    {
+      "name": "password2",
+      "value": "**********************"
+    }
+  ],
+  "username": "azurerepousr"
+}
+```
+
+Once the image is loaded proceed with the other commands, adding
+the `-Djkube.docker.registry` property and also setting image pull policy
+to `IfNotPresent` by using the `-Djkube.docker.imagePullPolicy` property.
+
+```
+mvn -Pproduction,cluster,pgsql k8s:resource k8s:apply -Djkube.docker.registry=myrepo.azurecr.io -Djkube.docker.imagePullPolicy=IfNotPresent
+```
+

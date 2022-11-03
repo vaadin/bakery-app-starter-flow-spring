@@ -35,6 +35,8 @@
 
         <jkube.namespace>vaadintest</jkube.namespace>
         <jkube.enricher.jkube-service.type>LoadBalancer</jkube.enricher.jkube-service.type>
+        <jkube.docker.imagePullPolicy>Never</jkube.docker.imagePullPolicy>
+        <jkube.replicas>4</jkube.replicas>
     </properties>
 
     <repositories>
@@ -237,7 +239,7 @@
 
     <profiles>
         <profile>
-            <id>local-cluster</id>
+            <id>cluster</id>
             <properties>
                 <jkube.namespace>bakery</jkube.namespace>
                 <jkube.enricher.jkube-service.type>LoadBalancer</jkube.enricher.jkube-service.type>
@@ -258,8 +260,6 @@
                                     <VAADIN_AZURE_HAZELCAST_KUBERNETES_SERVICENAME>azure-kit-hazelcast-service
                                     </VAADIN_AZURE_HAZELCAST_KUBERNETES_SERVICENAME>
                                 </env>
-                                <imagePullPolicy>Never</imagePullPolicy>
-                                <replicas>4</replicas>
                             </resources>
                         </configuration>
                     </plugin>
