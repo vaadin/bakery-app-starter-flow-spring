@@ -36,7 +36,6 @@
         <jkube.namespace>vaadintest</jkube.namespace>
         <jkube.enricher.jkube-service.type>LoadBalancer</jkube.enricher.jkube-service.type>
         <jkube.docker.imagePullPolicy>Never</jkube.docker.imagePullPolicy>
-        <jkube.replicas>4</jkube.replicas>
     </properties>
 
     <repositories>
@@ -282,6 +281,14 @@
                         <version>1.9.1</version>
                         <configuration>
                             <environment>app,pgsql</environment>
+                            <resources>
+                                <env>
+                                    <VAADIN_AZURE_HAZELCAST_KUBERNETES_NAMESPACE>${jkube.namespace}
+                                    </VAADIN_AZURE_HAZELCAST_KUBERNETES_NAMESPACE>
+                                    <VAADIN_AZURE_HAZELCAST_KUBERNETES_SERVICENAME>azure-kit-hazelcast-service
+                                    </VAADIN_AZURE_HAZELCAST_KUBERNETES_SERVICENAME>
+                                </env>
+                            </resources>
                         </configuration>
                     </plugin>
                 </plugins>
