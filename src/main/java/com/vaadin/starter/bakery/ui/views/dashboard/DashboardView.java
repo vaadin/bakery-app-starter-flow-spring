@@ -126,12 +126,12 @@ public class DashboardView extends LitTemplate {
 		};
 		 */
 
-		ComponentEventListener<ChartLoadEvent> chartLoadListener = new ComponentEventListener<ChartLoadEvent>() {
+		ComponentEventListener<ChartLoadEvent> chartLoadListener = new ComponentEventListener<>() {
 			@Override
 			public void onComponentEvent(ChartLoadEvent event) {
 				nLoaded.addAndGet(1);
 				if (nLoaded.get() == nTotal) {
-					UI.getCurrent().getPage().executeJs("$0._chartsLoadedResolve()", this);
+					UI.getCurrent().getPage().executeJs("$0._chartsLoadedResolve()", DashboardView.this);
 				}
 
 			}
