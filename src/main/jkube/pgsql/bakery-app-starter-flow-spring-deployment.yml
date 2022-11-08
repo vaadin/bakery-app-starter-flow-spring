@@ -23,3 +23,16 @@ spec:
             configMapKeyRef:
               name: bakery-database-config
               key: postgres_password
+        resources:
+          limits:
+            memory: 512Mi
+          requests:
+            memory: 256Mi
+        startupProbe:
+          failureThreshold: 60
+          httpGet:
+            host: ""
+            path: /sw-runtime-resources-precache.js
+            port: 8080
+            scheme: HTTP
+          periodSeconds: 10
