@@ -61,8 +61,7 @@ public class Barista extends Simulation {
   );
 
   private ScenarioBuilder scn = scenario("Barista").repeat(sessionRepeats).on(
-     exec(flushSessionCookies())
-    .exec(
+    exec(
       http("request_0")
         .get("/")
         .headers(headers_0)
@@ -330,9 +329,10 @@ public class Barista extends Simulation {
         .post("/?v-r=uidl&v-uiId=#{uiId}")
         .headers(headers_3)
         .body(ElFileBody("barista/0031_request.json"))
-        .check(regex("syncId\":([0-9]*)").saveAs("syncId"))
-        .check(regex("clientId\":([0-9]*)").saveAs("clientId"))
-    ));
+        .check(regex("syncId\":([0-9]*)").saveAs("syncId")).check(regex("clientId\":([0-9]*)").saveAs("clientId"))
+    ))
+    .exec(flushHttpCache())
+    .exec(flushSessionCookies());
   {
 	  setUp(scn.injectOpen(rampUsers(sessionCount).during(sessionStartInterval))).protocols(httpProtocol);
   }
