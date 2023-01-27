@@ -58,6 +58,7 @@ public abstract class AbstractIT<E extends TestBenchElement> extends ParallelTes
 	}
 
 	protected LoginViewElement openLoginView(WebDriver driver, String url) {
+		System.err.println(url);
 		driver.get(url);
 		return $(LoginViewElement.class).waitForFirst();
 	}
