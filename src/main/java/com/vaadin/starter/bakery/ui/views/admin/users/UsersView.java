@@ -2,7 +2,7 @@ package com.vaadin.starter.bakery.ui.views.admin.users;
 
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_USERS;
 
-import javax.annotation.security.RolesAllowed;
+import jakarta.annotation.security.RolesAllowed;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
