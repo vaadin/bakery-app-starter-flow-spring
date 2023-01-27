@@ -1,7 +1,7 @@
 name: Verify
 on:
   push:
-    branches: [v23]
+    branches: [v23, v24]
   workflow_dispatch:
   pull_request:
 permissions:
