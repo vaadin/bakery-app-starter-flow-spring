@@ -12,18 +12,12 @@ class SearchBar extends LitElement {
         position: relative;
         z-index: 2;
         display: flex;
-        flex-direction: column;
         overflow: hidden;
-        padding: 0 var(--lumo-space-s);
-        background-image: linear-gradient(
-          var(--lumo-shade-20pct),
-          var(--lumo-shade-20pct)
-        );
-        background-color: var(--lumo-base-color);
-        box-shadow: 0 0 16px 2px var(--lumo-shade-20pct);
+        flex-direction: column;
         order: 1;
         width: 100%;
         height: 48px;
+        padding-right: var(--lumo-space-s);
       }
 
       .row {
@@ -34,6 +28,7 @@ class SearchBar extends LitElement {
 
       .checkbox,
       .clear-btn,
+      :host(:not([show-action])) .action-btn,
       :host([show-extra-filters]) .action-btn {
         display: none;
       }
@@ -109,7 +104,11 @@ class SearchBar extends LitElement {
           .label="${this.checkboxText}"
         ></vaadin-checkbox>
 
-        <vaadin-button id="clear" class="clear-btn" theme="tertiary">
+        <vaadin-button id="clear" class="clear-btn" theme="tertiary"
+          @focus="${this._onFieldFocus}"
+          @blur="${this._onFieldBlur}"
+          @click="${this._onFieldBlur}"
+        >
           ${this.clearText}
         </vaadin-button>
 
@@ -154,6 +153,11 @@ class SearchBar extends LitElement {
         type: Boolean,
         reflect: true,
         attribute: 'show-checkbox',
+      },
+      showAction: {
+        type: Boolean,
+        reflect: true,
+        attribute: 'show-action',
       },
       checkboxText: {
         type: String,
@@ -233,22 +237,20 @@ class SearchBar extends LitElement {
   }
 
   _onFieldFocus(e) {
-    if (e.currentTarget.id === 'field') {
+    if (!this.showAction || e.currentTarget.id === 'field') {
       this.dispatchEvent(
         new Event('search-focus', { bubbles: true, composed: true })
       );
     }
-
     this._focused = true;
   }
 
   _onFieldBlur(e) {
-    if (e.currentTarget.id === 'field') {
+    if (!this.showAction || e.currentTarget.id === 'field') {
       this.dispatchEvent(
         new Event('search-blur', { bubbles: true, composed: true })
       );
     }
-
     this._focused = false;
   }
 }

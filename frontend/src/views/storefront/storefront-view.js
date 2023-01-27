@@ -21,7 +21,7 @@ class StorefrontView extends LitElement {
 
   render() {
     return html`
-      <search-bar id="search" show-checkbox=""></search-bar>
+      <search-bar id="search" show-checkbox show-action></search-bar>
 
       <vaadin-grid id="grid" theme="orders no-row-borders"></vaadin-grid>
 
