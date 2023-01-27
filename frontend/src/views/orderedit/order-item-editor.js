@@ -61,7 +61,7 @@ class OrderItemEditor extends LitElement {
             class="self-start"
             min="1"
             max="15"
-            has-controls
+            step-buttons-visible
             prevent-invalid-input
           ></vaadin-integer-field>
           <div id="price" colspan="4" class="money"></div>
