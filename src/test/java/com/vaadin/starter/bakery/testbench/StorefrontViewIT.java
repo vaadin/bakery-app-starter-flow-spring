@@ -112,8 +112,7 @@ public class StorefrontViewIT extends AbstractIT<StorefrontViewElement> {
 
 	private void testFieldOverflow(TextFieldElement textFieldElement) {
 		textFieldElement.setValue(IntStream.range(0, 256).mapToObj(i -> "A").collect(Collectors.joining()));
-		String msg = getErrorMessage(textFieldElement);
-		Assert.assertTrue(msg.matches("(maximum length is 255 characters|size must be between 0 and 255)"));
+		Assert.assertEquals("maximum length is 255 characters", getErrorMessage(textFieldElement));
 	}
 
 	private void testClearRequiredField(TextFieldElement textFieldElement) {
