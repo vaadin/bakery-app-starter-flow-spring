@@ -26,18 +26,18 @@ public class UsersViewIT extends AbstractIT<UsersViewElement> {
 	public void updatePassword() {
 		UsersViewElement usersView = openView();
 
-		Assert.assertFalse(usersView.isEditorOpen());
+		Assert.assertFalse(usersView.getCrud().isEditorOpen());
 
 		String uniqueEmail = "e" + r.nextInt() + "@vaadin.com";
 
 		createUser(usersView, uniqueEmail, "Paul", "Irwin", "Vaadin10", "baker");
 
-		int rowNum = usersView.getGrid().getCell(uniqueEmail).getRow();
+		int rowNum = usersView.getCrud().getGrid().getCell(uniqueEmail).getRow();
 		usersView.openRowForEditing(rowNum);
 
-		Assert.assertTrue(usersView.isEditorOpen());
+		Assert.assertTrue(usersView.getCrud().isEditorOpen());
 
-		Assert.assertTrue(usersView.isEditorOpen());
+		Assert.assertTrue(usersView.getCrud().isEditorOpen());
 
 		// When opening form the password value must be always empty
 		PasswordFieldElement password = usersView.getPasswordField();
@@ -48,11 +48,11 @@ public class UsersViewIT extends AbstractIT<UsersViewElement> {
 		String newEmail = "foo" + r.nextInt() + "@bar.com";
 		emailField.setValue(newEmail);
 
-		usersView.getEditorSaveButton().click();
-		Assert.assertFalse(usersView.isEditorOpen());
+		usersView.getCrud().getEditorSaveButton().click();
+		Assert.assertFalse(usersView.getCrud().isEditorOpen());
 
 		// Invalid password prevents closing form
-		rowNum = usersView.getGrid().getCell(newEmail).getRow();
+		rowNum = usersView.getCrud().getGrid().getCell(newEmail).getRow();
 		usersView.openRowForEditing(rowNum);
 
 		emailField = usersView.getEmailField(); // Requery email field.
@@ -61,19 +61,19 @@ public class UsersViewIT extends AbstractIT<UsersViewElement> {
 		emailField.setValue(uniqueEmail);
 		password.setValue("123");
 
-		usersView.getEditorSaveButton().click();
+		usersView.getCrud().getEditorSaveButton().click();
 
-		Assert.assertTrue(usersView.isEditorOpen());
+		Assert.assertTrue(usersView.getCrud().isEditorOpen());
 
 		password = usersView.getPasswordField(); // Requery password field.
 
 		// Good password
 		password.setValue("Abc123");
-		usersView.getEditorSaveButton().click();
-		Assert.assertFalse(usersView.isEditorOpen());
+		usersView.getCrud().getEditorSaveButton().click();
+		Assert.assertFalse(usersView.getCrud().isEditorOpen());
 
 		// When reopening the form password field must be empty.
-		rowNum = usersView.getGrid().getCell(uniqueEmail).getRow();
+		rowNum = usersView.getCrud().getGrid().getCell(uniqueEmail).getRow();
 		usersView.openRowForEditing(rowNum);
 
 		password = usersView.getPasswordField(); // Requery password field.
@@ -83,7 +83,7 @@ public class UsersViewIT extends AbstractIT<UsersViewElement> {
 	private void createUser(UsersViewElement usersView, String email, String firstName, String lastName,
 			String password, String role) {
 		usersView.getSearchBar().getCreateNewButton().click();
-		Assert.assertTrue(usersView.isEditorOpen());
+		Assert.assertTrue(usersView.getCrud().isEditorOpen());
 
 		usersView.getEmailField().setValue(email);
 		usersView.getFirstName().setValue(firstName);
@@ -92,38 +92,38 @@ public class UsersViewIT extends AbstractIT<UsersViewElement> {
 
 		usersView.getRole().selectByText(role);
 
-		usersView.getEditorSaveButton().click();
-		Assert.assertFalse(usersView.isEditorOpen());
+		usersView.getCrud().getEditorSaveButton().click();
+		Assert.assertFalse(usersView.getCrud().isEditorOpen());
 	}
 
 	@Test
 	public void tryToUpdateLockedEntity() {
 		UsersViewElement page = openView();
 
-		int rowNum = page.getGrid().getCell("barista@vaadin.com").getRow();
+		int rowNum = page.getCrud().getGrid().getCell("barista@vaadin.com").getRow();
 		page.openRowForEditing(rowNum);
 
 		PasswordFieldElement field = page.getPasswordField();
 		field.setValue("Abc123");
 		page.getEmailField().setValue("barista123@vaadin.com");
-		page.getEditorSaveButton().click();
+		page.getCrud().getEditorSaveButton().click();
 
-		Assert.assertEquals(rowNum, page.getGrid().getCell("barista@vaadin.com").getRow());
+		Assert.assertEquals(rowNum, page.getCrud().getGrid().getCell("barista@vaadin.com").getRow());
 	}
 
 	@Test
 	public void tryToDeleteLockedEntity() {
 		UsersViewElement page = openView();
 
-		int rowNum = page.getGrid().getCell("barista@vaadin.com").getRow();
+		int rowNum = page.getCrud().getGrid().getCell("barista@vaadin.com").getRow();
 		page.openRowForEditing(rowNum);
 
-		Assert.assertTrue(page.isEditorOpen());
+		Assert.assertTrue(page.getCrud().isEditorOpen());
 
-		page.getEditorDeleteButton().click();
+		page.getCrud().getEditorDeleteButton().click();
 		page.getDeleteConfirmDialog().getConfirmButton().click();
 
-		Assert.assertEquals(rowNum, page.getGrid().getCell("barista@vaadin.com").getRow());
+		Assert.assertEquals(rowNum, page.getCrud().getGrid().getCell("barista@vaadin.com").getRow());
 	}
 
 	@Test
@@ -131,7 +131,7 @@ public class UsersViewIT extends AbstractIT<UsersViewElement> {
 		UsersViewElement page = openView();
 		page.getSearchBar().getCreateNewButton().click();
 		page.getFirstName().setValue("Some name");
-		page.getEditorCancelButton().click();
+		page.getCrud().getEditorCancelButton().click();
 
 		Assert.assertEquals(page.getDiscardConfirmDialog().getHeaderText(), "Discard changes");
 	}
