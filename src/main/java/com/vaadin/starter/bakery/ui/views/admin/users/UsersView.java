@@ -38,6 +38,11 @@ public class UsersView extends AbstractBakeryCrudView<User> {
 	}
 
 	@Override
+	protected User createItem() {
+		return new User();
+	}
+
+	@Override
 	public void setupGrid(Grid<User> grid) {
 		grid.addColumn(User::getEmail).setWidth("270px").setHeader("Email").setFlexGrow(5);
 		grid.addColumn(u -> u.getFirstName() + " " + u.getLastName()).setHeader("Name").setWidth("200px").setFlexGrow(5);

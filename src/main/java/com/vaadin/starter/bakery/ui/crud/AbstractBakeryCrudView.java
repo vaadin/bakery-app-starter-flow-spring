@@ -29,6 +29,8 @@ public abstract class AbstractBakeryCrudView<E extends AbstractEntity> extends C
 
     protected abstract void setupGrid(Grid<E> grid);
 
+    protected abstract E createItem();
+
     public AbstractBakeryCrudView(Class<E> beanType, FilterableCrudService<E> service,
                                   Grid<E> grid, CrudEditor<E> editor, CurrentUser currentUser) {
         super(beanType, grid, editor);
@@ -55,7 +57,9 @@ public abstract class AbstractBakeryCrudView<E extends AbstractEntity> extends C
         searchBar.setActionText("New " + entityName);
         searchBar.setPlaceHolder("Search");
         searchBar.addFilterChangeListener(e -> dataProvider.setFilter(searchBar.getFilter()));
-        searchBar.getActionButton().getElement().setAttribute("new-button", true);
+        searchBar.getActionButton().addClickListener(e -> {
+            edit(createItem(), EditMode.NEW_ITEM);
+        });
 
         setToolbar(searchBar);
         setupCrudEventListeners(entityPresenter);

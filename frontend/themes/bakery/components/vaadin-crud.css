@@ -2,8 +2,12 @@
   height: 100%;
 }
 
-#new {
+::slotted([slot='new-button']) {
   display: none;
+}
+
+::slotted([slot='toolbar']) {
+  margin: 0 !important;
 }
 
 [part="toolbar"] {
