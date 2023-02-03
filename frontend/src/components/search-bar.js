@@ -24,6 +24,7 @@ class SearchBar extends LitElement {
         order: 1;
         width: 100%;
         height: 48px;
+        box-sizing: border-box;
       }
 
       .row {

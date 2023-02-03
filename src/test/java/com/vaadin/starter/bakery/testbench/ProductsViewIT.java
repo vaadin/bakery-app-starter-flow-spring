@@ -31,14 +31,14 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 		int rowNum = createProduct(productsPage, uniqueName, initialPrice);
 		productsPage.openRowForEditing(rowNum);
 
-		Assert.assertTrue(productsPage.isEditorOpen());
+		Assert.assertTrue(productsPage.getCrud().isEditorOpen());
 		String newValue = "New " + uniqueName;
 		TextFieldElement nameField = productsPage.getProductName();
 		nameField.setValue(newValue);
 
-		productsPage.getEditorSaveButton().click();
-		Assert.assertFalse(productsPage.isEditorOpen());
-		GridElement grid = productsPage.getGrid();
+		productsPage.getCrud().getEditorSaveButton().click();
+		Assert.assertFalse(productsPage.getCrud().isEditorOpen());
+		GridElement grid = productsPage.getCrud().getGrid();
 		Assert.assertEquals(rowNum, grid.getCell(newValue).getRow());
 
 		productsPage.openRowForEditing(rowNum);
@@ -46,8 +46,8 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 		nameField = productsPage.getProductName();
 		nameField.setValue(newValue);
 
-		productsPage.getEditorSaveButton().click();
-		Assert.assertFalse(productsPage.isEditorOpen());
+		productsPage.getCrud().getEditorSaveButton().click();
+		Assert.assertFalse(productsPage.getCrud().isEditorOpen());
 		Assert.assertEquals(rowNum, grid.getCell(newValue).getRow());
 	}
 
@@ -64,16 +64,16 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 		productsPage.openRowForEditing(rowIndex);
 		Assert.assertTrue(getDriver().getCurrentUrl().length() > url.length());
 
-		Assert.assertTrue(productsPage.isEditorOpen());
+		Assert.assertTrue(productsPage.getCrud().isEditorOpen());
 
 		TextFieldElement price = productsPage.getPrice();
 		Assert.assertEquals(initialPrice, price.getValue());
 
 		price.setValue("123.45");
 
-		productsPage.getEditorSaveButton().click();
+		productsPage.getCrud().getEditorSaveButton().click();
 
-		Assert.assertFalse(productsPage.isEditorOpen());
+		Assert.assertFalse(productsPage.getCrud().isEditorOpen());
 
 		Assert.assertTrue(getDriver().getCurrentUrl().endsWith("products"));
 
@@ -85,25 +85,25 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 		// Return initial value
 		price.setValue(initialPrice);
 
-		productsPage.getEditorSaveButton().click();
-		Assert.assertFalse(productsPage.isEditorOpen());
+		productsPage.getCrud().getEditorSaveButton().click();
+		Assert.assertFalse(productsPage.getCrud().isEditorOpen());
 	}
 
 	@Test
 	public void testCancelConfirmationMessage() {
 		ProductsViewElement productsPage = openView();
 
-		productsPage.getNewItemButton().get().click();
-		Assert.assertTrue(productsPage.isEditorOpen());
+		productsPage.getCrud().getNewItemButton().get().click();
+		Assert.assertTrue(productsPage.getCrud().isEditorOpen());
 		productsPage.getProductName().setValue("Some name");
-		productsPage.getEditorCancelButton().click();
+		productsPage.getCrud().getEditorCancelButton().click();
 		Assert.assertEquals(productsPage.getDiscardConfirmDialog().getHeaderText(), "Discard changes");
 	}
 
 	private int createProduct(ProductsViewElement productsPage, String name, String price) {
 		productsPage.getSearchBar().getCreateNewButton().click();
 
-		Assert.assertTrue(productsPage.isEditorOpen());
+		Assert.assertTrue(productsPage.getCrud().isEditorOpen());
 
 		TextFieldElement nameField = productsPage.getProductName();
 		TextFieldElement priceField = productsPage.getPrice();
@@ -111,10 +111,10 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 		nameField.setValue(name);
 		priceField.setValue(price);
 
-		productsPage.getEditorSaveButton().click();
-		Assert.assertFalse(productsPage.isEditorOpen());
+		productsPage.getCrud().getEditorSaveButton().click();
+		Assert.assertFalse(productsPage.getCrud().isEditorOpen());
 
-		return waitUntil((ExpectedCondition<GridTHTDElement>) wd -> productsPage.getGrid().getCell(name)).getRow();
+		return waitUntil((ExpectedCondition<GridTHTDElement>) wd -> productsPage.getCrud().getGrid().getCell(name)).getRow();
 	}
 
 }
