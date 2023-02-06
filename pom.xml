@@ -167,7 +167,6 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <!-- End Spring -->
-
         <!-- Testing -->
         <dependency>
             <groupId>com.vaadin</groupId>

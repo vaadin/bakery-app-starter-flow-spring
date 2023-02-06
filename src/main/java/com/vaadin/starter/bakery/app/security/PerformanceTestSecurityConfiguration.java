@@ -16,7 +16,6 @@ import com.vaadin.flow.spring.security.VaadinWebSecurity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
-import com.vaadin.flow.spring.security.VaadinWebSecurity;
 import com.vaadin.starter.bakery.backend.data.Role;
 
 
