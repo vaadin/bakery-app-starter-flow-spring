@@ -167,8 +167,6 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <!-- End Spring -->
-        <!-- Add JAXB explicitly as the java.xml.bind module is not included
-             by default anymore in Java 9-->
         <!-- Testing -->
         <dependency>
             <groupId>com.vaadin</groupId>
@@ -359,7 +357,7 @@
                                 <artifactId>ci-sauce</artifactId>
                                 <version>1.144</version>
                             </dependency>
-                            </dependencies>
+                        </dependencies>
                         <executions>
                             <!-- Start Sauce Connect prior to running the integration tests -->
                             <execution>

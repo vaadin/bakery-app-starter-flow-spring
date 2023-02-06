@@ -83,7 +83,7 @@ public class OrderService implements CrudService<Order> {
 			}
 		}
 	}
-	
+
 	@Transactional
 	public List<OrderSummary> findAnyMatchingStartingToday() {
 		return orderRepository.findByDueDateGreaterThanEqual(LocalDate.now());

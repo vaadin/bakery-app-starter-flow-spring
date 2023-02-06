@@ -63,7 +63,7 @@ public class MainView extends AppLayout {
 			if (e.getSelectedTab() == null) {
 				return;
 			}
-			
+
 			e.getSelectedTab().getId().ifPresent(id -> {
 				if ("logout-tab".equals(id)) {
 					UI.getCurrent().getPage().setLocation(LOGOUT_SUCCESS_URL);

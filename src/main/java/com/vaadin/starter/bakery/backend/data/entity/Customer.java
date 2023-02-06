@@ -20,7 +20,7 @@ public class Customer extends AbstractEntity {
 	// spaces
 	@Pattern(regexp = "^(\\+\\d+)?([ -]?\\d+){4,14}$", message = "{bakery.phone.number.invalid}")
 	private String phoneNumber;
-	
+
 	@Size(max = 255)
 	private String details;
 

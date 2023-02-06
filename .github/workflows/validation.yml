@@ -13,7 +13,7 @@ jobs:
       # for EnricoMi/publish-unit-test-result-action
       issues: read
       checks: write
-      pull-requests: write 
+      pull-requests: write
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -28,7 +28,7 @@ jobs:
           TBL=${{ secrets.TB_LICENSE }}
           [ -z "$TBL" ] && echo "No TB license provided" && exit 1
           mkdir -p ~/.vaadin/
-          echo '{"username":"'`echo $TBL | cut -d / -f1`'","proKey":"'`echo $TBL | cut -d / -f2`'"}' > ~/.vaadin/proKey          
+          echo '{"username":"'`echo $TBL | cut -d / -f1`'","proKey":"'`echo $TBL | cut -d / -f2`'"}' > ~/.vaadin/proKey
       - uses: actions/cache@v3
         with:
           path: ~/.m2/repository
@@ -37,7 +37,7 @@ jobs:
       - uses: browser-actions/setup-chrome@latest
         with:
           chrome-version: stable
-      - uses: nanasess/setup-chromedriver@master          
+      - uses: nanasess/setup-chromedriver@master
       - name: Verify
         run: |
           mvn -B -V -ntp verify -Dheadless -Pit,production
