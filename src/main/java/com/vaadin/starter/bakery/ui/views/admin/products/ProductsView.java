@@ -37,6 +37,11 @@ public class ProductsView extends AbstractBakeryCrudView<Product> {
 	}
 
 	@Override
+	protected Product createItem() {
+		return new Product();
+	}
+
+	@Override
 	protected void setupGrid(Grid<Product> grid) {
 		grid.addColumn(Product::getName).setHeader("Product Name").setFlexGrow(10);
 		grid.addColumn(p -> currencyFormatter.encode(p.getPrice())).setHeader("Unit Price");
@@ -61,7 +66,6 @@ public class ProductsView extends AbstractBakeryCrudView<Product> {
 
 		binder.forField(price).withConverter(new PriceConverter()).bind("price");
 		price.setPattern("\\d+(\\.\\d?\\d?)?$");
-		price.setPreventInvalidInput(true);
 
 		String currencySymbol = Currency.getInstance(BakeryConst.APP_LOCALE).getSymbol();
 		price.setPrefixComponent(new Span(currencySymbol));

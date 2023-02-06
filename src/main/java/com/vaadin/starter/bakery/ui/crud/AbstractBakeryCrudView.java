@@ -4,6 +4,8 @@ import com.vaadin.flow.component.crud.Crud;
 import com.vaadin.flow.component.crud.CrudEditor;
 import com.vaadin.flow.component.crud.CrudI18n;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
@@ -17,7 +19,7 @@ import com.vaadin.starter.bakery.ui.views.HasNotifications;
 
 import java.util.function.Consumer;
 
-public abstract class AbstractBakeryCrudView<E extends AbstractEntity> extends Crud<E>
+public abstract class AbstractBakeryCrudView<E extends AbstractEntity> extends VerticalLayout
         implements HasUrlParameter<Long>, HasNotifications {
 
     private static final String DISCARD_MESSAGE = "There are unsaved modifications to the %s. Discard changes?";
@@ -25,13 +27,22 @@ public abstract class AbstractBakeryCrudView<E extends AbstractEntity> extends C
 
     private final CrudEntityPresenter<E> entityPresenter;
 
+    private final Crud<E> crud;
+
     protected abstract String getBasePage();
 
     protected abstract void setupGrid(Grid<E> grid);
 
+    protected abstract E createItem();
+
     public AbstractBakeryCrudView(Class<E> beanType, FilterableCrudService<E> service,
                                   Grid<E> grid, CrudEditor<E> editor, CurrentUser currentUser) {
-        super(beanType, grid, editor);
+        setHeightFull();
+        setPadding(false);
+        setSpacing(false);
+
+        crud = new Crud<>(beanType, grid, editor);
+
         grid.setSelectionMode(Grid.SelectionMode.NONE);
 
         CrudI18n crudI18n = CrudI18n.createDefault();
@@ -42,7 +53,9 @@ public abstract class AbstractBakeryCrudView<E extends AbstractEntity> extends C
         crudI18n.getConfirm().getCancel().setContent(String.format(DISCARD_MESSAGE, entityName));
         crudI18n.getConfirm().getDelete().setContent(String.format(DELETE_MESSAGE, entityName));
         crudI18n.setDeleteItem("Delete");
-        setI18n(crudI18n);
+        crud.setI18n(crudI18n);
+        crud.setToolbarVisible(false);
+        crud.setHeightFull();
 
         CrudEntityDataProvider<E> dataProvider = new CrudEntityDataProvider<>(service);
         grid.setDataProvider(dataProvider);
@@ -56,9 +69,13 @@ public abstract class AbstractBakeryCrudView<E extends AbstractEntity> extends C
         searchBar.setPlaceHolder("Search");
         searchBar.addFilterChangeListener(e -> dataProvider.setFilter(searchBar.getFilter()));
         searchBar.getActionButton().getElement().setAttribute("new-button", true);
+        searchBar.addActionClickListener(e -> {
+            crud.edit(createItem(), Crud.EditMode.NEW_ITEM);
+        });
 
-        setToolbar(searchBar);
         setupCrudEventListeners(entityPresenter);
+
+        add(searchBar, crud);
     }
 
     private void setupCrudEventListeners(CrudEntityPresenter<E> entityPresenter) {
@@ -67,16 +84,16 @@ public abstract class AbstractBakeryCrudView<E extends AbstractEntity> extends C
             throw new RuntimeException("The operation could not be performed.");
         };
 
-        addEditListener(e ->
+        crud.addEditListener(e ->
                 entityPresenter.loadEntity(e.getItem().getId(),
                         entity -> navigateToEntity(entity.getId().toString())));
 
-        addCancelListener(e -> navigateToEntity(null));
+        crud.addCancelListener(e -> navigateToEntity(null));
 
-        addSaveListener(e ->
+        crud.addSaveListener(e ->
                 entityPresenter.save(e.getItem(), onSuccess, onFail));
 
-        addDeleteListener(e ->
+        crud.addDeleteListener(e ->
                 entityPresenter.delete(e.getItem(), onSuccess, onFail));
     }
 
@@ -87,13 +104,13 @@ public abstract class AbstractBakeryCrudView<E extends AbstractEntity> extends C
     @Override
     public void setParameter(BeforeEvent event, @OptionalParameter Long id) {
         if (id != null) {
-            E item = getEditor().getItem();
+            E item = crud.getEditor().getItem();
             if (item != null && id.equals(item.getId())) {
                 return;
             }
-            entityPresenter.loadEntity(id, entity -> edit(entity, EditMode.EXISTING_ITEM));
+            entityPresenter.loadEntity(id, entity -> crud.edit(entity, Crud.EditMode.EXISTING_ITEM));
         } else {
-            setOpened(false);
+            crud.setOpened(false);
         }
     }
 }

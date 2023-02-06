@@ -2,21 +2,7 @@
   height: 100%;
 }
 
-#new {
-  display: none;
-}
-
-[part="toolbar"] {
-  padding: 0 !important;
-}
-
 :host ::slotted(vaadin-grid) {
   max-width: calc(964px + var(--lumo-space-m));
   background-color: var(--lumo-base-color);
-}
-
-@media (min-width: 700px) {
-  [part="toolbar"] {
-    order: -1;
-  }
 }

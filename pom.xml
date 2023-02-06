@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.0-RC1</version>
+        <version>3.0.2</version>
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
@@ -23,10 +23,9 @@
 
         <!-- Dependencies -->
         <vaadin.version>24.0-SNAPSHOT</vaadin.version>
-        <flow.version>24.0-SNAPSHOT</flow.version>
 
-        <!-- Overrides the old version specified by the Spring Boot parent -->
-        <selenium.version>4.5.3</selenium.version>
+        <!-- selenium is so much verbose -->
+        <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
 
         <!-- Plugins -->
         <gatling.version>3.3.0</gatling.version>
@@ -43,10 +42,6 @@
             </snapshots>
         </repository>
         <repository>
-            <id>vaadin-prereleases</id>
-            <url>https://maven.vaadin.com/vaadin-prereleases</url>
-        </repository>
-        <repository>
             <id>vaadin-addons</id>
             <url>https://maven.vaadin.com/vaadin-addons</url>
             <snapshots>
@@ -54,12 +49,11 @@
             </snapshots>
         </repository>
         <repository>
-            <id>apache snapshots</id>
-            <url>https://repository.apache.org/content/repositories/snapshots</url>
-        </repository>
-        <repository>
-            <id>spring milestones</id>
-            <url>https://repo.spring.io/milestone</url>
+            <id>vaadin-prereleases</id>
+            <url>https://maven.vaadin.com/vaadin-prereleases</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
     </repositories>
     <pluginRepositories>
@@ -73,21 +67,13 @@
         <pluginRepository>
             <id>vaadin-prereleases</id>
             <url>https://maven.vaadin.com/vaadin-prereleases</url>
-        </pluginRepository>
-        <pluginRepository>
-            <id>spring milestones</id>
-            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </pluginRepository>
     </pluginRepositories>
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>com.vaadin</groupId>
-                <artifactId>flow-bom</artifactId>
-                <version>${flow.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
             <dependency>
                 <groupId>com.vaadin</groupId>
                 <artifactId>vaadin-bom</artifactId>
@@ -102,7 +88,6 @@
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
-            <version>5.0.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -182,13 +167,6 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <!-- End Spring -->
-        <!-- Add JAXB explicitly as the java.xml.bind module is not included
-             by default anymore in Java 9-->
-        <dependency>
-            <groupId>jakarta.xml.bind</groupId>
-            <artifactId>jakarta.xml.bind-api</artifactId>
-            <version>4.0.0</version>
-        </dependency>
 
         <!-- Testing -->
         <dependency>
@@ -214,8 +192,8 @@
             </plugin>
             <plugin>
                 <groupId>com.vaadin</groupId>
-                <artifactId>flow-maven-plugin</artifactId>
-                <version>${flow.version}</version>
+                <artifactId>vaadin-maven-plugin</artifactId>
+                <version>${vaadin.version}</version>
                 <executions>
                     <execution>
                         <goals>
@@ -244,8 +222,8 @@
                 <plugins>
                     <plugin>
                         <groupId>com.vaadin</groupId>
-                        <artifactId>flow-maven-plugin</artifactId>
-                        <version>${flow.version}</version>
+                        <artifactId>vaadin-maven-plugin</artifactId>
+                        <version>${vaadin.version}</version>
                         <executions>
                             <execution>
                                 <goals>
@@ -379,11 +357,6 @@
                                 <groupId>com.saucelabs</groupId>
                                 <artifactId>ci-sauce</artifactId>
                                 <version>1.144</version>
-                            </dependency>
-                            <dependency>
-                                <groupId>jakarta.xml.bind</groupId>
-                                <artifactId>jakarta.xml.bind-api</artifactId>
-                                <version>4.0.0</version>
                             </dependency>
                         </dependencies>
                         <executions>

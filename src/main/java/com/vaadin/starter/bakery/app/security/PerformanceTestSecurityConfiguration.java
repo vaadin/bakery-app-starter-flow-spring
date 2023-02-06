@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import com.vaadin.flow.spring.security.VaadinWebSecurity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
@@ -31,7 +32,7 @@ public class PerformanceTestSecurityConfiguration extends VaadinWebSecurity {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// Not using Spring CSRF here to be able to use plain HTML for the login page
-		http.csrf().disable().authorizeRequests()
+		http.csrf().disable().authorizeHttpRequests()
 				// Allow all requests by anonymous users.
 				.anyRequest().permitAll().and().anonymous()
 				.principal(new User("admin@vaadin.com", "", Arrays.asList(new SimpleGrantedAuthority("admin"))))

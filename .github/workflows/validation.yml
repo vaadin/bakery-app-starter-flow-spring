@@ -1,7 +1,7 @@
 name: Verify
 on:
   push:
-    branches: [v23]
+    branches: [v23, v24]
   workflow_dispatch:
   pull_request:
 permissions:
@@ -15,7 +15,7 @@ jobs:
       checks: write
       pull-requests: write
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
@@ -41,8 +41,9 @@ jobs:
       - name: Verify
         run: |
           mvn -B -V -ntp verify -Dheadless -Pit,production
-      - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1
+      - if: ${{always()}}
+        name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
         with:
           files: "**/target/*-reports/TEST*.xml"
           check_run_annotations: all tests, skipped tests
