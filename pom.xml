@@ -23,7 +23,6 @@
 
         <!-- Dependencies -->
         <vaadin.version>24.0-SNAPSHOT</vaadin.version>
-        <selenium.version>4.7.2</selenium.version>
 
         <!-- selenium is so much verbose -->
         <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
