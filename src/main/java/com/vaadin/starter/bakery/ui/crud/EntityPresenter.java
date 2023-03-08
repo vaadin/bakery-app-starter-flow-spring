@@ -2,8 +2,8 @@ package com.vaadin.starter.bakery.ui.crud;
 
 import java.util.function.UnaryOperator;
 
-import javax.persistence.EntityNotFoundException;
-import javax.validation.ConstraintViolationException;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ConstraintViolationException;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;

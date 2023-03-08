@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Currency;
 
-import javax.annotation.security.RolesAllowed;
+import jakarta.annotation.security.RolesAllowed;
 
 import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_PRODUCTS;
 
@@ -66,7 +66,6 @@ public class ProductsView extends AbstractBakeryCrudView<Product> {
 
 		binder.forField(price).withConverter(new PriceConverter()).bind("price");
 		price.setPattern("\\d+(\\.\\d?\\d?)?$");
-		price.setPreventInvalidInput(true);
 
 		String currencySymbol = Currency.getInstance(BakeryConst.APP_LOCALE).getSymbol();
 		price.setPrefixComponent(new Span(currencySymbol));
