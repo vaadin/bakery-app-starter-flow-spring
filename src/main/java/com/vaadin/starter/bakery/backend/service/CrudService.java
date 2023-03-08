@@ -1,6 +1,6 @@
 package com.vaadin.starter.bakery.backend.service;
 
-import javax.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
