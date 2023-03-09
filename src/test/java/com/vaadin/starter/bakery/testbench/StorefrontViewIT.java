@@ -23,7 +23,7 @@ public class StorefrontViewIT extends AbstractIT<StorefrontViewElement> {
 		return openLoginView().login("admin@vaadin.com", "admin");
 	}
 
-	@org.junit.Ignore @Test
+	@Test
 	public void editOrder() {
 		StorefrontViewElement storefrontPage = openView();
 
