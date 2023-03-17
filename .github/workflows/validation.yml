@@ -1,7 +1,7 @@
 name: Verify
 on:
   push:
-    branches: [v23]
+    branches: [v24]
   workflow_dispatch:
   pull_request:
 permissions:
@@ -46,4 +46,4 @@ jobs:
         with:
           files: "**/target/*-reports/TEST*.xml"
           check_run_annotations: all tests, skipped tests
-          check_run_annotations_branch: v23
+          check_run_annotations_branch: v24
