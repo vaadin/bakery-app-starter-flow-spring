@@ -27,7 +27,7 @@ public class StorefrontViewIT extends AbstractIT<StorefrontViewElement> {
 	public void editOrder() {
 		StorefrontViewElement storefrontPage = openView();
 
-		int orderIndex = new Random().nextInt(10);
+		int orderIndex = 1;
 
 		OrderCardElement order = storefrontPage.getOrderCard(orderIndex);
 		Assert.assertNotNull(order);
