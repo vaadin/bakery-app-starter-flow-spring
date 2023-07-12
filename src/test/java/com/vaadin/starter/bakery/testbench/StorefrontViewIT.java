@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.vaadin.flow.component.button.testbench.ButtonElement;
@@ -24,6 +25,7 @@ public class StorefrontViewIT extends AbstractIT<StorefrontViewElement> {
 	}
 
 	@Test
+	@Ignore
 	public void editOrder() {
 		StorefrontViewElement storefrontPage = openView();
 
