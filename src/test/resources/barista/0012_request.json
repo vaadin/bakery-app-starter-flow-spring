@@ -1,0 +1,1 @@
+{"csrfToken":"#{seckey}","rpc":[{"type":"event","node":#{searchId},"event":"value-changed","data":{"1":1,"for":"trailing"}}],"syncId":#{syncId},"clientId":#{clientId}}

@@ -1,0 +1,1 @@
+{"csrfToken":"#{seckey}","rpc":[{"type":"mSync","node":#{storeId},"feature":1,"property":"value","value":"1"},{"type":"event","node":#{storeId},"event":"value-changed","data":{}},{"type":"mSync","node":#{storeId},"feature":1,"property":"opened","value":false},{"type":"event","node":#{storeId},"event":"opened-changed","data":{}}],"syncId":#{syncId},"clientId":#{clientId}}
