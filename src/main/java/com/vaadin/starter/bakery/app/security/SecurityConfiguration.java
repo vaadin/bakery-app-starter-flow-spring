@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
  * Configures spring security, doing the following:
@@ -62,12 +63,11 @@ public class SecurityConfiguration extends VaadinWebSecurity {
 		super.configure(web);
 		web.ignoring().requestMatchers(
 				// the robots exclusion standard
-				"/robots.txt",
-
+				new AntPathRequestMatcher("/robots.txt"),
 				// icons and images
-				"/icons/**", "/images/**",
-
+				new AntPathRequestMatcher("/icons/**"),
+				new AntPathRequestMatcher("/images/**"),
 				// (development mode) H2 debugging console
-				"/h2-console/**");
+				new AntPathRequestMatcher("/h2-console/**"));
 	}
 }
