@@ -23,9 +23,6 @@
 
         <!-- Dependencies -->
         <vaadin.version>24.1.8</vaadin.version>
-
-        <!-- Overrides the old version specified by the Spring Boot parent -->
-        <selenium.version>4.12.0</selenium.version>
         <!-- selenium is so much verbose -->
         <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
 
