@@ -1,7 +1,5 @@
 package com.vaadin.starter.bakery.ui.views.admin.users;
 
-import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_USERS;
-
 import jakarta.annotation.security.RolesAllowed;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +25,7 @@ import com.vaadin.starter.bakery.ui.MainView;
 import com.vaadin.starter.bakery.ui.crud.AbstractBakeryCrudView;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 
-@Route(value = PAGE_USERS, layout = MainView.class)
+@Route(value = BakeryConst.PAGE_USERS, layout = MainView.class)
 @PageTitle(BakeryConst.TITLE_USERS)
 @RolesAllowed(Role.ADMIN)
 public class UsersView extends AbstractBakeryCrudView<User> {
@@ -51,7 +49,7 @@ public class UsersView extends AbstractBakeryCrudView<User> {
 
 	@Override
 	protected String getBasePage() {
-		return PAGE_USERS;
+		return BakeryConst.PAGE_USERS;
 	}
 
 	private static BinderCrudEditor<User> createForm(PasswordEncoder passwordEncoder) {

@@ -22,9 +22,7 @@ import java.util.Currency;
 
 import jakarta.annotation.security.RolesAllowed;
 
-import static com.vaadin.starter.bakery.ui.utils.BakeryConst.PAGE_PRODUCTS;
-
-@Route(value = PAGE_PRODUCTS, layout = MainView.class)
+@Route(value = BakeryConst.PAGE_PRODUCTS, layout = MainView.class)
 @PageTitle(BakeryConst.TITLE_PRODUCTS)
 @RolesAllowed(Role.ADMIN)
 public class ProductsView extends AbstractBakeryCrudView<Product> {
@@ -49,7 +47,7 @@ public class ProductsView extends AbstractBakeryCrudView<Product> {
 
 	@Override
 	protected String getBasePage() {
-		return PAGE_PRODUCTS;
+		return BakeryConst.PAGE_PRODUCTS;
 	}
 
 	private static BinderCrudEditor<Product> createForm() {
