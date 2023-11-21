@@ -47,7 +47,6 @@ public abstract class AbstractBakeryCrudView<E extends AbstractEntity> extends V
 
         CrudI18n crudI18n = CrudI18n.createDefault();
         String entityName = EntityUtil.getName(beanType);
-        crudI18n.setNewItem("New " + entityName);
         crudI18n.setEditItem("Edit " + entityName);
         crudI18n.setEditLabel("Edit " + entityName);
         crudI18n.getConfirm().getCancel().setContent(String.format(DISCARD_MESSAGE, entityName));
