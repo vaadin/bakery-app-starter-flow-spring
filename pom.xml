@@ -22,7 +22,7 @@
         <failOnMissingWebXml>false</failOnMissingWebXml>
 
         <!-- Dependencies -->
-        <vaadin.version>24.2.4</vaadin.version>
+        <vaadin.version>24.2.5</vaadin.version>
 
         <!-- Overrides the old version specified by the Spring Boot parent -->
         <selenium.version>4.11.0</selenium.version>
