@@ -31,7 +31,7 @@ public abstract class AbstractIT<E extends TestBenchElement> extends ParallelTes
 		if (getDesiredCapabilities().getBrowserName().equals(Browser.CHROME.browserName())
 				&& Boolean.getBoolean("headless")) {
 			ChromeOptions chromeOptions = new ChromeOptions();
-			chromeOptions.setHeadless(true);
+			chromeOptions.addArguments("--headless=new");
 			setDriver(new ChromeDriver(chromeOptions));
 		} else {
 			super.setup();

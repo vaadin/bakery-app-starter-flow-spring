@@ -114,7 +114,7 @@ public class ProductsViewIT extends AbstractIT<ProductsViewElement> {
 		productsPage.getCrud().getEditorSaveButton().click();
 		Assert.assertFalse(productsPage.getCrud().isEditorOpen());
 
-		return waitUntil((ExpectedCondition<GridTHTDElement>) wd -> productsPage.getCrud().getGrid().getCell(name)).getRow();
+		return waitUntil((ExpectedCondition<GridTHTDElement>) wd -> productsPage.getCrud().getGrid().getCell(name), 20).getRow();
 	}
 
 }
