@@ -42,7 +42,7 @@ jobs:
         run: |
           mvn -B -V -ntp verify -Dheadless -Pit,production
       - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1
+        uses: EnricoMi/publish-unit-test-result-action@v2
         with:
           files: "**/target/*-reports/TEST*.xml"
           check_run_annotations: all tests, skipped tests
