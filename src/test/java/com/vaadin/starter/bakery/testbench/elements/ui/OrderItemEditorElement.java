@@ -24,6 +24,6 @@ public class OrderItemEditorElement extends TestBenchElement {
 			throw new IllegalArgumentException("Value should be -1 or 1");
 		}
 		final String part = value < 0 ? "decrease-button" : "increase-button";
-		$("vaadin-integer-field").first().$("div").attribute("part", part).first().click();
+		$("vaadin-integer-field").first().$("div").withAttribute("part", part).first().click();
 	}
 }

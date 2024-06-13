@@ -8,13 +8,13 @@ import com.vaadin.testbench.elementsbase.Element;
 public class OrderCardElement extends DivElement {
 
 	public String getGoodsCount(int index) {
-		SpanElement count = $(DivElement.class).attributeContains("class", "goods-item").get(index)
+		SpanElement count = $(DivElement.class).withAttributeContainingWord("class", "goods-item").get(index)
 				.$(SpanElement.class).first();
 		return count.getText();
 	}
 
 	@Override
 	public void click() {
-		$(DivElement.class).attributeContains("class", "wrapper").first().click();
+		$(DivElement.class).withAttributeContainingWord("class", "wrapper").first().click();
 	}
 }
