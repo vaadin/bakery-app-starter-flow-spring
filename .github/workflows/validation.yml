@@ -36,7 +36,7 @@ jobs:
           restore-keys: ${{ runner.os }}-maven- 
       - name: Verify
         run: |
-          mvn -B -V -ntp verify -Dheadless -Pit,production
+          mvn -B -V -ntp verify -Pit,production -Dcom.vaadin.testbench.Parameters.headless=true -Dcom.vaadin.testbench.Parameters.testsInParallel=1
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
         with:
