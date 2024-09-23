@@ -44,9 +44,35 @@ spring.jpa.hibernate.ddl-auto=update
 
 # Running the Project in Production Mode
 
-`mvn spring-boot:run -Pproduction`
+`mvn -Pproduction`
 
 The default mode when the application is built or started is 'development'. The 'production' mode is turned on by enabling the `production` profile when building or starting the app.
+
+
+# Deploy the application for Production
+
+`mvn package -Pproduction`
+
+Then run it with
+
+`java -jar target/*.jar`
+
+
+# Deploying the Project in Control Center
+
+Bakery has a profile that allows the application being deployed with [Control Center](https://vaadin.com/docs/latest/control-center)
+
+Compile, package, build the image and upload to docker hub.
+
+```
+mvn package -P production -P control-center
+docker build -t your_docker_id/bakery:latest .
+docker push your_docker_id/bakery:latest
+```
+
+Import it in Control Center selecting the `Identity manager` flag. Then create roles `admin`, `baker` and `barista` in Control Center and create the corresponding users to login into bakery application.
+
+
 
 # Running in Eclipse or IntelliJ
 As both IDEs support running Spring Boot applications you just have to import the project and select `com.vaadin.starter.bakery.Application` as main class if not done automatically. Using an IDE will also allow you to speed up development even more. Just check https://vaadin.com/blog/developing-without-server-restarts.
@@ -92,6 +118,6 @@ For full terms, see LICENSE
 Pro components used in the starter are :
  - [Vaadin Crud](https://vaadin.com/components/vaadin-crud)
  - [Vaadin Charts](https://vaadin.com/components/vaadin-charts)
- - [Vaadin Confirm Dialog](https://vaadin.com/components/vaadin-confirm-dialog) 
+ - [Vaadin Confirm Dialog](https://vaadin.com/components/vaadin-confirm-dialog)
 
  Also the tests are created using [Testbench](https://vaadin.com/testbench) library.
