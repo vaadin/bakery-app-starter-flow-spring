@@ -3,11 +3,14 @@ package com.vaadin.starter.bakery.app.security;
 import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.vaadin.starter.bakery.backend.data.entity.User;
@@ -28,6 +31,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	@Autowired
 	public UserDetailsServiceImpl(UserRepository userRepository) {
 		this.userRepository = userRepository;
+	}
+	
+	/**
+	 * The password encoder to use when encrypting passwords.
+	 */
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 
 	/**
