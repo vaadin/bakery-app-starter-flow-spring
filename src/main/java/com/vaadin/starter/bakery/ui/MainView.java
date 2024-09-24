@@ -10,11 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.html.Anchor;
@@ -28,23 +27,23 @@ import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.VaadinServlet;
 import com.vaadin.flow.server.VaadinServletRequest;
 import com.vaadin.flow.server.auth.AccessAnnotationChecker;
-import com.vaadin.starter.bakery.ui.utils.BakeryConst;
+import com.vaadin.flow.spring.security.AuthenticationContext;
 import com.vaadin.starter.bakery.ui.views.HasConfirmation;
 import com.vaadin.starter.bakery.ui.views.admin.products.ProductsView;
 import com.vaadin.starter.bakery.ui.views.admin.users.UsersView;
 import com.vaadin.starter.bakery.ui.views.dashboard.DashboardView;
 import com.vaadin.starter.bakery.ui.views.storefront.StorefrontView;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import jakarta.annotation.PostConstruct;
 
 public class MainView extends AppLayout {
 
 	@Autowired
 	private AccessAnnotationChecker accessChecker;
+	@Autowired
+	private AuthenticationContext authenticationContext;
 	private final ConfirmDialog confirmDialog = new ConfirmDialog();
 	private Tabs menu;
-	private static final String LOGOUT_SUCCESS_URL = "/" + BakeryConst.PAGE_ROOT;
 
 	@PostConstruct
 	public void init() {
@@ -66,11 +65,7 @@ public class MainView extends AppLayout {
 			
 			e.getSelectedTab().getId().ifPresent(id -> {
 				if ("logout-tab".equals(id)) {
-					UI.getCurrent().getPage().setLocation(LOGOUT_SUCCESS_URL);
-					SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
-					logoutHandler.logout(
-						VaadinServletRequest.getCurrent().getHttpServletRequest(), null,
-					null);
+					authenticationContext.logout();
 				}
 			});
 		});

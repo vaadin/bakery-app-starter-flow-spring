@@ -1,20 +1,19 @@
 package com.vaadin.starter.bakery.app.security;
 
-import com.vaadin.flow.spring.security.VaadinWebSecurity;
-import com.vaadin.starter.bakery.backend.data.entity.User;
-import com.vaadin.starter.bakery.backend.repositories.UserRepository;
-import com.vaadin.starter.bakery.ui.views.login.LoginView;
-
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import com.vaadin.flow.spring.security.VaadinWebSecurity;
+import com.vaadin.starter.bakery.backend.data.entity.User;
+import com.vaadin.starter.bakery.backend.repositories.UserRepository;
+import com.vaadin.starter.bakery.ui.views.login.LoginView;
 
 /**
  * Configures spring security, doing the following:
@@ -26,15 +25,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
  */
 @EnableWebSecurity
 @Configuration
+@Profile("!control-center")
 public class SecurityConfiguration extends VaadinWebSecurity {
-
-	/**
-	 * The password encoder to use when encrypting passwords.
-	 */
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
