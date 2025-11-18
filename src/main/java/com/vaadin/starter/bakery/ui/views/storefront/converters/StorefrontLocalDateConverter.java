@@ -5,7 +5,8 @@ import static com.vaadin.starter.bakery.ui.utils.FormattingUtils.WEEKDAY_FULLNAM
 
 import java.time.LocalDate;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.databind.node.ObjectNode;
+
 import com.vaadin.flow.internal.JacksonUtils;
 
 /**

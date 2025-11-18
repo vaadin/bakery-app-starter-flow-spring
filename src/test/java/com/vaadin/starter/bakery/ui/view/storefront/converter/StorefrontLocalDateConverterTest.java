@@ -7,8 +7,8 @@ import java.time.LocalDate;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.node.ObjectNode;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.vaadin.starter.bakery.test.FormattingTest;
 import com.vaadin.starter.bakery.ui.views.storefront.converters.StorefrontLocalDateConverter;
 

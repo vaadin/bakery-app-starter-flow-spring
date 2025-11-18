@@ -23,11 +23,14 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.TabVariant;
 import com.vaadin.flow.component.tabs.Tabs;
+import com.vaadin.flow.router.AfterNavigationEvent;
+import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.RouteConfiguration;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.VaadinServlet;
 import com.vaadin.flow.server.VaadinServletRequest;
 import com.vaadin.flow.server.auth.AccessAnnotationChecker;
+import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.starter.bakery.ui.utils.BakeryConst;
 import com.vaadin.starter.bakery.ui.views.HasConfirmation;
 import com.vaadin.starter.bakery.ui.views.admin.products.ProductsView;
@@ -38,7 +41,8 @@ import com.vaadin.starter.bakery.ui.views.storefront.StorefrontView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 
-public class MainView extends AppLayout {
+@AnonymousAllowed
+public class MainView extends AppLayout implements AfterNavigationObserver {
 
 	@Autowired
 	private AccessAnnotationChecker accessChecker;
@@ -89,8 +93,7 @@ public class MainView extends AppLayout {
 	}
 
 	@Override
-	protected void afterNavigation() {
-		super.afterNavigation();
+	public void afterNavigation(AfterNavigationEvent afterNavigationEvent) {
 		confirmDialog.setOpened(false);
 		if (getContent() instanceof HasConfirmation) {
 			((HasConfirmation) getContent()).setConfirmDialog(confirmDialog);

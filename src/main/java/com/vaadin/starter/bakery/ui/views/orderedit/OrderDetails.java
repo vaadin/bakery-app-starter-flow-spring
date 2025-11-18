@@ -3,8 +3,9 @@
  */
 package com.vaadin.starter.bakery.ui.views.orderedit;
 
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.ObjectNode;
+
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Tag;
@@ -36,106 +37,106 @@ import com.vaadin.starter.bakery.ui.views.storefront.events.EditEvent;
 @JsModule("./src/views/orderedit/order-details.js")
 public class OrderDetails extends LitTemplate {
 
-	private Order order;
+    private Order order;
 
-	@Id("back")
-	private Button back;
+    @Id("back")
+    private Button back;
 
-	@Id("cancel")
-	private Button cancel;
+    @Id("cancel")
+    private Button cancel;
 
-	@Id("save")
-	private Button save;
+    @Id("save")
+    private Button save;
 
-	@Id("edit")
-	private Button edit;
+    @Id("edit")
+    private Button edit;
 
-	@Id("history")
-	private Element history;
+    @Id("history")
+    private Element history;
 
-	@Id("comment")
-	private Element comment;
+    @Id("comment")
+    private Element comment;
 
-	@Id("sendComment")
-	private Button sendComment;
+    @Id("sendComment")
+    private Button sendComment;
 
-	@Id("commentField")
-	private TextField commentField;
+    @Id("commentField")
+    private TextField commentField;
 
-	private boolean isDirty;
+    private boolean isDirty;
 
-	public OrderDetails() {
-		sendComment.addClickListener(e -> {
-			String message = commentField.getValue();
-			message = message == null ? "" : message.trim();
-			if (!message.isEmpty()) {
-				commentField.clear();
-				fireEvent(new CommentEvent(this, order.getId(), message));
-			}
-		});
-		save.addClickListener(e -> fireEvent(new SaveEvent(this, false)));
-		cancel.addClickListener(e -> fireEvent(new CancelEvent(this, false)));
-		edit.addClickListener(e -> fireEvent(new EditEvent(this)));
-	}
+    public OrderDetails() {
+        sendComment.addClickListener(e -> {
+            String message = commentField.getValue();
+            message = message == null ? "" : message.trim();
+            if (!message.isEmpty()) {
+                commentField.clear();
+                fireEvent(new CommentEvent(this, order.getId(), message));
+            }
+        });
+        save.addClickListener(e -> fireEvent(new SaveEvent(this, false)));
+        cancel.addClickListener(e -> fireEvent(new CancelEvent(this, false)));
+        edit.addClickListener(e -> fireEvent(new EditEvent(this)));
+    }
 
-	public void display(Order order, boolean review) {
-		getElement().setProperty("review", review);
-		this.order = order;
+    public void display(Order order, boolean review) {
+        getElement().setProperty("review", review);
+        this.order = order;
 
-		ObjectNode item = JacksonUtils.beanToJson(order);
+        ObjectNode item = JacksonUtils.beanToJson(order);
 
-		// Include formatted values to the ObjectNode
-		item.set("formattedDueDate", new StorefrontLocalDateConverter().encode(order.getDueDate()));
-		item.put("formattedDueTime", new LocalTimeConverter().encode(order.getDueTime()));
-		item.put("formattedTotalPrice", new CurrencyFormatter().encode(order.getTotalPrice()));
+        // Include formatted values to the ObjectNode
+        item.set("formattedDueDate", new StorefrontLocalDateConverter().encode(order.getDueDate()));
+        item.put("formattedDueTime", new LocalTimeConverter().encode(order.getDueTime()));
+        item.put("formattedTotalPrice", new CurrencyFormatter().encode(order.getTotalPrice()));
 
-		ArrayNode orderItems = (ArrayNode) item.get("items");
-		for (int i = 0; i < orderItems.size(); i++) {
-			ObjectNode itemProduct = (ObjectNode) orderItems.get(i).get("product");
-			Product product = order.getItems().get(i).getProduct();
-			itemProduct.put("formattedPrice", new CurrencyFormatter().encode(product.getPrice()));
-		}
+        ArrayNode orderItems = (ArrayNode) item.get("items");
+        for (int i = 0; i < orderItems.size(); i++) {
+            ObjectNode itemProduct = (ObjectNode) orderItems.get(i).get("product");
+            Product product = order.getItems().get(i).getProduct();
+            itemProduct.put("formattedPrice", new CurrencyFormatter().encode(product.getPrice()));
+        }
 
-		ArrayNode orderHistory = (ArrayNode) item.get("history");
-		for (int i = 0; i < orderHistory.size(); i++) {
-			ObjectNode itemHistory = (ObjectNode) orderHistory.get(i);
-			HistoryItem historyItem = order.getHistory().get(i);
-			itemHistory.put("formattedTimestamp", new LocalDateTimeConverter().encode(historyItem.getTimestamp()));
-		}
-		
-		getElement().setPropertyJson("item", item);
+        ArrayNode orderHistory = (ArrayNode) item.get("history");
+        for (int i = 0; i < orderHistory.size(); i++) {
+            ObjectNode itemHistory = (ObjectNode) orderHistory.get(i);
+            HistoryItem historyItem = order.getHistory().get(i);
+            itemHistory.put("formattedTimestamp", new LocalDateTimeConverter().encode(historyItem.getTimestamp()));
+        }
 
-		if (!review) {
-			commentField.clear();
-		}
-		this.isDirty = review;
-	}
+        getElement().setPropertyJson("item", item);
 
-	public boolean isDirty() {
-		return isDirty;
-	}
+        if (!review) {
+            commentField.clear();
+        }
+        this.isDirty = review;
+    }
 
-	public void setDirty(boolean isDirty) {
-		this.isDirty = isDirty;
-	}
+    public boolean isDirty() {
+        return isDirty;
+    }
 
-	public Registration addSaveListenter(ComponentEventListener<SaveEvent> listener) {
-		return addListener(SaveEvent.class, listener);
-	}
+    public void setDirty(boolean isDirty) {
+        this.isDirty = isDirty;
+    }
 
-	public Registration addEditListener(ComponentEventListener<EditEvent> listener) {
-		return addListener(EditEvent.class, listener);
-	}
+    public Registration addSaveListenter(ComponentEventListener<SaveEvent> listener) {
+        return addListener(SaveEvent.class, listener);
+    }
 
-	public Registration addBackListener(ComponentEventListener<ClickEvent<Button>> listener) {
-		return back.addClickListener(listener);
-	}
+    public Registration addEditListener(ComponentEventListener<EditEvent> listener) {
+        return addListener(EditEvent.class, listener);
+    }
 
-	public Registration addCommentListener(ComponentEventListener<CommentEvent> listener) {
-		return addListener(CommentEvent.class, listener);
-	}
+    public Registration addBackListener(ComponentEventListener<ClickEvent<Button>> listener) {
+        return back.addClickListener(listener);
+    }
 
-	public Registration addCancelListener(ComponentEventListener<CancelEvent> listener) {
-		return addListener(CancelEvent.class, listener);
-	}
+    public Registration addCommentListener(ComponentEventListener<CommentEvent> listener) {
+        return addListener(CommentEvent.class, listener);
+    }
+
+    public Registration addCancelListener(ComponentEventListener<CancelEvent> listener) {
+        return addListener(CancelEvent.class, listener);
+    }
 }
