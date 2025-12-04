@@ -29,6 +29,7 @@ public class Application extends SpringBootServletInitializer {
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        System.setProperty("copilot.development", "true");
 		return application.sources(Application.class);
 	}
 }
