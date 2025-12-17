@@ -1,11 +1,13 @@
 package com.vaadin.starter.bakery;
 
+import com.vaadin.starter.bakery.app.NativeBuildConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.persistence.autoconfigure.EntityScan;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.boot.webmvc.autoconfigure.error.ErrorMvcAutoConfiguration;
+import org.springframework.context.annotation.ImportRuntimeHints;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import com.vaadin.starter.bakery.app.security.SecurityConfiguration;
@@ -21,6 +23,7 @@ import com.vaadin.starter.bakery.ui.MainView;
 		UserService.class }, exclude = ErrorMvcAutoConfiguration.class)
 @EnableJpaRepositories(basePackageClasses = { UserRepository.class })
 @EntityScan(basePackageClasses = { User.class })
+@ImportRuntimeHints(NativeBuildConfiguration.class)
 public class Application extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
