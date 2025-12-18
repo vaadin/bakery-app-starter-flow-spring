@@ -1,6 +1,10 @@
 package com.vaadin.starter.bakery.app;
 
 import com.vaadin.flow.component.combobox.ComboBoxBase;
+import com.vaadin.starter.bakery.ui.views.orderedit.HistoryItemDisplayData;
+import com.vaadin.starter.bakery.ui.views.orderedit.OrderDisplayData;
+import com.vaadin.starter.bakery.ui.views.orderedit.OrderItemDisplayData;
+import com.vaadin.starter.bakery.ui.views.orderedit.ProductDisplayData;
 import com.vaadin.starter.bakery.ui.views.storefront.OrderCard;
 import com.vaadin.starter.bakery.ui.views.storefront.beans.OrderCardHeader;
 import com.vaadin.starter.bakery.ui.views.storefront.converters.StorefrontDate;
@@ -23,7 +27,11 @@ public class NativeBuildConfiguration implements RuntimeHintsRegistrar {
                 TypeReference.of("com.vaadin.starter.bakery.backend.data.OrderState"),
                 TypeReference.of(StorefrontDate.class),
                 TypeReference.of(OrderCardHeader.class),
-                TypeReference.of(OrderCard.class)
+                TypeReference.of(OrderCard.class),
+                TypeReference.of(OrderDisplayData.class),
+                TypeReference.of(OrderItemDisplayData.class),
+                TypeReference.of(ProductDisplayData.class),
+                TypeReference.of(HistoryItemDisplayData.class)
         ), builder -> builder.withMembers(MemberCategory.INVOKE_DECLARED_METHODS, MemberCategory.INVOKE_DECLARED_CONSTRUCTORS));
     }
 
