@@ -50,3 +50,74 @@ jobs:
           path: |
             **/error-screenshots
           retention-days: 7
+
+  verify-native:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: read
+      checks: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '21'
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '25'
+          distribution: 'graalvm'
+
+      - name: Set TB License
+        run: |
+          TBL=${{ secrets.TB_LICENSE }}
+          [ -z "$TBL" ] && echo "No TB license provided" && exit 1
+          mkdir -p ~/.vaadin/
+          echo '{"username":"'`echo $TBL | cut -d / -f1`'","proKey":"'`echo $TBL | cut -d / -f2`'"}' > ~/.vaadin/proKey
+
+      - uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-native-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-maven-
+
+      - name: Build Native Executable
+        run: mvn -B -V -ntp package -Pnative native:compile -DskipTests
+
+      - name: Start Native Application
+        run: |
+          ./target/bakery-app-starter-flow-spring > ./target/native-app.log 2>&1 & echo $! > ./target/app.pid
+          # Wait for application to be ready
+          timeout 10s bash -c 'until curl -s http://localhost:8080 > /dev/null; do sleep 2; done'
+
+      - name: Run TestBench Tests
+        run: |
+          mvn -B -V -ntp verify -Pit-native \
+            -Dvaadin.skip=true \
+            -Dcom.vaadin.testbench.Parameters.headless=true \
+            -Dcom.vaadin.testbench.Parameters.testsInParallel=1
+
+      - name: Stop Native Application
+        if: always()
+        run: |
+          if [ -f ./target/app.pid ]; then
+            kill $(cat ./target/app.pid) || true
+          fi
+
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: "**/target/*-reports/TEST*.xml"
+          check_name: "Native Test Results"
+
+      - name: Upload Debug Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-debug-artifacts
+          path: |
+            **/error-screenshots
+            ./target/native-app.log
+          retention-days: 7

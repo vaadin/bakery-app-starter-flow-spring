@@ -1,6 +1,5 @@
 package com.vaadin.starter.bakery.app;
 
-import com.vaadin.flow.component.combobox.ComboBoxBase;
 import com.vaadin.starter.bakery.ui.views.orderedit.HistoryItemDisplayData;
 import com.vaadin.starter.bakery.ui.views.orderedit.OrderDisplayData;
 import com.vaadin.starter.bakery.ui.views.orderedit.OrderItemDisplayData;
