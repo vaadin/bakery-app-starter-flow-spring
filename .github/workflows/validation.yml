@@ -66,6 +66,7 @@ jobs:
 
       - uses: actions/setup-java@v4
         with:
+          # SB 4 requires GraalVM 25+
           java-version: '25'
           distribution: 'graalvm'
 
