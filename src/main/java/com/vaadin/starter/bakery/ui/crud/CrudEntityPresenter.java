@@ -28,11 +28,23 @@ public class CrudEntityPresenter<E extends AbstractEntity>	implements HasLogger 
 		this.view = view;
 	}
 
+	public void delete(E entity, Consumer<E> onSuccess) {
+		if (executeOperation(() -> crudService.delete(currentUser.getUser(), entity))) {
+			onSuccess.accept(entity);
+		}
+	}
+
 	public void delete(E entity, Consumer<E> onSuccess, Consumer<E> onFail) {
 		if (executeOperation(() -> crudService.delete(currentUser.getUser(), entity))) {
 			onSuccess.accept(entity);
 		} else {
 			onFail.accept(entity);
+		}
+	}
+
+	public void save(E entity, Consumer<E> onSuccess) {
+		if (executeOperation(() -> saveEntity(entity))) {
+			onSuccess.accept(entity);
 		}
 	}
 

@@ -12,7 +12,9 @@ import com.vaadin.starter.bakery.testbench.elements.ui.StorefrontViewElement;
 import com.vaadin.starter.bakery.testbench.elements.ui.UsersViewElement;
 import com.vaadin.testbench.BrowserTest;
 import com.vaadin.testbench.TestBenchElement;
+import org.junit.jupiter.api.parallel.Isolated;
 
+@Isolated
 public class UsersViewIT extends AbstractIT<UsersViewElement> {
 
 	private static Random r = new Random();

@@ -79,9 +79,6 @@ public abstract class AbstractBakeryCrudView<E extends AbstractEntity> extends V
 
     private void setupCrudEventListeners(CrudEntityPresenter<E> entityPresenter) {
         Consumer<E> onSuccess = entity -> navigateToEntity(null);
-        Consumer<E> onFail = entity -> {
-            throw new RuntimeException("The operation could not be performed.");
-        };
 
         crud.addEditListener(e ->
                 entityPresenter.loadEntity(e.getItem().getId(),
@@ -90,10 +87,10 @@ public abstract class AbstractBakeryCrudView<E extends AbstractEntity> extends V
         crud.addCancelListener(e -> navigateToEntity(null));
 
         crud.addSaveListener(e ->
-                entityPresenter.save(e.getItem(), onSuccess, onFail));
+                entityPresenter.save(e.getItem(), onSuccess));
 
         crud.addDeleteListener(e ->
-                entityPresenter.delete(e.getItem(), onSuccess, onFail));
+                entityPresenter.delete(e.getItem(), onSuccess));
     }
 
     protected void navigateToEntity(String id) {
