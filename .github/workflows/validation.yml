@@ -8,12 +8,16 @@ permissions:
   contents: read
 jobs:
   verify:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     permissions:
       # for EnricoMi/publish-unit-test-result-action
       issues: read
       checks: write
-      pull-requests: write 
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -24,29 +28,44 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
       - name: Set TB License
+        # Use bash on all platforms (available on Windows runners via Git Bash)
+        shell: bash
         run: |
           TBL=${{ secrets.TB_LICENSE }}
           [ -z "$TBL" ] && echo "No TB license provided" && exit 1
           mkdir -p ~/.vaadin/
-          echo '{"username":"'`echo $TBL | cut -d / -f1`'","proKey":"'`echo $TBL | cut -d / -f2`'"}' > ~/.vaadin/proKey          
+          echo '{"username":"'`echo $TBL | cut -d / -f1`'","proKey":"'`echo $TBL | cut -d / -f2`'"}' > ~/.vaadin/proKey
       - uses: actions/cache@v4
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-maven- 
+          restore-keys: ${{ runner.os }}-maven-
       - name: Verify
+        shell: bash
         run: |
           mvn -B -V -ntp verify -Pit,production -Dcom.vaadin.testbench.Parameters.headless=true -Dcom.vaadin.testbench.Parameters.testsInParallel=1
       - name: Publish Test Results
+        # EnricoMi action is a Docker action and only runs on Linux runners
+        if: always() && runner.os == 'Linux'
         uses: EnricoMi/publish-unit-test-result-action@v2
         with:
           files: "**/target/*-reports/TEST*.xml"
           check_run_annotations: all tests, skipped tests
-          check_run_annotations_branch: v24
+          check_run_annotations_branch: "*"
+      - name: Publish Test Results (Windows)
+        # Composite variant runs on non-Linux runners; distinct check_name avoids clobbering the Linux check
+        if: always() && runner.os == 'Windows'
+        uses: EnricoMi/publish-unit-test-result-action/composite@v2
+        with:
+          files: "**/target/*-reports/TEST*.xml"
+          check_name: "Test Results (Windows)"
+          check_run_annotations: all tests, skipped tests
+          check_run_annotations_branch: "*"
       - if: ${{always()}}
         uses: actions/upload-artifact@v4
         with:
-          name: files
+          # Artifact names must be unique across matrix jobs (upload-artifact@v4)
+          name: files-${{ matrix.os }}
           path: |
             **/error-screenshots
           retention-days: 7
