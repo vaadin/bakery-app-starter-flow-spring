@@ -19,11 +19,11 @@ jobs:
       checks: write
       pull-requests: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: '21'
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           java-version: '21'
           distribution: 'temurin'
@@ -35,7 +35,7 @@ jobs:
           [ -z "$TBL" ] && echo "No TB license provided" && exit 1
           mkdir -p ~/.vaadin/
           echo '{"username":"'`echo $TBL | cut -d / -f1`'","proKey":"'`echo $TBL | cut -d / -f2`'"}' > ~/.vaadin/proKey
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -53,18 +53,18 @@ jobs:
           check_run_annotations: all tests, skipped tests
           check_run_annotations_branch: "*"
       - name: Publish Test Results (Windows)
-        # Composite variant runs on non-Linux runners; distinct check_name avoids clobbering the Linux check
+        # Windows variant runs on Windows runners; distinct check_name avoids clobbering the Linux check
         if: always() && runner.os == 'Windows'
-        uses: EnricoMi/publish-unit-test-result-action/composite@v2
+        uses: EnricoMi/publish-unit-test-result-action/windows@v2
         with:
           files: "**/target/*-reports/TEST*.xml"
           check_name: "Test Results (Windows)"
           check_run_annotations: all tests, skipped tests
           check_run_annotations_branch: "*"
       - if: ${{always()}}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
-          # Artifact names must be unique across matrix jobs (upload-artifact@v4)
+          # Artifact names must be unique across matrix jobs (upload-artifact@v6)
           name: files-${{ matrix.os }}
           path: |
             **/error-screenshots
@@ -77,13 +77,13 @@ jobs:
       checks: write
       pull-requests: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: '21'
 
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           # SB 4 requires GraalVM 25+
           java-version: '25'
@@ -96,7 +96,7 @@ jobs:
           mkdir -p ~/.vaadin/
           echo '{"username":"'`echo $TBL | cut -d / -f1`'","proKey":"'`echo $TBL | cut -d / -f2`'"}' > ~/.vaadin/proKey
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-native-${{ hashFiles('**/pom.xml') }}
@@ -134,7 +134,7 @@ jobs:
 
       - name: Upload Debug Artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: native-debug-artifacts
           path: |
